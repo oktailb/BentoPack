@@ -18,6 +18,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Basse** | Moyenne | 📝 Planifié |
 | **M7** | [Suppression Avancée de Fond & Segmentation Robuste (JPEG Bruités, Anti-Halo)](#m7--suppression-avancée-darrière-plan--segmentation-robuste-planches-jpeg-bruit-anti-halo) | **Moyenne** | Moyenne | 📝 Notes & Pistes Techniques |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifications Détaillées |
+| **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Originaux (Libres de Droits)](#assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits) | **Moyenne** | Faible | 📝 Planifié (Création de sprites originaux & pérennisation des tests) |
 
 ---
 
@@ -564,6 +565,34 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 
 ---
 
+## 🎨 ASSETS : Remplacement des Échantillons (`sample/`) par des Assets Originaux (Libres de Droits)
+
+### 📌 Contexte & Problématique
+- Actuellement, les fichiers du dossier `sample/` (ex. sprites et planches de Ryu, Chun-Li, etc.) sont issus d'œuvres existantes sous droits d'auteur (copyright).
+- Pour cette raison, ces fichiers de test sont **volontairement exclus des commits Git** (non suivis / untracked).
+- **Conséquences & Limites actuelles :**
+  - Risque juridique et éthique si ces contenus tiers venaient à être diffusés ou intégrés publiquement dans le dépôt.
+  - Fragilité des tests unitaires automatisés (`test_extractors`, `test_controllers`, `test_project`) qui dépendent de la présence de ces fichiers locaux non versionnés.
+  - Impossibilité pour un tiers ou un serveur d'intégration continue (CI) de cloner le dépôt et d'exécuter la suite CTest sans devoir récupérer manuellement ces échantillons protégés.
+  - Absence d'illustrations légitimes pour la documentation, le README et la mise en valeur du logiciel.
+
+### 🎯 Objectifs & Plan d'Action
+1. **Création Graphique Originale ("Maison") :**
+   - Dessiner soi-même quelques assets originaux en pixel art (ex. un personnage avec 2 ou 3 cycles d'animation : *idle*, *walk*, *action/attack*, ainsi qu'un item/effet).
+   - Concevoir une planche de test avec arrière-plan uni et une variante légèrement compressée/bruitée pour éprouver la détection automatique de fond et le détourage (M7).
+2. **Standardisation & Pérennisation des Formats de Test :**
+   - Générer à partir de ces créations originales les jeux de tests complets :
+     - PNG / BMP (planches brutes).
+     - GIF animé.
+     - TexturePacker / Aseprite JSON (`.json` + `.png`).
+     - Godot 4 SpriteFrames (`.tres` + `.png`).
+     - Projet natif SpriteStudio (`.ssp`).
+3. **Intégration Propre dans le Dépôt & Automatisation CTest :**
+   - Versionner officiellement ces nouveaux assets originaux dans le dépôt Git (ex. sous `sample/` ou `tests/data/`).
+   - Mettre à jour les suites de tests unitaires pour qu'elles s'exécutent de façon 100% autonome et reproductible dès le clonage du projet.
+
+---
+
 ## 📅 Ordre de Déploiement Recommandé
 
 1. **Étape 0 — Stabilisation & Clôture de M1 (M1-Fix) — ✅ TERMINÉ & VALIDÉ (100%)** :
@@ -584,3 +613,5 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
    Doter SpriteStudio d'un moteur de segmentation tolérant au bruit JPEG, anti-halo (*despill*), filtrage de textes parasites et désagglomération pour les planches de sprites complexes.
 9. **Étape 8 — Empaquetage Polygonal & Maillages Serrés (M8)** :
    Extension haute performance pour moteurs 2D modernes (Godot Polygon2D, Unity Tight) : tracé de contours alpha, simplification Douglas-Peucker, triangulation et imbrication type puzzle pour maximiser la densité d'atlas et éradiquer l'overdraw GPU.
+10. **Tâche Transverse — Assets Originaux & Échantillons Libres (ASSETS)** :
+    Dessiner et intégrer les visuels originaux dans Git pour remplacer les échantillons temporaires sous copyright et garantir des tests unitaires CTest autonomes.
