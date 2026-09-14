@@ -1,0 +1,289 @@
+#include "include/project/projectmanager.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFile>
+#include <QDir>
+#include <QFileInfo>
+#include <QDateTime>
+#include <QImage>
+#include <QPixmap>
+
+QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
+                                                    const QString &relativeAtlasPath,
+                                                    double zoomFactor,
+                                                    const QPointF &panOffset)
+{
+    QJsonObject root;
+    root[QStringLiteral("format")] = QStringLiteral("SpriteStudioProject");
+    root[QStringLiteral("version")] = QStringLiteral("1.0");
+    root[QStringLiteral("generator")] = QStringLiteral("SpriteStudio");
+    root[QStringLiteral("name")] = doc.projectName().isEmpty() ? QStringLiteral("New Project") : doc.projectName();
+    root[QStringLiteral("timestamp")] = QDateTime::currentDateTimeUtc().toString(Qt::ISODateWithMs);
+
+    // Atlas information
+    QJsonObject atlasObj;
+    atlasObj[QStringLiteral("file")] = relativeAtlasPath;
+    atlasObj[QStringLiteral("width")] = doc.atlas().width();
+    atlasObj[QStringLiteral("height")] = doc.atlas().height();
+    root[QStringLiteral("atlas")] = atlasObj;
+
+    // View state
+    QJsonObject viewObj;
+    viewObj[QStringLiteral("zoomFactor")] = zoomFactor;
+    viewObj[QStringLiteral("panX")] = panOffset.x();
+    viewObj[QStringLiteral("panY")] = panOffset.y();
+    root[QStringLiteral("viewState")] = viewObj;
+
+    // Slices / Bounding boxes
+    QJsonArray boxesArray;
+    const QList<SpriteBox> &boxes = doc.boxes();
+    for (int i = 0; i < boxes.size(); ++i) {
+        const SpriteBox &b = boxes.at(i);
+        QJsonObject bObj;
+        bObj[QStringLiteral("index")] = b.index;
+        bObj[QStringLiteral("selected")] = b.selected;
+        bObj[QStringLiteral("groupId")] = b.groupId;
+
+        QJsonObject rObj;
+        rObj[QStringLiteral("x")] = b.rect.x();
+        rObj[QStringLiteral("y")] = b.rect.y();
+        rObj[QStringLiteral("w")] = b.rect.width();
+        rObj[QStringLiteral("h")] = b.rect.height();
+        bObj[QStringLiteral("rect")] = rObj;
+
+        // Default pivot at bottom center (ready for M3)
+        QJsonObject pObj;
+        pObj[QStringLiteral("x")] = b.rect.width() / 2;
+        pObj[QStringLiteral("y")] = b.rect.height();
+        bObj[QStringLiteral("pivot")] = pObj;
+
+        if (!b.overlappingBoxes.isEmpty()) {
+            QJsonArray ovArray;
+            for (int ov : b.overlappingBoxes) {
+                ovArray.append(ov);
+            }
+            bObj[QStringLiteral("overlapping")] = ovArray;
+        }
+
+        boxesArray.append(bObj);
+    }
+    root[QStringLiteral("boxes")] = boxesArray;
+
+    // Animations
+    QJsonArray animsArray;
+    const auto &anims = doc.animations();
+    for (auto it = anims.constBegin(); it != anims.constEnd(); ++it) {
+        const SpriteAnimation &anim = it.value();
+        QJsonObject aObj;
+        aObj[QStringLiteral("name")] = anim.name;
+        aObj[QStringLiteral("fps")] = anim.fps;
+        aObj[QStringLiteral("loop")] = anim.loop;
+
+        QJsonArray fArray;
+        for (int frameIdx : anim.frameIndices) {
+            fArray.append(frameIdx);
+        }
+        aObj[QStringLiteral("frames")] = fArray;
+
+        animsArray.append(aObj);
+    }
+    root[QStringLiteral("animations")] = animsArray;
+
+    QJsonDocument jsonDoc(root);
+    return jsonDoc.toJson(QJsonDocument::Indented);
+}
+
+bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
+                                              SpriteDocument &outDoc,
+                                              const QString &sessionDir,
+                                              double *outZoomFactor,
+                                              QPointF *outPanOffset,
+                                              QString *errorMsg)
+{
+    QJsonParseError parseError;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &parseError);
+    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
+        if (errorMsg) *errorMsg = QStringLiteral("JSON Parse Error: ") + parseError.errorString();
+        return false;
+    }
+
+    QJsonObject root = jsonDoc.object();
+
+    // Verify format signature
+    QString format = root.value(QStringLiteral("format")).toString();
+    if (format != QStringLiteral("SpriteStudioProject")) {
+        // Fallback: accept if it contains "boxes" and "atlas"
+        if (!root.contains(QStringLiteral("boxes")) && !root.contains(QStringLiteral("atlas"))) {
+            if (errorMsg) *errorMsg = QStringLiteral("Invalid project format signature.");
+            return false;
+        }
+    }
+
+    // View state
+    if (root.contains(QStringLiteral("viewState"))) {
+        QJsonObject viewObj = root.value(QStringLiteral("viewState")).toObject();
+        if (outZoomFactor) {
+            *outZoomFactor = viewObj.value(QStringLiteral("zoomFactor")).toDouble(1.0);
+        }
+        if (outPanOffset) {
+            *outPanOffset = QPointF(viewObj.value(QStringLiteral("panX")).toDouble(0.0),
+                                   viewObj.value(QStringLiteral("panY")).toDouble(0.0));
+        }
+    }
+
+    // Clear document
+    outDoc.clear();
+
+    // Load Atlas
+    QJsonObject atlasObj = root.value(QStringLiteral("atlas")).toObject();
+    QString relativeAtlasFile = atlasObj.value(QStringLiteral("file")).toString(QStringLiteral("assets/atlas.png"));
+    QImage atlasImage;
+
+    if (!relativeAtlasFile.isEmpty()) {
+        QString fullAtlasPath = QDir(sessionDir).filePath(relativeAtlasFile);
+        if (QFile::exists(fullAtlasPath)) {
+            atlasImage.load(fullAtlasPath);
+            if (!atlasImage.isNull()) {
+                outDoc.setAtlas(atlasImage);
+            }
+        }
+    }
+
+    // Reconstruct Boxes and Frames
+    QJsonArray boxesArray = root.value(QStringLiteral("boxes")).toArray();
+    QList<SpriteBox> boxes;
+    QList<QPixmap> frames;
+    boxes.reserve(boxesArray.size());
+    frames.reserve(boxesArray.size());
+
+    for (int i = 0; i < boxesArray.size(); ++i) {
+        QJsonObject bObj = boxesArray.at(i).toObject();
+        QJsonObject rObj = bObj.value(QStringLiteral("rect")).toObject();
+
+        QRect rect(
+            rObj.value(QStringLiteral("x")).toInt(0),
+            rObj.value(QStringLiteral("y")).toInt(0),
+            rObj.value(QStringLiteral("w")).toInt(0),
+            rObj.value(QStringLiteral("h")).toInt(0)
+        );
+
+        SpriteBox box;
+        box.rect = rect;
+        box.index = bObj.value(QStringLiteral("index")).toInt(i);
+        box.selected = bObj.value(QStringLiteral("selected")).toBool(false);
+        box.groupId = bObj.value(QStringLiteral("groupId")).toInt(0);
+
+        if (bObj.contains(QStringLiteral("overlapping"))) {
+            QJsonArray ovArray = bObj.value(QStringLiteral("overlapping")).toArray();
+            for (const QJsonValue &v : ovArray) {
+                box.overlappingBoxes.append(v.toInt());
+            }
+        }
+
+        boxes.append(box);
+
+        // Crop frame from atlas if available
+        if (!atlasImage.isNull() && rect.isValid()) {
+            QRect intersect = rect.intersected(atlasImage.rect());
+            if (intersect.isValid() && !intersect.isEmpty()) {
+                frames.append(QPixmap::fromImage(atlasImage.copy(intersect)));
+            } else {
+                frames.append(QPixmap());
+            }
+        } else {
+            frames.append(QPixmap());
+        }
+    }
+
+    outDoc.setFrames(frames, boxes);
+
+    // Reconstruct Animations
+    QJsonArray animsArray = root.value(QStringLiteral("animations")).toArray();
+    for (int i = 0; i < animsArray.size(); ++i) {
+        QJsonObject aObj = animsArray.at(i).toObject();
+        QString name = aObj.value(QStringLiteral("name")).toString();
+        int fps = aObj.value(QStringLiteral("fps")).toInt(12);
+        bool loop = aObj.value(QStringLiteral("loop")).toBool(true);
+
+        QList<int> frameIndices;
+        QJsonArray fArray = aObj.value(QStringLiteral("frames")).toArray();
+        for (const QJsonValue &v : fArray) {
+            frameIndices.append(v.toInt());
+        }
+
+        if (!name.isEmpty()) {
+            outDoc.setAnimation(name, frameIndices, fps, loop);
+        }
+    }
+
+    return true;
+}
+
+bool ProjectManager::saveProjectToSessionDir(const SpriteDocument &doc,
+                                            const QString &sessionDir,
+                                            double zoomFactor,
+                                            const QPointF &panOffset,
+                                            QString *errorMsg)
+{
+    if (sessionDir.isEmpty()) {
+        if (errorMsg) *errorMsg = QStringLiteral("Session directory path is empty.");
+        return false;
+    }
+
+    QDir sDir(sessionDir);
+    if (!sDir.exists()) {
+        sDir.mkpath(sessionDir);
+    }
+
+    QString assetsDir = sDir.filePath(QStringLiteral("assets"));
+    QDir().mkpath(assetsDir);
+
+    // Save Atlas Image if present
+    QString relativeAtlasPath;
+    if (!doc.atlas().isNull()) {
+        relativeAtlasPath = QStringLiteral("assets/atlas.png");
+        QString atlasFullPath = sDir.filePath(relativeAtlasPath);
+        if (!doc.atlas().save(atlasFullPath, "PNG")) {
+            if (errorMsg) *errorMsg = QStringLiteral("Failed to save atlas image to ") + atlasFullPath;
+            return false;
+        }
+    }
+
+    // Serialize JSON
+    QByteArray jsonData = serializeDocumentToJson(doc, relativeAtlasPath, zoomFactor, panOffset);
+    QString projectJsonPath = sDir.filePath(QStringLiteral("project.json"));
+    QFile file(projectJsonPath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (errorMsg) *errorMsg = QStringLiteral("Failed to write project.json to ") + projectJsonPath;
+        return false;
+    }
+
+    file.write(jsonData);
+    file.close();
+    return true;
+}
+
+bool ProjectManager::loadProjectFromSessionDir(const QString &sessionDir,
+                                              SpriteDocument &outDoc,
+                                              double *outZoomFactor,
+                                              QPointF *outPanOffset,
+                                              QString *errorMsg)
+{
+    if (sessionDir.isEmpty() || !QDir(sessionDir).exists()) {
+        if (errorMsg) *errorMsg = QStringLiteral("Session directory does not exist: ") + sessionDir;
+        return false;
+    }
+
+    QString projectJsonPath = QDir(sessionDir).filePath(QStringLiteral("project.json"));
+    QFile file(projectJsonPath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        if (errorMsg) *errorMsg = QStringLiteral("Cannot open project.json in ") + sessionDir;
+        return false;
+    }
+
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    return deserializeJsonToDocument(jsonData, outDoc, sessionDir, outZoomFactor, outPanOffset, errorMsg);
+}

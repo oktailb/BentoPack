@@ -659,11 +659,16 @@
     <property name="title">
      <string>KEY_MENU_FILE</string>
     </property>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
+    <addaction name="actionNewProject"/>
+    <addaction name="actionOpenProject"/>
     <addaction name="actionOpen"/>
-    <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionSaveProject"/>
+    <addaction name="actionSaveProjectAs"/>
+    <addaction name="separator"/>
     <addaction name="actionExport"/>
+    <addaction name="actionExportAs"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -676,6 +681,16 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionNewProject">
+   <property name="text">
+    <string>KEY_ACTION_NEW_PROJECT</string>
+   </property>
+  </action>
+  <action name="actionOpenProject">
+   <property name="text">
+    <string>KEY_ACTION_OPEN_PROJECT</string>
+   </property>
+  </action>
   <action name="actionLicence">
    <property name="text">
     <string>KEY_ACTION_LICENCE</string>
@@ -706,9 +721,24 @@
     <string>KEY_ACTION_SAVE</string>
    </property>
   </action>
+  <action name="actionSaveProject">
+   <property name="text">
+    <string>KEY_ACTION_SAVE_PROJECT</string>
+   </property>
+  </action>
+  <action name="actionSaveProjectAs">
+   <property name="text">
+    <string>KEY_ACTION_SAVE_PROJECT_AS</string>
+   </property>
+  </action>
   <action name="actionExport">
    <property name="text">
     <string>KEY_ACTION_EXPORT</string>
+   </property>
+  </action>
+  <action name="actionExportAs">
+   <property name="text">
+    <string>KEY_ACTION_EXPORT_AS</string>
    </property>
   </action>
   <action name="actionExit">

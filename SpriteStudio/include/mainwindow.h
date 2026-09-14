@@ -24,6 +24,8 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+class GitHistoryDock;
+
 /**
  * @brief Custom item delegate for drawing visual feedback in the frame list view.
  */
@@ -111,12 +113,18 @@ protected:
 
 private slots:
     // Menu actions
+    void on_actionNewProject_triggered();
+    void on_actionOpenProject_triggered();
+    void on_actionSaveProject_triggered();
+    void on_actionSaveProjectAs_triggered();
+    void on_actionExportAs_triggered();
     void on_actionLicence_triggered();
     void on_actionAbout_triggered();
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionExport_triggered();
     void on_actionExit_triggered();
+    void openSettingsDialog();
 
     // Playback & FPS
     void on_Play_clicked();
@@ -147,7 +155,12 @@ private:
     void setupControllers();
     void setupUIConnections();
     void setupShortcuts();
+    void setupGitHistoryDock();
     void updateRecentFilesMenu();
+    void updateRecentProjectsMenu();
+    void updateWindowTitle();
+    void checkCrashRecovery();
+    bool maybeSave();
     void syncFromDocument();
     void populateFrameList(const QList<QPixmap> &frameList, const QList<SpriteBox> &boxList);
     void refreshFrameListDisplay();
@@ -165,6 +178,9 @@ private:
     std::unique_ptr<AnimationController> m_animationController;
 
     QMenu *m_recentMenu = nullptr;
+    QMenu *m_recentProjectsMenu = nullptr;
+    GitHistoryDock *m_gitDock = nullptr;
+    QAction *m_actionToggleGitHistory = nullptr;
     QLabel *statusLabel = nullptr;
     QLabel *zoomLabel = nullptr;
     QSlider *zoomSlider = nullptr;

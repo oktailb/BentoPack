@@ -32,12 +32,29 @@ class ProjectController : public QObject
 
 public:
     explicit ProjectController(SpriteDocument *document, QUndoStack *undoStack = nullptr, QObject *parent = nullptr);
-    ~ProjectController() override = default;
+    ~ProjectController() override;
 
     QString currentFilePath() const;
     void setCurrentFilePath(const QString &filePath);
 
-    bool isProcessing() const { return m_isProcessing; }
+    // Native .ssp Project Management
+    bool newProject();
+    bool openProject(const QString &sspPath, QString *errorMsg = nullptr);
+    bool saveProject(const QString &sspPath = QString(), QString *errorMsg = nullptr);
+    bool saveProjectAs(const QString &sspPath, QString *errorMsg = nullptr);
+    bool restoreSession(const QString &sessionDir, QString *errorMsg = nullptr);
+    bool checkoutRevision(const QString &commitHash, QString *errorMsg = nullptr);
+
+    bool isProjectModified() const { return m_isModified; }
+    void setProjectModified(bool modified);
+
+    QString currentProjectPath() const;
+    QString currentProjectName() const;
+    class SessionManager* sessionManager() const { return m_sessionManager.get(); }
+
+    QStringList recentProjects() const;
+    void addRecentProject(const QString &filePath);
+    void clearRecentProjects();
 
     bool openFile(const QString &filePath, QString *errorMsg = nullptr);
     void openFileAsync(const QString &filePath);
@@ -74,7 +91,12 @@ signals:
     void fileLoaded(const QString &filePath);
     void fileLoadError(const QString &filePath, const QString &errorMessage);
     void fileSaved(const QString &filePath);
+    void projectLoaded(const QString &sspPath);
+    void projectSaved(const QString &sspPath);
+    void projectModifiedChanged(bool modified);
+    void projectHistoryChanged();
     void recentFilesChanged(const QStringList &files);
+    void recentProjectsChanged(const QStringList &projects);
     void statusMessage(const QString &message);
     void progressChanged(int percent);
     void backgroundRemoved();
@@ -83,11 +105,17 @@ signals:
 
 private slots:
     void onAsyncJobFinished();
+    void onUndoStackIndexChanged(int idx);
 
 private:
     SpriteDocument *m_document;
     QUndoStack *m_undoStack;
     QString m_currentFilePath;
+    QString m_currentProjectPath;
+    std::unique_ptr<class SessionManager> m_sessionManager;
+    bool m_isModified = false;
+    bool m_isProjectLoading = false;
+    int  m_lastUndoIndex = 0;
     QFutureWatcher<AsyncExtractionResult> m_watcher;
     bool m_isProcessing = false;
 };

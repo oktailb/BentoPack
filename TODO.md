@@ -14,7 +14,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M2** | [Gestionnaire Complet d'Animations & Timeline](#m2--gestionnaire-complet-danimations--timeline) | **Haute** | Moyenne | 📝 Planifié |
 | **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Moyenne** | Faible | 📝 Planifié |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié |
-| **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 📝 Planifié |
+| **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (85 tests CTest 100% — Session, Lock, Crash Recovery, Atomic Save, LibGit2 Find) |
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Basse** | Moyenne | 📝 Planifié |
 | **M7** | [Suppression Avancée de Fond & Segmentation Robuste (JPEG Bruités, Anti-Halo)](#m7--suppression-avancée-darrière-plan--segmentation-robuste-planches-jpeg-bruit-anti-halo) | **Moyenne** | Moyenne | 📝 Notes & Pistes Techniques |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifications Détaillées |
@@ -309,61 +309,65 @@ Sprite Studio doit intégrer un mini-éditeur de pixels intégré dédié à la 
 
 ---
 
-## M5 : Format de Projet Natif (`.ssp` - Sprite Studio Project)
+## M5 : Format de Projet Natif (`.ssp` - Sprite Studio Project) — ✅ TERMINÉ & VALIDÉ (100%)
 
 ### Contexte & Objectif
 Actuellement, si un utilisateur découpe 50 frames, crée 4 animations, règle des FPS et retire le fond, toutes ces métadonnées de montage sont perdues à la fermeture de l'application s'il n'a pas exporté dans un format compatible. De plus, les formats d'export finaux (comme Godot) ne conservent pas forcément toute la disposition d'origine.  
 Un format de sauvegarde de session de travail (`.ssp`) est indispensable.
 
-### Spécifications Fonctionnelles
-1. **Structure de l'Archive `.ssp` (Conteneur ZIP) :**
-   - Format ZIP standard (identique au principe des formats `.docx`, `.kra`, `.aseprite`, OpenXML).
-   - Arborescence interne de l'archive :
-     - `project.json` (obligatoire) : structure du document, boîtes de découpe, animations, cadences FPS, modes de boucle, points d'ancrage/pivots (M3), seuils alpha et paramètres d'export.
-     - `assets/` (optionnel) : image(s) source / atlas embarqué pour rendre le fichier de projet 100% portable et autonome (ou chemin relatif si mode atlas externe).
-     - `.git/` : dépôt Git embarqué pour le versioning local de l'historique (`libgit2`).
+### Réalisations & Architecture Validée (85 tests CTest 100% Succès)
+1. **Archive Conteneur ZIP (`.ssp`) & Gestionnaire de Session (`SessionManager`) :**
+   - Implémentation de `SessionManager` (`include/project/sessionmanager.h` / `src/project/sessionmanager.cpp`).
+   - Espace de travail temporaire automatique sur disque : `%TEMP%/SpriteStudio/sessions/<session_uuid>/` (garantissant 0 saturation RAM sur les gros atlas).
+   - Prise en charge native de la compression/décompression ZIP cross-platform via `Qt6::CorePrivate` (`QZipReader` et `QZipWriter`), éliminant toute dépendance tierce (comme zlib externe ou libzip).
+   - **Sauvegarde atomique sécurisée :** Écriture vers `.ssp.tmp` puis renommage atomique vers `.ssp` avec remplacement propre, évitant toute corruption en cas d'interruption système.
 
-2. **Espace de Travail Temporaire (Scratch / Session Directory) :**
-   - Plutôt que de manipuler une archive ZIP lourde en mémoire vive (RAM), l'application travaille directement dans un dossier temporaire sur disque :  
-     `%TEMP%/SpriteStudio/sessions/<session_uuid>/` (via `QStandardPaths::TempLocation`).
-   - **Avantages majeurs :**
-     - Zéro saturation de RAM sur les gros atlas.
-     - Support natif et direct de Git / `libgit2` (qui nécessite une arborescence réelle sur disque pour opérer).
-     - **Sauvegarde atomique sécurisée :** Lors de `Ctrl+S`, le dossier temporaire est zippé dans un fichier temporaire `.ssp.tmp` puis substitué par renommage atomique vers `.ssp`, éliminant tout risque de corrompre le projet si le système est coupé pendant l'écriture.
+2. **Sérialisation Complète du Document (`ProjectManager`) :**
+   - Implémentation de `ProjectManager` (`include/project/projectmanager.h` / `src/project/projectmanager.cpp`).
+   - Fichier manifeste `project.json` (signature `"SpriteStudioProject"`, version `"1.0"`, métadonnées, dates, nom du projet).
+   - Sauvegarde de l'atlas embarqué sous `assets/atlas.png` pour une portabilité totale du projet.
+   - Sérialisation exhaustive de toutes les boîtes (`rect`, `index`, `selected`, `groupId`, `overlapping`, et `pivot` préparé pour M3), ainsi que de l'ensemble des animations (`name`, `fps`, `loop`, `frames`).
+   - Mémorisation de l'état de vue (`zoomFactor`, `panX`, `panY`).
 
-3. **Verrou de Session & Reprise sur Crash (Crash Recovery) :**
-   - Chaque session de travail maintient un fichier `.session_lock` (JSON) contenant :
-     - `pid` : identifiant du processus en cours.
-     - `originalFilePath` : chemin absolu du fichier `.ssp` ouvert (ou vide si nouveau projet non enregistré).
-     - `status` : `"active"` pendant la session, mis à jour en `"clean_closed"` à la fermeture normale.
-     - `lastSavedTimestamp` / `lastModifiedTimestamp`.
-   - **Détection & Reprise au Démarrage :**  
-     Au lancement, SpriteStudio inspecte les dossiers de sessions orphelines (dont le `pid` n'existe plus et dont le statut est resté `"active"`). Si une session interrompue est détectée :
-     - Un dialogue propose la restauration immédiate :  
-       > *"Une session de travail interrompue a été détectée (Projet : 'hero.ssp', 14/09/2026 09:15). Souhaitez-vous restaurer votre travail ?"*
-     - L'utilisateur peut restaurer la session ou purger les fichiers temporaires orphelins.
-   - **Détection de Désynchronisation à l'Ouverture :**  
-     À l'ouverture d'un projet `hero.ssp`, si une session temporaire associée existe sur le disque avec une date de modification plus récente que le fichier `.ssp` (non commité / crash précédent) :
-     - L'application avertit l'utilisateur et propose de charger la version la plus récente issue de la récupération de crash.
+3. **Verrou de Session & Détection de Crash au Démarrage :**
+   - Fichier de verrou `.session_lock` maintenu dans chaque session avec `pid`, `sessionUuid`, `originalFilePath`, `status` (`"active"` ou `"clean_closed"`), horodatages de création et modification.
+   - Détection multiplateforme de la vivacité des processus (`OpenProcess` sous Windows, `kill(pid, 0)` sous POSIX/Linux/macOS/Haiku).
+   - Inspection automatique au lancement de l'application : détection des sessions interrompues/orphelines et invite utilisateur permettant de restaurer immédiatement la session de travail ou de purger les résidus disque.
 
-4. **Intégration Menu Fichier :**
-   - `Fichier -> Nouveau Projet` (`Ctrl+N`).
-   - `Fichier -> Ouvrir Projet...` (`Ctrl+O`).
-   - `Fichier -> Enregistrer Projet` (`Ctrl+S`).
-   - `Fichier -> Enregistrer Sous...` (`Ctrl+Shift+S`).
-   - `Fichier -> Exporter ...` (`Ctrl+E`).
-   - `Fichier -> Exporter Sous...` (`Ctrl+Shift+E`).
-   - Détection automatique à l'ouverture : si l'extension est `.ssp`, ouvrir directement le projet.
-   - Historique *Projets Récents* peuplé avec les derniers projets `.ssp` ouverts.
+4. **Moteur Git Invisible Embarqué (M5-Git-Core) — ✅ TERMINÉ & VALIDÉ (100%) :**
+   - **Découverte CMake & Runtime Windows :** Politiques `CMP0074` et `CMP0144`, module `cmake/FindLibGit2.cmake` avec détection automatique des builds MinGW/MSVC (`Desktop_Qt_6_10_2_MinGW_64_bit-Debug`), et commande `POST_BUILD` copiant `libgit2.dll` vers les répertoires d'exécution (résolution de `STATUS_DLL_NOT_FOUND` / `0xc0000135`).
+   - **Snapshots continus calqués sur l'UndoStack :** Chaque commande (`QUndoStack::indexChanged`) écrit l'état sérialisé du projet et crée un commit Git instantané avec le libellé de l'action (`"Add Slice"`, `"Resize/Move Slice"`, `"Merge Frames"`, etc.).
+   - **Exclusion stricte du verrou :** Génération automatique de `.gitignore` et suppression explicite de `.session_lock` de l'index Git (`git_index_remove_bypath`).
+   - **Sauvegarde et persistance dans le `.ssp` :** Résolution du bug de normalisation de chemin dans `QZipReader` (préfixage interne `ssp/` empêchant l'écrasement des points de tête sur `.git` et `.gitignore`). Tout fichier `.ssp` conserve l'intégralité de son historique Git.
+   - **Moteur de Time Travel (`checkoutRevision`) :** Restauration fidèle de tout commit historique en mode HEAD détaché (`git_checkout_tree(GIT_CHECKOUT_FORCE)`), réinitialisation propre du document et des contrôleurs sans fuite de mémoire.
+   - **Suite de tests automatisée (`tests/test_project.cpp`) :** 14 tests unitaires (dont `testGitIntegration`, `testGitContinuousSnapshots`, `testGitSavedInSsp`, `testGitTimeTravelCheckout`), 100% de réussite sur les 4 suites CTest (89 tests au total).
 
-5. **Avertissement de modifications non enregistrées :**
-   - Indicateur `*` dans la barre de titre (`Sprite Studio - MonProjet.ssp *`).
-   - Dialogue de confirmation à la fermeture de l'application si le projet a été modifié.
+5. **Visualiseur d'Historique Git & Time Travel Graphique (M5-Git-UI) — ✅ TERMINÉ & VALIDÉ (100%) :**
+   - Inspiré du projet de référence `geometryEditor` (`geometryeditormainwindow_history.cpp` / `geometryeditormainwindow_history_log.cpp`).
+   - **Composant Dock Widget (`GitHistoryDock` / `GitHistoryGraphicsView`) :**
+     - Vue graphique (`QGraphicsView` / `QGraphicsScene`) interactive intégrée dans un dock amovible (`QDockWidget`).
+     - Représentation nodale des commits (disques/LEDs colorés : vert émeraude pour HEAD, bleu ardoise pour les commits normaux, anneau d'ambre doré pour la sélection).
+     - Liaisons vectorielles nettes entre les commits et leurs parents (`parentHashes`).
+     - Étiquettes d'informations : badge de hash court en police monospace, horodatage formaté, libellé d'action exact, badge `[HEAD]`.
+     - Volet d'inspection inférieur détaillé (hash complet sélectionnable, horodatage local, auteur et email, message intégral).
+   - **Interactivité & Time Travel :**
+     - Simple clic : sélection du nœud et mise à jour instantanée du volet d'inspection.
+     - Double-clic : checkout immédiat du commit sélectionné via `ProjectController::checkoutRevision(hash)`, rechargement en direct de l'atlas, des découpes et des animations sur la scène principale.
+     - Bouton toolbar *"Revenir au présent"* (HEAD) : retour en un clic sur la dernière révision active.
+     - Menu `Affichage -> Historique Git` (`Ctrl+H`) pour masquer/afficher le dock.
+     - Prise en charge du mode dégradé gracieux : bannière informative propre si `libgit2` n'est pas compilé.
+   - **Validation par tests unitaires (`tests/test_project.cpp`) :** Test `testGitHistoryDockUI` validant l'instanciation, la synchronisation du log et le time-travel bidirectionnel (passé $\leftrightarrow$ présent). 100% de réussite sur l'ensemble des 4 suites CTest (90 tests au total).
 
-### Fichiers & Composants Cibles
-- `SpriteStudio/include/project/projectmanager.h` / `src/project/projectmanager.cpp`.
-- `SpriteStudio/include/project/sessionmanager.h` / `src/project/sessionmanager.cpp` : Gestion du cycle de vie du dossier temporaire, extraction/compression ZIP, `.session_lock` et crash recovery.
-- `SpriteStudio/src/mainwindow.cpp` : Routines d'ouverture, sauvegarde, détection de modification (`isWindowModified`) et dialogue de reprise sur crash au démarrage.
+6. **Intégration Interface Utilisateur (`MainWindow` & `ProjectController`) :**
+   - Menus Fichier dédiés :
+     - `Nouveau Projet` (`Ctrl+N`).
+     - `Ouvrir Projet...` (`Ctrl+O`) et ouverture directe par drag & drop des `.ssp`.
+     - `Enregistrer Projet` (`Ctrl+S`) et `Enregistrer Projet Sous...` (`Ctrl+Shift+S`).
+     - `Exporter...` (`Ctrl+E`) et `Exporter Sous...` (`Ctrl+Shift+E`).
+     - Sous-menu `Projets Récents` (historique séparé des fichiers récents importés).
+   - Indicateur de modification non enregistrée `*` dans la barre de titre (`SpriteStudio - MonProjet.ssp *`).
+   - Dialogue de confirmation à la fermeture de l'application et à la création/ouverture de projet (`maybeSave`) protégeant les données non enregistrées.
+   - Prise en charge des traductions complètes en français et anglais.
 
 ---
 

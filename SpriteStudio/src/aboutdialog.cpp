@@ -1,5 +1,6 @@
 #include "aboutdialog.h"
 #include "generated/version.h"
+#include "widgets/settingsdialog.h"
 #include <QApplication>
 #include <QFile>
 #include <QTextStream>
@@ -110,10 +111,33 @@ void AboutDialog::setupUI()
       );
   connect(closeButton, &QPushButton::clicked, this, &AboutDialog::accept);
 
+  // Bouton Préférences
+  settingsButton = new QPushButton(tr("Préférences..."));
+  settingsButton->setStyleSheet(
+      "QPushButton {"
+      "    background: #ecf0f1;"
+      "    color: #2c3e50;"
+      "    border: 1px solid #bdc3c7;"
+      "    padding: 8px 16px;"
+      "    border-radius: 4px;"
+      "    font-weight: bold;"
+      "}"
+      "QPushButton:hover {"
+      "    background: #bdc3c7;"
+      "}"
+      "QPushButton:pressed {"
+      "    background: #95a5a6;"
+      "}"
+  );
+  connect(settingsButton, &QPushButton::clicked, this, [this]() {
+      SettingsDialog dlg(this);
+      dlg.exec();
+  });
+
   QHBoxLayout *buttonLayout = new QHBoxLayout();
+  buttonLayout->addWidget(settingsButton);
   buttonLayout->addStretch();
   buttonLayout->addWidget(closeButton);
-  buttonLayout->addStretch();
 
   mainLayout->addLayout(buttonLayout);
 

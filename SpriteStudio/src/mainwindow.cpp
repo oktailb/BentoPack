@@ -3,6 +3,9 @@
 #include "include/commands/commands.h"
 #include "include/extractor/extractorregistry.h"
 #include "include/config/appconfig.h"
+#include "include/project/sessionmanager.h"
+#include "include/widgets/githistorydock.h"
+#include "include/widgets/settingsdialog.h"
 #include <QShortcut>
 #include <QSettings>
 #include <QFileInfo>
@@ -28,9 +31,15 @@ MainWindow::MainWindow(QWidget *parent)
     setupControllers();
     setupUIConnections();
     setupShortcuts();
+    setupGitHistoryDock();
 
-    // Populate recent files menu
+    // Populate recent files and recent projects menus
     updateRecentFilesMenu();
+    updateRecentProjectsMenu();
+    updateWindowTitle();
+
+    // Check for crash recovery / orphan sessions
+    QTimer::singleShot(100, this, &MainWindow::checkCrashRecovery);
 }
 
 MainWindow::~MainWindow()
@@ -50,11 +59,37 @@ void MainWindow::setupControllers()
 
     // Connect ProjectController
     connect(m_projectController.get(), &ProjectController::fileLoaded, this, [this](const QString &filePath) {
-        setWindowTitle(QStringLiteral("SpriteStudio (%1)").arg(QFileInfo(filePath).fileName()));
+        updateWindowTitle();
         statusLabel->setText(filePath);
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+    });
+
+    connect(m_projectController.get(), &ProjectController::projectLoaded, this, [this](const QString &/*sspPath*/) {
+        updateWindowTitle();
+        m_atlasController->setAtlasImage(m_document->atlas());
+        populateFrameList(m_document->frames(), m_document->boxes());
+        m_animationController->syncAnimationList();
+    });
+
+    connect(m_document, &SpriteDocument::documentReset, this, [this]() {
+        updateWindowTitle();
+        m_atlasController->setAtlasImage(m_document->atlas());
+        populateFrameList(m_document->frames(), m_document->boxes());
+        m_animationController->syncAnimationList();
+    });
+
+    connect(m_projectController.get(), &ProjectController::projectSaved, this, [this](const QString &/*sspPath*/) {
+        updateWindowTitle();
+    });
+
+    connect(m_projectController.get(), &ProjectController::projectModifiedChanged, this, [this](bool /*modified*/) {
+        updateWindowTitle();
+    });
+
+    connect(m_projectController.get(), &ProjectController::recentProjectsChanged, this, [this]() {
+        updateRecentProjectsMenu();
     });
 
     connect(m_projectController.get(), &ProjectController::fileLoadError, this, [this](const QString &/*path*/, const QString &err) {
@@ -272,15 +307,32 @@ void MainWindow::setupShortcuts()
     removeBgAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
     connect(removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
 
-    // Standard File Shortcuts
-    ui->actionOpen->setShortcut(QKeySequence::Open);
-    ui->actionSave->setShortcut(QKeySequence::Save);
+    editMenu->addSeparator();
+    QAction *prefAction = editMenu->addAction(tr("Préférences..."));
+    prefAction->setShortcut(QKeySequence::Preferences);
+    connect(prefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
+
+    ui->menuHelp->addSeparator();
+    QAction *helpPrefAction = ui->menuHelp->addAction(tr("Préférences..."));
+    connect(helpPrefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
+
+    // Standard Project & File Shortcuts
+    ui->actionNewProject->setShortcut(QKeySequence::New);
+    ui->actionOpenProject->setShortcut(QKeySequence::Open);
+    ui->actionOpen->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_O));
+    ui->actionSaveProject->setShortcut(QKeySequence::Save);
+    ui->actionSaveProjectAs->setShortcut(QKeySequence::SaveAs);
     ui->actionExport->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_E));
+    ui->actionExportAs->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_E));
     ui->actionExit->setShortcut(QKeySequence::Quit);
+
+    // Recent Projects Submenu
+    m_recentProjectsMenu = new QMenu(tr("KEY_MENU_RECENT_PROJECTS"), this);
+    ui->menuFile->insertMenu(ui->actionSaveProject, m_recentProjectsMenu);
 
     // Recent Files Submenu
     m_recentMenu = new QMenu(tr("KEY_MENU_RECENT_FILES"), this);
-    ui->menuFile->insertMenu(ui->actionSave, m_recentMenu);
+    ui->menuFile->insertMenu(ui->actionSaveProject, m_recentMenu);
 
     // Playback Space shortcut
     QShortcut *spaceShortcut = new QShortcut(QKeySequence(Qt::Key_Space), this);
@@ -318,6 +370,29 @@ void MainWindow::setupShortcuts()
     });
 }
 
+void MainWindow::setupGitHistoryDock()
+{
+    m_gitDock = new GitHistoryDock(this);
+    m_gitDock->setProjectController(m_projectController.get());
+    addDockWidget(Qt::RightDockWidgetArea, m_gitDock);
+
+    // Create View menu between File and Help
+    QMenu *viewMenu = new QMenu(tr("&Affichage"), this);
+    if (ui->menuHelp) {
+        ui->menuBar->insertMenu(ui->menuHelp->menuAction(), viewMenu);
+    } else {
+        ui->menuBar->addMenu(viewMenu);
+    }
+
+    m_actionToggleGitHistory = viewMenu->addAction(tr("Historique &Git"));
+    m_actionToggleGitHistory->setCheckable(true);
+    m_actionToggleGitHistory->setChecked(true);
+    m_actionToggleGitHistory->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_H));
+
+    connect(m_actionToggleGitHistory, &QAction::toggled, m_gitDock, &QDockWidget::setVisible);
+    connect(m_gitDock, &QDockWidget::visibilityChanged, m_actionToggleGitHistory, &QAction::setChecked);
+}
+
 void MainWindow::processFile(const QString &fileName)
 {
     if (m_projectController) {
@@ -351,3 +426,112 @@ void MainWindow::updateRecentFilesMenu()
         });
     }
 }
+
+void MainWindow::updateRecentProjectsMenu()
+{
+    if (!m_recentProjectsMenu || !m_projectController) return;
+    m_recentProjectsMenu->clear();
+
+    QStringList files = m_projectController->recentProjects();
+    if (files.isEmpty()) {
+        QAction *emptyAction = m_recentProjectsMenu->addAction(tr("KEY_ACTION_NO_RECENT_PROJECTS"));
+        emptyAction->setEnabled(false);
+    } else {
+        for (int i = 0; i < files.size(); ++i) {
+            QString filePath = files.at(i);
+            QString text = tr("&%1 %2").arg(i + 1).arg(QFileInfo(filePath).fileName());
+            QAction *act = m_recentProjectsMenu->addAction(text);
+            act->setToolTip(filePath);
+            connect(act, &QAction::triggered, this, [this, filePath]() {
+                if (maybeSave()) {
+                    QString err;
+                    if (!m_projectController->openProject(filePath, &err)) {
+                        QMessageBox::critical(this, tr("KEY_MSG_LOAD_ERROR"), err);
+                    }
+                }
+            });
+        }
+        m_recentProjectsMenu->addSeparator();
+        QAction *clearAction = m_recentProjectsMenu->addAction(tr("KEY_ACTION_CLEAR_RECENT_PROJECTS"));
+        connect(clearAction, &QAction::triggered, this, [this]() {
+            m_projectController->clearRecentProjects();
+        });
+    }
+}
+
+void MainWindow::updateWindowTitle()
+{
+    QString name = m_projectController ? m_projectController->currentProjectName() : tr("Untitled");
+    bool modified = m_projectController ? m_projectController->isProjectModified() : false;
+    QString title = QStringLiteral("SpriteStudio - %1%2").arg(name, modified ? QStringLiteral(" *") : QString());
+    setWindowTitle(title);
+    setWindowModified(modified);
+}
+
+void MainWindow::checkCrashRecovery()
+{
+    QList<OrphanSessionInfo> orphans = SessionManager::detectOrphanSessions();
+    if (orphans.isEmpty()) return;
+
+    // Pick the most recent orphan session
+    std::sort(orphans.begin(), orphans.end(), [](const OrphanSessionInfo &a, const OrphanSessionInfo &b) {
+        return a.lastActivity > b.lastActivity;
+    });
+
+    const OrphanSessionInfo &orphan = orphans.first();
+    QString timeStr = orphan.lastActivity.isValid()
+        ? orphan.lastActivity.toLocalTime().toString(QStringLiteral("yyyy-MM-dd HH:mm"))
+        : tr("Unknown date");
+    QString msg = tr("An interrupted work session was detected:\n\nProject: %1\nDate: %2\n\nDo you want to restore this session?")
+                  .arg(orphan.projectName, timeStr);
+
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this,
+        tr("Crash Recovery"),
+        msg,
+        QMessageBox::Yes | QMessageBox::No
+    );
+
+    if (reply == QMessageBox::Yes) {
+        QString errorMsg;
+        if (!m_projectController->restoreSession(orphan.sessionDir, &errorMsg)) {
+            QMessageBox::warning(this, tr("Recovery Error"), errorMsg);
+        }
+    } else {
+        SessionManager::discardOrphanSession(orphan.sessionDir);
+    }
+}
+
+bool MainWindow::maybeSave()
+{
+    if (!m_projectController || !m_projectController->isProjectModified()) {
+        return true;
+    }
+
+    if (!m_document || m_document->isEmpty()) {
+        return true;
+    }
+
+    QMessageBox::StandardButton ret = QMessageBox::warning(
+        this,
+        tr("Unsaved Changes"),
+        tr("The current project '%1' has unsaved changes.\nDo you want to save them before proceeding?")
+            .arg(m_projectController->currentProjectName()),
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
+    );
+
+    if (ret == QMessageBox::Save) {
+        on_actionSaveProject_triggered();
+        return !m_projectController->isProjectModified();
+    } else if (ret == QMessageBox::Cancel) {
+        return false;
+    }
+    return true;
+}
+
+void MainWindow::openSettingsDialog()
+{
+    SettingsDialog dlg(this);
+    dlg.exec();
+}
+

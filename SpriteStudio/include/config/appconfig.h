@@ -59,6 +59,17 @@ struct ProjectConfig
 };
 
 /**
+ * @brief Configuration settings for Git version control and author identity.
+ */
+struct GitConfig
+{
+    QString authorName;
+    QString authorEmail;
+
+    static void detectSystemIdentity(QString *name, QString *email);
+};
+
+/**
  * @brief Central configuration manager for SpriteStudio.
  *
  * Persists and loads user and default application settings to/from a structured
@@ -86,6 +97,9 @@ public:
     const ProjectConfig& project() const { return m_project; }
     ProjectConfig& project() { return m_project; }
 
+    const GitConfig& git() const { return m_git; }
+    GitConfig& git() { return m_git; }
+
     // File operations
     bool load(const QString &filePath = QString());
     bool save(const QString &filePath = QString()) const;
@@ -108,6 +122,7 @@ private:
     VisualConfig    m_visuals;
     AnimationConfig m_animation;
     ProjectConfig   m_project;
+    GitConfig       m_git;
 
     mutable QString m_customConfigPath;
 };

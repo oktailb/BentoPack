@@ -8,6 +8,60 @@
 #include <QStandardPaths>
 #include <QDebug>
 
+#if defined(HAVE_LIBGIT2) && __has_include(<git2.h>)
+#define APPCONFIG_HAS_LIBGIT2 1
+#include <git2.h>
+#endif
+
+void GitConfig::detectSystemIdentity(QString *name, QString *email)
+{
+    QString foundName;
+    QString foundEmail;
+
+#ifdef APPCONFIG_HAS_LIBGIT2
+    git_libgit2_init();
+    git_config *cfg = nullptr;
+    if (git_config_open_default(&cfg) == 0) {
+        git_buf nameBuf = {nullptr, 0, 0};
+        if (git_config_get_string_buf(&nameBuf, cfg, "user.name") == 0 && nameBuf.ptr) {
+            foundName = QString::fromUtf8(nameBuf.ptr).trimmed();
+        }
+        git_buf_dispose(&nameBuf);
+
+        git_buf emailBuf = {nullptr, 0, 0};
+        if (git_config_get_string_buf(&emailBuf, cfg, "user.email") == 0 && emailBuf.ptr) {
+            foundEmail = QString::fromUtf8(emailBuf.ptr).trimmed();
+        }
+        git_buf_dispose(&emailBuf);
+
+        git_config_free(cfg);
+    }
+#endif
+
+    if (foundName.isEmpty()) {
+        foundName = qEnvironmentVariable("GIT_AUTHOR_NAME");
+        if (foundName.isEmpty()) {
+            foundName = qEnvironmentVariable("USERNAME");
+        }
+        if (foundName.isEmpty()) {
+            foundName = qEnvironmentVariable("USER");
+        }
+        if (foundName.isEmpty()) {
+            foundName = QStringLiteral("SpriteStudio");
+        }
+    }
+
+    if (foundEmail.isEmpty()) {
+        foundEmail = qEnvironmentVariable("GIT_AUTHOR_EMAIL");
+        if (foundEmail.isEmpty()) {
+            foundEmail = QStringLiteral("spritestudio@local");
+        }
+    }
+
+    if (name) *name = foundName;
+    if (email) *email = foundEmail;
+}
+
 AppConfig& AppConfig::instance()
 {
     static AppConfig cfg;
@@ -22,19 +76,13 @@ AppConfig::AppConfig()
 
 QString AppConfig::resolveDefaultConfigPath() const
 {
-    // 1. Portable mode: check if spritestudio_config.json exists next to executable
-    QString appDir = QCoreApplication::applicationDirPath();
-    if (!appDir.isEmpty()) {
-        QString localPath = QDir(appDir).filePath(QStringLiteral("spritestudio_config.json"));
-        if (QFile::exists(localPath)) {
-            return localPath;
-        }
-    }
-
-    // 2. Standard user config path
+    // Preferred persistent location:
+    // Windows: %APPDATA%/SpriteStudio/spritestudio_config.json
+    // Linux:   ~/.config/SpriteStudio/spritestudio_config.json
+    // macOS:   ~/Library/Application Support/SpriteStudio/spritestudio_config.json
     QString configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     if (configDir.isEmpty()) {
-        configDir = appDir;
+        configDir = QDir::homePath() + QStringLiteral("/.spritestudio");
     }
     return QDir(configDir).filePath(QStringLiteral("spritestudio_config.json"));
 }
@@ -58,6 +106,7 @@ void AppConfig::resetToDefaults()
     m_visuals = VisualConfig();
     m_animation = AnimationConfig();
     m_project = ProjectConfig();
+    m_git = GitConfig();
     emit configChanged();
 }
 
@@ -147,6 +196,13 @@ bool AppConfig::load(const QString &filePath)
         m_project.undoLimit = projObj.value(QStringLiteral("undo_limit")).toInt(m_project.undoLimit);
     }
 
+    // 5. Git section
+    if (root.contains(QStringLiteral("git")) && root.value(QStringLiteral("git")).isObject()) {
+        QJsonObject gitObj = root.value(QStringLiteral("git")).toObject();
+        m_git.authorName = gitObj.value(QStringLiteral("author_name")).toString(m_git.authorName);
+        m_git.authorEmail = gitObj.value(QStringLiteral("author_email")).toString(m_git.authorEmail);
+    }
+
     emit configChanged();
     return true;
 }
@@ -204,6 +260,12 @@ bool AppConfig::save(const QString &filePath) const
     projObj[QStringLiteral("background_min_alpha")] = m_project.backgroundMinAlpha;
     projObj[QStringLiteral("undo_limit")] = m_project.undoLimit;
     root[QStringLiteral("project")] = projObj;
+
+    // 5. Git
+    QJsonObject gitObj;
+    gitObj[QStringLiteral("author_name")] = m_git.authorName;
+    gitObj[QStringLiteral("author_email")] = m_git.authorEmail;
+    root[QStringLiteral("git")] = gitObj;
 
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {

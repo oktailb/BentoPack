@@ -122,7 +122,11 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    e->accept();
+    if (maybeSave()) {
+        e->accept();
+    } else {
+        e->ignore();
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

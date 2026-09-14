@@ -30,21 +30,24 @@ void MainWindow::on_animationList_customContextMenuRequested(const QPoint &pos)
 
     QAction *createAnimAction = menu.addAction(tr("KEY_CTX_CREATE_ANIM"));
     createAnimAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
-    connect(createAnimAction, &QAction::triggered, this, [this]() {
+
+    QAction *reverseAction = menu.addAction(tr("KEY_CTX_REVERSE_ANIM"));
+    QAction *deleteAction = menu.addAction(tr("KEY_CTX_DELETE_ANIM"));
+
+    QAction *chosen = menu.exec(ui->animationList->mapToGlobal(pos));
+    if (!chosen) return;
+
+    if (chosen == createAnimAction) {
         if (m_animationController && m_document) {
             m_animationController->createAnimationFromSelection(m_document->selectedFrameIndices());
         }
-    });
-
-    QAction *reverseAction = menu.addAction(tr("KEY_CTX_REVERSE_ANIM"));
-    connect(reverseAction, &QAction::triggered, this, [this]() {
-        if (m_animationController) m_animationController->reverseAnimationOrder();
-    });
-
-    QAction *deleteAction = menu.addAction(tr("KEY_CTX_DELETE_ANIM"));
-    connect(deleteAction, &QAction::triggered, this, [this]() {
-        if (m_animationController) m_animationController->removeSelectedAnimation();
-    });
-
-    menu.exec(ui->animationList->mapToGlobal(pos));
+    } else if (chosen == reverseAction) {
+        if (m_animationController) {
+            m_animationController->reverseAnimationOrder();
+        }
+    } else if (chosen == deleteAction) {
+        if (m_animationController) {
+            m_animationController->removeSelectedAnimation();
+        }
+    }
 }

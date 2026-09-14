@@ -30,10 +30,6 @@ void MainWindow::populateFrameList(const QList<QPixmap> &frameList, const QList<
         item->setData(i, Qt::UserRole);
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
         frameModel->appendRow(item);
-
-        if (progressBar && itemCount > 0) {
-            progressBar->setValue(100 * i / itemCount);
-        }
     }
 
     // Re-apply selection to ui->framesList if document has active selections

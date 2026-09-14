@@ -34,6 +34,7 @@ private:
   QLabel *titleLabel;
   QLabel *versionLabel;
   QPushButton *closeButton;
+  QPushButton *settingsButton;
 };
 
 #endif // ABOUTDIALOG_H

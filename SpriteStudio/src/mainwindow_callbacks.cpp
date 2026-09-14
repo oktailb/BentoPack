@@ -45,8 +45,80 @@ void MainWindow::on_actionAbout_triggered()
     aboutDialog.exec();
 }
 
+void MainWindow::on_actionNewProject_triggered()
+{
+    if (!maybeSave()) return;
+    if (m_projectController) {
+        m_projectController->newProject();
+    }
+}
+
+void MainWindow::on_actionOpenProject_triggered()
+{
+    if (!maybeSave()) return;
+
+    QString initialDir = m_projectController && !m_projectController->currentProjectPath().isEmpty()
+        ? QFileInfo(m_projectController->currentProjectPath()).absolutePath()
+        : QDir::homePath();
+
+    QString filter = tr("SpriteStudio Project (*.ssp);;All Files (*.*)");
+    QString fileName = QFileDialog::getOpenFileName(this, tr("KEY_ACTION_OPEN_PROJECT"), initialDir, filter);
+    if (!fileName.isEmpty() && m_projectController) {
+        QString errorMsg;
+        if (!m_projectController->openProject(fileName, &errorMsg)) {
+            QMessageBox::critical(this, tr("KEY_MSG_LOAD_ERROR"), errorMsg);
+        }
+    }
+}
+
+void MainWindow::on_actionSaveProject_triggered()
+{
+    if (!m_projectController || !m_document || m_document->isEmpty()) {
+        QMessageBox::warning(this, tr("KEY_ACTION_SAVE_PROJECT"), tr("KEY_MSG_NOTHING_TO_SAVE"));
+        return;
+    }
+
+    if (m_projectController->currentProjectPath().isEmpty()) {
+        on_actionSaveProjectAs_triggered();
+        return;
+    }
+
+    QString errorMsg;
+    if (!m_projectController->saveProject(m_projectController->currentProjectPath(), &errorMsg)) {
+        QMessageBox::critical(this, tr("KEY_MSG_SAVE_ERROR"), errorMsg);
+    }
+}
+
+void MainWindow::on_actionSaveProjectAs_triggered()
+{
+    if (!m_projectController || !m_document || m_document->isEmpty()) {
+        QMessageBox::warning(this, tr("KEY_ACTION_SAVE_PROJECT_AS"), tr("KEY_MSG_NOTHING_TO_SAVE"));
+        return;
+    }
+
+    QString initialPath = m_projectController->currentProjectPath().isEmpty()
+        ? QDir::homePath() + QStringLiteral("/project.ssp")
+        : m_projectController->currentProjectPath();
+
+    QString filter = tr("SpriteStudio Project (*.ssp);;All Files (*.*)");
+    QString fileName = QFileDialog::getSaveFileName(this, tr("KEY_ACTION_SAVE_PROJECT_AS"), initialPath, filter);
+    if (!fileName.isEmpty()) {
+        QString errorMsg;
+        if (!m_projectController->saveProjectAs(fileName, &errorMsg)) {
+            QMessageBox::critical(this, tr("KEY_MSG_SAVE_ERROR"), errorMsg);
+        }
+    }
+}
+
+void MainWindow::on_actionExportAs_triggered()
+{
+    on_actionExport_triggered();
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
+    if (!maybeSave()) return;
+
     const QString title = tr("KEY_DIALOG_OPEN_TITLE");
     const QString formats = ExtractorRegistry::instance().openFilterString();
     QString fileName = QFileDialog::getOpenFileName(this, title, "", formats);

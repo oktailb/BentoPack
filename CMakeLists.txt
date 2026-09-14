@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.20)
 
+if(POLICY CMP0074)
+    cmake_policy(SET CMP0074 NEW)
+endif()
+if(POLICY CMP0144)
+    cmake_policy(SET CMP0144 NEW)
+endif()
+
 set(PROJECT_VERSION_MAJOR 0)
 set(PROJECT_VERSION_MINOR 9)
 set(PROJECT_VERSION_PATCH 3)
@@ -13,7 +20,7 @@ project(SpriteStudio    VERSION ${PROJECT_VERSION}
 include("build.cmake")
 include(GNUInstallDirs)
 
-find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core CorePrivate)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Multimedia)
@@ -21,11 +28,6 @@ find_package(Qt6 REQUIRED COMPONENTS MultimediaWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Concurrent)
 find_package(Qt6 REQUIRED COMPONENTS LinguistTools REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Test)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -36,6 +38,21 @@ endif()
 if(NOT DEFINED CMAKE_RUNTIME_OUTPUT_DIRECTORY)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+find_package(LibGit2 QUIET)
+if(LibGit2_FOUND)
+    message(STATUS "LibGit2 found: ${LIBGIT2_LIBRARIES} (includes: ${LIBGIT2_INCLUDE_DIRS})")
+    add_compile_definitions(HAVE_LIBGIT2=1)
+else()
+    message(STATUS "LibGit2 not found. Git versioning in .ssp projects is disabled.")
+    message(STATUS "To enable LibGit2, configure with -DLIBGIT2_ROOT=<path_to_libgit2>")
+endif()
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(SpriteStudio)
 

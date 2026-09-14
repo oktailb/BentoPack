@@ -49,6 +49,10 @@ set (${PROJECT_NAME}_SRC
     src/atlasboxitem.cpp
     src/config/appconfig.cpp
     src/image/spritedetector.cpp
+    src/project/sessionmanager.cpp
+    src/project/projectmanager.cpp
+    src/widgets/githistorydock.cpp
+    src/widgets/settingsdialog.cpp
     src/version.h.in
     src/haiku.PackageInfo.in
     ${CMAKE_CURRENT_BINARY_DIR}/generated/version.h
@@ -71,6 +75,10 @@ set (${PROJECT_NAME}_INCLUDE
     include/commands/commands.h
     include/image/spritedetector.h
     include/atlasboxitem.h
+    include/project/sessionmanager.h
+    include/project/projectmanager.h
+    include/widgets/githistorydock.h
+    include/widgets/settingsdialog.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h
     include/extractor/spriteextractor.h
@@ -95,6 +103,7 @@ qt_add_translations(${PROJECT_NAME}
     SOURCES
         ${${PROJECT_NAME}_SRC}
         ${${PROJECT_NAME}_INCLUDE}
+        ${${PROJECT_NAME}_UI}
     RESOURCE_PREFIX
         "/i18n"
 )
@@ -126,13 +135,25 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Multimedia
-    Qt${QT_VERSION_MAJOR}::MultimediaWidgets
-    Qt${QT_VERSION_MAJOR}::Concurrent
+    Qt6::Core
+    Qt6::CorePrivate
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Multimedia
+    Qt6::MultimediaWidgets
+    Qt6::Concurrent
 )
+
+if(LibGit2_FOUND)
+    target_link_libraries(${PROJECT_NAME} PRIVATE LibGit2::LibGit2)
+    if(WIN32 AND LIBGIT2_DLL)
+        add_custom_command(
+            TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${LIBGIT2_DLL}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+            COMMENT "Copying libgit2.dll to application directory"
+        )
+    endif()
+endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
