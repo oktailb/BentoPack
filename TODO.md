@@ -14,9 +14,10 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M2** | [Gestionnaire Complet d'Animations & Timeline](#m2--gestionnaire-complet-danimations--timeline) | **Haute** | Moyenne | 📝 Planifié |
 | **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Moyenne** | Faible | 📝 Planifié |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié |
-| **M5** | [Format de Projet Natif (`.sps` - Sprite Studio Project)](#m5--format-de-projet-natif-sps---sprite-studio-project) | **Haute** | Faible | 📝 Planifié |
+| **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 📝 Planifié |
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Basse** | Moyenne | 📝 Planifié |
 | **M7** | [Suppression Avancée de Fond & Segmentation Robuste (JPEG Bruités, Anti-Halo)](#m7--suppression-avancée-darrière-plan--segmentation-robuste-planches-jpeg-bruit-anti-halo) | **Moyenne** | Moyenne | 📝 Notes & Pistes Techniques |
+| **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifications Détaillées |
 
 ---
 
@@ -455,12 +456,116 @@ Les planches de sprites récupérées sur le Web (rips d'émulateurs, archives) 
 
 ---
 
+## M8 : Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)
+
+### Contexte & Enjeux Techniques
+Dans l'empaquetage rectangulaire standard (M6), chaque frame est isolée dans un rectangle orthogonal $[x, y, w, h]$. Pour des sprites aux poses dynamiques (personnage en plein saut, bras levé, lame d'épée en diagonale, tentacules, queues, effets de foudre), ce rectangle contient souvent plus de 50% à 70% de pixels transparents inutilisés.  
+L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectangle une enveloppe polygonale 2D (convexe ou concave) épousant au plus près les pixels opaques de la silhouette :
+- **Gain d'espace drastique (20% à 50% de surface d'atlas économisée) :** Les formes s'imbriquent comme des pièces de puzzle (la pointe d'une épée se glisse dans le creux sous l'aisselle ou entre les jambes d'une autre frame). Cette compacité permet fréquemment de faire tenir une série d'animations dans un atlas $1024\times 1024$ au lieu de devoir doubler vers un $2048\times 2048$, réduisant l'empreinte mémoire vidéo (VRAM) de **75%**.
+- **Éradication de l'Overdraw GPU (Fillrate) :** Sur mobile et consoles (Switch, etc.), le processeur graphique ne gaspille plus de temps à exécuter les shaders sur des fragments transparents invisibles.
+
+---
+
+### 🔬 Pipeline Algorithmique Complet en 5 Étapes
+
+```
+[Canal Alpha] 
+     │
+     ▼ 1. Détection de Contour
+[Contour Pixel (Marching Squares / Moore-Neighbor)]
+     │
+     ▼ 2. Simplification Géométrique
+[Polygone Simplifié 8-12 sommets (Ramer-Douglas-Peucker)]
+     │
+     ▼ 3. Triangulation 2D
+[Maillage Triangulé GPU (Ear Clipping / Constrained Delaunay)]
+     │
+     ▼ 4. Bin-Packing Non-Convexe
+[Imbrication Puzzle Optimisée (No-Fit Polygon / Raster Dilation)]
+     │
+     ▼ 5. Export Multi-Moteurs
+[Atlas PNG Compact + JSON Maillage (Vertices, UVs, Triangles)]
+```
+
+#### 1. Détection de Contour Silhouette (*Contour Tracing*) :
+- Analyse du canal alpha de chaque frame selon un seuil d'opacité configurable ($\alpha > \text{alphaThreshold}$, ex. $\alpha \ge 1$).
+- Algorithme de contouring 2D (**Marching Squares** ou traçage de frontières de Moore-Neighbor) pour extraire la chaîne fermée ordonnée des pixels de bordure.
+- Prise en charge des silhouettes à composantes multiples ou îles disjointes (ex. projectile séparé du corps).
+
+#### 2. Simplification Géométrique Adaptative (*Ramer-Douglas-Peucker*) :
+- Les contours bruts contiennent souvent 100 à 400 sommets par sprite, ce qui saturerait inutilement le GPU au stade vertex.
+- Application de l'algorithme de **Ramer-Douglas-Peucker (RDP)** avec paramètre d'écart $\epsilon$ (en pixels, ex: $\epsilon = 1.0$ à $2.5$ px) :
+  - Réduction de l'enveloppe à un polygone épuré de **6 à 12 sommets** seulement.
+  - **Plafond strict de sommets ($N \le 16$) :** Garantie d'un coût de transformation de sommets négligeable pour le moteur de jeu.
+  - **Garantie d'inclusion externe :** Dilatation légère (expansion d'un demi-pixel) pour garantir qu'aucun pixel opaque ne soit accidentellement tronqué par une arête simplifiée.
+
+#### 3. Triangulation 2D du Maillage (*Mesh Triangulation*) :
+- Transformation du polygone 2D simple (pouvant être concave) en un ensemble de triangles prêt pour le pipeline graphique GPU.
+- Algorithme d'**Ear-Clipping** (découpage d'oreilles) ou **Constrained Delaunay Triangulation (CDT)**.
+- Génération des triplets d'indices de faces (`triangles: [0, 1, 2, 0, 2, 3...]`).
+
+#### 4. Algorithme d'Empaquetage 2D Non-Convexe (*Polygon Bin-Packing*) :
+- Contrairement aux rectangles qui ne se superposent que sur leurs projections orthogonales, les polygones peuvent s'interpénétrer dans leurs zones concaves :
+  - **Méthode NFP (No-Fit Polygon) :** Calcul de la zone interdite entre deux polygones pour trouver la trajectoire de contact la plus étroite sans collision.
+  - **Approche Raster-Assisted (Hybride Rapide) :** Dilatation du masque de silhouette par la valeur de rembourrage (*padding*), et balayage par transformée de distance ou bounding boxes orientées (OBB - *Oriented Bounding Box*) à pas angulaire ($0^\circ, 90^\circ, 180^\circ, 270^\circ$).
+- Respect rigoureux d'un espacement de sécurité polygonal (*Polygon Padding*, 2 px par défaut) pour prévenir tout artefact de saignement de texture (*texture bleeding*) lors du filtrage bilinéaire.
+
+#### 5. Données d'Exportation & Formats Cibles :
+- **Format JSON Étendu (Structure Universelle) :**
+  Pour chaque frame de l'atlas :
+  - `vertices` : tableau des coordonnées 2D des sommets relatifs au point d'ancrage/pivot ($[x_0, y_0, x_1, y_1 \dots]$).
+  - `uvs` : tableau des coordonnées de texture normalisées $[0.0, 1.0]$ sur l'atlas final.
+  - `triangles` : liste d'indices reliant les sommets par triplets.
+  - `bounds` : bounding box rectangulaire de fallback pour compatibilité.
+- **Export Dédié Godot 4 :**
+  - Génération de fichiers de ressources maillage avec nœuds `Polygon2D` ou `ArrayMesh` 2D, utilisables directement dans les scènes sans aucune ligne de code supplémentaire.
+- **Export Dédié Unity :**
+  - Fichier de métadonnées `.meta` / JSON compatible avec le mode `SpriteMeshType.Tight` d'Unity.
+
+---
+
+### 🎛️ Paramètres & Options dans l'Interface Utilisateur (UI)
+
+1. **Sélecteur de Mode d'Empaquetage :**
+   - `Rectangulaire (MaxRects — Standard & Universel)`
+   - `Polygonal (Tight Mesh — Optimisation VRAM & Overdraw)`
+2. **Curseur de Complexité du Maillage (Vertex Budget) :**
+   - *Ultra-Léger (6 à 8 sommets)* : Idéal pour jeux mobiles massifs et scènes à très grand nombre d'entités (bullet hell, foules).
+   - *Équilibré (8 à 12 sommets — recommandé)* : Compromis parfait entre gain d'atlas et charge géométrique.
+   - *Précis (12 à 16 sommets)* : Épouse au plus près les armes et détails fins.
+3. **Prévisualisation Interactive du Maillage :**
+   - Case à cocher *Afficher le maillage polygonal (Wireframe)* sur la vue de l'atlas pour inspecter visuellement les arêtes et les triangles générés.
+   - Statistiques en direct : comparaison du taux de remplissage (*Packing Efficiency : 64% en Rectangulaire $\rightarrow$ 89% en Polygonal*).
+
+---
+
+### ⚖️ Tableau Comparatif : Packing Rectangulaire vs Packing Polygonal
+
+| Critère | M6 : MaxRects Rectangulaire | M8 : Packing Polygonal / Tight Mesh |
+|---|---|---|
+| **Compatibilité Moteurs** | 🟢 **100% Universelle** (Tous moteurs, tous composants 2D) | 🟡 **Spécialisée** (Nécessite support `Polygon2D`, `MeshInstance` ou custom) |
+| **Gain de Surface d'Atlas** | Standard (Baseline) | 🟢 **+20% à +50% de compacité** (évite de doubler la taille d'atlas) |
+| **Consommation VRAM** | Moyenne | 🟢 **Minimale** (textures plus petites) |
+| **Overdraw GPU (Fillrate)** | Élevé sur formes ouvertes (quads transparents) | 🟢 **Quasi-nul** (les pixels transparents ne sont pas dessinés) |
+| **Coût CPU au Packing** | Rapide ($< 50$ ms) | Modéré (100 ms à 1-2 s selon le nombre de frames) |
+| **Complexité d'Intégration** | Faible | Haute (Tracé de contour + Simplification + Triangulation + NFP) |
+
+---
+
+### Fichiers & Composants Cibles
+- `SpriteStudio/include/geometry/contourtracer.h` / `src/geometry/contourtracer.cpp` : Extraction de contours alpha par Marching Squares / Moore-Neighbor.
+- `SpriteStudio/include/geometry/triangulator.h` / `src/geometry/triangulator.cpp` : Simplification Ramer-Douglas-Peucker et triangulation Ear-Clipping.
+- `SpriteStudio/include/packer/polygonpacker.h` / `src/packer/polygonpacker.cpp` : Algorithme de bin-packing 2D non-convexe.
+- `SpriteStudio/include/extractor/godotextractor.h` : Extension d'export Godot vers nœuds `Polygon2D`.
+
+---
+
 ## 📅 Ordre de Déploiement Recommandé
 
 1. **Étape 0 — Stabilisation & Clôture de M1 (M1-Fix) — ✅ TERMINÉ & VALIDÉ (100%)** :
    Poignées cosmétiques anti-chevauchement à fort zoom pixel art, déplacement synchronisé de multi-sélection (group drag), badges d'index sans débordement et découpe continue avec Shift validés par tests unitaires automatisés.
 2. **Étape 1 — Sauvegarde & Projet Natif (M5)** :
-   Sécuriser le travail de l'utilisateur dès le départ en lui permettant de sauvegarder et recharger son document complet (`.sps`), évitant toute perte de données lors des crashs ou fermetures.
+   Sécuriser le travail de l'utilisateur dès le départ en lui permettant de sauvegarder et recharger son document complet (`.ssp`), évitant toute perte de données lors des crashs ou fermetures.
 3. **Étape 2 — Séquençage & Multi-Animations (M2)** :
    Donner toute la dimension "studio d'animation" avec la création d'animations multiples, le réglage de cadence et les boucles via une timeline ergonomique.
 4. **Étape 3 — Points d'Ancrage / Pivots (M3)** :
@@ -473,3 +578,5 @@ Les planches de sprites récupérées sur le Web (rips d'émulateurs, archives) 
    Perfectionner le rendement de l'atlas PNG final pour la production avec MaxRects.
 8. **Étape 7 — Suppression Avancée de Fond & Débruitage Robuste (M7)** :
    Doter SpriteStudio d'un moteur de segmentation tolérant au bruit JPEG, anti-halo (*despill*), filtrage de textes parasites et désagglomération pour les planches de sprites complexes.
+9. **Étape 8 — Empaquetage Polygonal & Maillages Serrés (M8)** :
+   Extension haute performance pour moteurs 2D modernes (Godot Polygon2D, Unity Tight) : tracé de contours alpha, simplification Douglas-Peucker, triangulation et imbrication type puzzle pour maximiser la densité d'atlas et éradiquer l'overdraw GPU.
