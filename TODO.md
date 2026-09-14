@@ -315,19 +315,37 @@ Actuellement, si un utilisateur découpe 50 frames, crée 4 animations, règle d
 Un format de sauvegarde de session de travail (`.ssp`) est indispensable.
 
 ### Spécifications Fonctionnelles
-1. **Structure du Fichier `.ssp` :**
-   - Format JSON clair et lisible.
-   - Contenu sauvegardé sous format ZIP (meme principe que docx, oasis, openxml, etc.) contenant:
-     - images de référence (optionnel, sinon cherchées dans le même dossier que le fichier .sps)
-     - le fichier .json (obligatoire)
-     - Git embarqué pour versioning (libgit).
-   - Les données sauvegardées dans le json sont:
-     - Chemin ou données relatives de l'image source / atlas.
-     - Liste complète des Bounding Boxes (rectangles, indices, groupes, pivots).
-     - Dictionnaire de toutes les animations créées (noms, séquences, FPS, modes de boucle).
-     - Paramètres de projet (seuil alpha, tolérance verticale, stratégie de découpe).
-     - Derniers réglages d'export utilisés.
-2. **Intégration Menu Fichier :**
+1. **Structure de l'Archive `.ssp` (Conteneur ZIP) :**
+   - Format ZIP standard (identique au principe des formats `.docx`, `.kra`, `.aseprite`, OpenXML).
+   - Arborescence interne de l'archive :
+     - `project.json` (obligatoire) : structure du document, boîtes de découpe, animations, cadences FPS, modes de boucle, points d'ancrage/pivots (M3), seuils alpha et paramètres d'export.
+     - `assets/` (optionnel) : image(s) source / atlas embarqué pour rendre le fichier de projet 100% portable et autonome (ou chemin relatif si mode atlas externe).
+     - `.git/` : dépôt Git embarqué pour le versioning local de l'historique (`libgit2`).
+
+2. **Espace de Travail Temporaire (Scratch / Session Directory) :**
+   - Plutôt que de manipuler une archive ZIP lourde en mémoire vive (RAM), l'application travaille directement dans un dossier temporaire sur disque :  
+     `%TEMP%/SpriteStudio/sessions/<session_uuid>/` (via `QStandardPaths::TempLocation`).
+   - **Avantages majeurs :**
+     - Zéro saturation de RAM sur les gros atlas.
+     - Support natif et direct de Git / `libgit2` (qui nécessite une arborescence réelle sur disque pour opérer).
+     - **Sauvegarde atomique sécurisée :** Lors de `Ctrl+S`, le dossier temporaire est zippé dans un fichier temporaire `.ssp.tmp` puis substitué par renommage atomique vers `.ssp`, éliminant tout risque de corrompre le projet si le système est coupé pendant l'écriture.
+
+3. **Verrou de Session & Reprise sur Crash (Crash Recovery) :**
+   - Chaque session de travail maintient un fichier `.session_lock` (JSON) contenant :
+     - `pid` : identifiant du processus en cours.
+     - `originalFilePath` : chemin absolu du fichier `.ssp` ouvert (ou vide si nouveau projet non enregistré).
+     - `status` : `"active"` pendant la session, mis à jour en `"clean_closed"` à la fermeture normale.
+     - `lastSavedTimestamp` / `lastModifiedTimestamp`.
+   - **Détection & Reprise au Démarrage :**  
+     Au lancement, SpriteStudio inspecte les dossiers de sessions orphelines (dont le `pid` n'existe plus et dont le statut est resté `"active"`). Si une session interrompue est détectée :
+     - Un dialogue propose la restauration immédiate :  
+       > *"Une session de travail interrompue a été détectée (Projet : 'hero.ssp', 14/09/2026 09:15). Souhaitez-vous restaurer votre travail ?"*
+     - L'utilisateur peut restaurer la session ou purger les fichiers temporaires orphelins.
+   - **Détection de Désynchronisation à l'Ouverture :**  
+     À l'ouverture d'un projet `hero.ssp`, si une session temporaire associée existe sur le disque avec une date de modification plus récente que le fichier `.ssp` (non commité / crash précédent) :
+     - L'application avertit l'utilisateur et propose de charger la version la plus récente issue de la récupération de crash.
+
+4. **Intégration Menu Fichier :**
    - `Fichier -> Nouveau Projet` (`Ctrl+N`).
    - `Fichier -> Ouvrir Projet...` (`Ctrl+O`).
    - `Fichier -> Enregistrer Projet` (`Ctrl+S`).
@@ -336,13 +354,15 @@ Un format de sauvegarde de session de travail (`.ssp`) est indispensable.
    - `Fichier -> Exporter Sous...` (`Ctrl+Shift+E`).
    - Détection automatique à l'ouverture : si l'extension est `.ssp`, ouvrir directement le projet.
    - Historique *Projets Récents* peuplé avec les derniers projets `.ssp` ouverts.
-3. **Avertissement de modifications non enregistrées :**
+
+5. **Avertissement de modifications non enregistrées :**
    - Indicateur `*` dans la barre de titre (`Sprite Studio - MonProjet.ssp *`).
    - Dialogue de confirmation à la fermeture de l'application si le projet a été modifié.
 
 ### Fichiers & Composants Cibles
 - `SpriteStudio/include/project/projectmanager.h` / `src/project/projectmanager.cpp`.
-- `SpriteStudio/src/mainwindow.cpp` : Routines d'ouverture, sauvegarde et détection de modification (`isWindowModified`).
+- `SpriteStudio/include/project/sessionmanager.h` / `src/project/sessionmanager.cpp` : Gestion du cycle de vie du dossier temporaire, extraction/compression ZIP, `.session_lock` et crash recovery.
+- `SpriteStudio/src/mainwindow.cpp` : Routines d'ouverture, sauvegarde, détection de modification (`isWindowModified`) et dialogue de reprise sur crash au démarrage.
 
 ---
 
