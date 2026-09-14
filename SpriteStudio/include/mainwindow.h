@@ -152,9 +152,6 @@ private slots:
     void invertSelection();
 
     // Slicing tools
-    void on_btnToolSelect_clicked();
-    void on_btnToolAddSlice_clicked();
-    void on_btnTrimSlice_clicked();
     void on_actionToolSelect_triggered();
     void on_actionToolAddSlice_triggered();
     void on_actionTrimSlice_triggered();

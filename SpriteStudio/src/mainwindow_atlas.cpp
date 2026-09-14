@@ -3,40 +3,25 @@
 #include <QMenu>
 #include <QAction>
 
-void MainWindow::on_btnToolSelect_clicked()
+void MainWindow::on_actionToolSelect_triggered()
 {
     if (m_atlasController) {
         m_atlasController->setToolMode(AtlasViewController::ToolSelect);
     }
 }
 
-void MainWindow::on_btnToolAddSlice_clicked()
+void MainWindow::on_actionToolAddSlice_triggered()
 {
     if (m_atlasController) {
         m_atlasController->setToolMode(AtlasViewController::ToolAddSlice);
     }
 }
 
-void MainWindow::on_btnTrimSlice_clicked()
+void MainWindow::on_actionTrimSlice_triggered()
 {
     if (m_atlasController) {
         m_atlasController->trimSelectedSlice(ui->alphaThreshold ? ui->alphaThreshold->value() : 1);
     }
-}
-
-void MainWindow::on_actionToolSelect_triggered()
-{
-    on_btnToolSelect_clicked();
-}
-
-void MainWindow::on_actionToolAddSlice_triggered()
-{
-    on_btnToolAddSlice_clicked();
-}
-
-void MainWindow::on_actionTrimSlice_triggered()
-{
-    on_btnTrimSlice_clicked();
 }
 
 void MainWindow::on_actionZoomIn_triggered()

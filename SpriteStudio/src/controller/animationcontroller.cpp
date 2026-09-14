@@ -663,7 +663,6 @@ void AnimationController::updateScrubberState()
 {
     int total = m_player ? m_player->frameCount() : 0;
     int curr = m_player ? m_player->currentSequenceIndex() : 0;
-    int curGlobal = m_player ? m_player->currentGlobalFrameIndex() : -1;
 
     if (m_scrubberSlider) {
         m_scrubberSlider->blockSignals(true);
@@ -675,13 +674,9 @@ void AnimationController::updateScrubberState()
 
     if (m_frameIndicator) {
         if (total > 0) {
-            int currentFps = fps();
-            int duration = currentFps > 0 ? (total * 1000) / currentFps : 0;
             m_frameIndicator->setText(tr("KEY_FRAME_INDICATOR_FORMAT")
                                           .arg(curr + 1)
-                                          .arg(total)
-                                          .arg(curGlobal + 1)
-                                          .arg(duration));
+                                          .arg(total));
         } else {
             m_frameIndicator->setText(tr("KEY_NO_FRAMES"));
         }

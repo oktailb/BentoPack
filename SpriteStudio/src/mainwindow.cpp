@@ -606,8 +606,7 @@ void MainWindow::updateWindowTitle()
 {
     QString name = m_projectController ? m_projectController->currentProjectName() : tr("KEY_UNTITLED_PROJECT");
     bool modified = m_projectController ? m_projectController->isProjectModified() : false;
-    QString title = QStringLiteral("SpriteStudio - %1%2").arg(name, modified ? QStringLiteral(" *") : QString());
-    setWindowTitle(title);
+    setWindowTitle(QStringLiteral("SpriteStudio - %1[*]").arg(name));
     setWindowModified(modified);
 }
 
