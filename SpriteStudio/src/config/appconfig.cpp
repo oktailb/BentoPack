@@ -102,6 +102,7 @@ void AppConfig::setConfigFilePath(const QString &path)
 
 void AppConfig::resetToDefaults()
 {
+    m_general = GeneralConfig();
     m_atlas = AtlasConfig();
     m_visuals = VisualConfig();
     m_animation = AnimationConfig();
@@ -137,6 +138,12 @@ bool AppConfig::load(const QString &filePath)
     }
 
     QJsonObject root = doc.object();
+
+    // 0. General section
+    if (root.contains(QStringLiteral("general")) && root.value(QStringLiteral("general")).isObject()) {
+        QJsonObject genObj = root.value(QStringLiteral("general")).toObject();
+        m_general.language = genObj.value(QStringLiteral("language")).toString(m_general.language);
+    }
 
     // 1. Atlas section
     if (root.contains(QStringLiteral("atlas")) && root.value(QStringLiteral("atlas")).isObject()) {
@@ -219,6 +226,11 @@ bool AppConfig::save(const QString &filePath) const
 
     QJsonObject root;
     root[QStringLiteral("version")] = 1;
+
+    // 0. General
+    QJsonObject genObj;
+    genObj[QStringLiteral("language")] = m_general.language;
+    root[QStringLiteral("general")] = genObj;
 
     // 1. Atlas
     QJsonObject atlasObj;

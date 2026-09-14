@@ -112,7 +112,7 @@ void AboutDialog::setupUI()
   connect(closeButton, &QPushButton::clicked, this, &AboutDialog::accept);
 
   // Bouton Préférences
-  settingsButton = new QPushButton(tr("Préférences..."));
+  settingsButton = new QPushButton(tr("KEY_ACTION_SETTINGS"));
   settingsButton->setStyleSheet(
       "QPushButton {"
       "    background: #ecf0f1;"
@@ -256,7 +256,7 @@ QString AboutDialog::readTextFile(const QString &filePath)
 
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
       qWarning() << "Impossible d'ouvrir le fichier de ressource de licence:" << filePath;
-      return QString("Erreur: Fichier de licence non trouvé dans les ressources: ") + filePath;
+      return tr("KEY_LICENCE_FILE_NOT_FOUND").arg(filePath);
     }
 
   QTextStream in(&file);

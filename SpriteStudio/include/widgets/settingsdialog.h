@@ -7,9 +7,11 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QComboBox>
 #include <QLabel>
 #include <QPushButton>
 #include <QDialogButtonBox>
+#include <QGroupBox>
 
 /**
  * @brief Modal configuration dialog for SpriteStudio.
@@ -43,8 +45,12 @@ private slots:
     void onCategoryItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void onDetectSystemGitIdentity();
 
+protected:
+    void changeEvent(QEvent *event) override;
+
 private:
     void setupUI();
+    void retranslateUi();
     QWidget* createGeneralPage();
     QWidget* createGitPage();
     QWidget* createAtlasPage();
@@ -63,24 +69,53 @@ private:
     QTreeWidgetItem *m_itemGit = nullptr;
     QTreeWidgetItem *m_itemAtlas = nullptr;
 
-    // General Page Controls
-    QSpinBox *m_spinUndoLimit = nullptr;
-    QSpinBox *m_spinMaxRecentFiles = nullptr;
-    QSpinBox *m_spinAlphaThreshold = nullptr;
-    QSpinBox *m_spinBgRemovalTol = nullptr;
+    // General Page Controls & Labels
+    QLabel    *m_hdrGeneral = nullptr;
+    QGroupBox *m_grpHistory = nullptr;
+    QLabel    *m_lblUndoLimit = nullptr;
+    QLabel    *m_lblMaxRecentFiles = nullptr;
+    QSpinBox  *m_spinUndoLimit = nullptr;
+    QSpinBox  *m_spinMaxRecentFiles = nullptr;
 
-    // Git Page Controls
+    QGroupBox *m_grpExtraction = nullptr;
+    QLabel    *m_lblAlphaThreshold = nullptr;
+    QLabel    *m_lblBgRemovalTol = nullptr;
+    QSpinBox  *m_spinAlphaThreshold = nullptr;
+    QSpinBox  *m_spinBgRemovalTol = nullptr;
+
+    QGroupBox *m_grpLang = nullptr;
+    QLabel    *m_lblLangApp = nullptr;
+    QComboBox *m_comboLanguage = nullptr;
+    QLabel    *m_lblLangHint = nullptr;
+
+    // Git Page Controls & Labels
+    QLabel      *m_hdrGit = nullptr;
+    QGroupBox   *m_grpAuthor = nullptr;
+    QLabel      *m_lblAuthorInfo = nullptr;
+    QLabel      *m_lblAuthorName = nullptr;
+    QLabel      *m_lblAuthorEmail = nullptr;
     QLineEdit   *m_editGitAuthorName = nullptr;
     QLineEdit   *m_editGitAuthorEmail = nullptr;
     QPushButton *m_btnDetectGit = nullptr;
     QLabel      *m_lblGitStatus = nullptr;
+    QGroupBox   *m_grpGitEngine = nullptr;
+    QLabel      *m_lblGitDesc = nullptr;
 
-    // Atlas Page Controls
+    // Atlas Page Controls & Labels
+    QLabel         *m_hdrAtlas = nullptr;
+    QGroupBox      *m_grpZoom = nullptr;
+    QLabel         *m_lblZoomStep = nullptr;
+    QLabel         *m_lblZoomMin = nullptr;
+    QLabel         *m_lblZoomMax = nullptr;
+    QLabel         *m_lblFitPadding = nullptr;
     QDoubleSpinBox *m_spinZoomStep = nullptr;
     QDoubleSpinBox *m_spinZoomMin = nullptr;
     QDoubleSpinBox *m_spinZoomMax = nullptr;
-    QSpinBox       *m_spinMinSliceSize = nullptr;
     QSpinBox       *m_spinFitPadding = nullptr;
+
+    QGroupBox      *m_grpSlicing = nullptr;
+    QLabel         *m_lblMinSliceSize = nullptr;
+    QSpinBox       *m_spinMinSliceSize = nullptr;
 };
 
 #endif // SETTINGSDIALOG_H

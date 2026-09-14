@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <QDragMoveEvent>
 #include <QMimeData>
+#include <QSettings>
 
 #include <QLineEdit>
 #include <QTextEdit>
@@ -29,6 +30,21 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
                 event->accept();
                 return;
             }
+        }
+    }
+
+    // Home/End: First / Last frame
+    if (key == Qt::Key_Home) {
+        if (m_animationController) {
+            m_animationController->firstFrame();
+            event->accept();
+            return;
+        }
+    } else if (key == Qt::Key_End) {
+        if (m_animationController) {
+            m_animationController->lastFrame();
+            event->accept();
+            return;
         }
     }
 
@@ -61,6 +77,21 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             m_atlasController->nudgeSelectedBoxes(dx, dy);
             event->accept();
             return;
+        }
+    } else {
+        // Left / Right arrows: Frame-by-frame stepping in animation player
+        if (key == Qt::Key_Left) {
+            if (m_animationController) {
+                m_animationController->stepBackward();
+                event->accept();
+                return;
+            }
+        } else if (key == Qt::Key_Right) {
+            if (m_animationController) {
+                m_animationController->stepForward();
+                event->accept();
+                return;
+            }
         }
     }
     QMainWindow::keyPressEvent(event);
@@ -122,6 +153,8 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
+    saveLayoutState();
+
     if (maybeSave()) {
         e->accept();
     } else {

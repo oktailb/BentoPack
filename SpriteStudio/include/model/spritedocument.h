@@ -29,10 +29,21 @@ struct SpriteBox {
  * @brief Structure representing an animation sequence.
  */
 struct SpriteAnimation {
+    enum LoopMode {
+        Loop = 0,
+        Once = 1,
+        PingPong = 2
+    };
+
     QString     name;
     QList<int>  frameIndices;
     int         fps = 12;
     bool        loop = true;
+    LoopMode    loopMode = Loop;
+
+    int durationMs() const {
+        return fps > 0 ? (frameIndices.size() * 1000) / fps : 0;
+    }
 };
 
 /**
@@ -86,6 +97,7 @@ public:
     void setFrameSelected(int index, bool selected) { setBoxSelection(index, selected); }
     void clearBoxSelections();
     QList<int> selectedFrameIndices() const;
+    void setSelectedFrameIndices(const QList<int> &indices);
 
     // Dimensions
     int maxFrameWidth() const { return m_maxFrameWidth; }
@@ -96,10 +108,20 @@ public:
     bool hasAnimation(const QString &name) const { return m_animations.contains(name); }
     SpriteAnimation animation(const QString &name) const;
     const QMap<QString, SpriteAnimation>& animations() const { return m_animations; }
-    void setAnimation(const QString &name, const QList<int> &frameIndices, int fps = 12, bool loop = true);
+    void setAnimation(const QString &name, const QList<int> &frameIndices, int fps = 12, bool loop = true, SpriteAnimation::LoopMode loopMode = SpriteAnimation::Loop);
+    void addAnimation(const QString &name, const QList<int> &frameIndices, int fps = 12, SpriteAnimation::LoopMode loopMode = SpriteAnimation::Loop)
+    {
+        setAnimation(name, frameIndices, fps, loopMode == SpriteAnimation::Loop, loopMode);
+    }
+    void setAnimation(const SpriteAnimation &anim);
     void removeAnimation(const QString &name);
     void renameAnimation(const QString &oldName, const QString &newName);
+    void duplicateAnimation(const QString &sourceName, const QString &newName);
     void reverseAnimationFrames(const QString &name);
+    void setAnimationLoopMode(const QString &name, SpriteAnimation::LoopMode mode);
+    void setAnimationFrameSequence(const QString &name, const QList<int> &frameIndices);
+    void insertFrameInAnimation(const QString &name, int seqIndex, int globalFrameIndex);
+    void removeFrameFromAnimation(const QString &name, int seqIndex);
 
     // Manipulation helper
     void clearAtlasAreas(const QList<int> &frameIndices);
@@ -117,6 +139,7 @@ private:
     QImage                          m_atlas;
     QList<QPixmap>                  m_frames;
     QList<SpriteBox>                m_boxes;
+    QList<int>                      m_selectedFrameIndices;
     QMap<QString, SpriteAnimation>  m_animations;
     QString                         m_filePath;
     int                             m_maxFrameWidth = 0;

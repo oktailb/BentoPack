@@ -17,6 +17,7 @@
 #include "controller/projectcontroller.h"
 #include "controller/animationcontroller.h"
 #include "controller/atlasviewcontroller.h"
+#include "widgets/timelinefilmstripwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -111,6 +112,9 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 
+    void changeEvent(QEvent *event) override;
+    void resetDefaultLayout();
+
 private slots:
     // Menu actions
     void on_actionNewProject_triggered();
@@ -129,6 +133,15 @@ private slots:
     // Playback & FPS
     void on_Play_clicked();
     void on_Pause_clicked();
+    void on_btnFirstFrame_clicked();
+    void on_btnPrevFrame_clicked();
+    void on_btnNextFrame_clicked();
+    void on_btnLastFrame_clicked();
+    void on_btnNewAnim_clicked();
+    void on_btnNewFromSelection_clicked();
+    void on_btnDuplicateAnim_clicked();
+    void on_btnReverseAnim_clicked();
+    void on_btnDeleteAnim_clicked();
     void on_fps_valueChanged(int fps);
     void zoomSliderChanged(int val);
 
@@ -142,6 +155,12 @@ private slots:
     void on_btnToolSelect_clicked();
     void on_btnToolAddSlice_clicked();
     void on_btnTrimSlice_clicked();
+    void on_actionToolSelect_triggered();
+    void on_actionToolAddSlice_triggered();
+    void on_actionTrimSlice_triggered();
+    void on_actionZoomIn_triggered();
+    void on_actionZoomOut_triggered();
+    void on_actionZoomReset_triggered();
 
     // Context menus
     void onAtlasContextMenuRequested(const QPoint &pos);
@@ -153,6 +172,7 @@ private slots:
 
 private:
     void setupControllers();
+    void setupErgonomicLayout();
     void setupUIConnections();
     void setupShortcuts();
     void setupGitHistoryDock();
@@ -161,9 +181,12 @@ private:
     void updateWindowTitle();
     void checkCrashRecovery();
     bool maybeSave();
+    void saveLayoutState();
     void syncFromDocument();
     void populateFrameList(const QList<QPixmap> &frameList, const QList<SpriteBox> &boxList);
     void refreshFrameListDisplay();
+    void setupViewMenuActions();
+    void retranslateUi();
 
     std::unique_ptr<Ui::MainWindow> ui;
     ArrangementModel *frameModel = nullptr;
@@ -179,12 +202,19 @@ private:
 
     QMenu *m_recentMenu = nullptr;
     QMenu *m_recentProjectsMenu = nullptr;
+    QMenu *m_editMenu = nullptr;
+    QAction *m_undoAction = nullptr;
+    QAction *m_redoAction = nullptr;
+    QAction *m_removeBgAction = nullptr;
+    QAction *m_prefAction = nullptr;
+    QAction *m_helpPrefAction = nullptr;
     GitHistoryDock *m_gitDock = nullptr;
     QAction *m_actionToggleGitHistory = nullptr;
     QLabel *statusLabel = nullptr;
     QLabel *zoomLabel = nullptr;
     QSlider *zoomSlider = nullptr;
     QProgressBar *progressBar = nullptr;
+    TimelineFilmstripWidget *m_timelineWidget = nullptr;
     bool m_isSyncingSelection = false;
 };
 

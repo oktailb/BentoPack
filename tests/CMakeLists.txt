@@ -74,10 +74,14 @@ add_executable(test_controllers
     ${CMAKE_SOURCE_DIR}/SpriteStudio/src/extractor/extractorregistry.cpp
     ${CMAKE_SOURCE_DIR}/SpriteStudio/src/extractor.cpp
     ${CMAKE_SOURCE_DIR}/SpriteStudio/src/image/spritedetector.cpp
+    ${CMAKE_SOURCE_DIR}/SpriteStudio/src/widgets/timelinefilmstripwidget.cpp
+    ${CMAKE_SOURCE_DIR}/SpriteStudio/src/localizationmanager.cpp
 
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/controller/projectcontroller.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/controller/animationcontroller.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/controller/atlasviewcontroller.h
+    ${CMAKE_SOURCE_DIR}/SpriteStudio/include/widgets/timelinefilmstripwidget.h
+    ${CMAKE_SOURCE_DIR}/SpriteStudio/include/localizationmanager.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/model/spritedocument.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/packer/atlaspacker.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/image/spritedetector.h
@@ -155,12 +159,14 @@ add_executable(test_project
     ${CMAKE_SOURCE_DIR}/SpriteStudio/src/image/spritedetector.cpp
     ${CMAKE_SOURCE_DIR}/SpriteStudio/src/widgets/githistorydock.cpp
     ${CMAKE_SOURCE_DIR}/SpriteStudio/src/widgets/settingsdialog.cpp
+    ${CMAKE_SOURCE_DIR}/SpriteStudio/src/localizationmanager.cpp
 
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/project/sessionmanager.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/project/projectmanager.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/controller/projectcontroller.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/widgets/githistorydock.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/widgets/settingsdialog.h
+    ${CMAKE_SOURCE_DIR}/SpriteStudio/include/localizationmanager.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/model/spritedocument.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/packer/atlaspacker.h
     ${CMAKE_SOURCE_DIR}/SpriteStudio/include/commands/commands.h

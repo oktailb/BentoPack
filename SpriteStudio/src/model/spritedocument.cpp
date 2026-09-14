@@ -13,6 +13,7 @@ void SpriteDocument::clear()
     m_atlas = QImage();
     m_frames.clear();
     m_boxes.clear();
+    m_selectedFrameIndices.clear();
     m_animations.clear();
     m_filePath.clear();
     m_maxFrameWidth = 0;
@@ -47,6 +48,12 @@ void SpriteDocument::setFrames(const QList<QPixmap> &frames, const QList<SpriteB
 {
     m_frames = frames;
     m_boxes = boxes;
+    m_selectedFrameIndices.clear();
+    for (int i = 0; i < m_boxes.size(); ++i) {
+        if (m_boxes[i].selected) {
+            m_selectedFrameIndices.append(i);
+        }
+    }
     recalculateMaxFrameDimensions();
     emit framesChanged();
 }
@@ -77,6 +84,15 @@ void SpriteDocument::insertFrame(int index, const QPixmap &pixmap, const SpriteB
                 indices[i]++;
             }
         }
+    }
+
+    for (int i = 0; i < m_selectedFrameIndices.size(); ++i) {
+        if (m_selectedFrameIndices[i] >= index) {
+            m_selectedFrameIndices[i]++;
+        }
+    }
+    if (box.selected) {
+        m_selectedFrameIndices.append(index);
     }
 
     recalculateMaxFrameDimensions();
@@ -121,6 +137,18 @@ void SpriteDocument::removeFrame(int index)
         it.value().frameIndices = updated;
     }
 
+    QList<int> updatedSel;
+    for (int idx : m_selectedFrameIndices) {
+        if (idx == index) {
+            continue;
+        } else if (idx > index) {
+            updatedSel.append(idx - 1);
+        } else {
+            updatedSel.append(idx);
+        }
+    }
+    m_selectedFrameIndices = updatedSel;
+
     recalculateMaxFrameDimensions();
     emit framesChanged();
     emit animationsChanged();
@@ -162,6 +190,21 @@ void SpriteDocument::removeFrames(const QList<int> &indices)
         it.value().frameIndices = updated;
     }
 
+    QList<int> updatedSel;
+    for (int frameIdx : m_selectedFrameIndices) {
+        if (sortedIndices.contains(frameIdx)) {
+            continue;
+        }
+        int shift = 0;
+        for (int removedIdx : sortedIndices) {
+            if (removedIdx < frameIdx) {
+                shift++;
+            }
+        }
+        updatedSel.append(frameIdx - shift);
+    }
+    m_selectedFrameIndices = updatedSel;
+
     recalculateMaxFrameDimensions();
     emit framesChanged();
     emit animationsChanged();
@@ -199,6 +242,14 @@ void SpriteDocument::reorderFrames(const QList<int> &newOrder)
         }
         it.value().frameIndices = updated;
     }
+
+    QList<int> updatedSel;
+    for (int oldIdx : m_selectedFrameIndices) {
+        if (oldToNew.contains(oldIdx)) {
+            updatedSel.append(oldToNew[oldIdx]);
+        }
+    }
+    m_selectedFrameIndices = updatedSel;
 
     emit framesChanged();
     emit animationsChanged();
@@ -290,6 +341,7 @@ int SpriteDocument::addSlice(const QRect &rect)
     QPixmap framePixmap = QPixmap::fromImage(m_atlas.copy(clampedRect));
     m_frames.append(framePixmap);
     m_boxes.append(newBox);
+    m_selectedFrameIndices.append(newIndex);
 
     recalculateMaxFrameDimensions();
     emit framesChanged();
@@ -330,6 +382,13 @@ void SpriteDocument::setBoxSelection(int index, bool selected)
 {
     if (index >= 0 && index < m_boxes.size()) {
         m_boxes[index].selected = selected;
+        if (selected) {
+            if (!m_selectedFrameIndices.contains(index)) {
+                m_selectedFrameIndices.append(index);
+            }
+        } else {
+            m_selectedFrameIndices.removeAll(index);
+        }
     }
 }
 
@@ -338,17 +397,25 @@ void SpriteDocument::clearBoxSelections()
     for (int i = 0; i < m_boxes.size(); ++i) {
         m_boxes[i].selected = false;
     }
+    m_selectedFrameIndices.clear();
 }
 
 QList<int> SpriteDocument::selectedFrameIndices() const
 {
-    QList<int> res;
-    for (int i = 0; i < m_boxes.size(); ++i) {
-        if (m_boxes[i].selected) {
-            res.append(i);
+    return m_selectedFrameIndices;
+}
+
+void SpriteDocument::setSelectedFrameIndices(const QList<int> &indices)
+{
+    clearBoxSelections();
+    for (int idx : indices) {
+        if (idx >= 0 && idx < m_boxes.size()) {
+            m_boxes[idx].selected = true;
+            if (!m_selectedFrameIndices.contains(idx)) {
+                m_selectedFrameIndices.append(idx);
+            }
         }
     }
-    return res;
 }
 
 SpriteAnimation SpriteDocument::animation(const QString &name) const
@@ -356,15 +423,26 @@ SpriteAnimation SpriteDocument::animation(const QString &name) const
     return m_animations.value(name);
 }
 
-void SpriteDocument::setAnimation(const QString &name, const QList<int> &frameIndices, int fps, bool loop)
+void SpriteDocument::setAnimation(const QString &name, const QList<int> &frameIndices, int fps, bool loop, SpriteAnimation::LoopMode loopMode)
 {
     SpriteAnimation anim;
     anim.name = name;
     anim.frameIndices = frameIndices;
     anim.fps = fps;
-    anim.loop = loop;
+    if (!loop && loopMode == SpriteAnimation::Loop) {
+        loopMode = SpriteAnimation::Once;
+    }
+    anim.loop = (loopMode == SpriteAnimation::Loop);
+    anim.loopMode = loopMode;
     m_animations[name] = anim;
 
+    emit animationsChanged();
+}
+
+void SpriteDocument::setAnimation(const SpriteAnimation &anim)
+{
+    if (anim.name.isEmpty()) return;
+    m_animations[anim.name] = anim;
     emit animationsChanged();
 }
 
@@ -377,7 +455,7 @@ void SpriteDocument::removeAnimation(const QString &name)
 
 void SpriteDocument::renameAnimation(const QString &oldName, const QString &newName)
 {
-    if (m_animations.contains(oldName) && !newName.isEmpty()) {
+    if (m_animations.contains(oldName) && !newName.isEmpty() && oldName != newName) {
         SpriteAnimation anim = m_animations.take(oldName);
         anim.name = newName;
         m_animations[newName] = anim;
@@ -385,11 +463,59 @@ void SpriteDocument::renameAnimation(const QString &oldName, const QString &newN
     }
 }
 
+void SpriteDocument::duplicateAnimation(const QString &sourceName, const QString &newName)
+{
+    if (!m_animations.contains(sourceName) || newName.isEmpty()) return;
+    SpriteAnimation anim = m_animations.value(sourceName);
+    anim.name = newName;
+    m_animations[newName] = anim;
+    emit animationsChanged();
+}
+
 void SpriteDocument::reverseAnimationFrames(const QString &name)
 {
     if (m_animations.contains(name)) {
         std::reverse(m_animations[name].frameIndices.begin(), m_animations[name].frameIndices.end());
         emit animationsChanged();
+    }
+}
+
+void SpriteDocument::setAnimationLoopMode(const QString &name, SpriteAnimation::LoopMode mode)
+{
+    if (m_animations.contains(name)) {
+        m_animations[name].loopMode = mode;
+        m_animations[name].loop = (mode == SpriteAnimation::Loop);
+        emit animationsChanged();
+    }
+}
+
+void SpriteDocument::setAnimationFrameSequence(const QString &name, const QList<int> &frameIndices)
+{
+    if (m_animations.contains(name)) {
+        m_animations[name].frameIndices = frameIndices;
+        emit animationsChanged();
+    }
+}
+
+void SpriteDocument::insertFrameInAnimation(const QString &name, int seqIndex, int globalFrameIndex)
+{
+    if (m_animations.contains(name)) {
+        if (seqIndex < 0 || seqIndex > m_animations[name].frameIndices.size()) {
+            m_animations[name].frameIndices.append(globalFrameIndex);
+        } else {
+            m_animations[name].frameIndices.insert(seqIndex, globalFrameIndex);
+        }
+        emit animationsChanged();
+    }
+}
+
+void SpriteDocument::removeFrameFromAnimation(const QString &name, int seqIndex)
+{
+    if (m_animations.contains(name)) {
+        if (seqIndex >= 0 && seqIndex < m_animations[name].frameIndices.size()) {
+            m_animations[name].frameIndices.removeAt(seqIndex);
+            emit animationsChanged();
+        }
     }
 }
 

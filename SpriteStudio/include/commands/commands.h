@@ -131,6 +131,78 @@ private:
 };
 
 /**
+ * @brief Command to rename an animation sequence.
+ */
+class RenameAnimationCommand : public QUndoCommand
+{
+public:
+    RenameAnimationCommand(SpriteDocument *doc, const QString &oldName, const QString &newName, QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument* m_doc;
+    QString         m_oldName;
+    QString         m_newName;
+};
+
+/**
+ * @brief Command to duplicate an animation sequence.
+ */
+class DuplicateAnimationCommand : public QUndoCommand
+{
+public:
+    DuplicateAnimationCommand(SpriteDocument *doc, const QString &sourceName, const QString &newName, QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument* m_doc;
+    QString         m_sourceName;
+    QString         m_newName;
+};
+
+/**
+ * @brief Command to reorder or update frame indices within an animation sequence.
+ */
+class ReorderAnimationFramesCommand : public QUndoCommand
+{
+public:
+    ReorderAnimationFramesCommand(SpriteDocument *doc, const QString &animName, const QList<int> &newSequence, QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument* m_doc;
+    QString         m_animName;
+    QList<int>      m_oldSequence;
+    QList<int>      m_newSequence;
+};
+
+/**
+ * @brief Command to change animation playback properties (fps and loop mode).
+ */
+class ChangeAnimationPropertiesCommand : public QUndoCommand
+{
+public:
+    ChangeAnimationPropertiesCommand(SpriteDocument *doc, const QString &animName, int newFps, SpriteAnimation::LoopMode newLoopMode, QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument*             m_doc;
+    QString                     m_animName;
+    int                         m_oldFps;
+    int                         m_newFps;
+    SpriteAnimation::LoopMode   m_oldLoopMode;
+    SpriteAnimation::LoopMode   m_newLoopMode;
+};
+
+/**
  * @brief Command to change a bounding box rectangle (resize or move) with undo/redo.
  */
 class ChangeBoxRectCommand : public QUndoCommand

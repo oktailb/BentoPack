@@ -15,6 +15,7 @@
 #include <QtConcurrent>
 #include <cmath>
 #include <vector>
+#include <QCoreApplication>
 
 ProjectController::ProjectController(SpriteDocument *document, QUndoStack *undoStack, QObject *parent)
     : QObject(parent)
@@ -70,10 +71,10 @@ QString ProjectController::currentProjectName() const
     if (!m_currentProjectPath.isEmpty()) {
         return QFileInfo(m_currentProjectPath).fileName();
     }
-    if (m_document && !m_document->projectName().isEmpty()) {
+    if (m_document && !m_document->projectName().isEmpty() && m_document->projectName() != QStringLiteral("untitled")) {
         return m_document->projectName();
     }
-    return tr("Untitled Project");
+    return QCoreApplication::translate("MainWindow", "KEY_UNTITLED_PROJECT");
 }
 
 void ProjectController::setProjectModified(bool modified)

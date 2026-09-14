@@ -53,6 +53,8 @@ set (${PROJECT_NAME}_SRC
     src/project/projectmanager.cpp
     src/widgets/githistorydock.cpp
     src/widgets/settingsdialog.cpp
+    src/widgets/timelinefilmstripwidget.cpp
+    src/localizationmanager.cpp
     src/version.h.in
     src/haiku.PackageInfo.in
     ${CMAKE_CURRENT_BINARY_DIR}/generated/version.h
@@ -79,6 +81,8 @@ set (${PROJECT_NAME}_INCLUDE
     include/project/projectmanager.h
     include/widgets/githistorydock.h
     include/widgets/settingsdialog.h
+    include/widgets/timelinefilmstripwidget.h
+    include/localizationmanager.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h
     include/extractor/spriteextractor.h

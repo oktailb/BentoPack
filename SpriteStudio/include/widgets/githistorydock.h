@@ -73,6 +73,7 @@ public:
     ~GitHistoryDock() override = default;
 
     void setProjectController(ProjectController *controller);
+    void retranslateUi();
 
 public slots:
     void refreshHistory();
@@ -81,6 +82,9 @@ public slots:
 
 signals:
     void revisionCheckoutRequested(const QString &hash);
+
+protected:
+    void changeEvent(QEvent *event) override;
 
 private slots:
     void onCommitSelected(const GitCommitInfo &info);
@@ -104,9 +108,13 @@ private:
     QGraphicsScene         *m_scene = nullptr;
 
     QWidget     *m_detailsWidget = nullptr;
+    QLabel      *m_hdrHash = nullptr;
     QLabel      *m_lblHash = nullptr;
+    QLabel      *m_hdrDate = nullptr;
     QLabel      *m_lblDate = nullptr;
+    QLabel      *m_hdrAuthor = nullptr;
     QLabel      *m_lblAuthor = nullptr;
+    QLabel      *m_hdrMsg = nullptr;
     QLabel      *m_lblMessage = nullptr;
     QPushButton *m_btnCheckoutSelected = nullptr;
 

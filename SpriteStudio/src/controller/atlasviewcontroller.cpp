@@ -219,10 +219,7 @@ void AtlasViewController::setSelectedBoxIndices(const QList<int> &indices)
         if (m_document->selectedFrameIndices() == indices) {
             return;
         }
-        m_document->clearBoxSelections();
-        for (int idx : indices) {
-            m_document->setBoxSelection(idx, true);
-        }
+        m_document->setSelectedFrameIndices(indices);
     }
     updateBoxSelectionVisuals(indices);
     emit selectionChanged(indices);
@@ -288,7 +285,7 @@ void AtlasViewController::trimSelectedSlice(int alphaThreshold)
             }
         }
     } else {
-        if (m_undoStack) m_undoStack->beginMacro(tr("Trim %1 Slices").arg(selected.size()));
+        if (m_undoStack) m_undoStack->beginMacro(tr("KEY_CMD_TRIM_SLICES").arg(selected.size()));
         for (int idx : selected) {
             if (idx >= 0 && idx < m_document->frameCount()) {
                 QRect oldRect = m_document->box(idx).rect;
@@ -316,7 +313,7 @@ void AtlasViewController::mergeSelectedSlices()
     int target = selected.first();
 
     if (m_undoStack) {
-        m_undoStack->beginMacro(tr("Merge %1 Slices").arg(selected.size()));
+        m_undoStack->beginMacro(tr("KEY_CMD_MERGE_SLICES").arg(selected.size()));
         for (int i = selected.size() - 1; i >= 1; --i) {
             int src = selected.at(i);
             m_undoStack->push(new MergeFramesCommand(m_document, src, target));
@@ -401,7 +398,7 @@ void AtlasViewController::moveSelectedBoxes(int dx, int dy)
         }
     } else {
         if (m_undoStack) {
-            m_undoStack->beginMacro(tr("Move %1 Slices").arg(selected.size()));
+            m_undoStack->beginMacro(tr("KEY_CMD_MOVE_SLICES").arg(selected.size()));
         }
         for (int idx : selected) {
             if (idx >= 0 && idx < m_document->frameCount()) {
@@ -462,11 +459,17 @@ void AtlasViewController::onBoxItemSelected(int index, bool /*selected*/, Qt::Ke
         }
     } else if (modifiers & Qt::ShiftModifier) {
         int last = currentSel.isEmpty() ? 0 : currentSel.last();
-        int start = std::min(last, index);
-        int end = std::max(last, index);
-        for (int i = start; i <= end; ++i) {
-            if (!currentSel.contains(i)) {
-                currentSel.append(i);
+        if (last <= index) {
+            for (int i = last; i <= index; ++i) {
+                if (!currentSel.contains(i)) {
+                    currentSel.append(i);
+                }
+            }
+        } else {
+            for (int i = last; i >= index; --i) {
+                if (!currentSel.contains(i)) {
+                    currentSel.append(i);
+                }
             }
         }
     } else {

@@ -11,7 +11,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 |---|---|---|---|---|
 | **M0** | [Assainissement Architectural & Dette Technique (Audit Critique)](#m0--assainissement-architectural--dette-technique-audit-critique) | **Haute** | Haute | 🟢 Clôturé & Validé (73 tests CTest 100% — Multiplateforme) |
 | **M1** | [Édition Interactive des Bounding Boxes (Atlas Slicing)](#m1--édition-interactive-des-bounding-boxes-atlas-slicing) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% — Poignées, Group Drag, Shift Slice) |
-| **M2** | [Gestionnaire Complet d'Animations & Timeline](#m2--gestionnaire-complet-danimations--timeline) | **Haute** | Moyenne | 📝 Planifié |
+| **M2** | [Gestionnaire Complet d'Animations & Timeline](#m2--gestionnaire-complet-danimations--timeline) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Ergonomie Splitters, Filmstrip Drag&Drop, LoopModes, Undo/Redo) |
 | **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Moyenne** | Faible | 📝 Planifié |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié |
 | **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (85 tests CTest 100% — Session, Lock, Crash Recovery, Atomic Save, LibGit2 Find) |
@@ -246,10 +246,28 @@ Dans l'interface actuelle, le bloc de droite `animationArea` combine :
    - Barre de progression pas-à-pas synchrone avec la frame en cours de lecture.
    - Raccourcis clavier : `Espace` (Play/Pause), `Flèche Gauche / Droite` (Frame step).
 
-### Fichiers & Composants Cibles
-- `SpriteStudio/src/mainwindow.ui` : Ajustement du layout dans `animationArea` (barre d'outils pour `animationList`, clarification du slider).
-- `SpriteStudio/include/model/spritedocument.h` : `SpriteAnimation` enrichie (`loopMode`, `fps`).
-- `SpriteStudio/src/mainwindow_animation.cpp` & `src/mainwindow_callbacks.cpp` : Logique de synchronisation et d'édition de `animationList`.
+### Fichiers & Composants Réalisés
+- `SpriteStudio/src/mainwindow.ui` : Réorganisation ergonomique par `QSplitter` horizontal et vertical avec `QTabWidget` inférieur (`[🎞️ Timeline]`, `[🗃️ Atlas Frames]`), barre de transport moderne et barre d'outils d'animations.
+- `SpriteStudio/include/widgets/timelinefilmstripwidget.h` & `src/widgets/timelinefilmstripwidget.cpp` : Ruban de vignettes ordonnées, surbrillance temps réel, réordonnancement par glisser-déposer, duplication/suppression/sélection.
+- `SpriteStudio/include/model/spritedocument.h` & `src/model/spritedocument.cpp` : `SpriteAnimation::LoopMode` (`Loop`, `Once`, `PingPong`), `durationMs()`, et méthodes documentaires de séquence.
+- `SpriteStudio/include/animation/animationplayer.h` & `src/animation/animationplayer.cpp` : Moteur de lecture prenant en charge `PingPong`, `Once`, `advanceFrame()`, `firstFrame()`, `lastFrame()`, `seek()`.
+- `SpriteStudio/include/commands/commands.h` & `src/commands/commands.cpp` : Commandes Undo/Redo (`RenameAnimationCommand`, `DuplicateAnimationCommand`, `ReorderAnimationFramesCommand`, `ChangeAnimationPropertiesCommand`).
+- `SpriteStudio/src/controller/animationcontroller.cpp` : Synchronisation bidirectionnelle scrubber/timeline/list/preview, édition inline (double-clic nom et FPS).
+- `SpriteStudio/src/project/projectmanager.cpp` : Sérialisation et désérialisation de `loop_mode` dans `.ssp`.
+
+| Spécification M2 | Statut | Composant / Fichier | Diagnostic & Observations |
+|---|:---:|---|---|
+| **Disposition IHM ergonomique (Splitters)** | ✅ **RÉSOLU & VALIDÉ** | `mainwindow.ui`, `mainwindow.cpp` | `mainSplitter` horizontal et `leftSplitter` vertical fluides. Les panneaux s'adaptent dynamiquement. |
+| **Onglets inférieurs (Timeline & Atlas)** | ✅ **RÉSOLU & VALIDÉ** | `mainwindow.ui`, `mainwindow.cpp` | `QTabWidget` documentaire fluide permettant de basculer instantanément entre la Timeline active et les Frames découpées de l'atlas. |
+| **Timeline Filmstrip interactive** | ✅ **RÉSOLU & VALIDÉ** | `timelinefilmstripwidget.cpp` | Ruban horizontal de vignettes carrées numérotées, surbrillance dynamique de la tête de lecture, drag & drop réversible pour réordonner les étapes. |
+| **Modes de boucle (Loop, Once, Ping-Pong)** | ✅ **RÉSOLU & VALIDÉ** | `animationplayer.cpp`, `spritedocument.h` | 3 modes de lecture supportés dans le moteur et sérialisés de manière rétrocompatible dans `.ssp`. |
+| **Barre de Transport moderne (Scrubber)** | ✅ **RÉSOLU & VALIDÉ** | `mainwindow.ui`, `animationcontroller.cpp` | Curseur pas-à-pas avec compteur dynamique `Frame X / Total (ms)`, boutons `First`, `Prev`, `Play/Pause`, `Next`, `Last`. |
+| **Barre d'outils d'animations** | ✅ **RÉSOLU & VALIDÉ** | `mainwindow_animation.cpp` | Boutons `+ Nouveau`, `+ Depuis Sélection`, `📋 Dupliquer`, `⇄ Inverser`, `🗑 Supprimer`. |
+| **Édition inline (Nom & FPS)** | ✅ **RÉSOLU & VALIDÉ** | `animationcontroller.cpp` | Double-clic sur le nom ou le FPS dans `animationList` avec validation et annulation Undo/Redo. |
+| **Raccourcis clavier transport** | ✅ **RÉSOLU & VALIDÉ** | `mainwindow_events.cpp` | `Espace` (Play/Pause), `Flèches Gauche/Droite` (Step frame si aucune boîte atlas sélectionnée), `Home` / `End` (Première / Dernière frame). |
+| **Mémorisation des panneaux (Docks)** | ✅ **RÉSOLU & VALIDÉ** | `mainwindow.cpp`, `mainwindow_events.cpp` | Sauvegarde/restauration pérenne sous `QSettings` (`saveState()`, `restoreState()`), auto-sauvegarde immédiate sur déplacement, fermeture, flottement et redimensionnement. |
+| **Sélecteur de langue dans les Réglages** | ✅ **RÉSOLU & VALIDÉ** | `settingsdialog.cpp`, `appconfig.cpp`, `main.cpp` | Choix de langue (Système, FR, EN, JA) dans la page Générale des Réglages, persistance JSON et chargement au démarrage. |
+| **Tests unitaires automatisés (100% CTest)** | ✅ **RÉSOLU & VALIDÉ** | `test_controllers.cpp`, `test_project.cpp` | Validation de Ping-Pong, Once, duplication, renommage, réordonnancement, persistance des docks et des réglages de langue. |
 
 ---
 

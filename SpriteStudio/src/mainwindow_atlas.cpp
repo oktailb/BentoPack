@@ -24,6 +24,42 @@ void MainWindow::on_btnTrimSlice_clicked()
     }
 }
 
+void MainWindow::on_actionToolSelect_triggered()
+{
+    on_btnToolSelect_clicked();
+}
+
+void MainWindow::on_actionToolAddSlice_triggered()
+{
+    on_btnToolAddSlice_clicked();
+}
+
+void MainWindow::on_actionTrimSlice_triggered()
+{
+    on_btnTrimSlice_clicked();
+}
+
+void MainWindow::on_actionZoomIn_triggered()
+{
+    if (zoomSlider) {
+        zoomSlider->setValue(zoomSlider->value() + 25);
+    }
+}
+
+void MainWindow::on_actionZoomOut_triggered()
+{
+    if (zoomSlider) {
+        zoomSlider->setValue(zoomSlider->value() - 25);
+    }
+}
+
+void MainWindow::on_actionZoomReset_triggered()
+{
+    if (zoomSlider) {
+        zoomSlider->setValue(100);
+    }
+}
+
 void MainWindow::onBoxContextMenuRequested(int index, const QPoint &screenPos)
 {
     if (!m_document || index < 0 || index >= m_document->frameCount()) return;

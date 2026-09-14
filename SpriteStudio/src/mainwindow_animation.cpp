@@ -17,6 +17,69 @@ void MainWindow::on_Pause_clicked()
     }
 }
 
+void MainWindow::on_btnFirstFrame_clicked()
+{
+    if (m_animationController) {
+        m_animationController->firstFrame();
+    }
+}
+
+void MainWindow::on_btnPrevFrame_clicked()
+{
+    if (m_animationController) {
+        m_animationController->stepBackward();
+    }
+}
+
+void MainWindow::on_btnNextFrame_clicked()
+{
+    if (m_animationController) {
+        m_animationController->stepForward();
+    }
+}
+
+void MainWindow::on_btnLastFrame_clicked()
+{
+    if (m_animationController) {
+        m_animationController->lastFrame();
+    }
+}
+
+void MainWindow::on_btnNewAnim_clicked()
+{
+    if (m_animationController) {
+        m_animationController->promptCreateNewAnimation();
+    }
+}
+
+void MainWindow::on_btnNewFromSelection_clicked()
+{
+    if (m_animationController && m_document) {
+        m_animationController->createAnimationFromSelection(m_document->selectedFrameIndices());
+    }
+}
+
+void MainWindow::on_btnDuplicateAnim_clicked()
+{
+    if (m_animationController) {
+        m_animationController->duplicateSelectedAnimation();
+    }
+}
+
+void MainWindow::on_btnReverseAnim_clicked()
+{
+    if (m_animationController) {
+        m_animationController->reverseAnimationOrder();
+    }
+}
+
+void MainWindow::on_btnDeleteAnim_clicked()
+{
+    if (m_animationController) {
+        m_animationController->removeSelectedAnimation();
+    }
+}
+
 void MainWindow::on_fps_valueChanged(int fps)
 {
     if (m_animationController) {
@@ -31,8 +94,14 @@ void MainWindow::on_animationList_customContextMenuRequested(const QPoint &pos)
     QAction *createAnimAction = menu.addAction(tr("KEY_CTX_CREATE_ANIM"));
     createAnimAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
 
+    QAction *duplicateAction = menu.addAction(tr("KEY_CTX_DUPLICATE_ANIM"));
     QAction *reverseAction = menu.addAction(tr("KEY_CTX_REVERSE_ANIM"));
     QAction *deleteAction = menu.addAction(tr("KEY_CTX_DELETE_ANIM"));
+
+    bool hasSelection = (ui->animationList->currentItem() != nullptr);
+    duplicateAction->setEnabled(hasSelection);
+    reverseAction->setEnabled(hasSelection);
+    deleteAction->setEnabled(hasSelection);
 
     QAction *chosen = menu.exec(ui->animationList->mapToGlobal(pos));
     if (!chosen) return;
@@ -40,6 +109,10 @@ void MainWindow::on_animationList_customContextMenuRequested(const QPoint &pos)
     if (chosen == createAnimAction) {
         if (m_animationController && m_document) {
             m_animationController->createAnimationFromSelection(m_document->selectedFrameIndices());
+        }
+    } else if (chosen == duplicateAction) {
+        if (m_animationController) {
+            m_animationController->duplicateSelectedAnimation();
         }
     } else if (chosen == reverseAction) {
         if (m_animationController) {

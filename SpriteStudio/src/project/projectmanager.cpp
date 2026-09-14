@@ -79,6 +79,14 @@ QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
         aObj[QStringLiteral("name")] = anim.name;
         aObj[QStringLiteral("fps")] = anim.fps;
         aObj[QStringLiteral("loop")] = anim.loop;
+        QString loopModeStr;
+        switch (anim.loopMode) {
+            case SpriteAnimation::Once: loopModeStr = QStringLiteral("once"); break;
+            case SpriteAnimation::PingPong: loopModeStr = QStringLiteral("pingpong"); break;
+            case SpriteAnimation::Loop:
+            default: loopModeStr = QStringLiteral("loop"); break;
+        }
+        aObj[QStringLiteral("loop_mode")] = loopModeStr;
 
         QJsonArray fArray;
         for (int frameIdx : anim.frameIndices) {
@@ -205,6 +213,17 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
         QString name = aObj.value(QStringLiteral("name")).toString();
         int fps = aObj.value(QStringLiteral("fps")).toInt(12);
         bool loop = aObj.value(QStringLiteral("loop")).toBool(true);
+        QString loopModeStr = aObj.value(QStringLiteral("loop_mode")).toString();
+        SpriteAnimation::LoopMode loopMode = SpriteAnimation::Loop;
+        if (loopModeStr == QLatin1String("once")) {
+            loopMode = SpriteAnimation::Once;
+        } else if (loopModeStr == QLatin1String("pingpong")) {
+            loopMode = SpriteAnimation::PingPong;
+        } else if (!loopModeStr.isEmpty()) {
+            loopMode = SpriteAnimation::Loop;
+        } else {
+            loopMode = loop ? SpriteAnimation::Loop : SpriteAnimation::Once;
+        }
 
         QList<int> frameIndices;
         QJsonArray fArray = aObj.value(QStringLiteral("frames")).toArray();
@@ -213,7 +232,7 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
         }
 
         if (!name.isEmpty()) {
-            outDoc.setAnimation(name, frameIndices, fps, loop);
+            outDoc.setAnimation(name, frameIndices, fps, (loopMode == SpriteAnimation::Loop), loopMode);
         }
     }
 

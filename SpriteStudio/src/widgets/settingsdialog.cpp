@@ -1,6 +1,7 @@
 #include "include/widgets/settingsdialog.h"
 #include "config/appconfig.h"
 #include "include/project/sessionmanager.h"
+#include "include/localizationmanager.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -9,6 +10,7 @@
 #include <QSplitter>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QEvent>
 
 SettingsDialog::SettingsDialog(QWidget *parent, PageIndex initialPage)
     : QDialog(parent)
@@ -17,7 +19,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, PageIndex initialPage)
     loadSettings();
     setCurrentPage(initialPage);
 
-    setWindowTitle(tr("Préférences") + QStringLiteral(" - Sprite Studio"));
+    setWindowTitle(tr("KEY_SETTINGS_TITLE") + QStringLiteral(" - Sprite Studio"));
     resize(760, 520);
     setMinimumSize(640, 440);
 }
@@ -58,7 +60,7 @@ void SettingsDialog::setupUI()
     leftLayout->setSpacing(8);
 
     m_searchEdit = new QLineEdit(leftWidget);
-    m_searchEdit->setPlaceholderText(tr("Rechercher dans les réglages..."));
+    m_searchEdit->setPlaceholderText(tr("KEY_SETTINGS_SEARCH_PLACEHOLDER"));
     m_searchEdit->setClearButtonEnabled(true);
     leftLayout->addWidget(m_searchEdit);
 
@@ -68,15 +70,15 @@ void SettingsDialog::setupUI()
     m_categoryTree->setIndentation(12);
 
     m_itemGeneral = new QTreeWidgetItem(m_categoryTree);
-    m_itemGeneral->setText(0, tr("Général"));
+    m_itemGeneral->setText(0, tr("KEY_SETTINGS_CAT_GENERAL"));
     m_itemGeneral->setData(0, Qt::UserRole, PageGeneral);
 
     m_itemGit = new QTreeWidgetItem(m_categoryTree);
-    m_itemGit->setText(0, tr("Contrôle de Version (Git)"));
+    m_itemGit->setText(0, tr("KEY_SETTINGS_CAT_GIT"));
     m_itemGit->setData(0, Qt::UserRole, PageGit);
 
     m_itemAtlas = new QTreeWidgetItem(m_categoryTree);
-    m_itemAtlas->setText(0, tr("Affichage & Atlas"));
+    m_itemAtlas->setText(0, tr("KEY_SETTINGS_CAT_ATLAS"));
     m_itemAtlas->setData(0, Qt::UserRole, PageAtlas);
 
     leftLayout->addWidget(m_categoryTree);
@@ -128,36 +130,61 @@ QWidget* SettingsDialog::createGeneralPage()
     QVBoxLayout *layout = new QVBoxLayout(page);
     layout->setContentsMargins(10, 0, 0, 0);
 
-    QLabel *header = new QLabel(tr("Réglages Généraux"));
-    header->setStyleSheet(QStringLiteral("font-size: 16px; font-weight: bold; margin-bottom: 8px;"));
-    layout->addWidget(header);
+    m_hdrGeneral = new QLabel(tr("KEY_SETTINGS_HDR_GENERAL"));
+    m_hdrGeneral->setStyleSheet(QStringLiteral("font-size: 16px; font-weight: bold; margin-bottom: 8px;"));
+    layout->addWidget(m_hdrGeneral);
 
     // Project & History Group
-    QGroupBox *grpHistory = new QGroupBox(tr("Historique & Projet"), page);
-    QFormLayout *formHistory = new QFormLayout(grpHistory);
+    m_grpHistory = new QGroupBox(tr("KEY_SETTINGS_GRP_HISTORY"), page);
+    QFormLayout *formHistory = new QFormLayout(m_grpHistory);
 
-    m_spinUndoLimit = new QSpinBox(grpHistory);
+    m_spinUndoLimit = new QSpinBox(m_grpHistory);
     m_spinUndoLimit->setRange(5, 500);
-    m_spinUndoLimit->setSuffix(tr(" actions"));
-    formHistory->addRow(tr("Limite d'annulation (Undo/Redo) :"), m_spinUndoLimit);
+    m_spinUndoLimit->setSuffix(tr("KEY_SETTINGS_SUFFIX_ACTIONS"));
+    m_lblUndoLimit = new QLabel(tr("KEY_SETTINGS_UNDO_LIMIT"), m_grpHistory);
+    formHistory->addRow(m_lblUndoLimit, m_spinUndoLimit);
 
-    m_spinMaxRecentFiles = new QSpinBox(grpHistory);
+    m_spinMaxRecentFiles = new QSpinBox(m_grpHistory);
     m_spinMaxRecentFiles->setRange(1, 30);
-    formHistory->addRow(tr("Nombre maximal de fichiers récents :"), m_spinMaxRecentFiles);
-    layout->addWidget(grpHistory);
+    m_lblMaxRecentFiles = new QLabel(tr("KEY_SETTINGS_MAX_RECENT_FILES"), m_grpHistory);
+    formHistory->addRow(m_lblMaxRecentFiles, m_spinMaxRecentFiles);
+    layout->addWidget(m_grpHistory);
 
     // Segmentation & Background Group
-    QGroupBox *grpExtraction = new QGroupBox(tr("Extraction & Arrière-plan"), page);
-    QFormLayout *formExtraction = new QFormLayout(grpExtraction);
+    m_grpExtraction = new QGroupBox(tr("KEY_SETTINGS_GRP_EXTRACTION"), page);
+    QFormLayout *formExtraction = new QFormLayout(m_grpExtraction);
 
-    m_spinAlphaThreshold = new QSpinBox(grpExtraction);
+    m_spinAlphaThreshold = new QSpinBox(m_grpExtraction);
     m_spinAlphaThreshold->setRange(0, 255);
-    formExtraction->addRow(tr("Seuil d'opacité alpha par défaut :"), m_spinAlphaThreshold);
+    m_lblAlphaThreshold = new QLabel(tr("KEY_SETTINGS_ALPHA_THRESHOLD"), m_grpExtraction);
+    formExtraction->addRow(m_lblAlphaThreshold, m_spinAlphaThreshold);
 
-    m_spinBgRemovalTol = new QSpinBox(grpExtraction);
+    m_spinBgRemovalTol = new QSpinBox(m_grpExtraction);
     m_spinBgRemovalTol->setRange(0, 100);
-    formExtraction->addRow(tr("Tolérance de suppression du fond :"), m_spinBgRemovalTol);
-    layout->addWidget(grpExtraction);
+    m_lblBgRemovalTol = new QLabel(tr("KEY_SETTINGS_BG_REMOVAL_TOL"), m_grpExtraction);
+    formExtraction->addRow(m_lblBgRemovalTol, m_spinBgRemovalTol);
+    layout->addWidget(m_grpExtraction);
+
+    // Language / Localization Group
+    m_grpLang = new QGroupBox(tr("KEY_SETTINGS_GRP_LANGUAGE"), page);
+    QFormLayout *formLang = new QFormLayout(m_grpLang);
+
+    m_comboLanguage = new QComboBox(m_grpLang);
+    m_comboLanguage->addItem(tr("KEY_SETTINGS_LANG_SYSTEM"), QStringLiteral("system"));
+    m_comboLanguage->addItem(QStringLiteral("Français"), QStringLiteral("fr_FR"));
+    m_comboLanguage->addItem(QStringLiteral("English"), QStringLiteral("en_US"));
+    m_comboLanguage->addItem(QStringLiteral("日本語"), QStringLiteral("ja_JA"));
+    m_lblLangApp = new QLabel(tr("KEY_SETTINGS_LANG_APP"), m_grpLang);
+    formLang->addRow(m_lblLangApp, m_comboLanguage);
+
+    m_lblLangHint = new QLabel(
+        tr("KEY_SETTINGS_LANG_HINT"),
+        m_grpLang
+    );
+    m_lblLangHint->setStyleSheet(QStringLiteral("color: #7f8c8d; font-size: 11px;"));
+    m_lblLangHint->setWordWrap(true);
+    formLang->addRow(m_lblLangHint);
+    layout->addWidget(m_grpLang);
 
     layout->addStretch();
     return page;
@@ -169,62 +196,63 @@ QWidget* SettingsDialog::createGitPage()
     QVBoxLayout *layout = new QVBoxLayout(page);
     layout->setContentsMargins(10, 0, 0, 0);
 
-    QLabel *header = new QLabel(tr("Contrôle de Version (Git)"));
-    header->setStyleSheet(QStringLiteral("font-size: 16px; font-weight: bold; margin-bottom: 8px;"));
-    layout->addWidget(header);
+    m_hdrGit = new QLabel(tr("KEY_SETTINGS_HDR_GIT"));
+    m_hdrGit->setStyleSheet(QStringLiteral("font-size: 16px; font-weight: bold; margin-bottom: 8px;"));
+    layout->addWidget(m_hdrGit);
 
     // Author Identity Group
-    QGroupBox *grpAuthor = new QGroupBox(tr("Identité de l'auteur (Commits Git)"), page);
-    QVBoxLayout *authorLayout = new QVBoxLayout(grpAuthor);
+    m_grpAuthor = new QGroupBox(tr("KEY_SETTINGS_GRP_AUTHOR"), page);
+    QVBoxLayout *authorLayout = new QVBoxLayout(m_grpAuthor);
 
-    QLabel *infoLabel = new QLabel(
-        tr("Cette identité est inscrite comme signature d'auteur sur chaque commit de l'historique du projet .ssp.")
+    m_lblAuthorInfo = new QLabel(
+        tr("KEY_SETTINGS_AUTHOR_INFO")
     );
-    infoLabel->setWordWrap(true);
-    infoLabel->setStyleSheet(QStringLiteral("color: #7f8c8d; margin-bottom: 6px;"));
-    authorLayout->addWidget(infoLabel);
+    m_lblAuthorInfo->setWordWrap(true);
+    m_lblAuthorInfo->setStyleSheet(QStringLiteral("color: #7f8c8d; margin-bottom: 6px;"));
+    authorLayout->addWidget(m_lblAuthorInfo);
 
     QFormLayout *formAuthor = new QFormLayout();
-    m_editGitAuthorName = new QLineEdit(grpAuthor);
-    m_editGitAuthorName->setPlaceholderText(tr("ex: John Doe"));
-    formAuthor->addRow(tr("Nom de l'auteur :"), m_editGitAuthorName);
+    m_editGitAuthorName = new QLineEdit(m_grpAuthor);
+    m_editGitAuthorName->setPlaceholderText(tr("KEY_SETTINGS_AUTHOR_NAME_PLACEHOLDER"));
+    m_lblAuthorName = new QLabel(tr("KEY_SETTINGS_AUTHOR_NAME"), m_grpAuthor);
+    formAuthor->addRow(m_lblAuthorName, m_editGitAuthorName);
 
-    m_editGitAuthorEmail = new QLineEdit(grpAuthor);
-    m_editGitAuthorEmail->setPlaceholderText(tr("ex: john.doe@example.com"));
-    formAuthor->addRow(tr("Email de l'auteur :"), m_editGitAuthorEmail);
+    m_editGitAuthorEmail = new QLineEdit(m_grpAuthor);
+    m_editGitAuthorEmail->setPlaceholderText(tr("KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER"));
+    m_lblAuthorEmail = new QLabel(tr("KEY_SETTINGS_AUTHOR_EMAIL"), m_grpAuthor);
+    formAuthor->addRow(m_lblAuthorEmail, m_editGitAuthorEmail);
     authorLayout->addLayout(formAuthor);
 
     QHBoxLayout *detectLayout = new QHBoxLayout();
-    m_btnDetectGit = new QPushButton(tr("Détecter depuis la configuration Git système"), grpAuthor);
+    m_btnDetectGit = new QPushButton(tr("KEY_SETTINGS_DETECT_GIT"), m_grpAuthor);
     connect(m_btnDetectGit, &QPushButton::clicked, this, &SettingsDialog::onDetectSystemGitIdentity);
     detectLayout->addWidget(m_btnDetectGit);
     detectLayout->addStretch();
     authorLayout->addLayout(detectLayout);
 
-    layout->addWidget(grpAuthor);
+    layout->addWidget(m_grpAuthor);
 
     // Git Engine Status Group
-    QGroupBox *grpEngine = new QGroupBox(tr("Moteur Git Intégré"), page);
-    QVBoxLayout *engineLayout = new QVBoxLayout(grpEngine);
+    m_grpGitEngine = new QGroupBox(tr("KEY_SETTINGS_GRP_GIT_ENGINE"), page);
+    QVBoxLayout *engineLayout = new QVBoxLayout(m_grpGitEngine);
 
     bool gitAvailable = SessionManager::isGitAvailable();
     QString statusText = gitAvailable
-        ? tr("Statut : <b style='color:#27ae60;'>LibGit2 actif</b> (gestion d'historique et branches opérationnelle)")
-        : tr("Statut : <b style='color:#e74c3c;'>LibGit2 non compilé</b> (historique git désactivé)");
+        ? tr("KEY_SETTINGS_GIT_STATUS_ACTIVE")
+        : tr("KEY_SETTINGS_GIT_STATUS_INACTIVE");
 
-    m_lblGitStatus = new QLabel(statusText, grpEngine);
+    m_lblGitStatus = new QLabel(statusText, m_grpGitEngine);
     m_lblGitStatus->setTextFormat(Qt::RichText);
     engineLayout->addWidget(m_lblGitStatus);
 
-    QLabel *engineDesc = new QLabel(
-        tr("Chaque action d'édition (découpe, renommage, fusion de sprite, création d'animation) "
-           "génère un commit incrémental et atomique dans le dépôt Git transparent du projet .ssp.")
+    m_lblGitDesc = new QLabel(
+        tr("KEY_SETTINGS_GIT_ENGINE_DESC")
     );
-    engineDesc->setWordWrap(true);
-    engineDesc->setStyleSheet(QStringLiteral("color: #7f8c8d;"));
-    engineLayout->addWidget(engineDesc);
+    m_lblGitDesc->setWordWrap(true);
+    m_lblGitDesc->setStyleSheet(QStringLiteral("color: #7f8c8d;"));
+    engineLayout->addWidget(m_lblGitDesc);
 
-    layout->addWidget(grpEngine);
+    layout->addWidget(m_grpGitEngine);
     layout->addStretch();
     return page;
 }
@@ -235,46 +263,51 @@ QWidget* SettingsDialog::createAtlasPage()
     QVBoxLayout *layout = new QVBoxLayout(page);
     layout->setContentsMargins(10, 0, 0, 0);
 
-    QLabel *header = new QLabel(tr("Affichage & Atlas"));
-    header->setStyleSheet(QStringLiteral("font-size: 16px; font-weight: bold; margin-bottom: 8px;"));
-    layout->addWidget(header);
+    m_hdrAtlas = new QLabel(tr("KEY_SETTINGS_HDR_ATLAS"));
+    m_hdrAtlas->setStyleSheet(QStringLiteral("font-size: 16px; font-weight: bold; margin-bottom: 8px;"));
+    layout->addWidget(m_hdrAtlas);
 
     // Zoom and Navigation
-    QGroupBox *grpZoom = new QGroupBox(tr("Navigation & Zoom"), page);
-    QFormLayout *formZoom = new QFormLayout(grpZoom);
+    m_grpZoom = new QGroupBox(tr("KEY_SETTINGS_GRP_ZOOM"), page);
+    QFormLayout *formZoom = new QFormLayout(m_grpZoom);
 
-    m_spinZoomStep = new QDoubleSpinBox(grpZoom);
+    m_spinZoomStep = new QDoubleSpinBox(m_grpZoom);
     m_spinZoomStep->setRange(1.05, 2.50);
     m_spinZoomStep->setSingleStep(0.05);
-    formZoom->addRow(tr("Facteur de zoom (molette) :"), m_spinZoomStep);
+    m_lblZoomStep = new QLabel(tr("KEY_SETTINGS_ZOOM_STEP"), m_grpZoom);
+    formZoom->addRow(m_lblZoomStep, m_spinZoomStep);
 
-    m_spinZoomMin = new QDoubleSpinBox(grpZoom);
+    m_spinZoomMin = new QDoubleSpinBox(m_grpZoom);
     m_spinZoomMin->setRange(0.01, 1.0);
     m_spinZoomMin->setSingleStep(0.05);
-    formZoom->addRow(tr("Niveau de dézoom minimal :"), m_spinZoomMin);
+    m_lblZoomMin = new QLabel(tr("KEY_SETTINGS_ZOOM_MIN"), m_grpZoom);
+    formZoom->addRow(m_lblZoomMin, m_spinZoomMin);
 
-    m_spinZoomMax = new QDoubleSpinBox(grpZoom);
+    m_spinZoomMax = new QDoubleSpinBox(m_grpZoom);
     m_spinZoomMax->setRange(1.0, 50.0);
     m_spinZoomMax->setSingleStep(1.0);
-    formZoom->addRow(tr("Niveau de zoom maximal :"), m_spinZoomMax);
+    m_lblZoomMax = new QLabel(tr("KEY_SETTINGS_ZOOM_MAX"), m_grpZoom);
+    formZoom->addRow(m_lblZoomMax, m_spinZoomMax);
 
-    m_spinFitPadding = new QSpinBox(grpZoom);
+    m_spinFitPadding = new QSpinBox(m_grpZoom);
     m_spinFitPadding->setRange(0, 200);
     m_spinFitPadding->setSuffix(QStringLiteral(" px"));
-    formZoom->addRow(tr("Marge de cadrage automatique :"), m_spinFitPadding);
+    m_lblFitPadding = new QLabel(tr("KEY_SETTINGS_FIT_PADDING"), m_grpZoom);
+    formZoom->addRow(m_lblFitPadding, m_spinFitPadding);
 
-    layout->addWidget(grpZoom);
+    layout->addWidget(m_grpZoom);
 
     // Slicing parameters
-    QGroupBox *grpSlicing = new QGroupBox(tr("Découpage interactif"), page);
-    QFormLayout *formSlicing = new QFormLayout(grpSlicing);
+    m_grpSlicing = new QGroupBox(tr("KEY_SETTINGS_GRP_SLICING"), page);
+    QFormLayout *formSlicing = new QFormLayout(m_grpSlicing);
 
-    m_spinMinSliceSize = new QSpinBox(grpSlicing);
+    m_spinMinSliceSize = new QSpinBox(m_grpSlicing);
     m_spinMinSliceSize->setRange(1, 100);
     m_spinMinSliceSize->setSuffix(QStringLiteral(" px"));
-    formSlicing->addRow(tr("Taille minimale de boîte de découpe :"), m_spinMinSliceSize);
+    m_lblMinSliceSize = new QLabel(tr("KEY_SETTINGS_MIN_SLICE_SIZE"), m_grpSlicing);
+    formSlicing->addRow(m_lblMinSliceSize, m_spinMinSliceSize);
 
-    layout->addWidget(grpSlicing);
+    layout->addWidget(m_grpSlicing);
     layout->addStretch();
     return page;
 }
@@ -289,7 +322,7 @@ void SettingsDialog::onSearchTextChanged(const QString &text)
         return;
     }
 
-    bool matchGeneral = QStringLiteral("général general projet project undo redo recent récents alpha seuil tolerance fond background").contains(query);
+    bool matchGeneral = QStringLiteral("général general langue language locale fr en ja français english japonais projet project undo redo recent récents alpha seuil tolerance fond background").contains(query);
     bool matchGit = QStringLiteral("git version control contrôle author auteur email mail nom signature libgit2 commit").contains(query);
     bool matchAtlas = QStringLiteral("atlas affichage display zoom vue tranche slice padding cadrage").contains(query);
 
@@ -337,6 +370,11 @@ void SettingsDialog::loadSettings()
     const AppConfig &cfg = AppConfig::instance();
 
     // General
+    int langIdx = m_comboLanguage ? m_comboLanguage->findData(cfg.general().language) : -1;
+    if (m_comboLanguage) {
+        m_comboLanguage->setCurrentIndex(langIdx >= 0 ? langIdx : 0);
+    }
+
     m_spinUndoLimit->setValue(cfg.project().undoLimit);
     m_spinMaxRecentFiles->setValue(cfg.project().maxRecentFiles);
     m_spinAlphaThreshold->setValue(cfg.atlas().defaultAlphaThreshold);
@@ -359,6 +397,9 @@ void SettingsDialog::saveSettings()
     AppConfig &cfg = AppConfig::instance();
 
     // General
+    if (m_comboLanguage) {
+        cfg.general().language = m_comboLanguage->currentData().toString();
+    }
     cfg.project().undoLimit = m_spinUndoLimit->value();
     cfg.project().maxRecentFiles = m_spinMaxRecentFiles->value();
     cfg.atlas().defaultAlphaThreshold = m_spinAlphaThreshold->value();
@@ -380,15 +421,84 @@ void SettingsDialog::saveSettings()
 
 void SettingsDialog::applySettings()
 {
+    QString oldLang = AppConfig::instance().general().language;
     saveSettings();
+    QString newLang = AppConfig::instance().general().language;
+    if (newLang != oldLang) {
+        LocalizationManager::instance().setLanguage(newLang);
+    }
 }
 
 void SettingsDialog::restoreDefaults()
 {
-    if (QMessageBox::question(this, tr("Rétablir les valeurs par défaut"),
-                              tr("Voulez-vous vraiment réinitialiser tous les paramètres à leurs valeurs par défaut ?"),
+    if (QMessageBox::question(this, tr("KEY_SETTINGS_RESET_TITLE"),
+                              tr("KEY_SETTINGS_RESET_CONFIRM"),
                               QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+        QString oldLang = AppConfig::instance().general().language;
         AppConfig::instance().resetToDefaults();
         loadSettings();
+        QString newLang = AppConfig::instance().general().language;
+        if (newLang != oldLang) {
+            LocalizationManager::instance().setLanguage(newLang);
+        }
     }
+}
+
+void SettingsDialog::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+    }
+    QDialog::changeEvent(event);
+}
+
+void SettingsDialog::retranslateUi()
+{
+    setWindowTitle(tr("KEY_SETTINGS_TITLE") + QStringLiteral(" - Sprite Studio"));
+    if (m_searchEdit) m_searchEdit->setPlaceholderText(tr("KEY_SETTINGS_SEARCH_PLACEHOLDER"));
+    if (m_itemGeneral) m_itemGeneral->setText(0, tr("KEY_SETTINGS_CAT_GENERAL"));
+    if (m_itemGit) m_itemGit->setText(0, tr("KEY_SETTINGS_CAT_GIT"));
+    if (m_itemAtlas) m_itemAtlas->setText(0, tr("KEY_SETTINGS_CAT_ATLAS"));
+
+    // General Page
+    if (m_hdrGeneral) m_hdrGeneral->setText(tr("KEY_SETTINGS_HDR_GENERAL"));
+    if (m_grpHistory) m_grpHistory->setTitle(tr("KEY_SETTINGS_GRP_HISTORY"));
+    if (m_lblUndoLimit) m_lblUndoLimit->setText(tr("KEY_SETTINGS_UNDO_LIMIT"));
+    if (m_lblMaxRecentFiles) m_lblMaxRecentFiles->setText(tr("KEY_SETTINGS_MAX_RECENT_FILES"));
+    if (m_spinUndoLimit) m_spinUndoLimit->setSuffix(tr("KEY_SETTINGS_SUFFIX_ACTIONS"));
+
+    if (m_grpExtraction) m_grpExtraction->setTitle(tr("KEY_SETTINGS_GRP_EXTRACTION"));
+    if (m_lblAlphaThreshold) m_lblAlphaThreshold->setText(tr("KEY_SETTINGS_ALPHA_THRESHOLD"));
+    if (m_lblBgRemovalTol) m_lblBgRemovalTol->setText(tr("KEY_SETTINGS_BG_REMOVAL_TOL"));
+
+    if (m_grpLang) m_grpLang->setTitle(tr("KEY_SETTINGS_GRP_LANGUAGE"));
+    if (m_lblLangApp) m_lblLangApp->setText(tr("KEY_SETTINGS_LANG_APP"));
+    if (m_comboLanguage) m_comboLanguage->setItemText(0, tr("KEY_SETTINGS_LANG_SYSTEM"));
+    if (m_lblLangHint) m_lblLangHint->setText(tr("KEY_SETTINGS_LANG_HINT"));
+
+    // Git Page
+    if (m_hdrGit) m_hdrGit->setText(tr("KEY_SETTINGS_HDR_GIT"));
+    if (m_grpAuthor) m_grpAuthor->setTitle(tr("KEY_SETTINGS_GRP_AUTHOR"));
+    if (m_lblAuthorInfo) m_lblAuthorInfo->setText(tr("KEY_SETTINGS_AUTHOR_INFO"));
+    if (m_lblAuthorName) m_lblAuthorName->setText(tr("KEY_SETTINGS_AUTHOR_NAME"));
+    if (m_lblAuthorEmail) m_lblAuthorEmail->setText(tr("KEY_SETTINGS_AUTHOR_EMAIL"));
+    if (m_editGitAuthorName) m_editGitAuthorName->setPlaceholderText(tr("KEY_SETTINGS_AUTHOR_NAME_PLACEHOLDER"));
+    if (m_editGitAuthorEmail) m_editGitAuthorEmail->setPlaceholderText(tr("KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER"));
+    if (m_btnDetectGit) m_btnDetectGit->setText(tr("KEY_SETTINGS_DETECT_GIT"));
+    if (m_grpGitEngine) m_grpGitEngine->setTitle(tr("KEY_SETTINGS_GRP_GIT_ENGINE"));
+    if (m_lblGitStatus) {
+        bool gitAvailable = SessionManager::isGitAvailable();
+        m_lblGitStatus->setText(gitAvailable ? tr("KEY_SETTINGS_GIT_STATUS_ACTIVE") : tr("KEY_SETTINGS_GIT_STATUS_INACTIVE"));
+    }
+    if (m_lblGitDesc) m_lblGitDesc->setText(tr("KEY_SETTINGS_GIT_ENGINE_DESC"));
+
+    // Atlas Page
+    if (m_hdrAtlas) m_hdrAtlas->setText(tr("KEY_SETTINGS_HDR_ATLAS"));
+    if (m_grpZoom) m_grpZoom->setTitle(tr("KEY_SETTINGS_GRP_ZOOM"));
+    if (m_lblZoomStep) m_lblZoomStep->setText(tr("KEY_SETTINGS_ZOOM_STEP"));
+    if (m_lblZoomMin) m_lblZoomMin->setText(tr("KEY_SETTINGS_ZOOM_MIN"));
+    if (m_lblZoomMax) m_lblZoomMax->setText(tr("KEY_SETTINGS_ZOOM_MAX"));
+    if (m_lblFitPadding) m_lblFitPadding->setText(tr("KEY_SETTINGS_FIT_PADDING"));
+    if (m_grpSlicing) m_grpSlicing->setTitle(tr("KEY_SETTINGS_GRP_SLICING"));
+    if (m_lblMinSliceSize) m_lblMinSliceSize->setText(tr("KEY_SETTINGS_MIN_SLICE_SIZE"));
 }

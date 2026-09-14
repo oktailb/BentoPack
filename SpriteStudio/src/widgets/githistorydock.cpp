@@ -1,5 +1,6 @@
 #include "include/widgets/githistorydock.h"
 #include "include/controller/projectcontroller.h"
+#include <QEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -40,10 +41,10 @@ GitCommitNodeItem::GitCommitNodeItem(const GitCommitInfo &info, bool isHead, QGr
     ).arg(
         m_info.shortHash,
         m_isHead ? QStringLiteral("<b style='color:#2ecc71;'>(HEAD)</b>") : QString(),
-        tr("Message"), m_info.message.toHtmlEscaped(),
-        tr("Auteur"), m_info.author.toHtmlEscaped(),
-        tr("Date"), m_info.timestamp.toLocalTime().toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")),
-        tr("Double-cliquez pour restaurer cette révision")
+        tr("KEY_GIT_TIP_MSG"), m_info.message.toHtmlEscaped(),
+        tr("KEY_GIT_TIP_AUTHOR"), m_info.author.toHtmlEscaped(),
+        tr("KEY_GIT_TIP_DATE"), m_info.timestamp.toLocalTime().toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")),
+        tr("KEY_GIT_TIP_RESTORE_HINT")
     );
     setToolTip(tip);
 
@@ -143,7 +144,7 @@ void GitHistoryGraphicsView::resizeEvent(QResizeEvent *event)
 GitHistoryDock::GitHistoryDock(QWidget *parent)
     : QDockWidget(parent)
 {
-    setWindowTitle(tr("Historique Git"));
+    setWindowTitle(tr("KEY_DOCK_GIT_HISTORY"));
     setObjectName(QStringLiteral("gitHistoryDock"));
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
 
@@ -164,15 +165,15 @@ void GitHistoryDock::setupUi()
 
     m_btnRefresh = new QToolButton(mainWidget);
     m_btnRefresh->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
-    m_btnRefresh->setToolTip(tr("Rafraîchir l'historique des révisions"));
+    m_btnRefresh->setToolTip(tr("KEY_GIT_REFRESH_TOOLTIP"));
     connect(m_btnRefresh, &QToolButton::clicked, this, &GitHistoryDock::refreshHistory);
     toolLayout->addWidget(m_btnRefresh);
 
     m_btnCheckoutHead = new QToolButton(mainWidget);
     m_btnCheckoutHead->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
-    m_btnCheckoutHead->setText(tr("Revenir au présent"));
+    m_btnCheckoutHead->setText(tr("KEY_GIT_RETURN_PRESENT"));
     m_btnCheckoutHead->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    m_btnCheckoutHead->setToolTip(tr("Restaurer la dernière version (HEAD de la branche)"));
+    m_btnCheckoutHead->setToolTip(tr("KEY_GIT_RETURN_PRESENT_TOOLTIP"));
     connect(m_btnCheckoutHead, &QToolButton::clicked, this, &GitHistoryDock::checkoutHead);
     toolLayout->addWidget(m_btnCheckoutHead);
 
@@ -187,7 +188,7 @@ void GitHistoryDock::setupUi()
     // 2. Disabled banner (if libgit2 not available)
     if (!SessionManager::isGitAvailable()) {
         m_lblDisabledBanner = new QLabel(
-            tr("L'intégration Git n'est pas activée sur ce système.\n(libgit2 non détectée lors de la compilation)"),
+            tr("KEY_GIT_DISABLED_BANNER"),
             mainWidget
         );
         m_lblDisabledBanner->setAlignment(Qt::AlignCenter);
@@ -215,34 +216,34 @@ void GitHistoryDock::setupUi()
     detLayout->setHorizontalSpacing(8);
     detLayout->setVerticalSpacing(4);
 
-    QLabel *hdrHash = new QLabel(tr("Commit :"), m_detailsWidget);
-    hdrHash->setStyleSheet(QStringLiteral("font-weight: bold; color: gray;"));
+    m_hdrHash = new QLabel(tr("KEY_GIT_HDR_COMMIT"), m_detailsWidget);
+    m_hdrHash->setStyleSheet(QStringLiteral("font-weight: bold; color: gray;"));
     m_lblHash = new QLabel(m_detailsWidget);
     m_lblHash->setTextInteractionFlags(Qt::TextSelectableByMouse);
     m_lblHash->setFont(QFont(QStringLiteral("Monospace"), 9));
-    detLayout->addWidget(hdrHash, 0, 0);
+    detLayout->addWidget(m_hdrHash, 0, 0);
     detLayout->addWidget(m_lblHash, 0, 1);
 
-    QLabel *hdrDate = new QLabel(tr("Date :"), m_detailsWidget);
-    hdrDate->setStyleSheet(QStringLiteral("font-weight: bold; color: gray;"));
+    m_hdrDate = new QLabel(tr("KEY_GIT_HDR_DATE"), m_detailsWidget);
+    m_hdrDate->setStyleSheet(QStringLiteral("font-weight: bold; color: gray;"));
     m_lblDate = new QLabel(m_detailsWidget);
-    detLayout->addWidget(hdrDate, 1, 0);
+    detLayout->addWidget(m_hdrDate, 1, 0);
     detLayout->addWidget(m_lblDate, 1, 1);
 
-    QLabel *hdrAuthor = new QLabel(tr("Auteur :"), m_detailsWidget);
-    hdrAuthor->setStyleSheet(QStringLiteral("font-weight: bold; color: gray;"));
+    m_hdrAuthor = new QLabel(tr("KEY_GIT_HDR_AUTHOR"), m_detailsWidget);
+    m_hdrAuthor->setStyleSheet(QStringLiteral("font-weight: bold; color: gray;"));
     m_lblAuthor = new QLabel(m_detailsWidget);
-    detLayout->addWidget(hdrAuthor, 2, 0);
+    detLayout->addWidget(m_hdrAuthor, 2, 0);
     detLayout->addWidget(m_lblAuthor, 2, 1);
 
-    QLabel *hdrMsg = new QLabel(tr("Action :"), m_detailsWidget);
-    hdrMsg->setStyleSheet(QStringLiteral("font-weight: bold; color: gray;"));
+    m_hdrMsg = new QLabel(tr("KEY_GIT_HDR_ACTION"), m_detailsWidget);
+    m_hdrMsg->setStyleSheet(QStringLiteral("font-weight: bold; color: gray;"));
     m_lblMessage = new QLabel(m_detailsWidget);
     m_lblMessage->setWordWrap(true);
-    detLayout->addWidget(hdrMsg, 3, 0);
+    detLayout->addWidget(m_hdrMsg, 3, 0);
     detLayout->addWidget(m_lblMessage, 3, 1);
 
-    m_btnCheckoutSelected = new QPushButton(tr("Restaurer cette révision"), m_detailsWidget);
+    m_btnCheckoutSelected = new QPushButton(tr("KEY_GIT_BTN_RESTORE"), m_detailsWidget);
     m_btnCheckoutSelected->setIcon(style()->standardIcon(QStyle::SP_ArrowRight));
     m_btnCheckoutSelected->setEnabled(false);
     connect(m_btnCheckoutSelected, &QPushButton::clicked, this, &GitHistoryDock::onCheckoutSelectedClicked);
@@ -282,7 +283,7 @@ void GitHistoryDock::refreshHistory()
     m_nodeItems.clear();
 
     if (!m_controller || !m_controller->sessionManager() || !m_controller->sessionManager()->hasActiveSession()) {
-        m_lblStatus->setText(tr("Aucun projet actif"));
+        m_lblStatus->setText(tr("KEY_GIT_NO_ACTIVE_PROJECT"));
         updateDetailsPane(nullptr);
         return;
     }
@@ -291,10 +292,10 @@ void GitHistoryDock::refreshHistory()
     QList<GitCommitInfo> log = sm->gitLog();
     QString headHash = sm->gitHeadCommitHash();
 
-    m_lblStatus->setText(tr("%n commit(s)", "", log.size()));
+    m_lblStatus->setText(tr("KEY_GIT_COMMITS_COUNT").arg(log.size()));
 
     if (log.isEmpty()) {
-        QGraphicsTextItem *emptyText = m_scene->addText(tr("Historique Git vide pour ce projet."));
+        QGraphicsTextItem *emptyText = m_scene->addText(tr("KEY_GIT_EMPTY_HISTORY"));
         emptyText->setDefaultTextColor(Qt::gray);
         emptyText->setPos(10, 10);
         updateDetailsPane(nullptr);
@@ -403,7 +404,7 @@ void GitHistoryDock::updateDetailsPane(const GitCommitInfo *info)
         m_lblHash->setText(QStringLiteral("-"));
         m_lblDate->setText(QStringLiteral("-"));
         m_lblAuthor->setText(QStringLiteral("-"));
-        m_lblMessage->setText(tr("Aucun commit sélectionné.\nCliquez sur un nœud pour afficher ses détails."));
+        m_lblMessage->setText(tr("KEY_GIT_NO_SELECTION"));
         m_btnCheckoutSelected->setEnabled(false);
         return;
     }
@@ -462,3 +463,35 @@ void GitHistoryDock::checkoutHead()
         checkoutRevision(log.first().hash);
     }
 }
+
+void GitHistoryDock::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+    }
+    QDockWidget::changeEvent(event);
+}
+
+void GitHistoryDock::retranslateUi()
+{
+    setWindowTitle(tr("KEY_DOCK_GIT_HISTORY"));
+    if (m_btnRefresh) {
+        m_btnRefresh->setToolTip(tr("KEY_GIT_REFRESH_TOOLTIP"));
+    }
+    if (m_btnCheckoutHead) {
+        m_btnCheckoutHead->setText(tr("KEY_GIT_RETURN_PRESENT"));
+        m_btnCheckoutHead->setToolTip(tr("KEY_GIT_RETURN_PRESENT_TOOLTIP"));
+    }
+    if (m_lblDisabledBanner) {
+        m_lblDisabledBanner->setText(tr("KEY_GIT_DISABLED_BANNER"));
+    }
+    if (m_hdrHash) m_hdrHash->setText(tr("KEY_GIT_HDR_COMMIT"));
+    if (m_hdrDate) m_hdrDate->setText(tr("KEY_GIT_HDR_DATE"));
+    if (m_hdrAuthor) m_hdrAuthor->setText(tr("KEY_GIT_HDR_AUTHOR"));
+    if (m_hdrMsg) m_hdrMsg->setText(tr("KEY_GIT_HDR_ACTION"));
+    if (m_btnCheckoutSelected) m_btnCheckoutSelected->setText(tr("KEY_GIT_BTN_RESTORE"));
+    if (!m_hasSelection && m_lblMessage) {
+        m_lblMessage->setText(tr("KEY_GIT_NO_SELECTION"));
+    }
+}
+

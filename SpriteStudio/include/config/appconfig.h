@@ -70,6 +70,14 @@ struct GitConfig
 };
 
 /**
+ * @brief General application settings (language, locale).
+ */
+struct GeneralConfig
+{
+    QString language = QStringLiteral("system"); // "system", "fr_FR", "en_US", "ja_JA"
+};
+
+/**
  * @brief Central configuration manager for SpriteStudio.
  *
  * Persists and loads user and default application settings to/from a structured
@@ -85,6 +93,9 @@ public:
     static AppConfig& instance();
 
     // Accessors
+    const GeneralConfig& general() const { return m_general; }
+    GeneralConfig& general() { return m_general; }
+
     const AtlasConfig& atlas() const { return m_atlas; }
     AtlasConfig& atlas() { return m_atlas; }
 
@@ -118,6 +129,7 @@ private:
 
     QString resolveDefaultConfigPath() const;
 
+    GeneralConfig   m_general;
     AtlasConfig     m_atlas;
     VisualConfig    m_visuals;
     AnimationConfig m_animation;

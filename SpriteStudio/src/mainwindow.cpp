@@ -11,6 +11,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QActionGroup>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -29,9 +30,40 @@ MainWindow::MainWindow(QWidget *parent)
     ExtractorRegistry::instance();
 
     setupControllers();
+    setupGitHistoryDock();
+    setupErgonomicLayout();
     setupUIConnections();
     setupShortcuts();
-    setupGitHistoryDock();
+
+    // Restore saved window geometry and dock state
+    QSettings settings(QStringLiteral("SpriteStudio"), QStringLiteral("SpriteStudio"));
+    QByteArray savedGeometry = settings.value(QStringLiteral("mainWindow/geometry")).toByteArray();
+    QByteArray savedState = settings.value(QStringLiteral("mainWindow/windowState")).toByteArray();
+    if (!savedGeometry.isEmpty()) {
+        restoreGeometry(savedGeometry);
+    }
+    bool stateRestored = false;
+    if (!savedState.isEmpty()) {
+        stateRestored = restoreState(savedState);
+    }
+    if (!stateRestored) {
+        resetDefaultLayout();
+    }
+
+    // Auto-save dock layout whenever panels are moved, closed, docked or floated
+    const auto docks = {ui->dockPreview, ui->dockAnimations, ui->dockTimeline, ui->dockAtlasFrames, qobject_cast<QDockWidget*>(m_gitDock)};
+    for (QDockWidget *dock : docks) {
+        if (!dock) continue;
+        connect(dock, &QDockWidget::visibilityChanged, this, [this](bool) {
+            saveLayoutState();
+        });
+        connect(dock, &QDockWidget::dockLocationChanged, this, [this](Qt::DockWidgetArea) {
+            saveLayoutState();
+        });
+        connect(dock, &QDockWidget::topLevelChanged, this, [this](bool) {
+            saveLayoutState();
+        });
+    }
 
     // Populate recent files and recent projects menus
     updateRecentFilesMenu();
@@ -154,8 +186,8 @@ void MainWindow::setupControllers()
     });
 
     connect(m_atlasController.get(), &AtlasViewController::toolModeChanged, this, [this](SliceToolMode mode) {
-        ui->btnToolSelect->setChecked(mode == AtlasViewController::ToolSelect);
-        ui->btnToolAddSlice->setChecked(mode == AtlasViewController::ToolAddSlice);
+        ui->actionToolSelect->setChecked(mode == AtlasViewController::ToolSelect);
+        ui->actionToolAddSlice->setChecked(mode == AtlasViewController::ToolAddSlice);
     });
 
     connect(m_atlasController.get(), &AtlasViewController::boxContextMenuRequested,
@@ -174,7 +206,7 @@ void MainWindow::setupControllers()
         ui->fps->blockSignals(true);
         ui->fps->setValue(fps);
         ui->fps->blockSignals(false);
-        ui->timingLabel->setText(" -> " + tr("_timing") + ": " +
+        ui->timingLabel->setText(" -> " + tr("KEY_LABEL_TIMING") + ": " +
                                  QString::number(1000.0 / static_cast<double>(fps), 'g', 4) + "ms");
     });
 
@@ -201,6 +233,71 @@ void MainWindow::setupControllers()
                 QPixmap thumbnail = pixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                 it->setData(thumbnail, Qt::DecorationRole);
             }
+        }
+    });
+}
+
+void MainWindow::setupErgonomicLayout()
+{
+    // Create Timeline Filmstrip and embed into the Timeline dock
+    m_timelineWidget = new TimelineFilmstripWidget(this);
+    m_timelineWidget->setDocument(m_document);
+    ui->timelineLayout->addWidget(m_timelineWidget);
+
+    // Attach timeline, scrubber, and loop mode to AnimationController
+    if (m_animationController) {
+        m_animationController->attachTimelineWidget(m_timelineWidget);
+        m_animationController->attachScrubberSlider(ui->sliderScrubber, ui->lblFrameCounter);
+        m_animationController->attachLoopModeComboBox(ui->comboLoopMode);
+    }
+
+    // Configure animationList columns
+    ui->animationList->setHeaderLabels({tr("KEY_ANIM_COL_NAME"), tr("KEY_ANIM_COL_FPS"), tr("KEY_ANIM_COL_MODE"), tr("KEY_ANIM_COL_FRAMES"), tr("KEY_ANIM_COL_DURATION")});
+    ui->animationList->header()->resizeSection(0, 110);
+    ui->animationList->header()->resizeSection(1, 45);
+    ui->animationList->header()->resizeSection(2, 65);
+    ui->animationList->header()->resizeSection(3, 50);
+    ui->animationList->header()->resizeSection(4, 55);
+
+    // Setup main toolbar
+    ui->mainToolBar->setWindowTitle(tr("KEY_TOOLBAR_MAIN"));
+    ui->mainToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    ui->actionNewProject->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
+    ui->actionOpenProject->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentOpen));
+    ui->actionSaveProject->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentSave));
+
+    ui->actionToolSelect->setIcon(QIcon(":/drawer/icons/tool_select.png"));
+    ui->actionToolAddSlice->setIcon(QIcon(":/drawer/icons/tool_slice.png"));
+    ui->actionTrimSlice->setIcon(QIcon(":/drawer/icons/tool_trim.png"));
+    ui->actionRemoveBg->setIcon(QIcon(":/drawer/icons/tool_remove_bg.png"));
+
+    ui->actionZoomIn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomIn, QIcon(":/drawer/plus.png")));
+    ui->actionZoomOut->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomOut, QIcon(":/drawer/minus.png")));
+
+    QActionGroup *toolGroup = new QActionGroup(this);
+    toolGroup->setExclusive(true);
+    toolGroup->addAction(ui->actionToolSelect);
+    toolGroup->addAction(ui->actionToolAddSlice);
+    ui->actionToolSelect->setChecked(true);
+
+    connect(ui->actionToolSelect, &QAction::triggered, this, &MainWindow::on_actionToolSelect_triggered);
+    connect(ui->actionToolAddSlice, &QAction::triggered, this, &MainWindow::on_actionToolAddSlice_triggered);
+    connect(ui->actionTrimSlice, &QAction::triggered, this, &MainWindow::on_actionTrimSlice_triggered);
+    connect(ui->actionRemoveBg, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
+
+    connect(ui->actionZoomIn, &QAction::triggered, this, &MainWindow::on_actionZoomIn_triggered);
+    connect(ui->actionZoomOut, &QAction::triggered, this, &MainWindow::on_actionZoomOut_triggered);
+    connect(ui->actionZoomReset, &QAction::triggered, this, &MainWindow::on_actionZoomReset_triggered);
+
+    // Setup Affichage (View) Menu with toggle actions for all docks
+    setupViewMenuActions();
+    connect(ui->actionResetLayout, &QAction::triggered, this, &MainWindow::resetDefaultLayout);
+
+    // Connect animation selection to automatically show and raise the Timeline dock
+    connect(m_animationController.get(), &AnimationController::currentAnimationChanged, this, [this](const QString &name) {
+        if (!name.isEmpty() && ui->dockTimeline) {
+            ui->dockTimeline->setVisible(true);
+            ui->dockTimeline->raise();
         }
     });
 }
@@ -243,16 +340,28 @@ void MainWindow::setupUIConnections()
     ui->framesList->setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(ui->framesList->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, [this]() {
+            this, [this](const QItemSelection &selected, const QItemSelection &deselected) {
         if (m_isSyncingSelection || !m_atlasController || !m_document) return;
         m_isSyncingSelection = true;
-        QModelIndexList selectedRows = ui->framesList->selectionModel()->selectedRows();
-        QList<int> indices;
-        indices.reserve(selectedRows.size());
-        for (const QModelIndex &idx : selectedRows) {
-            indices.append(idx.row());
+
+        QList<int> indices = m_atlasController->selectedBoxIndices();
+
+        for (const QModelIndex &idx : deselected.indexes()) {
+            indices.removeAll(idx.row());
         }
-        std::sort(indices.begin(), indices.end());
+        for (const QModelIndex &idx : selected.indexes()) {
+            int r = idx.row();
+            if (!indices.contains(r)) {
+                indices.append(r);
+            }
+        }
+
+        if (indices.isEmpty()) {
+            for (const QModelIndex &idx : ui->framesList->selectionModel()->selectedRows()) {
+                indices.append(idx.row());
+            }
+        }
+
         if (m_atlasController->selectedBoxIndices() != indices) {
             m_atlasController->setSelectedBoxIndices(indices);
         }
@@ -266,25 +375,32 @@ void MainWindow::setupUIConnections()
     connect(ui->framesList, &QListView::customContextMenuRequested,
             this, &MainWindow::on_framesList_customContextMenuRequested);
 
-    // Slice tool buttons
-    ui->btnToolSelect->setIcon(QIcon(":/drawer/icons/tool_select.png"));
-    ui->btnToolSelect->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    ui->btnToolAddSlice->setIcon(QIcon(":/drawer/icons/tool_slice.png"));
-    ui->btnToolAddSlice->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    ui->btnTrimSlice->setIcon(QIcon(":/drawer/icons/tool_trim.png"));
-    ui->btnRemoveBg->setIcon(QIcon(":/drawer/icons/tool_remove_bg.png"));
-
-    connect(ui->btnToolSelect, &QToolButton::clicked, this, &MainWindow::on_btnToolSelect_clicked);
-    connect(ui->btnToolAddSlice, &QToolButton::clicked, this, &MainWindow::on_btnToolAddSlice_clicked);
-    connect(ui->btnTrimSlice, &QPushButton::clicked, this, &MainWindow::on_btnTrimSlice_clicked);
-    connect(ui->btnRemoveBg, &QPushButton::clicked, this, &MainWindow::removeAtlasBackgroundAndRefresh);
-
     // Animation list context menu
     ui->animationList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->animationList, &QTreeWidget::customContextMenuRequested,
             this, &MainWindow::on_animationList_customContextMenuRequested);
 
-    // Initial timing label
+    // Animation action buttons
+    connect(ui->btnNewAnim, &QToolButton::clicked, this, &MainWindow::on_btnNewAnim_clicked);
+    connect(ui->btnNewFromSelection, &QToolButton::clicked, this, &MainWindow::on_btnNewFromSelection_clicked);
+    connect(ui->btnDuplicateAnim, &QToolButton::clicked, this, &MainWindow::on_btnDuplicateAnim_clicked);
+    connect(ui->btnReverseAnim, &QToolButton::clicked, this, &MainWindow::on_btnReverseAnim_clicked);
+    connect(ui->btnDeleteAnim, &QToolButton::clicked, this, &MainWindow::on_btnDeleteAnim_clicked);
+
+    // Transport buttons
+    connect(ui->btnFirstFrame, &QToolButton::clicked, this, &MainWindow::on_btnFirstFrame_clicked);
+    connect(ui->btnPrevFrame, &QToolButton::clicked, this, &MainWindow::on_btnPrevFrame_clicked);
+    connect(ui->btnNextFrame, &QToolButton::clicked, this, &MainWindow::on_btnNextFrame_clicked);
+    connect(ui->btnLastFrame, &QToolButton::clicked, this, &MainWindow::on_btnLastFrame_clicked);
+    connect(ui->Play, &QPushButton::clicked, this, &MainWindow::on_Play_clicked);
+    connect(ui->Pause, &QPushButton::clicked, this, &MainWindow::on_Pause_clicked);
+    connect(ui->fps, &QSpinBox::valueChanged, this, &MainWindow::on_fps_valueChanged);
+
+    // Enforce fixed widths to guarantee absolute position stability when timing changes
+    ui->fpsLabel->setFixedWidth(28);
+    ui->fps->setFixedWidth(55);
+    ui->timingLabel->setFixedWidth(120);
+    ui->timingLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->timingLabel->setText(" -> " + tr("KEY_LABEL_TIMING") + ": " +
                              QString::number(1000.0 / static_cast<double>(ui->fps->value()), 'g', 4) + "ms");
 }
@@ -292,29 +408,29 @@ void MainWindow::setupUIConnections()
 void MainWindow::setupShortcuts()
 {
     // Create Edit Menu for Undo/Redo
-    QMenu *editMenu = new QMenu(tr("KEY_MENU_EDIT"), this);
-    menuBar()->insertMenu(ui->menuHelp->menuAction(), editMenu);
-    QAction *undoAction = m_undoStack->createUndoAction(this, tr("KEY_ACTION_UNDO"));
-    undoAction->setShortcut(QKeySequence::Undo);
-    editMenu->addAction(undoAction);
+    m_editMenu = new QMenu(tr("KEY_MENU_EDIT"), this);
+    menuBar()->insertMenu(ui->menuHelp->menuAction(), m_editMenu);
+    m_undoAction = m_undoStack->createUndoAction(this, tr("KEY_ACTION_UNDO"));
+    m_undoAction->setShortcut(QKeySequence::Undo);
+    m_editMenu->addAction(m_undoAction);
 
-    QAction *redoAction = m_undoStack->createRedoAction(this, tr("KEY_ACTION_REDO"));
-    redoAction->setShortcut(QKeySequence::Redo);
-    editMenu->addAction(redoAction);
+    m_redoAction = m_undoStack->createRedoAction(this, tr("KEY_ACTION_REDO"));
+    m_redoAction->setShortcut(QKeySequence::Redo);
+    m_editMenu->addAction(m_redoAction);
 
-    editMenu->addSeparator();
-    QAction *removeBgAction = editMenu->addAction(tr("KEY_ACTION_REMOVE_BG"));
-    removeBgAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
-    connect(removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
+    m_editMenu->addSeparator();
+    m_removeBgAction = m_editMenu->addAction(tr("KEY_ACTION_REMOVE_BG"));
+    m_removeBgAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
+    connect(m_removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
 
-    editMenu->addSeparator();
-    QAction *prefAction = editMenu->addAction(tr("Préférences..."));
-    prefAction->setShortcut(QKeySequence::Preferences);
-    connect(prefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
+    m_editMenu->addSeparator();
+    m_prefAction = m_editMenu->addAction(tr("KEY_ACTION_SETTINGS"));
+    m_prefAction->setShortcut(QKeySequence::Preferences);
+    connect(m_prefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
 
     ui->menuHelp->addSeparator();
-    QAction *helpPrefAction = ui->menuHelp->addAction(tr("Préférences..."));
-    connect(helpPrefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
+    m_helpPrefAction = ui->menuHelp->addAction(tr("KEY_ACTION_SETTINGS"));
+    connect(m_helpPrefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
 
     // Standard Project & File Shortcuts
     ui->actionNewProject->setShortcut(QKeySequence::New);
@@ -340,18 +456,18 @@ void MainWindow::setupShortcuts()
         m_animationController->togglePlayPause();
     });
 
-    // Arrow keys stepping (deferred if slices selected)
-    QShortcut *stepLeftShortcut = new QShortcut(QKeySequence(Qt::Key_Left), this);
-    connect(stepLeftShortcut, &QShortcut::activated, this, [this]() {
-        if (m_document && !m_document->selectedFrameIndices().isEmpty()) {
-            return;
+    // Arrow keys shortcuts for next / prev frame
+    QShortcut *prevFrameShortcut = new QShortcut(QKeySequence(Qt::Key_Left), this);
+    connect(prevFrameShortcut, &QShortcut::activated, this, [this]() {
+        if (m_animationController) {
+            m_animationController->stepBackward();
         }
-        m_animationController->stepBackward();
     });
 
-    QShortcut *stepRightShortcut = new QShortcut(QKeySequence(Qt::Key_Right), this);
-    connect(stepRightShortcut, &QShortcut::activated, this, [this]() {
-        if (m_document && !m_document->selectedFrameIndices().isEmpty()) {
+    QShortcut *nextFrameShortcut = new QShortcut(QKeySequence(Qt::Key_Right), this);
+    connect(nextFrameShortcut, &QShortcut::activated, this, [this]() {
+        if (!m_animationController) return;
+        if (!m_document || m_document->selectedFrameIndices().size() <= 1) {
             return;
         }
         m_animationController->stepForward();
@@ -373,24 +489,51 @@ void MainWindow::setupShortcuts()
 void MainWindow::setupGitHistoryDock()
 {
     m_gitDock = new GitHistoryDock(this);
+    m_gitDock->setObjectName(QStringLiteral("gitHistoryDock"));
+    m_gitDock->setWindowTitle(tr("KEY_DOCK_GIT_HISTORY"));
     m_gitDock->setProjectController(m_projectController.get());
     addDockWidget(Qt::RightDockWidgetArea, m_gitDock);
 
-    // Create View menu between File and Help
-    QMenu *viewMenu = new QMenu(tr("&Affichage"), this);
-    if (ui->menuHelp) {
-        ui->menuBar->insertMenu(ui->menuHelp->menuAction(), viewMenu);
-    } else {
-        ui->menuBar->addMenu(viewMenu);
+    m_actionToggleGitHistory = m_gitDock->toggleViewAction();
+    m_actionToggleGitHistory->setText(tr("KEY_DOCK_GIT_HISTORY"));
+    m_actionToggleGitHistory->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_H));
+}
+
+void MainWindow::resetDefaultLayout()
+{
+    if (ui->dockPreview) ui->dockPreview->setVisible(true);
+    if (ui->dockAnimations) ui->dockAnimations->setVisible(true);
+    if (ui->dockTimeline) ui->dockTimeline->setVisible(true);
+    if (ui->dockAtlasFrames) ui->dockAtlasFrames->setVisible(true);
+    if (m_gitDock) m_gitDock->setVisible(true);
+    if (ui->mainToolBar) ui->mainToolBar->setVisible(true);
+
+    addDockWidget(Qt::RightDockWidgetArea, ui->dockPreview);
+    addDockWidget(Qt::RightDockWidgetArea, ui->dockAnimations);
+    splitDockWidget(ui->dockPreview, ui->dockAnimations, Qt::Vertical);
+
+    if (m_gitDock) {
+        addDockWidget(Qt::RightDockWidgetArea, m_gitDock);
+        tabifyDockWidget(ui->dockAnimations, m_gitDock);
+        ui->dockAnimations->raise();
     }
 
-    m_actionToggleGitHistory = viewMenu->addAction(tr("Historique &Git"));
-    m_actionToggleGitHistory->setCheckable(true);
-    m_actionToggleGitHistory->setChecked(true);
-    m_actionToggleGitHistory->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_H));
+    addDockWidget(Qt::BottomDockWidgetArea, ui->dockTimeline);
+    addDockWidget(Qt::BottomDockWidgetArea, ui->dockAtlasFrames);
+    tabifyDockWidget(ui->dockTimeline, ui->dockAtlasFrames);
+    ui->dockTimeline->raise();
 
-    connect(m_actionToggleGitHistory, &QAction::toggled, m_gitDock, &QDockWidget::setVisible);
-    connect(m_gitDock, &QDockWidget::visibilityChanged, m_actionToggleGitHistory, &QAction::setChecked);
+    resizeDocks({ui->dockPreview, ui->dockAnimations}, {280, 320}, Qt::Vertical);
+    resizeDocks({ui->dockTimeline}, {160}, Qt::Vertical);
+
+    saveLayoutState();
+}
+
+void MainWindow::saveLayoutState()
+{
+    QSettings settings(QStringLiteral("SpriteStudio"), QStringLiteral("SpriteStudio"));
+    settings.setValue(QStringLiteral("mainWindow/geometry"), saveGeometry());
+    settings.setValue(QStringLiteral("mainWindow/windowState"), saveState());
 }
 
 void MainWindow::processFile(const QString &fileName)
@@ -461,7 +604,7 @@ void MainWindow::updateRecentProjectsMenu()
 
 void MainWindow::updateWindowTitle()
 {
-    QString name = m_projectController ? m_projectController->currentProjectName() : tr("Untitled");
+    QString name = m_projectController ? m_projectController->currentProjectName() : tr("KEY_UNTITLED_PROJECT");
     bool modified = m_projectController ? m_projectController->isProjectModified() : false;
     QString title = QStringLiteral("SpriteStudio - %1%2").arg(name, modified ? QStringLiteral(" *") : QString());
     setWindowTitle(title);
@@ -481,13 +624,13 @@ void MainWindow::checkCrashRecovery()
     const OrphanSessionInfo &orphan = orphans.first();
     QString timeStr = orphan.lastActivity.isValid()
         ? orphan.lastActivity.toLocalTime().toString(QStringLiteral("yyyy-MM-dd HH:mm"))
-        : tr("Unknown date");
-    QString msg = tr("An interrupted work session was detected:\n\nProject: %1\nDate: %2\n\nDo you want to restore this session?")
+        : tr("KEY_UNKNOWN_DATE");
+    QString msg = tr("KEY_RECOVERY_PROMPT")
                   .arg(orphan.projectName, timeStr);
 
     QMessageBox::StandardButton reply = QMessageBox::question(
         this,
-        tr("Crash Recovery"),
+        tr("KEY_RECOVERY_TITLE"),
         msg,
         QMessageBox::Yes | QMessageBox::No
     );
@@ -495,7 +638,7 @@ void MainWindow::checkCrashRecovery()
     if (reply == QMessageBox::Yes) {
         QString errorMsg;
         if (!m_projectController->restoreSession(orphan.sessionDir, &errorMsg)) {
-            QMessageBox::warning(this, tr("Recovery Error"), errorMsg);
+            QMessageBox::warning(this, tr("KEY_RECOVERY_ERROR"), errorMsg);
         }
     } else {
         SessionManager::discardOrphanSession(orphan.sessionDir);
@@ -514,8 +657,8 @@ bool MainWindow::maybeSave()
 
     QMessageBox::StandardButton ret = QMessageBox::warning(
         this,
-        tr("Unsaved Changes"),
-        tr("The current project '%1' has unsaved changes.\nDo you want to save them before proceeding?")
+        tr("KEY_UNSAVED_CHANGES_TITLE"),
+        tr("KEY_UNSAVED_CHANGES_PROMPT")
             .arg(m_projectController->currentProjectName()),
         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
     );
@@ -534,4 +677,106 @@ void MainWindow::openSettingsDialog()
     SettingsDialog dlg(this);
     dlg.exec();
 }
+
+void MainWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+    }
+    QMainWindow::changeEvent(event);
+}
+
+void MainWindow::setupViewMenuActions()
+{
+    if (!ui || !ui->menuAffichage) return;
+    ui->menuAffichage->clear();
+    ui->menuAffichage->addAction(ui->dockPreview->toggleViewAction());
+    ui->menuAffichage->addAction(ui->dockAnimations->toggleViewAction());
+    ui->menuAffichage->addAction(ui->dockTimeline->toggleViewAction());
+    ui->menuAffichage->addAction(ui->dockAtlasFrames->toggleViewAction());
+    if (m_gitDock) {
+        ui->menuAffichage->addAction(m_gitDock->toggleViewAction());
+    }
+    ui->menuAffichage->addSeparator();
+    ui->menuAffichage->addAction(ui->mainToolBar->toggleViewAction());
+    ui->menuAffichage->addSeparator();
+    ui->menuAffichage->addAction(ui->actionResetLayout);
+}
+
+void MainWindow::retranslateUi()
+{
+    ui->retranslateUi(this);
+
+    // Main Toolbar title
+    if (ui->mainToolBar) {
+        ui->mainToolBar->setWindowTitle(tr("KEY_TOOLBAR_MAIN"));
+    }
+
+    // Animation list headers
+    if (ui->animationList) {
+        ui->animationList->setHeaderLabels({
+            tr("KEY_ANIM_COL_NAME"),
+            tr("KEY_ANIM_COL_FRAMES"),
+            tr("KEY_ANIM_COL_FPS"),
+            tr("KEY_ANIM_COL_DURATION")
+        });
+    }
+
+    // Dynamic menus & actions
+    if (m_recentMenu) {
+        m_recentMenu->setTitle(tr("KEY_MENU_RECENT_FILES"));
+    }
+    if (m_recentProjectsMenu) {
+        m_recentProjectsMenu->setTitle(tr("KEY_MENU_RECENT_PROJECTS"));
+    }
+    if (m_editMenu) {
+        m_editMenu->setTitle(tr("KEY_MENU_EDIT"));
+    }
+    if (m_undoAction) {
+        m_undoAction->setText(tr("KEY_ACTION_UNDO"));
+    }
+    if (m_redoAction) {
+        m_redoAction->setText(tr("KEY_ACTION_REDO"));
+    }
+    if (m_removeBgAction) {
+        m_removeBgAction->setText(tr("KEY_ACTION_REMOVE_BG"));
+    }
+    if (m_prefAction) {
+        m_prefAction->setText(tr("KEY_ACTION_SETTINGS"));
+    }
+    if (m_helpPrefAction) {
+        m_helpPrefAction->setText(tr("KEY_ACTION_SETTINGS"));
+    }
+
+    // Refresh view menu dock titles
+    setupViewMenuActions();
+
+    // Status bar widgets
+    if (progressBar) {
+        progressBar->setFormat(tr("KEY_STATUS_PROGRESS") + QStringLiteral(" %p%"));
+    }
+    if (ui->timingLabel) {
+        ui->timingLabel->setText(QStringLiteral(" -> ") + tr("KEY_LABEL_TIMING") + QStringLiteral(": ") +
+                                 QString::number(1000.0 / static_cast<double>(ui->fps->value()), 'g', 4) + QStringLiteral("ms"));
+    }
+
+    // Recent menus actions
+    updateRecentProjectsMenu();
+    updateRecentFilesMenu();
+
+    // Frame list items
+    refreshFrameListDisplay();
+
+    // Window title
+    updateWindowTitle();
+
+    // Child docks
+    if (m_gitDock) {
+        m_gitDock->retranslateUi();
+    }
+    if (m_timelineWidget) {
+        m_timelineWidget->retranslateUi();
+    }
+}
+
 
