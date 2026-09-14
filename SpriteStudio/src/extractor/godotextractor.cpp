@@ -115,23 +115,31 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
     setProgress(60);
 
     // 2. Parse sub_resources (AtlasTexture definitions)
-    QRegularExpression subResRegex(QStringLiteral(
-        R"re(\[sub_resource\s+type="AtlasTexture"\s+id="([^"]+)"\]\s*[\r\n]+(?:atlas\s*=\s*[^\r\n]+[\r\n]+)?region\s*=\s*Rect2\(\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*\))re"
+    QRegularExpression subResBlockRegex(QStringLiteral(
+        R"re(\[sub_resource\s+type="AtlasTexture"\s+id=(?:"([^"]+)"|([^\s\]]+))\]([^\[]*))re"
+    ));
+    QRegularExpression regionRegex(QStringLiteral(
+        R"re(region\s*=\s*Rect2\(\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*\))re"
     ));
 
     QMap<QString, int> subResToFrameIdx;
     QList<SpriteBox> boxes;
     QList<QPixmap> frames;
 
-    QRegularExpressionMatchIterator iter = subResRegex.globalMatch(content);
+    QRegularExpressionMatchIterator iter = subResBlockRegex.globalMatch(content);
     int frameIndex = 0;
     while (iter.hasNext()) {
         QRegularExpressionMatch match = iter.next();
-        QString subResId = match.captured(1);
-        int rx = qRound(match.captured(2).toDouble());
-        int ry = qRound(match.captured(3).toDouble());
-        int rw = qRound(match.captured(4).toDouble());
-        int rh = qRound(match.captured(5).toDouble());
+        QString subResId = match.captured(1).isEmpty() ? match.captured(2) : match.captured(1);
+        QString body = match.captured(3);
+
+        QRegularExpressionMatch regMatch = regionRegex.match(body);
+        if (!regMatch.hasMatch()) continue;
+
+        int rx = qRound(regMatch.captured(1).toDouble());
+        int ry = qRound(regMatch.captured(2).toDouble());
+        int rw = qRound(regMatch.captured(3).toDouble());
+        int rh = qRound(regMatch.captured(4).toDouble());
 
         QRect boxRect(rx, ry, rw, rh);
         boxRect = boxRect.intersected(atlasImg.rect());
@@ -155,13 +163,31 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
     // 3. Parse animations block
     QMap<QString, SpriteAnimation> parsedAnimations;
 
-    QRegularExpression animsListRegex(QStringLiteral(R"re("animations":\s*\[(.*)\]\s*\}\s*$)re"),
-                                      QRegularExpression::DotMatchesEverythingOption);
-    QRegularExpressionMatch animsMatch = animsListRegex.match(content);
+    // Matches both Godot .tres: "animations = [" and JSON: "\"animations\": ["
+    QRegularExpression animsStartRegex(QStringLiteral(R"re((?:animations\s*=|"animations"\s*:)\s*\[)re"));
+    QRegularExpressionMatch animsStartMatch = animsStartRegex.match(content);
 
-    if (animsMatch.hasMatch()) {
-        QString animsArrayStr = animsMatch.captured(1);
+    if (animsStartMatch.hasMatch()) {
+        int arrayStart = animsStartMatch.capturedEnd();
+        int bracketDepth = 1;
+        int arrayEnd = -1;
 
+        for (int i = arrayStart; i < content.length(); ++i) {
+            QChar c = content.at(i);
+            if (c == QLatin1Char('[')) {
+                bracketDepth++;
+            } else if (c == QLatin1Char(']')) {
+                bracketDepth--;
+                if (bracketDepth == 0) {
+                    arrayEnd = i;
+                    break;
+                }
+            }
+        }
+
+        QString animsArrayStr = content.mid(arrayStart, (arrayEnd != -1 ? arrayEnd : content.length()) - arrayStart);
+
+        // Find each { ... } animation block inside the array
         int braceDepth = 0;
         int blockStart = -1;
         QList<QString> animBlocks;
@@ -182,10 +208,10 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
             }
         }
 
-        QRegularExpression nameRegex(QStringLiteral(R"re("name":\s*(?:&?"([^"]+)"|([a-zA-Z0-9_]+)))re"));
-        QRegularExpression speedRegex(QStringLiteral(R"re("speed":\s*([0-9.]+))re"));
-        QRegularExpression loopRegex(QStringLiteral(R"re("loop":\s*(true|false))re"));
-        QRegularExpression subResRefRegex(QStringLiteral(R"re(SubResource\("([^"]+)"\))re"));
+        QRegularExpression nameRegex(QStringLiteral(R"re((?:"name"|name)\s*[:=]\s*(?:&?"([^"]+)"|([a-zA-Z0-9_ -]+)))re"));
+        QRegularExpression speedRegex(QStringLiteral(R"re((?:"speed"|speed)\s*[:=]\s*([0-9.]+))re"));
+        QRegularExpression loopRegex(QStringLiteral(R"re((?:"loop"|loop)\s*[:=]\s*(true|false))re"));
+        QRegularExpression subResRefRegex(QStringLiteral(R"re((?:SubResource|ExtResource)\(\s*(?:"([^"]+)"|([a-zA-Z0-9_]+))\s*\))re"));
 
         for (int b = 0; b < animBlocks.size(); ++b) {
             const QString &block = animBlocks[b];
@@ -196,7 +222,7 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
 
             QRegularExpressionMatch nm = nameRegex.match(block);
             if (nm.hasMatch()) {
-                anim.name = nm.captured(1).isEmpty() ? nm.captured(2) : nm.captured(1);
+                anim.name = nm.captured(1).isEmpty() ? nm.captured(2).trimmed() : nm.captured(1);
             }
 
             QRegularExpressionMatch sm = speedRegex.match(block);
@@ -212,7 +238,7 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
             QRegularExpressionMatchIterator fit = subResRefRegex.globalMatch(block);
             while (fit.hasNext()) {
                 QRegularExpressionMatch fm = fit.next();
-                QString refId = fm.captured(1);
+                QString refId = fm.captured(1).isEmpty() ? fm.captured(2) : fm.captured(1);
                 if (subResToFrameIdx.contains(refId)) {
                     anim.frameIndices.append(subResToFrameIdx.value(refId));
                 }
@@ -236,6 +262,7 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
     }
 
     // 4. Update SpriteDocument directly
+    doc.clear();
     doc.setFilePath(filePath);
     doc.setAtlas(atlasImg);
     doc.setFrames(frames, boxes);

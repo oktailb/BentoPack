@@ -387,11 +387,17 @@ void AnimationController::syncAnimationList()
 
             if (name == currentSelected) {
                 item->setSelected(true);
+                m_treeWidget->setCurrentItem(item);
             }
         }
     }
 
     m_treeWidget->blockSignals(false);
+
+    if ((currentSelected.isEmpty() || !animMap.contains(currentSelected)) && m_treeWidget->topLevelItemCount() > 0) {
+        selectAnimation(m_treeWidget->topLevelItem(0)->text(0));
+    }
+
     emit animationListChanged();
 }
 

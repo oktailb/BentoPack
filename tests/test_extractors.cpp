@@ -177,8 +177,14 @@ void TestExtractors::testGodotExtractorReadWrite()
     QVERIFY(!err.isError());
 
     QVERIFY(!doc.atlas().isNull());
-    QVERIFY(doc.frameCount() > 0);
-    QVERIFY(!doc.animations().isEmpty());
+    QCOMPARE(doc.frameCount(), 86);
+    QCOMPARE(doc.animations().size(), 3);
+    QVERIFY(doc.hasAnimation(QStringLiteral("guard")));
+    QVERIFY(doc.hasAnimation(QStringLiteral("punch")));
+    QVERIFY(doc.hasAnimation(QStringLiteral("side kick")));
+    QCOMPARE(doc.animation(QStringLiteral("guard")).frameIndices.size(), 6);
+    QCOMPARE(doc.animation(QStringLiteral("punch")).frameIndices.size(), 10);
+    QCOMPARE(doc.animation(QStringLiteral("side kick")).frameIndices.size(), 10);
 
     // Test export round-trip
     QTemporaryDir tempDir;
@@ -199,6 +205,13 @@ void TestExtractors::testGodotExtractorReadWrite()
     bool readBackOk = extractor.read(exportedTres, doc2, &readBackErr);
     QVERIFY2(readBackOk, qPrintable(readBackErr.toString()));
     QCOMPARE(doc2.frameCount(), doc.frameCount());
+    QCOMPARE(doc2.animations().size(), 3);
+    QVERIFY(doc2.hasAnimation(QStringLiteral("guard")));
+    QVERIFY(doc2.hasAnimation(QStringLiteral("punch")));
+    QVERIFY(doc2.hasAnimation(QStringLiteral("side kick")));
+    QCOMPARE(doc2.animation(QStringLiteral("guard")).frameIndices.size(), 6);
+    QCOMPARE(doc2.animation(QStringLiteral("punch")).frameIndices.size(), 10);
+    QCOMPARE(doc2.animation(QStringLiteral("side kick")).frameIndices.size(), 10);
 }
 
 void TestExtractors::testGifExtractorRead()
