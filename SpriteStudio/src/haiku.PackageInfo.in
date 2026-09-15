@@ -3,15 +3,15 @@ version               @PROJECT_VERSION@-1
 architecture          x86_64
 summary               "Animated Sprite Management and Assembly Tool"
 description           "Sprite Studio is a work-in-progress (WIP) development tool designed to help game creators and pixel artists efficiently manage, slice, and arrange animation sequences from various source materials (GIFs, consolidated image files, or individual frames)."
-packager              "John Doe <test@example.com>"
-vendor                "Haiku Project"
+packager              "LECOQ Vincent <vincent.lecoq@gmail.com>"
+vendor                "Oktailb"
 
 licenses {
         "@CMAKE_CURRENT_LIST_DIR@/LICENSE"
 }
 
 copyrights {
-    "Copyright (C) 1980-2015 by @GIT_LAST_AUTHOR@ <@GIT_LAST_EMAIL@>"
+    "Copyright (C) 2025-2026 by @GIT_LAST_AUTHOR@ <@GIT_LAST_EMAIL@>"
 }
 
 provides {
@@ -19,8 +19,12 @@ provides {
 }
 
 requires {
-    qt6_core
-    qt6_multimedia
+    haiku >= r1~beta4
+    lib:libQt6Core
+    lib:libQt6Gui
+    lib:libQt6Widgets
+    lib:libQt6Concurrent
+    lib:libgit2
 }
 
 urls {

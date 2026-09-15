@@ -73,6 +73,15 @@ if (WIN32)
 #    )
 endif()
 
+if(UNIX AND NOT APPLE AND NOT HAIKU)
+    install(FILES SpriteStudio/res/linux/SpriteStudio.desktop
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
+    )
+    install(FILES SpriteStudio/res/icons/spritestudio.png
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps
+    )
+endif()
+
 if (HAIKU)
     message("This is haiku")
     install(FILES     ${CMAKE_CURRENT_LIST_DIR}/LICENSE
@@ -90,14 +99,31 @@ set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_RELEASE 1)
 set(CPACK_PACKAGE_CONTACT "vincent.lecoq@gmail.com")
 set(CPACK_PACKAGE_VENDOR "Oktailb")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Animated Sprite Management and Assembly Tool")
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
+
+# Linux CPack configuration
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_CONTACT}")
+set(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+set(CPACK_RPM_PACKAGE_LICENSE "MIT")
+set(CPACK_RPM_PACKAGE_GROUP "Applications/Graphics")
+
+# Windows CPack configuration
+set(CPACK_NSIS_DISPLAY_NAME "Sprite Studio")
+set(CPACK_NSIS_PACKAGE_NAME "Sprite Studio")
+set(CPACK_NSIS_MODIFY_PATH ON)
+
+# macOS CPack configuration
+set(CPACK_DMG_VOLUME_NAME "Sprite Studio")
+set(CPACK_DMG_FORMAT "UDZO")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(CPACK_GENERATOR "TGZ;RPM;DEB")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(CPACK_GENERATOR "NSIS;ZIP")
+    set(CPACK_GENERATOR "ZIP;NSIS")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    set(CPACK_GENERATOR "PACKAGEMAKER;DRAGANDROP;BUNDLE;OSXX11")
+    set(CPACK_GENERATOR "DragNDrop;TGZ")
 else()
     set(CPACK_GENERATOR "TGZ")
 endif()

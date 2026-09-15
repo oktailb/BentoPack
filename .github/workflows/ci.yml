@@ -87,3 +87,55 @@ jobs:
           QT_QPA_PLATFORM: offscreen
         run: |
           ctest --test-dir build --output-on-failure --verbose
+
+  macos:
+    name: macOS (Apple Silicon Clang)
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install System Dependencies
+        run: |
+          brew install qt@6 libgit2 ninja
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$(brew --prefix qt@6);$(brew --prefix libgit2)"
+
+      - name: Build
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+
+  haiku:
+    name: Haiku OS (x86_64 VM)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build and Test on Haiku VM
+        uses: vmactions/haiku-vm@v1
+        with:
+          usesh: true
+          sync: sshfs
+          prepare: |
+            pkgman refresh
+            pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git lib:libQt6Core lib:libQt6Gui lib:libQt6Widgets lib:libQt6Concurrent lib:libQt6Test lib:libgit2_devel
+          run: |
+            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+            cmake --build build --parallel
+            export QT_QPA_PLATFORM=offscreen
+            ctest --test-dir build --output-on-failure --verbose

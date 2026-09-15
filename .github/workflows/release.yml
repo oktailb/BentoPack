@@ -1,0 +1,271 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release-linux:
+    name: Build Linux Deliverables (DEB, RPM, AppImage, Tarball)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install System & Packaging Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            rpm \
+            file \
+            qt6-base-dev \
+            qt6-tools-dev \
+            qt6-tools-dev-tools \
+            qt6-l10n-tools \
+            libgit2-dev \
+            libgl1-mesa-dev \
+            libgl-dev \
+            libegl1-mesa-dev \
+            libxkbcommon-x11-0 \
+            libpulse-dev \
+            libasound2-dev
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr
+
+      - name: Build
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+
+      - name: Build CPack Packages (DEB, RPM, TGZ)
+        run: |
+          cd build
+          cpack -G "DEB;RPM;TGZ"
+
+      - name: Build AppImage
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: 1
+        run: |
+          DESTDIR=AppDir cmake --install build
+          mkdir -p AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
+          cp SpriteStudio/res/linux/SpriteStudio.desktop AppDir/usr/share/applications/
+          cp SpriteStudio/res/icons/spritestudio.png AppDir/usr/share/icons/hicolor/256x256/apps/
+          
+          wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+          
+          export QMAKE=/usr/lib/qt6/bin/qmake
+          ./linuxdeploy-x86_64.AppImage \
+            --appdir AppDir \
+            --desktop-file SpriteStudio/res/linux/SpriteStudio.desktop \
+            --icon-file SpriteStudio/res/icons/spritestudio.png \
+            --plugin qt \
+            --output appimage || true
+          
+          if ls SpriteStudio*.AppImage 1> /dev/null 2>&1; then
+            mv SpriteStudio*.AppImage build/
+          fi
+
+      - name: Upload Linux Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages
+          path: |
+            build/*.deb
+            build/*.rpm
+            build/*.tar.gz
+            build/*.AppImage
+
+  release-windows:
+    name: Build Windows Deliverables (ZIP Portable, NSIS Setup)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup MSYS2 & MinGW Toolchain
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            git
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-qt6-base
+            mingw-w64-x86_64-qt6-tools
+            mingw-w64-x86_64-libgit2
+            mingw-w64-x86_64-nsis
+            p7zip
+
+      - name: Configure CMake
+        shell: msys2 {0}
+        run: |
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests
+        shell: msys2 {0}
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+
+      - name: Deploy Qt Libraries and Create Portable ZIP
+        shell: msys2 {0}
+        run: |
+          windeployqt --release --compiler-runtime build/bin/SpriteStudio.exe
+          mkdir -p dist
+          7z a dist/SpriteStudio-Windows-x64-Portable.zip ./build/bin/*
+
+      - name: Build NSIS Installer
+        shell: msys2 {0}
+        run: |
+          cd build
+          cpack -G NSIS || true
+          if ls SpriteStudio*Setup.exe 1> /dev/null 2>&1; then
+            cp SpriteStudio*Setup.exe ../dist/
+          fi
+
+      - name: Upload Windows Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-packages
+          path: dist/*
+
+  release-macos:
+    name: Build macOS Deliverables (DMG, App Bundle ZIP)
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Dependencies
+        run: |
+          brew install qt@6 libgit2 ninja
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$(brew --prefix qt@6);$(brew --prefix libgit2)"
+
+      - name: Build
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+
+      - name: Deploy Qt and Package DMG
+        run: |
+          mkdir -p dist
+          /opt/homebrew/opt/qt@6/bin/macdeployqt build/bin/SpriteStudio.app
+          
+          # Create DMG via CPack or hdiutil
+          cd build
+          cpack -G DragNDrop || true
+          if ls *.dmg 1> /dev/null 2>&1; then
+            cp *.dmg ../dist/
+          else
+            hdiutil create -volname "Sprite Studio" -srcfolder bin/SpriteStudio.app -ov -format UDZO ../dist/SpriteStudio-macOS-arm64.dmg
+          fi
+          cd ..
+          
+          # Also package ZIP of the .app
+          ditto -c -k --sequesterRsrc --keepParent build/bin/SpriteStudio.app dist/SpriteStudio-macOS-arm64.zip
+
+      - name: Upload macOS Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-packages
+          path: dist/*
+
+  release-haiku:
+    name: Build Haiku OS Deliverables (HPKG)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build and Package inside Haiku VM
+        uses: vmactions/haiku-vm@v1
+        with:
+          usesh: true
+          sync: sshfs
+          prepare: |
+            pkgman refresh
+            pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git lib:libQt6Core lib:libQt6Gui lib:libQt6Widgets lib:libQt6Concurrent lib:libQt6Test lib:libgit2_devel
+          run: |
+            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+            cmake --build build --parallel
+            export QT_QPA_PLATFORM=offscreen
+            ctest --test-dir build --output-on-failure --verbose
+            
+            mkdir -p dist/packages
+            DESTDIR=haiku_install cmake --install build
+            package create -i build/generated/haiku.PackageInfo -C haiku_install/boot/system dist/SpriteStudio-0.9.3-1-x86_64.hpkg || \
+            package create -i build/generated/haiku.PackageInfo -C build/bin dist/SpriteStudio-0.9.3-1-x86_64.hpkg
+
+      - name: Upload Haiku Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: haiku-packages
+          path: dist/*.hpkg
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [release-linux, release-windows, release-macos, release-haiku]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Organize artifacts for release
+        run: |
+          mkdir -p release_assets
+          find artifacts/ -type f -exec cp {} release_assets/ \;
+          ls -lah release_assets/
+
+      - name: Create or Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          files: release_assets/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
