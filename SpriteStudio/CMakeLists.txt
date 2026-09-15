@@ -22,8 +22,7 @@ set(${PROJECT_NAME}_TS_FILES
     i18n/sprite_studio_ja_JA.ts # Japanese
 )
 
-set (${PROJECT_NAME}_SRC
-    src/main.cpp
+set(SpriteStudioCore_SRC
     src/mainwindow.cpp
     src/mainwindow_events.cpp
     src/mainwindow_callbacks.cpp
@@ -60,12 +59,12 @@ set (${PROJECT_NAME}_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/generated/version.h
 )
 
-set (${PROJECT_NAME}_UI
+set(SpriteStudioCore_UI
     src/mainwindow.ui
     src/extractor/jsonExtractordialog.ui
 )
 
-set (${PROJECT_NAME}_INCLUDE
+set(SpriteStudioCore_INCLUDE
     include/mainwindow.h
     include/config/appconfig.h
     include/controller/projectcontroller.h
@@ -95,24 +94,25 @@ set (${PROJECT_NAME}_INCLUDE
     include/aboutdialog.h
 )
 
-qt_add_executable(${PROJECT_NAME}
-    ${${PROJECT_NAME}_SRC}
-    ${${PROJECT_NAME}_UI}
-    ${${PROJECT_NAME}_INCLUDE}
+# Bibliothèque statique commune pour l'application et la suite de tests
+add_library(SpriteStudioCore STATIC
+    ${SpriteStudioCore_SRC}
+    ${SpriteStudioCore_UI}
+    ${SpriteStudioCore_INCLUDE}
 )
 
-qt_add_translations(${PROJECT_NAME}
+qt_add_translations(SpriteStudioCore
     TS_FILES
         ${${PROJECT_NAME}_TS_FILES}
     SOURCES
-        ${${PROJECT_NAME}_SRC}
-        ${${PROJECT_NAME}_INCLUDE}
-        ${${PROJECT_NAME}_UI}
+        ${SpriteStudioCore_SRC}
+        ${SpriteStudioCore_INCLUDE}
+        ${SpriteStudioCore_UI}
     RESOURCE_PREFIX
         "/i18n"
 )
 
-qt6_add_resources(${PROJECT_NAME} "images"
+qt6_add_resources(SpriteStudioCore "images"
     PREFIX "drawer"
     FILES
     play.png
@@ -126,19 +126,20 @@ qt6_add_resources(${PROJECT_NAME} "images"
     icons/tool_remove_bg.png
 )
 
-qt6_add_resources(${PROJECT_NAME} "text"
+qt6_add_resources(SpriteStudioCore "text"
     PREFIX "text"
     FILES
     license.txt
     about.txt
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    WIN32_EXECUTABLE TRUE
-    MACOSX_BUNDLE TRUE
+target_include_directories(SpriteStudioCore PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC
+target_link_libraries(SpriteStudioCore PUBLIC
     Qt6::Core
     Qt6::CorePrivate
     Qt6::Gui
@@ -149,7 +150,24 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 )
 
 if(LibGit2_FOUND)
-    target_link_libraries(${PROJECT_NAME} PRIVATE LibGit2::LibGit2)
+    target_link_libraries(SpriteStudioCore PUBLIC LibGit2::LibGit2)
+endif()
+
+# Exécutable principal SpriteStudio
+qt_add_executable(${PROJECT_NAME}
+    src/main.cpp
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    SpriteStudioCore
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    WIN32_EXECUTABLE TRUE
+    MACOSX_BUNDLE TRUE
+)
+
+if(LibGit2_FOUND)
     if(WIN32 AND LIBGIT2_DLL)
         add_custom_command(
             TARGET ${PROJECT_NAME} POST_BUILD
@@ -173,3 +191,4 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Haiku")
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
 endif()
+
