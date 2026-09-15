@@ -35,12 +35,12 @@ void AboutDialog::setupUI()
   // En-tête avec icône et titre
   QHBoxLayout *headerLayout = new QHBoxLayout();
 
-  // Icône de l'application (vous pouvez remplacer par votre propre icône)
+  // Icône de l'application
   iconLabel = new QLabel();
-  QPixmap appIcon(":/drawer/play.png"); // Utilise une icône existante ou créez-en une
+  QPixmap appIcon(":/drawer/icons/spritestudio.png");
   if (!appIcon.isNull()) {
       iconLabel->setPixmap(appIcon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    }
+  }
   iconLabel->setAlignment(Qt::AlignCenter);
 
   // Titre et version
@@ -265,8 +265,10 @@ QString AboutDialog::readTextFile(const QString &filePath)
 
 void AboutDialog::loadLicense()
 {
-  // Lire le fichier de licence comme avant
-  QString licenseTextContent = readTextFile(":/text/license.txt");
+  QString licenseTextContent = readTextFile(":/text/LICENSE");
+  if (licenseTextContent.isEmpty()) {
+      licenseTextContent = readTextFile(":/text/license.txt");
+  }
 
   QString licenseHtml = QString(
                             "<div style='margin: 20px; font-family: monospace; font-size: 12px;'>"

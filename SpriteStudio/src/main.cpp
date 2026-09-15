@@ -6,6 +6,7 @@
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
+  a.setWindowIcon(QIcon(QStringLiteral(":/drawer/icons/spritestudio.png")));
   QCoreApplication::setOrganizationName(QStringLiteral("SpriteStudio"));
   QCoreApplication::setApplicationName(QStringLiteral("SpriteStudio"));
 

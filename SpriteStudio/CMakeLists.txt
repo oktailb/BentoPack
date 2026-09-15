@@ -126,12 +126,17 @@ qt6_add_resources(SpriteStudioCore "images"
     icons/tool_slice.png
     icons/tool_trim.png
     icons/tool_remove_bg.png
+    icons/spritestudio.png
+)
+
+set_source_files_properties(${CMAKE_SOURCE_DIR}/LICENSE PROPERTIES
+    QT_RESOURCE_ALIAS "LICENSE"
 )
 
 qt6_add_resources(SpriteStudioCore "text"
     PREFIX "text"
     FILES
-    license.txt
+    ${CMAKE_SOURCE_DIR}/LICENSE
     about.txt
 )
 
@@ -153,9 +158,16 @@ if(LibGit2_FOUND)
     target_link_libraries(SpriteStudioCore PUBLIC LibGit2::LibGit2)
 endif()
 
+# Ressources d'icône Windows
+set(APP_EXTRA_SOURCES "")
+if(WIN32)
+    set(APP_EXTRA_SOURCES res/windows/SpriteStudio.rc)
+endif()
+
 # Exécutable principal SpriteStudio
 qt_add_executable(${PROJECT_NAME}
     src/main.cpp
+    ${APP_EXTRA_SOURCES}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
