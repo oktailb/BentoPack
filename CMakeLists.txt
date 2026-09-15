@@ -20,14 +20,15 @@ project(SpriteStudio    VERSION ${PROJECT_VERSION}
 include("build.cmake")
 include(GNUInstallDirs)
 
-find_package(Qt6 REQUIRED COMPONENTS Core CorePrivate)
-find_package(Qt6 REQUIRED COMPONENTS Gui)
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Multimedia)
-find_package(Qt6 REQUIRED COMPONENTS MultimediaWidgets)
-find_package(Qt6 REQUIRED COMPONENTS Concurrent)
-find_package(Qt6 REQUIRED COMPONENTS LinguistTools REQUIRED)
-find_package(Qt6 REQUIRED COMPONENTS Test)
+find_package(Qt6 REQUIRED COMPONENTS
+    Core
+    CorePrivate
+    Gui
+    Widgets
+    Concurrent
+    LinguistTools
+    Test
+)
 
 if(NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

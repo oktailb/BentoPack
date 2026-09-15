@@ -144,8 +144,6 @@ target_link_libraries(SpriteStudioCore PUBLIC
     Qt6::CorePrivate
     Qt6::Gui
     Qt6::Widgets
-    Qt6::Multimedia
-    Qt6::MultimediaWidgets
     Qt6::Concurrent
 )
 
