@@ -19,6 +19,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M7** | [Suppression Avancée de Fond & Segmentation Robuste (JPEG Bruités, Anti-Halo)](#m7--suppression-avancée-darrière-plan--segmentation-robuste-planches-jpeg-bruit-anti-halo) | **Moyenne** | Moyenne | 📝 Notes & Pistes Techniques |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifications Détaillées |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Originaux (Libres de Droits)](#assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits) | **Moyenne** | Faible | 📝 Planifié (Création de sprites originaux & pérennisation des tests) |
+| **AUDIT** | [Points à Revoir & Dette Technique Résiduelle (Recommandations d'Amélioration)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 📝 À Traiter (Architecture, QImage, CMake, CI/CD, Optimisation O(N²)) |
 
 ---
 
@@ -281,7 +282,7 @@ Le point d'ancrage (ou pivot) définit le point de référence (souvent au nivea
 1. **Édition Visuelle du Pivot :**
    - Affichage d'un réticule / mire (croix colorée semi-transparente) sur la vue de la frame ou dans le lecteur d'animation.
    - Déplacement interactif à la souris du point de pivot.
-   - Préréglages rapides en un clic :
+   - Préréglages rapides en un clic par frame:
      - `Bottom-Center` (standard pour personnages au sol).
      - `Center` (standard pour projectiles, vaisseaux, effets visuels).
      - `Top-Left` (standard pour éléments d'interface).
@@ -611,25 +612,90 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 
 ---
 
+## 🛠️ AUDIT : Points de Vigilance & Dette Technique Résiduelle (Recommandations d'Amélioration)
+
+Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et dettes techniques mis en lumière lors de l'audit critique approfondi du projet (architecture logicielle, intégrité du modèle de données, build CMake, tests & DevOps, ergonomie et documentation).
+
+### 1. Architecture & Modèle de Données (Core Model Integrity)
+
+- **Purification de `SpriteDocument` (`QImage` vs `QPixmap`) :**
+  - *Constat :* `SpriteDocument::m_frames` stocke une liste de `QPixmap` (`QList<QPixmap>`), alors que l'atlas d'origine est conservé sous forme de `QImage`.
+  - *Problème & Risque :* En Qt, un `QPixmap` est directement assujetti au serveur d'affichage graphique / GPU. Manipuler ou instancier des `QPixmap` en dehors du thread GUI principal provoque des assertions, des fuites de ressources ou des comportements indéfinis sous Linux (X11/Wayland) et macOS lors des opérations asynchrones (`QtConcurrent`).
+  - *Action requise :* Refactoriser `SpriteDocument` pour stocker exclusivement des `QImage`. La conversion vers `QPixmap` doit être repoussée à la couche de vue et de rendu (`AtlasViewController`, `TimelineFilmstripWidget`, délégués d'affichage).
+
+- **Virtualisation & Refonte de `ArrangementModel` (Lazy-Loading des Vignettes) :**
+  - *Constat :* `ArrangementModel` hérite de `QStandardItemModel` et recopie toutes les frames du document sous forme de `QStandardItem`. Dans `MainWindow::populateFrameList()`, le redimensionnement `scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation)` est exécuté de façon synchrone pour chaque frame sur le thread principal.
+  - *Problème & Risque :* Goulot d'étranglement perceptible lors du chargement de planches massives (200 à 500 frames), figeant temporairement l'interface.
+  - *Action requise :* Remplacer `ArrangementModel` par un `QAbstractListModel` personnalisé indexant directement `SpriteDocument` sans recopie, avec génération asynchrone des vignettes ou mise en cache LRU à la demande (`data(Qt::DecorationRole)`).
+
+- **Réduction de la Colle Événementielle dans `MainWindow` :**
+  - *Constat :* Bien que délestée de ses responsabilités monolithiques, la classe `MainWindow` reste dispersée sur 6 fichiers source (`mainwindow.cpp`, `mainwindow_animation.cpp`, `mainwindow_atlas.cpp`, `mainwindow_callbacks.cpp`, `mainwindow_events.cpp`, `mainwindow_frames.cpp`).
+  - *Action requise :* Rapatrier la glue d'événements et de menus directement dans les contrôleurs respectifs (`AtlasViewController`, `AnimationController`, `ProjectController`) ou au sein de sous-composants/docks autonomes pour alléger l'orchestrateur.
+
+- **Isolation de la Dépendance Privée Qt (`Qt6::CorePrivate`) :**
+  - *Constat :* La compression et décompression des archives `.ssp` s'appuie sur `<private/qzipreader_p.h>` et `qzipwriter_p.h`.
+  - *Problème & Risque :* Les en-têtes privés de Qt ne bénéficient d'aucune garantie de stabilité d'API/ABI entre versions mineures de Qt, et certaines distributions Linux n'installent pas par défaut les paquets de développement privés.
+  - *Action requise :* Encapsuler l'accès ZIP derrière une interface d'abstraction pour permettre, si nécessaire, un basculement aisé vers une bibliothèque tierce standardisée (ex: `minizip-ng` ou `libzip`).
+
+---
+
+### 2. Performance & Optimisations Algorithmiques
+
+- **Désengorgement de la Vérification d'Inclusion dans `SpriteDetector` ($O(N^2)$) :**
+  - *Constat :* Dans `SpriteDetector::detectToImages()`, le filtrage des boîtes englobantes entièrement incluses dans d'autres utilise une double boucle imbriquée $N \times N$ (`componentRects[j].contains(componentRects[i])`).
+  - *Problème & Risque :* Sur une planche fortement bruitée (JPEG issu du web) générant 2000 à 5000 composantes parasites, ce test effectue entre 4 et 25 millions de comparaisons géométriques sur le CPU.
+  - *Action requise :* Remplacer la boucle naïve par un partitionnement spatial (grille spatiale uniforme ou QuadTree) pour ramener la complexité à $O(N \log N)$.
+
+---
+
+### 3. DevOps, Build & Automatisation (Tests & CI/CD)
+
+- **Factorisation CMake (Bibliothèque Commune `SpriteStudioCore`) :**
+  - *Constat :* Le répertoire `lib/` est vide. L'application principale et les 4 exécutables de test (`test_extractors`, `test_controllers`, `test_project`, `test_core`) recompilent chacun l'intégralité des fichiers sources `.cpp` (les mêmes fichiers sont compilés jusqu'à 5 fois).
+  - *Action requise :* Définir une bibliothèque statique `SpriteStudioCore` dans CMake et la lier aux cibles de tests et à l'exécutable principal. Temps de compilation divisé par 3 et maintenance centralisée.
+
+- **Pipeline d'Intégration Continue (GitHub Actions CI/CD) :**
+  - *Constat :* Le dossier `.github/` ne contient aucun workflow (`.github/workflows/ci.yml`). La validation des 93 tests CTest dépend exclusivement des exécutions manuelles en local.
+  - *Action requise :* Créer un workflow GitHub Actions automatisant la compilation et l'exécution de `ctest --output-on-failure` (en mode `QT_QPA_PLATFORM=offscreen`) sur les 3 environnements cibles : Ubuntu (GCC), Windows (MinGW/MSVC) et macOS (Clang).
+
+- **Pérennisation des Fixtures de Tests (Suite à la Purge Copyright) :**
+  - *Constat :* Suite au commit `bad56df` supprimant les planches de test sous droits d'auteur (`sample/ryu.png`, etc.), plusieurs tests de codecs recourent à `QSKIP` et ne s'exécutent plus réellement.
+  - *Action requise :* Créer et versionner dans `tests/data/` un jeu minimal d'assets originaux libres de droits (ou générés par code via `QImage`) afin de garantir une exécution 100% autonome et effective des tests en environnement vierge (CI).
+
+---
+
+### 4. Documentation & Visibilité Externe
+
+- **Refonte Majeure du `README.md` :**
+  - *Constat :* Le `README.md` actuel est lourdement désynchronisé des avancées du logiciel. Il ignore le format natif `.ssp`, l'historique Git et le Time-Travel interactif, la timeline filmstrip, le support de Godot 4, et annonce des prérequis obsolètes (CMake 3.10 au lieu de 3.20+ et Qt 6).
+  - *Action requise :* Réécrire le README avec présentation moderne, actualisation des fonctionnalités réelles, prérequis exacts, et nouvelles captures d'écran / GIFs animés représentatifs de l'interface actuelle.
+
+---
+
 ## 📅 Ordre de Déploiement Recommandé
 
 1. **Étape 0 — Stabilisation & Clôture de M1 (M1-Fix) — ✅ TERMINÉ & VALIDÉ (100%)** :
    Poignées cosmétiques anti-chevauchement à fort zoom pixel art, déplacement synchronisé de multi-sélection (group drag), badges d'index sans débordement et découpe continue avec Shift validés par tests unitaires automatisés.
-2. **Étape 1 — Sauvegarde & Projet Natif (M5)** :
-   Sécuriser le travail de l'utilisateur dès le départ en lui permettant de sauvegarder et recharger son document complet (`.ssp`), évitant toute perte de données lors des crashs ou fermetures.
-3. **Étape 2 — Séquençage & Multi-Animations (M2)** :
-   Donner toute la dimension "studio d'animation" avec la création d'animations multiples, le réglage de cadence et les boucles via une timeline ergonomique.
-4. **Étape 3 — Points d'Ancrage / Pivots (M3)** :
-   Assurer la cohérence physique des animations avant l'export dans les moteurs de jeux.
-5. **Étape 4 — Assainissement Architectural & Performance (M0)** :
-   Unification définitive du modèle sur `SpriteDocument`, élimination du state parallèle d'`Extractor`, multithreading des extractions et tests unitaires.
-6. **Étape 5 — Outil d'Édition de Pixels (M4)** :
+2. **Étape 1 — Sauvegarde & Projet Natif (M5) — ✅ TERMINÉ & VALIDÉ (100%)** :
+   Sécuriser le travail de l'utilisateur avec format `.ssp` ZIP atomique, détection de crash, snapshots Git continus calqués sur l'UndoStack et Time Travel graphique via le dock d'historique.
+3. **Étape 2 — Séquençage & Multi-Animations (M2) — ✅ TERMINÉ & VALIDÉ (100%)** :
+   Donner toute la dimension "studio d'animation" avec la création d'animations multiples, le réglage de cadence, les boucles (Loop, Once, Ping-Pong) via une timeline ergonomique par splitters et ruban filmstrip.
+4. **Étape 3 — Quick Wins & Consolidation Technique (AUDIT-Phase 1)** :
+   - Factorisation de la cible `SpriteStudioCore` dans CMake (accélération x3 des compilations de tests).
+   - Génération/intégration des fixtures d'assets originaux libres de droits (`ASSETS` / `tests/data/`) pour réarmer les tests skippés.
+   - Mise en place du workflow GitHub Actions CI/CD multiplateforme (`.github/workflows/ci.yml`).
+   - Actualisation du `README.md` (mise en valeur des atouts M2/M5/Godot).
+5. **Étape 4 — Points d'Ancrage / Pivots (M3)** :
+   Assurer la cohérence physique des animations avant l'export dans les moteurs de jeux (réticule interactif, presets, offsets Godot/JSON).
+6. **Étape 5 — Assainissement Architectural & Performance (AUDIT-Phase 2)** :
+   - Migration de `SpriteDocument::m_frames` vers `QImage` pour purifier le modèle de données et garantir l'étanchéité hors-thread.
+   - Virtualisation de `ArrangementModel` via `QAbstractListModel` avec lazy-loading des vignettes.
+   - Optimisation de la détection de boîtes imbriquées dans `SpriteDetector` via partitionnement spatial ($O(N \log N)$).
+7. **Étape 6 — Outil d'Édition de Pixels (M4)** :
    Offrir l'atelier de retouche pixel art autonome directement au cœur du workflow.
-7. **Étape 6 — Optimisation du Packing (M6)** :
-   Perfectionner le rendement de l'atlas PNG final pour la production avec MaxRects.
-8. **Étape 7 — Suppression Avancée de Fond & Débruitage Robuste (M7)** :
+8. **Étape 7 — Optimisation du Packing (M6)** :
+   Perfectionner le rendement de l'atlas PNG final pour la production avec MaxRects (Best Short Side Fit / Best Area Fit).
+9. **Étape 8 — Suppression Avancée de Fond & Débruitage Robuste (M7)** :
    Doter SpriteStudio d'un moteur de segmentation tolérant au bruit JPEG, anti-halo (*despill*), filtrage de textes parasites et désagglomération pour les planches de sprites complexes.
-9. **Étape 8 — Empaquetage Polygonal & Maillages Serrés (M8)** :
-   Extension haute performance pour moteurs 2D modernes (Godot Polygon2D, Unity Tight) : tracé de contours alpha, simplification Douglas-Peucker, triangulation et imbrication type puzzle pour maximiser la densité d'atlas et éradiquer l'overdraw GPU.
-10. **Tâche Transverse — Assets Originaux & Échantillons Libres (ASSETS)** :
-    Dessiner et intégrer les visuels originaux dans Git pour remplacer les échantillons temporaires sous copyright et garantir des tests unitaires CTest autonomes.
+10. **Étape 9 — Empaquetage Polygonal & Maillages Serrés (M8)** :
+    Extension haute performance pour moteurs 2D modernes (Godot Polygon2D, Unity Tight) : tracé de contours alpha, simplification Douglas-Peucker, triangulation et imbrication type puzzle pour maximiser la densité d'atlas et éradiquer l'overdraw GPU.
