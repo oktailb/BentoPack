@@ -1,36 +1,55 @@
-# 🌟 Sprite Studio (WIP)
+# 🌟 SpriteStudio
 
-## Animated Sprite Management and Assembly Tool
+[![CI](https://github.com/oktailb/SpriteStudio/actions/workflows/ci.yml/badge.svg)](https://github.com/oktailb/SpriteStudio/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C.svg?logo=c%2B%2B)](https://en.cppreference.com/w/cpp/17)
+[![Qt 6](https://img.shields.io/badge/Qt-6.5+-41CD52.svg?logo=qt)](https://www.qt.io/)
+[![CMake](https://img.shields.io/badge/CMake-3.20+-064F8C.svg?logo=cmake)](https://cmake.org/)
 
-**Sprite Studio** is a work-in-progress (WIP) development tool designed to help game creators and pixel artists efficiently manage, slice, and arrange animation sequences from various source materials (GIFs, consolidated image files, or individual frames).
+> **SpriteStudio** is a fast, modular, and modern desktop application tailored for game developers, pixel artists, and 2D animators to extract, clean, arrange, and export 2D sprite sheets and animated textures.
 
-![A quick demo of the Sprite Studio interface showing frame extraction, list management, and animation preview.](SpriteStudio.gif)
+---
+
+![SpriteStudio Interface Demo](SpriteStudio.gif)
 
 ---
 
 ## ✨ Key Features
 
-### Import & Data Handling
-* **Flexible Import:** Supports importing **Animated GIFs** (automatic frame extraction) and **Sprite Sheets** (automatic slicing based on alpha/color tolerance).
-* **Visual Arrangement:** Frames are managed in a list with intuitive drag-and-drop support for reordering and insertion.
+### 📥 Intelligent Extraction & Import
+* **Smart Sprite Sheet Slicing:** Automatic sprite detection and extraction with configurable alpha and color tolerance.
+* **Animated GIF Decompilation:** Instant extraction of multi-frame animated GIFs into ordered frame sequences.
+* **Format Parsers:** Import existing sprite atlases with associated **JSON** (TexturePacker / Aseprite) or **Godot 4 `.tres`** metadata.
+* **Non-Destructive Background Removal:** Pick transparent chroma colors and remove background colors with instant visual feedback.
 
-### Editing & Sequencing
-* **Frame Merging:** Easily merge frames by dropping one item onto another to combine them into a single frame.
-![Fusion of two sprites.](Fusion.gif)
-* **Background removal:** Easily remove background color on sprite maps to have nicely usable transparent animations
-![Background removal feature.](RemoveBackground.gif)
-* **Batch Operations (Multi-Selection):**
-    * **Group Deletion** for selected frames.
-    * **Invert Selection** to quickly select all unselected frames.
-    * **Reverse Order** for selected frames to create quick ping-pong animations or correct sequencing issues.
+![Background Removal Demo](RemoveBackground.gif)
 
-### Animation Preview
-* **Real-time Preview:** Animate the **currently selected frames** in sequence, respecting the user-defined **FPS** (Frames Per Second).
-* **Fixed Aspect Ratio:** Ensures small frames are centered within the bounding box of the largest frame, preventing perceived size changes during playback.
+### 🎬 Timeline & Animation Filmstrip
+* **Filmstrip Dock:** Intuitive bottom timeline with thumbnail filmstrip, scrub bar, and drag-and-drop frame reordering.
+* **Frame Merging & Compositing:** Drag and drop one frame onto another to fuse them into a single layered sprite.
+* **Batch Editing:** Multi-selection operations including group deletion, invert selection, and reverse frame ordering (ideal for ping-pong loops).
+* **Real-time Playback:** High-precision preview engine with configurable FPS (1 to 60 FPS), loop controls, and aspect-ratio stabilization.
 
-### Export
-* **Industry-Standard Export:** Generates the final **Sprite Atlas** as a **PNG** image.
-* **Metadata Export:** Creates a **JSON** metadata file (compatible with tools like Texture Packer) containing the exact coordinates (x, y, w, h) of each frame on the exported atlas.
+![Frame Fusion Demo](Fusion.gif)
+
+### 💾 Native `.ssp` Project Architecture
+* **All-in-One Compressed Format:** `.ssp` project files package project metadata, frame descriptors, and source assets into a structured ZIP archive.
+* **Atomic Transactions & Crash Recovery:** Atomic file writing with journaled crash-recovery safeguard prevents project corruption.
+* **Embedded Git Time-Travel:** Integrated non-destructive versioning engine powered by LibGit2. Browse commit history, inspect visual diffs, and revert to previous states without leaving the app.
+
+### 📤 Multi-Engine Export
+* **PNG Sprite Atlas:** Optimized packing of extracted frames into a consolidated texture sheet.
+* **Godot 4 Engine Exporter:** Generates ready-to-use Godot 4 `SpriteFrames` (`.tres`) resources with embedded `AtlasTexture` definitions and animations.
+* **TexturePacker / Aseprite JSON:** Universal JSON metadata mapping frame bounds `(x, y, w, h)` and animation tags.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+* **Language:** C++17
+* **Framework:** Qt 6 (Core, Gui, Widgets, Multimedia, Concurrent, Test, LinguistTools)
+* **Build System:** CMake 3.20+ with modular architecture (`SpriteStudioCore` static engine + `SpriteStudio` app + automated CTest test suite)
+* **Versioning Engine:** LibGit2 (optional, enabled when detected)
 
 ---
 
@@ -38,48 +57,90 @@
 
 ### Prerequisites
 
-* A C++ compiler.
-* **CMake** (version 3.10 or higher recommended).
-* The necessary development dependencies (e.g., Qt framework libraries, as specified in `CMakeLists.txt`).
+* **C++17 compliant compiler:** GCC 11+, Clang 13+, or MSVC 2019/2022
+* **CMake:** Version 3.20 or newer
+* **Qt 6:** Version 6.5 or newer (Core, Gui, Widgets, Multimedia, MultimediaWidgets, Concurrent, Test, LinguistTools)
+* **Ninja** or **Make** (recommended build generators)
+* *(Optional)* **LibGit2** (for embedded `.ssp` time-travel versioning)
 
-### Build Steps
+### Build Instructions
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/oktailb/SpriteStudio
-    cd SpriteStudio.git
-    ```
+#### Linux (Ubuntu / Debian)
 
-2.  **Configure and Compile (using CMake):**
-    ```bash
-    mkdir build
-    cd build
-    # Configure the project, assuming CMakeLists.txt is in the root
-    cmake ..
-    # Build the project
-    cmake --build . 
-    # Or simply: make
-    ```
+```bash
+# 1. Install prerequisites
+sudo apt-get update
+sudo apt-get install -y build-essential cmake ninja-build \
+  qt6-base-dev qt6-multimedia-dev qt6-tools-dev libgit2-dev
 
-3.  **Launch the application:**
-    ```bash
-    ./SpriteStudio
-    ```
+# 2. Clone repository
+git clone https://github.com/oktailb/SpriteStudio.git
+cd SpriteStudio
+
+# 3. Configure and build
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+
+# 4. Run tests
+ctest --test-dir build --output-on-failure
+
+# 5. Launch
+./build/bin/SpriteStudio
+```
+
+#### Windows (MinGW 64-bit or MSVC)
+
+```powershell
+# 1. Clone repository
+git clone https://github.com/oktailb/SpriteStudio.git
+cd SpriteStudio
+
+# 2. Configure with CMake
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+# 3. Build project
+cmake --build build --config Release --parallel
+
+# 4. Run automated test suite
+ctest --test-dir build --output-on-failure -C Release
+
+# 5. Launch
+.\build\bin\SpriteStudio.exe
+```
 
 ---
 
-## 🗺️ Roadmap (Future Plans)
+## 🧪 Automated Testing
 
-* **Project Save/Load:** Implement a dedicated project file format (`.sps`) to save the current frame order, settings, and source data, plans also to support `.tps` format.
-* **Manual Bounding Box Editing:** Allow users to manually adjust frame boundaries for precise slicing.
-* **Export Formats:** Add specific metadata formats (e.g., XML, formats tailored for popular game engines).
+SpriteStudio includes a modular test suite using `QtTest` and `CTest`, validating core models, extractors, controllers, and project serialization:
+
+```bash
+ctest --test-dir build --output-on-failure --verbose
+```
+
+| Test Suite | Description |
+| :--- | :--- |
+| `test_core` | Frame data structures, color detection, and algorithm utilities |
+| `test_project` | `.ssp` serialization, atomic saves, journal recovery, and LibGit2 versioning |
+| `test_extractors` | GIF, JSON, Godot 4 `.tres`, and Sprite Sheet detectors using sample assets |
+| `test_controllers` | Undo/Redo commands, frame merging, selection, and timeline controller logic |
 
 ---
 
-## ✍️ Development
+## 🗺️ Roadmap
 
-**Developer:** Vincent LECOQ
+- [x] Native `.ssp` compressed project format with atomic saves
+- [x] Embedded Git time-travel dock
+- [x] Godot 4 `SpriteFrames` exporter
+- [x] Factorized CMake architecture (`SpriteStudioCore`) & automated CTest suites
+- [ ] **M3 — Interactive Pivots & Alignment:** Visual crosshair gizmo, batch alignment presets (Bottom-Center, Top-Left), bounding box stabilization
+- [ ] **M4 — In-App Pixel Art & Cleanup Editor:** 1-bit pencil, eraser, color picker, onion skinning, flood fill, transparency mask brush
+- [ ] **M5 — Advanced Exporters:** Unity `.anim` / `SpriteSheet`, Defold atlas, Unreal Engine paper2D metadata
+
+---
 
 ## 📄 License
 
-This project is licensed under the **Apache License 2.0**. See the `LICENSE` file for full details.
+This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
+
+**Developer:** Vincent LECOQ
