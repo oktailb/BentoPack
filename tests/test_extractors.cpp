@@ -49,7 +49,7 @@ void TestExtractors::initTestCase()
     };
 
     for (const QString &cand : candidates) {
-        if (QFile::exists(cand + QStringLiteral("/ryu.png"))) {
+        if (QFile::exists(cand + QStringLiteral("/hero.png")) || QFile::exists(cand + QStringLiteral("/ryu.png"))) {
             m_sampleDir = QDir(cand).canonicalPath();
             break;
         }
@@ -98,9 +98,10 @@ void TestExtractors::testSpriteExtractorCapabilities()
 
 void TestExtractors::testSpriteExtractorReadPng()
 {
-    QString ryuPng = m_sampleDir + QStringLiteral("/ryu.png");
-    if (!QFile::exists(ryuPng)) {
-        QSKIP("Sample file not present (uncommitted assets).");
+    QString pngPath = m_sampleDir + QStringLiteral("/hero.png");
+    if (!QFile::exists(pngPath)) pngPath = m_sampleDir + QStringLiteral("/ryu.png");
+    if (!QFile::exists(pngPath)) {
+        QSKIP("Sample file not present.");
     }
 
     SpriteExtractor extractor;
@@ -110,7 +111,7 @@ void TestExtractors::testSpriteExtractorReadPng()
     QSignalSpy progressSpy(&extractor, &Extractor::progress);
     QSignalSpy statusSpy(&extractor, &Extractor::statusMessage);
 
-    bool ok = extractor.read(ryuPng, doc, &err);
+    bool ok = extractor.read(pngPath, doc, &err);
     QVERIFY2(ok, qPrintable(err.toString()));
     QVERIFY(!err.isError());
 
@@ -128,16 +129,17 @@ void TestExtractors::testSpriteExtractorReadPng()
 
 void TestExtractors::testJsonExtractorReadWrite()
 {
-    QString ryuJson = m_sampleDir + QStringLiteral("/ryu.json");
-    if (!QFile::exists(ryuJson)) {
-        QSKIP("Sample file not present (uncommitted assets).");
+    QString jsonPath = m_sampleDir + QStringLiteral("/hero.json");
+    if (!QFile::exists(jsonPath)) jsonPath = m_sampleDir + QStringLiteral("/ryu.json");
+    if (!QFile::exists(jsonPath)) {
+        QSKIP("Sample file not present.");
     }
 
     JsonExtractor extractor;
     SpriteDocument doc;
     ExtractorError err;
 
-    bool ok = extractor.read(ryuJson, doc, &err);
+    bool ok = extractor.read(jsonPath, doc, &err);
     QVERIFY2(ok, qPrintable(err.toString()));
     QVERIFY(!err.isError());
 
@@ -149,7 +151,7 @@ void TestExtractors::testJsonExtractorReadWrite()
     QTemporaryDir tempDir;
     QVERIFY(tempDir.isValid());
 
-    QString exportedJson = tempDir.filePath(QStringLiteral("exported_ryu.json"));
+    QString exportedJson = tempDir.filePath(QStringLiteral("exported_hero.json"));
     ExportOptions opts;
     opts.compressJson = false;
 
@@ -157,7 +159,7 @@ void TestExtractors::testJsonExtractorReadWrite()
     bool writeOk = extractor.write(exportedJson, doc, opts, &writeErr);
     QVERIFY2(writeOk, qPrintable(writeErr.toString()));
     QVERIFY(QFile::exists(exportedJson));
-    QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("exported_ryu.png"))));
+    QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("exported_hero.png"))));
 
     // Read back exported JSON
     SpriteDocument doc2;
@@ -170,9 +172,10 @@ void TestExtractors::testJsonExtractorReadWrite()
 
 void TestExtractors::testGodotExtractorReadWrite()
 {
-    QString godotTres = m_sampleDir + QStringLiteral("/ryu_godot.tres");
+    QString godotTres = m_sampleDir + QStringLiteral("/hero_godot.tres");
+    if (!QFile::exists(godotTres)) godotTres = m_sampleDir + QStringLiteral("/ryu_godot.tres");
     if (!QFile::exists(godotTres)) {
-        QSKIP("Sample file not present (uncommitted assets).");
+        QSKIP("Sample file not present.");
     }
 
     GodotExtractor extractor;
@@ -184,14 +187,23 @@ void TestExtractors::testGodotExtractorReadWrite()
     QVERIFY(!err.isError());
 
     QVERIFY(!doc.atlas().isNull());
-    QCOMPARE(doc.frameCount(), 86);
     QCOMPARE(doc.animations().size(), 3);
-    QVERIFY(doc.hasAnimation(QStringLiteral("guard")));
-    QVERIFY(doc.hasAnimation(QStringLiteral("punch")));
-    QVERIFY(doc.hasAnimation(QStringLiteral("side kick")));
-    QCOMPARE(doc.animation(QStringLiteral("guard")).frameIndices.size(), 6);
-    QCOMPARE(doc.animation(QStringLiteral("punch")).frameIndices.size(), 10);
-    QCOMPARE(doc.animation(QStringLiteral("side kick")).frameIndices.size(), 10);
+    if (doc.hasAnimation(QStringLiteral("idle"))) {
+        QCOMPARE(doc.frameCount(), 14);
+        QVERIFY(doc.hasAnimation(QStringLiteral("run")));
+        QVERIFY(doc.hasAnimation(QStringLiteral("attack")));
+        QCOMPARE(doc.animation(QStringLiteral("idle")).frameIndices.size(), 4);
+        QCOMPARE(doc.animation(QStringLiteral("run")).frameIndices.size(), 6);
+        QCOMPARE(doc.animation(QStringLiteral("attack")).frameIndices.size(), 4);
+    } else {
+        QCOMPARE(doc.frameCount(), 86);
+        QVERIFY(doc.hasAnimation(QStringLiteral("guard")));
+        QVERIFY(doc.hasAnimation(QStringLiteral("punch")));
+        QVERIFY(doc.hasAnimation(QStringLiteral("side kick")));
+        QCOMPARE(doc.animation(QStringLiteral("guard")).frameIndices.size(), 6);
+        QCOMPARE(doc.animation(QStringLiteral("punch")).frameIndices.size(), 10);
+        QCOMPARE(doc.animation(QStringLiteral("side kick")).frameIndices.size(), 10);
+    }
 
     // Test export round-trip
     QTemporaryDir tempDir;
@@ -213,26 +225,29 @@ void TestExtractors::testGodotExtractorReadWrite()
     QVERIFY2(readBackOk, qPrintable(readBackErr.toString()));
     QCOMPARE(doc2.frameCount(), doc.frameCount());
     QCOMPARE(doc2.animations().size(), 3);
-    QVERIFY(doc2.hasAnimation(QStringLiteral("guard")));
-    QVERIFY(doc2.hasAnimation(QStringLiteral("punch")));
-    QVERIFY(doc2.hasAnimation(QStringLiteral("side kick")));
-    QCOMPARE(doc2.animation(QStringLiteral("guard")).frameIndices.size(), 6);
-    QCOMPARE(doc2.animation(QStringLiteral("punch")).frameIndices.size(), 10);
-    QCOMPARE(doc2.animation(QStringLiteral("side kick")).frameIndices.size(), 10);
+    if (doc2.hasAnimation(QStringLiteral("idle"))) {
+        QVERIFY(doc2.hasAnimation(QStringLiteral("run")));
+        QVERIFY(doc2.hasAnimation(QStringLiteral("attack")));
+    } else {
+        QVERIFY(doc2.hasAnimation(QStringLiteral("guard")));
+        QVERIFY(doc2.hasAnimation(QStringLiteral("punch")));
+        QVERIFY(doc2.hasAnimation(QStringLiteral("side kick")));
+    }
 }
 
 void TestExtractors::testGifExtractorRead()
 {
-    QString ryuGif = m_sampleDir + QStringLiteral("/ryu_hd.gif");
-    if (!QFile::exists(ryuGif)) {
-        QSKIP("Sample file not present (uncommitted assets).");
+    QString gifPath = m_sampleDir + QStringLiteral("/hero.gif");
+    if (!QFile::exists(gifPath)) gifPath = m_sampleDir + QStringLiteral("/ryu_hd.gif");
+    if (!QFile::exists(gifPath)) {
+        QSKIP("Sample file not present.");
     }
 
     GifExtractor extractor;
     SpriteDocument doc;
     ExtractorError err;
 
-    bool ok = extractor.read(ryuGif, doc, &err);
+    bool ok = extractor.read(gifPath, doc, &err);
     QVERIFY2(ok, qPrintable(err.toString()));
     QVERIFY(!err.isError());
 

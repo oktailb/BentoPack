@@ -82,8 +82,21 @@ private:
 
 void TestControllers::initTestCase()
 {
-    m_sampleDir = QStringLiteral(SAMPLE_DIR);
-    QVERIFY(!m_sampleDir.isEmpty());
+    QStringList candidates = {
+        QStringLiteral(SAMPLE_DIR),
+        QDir::current().filePath(QStringLiteral("../sample")),
+        QDir::current().filePath(QStringLiteral("../../sample")),
+        QDir::current().filePath(QStringLiteral("sample"))
+    };
+    for (const QString &cand : candidates) {
+        if (QFile::exists(cand + QStringLiteral("/hero.png")) || QFile::exists(cand + QStringLiteral("/ryu.png"))) {
+            m_sampleDir = QDir(cand).canonicalPath();
+            break;
+        }
+    }
+    if (m_sampleDir.isEmpty()) {
+        m_sampleDir = QStringLiteral(SAMPLE_DIR);
+    }
 }
 
 void TestControllers::cleanupTestCase()
@@ -205,9 +218,10 @@ void TestControllers::testAppConfigCorruptJsonFallback()
 
 void TestControllers::testProjectControllerOpenJson()
 {
-    QString jsonPath = m_sampleDir + QStringLiteral("/ryu.json");
+    QString jsonPath = m_sampleDir + QStringLiteral("/hero.json");
+    if (!QFile::exists(jsonPath)) jsonPath = m_sampleDir + QStringLiteral("/ryu.json");
     if (!QFile::exists(jsonPath)) {
-        QSKIP("Sample file not present (uncommitted assets).");
+        QSKIP("Sample file not present.");
     }
 
     SpriteDocument doc;
@@ -229,9 +243,10 @@ void TestControllers::testProjectControllerOpenJson()
 
 void TestControllers::testProjectControllerOpenGif()
 {
-    QString gifPath = m_sampleDir + QStringLiteral("/ryu_hd.gif");
+    QString gifPath = m_sampleDir + QStringLiteral("/hero.gif");
+    if (!QFile::exists(gifPath)) gifPath = m_sampleDir + QStringLiteral("/ryu_hd.gif");
     if (!QFile::exists(gifPath)) {
-        QSKIP("Sample file not present (uncommitted assets).");
+        QSKIP("Sample file not present.");
     }
 
     SpriteDocument doc;
@@ -338,9 +353,10 @@ void TestControllers::testProjectControllerBackgroundRemoval()
 
 void TestControllers::testProjectControllerOpenAsync()
 {
-    QString pngPath = m_sampleDir + QStringLiteral("/ryu.png");
+    QString pngPath = m_sampleDir + QStringLiteral("/hero.png");
+    if (!QFile::exists(pngPath)) pngPath = m_sampleDir + QStringLiteral("/ryu.png");
     if (!QFile::exists(pngPath)) {
-        QSKIP("Sample file not present (uncommitted assets).");
+        QSKIP("Sample file not present.");
     }
 
     SpriteDocument doc;
