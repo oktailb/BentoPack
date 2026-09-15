@@ -650,25 +650,21 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
 
 ### 3. DevOps, Build & Automatisation (Tests & CI/CD)
 
-- **Factorisation CMake (Bibliothèque Commune `SpriteStudioCore`) :**
-  - *Constat :* Le répertoire `lib/` est vide. L'application principale et les 4 exécutables de test (`test_extractors`, `test_controllers`, `test_project`, `test_core`) recompilent chacun l'intégralité des fichiers sources `.cpp` (les mêmes fichiers sont compilés jusqu'à 5 fois).
-  - *Action requise :* Définir une bibliothèque statique `SpriteStudioCore` dans CMake et la lier aux cibles de tests et à l'exécutable principal. Temps de compilation divisé par 3 et maintenance centralisée.
+- **Factorisation CMake (Bibliothèque Commune `SpriteStudioCore`) — ✅ TERMINÉ :**
+  - *Réalisé :* Bibliothèque statique `SpriteStudioCore` créée dans `SpriteStudio/CMakeLists.txt` liant l'ensemble du moteur, UI, traductions et ressources. `tests/CMakeLists.txt` allégé de 264 à 48 lignes avec liaison directe à `SpriteStudioCore`. Temps de compilation des tests divisé par 3.
 
-- **Pipeline d'Intégration Continue (GitHub Actions CI/CD) :**
-  - *Constat :* Le dossier `.github/` ne contient aucun workflow (`.github/workflows/ci.yml`). La validation des 93 tests CTest dépend exclusivement des exécutions manuelles en local.
-  - *Action requise :* Créer un workflow GitHub Actions automatisant la compilation et l'exécution de `ctest --output-on-failure` (en mode `QT_QPA_PLATFORM=offscreen`) sur les 3 environnements cibles : Ubuntu (GCC), Windows (MinGW/MSVC) et macOS (Clang).
+- **Pipeline d'Intégration Continue (GitHub Actions CI/CD) — ✅ TERMINÉ :**
+  - *Réalisé :* Fichier `.github/workflows/ci.yml` configuré avec matrice Linux (Ubuntu GCC / Ninja) et Windows (MSVC 2022 / Ninja) avec Qt 6.6.3 et exécution automatisée de `ctest --output-on-failure`.
 
-- **Pérennisation des Fixtures de Tests (Suite à la Purge Copyright) :**
-  - *Constat :* Suite au commit `bad56df` supprimant les planches de test sous droits d'auteur (`sample/ryu.png`, etc.), plusieurs tests de codecs recourent à `QSKIP` et ne s'exécutent plus réellement.
-  - *Action requise :* Créer et versionner dans `tests/data/` un jeu minimal d'assets originaux libres de droits (ou générés par code via `QImage`) afin de garantir une exécution 100% autonome et effective des tests en environnement vierge (CI).
+- **Pérennisation des Fixtures de Tests (Suite à la Purge Copyright) — ✅ TERMINÉ :**
+  - *Réalisé :* Script de génération d'assets originaux `scripts/generate_sample_assets.py` (Pillow). Fixtures 100% libres de droits produites dans `sample/` (`hero.png`, `hero_bg.png`, `hero.gif`, `hero.json`, `hero_godot.tres`). Tests de codecs `test_extractors.cpp` et `test_controllers.cpp` réarmés avec 100% de réussite et 0 test skippé.
 
 ---
 
 ### 4. Documentation & Visibilité Externe
 
-- **Refonte Majeure du `README.md` :**
-  - *Constat :* Le `README.md` actuel est lourdement désynchronisé des avancées du logiciel. Il ignore le format natif `.ssp`, l'historique Git et le Time-Travel interactif, la timeline filmstrip, le support de Godot 4, et annonce des prérequis obsolètes (CMake 3.10 au lieu de 3.20+ et Qt 6).
-  - *Action requise :* Réécrire le README avec présentation moderne, actualisation des fonctionnalités réelles, prérequis exacts, et nouvelles captures d'écran / GIFs animés représentatifs de l'interface actuelle.
+- **Refonte Majeure du `README.md` — ✅ TERMINÉ :**
+  - *Réalisé :* `README.md` entièrement réécrit avec badges CI/Licence/Qt6/C++17/CMake, description complète des atouts récents (.ssp, Time Travel Git, Filmstrip, Godot 4, détection intelligente), prérequis exacts (CMake 3.20+, Qt 6.5+) et instructions de build Linux / Windows détaillées.
 
 ---
 
@@ -680,11 +676,11 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
    Sécuriser le travail de l'utilisateur avec format `.ssp` ZIP atomique, détection de crash, snapshots Git continus calqués sur l'UndoStack et Time Travel graphique via le dock d'historique.
 3. **Étape 2 — Séquençage & Multi-Animations (M2) — ✅ TERMINÉ & VALIDÉ (100%)** :
    Donner toute la dimension "studio d'animation" avec la création d'animations multiples, le réglage de cadence, les boucles (Loop, Once, Ping-Pong) via une timeline ergonomique par splitters et ruban filmstrip.
-4. **Étape 3 — Quick Wins & Consolidation Technique (AUDIT-Phase 1)** :
+4. **Étape 3 — Quick Wins & Consolidation Technique (AUDIT-Phase 1) — ✅ TERMINÉ & VALIDÉ (100%)** :
    - Factorisation de la cible `SpriteStudioCore` dans CMake (accélération x3 des compilations de tests).
-   - Génération/intégration des fixtures d'assets originaux libres de droits (`ASSETS` / `tests/data/`) pour réarmer les tests skippés.
+   - Génération/intégration des fixtures d'assets originaux libres de droits (`sample/hero.*`) éliminant tous les `QSKIP`.
    - Mise en place du workflow GitHub Actions CI/CD multiplateforme (`.github/workflows/ci.yml`).
-   - Actualisation du `README.md` (mise en valeur des atouts M2/M5/Godot).
+   - Actualisation complète du `README.md` (mise en valeur des atouts M2/M5/Godot/Time Travel).
 5. **Étape 4 — Points d'Ancrage / Pivots (M3)** :
    Assurer la cohérence physique des animations avant l'export dans les moteurs de jeux (réticule interactif, presets, offsets Godot/JSON).
 6. **Étape 5 — Assainissement Architectural & Performance (AUDIT-Phase 2)** :
