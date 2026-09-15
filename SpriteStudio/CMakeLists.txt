@@ -53,6 +53,7 @@ set(SpriteStudioCore_SRC
     src/widgets/githistorydock.cpp
     src/widgets/settingsdialog.cpp
     src/widgets/timelinefilmstripwidget.cpp
+    src/widgets/backgroundremovaldialog.cpp
     src/localizationmanager.cpp
     src/zip/miniz.c
     src/version.h.in
@@ -82,6 +83,7 @@ set(SpriteStudioCore_INCLUDE
     include/widgets/githistorydock.h
     include/widgets/settingsdialog.h
     include/widgets/timelinefilmstripwidget.h
+    include/widgets/backgroundremovaldialog.h
     include/localizationmanager.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h

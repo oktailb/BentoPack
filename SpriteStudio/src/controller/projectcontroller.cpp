@@ -498,29 +498,26 @@ void ProjectController::clearRecentFiles()
     emit recentFilesChanged(QStringList());
 }
 
-QImage ProjectController::removeBackgroundFromImage(const QImage &srcImage, int tolerance)
+QRgb ProjectController::detectDominantBackgroundColor(const QImage &srcImage, int minAlpha)
 {
-    if (srcImage.isNull()) return QImage();
-
-    if (tolerance < 0) {
-        tolerance = AppConfig::instance().project().backgroundRemovalTolerance;
+    if (srcImage.isNull()) return 0;
+    if (minAlpha < 0) {
+        minAlpha = AppConfig::instance().project().backgroundMinAlpha;
     }
-    const int minAlpha = AppConfig::instance().project().backgroundMinAlpha;
 
     QImage image = (srcImage.format() == QImage::Format_ARGB32)
-        ? srcImage.copy()
+        ? srcImage
         : srcImage.convertToFormat(QImage::Format_ARGB32);
 
     const int w = image.width();
     const int h = image.height();
-    if (w <= 0 || h <= 0) return image;
+    if (w <= 0 || h <= 0) return 0;
 
     std::vector<const QRgb*> constScanLines(h);
     for (int y = 0; y < h; ++y) {
         constScanLines[y] = reinterpret_cast<const QRgb*>(image.constScanLine(y));
     }
 
-    // Find the most frequent color by sampling with O(1) hash map
     QHash<QRgb, int> histogram;
     histogram.reserve(4096);
     int maxCount = 0;
@@ -540,8 +537,28 @@ QImage ProjectController::removeBackgroundFromImage(const QImage &srcImage, int 
             }
         }
     }
+    return backgroundColor;
+}
 
-    if (maxCount == 0) return image;
+QImage ProjectController::removeBackgroundFromImage(const QImage &srcImage, int tolerance)
+{
+    if (srcImage.isNull()) return QImage();
+
+    if (tolerance < 0) {
+        tolerance = AppConfig::instance().project().backgroundRemovalTolerance;
+    }
+    const int minAlpha = AppConfig::instance().project().backgroundMinAlpha;
+
+    QImage image = (srcImage.format() == QImage::Format_ARGB32)
+        ? srcImage.copy()
+        : srcImage.convertToFormat(QImage::Format_ARGB32);
+
+    const int w = image.width();
+    const int h = image.height();
+    if (w <= 0 || h <= 0) return image;
+
+    const QRgb backgroundColor = detectDominantBackgroundColor(srcImage, minAlpha);
+    if (qAlpha(backgroundColor) < minAlpha) return image;
 
     const int bgR = qRed(backgroundColor);
     const int bgG = qGreen(backgroundColor);

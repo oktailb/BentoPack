@@ -1,5 +1,7 @@
 #include "include/mainwindow.h"
 #include "ui_mainwindow.h"
+#include "config/appconfig.h"
+#include "widgets/backgroundremovaldialog.h"
 #include <QMenu>
 #include <QAction>
 
@@ -20,7 +22,7 @@ void MainWindow::on_actionToolAddSlice_triggered()
 void MainWindow::on_actionTrimSlice_triggered()
 {
     if (m_atlasController) {
-        m_atlasController->trimSelectedSlice(ui->alphaThreshold ? ui->alphaThreshold->value() : 1);
+        m_atlasController->trimSelectedSlice(AppConfig::instance().atlas().defaultAlphaThreshold);
     }
 }
 
@@ -69,7 +71,7 @@ void MainWindow::onBoxContextMenuRequested(int index, const QPoint &screenPos)
 
     QAction *trimAction = menu.addAction(tr("KEY_CTX_TRIM_SLICE"));
     connect(trimAction, &QAction::triggered, this, [this]() {
-        if (m_atlasController) m_atlasController->trimSelectedSlice(ui->alphaThreshold ? ui->alphaThreshold->value() : 1);
+        if (m_atlasController) m_atlasController->trimSelectedSlice(AppConfig::instance().atlas().defaultAlphaThreshold);
     });
 
     QAction *mergeAction = menu.addAction(tr("KEY_CTX_MERGE_SLICES"));
@@ -114,7 +116,7 @@ void MainWindow::onAtlasContextMenuRequested(const QPoint &pos)
     QAction *trimAction = menu.addAction(tr("KEY_CTX_TRIM_SLICE"));
     trimAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
     connect(trimAction, &QAction::triggered, this, [this]() {
-        if (m_atlasController) m_atlasController->trimSelectedSlice(ui->alphaThreshold ? ui->alphaThreshold->value() : 1);
+        if (m_atlasController) m_atlasController->trimSelectedSlice(AppConfig::instance().atlas().defaultAlphaThreshold);
     });
 
     QAction *mergeSlicesAction = menu.addAction(tr("KEY_CTX_MERGE_SLICES"));
@@ -155,12 +157,8 @@ void MainWindow::onAtlasContextMenuRequested(const QPoint &pos)
 
 void MainWindow::removeAtlasBackgroundAndRefresh()
 {
-    if (m_projectController) {
-        m_projectController->removeAtlasBackgroundAndRefreshAsync(
-            ui->alphaThreshold ? ui->alphaThreshold->value() : 10,
-            ui->verticalTolerance ? ui->verticalTolerance->value() : 5,
-            ui->enableSmartCropCheckbox ? ui->enableSmartCropCheckbox->isChecked() : false,
-            ui->overlapThresholdSpinbox ? ui->overlapThresholdSpinbox->value() : 0.5
-        );
+    if (m_document && !m_document->atlas().isNull()) {
+        BackgroundRemovalDialog dlg(m_document, m_undoStack, this);
+        dlg.exec();
     }
 }

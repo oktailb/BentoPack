@@ -33,6 +33,8 @@ private slots:
     void testExtractToImagesEquivalence();
     void testExtractPerformance();
     void testSpriteDetectorBasics();
+    void testSpriteDetectorNestedContainment();
+    void testSpriteDetectorLargeScaleInclusionPerformance();
 
 private:
     QString m_sampleDir;
@@ -405,6 +407,94 @@ void TestExtractors::testSpriteDetectorBasics()
     QVERIFY(boxesOk);
     QCOMPARE(boxesOnly.size(), 2);
     QCOMPARE(boxesOnly[0].rect, QRect(5, 5, 20, 20));
+}
+
+void TestExtractors::testSpriteDetectorNestedContainment()
+{
+    // Create an image with an outer hollow box containing an inner isolated component,
+    // plus a standalone distinct component.
+    QImage testImg(120, 80, QImage::Format_ARGB32);
+    testImg.fill(Qt::transparent);
+
+    QPainter p(&testImg);
+    // Outer hollow rectangle (bounding box 10,10, 50,50)
+    p.fillRect(10, 10, 50, 4, Qt::blue);  // Top
+    p.fillRect(10, 56, 50, 4, Qt::blue);  // Bottom
+    p.fillRect(10, 10, 4, 50, Qt::blue);  // Left
+    p.fillRect(56, 10, 4, 50, Qt::blue);  // Right
+
+    // Inner island strictly inside the outer hollow box (30,30, 10,10)
+    p.fillRect(30, 30, 10, 10, Qt::green);
+
+    // Standalone separate component (75, 15, 30, 30)
+    p.fillRect(75, 15, 30, 30, Qt::red);
+    p.end();
+
+    QList<SpriteBox> boxes;
+    SpriteDetectionOptions opts;
+    bool ok = SpriteDetector::detectBoxes(testImg, boxes, opts);
+    QVERIFY(ok);
+
+    // The inner green island (30,30, 10,10) must be filtered out because it is fully
+    // inside the outer blue hollow box (10,10, 50,50).
+    // Exactly 2 master boxes should be returned.
+    QCOMPARE(boxes.size(), 2);
+    QCOMPARE(boxes[0].rect, QRect(10, 10, 50, 50));
+    QCOMPARE(boxes[1].rect, QRect(75, 15, 30, 30));
+}
+
+void TestExtractors::testSpriteDetectorLargeScaleInclusionPerformance()
+{
+    // Stress test: 1024x1024 image with 64 outer master sprites (8x8 grid).
+    // Inside each master sprite, place 8 separate small disjoint components (total 512 nested islands).
+    // In addition, place 64 small standalone sprites outside the grid.
+    // Total components = 64 (outer) + 512 (nested) + 64 (standalone) = 640 components.
+    const int imgSize = 1024;
+    QImage largeImg(imgSize, imgSize, QImage::Format_ARGB32);
+    largeImg.fill(Qt::transparent);
+
+    QPainter p(&largeImg);
+    for (int gy = 0; gy < 8; ++gy) {
+        for (int gx = 0; gx < 8; ++gx) {
+            const int ox = gx * 110 + 20;
+            const int oy = gy * 110 + 20;
+
+            // Outer hollow frame 80x80
+            p.fillRect(ox, oy, 80, 2, Qt::white);
+            p.fillRect(ox, oy + 78, 80, 2, Qt::white);
+            p.fillRect(ox, oy, 2, 80, Qt::white);
+            p.fillRect(ox + 78, oy, 2, 80, Qt::white);
+
+            // 8 small inner islands (size 4x4) inside the frame
+            for (int k = 0; k < 8; ++k) {
+                const int ix = ox + 10 + (k % 4) * 15;
+                const int iy = oy + 10 + (k / 4) * 30;
+                p.fillRect(ix, iy, 4, 4, QColor(k * 25, 120, 200));
+            }
+
+            // Standalone small sprite in the margin between grid cells
+            p.fillRect(ox + 90, oy + 40, 6, 6, Qt::yellow);
+        }
+    }
+    p.end();
+
+    QList<SpriteBox> boxes;
+    SpriteDetectionOptions opts;
+
+    QElapsedTimer timer;
+    timer.start();
+
+    bool ok = SpriteDetector::detectBoxes(largeImg, boxes, opts);
+    qint64 elapsedMs = timer.elapsed();
+
+    QVERIFY(ok);
+    // 64 outer frames + 64 standalone sprites = 128 master boxes
+    // All 512 inner islands must be filtered out
+    QCOMPARE(boxes.size(), 128);
+
+    qDebug() << "SpriteDetector segmented 640 components (with 512 nested) on 1024x1024 in" << elapsedMs << "ms";
+    // With SpatialGrid2D, this runs in ~10-30 ms. Threshold set to 500 ms for CI headroom.
+    QVERIFY2(elapsedMs < 500, qPrintable(QString("Large scale inclusion check took too long: %1 ms").arg(elapsedMs)));
 }
 
 #include <QGuiApplication>

@@ -369,3 +369,52 @@ void AddSliceCommand::undo()
         m_doc->removeFrame(m_createdIndex);
     }
 }
+
+// ============================================================================
+// RemoveBackgroundCommand
+// ============================================================================
+RemoveBackgroundCommand::RemoveBackgroundCommand(SpriteDocument *doc,
+                                                 const QImage &oldAtlas, const QList<QPixmap> &oldFrames, const QList<SpriteBox> &oldBoxes,
+                                                 const QImage &newAtlas, const QList<QPixmap> &newFrames, const QList<SpriteBox> &newBoxes,
+                                                 QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+    , m_oldAtlas(oldAtlas)
+    , m_oldFrames(oldFrames)
+    , m_oldBoxes(oldBoxes)
+    , m_newAtlas(newAtlas)
+    , m_newFrames(newFrames)
+    , m_newBoxes(newBoxes)
+{
+    setText(QObject::tr("Remove Background"));
+    if (m_doc) {
+        m_animationsBackup = m_doc->animations();
+    }
+}
+
+RemoveBackgroundCommand::RemoveBackgroundCommand(SpriteDocument *doc,
+                                                 const QImage &newAtlas, const QList<QPixmap> &newFrames, const QList<SpriteBox> &newBoxes,
+                                                 QUndoCommand *parent)
+    : RemoveBackgroundCommand(doc,
+                              doc ? doc->atlas() : QImage(),
+                              doc ? doc->frames() : QList<QPixmap>(),
+                              doc ? doc->boxes() : QList<SpriteBox>(),
+                              newAtlas, newFrames, newBoxes, parent)
+{
+}
+
+void RemoveBackgroundCommand::redo()
+{
+    if (!m_doc) return;
+    m_doc->setAtlas(m_newAtlas);
+    m_doc->setFrames(m_newFrames, m_newBoxes);
+}
+
+void RemoveBackgroundCommand::undo()
+{
+    if (!m_doc) return;
+    m_doc->setAtlas(m_oldAtlas);
+    m_doc->setFrames(m_oldFrames, m_oldBoxes);
+    m_doc->setAnimations(m_animationsBackup);
+}
+

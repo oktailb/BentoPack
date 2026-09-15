@@ -237,4 +237,33 @@ private:
     int             m_createdIndex = -1;
 };
 
+/**
+ * @brief Command to apply background removal on the atlas and update extracted frames with undo/redo.
+ */
+class RemoveBackgroundCommand : public QUndoCommand
+{
+public:
+    RemoveBackgroundCommand(SpriteDocument *doc,
+                            const QImage &oldAtlas, const QList<QPixmap> &oldFrames, const QList<SpriteBox> &oldBoxes,
+                            const QImage &newAtlas, const QList<QPixmap> &newFrames, const QList<SpriteBox> &newBoxes,
+                            QUndoCommand *parent = nullptr);
+
+    RemoveBackgroundCommand(SpriteDocument *doc,
+                            const QImage &newAtlas, const QList<QPixmap> &newFrames, const QList<SpriteBox> &newBoxes,
+                            QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument*                 m_doc;
+    QImage                          m_oldAtlas;
+    QList<QPixmap>                  m_oldFrames;
+    QList<SpriteBox>                m_oldBoxes;
+    QImage                          m_newAtlas;
+    QList<QPixmap>                  m_newFrames;
+    QList<SpriteBox>                m_newBoxes;
+    QMap<QString, SpriteAnimation>  m_animationsBackup;
+};
+
 #endif // COMMANDS_H

@@ -8,6 +8,65 @@ struct Point2D {
     int x;
     int y;
 };
+
+/**
+ * @brief 2D uniform spatial grid for accelerating rectangle containment queries.
+ * Reduces all-pairs N x N containment checks from O(N^2) to O(N) average time.
+ */
+class SpatialGrid2D {
+public:
+    SpatialGrid2D(int imageWidth, int imageHeight, int numRectangles)
+    {
+        m_width = std::max(1, imageWidth);
+        m_height = std::max(1, imageHeight);
+
+        // Adapt cell size based on image dimensions and rectangle density:
+        // Targeting ~16 to ~64 cells along the longest side
+        const int maxDim = std::max(m_width, m_height);
+        int targetCellsPerSide = 32;
+        if (numRectangles > 2000) {
+            targetCellsPerSide = 64;
+        } else if (numRectangles < 100) {
+            targetCellsPerSide = 16;
+        }
+        m_cellSize = std::clamp(maxDim / targetCellsPerSide, 16, 128);
+
+        m_cols = std::max(1, (m_width + m_cellSize - 1) / m_cellSize);
+        m_rows = std::max(1, (m_height + m_cellSize - 1) / m_cellSize);
+
+        m_cells.resize(static_cast<size_t>(m_cols * m_rows));
+    }
+
+    void insert(int rectIndex, const QRect &rect)
+    {
+        const int minCol = std::clamp(rect.left() / m_cellSize, 0, m_cols - 1);
+        const int maxCol = std::clamp(rect.right() / m_cellSize, 0, m_cols - 1);
+        const int minRow = std::clamp(rect.top() / m_cellSize, 0, m_rows - 1);
+        const int maxRow = std::clamp(rect.bottom() / m_cellSize, 0, m_rows - 1);
+
+        for (int r = minRow; r <= maxRow; ++r) {
+            const int rowOffset = r * m_cols;
+            for (int c = minCol; c <= maxCol; ++c) {
+                m_cells[rowOffset + c].push_back(rectIndex);
+            }
+        }
+    }
+
+    const std::vector<int>& getCandidatesAtPoint(int x, int y) const
+    {
+        const int c = std::clamp(x / m_cellSize, 0, m_cols - 1);
+        const int r = std::clamp(y / m_cellSize, 0, m_rows - 1);
+        return m_cells[r * m_cols + c];
+    }
+
+private:
+    int m_width;
+    int m_height;
+    int m_cellSize;
+    int m_cols;
+    int m_rows;
+    std::vector<std::vector<int>> m_cells;
+};
 }
 
 bool SpriteDetector::detectToImages(const QImage &sourceImage,
@@ -123,14 +182,47 @@ bool SpriteDetector::detectToImages(const QImage &sourceImage,
 
     if (progressCallback) progressCallback(50);
 
-    // Filter components fully contained inside another
-    QList<bool> isMaster(componentRects.size(), true);
-    for (int i = 0; i < componentRects.size(); ++i) {
-        for (int j = 0; j < componentRects.size(); ++j) {
-            if (i == j) continue;
-            if (componentRects[j].contains(componentRects[i])) {
-                isMaster[i] = false;
-                break;
+    // Filter components fully contained inside another using spatial grid partitioning O(N)
+    const int numComponents = componentRects.size();
+    QList<bool> isMaster(numComponents, true);
+
+    if (numComponents > 1) {
+        SpatialGrid2D grid(w, h, numComponents);
+        for (int i = 0; i < numComponents; ++i) {
+            grid.insert(i, componentRects[i]);
+        }
+
+        for (int i = 0; i < numComponents; ++i) {
+            const QRect &ri = componentRects[i];
+            const int riLeft = ri.left();
+            const int riRight = ri.right();
+            const int riTop = ri.top();
+            const int riBottom = ri.bottom();
+            const int riWidth = ri.width();
+            const int riHeight = ri.height();
+
+            // Any rectangle containing ri must contain the point (riLeft, riTop),
+            // and therefore must be present in the spatial grid cell covering that point.
+            const std::vector<int> &candidates = grid.getCandidatesAtPoint(riLeft, riTop);
+            for (int j : candidates) {
+                if (i == j) continue;
+
+                const QRect &rj = componentRects[j];
+                // Quick rejection: a containing rectangle must be at least as wide and tall
+                if (rj.width() < riWidth || rj.height() < riHeight) continue;
+
+                // Full geometric containment check
+                if (rj.left() <= riLeft && rj.right() >= riRight &&
+                    rj.top() <= riTop && rj.bottom() >= riBottom) {
+                    // Tie-breaker: if two components have the exact same bounding box,
+                    // keep the one with the smaller index to avoid discarding both
+                    if (rj.left() == riLeft && rj.right() == riRight &&
+                        rj.top() == riTop && rj.bottom() == riBottom && j > i) {
+                        continue;
+                    }
+                    isMaster[i] = false;
+                    break;
+                }
             }
         }
     }

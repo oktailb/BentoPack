@@ -638,12 +638,33 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
 
 ---
 
-### 2. Performance & Optimisations Algorithmiques
+### 2. Performance & Optimisations Algorithmiques — ✅ TERMINÉ
 
-- **Désengorgement de la Vérification d'Inclusion dans `SpriteDetector` ($O(N^2)$) :**
-  - *Constat :* Dans `SpriteDetector::detectToImages()`, le filtrage des boîtes englobantes entièrement incluses dans d'autres utilise une double boucle imbriquée $N \times N$ (`componentRects[j].contains(componentRects[i])`).
-  - *Problème & Risque :* Sur une planche fortement bruitée (JPEG issu du web) générant 2000 à 5000 composantes parasites, ce test effectue entre 4 et 25 millions de comparaisons géométriques sur le CPU.
-  - *Action requise :* Remplacer la boucle naïve par un partitionnement spatial (grille spatiale uniforme ou QuadTree) pour ramener la complexité à $O(N \log N)$.
+- **Désengorgement de la Vérification d'Inclusion dans `SpriteDetector` ($O(N^2) \rightarrow O(N)$) — ✅ TERMINÉ & VALIDÉ (100%) :**
+  - *Constat :* Dans `SpriteDetector::detectToImages()`, le filtrage des boîtes englobantes entièrement incluses dans d'autres utilisait une double boucle imbriquée $N \times N$ naïve (`componentRects[j].contains(componentRects[i])`).
+  - *Problème résolu :* Sur une planche bruitée générant 2000 à 5000 composantes parasites, ce test effectuait entre 4 et 25 millions de comparaisons géométriques, provoquant un gel CPU notable.
+  - *Réalisé :*
+    - Implémentation d'une structure de partitionnement spatial 2D contiguë `SpatialGrid2D` dans `SpriteStudio/src/image/spritedetector.cpp`.
+    - Dimensionnement adaptatif du maillage (grille de $16\times 16$ à $64\times 64$ cellules indexées en $O(1)$) selon les dimensions de l'atlas et la densité de composantes.
+    - Propriété géométrique exploitée : tout rectangle englobant $R_j$ contenant $R_i$ couvre impérativement son coin supérieur gauche $(R_i.\text{left}(), R_i.\text{top}())$ et réside obligatoirement dans la cellule correspondante.
+    - Élimination immédiate des faux candidats par pré-filtrage de dimensions ($W_j \ge W_i$ et $H_j \ge H_i$) et gestion déterministe des égalités strictes (évitant la suppression mutuelle de boîtes identiques).
+    - **Résultat de benchmark :** Détection et filtrage de 640 composantes (dont 512 îlots imbriqués) sur un atlas $1024\times 1024$ exécutés en **17 ms** seulement !
+    - **Validation par tests unitaires (`tests/test_extractors.cpp`) :** Deux nouveaux tests automatisés (`testSpriteDetectorNestedContainment`, `testSpriteDetectorLargeScaleInclusionPerformance`) validant la fidélité géométrique et la rapidité d'exécution. 100% de succès sous CTest (4/4 suites passées en 1.04s).
+
+- **Dialogue Flottant & Aperçu Temps Réel de Suppression d'Arrière-Plan (Style Filtres GIMP) — ✅ TERMINÉ & VALIDÉ (100%) :**
+  - *Constat :* Les contrôles de suppression d'arrière-plan et d'ordonnancement des sprites occupaient une barre fixe encombrante (`AtlasButtons`) sous la vue graphique de l'atlas dans `mainwindow.ui`, gaspillant l'espace vertical sans retour visuel dynamique.
+  - *Réalisé :*
+    - **Éradication de `AtlasButtons` :** Suppression de la barre fixe sous la vue atlas, restituant 100% de la hauteur disponible à la zone d'édition graphique.
+    - **Création du composant flottant `BackgroundRemovalDialog` (`include/widgets/backgroundremovaldialog.h`, `src/widgets/backgroundremovaldialog.cpp`) :**
+      - Fenêtre modale non-bloquante flottante inspirée des dialogues de filtres GIMP / Photoshop.
+      - Échantillonnage automatique et pastille visuelle de la couleur d'arrière-plan dominante détectée via `ProjectController::detectDominantBackgroundColor`.
+      - Curseurs synchronisés (Sliders + SpinBoxes) pour la tolérance de couleur (0-100), le seuil alpha (0-255) et la tolérance verticale d'ordonnancement (0-50 px).
+      - Options de découpe intelligente (Smart Crop) et seuil de chevauchement.
+      - **Aperçu interactif en direct (Live Preview) :** Mise à jour en continu de l'atlas et des rectangles de sprites détectés sur la scène principale dès la manipulation des sliders (timer anti-rebond / debounce à 80 ms, tirant parti des 17 ms du `SpriteDetector` optimisé).
+      - Badge dynamique informant du nombre exact de frames détectées en temps réel.
+      - **Annulation intégrale (Cancel / Échap / Croix) :** Restauration immédiate et fidèle de l'atlas d'origine, des frames et des animations.
+      - **Validation Undoable (OK / Entrée) :** Création et empilement d'une commande `RemoveBackgroundCommand` dans `QUndoStack` (permettant un `Ctrl+Z` / `Ctrl+Y` instantané) et mémorisation des préférences dans `AppConfig`.
+    - **Validation par tests automatisés (`tests/test_controllers.cpp`) :** Test `testProjectControllerDominantBackgroundColorAndUndo` validant la détection de dominante RGB et la réversibilité stricte `undo()` / `redo()` du `RemoveBackgroundCommand`. 100% des tests CTest validés.
 
 ---
 

@@ -441,6 +441,12 @@ void SpriteDocument::setAnimation(const QString &name, const QList<int> &frameIn
     emit animationsChanged();
 }
 
+void SpriteDocument::setAnimations(const QMap<QString, SpriteAnimation> &animations)
+{
+    m_animations = animations;
+    emit animationsChanged();
+}
+
 void SpriteDocument::setAnimation(const SpriteAnimation &anim)
 {
     if (anim.name.isEmpty()) return;

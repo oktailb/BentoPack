@@ -39,6 +39,7 @@ private slots:
     void testProjectControllerOpenNonExistent();
     void testProjectControllerRecentFiles();
     void testProjectControllerBackgroundRemoval();
+    void testProjectControllerDominantBackgroundColorAndUndo();
     void testProjectControllerOpenAsync();
     void testProjectControllerRemoveBgAsync();
     void testUndoStackLimitAndImageStorage();
@@ -349,6 +350,62 @@ void TestControllers::testProjectControllerBackgroundRemoval()
     QVERIFY(ok);
     QCOMPARE(spyBg.count(), 1);
     QCOMPARE(doc.frameCount(), 2);
+}
+
+void TestControllers::testProjectControllerDominantBackgroundColorAndUndo()
+{
+    // 1. Dominant background color detection
+    QImage testImg(60, 60, QImage::Format_ARGB32);
+    testImg.fill(qRgb(255, 0, 128)); // distinctive pinkish magenta
+    QPainter p(&testImg);
+    p.fillRect(10, 10, 8, 8, QColor(0, 255, 0));
+    p.fillRect(30, 30, 8, 8, QColor(0, 0, 255));
+    p.end();
+
+    QRgb detectedBg = ProjectController::detectDominantBackgroundColor(testImg);
+    QCOMPARE(qRed(detectedBg), 255);
+    QCOMPARE(qGreen(detectedBg), 0);
+    QCOMPARE(qBlue(detectedBg), 128);
+
+    // 2. RemoveBackgroundCommand test with undo and redo
+    SpriteDocument doc;
+    doc.setAtlas(testImg);
+    QList<QPixmap> origFrames = { QPixmap::fromImage(testImg.copy(10, 10, 8, 8)) };
+    SpriteBox box1;
+    box1.rect = QRect(10, 10, 8, 8);
+    box1.index = 0;
+    QList<SpriteBox> origBoxes = { box1 };
+    doc.setFrames(origFrames, origBoxes);
+    QCOMPARE(doc.frameCount(), 1);
+
+    // Prepare new state
+    QImage cleaned = ProjectController::removeBackgroundFromImage(testImg, 10);
+    QList<QPixmap> newFrames = {
+        QPixmap::fromImage(cleaned.copy(10, 10, 8, 8)),
+        QPixmap::fromImage(cleaned.copy(30, 30, 8, 8))
+    };
+    SpriteBox box2;
+    box2.rect = QRect(30, 30, 8, 8);
+    box2.index = 1;
+    QList<SpriteBox> newBoxes = { box1, box2 };
+
+    QUndoStack undoStack;
+    undoStack.push(new RemoveBackgroundCommand(&doc, cleaned, newFrames, newBoxes));
+
+    // After push, document should have newAtlas and 2 frames
+    QCOMPARE(doc.frameCount(), 2);
+    QCOMPARE(qAlpha(doc.atlas().pixel(0, 0)), 0);
+
+    // Undo should restore original atlas and 1 frame
+    undoStack.undo();
+    QCOMPARE(doc.frameCount(), 1);
+    QCOMPARE(qAlpha(doc.atlas().pixel(0, 0)), 255);
+    QCOMPARE(doc.atlas().pixel(0, 0), qRgb(255, 0, 128));
+
+    // Redo should re-apply new atlas and 2 frames
+    undoStack.redo();
+    QCOMPARE(doc.frameCount(), 2);
+    QCOMPARE(qAlpha(doc.atlas().pixel(0, 0)), 0);
 }
 
 void TestControllers::testProjectControllerOpenAsync()

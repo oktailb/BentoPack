@@ -67,6 +67,11 @@ public:
     void clearRecentFiles();
 
     /**
+     * @brief Detects the dominant background color in the given image.
+     */
+    static QRgb detectDominantBackgroundColor(const QImage &image, int minAlpha = -1);
+
+    /**
      * @brief Detects the dominant background color and turns matching pixels transparent.
      * @param image Input image.
      * @param tolerance Color difference tolerance (0-255).

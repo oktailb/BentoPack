@@ -111,6 +111,7 @@ public:
     bool hasAnimation(const QString &name) const { return m_animations.contains(name); }
     SpriteAnimation animation(const QString &name) const;
     const QMap<QString, SpriteAnimation>& animations() const { return m_animations; }
+    void setAnimations(const QMap<QString, SpriteAnimation> &animations);
     void setAnimation(const QString &name, const QList<int> &frameIndices, int fps = 12, bool loop = true, SpriteAnimation::LoopMode loopMode = SpriteAnimation::Loop);
     void addAnimation(const QString &name, const QList<int> &frameIndices, int fps = 12, SpriteAnimation::LoopMode loopMode = SpriteAnimation::Loop)
     {
