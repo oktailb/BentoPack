@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux (Ubuntu GCC)
+            os: ubuntu-latest
+            qt_arch: linux_gcc_64
+            qt_version: '6.6.3'
+            cmake_generator: "Ninja"
+          - name: Windows (MSVC 2022)
+            os: windows-latest
+            qt_arch: win64_msvc2019_64
+            qt_version: '6.6.3'
+            cmake_generator: "Visual Studio 17 2022"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Linux System Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            libgl1-mesa-dev \
+            libgl-dev \
+            libegl1-mesa-dev \
+            libxkbcommon-x11-0 \
+            libpulse0 \
+            libasound2-dev \
+            libgit2-dev
+
+      - name: Setup Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ matrix.qt_version }}
+          arch: ${{ matrix.qt_arch }}
+          modules: 'qtmultimedia'
+          cache: true
+
+      - name: Configure CMake (Linux / Ninja)
+        if: runner.os == 'Linux'
+        run: |
+          cmake -B build -G "${{ matrix.cmake_generator }}" \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Configure CMake (Windows / MSVC)
+        if: runner.os == 'Windows'
+        run: |
+          cmake -B build -G "${{ matrix.cmake_generator }}" -A x64
+
+      - name: Build
+        run: |
+          cmake --build build --config Release --parallel
+
+      - name: Run CTest
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure -C Release --verbose
