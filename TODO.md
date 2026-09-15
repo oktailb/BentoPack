@@ -12,13 +12,14 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M0** | [Assainissement Architectural & Dette Technique (Audit Critique)](#m0--assainissement-architectural--dette-technique-audit-critique) | **Haute** | Haute | 🟢 Clôturé & Validé (73 tests CTest 100% — Multiplateforme) |
 | **M1** | [Édition Interactive des Bounding Boxes (Atlas Slicing)](#m1--édition-interactive-des-bounding-boxes-atlas-slicing) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% — Poignées, Group Drag, Shift Slice) |
 | **M2** | [Gestionnaire Complet d'Animations & Timeline](#m2--gestionnaire-complet-danimations--timeline) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Ergonomie Splitters, Filmstrip Drag&Drop, LoopModes, Undo/Redo) |
-| **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Moyenne** | Faible | 📝 Planifié |
-| **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié |
+| **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Haute (Critique)** | Faible | 📝 Planifié (Prochaine Étape Immédiate) |
 | **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (85 tests CTest 100% — Session, Lock, Crash Recovery, Atomic Save, LibGit2 Find) |
-| **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Basse** | Moyenne | 📝 Planifié |
-| **M7** | [Suppression Avancée de Fond & Segmentation Robuste (JPEG Bruités, Anti-Halo)](#m7--suppression-avancée-darrière-plan--segmentation-robuste-planches-jpeg-bruit-anti-halo) | **Moyenne** | Moyenne | 📝 Notes & Pistes Techniques |
-| **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifications Détaillées |
-| **AUDIT** | [Points à Revoir & Dette Technique Résiduelle (Recommandations d'Amélioration)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Phase 1 Clôturée & Validée (CorePrivate éliminé, CI Linux/Win 100% vert, normalisation chemins) |
+| **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟡 En cours (Socle FilterDialogBase & BackgroundRemoval validés, Despill à venir) |
+| **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 📝 Planifié (Compacité de Production) |
+| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Faible | 📝 Spécifié (Intégration Pipelines Studios) |
+| **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
+| **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifications Détaillées (Optimisation Mobile & Switch) |
+| **AUDIT** | [Points à Revoir & Dette Technique Résiduelle (Recommandations d'Amélioration)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟡 Phase 1 Clôturée / Phase 2 Prioritaire (QImage multi-thread, Cache LRU) |
 
 ---
 
@@ -408,74 +409,96 @@ L'exportation actuelle vers Godot ou TexturePacker utilise un placement en grill
 
 ---
 
-## M7 : Suppression Avancée d'Arrière-Plan & Segmentation Robuste (Planches JPEG, Bruit, Anti-Halo)
+## M7 : Suppression Avancée d'Arrière-Plan & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)
 
-### Contexte & Problématique Observée (Exemple : Planche Street Fighter / Ryu)
-Les planches de sprites récupérées sur le Web (rips d'émulateurs, archives) sont très fréquemment stockées au format **JPEG** :
-- Absence totale de couche alpha native ($\alpha = 255$ partout).
-- Compression à perte (DCT $8\times 8$ et sous-échantillonnage chromatique YUV 4:2:0).
-- Fond aplat uniforme en théorie (souvent vert `#3b7b0a`, cyan ou magenta), mais fortement altéré et bruité en pratique autour des personnages.
-- Sprites agencés de façon extrêmement compacte (espacement de 1 à 2 pixels seulement entre deux frames consécutives).
-- Présence d'éléments parasites non graphiques : annotations textuelles de rippers ("Ryu ripped by..."), flèches explicatives, encadrés de texte, notes d'animation.
-- Poses variées avec cavités corporelles complexes (jambes écartées lors des sauts, bras repliés) et effets spéciaux d'énergie (Hadouken, auras) dont les dégradés semi-transparents ont été fusionnés avec la couleur du fond.
+### 🏛️ Architecture Générique des Filtres Graphiques (`FilterDialogBase`)
 
----
+Pour éviter la prolifération de fenêtres ad-hoc et uniformiser l'expérience utilisateur, l'ensemble des filtres et traitements d'image de SpriteStudio s'appuient sur une architecture commune inspirée des fenêtres de filtres de GIMP et Photoshop :
 
-### ⚠️ Inventaire des Problèmes et Risques d'Échec
-
-1. **Artefacts de Compression JPEG & Bruit de Contour (Ringing / Mosquito Noise) :**
-   - Aux abords des silhouettes à fort contraste (kimono blanc, cheveux noirs, bandeau rouge sur fond vert), la transformée en cosinus discrète (DCT) produit des ondulations de teinte. Le vert de fond fluctue localement de $\pm 15$ à $\pm 30$ en valeurs RVB.
-   - **Conséquence :** Un seuil de tolérance trop bas laisse un "nuage de moustiques" de pixels verts flottant autour des sprites. Un seuil trop élevé commence à grignoter les pixels clairs ou colorés du personnage.
-
-2. **Halo Résiduel & Frange de Transition (Color Spill / Green Fringe) :**
-   - En raison de l'interpolation bilinéaire et du sous-échantillonnage chroma (4:2:0), les pixels à la frontière exacte du sprite sont un mélange optique de la couleur du trait du sprite et de la couleur du fond vert.
-   - **Conséquence :** Une fois le fond supprimé au seuil strict, chaque sprite conserve un liseré verdâtre disgracieux (*green halo*) qui gâche le rendu dès qu'on place le sprite sur un fond sombre ou dans un moteur de jeu.
-
-3. **Sur-fusion des Sprites Resserrés (Over-merging) :**
-   - Entre deux frames d'animation très proches (ex: un coup de pied qui frôle la pose suivante à 1 pixel d'écart), le moindre pixel de bruit résiduel non éliminé sert de "pont" conducteur pour le flood-fill.
-   - **Conséquence :** Deux ou trois frames distinctes se retrouvent agglutinées en une seule boîte englobante géante.
-
-4. **Le Dilemme des Cavités Internes Closes (Holes & Enclosed Background Islands) :**
-   - Les trous d'arrière-plan situés à l'intérieur du corps (triangle entre les jambes écartées lors d'un saut, espace sous l'aisselle, boucle d'un bras replié) posent un dilemme algorithmique :
-     - *Inondation depuis l'extérieur (Flood-fill pur) :* Elle isole parfaitement la silhouette externe sans toucher au sprite, mais laisse tous les trous intérieurs remplis de vert opaque.
-     - *Substitution globale de couleur (Color Replacement global) :* Elle vide correctement les trous intérieurs, mais risque de percer des trous dans le sprite si le personnage porte un vêtement ou un accessoire de teinte voisine du fond (ex: Blanka, gants, liserés).
-
-5. **Pollution par les Micro-Composantes Textuelles (Stray Text & Credits) :**
-   - Les crédits de ripping et flèches disséminés entre les rangées de sprites sont découpés en dizaines de micro-boîtes parasites ($2\times 3$ px, $5\times 5$ px), polluant la liste des frames et faussant les calculs de cadence ou d'alignement.
-
-6. **Dégradation des Effets Semi-Transparents (Hadouken, Projectiles, Auras) :**
-   - Les flammes et boules d'énergie bleues avec transparence d'origine ont été aplaties sur le vert lors de l'enregistrement JPEG, créant des pixels cyan/verts hybrides impossibles à isoler par un seuil binaire.
+- **Composant Socle `FilterDialogBase` (`include/widgets/filterdialogbase.h`, `src/widgets/filterdialogbase.cpp`) :**
+  - **Dialogue Flottant Non-Bloquant :** La fenêtre reste légère au-dessus de l'espace de travail sans masquer l'atlas ni bloquer l'interaction visuelle.
+  - **Aperçu Réactif en Direct (Live Preview) :**
+    - Timer anti-rebond (*debounce*) calibré à 80 ms : dès que l'utilisateur déplace un curseur, le filtre s'applique temporairement sur l'atlas et les frames affichées sur la scène principale.
+    - Grâce aux optimisations de découpe $O(N)$ (`SpatialGrid2D` exécuté en 17 ms), le retour visuel est instantané et fluide, sans saccade.
+    - Case à cocher permettant de désactiver l'aperçu dynamique à la demande.
+  - **Gestion de l'État & Rollback Garanti (`reject()`) :**
+    - À l'ouverture du filtre, un snapshot complet et non-destructif de l'état du document est conservé (`m_initialAtlas`, `m_initialFrames`, `m_initialBoxes`, `m_initialAnimations`).
+    - Tout clic sur **Annuler**, appui sur la touche **Échap** ou fermeture de la fenêtre rétablit fidèlement l'état d'origine du document en 0 ms sans laisser d'effets secondaires.
+  - **Validation & Annulation Complète (`QUndoStack` / `accept()`) :**
+    - Tout clic sur **OK** ou appui sur **Entrée** applique l'effet et pousse un `QUndoCommand` dédié sur la pile d'annulation du projet (`Ctrl+Z` / `Ctrl+Y`).
+  - **Portée d'Application (Scope) :**
+    - Permet d'appliquer le traitement soit à la planche entière (*Entire Atlas*), soit uniquement aux frames sélectionnées (*Selected Slices*).
+  - **Bouton « Valeurs par défaut » :**
+    - Réinitialise instantanément les curseurs aux valeurs recommandées ou mémorisées dans `AppConfig`.
 
 ---
 
-### 💡 Pistes Techniques & Solutions Envisagées
+### 🎨 Catalogue Détaillé des Filtres Prévus & Conçus
 
-1. **Détection Colorimétrique Évoluée (Espace Perceptuel CIELAB / $\Delta E$) :**
-   - Abandonner la simple distance Manhattan RVB ($|R_1-R_2| + |G_1-G_2| + |B_1-B_2|$) au profit de la distance euclidienne $\Delta E$ dans l'espace **CIELAB** ou en décomposition **YCbCr**.
-   - En séparant la luminance ($Y/L$) de la chrominance ($Cb, Cr / a, b$), on peut appliquer une tolérance étroite sur la teinte du fond tout en autorisant les variations de luminosité induites par les blocs JPEG.
-   - **Échantillonnage statistique :** Échantillonner les 4 coins et le périmètre extérieur pour calculer la médiane de la couleur de fond ainsi que son écart-type ($\sigma$), permettant de définir un seuil adaptatif automatique.
+#### 1. Suppression d'Arrière-Plan (`BackgroundRemovalDialog`) — 🟢 Validé & Opérationnel
+- **Rôle :** Éliminer le fond uni d'une planche importée et recalculer automatiquement les boîtes englobantes de chaque sprite.
+- **Paramètres :**
+  - Échantillonnage automatique et pastille visuelle de la couleur dominante (#RRGGBB).
+  - Curseur Tolérance de couleur (0 à 100).
+  - Curseur Seuil Alpha (0 à 255).
+  - Curseur Tolérance Verticale d'ordonnancement de lecture (0 à 50 px).
+  - Options de rognage intelligent (Smart Crop) et seuil de chevauchement.
+- **Retour visuel :** Badge dynamique informant du nombre exact de frames détectées en temps réel.
 
-2. **Algorithme Hybride en 2 Passes (Silhouette Externe + Cavités Validées) :**
-   - **Passe 1 (Masquage Extérieur) :** Flood-fill depuis les bords de l'image pour marquer tout l'arrière-plan externe continu sans jamais pénétrer dans le sprite.
-   - **Passe 2 (Cavités Internes) :** Pour les îlots internes non connectés à l'extérieur :
-     - Calculer la compacité et la proximité colorimétrique avec le fond extérieur.
-     - Remplacer par la transparence uniquement si la couleur moyenne de l'îlot concorde avec le fond à $\Delta E < \text{seuil}$, ou proposer un mode interactif "clic pour déboucher la cavité".
+#### 2. Débavurage & Anti-Halo (*Despill / Edge Cleanup*) — 📝 Prochaine Étape
+- **Rôle :** Éliminer le liseré verdâtre, blanc ou magenta de 1 pixel persistant sur le pourtour des sprites après détourage d'un fond JPEG ou antialiasé.
+- **Paramètres :**
+  - Pipette / Sélecteur de couleur du liseré à neutraliser.
+  - Curseur Tolérance de détection périphérique.
+  - Mode d'action :
+    - *Suppression stricte :* Rend transparents les pixels périphériques contaminés.
+    - *Color Clamping / Despill doux :* Conserve l'alpha mais remplace la teinte du liseré par la couleur opaque du pixel intérieur adjacent (évite d'amputer les contours fins).
+- **Portée :** Tout l'atlas ou sélection de frames.
 
-3. **Traitement Anti-Halo / Dé-frangeage (Color Despill & Alpha Matte) :**
-   - **Algorithme de Green Despill :** Sur les pixels de contour (bordure de transition de 1 pixel), calculer la proportion de vert parasite et la soustraire en ajustant la composante alpha (technique similaire au chromakey vidéo professionnel).
-   - **Érosion morphologique optionnelle :** Permettre un rognage d'un demi-pixel ou 1 pixel sur le masque alpha pour éradiquer les franges bruitées tenaces.
+#### 3. Échange de Palette & Color Swap (*Alt-Skins / Recoloring*) — 📝 Planifié
+- **Rôle :** Générer en un clic des variantes de personnages (Joueur 1 vs Joueur 2, variantes d'ennemis Gobelin vert $\rightarrow$ Gobelin de feu rouge) sans redessiner.
+- **Paramètres :**
+  - Sélecteur de couleur source (pipette) et couleur de destination.
+  - Curseur de tolérance colorimétrique (teinte / RVB).
+  - Case à cocher *« Préserver la luminosité (Shading) »* : permute la teinte générale tout en conservant les dégradés d'ombres et reflets d'origine du pixel art.
+- **Aperçu direct :** Permet d'observer la nouvelle variante s'animer immédiatement dans le lecteur de preview.
 
-4. **Filtrage Intelligent des Parasites & Débruitage Géométrique (Pruning) :**
-   - **Seuils dimensionnels minimaux :** Ignorer automatiquement lors de la segmentation toutes les composantes connexes dont $\text{largeur} < \text{seuilMin}$ OU $\text{hauteur} < \text{seuilMin}$ (ex. $< 8$ px) ou surface $< 32\text{ px}^2$.
-   - **Outil "Zone d'Exclusion / Masque Rectangulaire" :** Permettre à l'utilisateur de tracer un ou plusieurs rectangles rouges "Ignorer cette zone" sur l'atlas (ex. par-dessus le bloc de texte de crédits) avant de lancer la détection automatique.
+#### 4. Générateur de Contours & Silhouettes (*Outline & Stroke Generator*) — 📝 Planifié
+- **Rôle :** Ajouter un contour marqué autour des sprites (effet de surbrillance/hover, style sticker, lisibilité sur décors sombres) ou produire des masques d'impact.
+- **Paramètres :**
+  - Curseur Épaisseur (1 à 4 px).
+  - Sélecteur de couleur du trait (noir `#000000`, blanc `#ffffff`, doré, etc.).
+  - Voisinage : 4-connecté (croix nette pour pixel art rétro) ou 8-connecté (diagonales lissées).
+  - Option *« Silhouette pleine »* : remplit l'intérieur pour créer une ombre portée ou un flash blanc de dégât (*hit-flash*).
 
-5. **Désagglomération par Profils de Projection (Histogram Slicing / Watershed) :**
-   - Calculer les histogrammes de projection de densité de pixels opaques selon les axes horizontaux (lignes) et verticaux (colonnes).
-   - Détecter les "cols" et vallées étroites où deux sprites ne se touchent que par 1 ou 2 pixels aberrants pour couper automatiquement le lien et séparer les boîtes englobantes.
+#### 5. Ajustements Teinte / Saturation / Valeur / Contraste (*HSV Adjust*) — 📝 Planifié
+- **Rôle :** Harmoniser les couleurs d'une planche ou simuler des états d'altération (personnage empoisonné teinté de violet, personnage gelé bleuté, scène de nuit désaturée).
+- **Paramètres :**
+  - Teinte (Hue) : $-180^\circ$ à $+180^\circ$.
+  - Saturation : $-100\%$ (niveaux de gris) à $+100\%$.
+  - Luminosité / Valeur : $-100\%$ à $+100\%$.
+  - Contraste : $-100\%$ à $+100\%$.
 
-6. **Pipette Manuelle & Prévisualisation en Direct (Live Overlay) :**
-   - Ajouter un outil pipette dans la barre d'outils pour sélectionner manuellement la couleur de fond sur l'atlas en cas de couleur non majoritaire.
-   - Prévisualisation instantanée par damier de transparence ou masque binaire dynamique avec curseur de tolérance en direct avant d'appliquer définitivement la transformation sur le document.
+#### 6. Redimensionnement Pixel Art Net (*Pixel Rescale / Nearest-Neighbor & xBRZ*) — 📝 Planifié
+- **Rôle :** Agrandir ou réduire un atlas sans que l'interpolation bilinéaire standard ne génère de flou destructeur sur le pixel art.
+- **Paramètres :**
+  - Facteur d'échelle : Entiers ($2\times, 3\times, 4\times, 0.5\times$).
+  - Moteur de filtrage : Nearest-Neighbor (pixels nets d'origine), Scale2x / AdvMAME2x ou xBRZ (lissage cartoon haute définition).
+
+#### 7. Quantification & Palettes Rétro (*Palette Snapping & Bayer Dithering*) — 📝 Planifié
+- **Rôle :** Forcer une planche à adopter une palette matérielle rétro authentique.
+- **Paramètres :**
+  - Sélecteur de presets : Game Boy (4 teintes de vert), PICO-8 (16 couleurs), NES (54 couleurs), Endesga 32, ou palette importée.
+  - Option *« Tramage ordonné (Bayer Dithering) »* avec matrice $2\times 2$, $4\times 4$ ou $8\times 8$ pour reproduire les dégradés d'époque.
+
+---
+
+### ⚠️ Problématique Spécifique des Planches JPEG & Solutions Algorithmiques
+
+Les planches de sprites issues du Web (rips JPEG sans couche alpha, compression DCT $8\times 8$, bruit de moustique et sous-échantillonnage 4:2:0) imposent des traitements spécialisés :
+1. **Artefacts de sonnerie JPEG :** Résolu par le seuil de tolérance couplé au seuil alpha et au filtre de médiane.
+2. **Sur-fusion des sprites proches :** Résolu par le partitionnement spatial `SpatialGrid2D` et la coupure de connexité par profil de projection.
+3. **Cavités internes closes :** Approche hybride combinant flood-fill extérieur et ré-évaluation colorimétrique des cavités internes.
 
 ---
 
@@ -580,6 +603,39 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 - `SpriteStudio/include/geometry/triangulator.h` / `src/geometry/triangulator.cpp` : Simplification Ramer-Douglas-Peucker et triangulation Ear-Clipping.
 - `SpriteStudio/include/packer/polygonpacker.h` / `src/packer/polygonpacker.cpp` : Algorithme de bin-packing 2D non-convexe.
 - `SpriteStudio/include/extractor/godotextractor.h` : Extension d'export Godot vers nœuds `Polygon2D`.
+
+---
+
+## M-CLI : Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)
+
+### Contexte & Enjeux Industriels
+Dans les studios professionnels et les productions indépendantes d'envergure, les artistes poussent leurs fichiers sources (Aseprite, Photoshop, PNG) sur le dépôt Git. Des scripts de build et des pipelines d'Intégration Continue (GitHub Actions, GitLab CI) ré-empaquettent automatiquement les atlas de sprites et régénèrent les métadonnées de moteur de jeu (`.tres`, `.json`) sans nécessiter d'intervention humaine dans une interface graphique.
+TexturePacker doit l'essentiel de son monopole en studio à son binaire en ligne de commande scriptable.  
+Grâce à la factorisation de la bibliothèque statique `SpriteStudioCore`, SpriteStudio peut fournir une cible autonome légère `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen` / `QCoreApplication`).
+
+### Spécifications Fonctionnelles
+1. **Commandes & Actions Principales :**
+   - `spritestudio-cli pack <options>` : Empaquette un ensemble d'images ou découpe une planche selon les paramètres spécifiés.
+   - `spritestudio-cli slice <image> <options>` : Découpe automatique d'une planche avec seuil alpha et tolérance de fond.
+   - `spritestudio-cli export <projet.ssp> <options>` : Convertit un projet `.ssp` existant vers un format cible (Godot 4 `.tres`, JSON TexturePacker) de manière headless.
+2. **Options & Arguments Standardisés :**
+   - `--input <path>` / `-i <path>` : Fichier source ou dossier d'images à traiter.
+   - `--output <path>` / `-o <path>` : Fichier image atlas généré (`.png`).
+   - `--format <godot4|json|aseprite>` / `-f` : Format d'export des métadonnées d'animation et de texture.
+   - `--padding <px>` (défaut: 2) : Espacement anti-saignement (*bleeding*) entre les sprites.
+   - `--algorithm <maxrects|row|grid>` (défaut: maxrects) : Algorithme d'empaquetage 2D.
+   - `--pot` : Force des dimensions d'atlas en puissances de deux ($2^n$, standard GPU).
+   - `--trim` / `--no-trim` : Rognage automatique des bordures transparentes (Alpha Trim).
+   - `--pivot <preset>` : Positionnement des points d'ancrage (`bottom-center`, `center`, `top-left`).
+   - `--remove-bg [hexColor]` : Détection et suppression automatique de la couleur de fond spécifiée (ex. `#00FF00`).
+   - `--tolerance <0-100>` : Tolérance colorimétrique pour la suppression de fond.
+3. **Comportement en Sortie & Intégration CI :**
+   - Sortie console claire et concise, avec option `--json` pour exploitation directe par d'autres outils de pipeline.
+   - Codes de retour POSIX déterministes (0 en succès, 1 sur argument invalide, 2 sur fichier introuvable, 3 sur échec d'export).
+
+### Fichiers & Composants Cibles
+- `SpriteStudio/src/cli/main_cli.cpp` : Point d'entrée de la commande console utilisant `QCommandLineParser`.
+- `SpriteStudio/CMakeLists.txt` : Déclaration de la cible exécutable `spritestudio-cli` liée directement à `SpriteStudioCore`.
 
 ---
 
@@ -697,33 +753,52 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
 
 ---
 
-## 📅 Ordre de Déploiement Recommandé
+## 📅 Ordre de Déploiement Recommandé & Phasing Stratégique
 
-1. **Étape 0 — Stabilisation & Clôture de M1 (M1-Fix) — ✅ TERMINÉ & VALIDÉ (100%)** :
-   Poignées cosmétiques anti-chevauchement à fort zoom pixel art, déplacement synchronisé de multi-sélection (group drag), badges d'index sans débordement et découpe continue avec Shift validés par tests unitaires automatisés.
-2. **Étape 1 — Sauvegarde & Projet Natif (M5) — ✅ TERMINÉ & VALIDÉ (100%)** :
-   Sécuriser le travail de l'utilisateur avec format `.ssp` ZIP atomique, détection de crash, snapshots Git continus calqués sur l'UndoStack et Time Travel graphique via le dock d'historique.
-3. **Étape 2 — Séquençage & Multi-Animations (M2) — ✅ TERMINÉ & VALIDÉ (100%)** :
-   Donner toute la dimension "studio d'animation" avec la création d'animations multiples, le réglage de cadence, les boucles (Loop, Once, Ping-Pong) via une timeline ergonomique par splitters et ruban filmstrip.
-4. **Étape 3 — Quick Wins & Consolidation Technique (AUDIT-Phase 1) — ✅ TERMINÉ & VALIDÉ (100%)** :
-   - Factorisation de la cible `SpriteStudioCore` dans CMake (accélération x3 des compilations de tests).
-   - Éradication complète de `Qt6CorePrivate` via l'intégration de `miniz` pour les archives de projet `.ssp`.
-   - Compatibilité universelle Qt 6.4 à 6.10+ (noms de thèmes standards, `#include <QGuiApplication>`).
-   - Normalisation stricte et portable des chemins (éradication des chemins en dur, unifications vers `/` universel).
-   - Génération/intégration des fixtures d'assets originaux libres de droits (`sample/hero.*`) éliminant tous les `QSKIP`.
-   - Pipeline GitHub Actions CI/CD propre et pérenne (Ubuntu APT natif + Windows MSYS2 MinGW64, CTest 100% vert).
-   - Actualisation complète du `README.md` (mise en valeur des atouts M2/M5/Godot/Time Travel).
-5. **Étape 4 — Points d'Ancrage / Pivots (M3)** :
-   Assurer la cohérence physique des animations avant l'export dans les moteurs de jeux (réticule interactif, presets, offsets Godot/JSON).
-6. **Étape 5 — Assainissement Architectural & Performance (AUDIT-Phase 2)** :
-   - Migration de `SpriteDocument::m_frames` vers `QImage` pour purifier le modèle de données et garantir l'étanchéité hors-thread.
-   - Virtualisation de `ArrangementModel` via `QAbstractListModel` avec lazy-loading des vignettes.
-   - Optimisation de la détection de boîtes imbriquées dans `SpriteDetector` via partitionnement spatial ($O(N \log N)$).
-7. **Étape 6 — Outil d'Édition de Pixels (M4)** :
-   Offrir l'atelier de retouche pixel art autonome directement au cœur du workflow.
-8. **Étape 7 — Optimisation du Packing (M6)** :
-   Perfectionner le rendement de l'atlas PNG final pour la production avec MaxRects (Best Short Side Fit / Best Area Fit).
-9. **Étape 8 — Suppression Avancée de Fond & Débruitage Robuste (M7)** :
-   Doter SpriteStudio d'un moteur de segmentation tolérant au bruit JPEG, anti-halo (*despill*), filtrage de textes parasites et désagglomération pour les planches de sprites complexes.
-10. **Étape 9 — Empaquetage Polygonal & Maillages Serrés (M8)** :
-    Extension haute performance pour moteurs 2D modernes (Godot Polygon2D, Unity Tight) : tracé de contours alpha, simplification Douglas-Peucker, triangulation et imbrication type puzzle pour maximiser la densité d'atlas et éradiquer l'overdraw GPU.
+L'ordonnancement des chantiers est articulé en 3 phases progressives pour maximiser la valeur métier à chaque jalon :
+
+### 🚀 Phase A — Utilité Métier Immédiate & Robustesse (Court Terme)
+1. **Étape 4 — Points d'Ancrage / Pivots (M3) — 🔥 PRIORITÉ ABSOLUE & CRITIQUE :**
+   - *Objectif :* Éradiquer le sautillement ("jittering") des animations en jeu vidéo lors de l'export vers Godot ou JSON.
+   - *Livrables :* `QPoint origin` dans `SpriteBox`, réticule interactif sur l'atlas et l'animation preview, presets (`Bottom-Center`, `Center`, `Top-Left`), injection dans les ressources Godot 4 (`AtlasTexture` offsets) et le JSON TexturePacker.
+2. **Étape 5 — Assainissement Architectural & Thread-Safety (AUDIT-Phase 2) :**
+   - *Objectif :* Sécuriser l'étanchéité multi-thread pour les traitements asynchrones et l'export batch.
+   - *Livrables :* Migration de `SpriteDocument::m_frames` de `QList<QPixmap>` vers `QList<QImage>`. Déport de la conversion `QPixmap` uniquement dans les composants d'affichage GUI.
+3. **Étape 6 — Nettoyage Périphérique Anti-Halo / Despill (M7-Suite) :**
+   - *Objectif :* Offrir un détourage parfait des rips de planches Web sans laisser de liseré de 1 px.
+   - *Livrables :* Filtre `DespillDialog` dérivé de `FilterDialogBase` avec live preview debouncé et color clamping doux.
+
+---
+
+### 📦 Phase B — Compacité d'Atlas & Automatisation Industrielle (Moyen Terme)
+4. **Étape 7 — Empaquetage Avancé MaxRects (M6) :**
+   - *Objectif :* Atteindre une densité d'atlas comparable à TexturePacker pour minimiser la VRAM en production.
+   - *Livrables :* Algorithmes *Best Short Side Fit* (BSSF) et *Best Area Fit* (BAF), padding anti-saignement, extrusion de bordure (1 px) et déduplication des frames identiques.
+5. **Étape 8 — Outil en Ligne de Commande Headless (M-CLI / `spritestudio-cli`) :**
+   - *Objectif :* Intégrer SpriteStudio dans les chaînes de compilation automatisées (CI/CD) des studios pros.
+   - *Livrables :* Binaire autonome `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`) supportant `pack`, `slice` et `export`.
+6. **Étape 9 — Virtualisation & Fluidité des Vignettes (AUDIT-Phase 2) :**
+   - *Objectif :* Éliminer les micro-gels sur les planches massives (> 300 frames).
+   - *Livrables :* Remplacement de `ArrangementModel` par un `QAbstractListModel` personnalisé avec lazy-loading asynchrone et cache LRU.
+
+---
+
+### 🎯 Phase C — Spécialisation, Retouche & Haute Performance GPU (Long Terme)
+7. **Étape 10 — Outil de Retouche Pixel Chirurgicale (M4 allégé) :**
+   - *Objectif :* Corriger rapidement un pixel oublié ou un artefact sans devoir rouvrir un éditeur externe.
+   - *Cadrage strict :* Outils limités (crayon 1px, gomme, pipette, seau de remplissage) pour éviter le risque de dispersion (*feature creep*).
+8. **Étape 11 — Empaquetage Polygonal & Maillages Serrés (M8 - Tight Mesh) :**
+   - *Objectif :* Éradiquer l'overdraw GPU et maximiser la compacité (+20% à +50%) pour mobile et Nintendo Switch.
+   - *Livrables :* Contouring Marching Squares, simplification Ramer-Douglas-Peucker (6-12 sommets), triangulation Ear-Clipping et export Godot `Polygon2D`.
+
+---
+
+## ⚠️ Matrice des Risques & Stratégies d'Atténuation
+
+| Risque Identifié | Gravité | Probabilité | Impact Métier & Technique | Stratégie d'Atténuation Adoptée |
+|---|:---:|:---:|---|---|
+| **1. Absence de Pivots (M3)** | **Critique** | **Haute** | Les animations exportées dans les moteurs de jeux subissent des décalages visuels si les boîtes ont des tailles hétérogènes. | **Priorisation immédiate de M3** avant tout autre nouveau filtre ou fonctionnalité graphique. |
+| **2. Absence d'Interface CLI** | **Élevée** | **Haute** | SpriteStudio reste exclu des pipelines de production automatisés (CI/CD) des studios professionnels de jeux vidéo. | Création de la cible légère `spritestudio-cli` liée à `SpriteStudioCore` sans dépendance GUI. |
+| **3. Thread-Safety du Modèle (`QPixmap`)** | **Moyenne** | **Moyenne** | Instanciation de `QPixmap` hors-thread provoquant des plantages intermittents sous Linux (X11/Wayland) et macOS. | Migration planifiée de `SpriteDocument::m_frames` vers `QImage` pure. |
+| **4. Dispersion Fonctionnelle (*Feature Creep*)** | **Élevée** | **Moyenne** | Vouloir réinventer Aseprite (dessin pixel) et Photoshop épuise les ressources et dégrade la clarté du produit. | Définir SpriteStudio comme le **couteau suisse du conditionnement et de la préparation**, pas un outil d'illustration. Cadrer M4 sur la retouche chirurgicale. |
+| **5. Consommation RAM sur Grands Atlas** | **Moyenne** | **Faible** | Clonage d'images volumineuses dans la pile `QUndoStack` (atlas 4K avec 50 étapes d'annulation). | Exploiter le Copy-On-Write (COW) implicite de `QImage` et stocker uniquement des rectangles de diffs pour les filtres locaux. |
