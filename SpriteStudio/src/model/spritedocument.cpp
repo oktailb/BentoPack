@@ -27,7 +27,9 @@ QString SpriteDocument::projectName() const
     if (m_filePath.isEmpty()) {
         return QStringLiteral("untitled");
     }
-    return QFileInfo(m_filePath).completeBaseName();
+    QString clean = m_filePath;
+    clean.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    return QFileInfo(clean).completeBaseName();
 }
 
 void SpriteDocument::setAtlas(const QImage &image)

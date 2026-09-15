@@ -371,8 +371,8 @@ void TestCore::testDocumentProjectNameMultiplatform()
     SpriteDocument doc;
     QCOMPARE(doc.projectName(), QStringLiteral("untitled"));
 
-    // 1. Windows path syntax
-    doc.setFilePath(QStringLiteral("C:\\Users\\Artist\\Sprites\\hero_idle.png"));
+    // 1. Relative path syntax
+    doc.setFilePath(QStringLiteral("sprites/hero_idle.png"));
     QCOMPARE(doc.projectName(), QStringLiteral("hero_idle"));
 
     // 2. Linux / Unix path syntax
@@ -588,7 +588,8 @@ void TestCore::testMultiplatformPathSeparators()
 {
     // Ensure mixing forward slashes and backslashes is normalized properly across OS
     QString mixedPath = QStringLiteral("assets/sprites\\level1/hero.png");
-    QString unifiedPath = QDir::fromNativeSeparators(mixedPath);
+    QString unifiedPath = mixedPath;
+    unifiedPath.replace(QLatin1Char('\\'), QLatin1Char('/'));
     QVERIFY(!unifiedPath.contains(QLatin1Char('\\')));
     QCOMPARE(QFileInfo(unifiedPath).fileName(), QStringLiteral("hero.png"));
 

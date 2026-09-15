@@ -66,7 +66,10 @@ public:
 
     // File path & project info
     QString filePath() const { return m_filePath; }
-    void setFilePath(const QString &path) { m_filePath = path; }
+    void setFilePath(const QString &path) {
+        m_filePath = path;
+        m_filePath.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    }
     QString projectName() const;
 
     // Atlas
