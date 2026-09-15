@@ -18,8 +18,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Basse** | Moyenne | 📝 Planifié |
 | **M7** | [Suppression Avancée de Fond & Segmentation Robuste (JPEG Bruités, Anti-Halo)](#m7--suppression-avancée-darrière-plan--segmentation-robuste-planches-jpeg-bruit-anti-halo) | **Moyenne** | Moyenne | 📝 Notes & Pistes Techniques |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifications Détaillées |
-| **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Originaux (Libres de Droits)](#assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits) | **Moyenne** | Faible | 📝 Planifié (Création de sprites originaux & pérennisation des tests) |
-| **AUDIT** | [Points à Revoir & Dette Technique Résiduelle (Recommandations d'Amélioration)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 📝 À Traiter (Architecture, QImage, CMake, CI/CD, Optimisation O(N²)) |
+| **AUDIT** | [Points à Revoir & Dette Technique Résiduelle (Recommandations d'Amélioration)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Phase 1 Clôturée & Validée (CorePrivate éliminé, CI Linux/Win 100% vert, normalisation chemins) |
 
 ---
 
@@ -632,10 +631,10 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
   - *Constat :* Bien que délestée de ses responsabilités monolithiques, la classe `MainWindow` reste dispersée sur 6 fichiers source (`mainwindow.cpp`, `mainwindow_animation.cpp`, `mainwindow_atlas.cpp`, `mainwindow_callbacks.cpp`, `mainwindow_events.cpp`, `mainwindow_frames.cpp`).
   - *Action requise :* Rapatrier la glue d'événements et de menus directement dans les contrôleurs respectifs (`AtlasViewController`, `AnimationController`, `ProjectController`) ou au sein de sous-composants/docks autonomes pour alléger l'orchestrateur.
 
-- **Isolation de la Dépendance Privée Qt (`Qt6::CorePrivate`) :**
-  - *Constat :* La compression et décompression des archives `.ssp` s'appuie sur `<private/qzipreader_p.h>` et `qzipwriter_p.h`.
-  - *Problème & Risque :* Les en-têtes privés de Qt ne bénéficient d'aucune garantie de stabilité d'API/ABI entre versions mineures de Qt, et certaines distributions Linux n'installent pas par défaut les paquets de développement privés.
-  - *Action requise :* Encapsuler l'accès ZIP derrière une interface d'abstraction pour permettre, si nécessaire, un basculement aisé vers une bibliothèque tierce standardisée (ex: `minizip-ng` ou `libzip`).
+- **Élimination de la Dépendance Privée Qt (`Qt6::CorePrivate`) — ✅ TERMINÉ :**
+  - *Constat :* La compression et décompression des archives `.ssp` s'appuyait sur `<QtCore/private/qzipreader_p.h>` et `qzipwriter_p.h`.
+  - *Problème & Risque :* Les distributions Linux (Ubuntu/Debian) n'exposent pas `Qt6CorePrivateConfig.cmake` pour des raisons de stabilité d'ABI, provoquant l'échec de `find_package(Qt6CorePrivate)` et imposant des contournements complexes et fragiles dans le CI (`install-qt-action` + Python).
+  - *Réalisé :* Intégration de la bibliothèque ZIP autonome et éprouvée `miniz` (v3.1.2, domaine public / MIT) dans `SpriteStudio/include/zip/miniz.h` et `SpriteStudio/src/zip/miniz.c`. Migration complète de `sessionmanager.cpp` sur l'API `miniz`, suppression totale de `CorePrivate` dans CMake, et gestion propre de la libération des descripteurs de fichiers évitant les verrous de renommage sous Windows. Résultat : 18/18 sous-tests `.ssp` validés sous CTest sans dépendance privée.
 
 ---
 
@@ -653,8 +652,17 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
 - **Factorisation CMake (Bibliothèque Commune `SpriteStudioCore`) — ✅ TERMINÉ :**
   - *Réalisé :* Bibliothèque statique `SpriteStudioCore` créée dans `SpriteStudio/CMakeLists.txt` liant l'ensemble du moteur, UI, traductions et ressources. `tests/CMakeLists.txt` allégé de 264 à 48 lignes avec liaison directe à `SpriteStudioCore`. Temps de compilation des tests divisé par 3.
 
-- **Pipeline d'Intégration Continue (GitHub Actions CI/CD) — ✅ TERMINÉ :**
-  - *Réalisé :* Fichier `.github/workflows/ci.yml` configuré avec matrice Linux (Ubuntu GCC / Ninja) et Windows (MSVC 2022 / Ninja) avec Qt 6.6.3 et exécution automatisée de `ctest --output-on-failure`.
+- **Pipeline d'Intégration Continue Robuste (GitHub Actions CI/CD) — ✅ TERMINÉ :**
+  - *Réalisé :* Fichier `.github/workflows/ci.yml` configuré et stabilisé sans artifices fragiles :
+    - **Linux (Ubuntu GCC / Ninja) :** Installation directe via les paquets officiels APT (`qt6-base-dev qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libgit2-dev`). Suppression intégrale de Python et d'`aqtinstall`. Temps d'exécution réduit à quelques secondes avec une fiabilité totale.
+    - **Windows (MinGW 64-bit / Ninja) :** Déploiement propre via `msys2/setup-msys2` avec la chaîne MinGW64 officielle (`gcc`, `ninja`, `qt6-base`, `qt6-tools`, `libgit2`).
+    - Exécution automatisée de `ctest --output-on-failure --verbose` sur les deux cibles (100% de succès).
+
+- **Portabilité Multiplateforme & Rétrocompatibilité Versions Qt (Qt 6.4 à 6.10+) — ✅ TERMINÉ :**
+  - *Réalisé :*
+    - Résolution de l'omission de l'en-tête `<QGuiApplication>` dans `atlasviewcontroller.h` requis pour `QGuiApplication::keyboardModifiers()`.
+    - Remplacement de l'énumération `QIcon::ThemeIcon` (introduite uniquement en Qt 6.7) par les noms de thèmes freedesktop standards sous forme de chaînes (`"document-new"`, `"document-open"`, `"document-save"`, `"zoom-in"`, `"zoom-out"`), garantissant une compatibilité native avec Qt 6.2/6.4/6.6 (dépôts Ubuntu LTS) comme avec Qt 6.10+.
+    - Élimination des chemins Windows absolus en dur (`C:\...`) dans les tests unitaires et normalisation automatique des séparateurs de chemins (`\` unifiés en `/` universel Qt) dans `SpriteDocument::setFilePath` et `SpriteDocument::projectName()`.
 
 - **Pérennisation des Fixtures de Tests (Suite à la Purge Copyright) — ✅ TERMINÉ :**
   - *Réalisé :* Script de génération d'assets originaux `scripts/generate_sample_assets.py` (Pillow). Fixtures 100% libres de droits produites dans `sample/` (`hero.png`, `hero_bg.png`, `hero.gif`, `hero.json`, `hero_godot.tres`). Tests de codecs `test_extractors.cpp` et `test_controllers.cpp` réarmés avec 100% de réussite et 0 test skippé.
@@ -678,8 +686,11 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
    Donner toute la dimension "studio d'animation" avec la création d'animations multiples, le réglage de cadence, les boucles (Loop, Once, Ping-Pong) via une timeline ergonomique par splitters et ruban filmstrip.
 4. **Étape 3 — Quick Wins & Consolidation Technique (AUDIT-Phase 1) — ✅ TERMINÉ & VALIDÉ (100%)** :
    - Factorisation de la cible `SpriteStudioCore` dans CMake (accélération x3 des compilations de tests).
+   - Éradication complète de `Qt6CorePrivate` via l'intégration de `miniz` pour les archives de projet `.ssp`.
+   - Compatibilité universelle Qt 6.4 à 6.10+ (noms de thèmes standards, `#include <QGuiApplication>`).
+   - Normalisation stricte et portable des chemins (éradication des chemins en dur, unifications vers `/` universel).
    - Génération/intégration des fixtures d'assets originaux libres de droits (`sample/hero.*`) éliminant tous les `QSKIP`.
-   - Mise en place du workflow GitHub Actions CI/CD multiplateforme (`.github/workflows/ci.yml`).
+   - Pipeline GitHub Actions CI/CD propre et pérenne (Ubuntu APT natif + Windows MSYS2 MinGW64, CTest 100% vert).
    - Actualisation complète du `README.md` (mise en valeur des atouts M2/M5/Godot/Time Travel).
 5. **Étape 4 — Points d'Ancrage / Pivots (M3)** :
    Assurer la cohérence physique des animations avant l'export dans les moteurs de jeux (réticule interactif, presets, offsets Godot/JSON).
