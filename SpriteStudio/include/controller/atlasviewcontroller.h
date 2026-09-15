@@ -12,6 +12,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QKeyEvent>
+#include <QGuiApplication>
 
 class SpriteDocument;
 class QUndoStack;

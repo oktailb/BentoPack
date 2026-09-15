@@ -262,17 +262,17 @@ void MainWindow::setupErgonomicLayout()
     // Setup main toolbar
     ui->mainToolBar->setWindowTitle(tr("KEY_TOOLBAR_MAIN"));
     ui->mainToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    ui->actionNewProject->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
-    ui->actionOpenProject->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentOpen));
-    ui->actionSaveProject->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentSave));
+    ui->actionNewProject->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));
+    ui->actionOpenProject->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
+    ui->actionSaveProject->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
 
     ui->actionToolSelect->setIcon(QIcon(":/drawer/icons/tool_select.png"));
     ui->actionToolAddSlice->setIcon(QIcon(":/drawer/icons/tool_slice.png"));
     ui->actionTrimSlice->setIcon(QIcon(":/drawer/icons/tool_trim.png"));
     ui->actionRemoveBg->setIcon(QIcon(":/drawer/icons/tool_remove_bg.png"));
 
-    ui->actionZoomIn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomIn, QIcon(":/drawer/plus.png")));
-    ui->actionZoomOut->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomOut, QIcon(":/drawer/minus.png")));
+    ui->actionZoomIn->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in"), QIcon(":/drawer/plus.png")));
+    ui->actionZoomOut->setIcon(QIcon::fromTheme(QStringLiteral("zoom-out"), QIcon(":/drawer/minus.png")));
 
     QActionGroup *toolGroup = new QActionGroup(this);
     toolGroup->setExclusive(true);
