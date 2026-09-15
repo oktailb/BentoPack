@@ -133,7 +133,7 @@ jobs:
           sync: sshfs
           prepare: |
             pkgman refresh
-            pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git lib:libQt6Core lib:libQt6Gui lib:libQt6Widgets lib:libQt6Concurrent lib:libQt6Test lib:libgit2_devel
+            pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git qt6_base_devel qt6_tools_devel libgit2_devel
           run: |
             cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
             cmake --build build --parallel
