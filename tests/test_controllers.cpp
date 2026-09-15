@@ -1279,6 +1279,13 @@ void TestControllers::testI18nKeyTranslations()
 {
 #ifdef QM_DIR
     QString qmDir = QStringLiteral(QM_DIR);
+    if (!QFile::exists(qmDir + QStringLiteral("/sprite_studio_fr_FR.qm"))) {
+        if (QFile::exists(qmDir + QStringLiteral("/.qm/sprite_studio_fr_FR.qm"))) {
+            qmDir = qmDir + QStringLiteral("/.qm");
+        } else if (QFile::exists(QStringLiteral(":/i18n/sprite_studio_fr_FR.qm"))) {
+            qmDir = QStringLiteral(":/i18n");
+        }
+    }
 
     // 1. Test French translation
     {

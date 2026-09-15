@@ -7,69 +7,83 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Linux (Ubuntu GCC)
-            os: ubuntu-latest
-            qt_arch: linux_gcc_64
-            qt_version: '6.6.3'
-            cmake_generator: "Ninja"
-          - name: Windows (MSVC 2022)
-            os: windows-latest
-            qt_arch: win64_msvc2019_64
-            qt_version: '6.6.3'
-            cmake_generator: "Visual Studio 17 2022"
-
+  linux:
+    name: Linux (Ubuntu GCC)
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Install Linux System Dependencies
-        if: runner.os == 'Linux'
+      - name: Install Dependencies & Qt 6
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             ninja-build \
+            qt6-base-dev \
+            qt6-base-private-dev \
+            qt6-multimedia-dev \
+            qt6-tools-dev \
+            qt6-l10n-tools \
+            libgit2-dev \
             libgl1-mesa-dev \
             libgl-dev \
             libegl1-mesa-dev \
             libxkbcommon-x11-0 \
-            libpulse0 \
-            libasound2-dev \
-            libgit2-dev
+            libpulse-dev \
+            libasound2-dev
 
-      - name: Setup Qt
+      - name: Configure CMake
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+
+  windows:
+    name: Windows (MSVC 2022)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Qt 6
         uses: jurplel/install-qt-action@v4
         with:
-          version: ${{ matrix.qt_version }}
-          arch: ${{ matrix.qt_arch }}
+          version: '6.6.3'
+          arch: 'win64_msvc2019_64'
           modules: 'qtmultimedia'
           cache: true
 
-      - name: Configure CMake (Linux / Ninja)
-        if: runner.os == 'Linux'
+      - name: Configure CMake
+        shell: bash
         run: |
-          cmake -B build -G "${{ matrix.cmake_generator }}" \
-            -DCMAKE_BUILD_TYPE=Release
-
-      - name: Configure CMake (Windows / MSVC)
-        if: runner.os == 'Windows'
-        run: |
-          cmake -B build -G "${{ matrix.cmake_generator }}" -A x64
+          cmake -B build -G "Visual Studio 17 2022" -A x64 \
+            -DCMAKE_PREFIX_PATH="${QT_ROOT_DIR}"
 
       - name: Build
         run: |
           cmake --build build --config Release --parallel
 
-      - name: Run CTest
+      - name: Run Tests
+        shell: bash
         env:
           QT_QPA_PLATFORM: offscreen
         run: |
-          ctest --test-dir build --output-on-failure -C Release --verbose
+          ctest --test-dir build -C Release --output-on-failure --verbose

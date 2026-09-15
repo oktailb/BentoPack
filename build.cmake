@@ -1,16 +1,31 @@
 if(WIN32)
     # Check if Qt6 is already provided via CMAKE_PREFIX_PATH, Qt6_DIR, or environment
-    if(NOT CMAKE_PREFIX_PATH AND NOT Qt6_DIR AND NOT DEFINED ENV{QTDIR} AND NOT DEFINED ENV{CMAKE_PREFIX_PATH})
-        # Check standard default installation locations for Qt on Windows
-        file(GLOB QT_CANDIDATES
-            "C:/Qt/6.*/mingw_64"
-            "C:/Qt6/6.*/mingw_64"
-        )
-        if(QT_CANDIDATES)
-            list(SORT QT_CANDIDATES ORDER DESCENDING)
-            list(GET QT_CANDIDATES 0 QT_DETECTED)
-            message(STATUS "Auto-detected Qt6 at: ${QT_DETECTED}")
-            list(APPEND CMAKE_PREFIX_PATH "${QT_DETECTED}")
+    if(NOT CMAKE_PREFIX_PATH AND NOT Qt6_DIR AND NOT DEFINED ENV{CMAKE_PREFIX_PATH})
+        if(DEFINED ENV{Qt6_Dir})
+            message(STATUS "Using Qt6 from ENV{Qt6_Dir}: $ENV{Qt6_Dir}")
+            list(APPEND CMAKE_PREFIX_PATH "$ENV{Qt6_Dir}")
+        elseif(DEFINED ENV{QT_ROOT_DIR})
+            message(STATUS "Using Qt6 from ENV{QT_ROOT_DIR}: $ENV{QT_ROOT_DIR}")
+            list(APPEND CMAKE_PREFIX_PATH "$ENV{QT_ROOT_DIR}")
+        elseif(DEFINED ENV{QTDIR})
+            message(STATUS "Using Qt6 from ENV{QTDIR}: $ENV{QTDIR}")
+            list(APPEND CMAKE_PREFIX_PATH "$ENV{QTDIR}")
+        else()
+            # Check standard default installation locations for Qt on Windows
+            file(GLOB QT_CANDIDATES
+                "C:/Qt/6.*/mingw_64"
+                "C:/Qt6/6.*/mingw_64"
+                "C:/Qt/6.*/msvc2019_64"
+                "C:/Qt/6.*/msvc2022_64"
+                "C:/Qt6/6.*/msvc2019_64"
+                "C:/Qt6/6.*/msvc2022_64"
+            )
+            if(QT_CANDIDATES)
+                list(SORT QT_CANDIDATES ORDER DESCENDING)
+                list(GET QT_CANDIDATES 0 QT_DETECTED)
+                message(STATUS "Auto-detected Qt6 at: ${QT_DETECTED}")
+                list(APPEND CMAKE_PREFIX_PATH "${QT_DETECTED}")
+            endif()
         endif()
     endif()
 endif()
@@ -21,7 +36,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -ggdb")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb")
 elseif(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /utf-8")
 endif()
 
 set(QT_FORCE_CMP0156_TO_VALUE NEW)
