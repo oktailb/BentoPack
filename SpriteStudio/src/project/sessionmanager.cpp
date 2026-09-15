@@ -1,7 +1,8 @@
 #include "include/project/sessionmanager.h"
 #include "config/appconfig.h"
-#include <QtCore/private/qzipreader_p.h>
-#include <QtCore/private/qzipwriter_p.h>
+extern "C" {
+#include "zip/miniz.h"
+}
 #include <QStandardPaths>
 #include <QCoreApplication>
 #include <QUuid>
@@ -286,7 +287,7 @@ bool SessionManager::discardOrphanSession(const QString &sessionDir)
     return QDir(sessionDir).removeRecursively();
 }
 
-static void addDirectoryToZip(QZipWriter &writer, const QDir &dir, const QString &baseDir)
+static bool addDirectoryToZip(mz_zip_archive &zip, const QDir &dir, const QString &baseDir)
 {
     const QFileInfoList entries = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
     for (const QFileInfo &entry : entries) {
@@ -298,21 +299,35 @@ static void addDirectoryToZip(QZipWriter &writer, const QDir &dir, const QString
         QString relPath = QDir(baseDir).relativeFilePath(entry.absoluteFilePath());
         relPath.replace(QLatin1Char('\\'), QLatin1Char('/'));
 
-        // Prefix with "ssp/" so root dot-directories like ".git" or files like ".gitignore"
-        // do not have their leading dots stripped by Qt's QZipReader path normalization.
+        // Prefix with "ssp/" for backward and forward compatibility with existing archives
         QString zipEntryPath = QStringLiteral("ssp/") + relPath;
 
         if (entry.isDir()) {
-            writer.addDirectory(zipEntryPath);
-            addDirectoryToZip(writer, QDir(entry.absoluteFilePath()), baseDir);
+            if (!zipEntryPath.endsWith(QLatin1Char('/'))) {
+                zipEntryPath += QLatin1Char('/');
+            }
+            QByteArray utf8Path = zipEntryPath.toUtf8();
+            if (!mz_zip_writer_add_mem(&zip, utf8Path.constData(), nullptr, 0, MZ_DEFAULT_COMPRESSION)) {
+                return false;
+            }
+            if (!addDirectoryToZip(zip, QDir(entry.absoluteFilePath()), baseDir)) {
+                return false;
+            }
         } else if (entry.isFile()) {
             QFile file(entry.absoluteFilePath());
             if (file.open(QIODevice::ReadOnly)) {
-                writer.addFile(zipEntryPath, file.readAll());
+                QByteArray data = file.readAll();
                 file.close();
+                QByteArray utf8Path = zipEntryPath.toUtf8();
+                if (!mz_zip_writer_add_mem(&zip, utf8Path.constData(), data.constData(), static_cast<size_t>(data.size()), MZ_DEFAULT_COMPRESSION)) {
+                    return false;
+                }
+            } else {
+                return false;
             }
         }
     }
+    return true;
 }
 
 bool SessionManager::packZip(const QString &sourceDir, const QString &zipFilePath, QString *errorMsg)
@@ -323,37 +338,53 @@ bool SessionManager::packZip(const QString &sourceDir, const QString &zipFilePat
         return false;
     }
 
-    QZipWriter writer(zipFilePath);
-    if (writer.status() != QZipWriter::NoError) {
+    mz_zip_archive zip;
+    memset(&zip, 0, sizeof(zip));
+
+    QByteArray nativePath = zipFilePath.toUtf8();
+    if (!mz_zip_writer_init_file(&zip, nativePath.constData(), 0)) {
         if (errorMsg) *errorMsg = tr("Cannot create ZIP file: %1").arg(zipFilePath);
         return false;
     }
 
-    addDirectoryToZip(writer, src, sourceDir);
-    writer.close();
+    if (!addDirectoryToZip(zip, src, sourceDir)) {
+        mz_zip_writer_end(&zip);
+        if (errorMsg) *errorMsg = tr("Error occurred while adding files to ZIP archive: %1").arg(zipFilePath);
+        return false;
+    }
 
-    if (writer.status() != QZipWriter::NoError) {
+    if (!mz_zip_writer_finalize_archive(&zip)) {
+        mz_zip_writer_end(&zip);
         if (errorMsg) *errorMsg = tr("Error occurred while writing ZIP file: %1").arg(zipFilePath);
         return false;
     }
+
+    mz_zip_writer_end(&zip);
     return true;
 }
 
 bool SessionManager::unpackZip(const QString &zipFilePath, const QString &destDir, QString *errorMsg)
 {
-    QZipReader reader(zipFilePath);
-    if (reader.status() != QZipReader::NoError) {
+    mz_zip_archive zip;
+    memset(&zip, 0, sizeof(zip));
+
+    QByteArray nativePath = zipFilePath.toUtf8();
+    if (!mz_zip_reader_init_file(&zip, nativePath.constData(), 0)) {
         if (errorMsg) *errorMsg = tr("Failed to open ZIP archive: %1").arg(zipFilePath);
         return false;
     }
 
-    const auto allFiles = reader.fileInfoList();
-    for (const auto &fi : allFiles) {
-        QString normalizedPath = fi.filePath;
+    const mz_uint numFiles = mz_zip_reader_get_num_files(&zip);
+    for (mz_uint i = 0; i < numFiles; ++i) {
+        mz_zip_archive_file_stat fileStat;
+        if (!mz_zip_reader_file_stat(&zip, i, &fileStat)) {
+            continue;
+        }
+
+        QString normalizedPath = QString::fromUtf8(fileStat.m_filename);
         normalizedPath.replace(QLatin1Char('\\'), QLatin1Char('/'));
 
-        // If the archive was created with the "ssp/" prefix (to protect dot-files from Qt's QZipReader),
-        // strip the prefix. Also handle legacy archives without the prefix.
+        // If the archive was created with the "ssp/" prefix, strip it
         if (normalizedPath.startsWith(QStringLiteral("ssp/"))) {
             normalizedPath = normalizedPath.mid(4);
         } else if (normalizedPath == QStringLiteral("ssp")) {
@@ -365,19 +396,26 @@ bool SessionManager::unpackZip(const QString &zipFilePath, const QString &destDi
         }
 
         QString targetPath = QDir(destDir).filePath(normalizedPath);
-        if (fi.isDir || normalizedPath.endsWith(QLatin1Char('/'))) {
+        if (mz_zip_reader_is_file_a_directory(&zip, i) || normalizedPath.endsWith(QLatin1Char('/'))) {
             QDir().mkpath(targetPath);
         } else {
             QFileInfo targetInfo(targetPath);
             QDir().mkpath(targetInfo.absolutePath());
-            QFile file(targetPath);
-            if (file.open(QIODevice::WriteOnly)) {
-                file.write(reader.fileData(fi.filePath));
-                file.close();
+
+            size_t uncompSize = 0;
+            void *pData = mz_zip_reader_extract_to_heap(&zip, i, &uncompSize, 0);
+            if (pData) {
+                QFile file(targetPath);
+                if (file.open(QIODevice::WriteOnly)) {
+                    file.write(reinterpret_cast<const char*>(pData), static_cast<qint64>(uncompSize));
+                    file.close();
+                }
+                mz_free(pData);
             }
         }
     }
-    reader.close();
+
+    mz_zip_reader_end(&zip);
     return true;
 }
 

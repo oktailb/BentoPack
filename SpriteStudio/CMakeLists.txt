@@ -54,6 +54,7 @@ set(SpriteStudioCore_SRC
     src/widgets/settingsdialog.cpp
     src/widgets/timelinefilmstripwidget.cpp
     src/localizationmanager.cpp
+    src/zip/miniz.c
     src/version.h.in
     src/haiku.PackageInfo.in
     ${CMAKE_CURRENT_BINARY_DIR}/generated/version.h
@@ -92,6 +93,7 @@ set(SpriteStudioCore_INCLUDE
     include/extractor/export.h
     include/arrangementmodel.h
     include/aboutdialog.h
+    include/zip/miniz.h
 )
 
 # Bibliothèque statique commune pour l'application et la suite de tests
@@ -135,13 +137,13 @@ qt6_add_resources(SpriteStudioCore "text"
 
 target_include_directories(SpriteStudioCore PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/zip
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 target_link_libraries(SpriteStudioCore PUBLIC
     Qt6::Core
-    Qt6::CorePrivate
     Qt6::Gui
     Qt6::Widgets
     Qt6::Concurrent

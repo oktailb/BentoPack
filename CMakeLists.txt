@@ -13,7 +13,7 @@ set(PROJECT_VERSION_PATCH 3)
 set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
 project(SpriteStudio    VERSION ${PROJECT_VERSION}
-                        LANGUAGES CXX
+                        LANGUAGES C CXX
                         DESCRIPTION "Little sprites and animated texture management tool"
             )
 
@@ -22,7 +22,6 @@ include(GNUInstallDirs)
 
 find_package(Qt6 REQUIRED COMPONENTS
     Core
-    CorePrivate
     Gui
     Widgets
     Concurrent
