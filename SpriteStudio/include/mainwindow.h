@@ -200,6 +200,7 @@ private:
     QMenu *m_recentMenu = nullptr;
     QMenu *m_recentProjectsMenu = nullptr;
     QMenu *m_editMenu = nullptr;
+    QMenu *m_filtersMenu = nullptr;
     QAction *m_undoAction = nullptr;
     QAction *m_redoAction = nullptr;
     QAction *m_removeBgAction = nullptr;

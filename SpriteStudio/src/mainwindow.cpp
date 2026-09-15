@@ -419,14 +419,16 @@ void MainWindow::setupShortcuts()
     m_editMenu->addAction(m_redoAction);
 
     m_editMenu->addSeparator();
-    m_removeBgAction = m_editMenu->addAction(tr("KEY_ACTION_REMOVE_BG"));
-    m_removeBgAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
-    connect(m_removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
-
-    m_editMenu->addSeparator();
     m_prefAction = m_editMenu->addAction(tr("KEY_ACTION_SETTINGS"));
     m_prefAction->setShortcut(QKeySequence::Preferences);
     connect(m_prefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
+
+    // Create Filters Menu
+    m_filtersMenu = new QMenu(tr("KEY_MENU_FILTERS", "Filtres"), this);
+    menuBar()->insertMenu(ui->menuHelp->menuAction(), m_filtersMenu);
+    m_removeBgAction = m_filtersMenu->addAction(tr("KEY_ACTION_REMOVE_BG", "Suppression d'arrière-plan..."));
+    m_removeBgAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
+    connect(m_removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
 
     ui->menuHelp->addSeparator();
     m_helpPrefAction = ui->menuHelp->addAction(tr("KEY_ACTION_SETTINGS"));

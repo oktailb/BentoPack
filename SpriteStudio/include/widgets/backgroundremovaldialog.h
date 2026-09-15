@@ -1,40 +1,32 @@
 #ifndef BACKGROUNDREMOVALDIALOG_H
 #define BACKGROUNDREMOVALDIALOG_H
 
-#include <QDialog>
-#include <QImage>
-#include <QPixmap>
-#include <QList>
-#include <QMap>
-#include <QTimer>
-#include "model/spritedocument.h"
+#include "widgets/filterdialogbase.h"
 
 class QSlider;
 class QSpinBox;
 class QDoubleSpinBox;
 class QCheckBox;
 class QLabel;
-class QDialogButtonBox;
-class QGroupBox;
-class SpriteDocument;
-class QUndoStack;
 
 /**
  * @brief Floating interactive tool dialog for background removal with real-time live preview.
  *
- * Mimics GIMP/Photoshop filter dialogs:
- * - Shows sampled background color and controls for tolerance, alpha, and vertical reading order.
- * - Updates the atlas and detected frame bounding boxes live as parameters change.
- * - Reverts back to the original document state on Cancel.
- * - Commits changes via an undoable command on OK.
+ * Derives from FilterDialogBase:
+ * - Detects dominant background color and presents controls for tolerance, alpha, and vertical order.
+ * - Live preview re-segments the atlas as parameters change.
+ * - Guaranteed restoration on Cancel.
+ * - Commits via RemoveBackgroundCommand on OK.
  */
-class BackgroundRemovalDialog : public QDialog
+class BackgroundRemovalDialog : public FilterDialogBase
 {
     Q_OBJECT
 
 public:
-    explicit BackgroundRemovalDialog(SpriteDocument *doc, QUndoStack *undoStack = nullptr, QWidget *parent = nullptr);
-    ~BackgroundRemovalDialog() override;
+    explicit BackgroundRemovalDialog(SpriteDocument *doc,
+                                     QUndoStack *undoStack = nullptr,
+                                     QWidget *parent = nullptr);
+    ~BackgroundRemovalDialog() override = default;
 
     int colorTolerance() const;
     int alphaThreshold() const;
@@ -43,57 +35,41 @@ public:
     double overlapThreshold() const;
 
 protected:
-    void reject() override;
-    void accept() override;
+    // FilterDialogBase implementation
+    void applyPreview() override;
+    QUndoCommand* createUndoCommand() override;
+    void resetDefaults() override;
+    void saveSettings() override;
 
 private slots:
     void onParametersChanged();
-    void onPreviewTimeout();
-    void onResetDefaults();
 
 private:
-    void setupUI();
+    void setupFilterUI();
     void updateColorSwatch(QRgb color);
-    void applyLivePreview();
-    void restoreInitialState();
 
-    SpriteDocument*                 m_document;
-    QUndoStack*                     m_undoStack;
-    QTimer                          m_debounceTimer;
+    QRgb                            m_detectedBgColor = 0;
 
-    // Initial state backups for full restoration on Cancel
-    QImage                          m_initialAtlas;
-    QList<QPixmap>                  m_initialFrames;
-    QList<SpriteBox>                m_initialBoxes;
-    QMap<QString, SpriteAnimation>  m_initialAnimations;
-    QRgb                            m_detectedBgColor;
-
-    // Current preview state
+    // Current preview state (result of last segmentation)
     QImage                          m_previewAtlas;
     QList<QPixmap>                  m_previewFrames;
     QList<SpriteBox>                m_previewBoxes;
-    bool                            m_previewApplied;
 
-    // UI Widgets
-    QLabel*                         m_swatchLabel;
-    QLabel*                         m_colorInfoLabel;
+    // Filter-specific UI Widgets
+    QLabel*                         m_swatchLabel = nullptr;
+    QLabel*                         m_colorInfoLabel = nullptr;
 
-    QSlider*                        m_colorToleranceSlider;
-    QSpinBox*                       m_colorToleranceSpin;
+    QSlider*                        m_colorToleranceSlider = nullptr;
+    QSpinBox*                       m_colorToleranceSpin = nullptr;
 
-    QSlider*                        m_alphaThresholdSlider;
-    QSpinBox*                       m_alphaThresholdSpin;
+    QSlider*                        m_alphaThresholdSlider = nullptr;
+    QSpinBox*                       m_alphaThresholdSpin = nullptr;
 
-    QSlider*                        m_verticalToleranceSlider;
-    QSpinBox*                       m_verticalToleranceSpin;
+    QSlider*                        m_verticalToleranceSlider = nullptr;
+    QSpinBox*                       m_verticalToleranceSpin = nullptr;
 
-    QCheckBox*                      m_smartCropCheck;
-    QDoubleSpinBox*                 m_overlapSpin;
-
-    QCheckBox*                      m_livePreviewCheck;
-    QLabel*                         m_statusBadge;
-
-    QDialogButtonBox*               m_buttonBox;
+    QCheckBox*                      m_smartCropCheck = nullptr;
+    QDoubleSpinBox*                 m_overlapSpin = nullptr;
 };
 
 #endif // BACKGROUNDREMOVALDIALOG_H
