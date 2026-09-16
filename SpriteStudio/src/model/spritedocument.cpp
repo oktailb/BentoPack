@@ -420,6 +420,138 @@ void SpriteDocument::setSelectedFrameIndices(const QList<int> &indices)
     }
 }
 
+QPoint SpriteBox::calculatePresetPivot(PivotPreset preset, const QSize &size)
+{
+    int w = size.width();
+    int h = size.height();
+    switch (preset) {
+    case PivotPreset::TopLeft:
+        return QPoint(0, 0);
+    case PivotPreset::TopCenter:
+        return QPoint(w / 2, 0);
+    case PivotPreset::TopRight:
+        return QPoint(w, 0);
+    case PivotPreset::CenterLeft:
+        return QPoint(0, h / 2);
+    case PivotPreset::Center:
+        return QPoint(w / 2, h / 2);
+    case PivotPreset::CenterRight:
+        return QPoint(w, h / 2);
+    case PivotPreset::BottomLeft:
+        return QPoint(0, h);
+    case PivotPreset::BottomCenter:
+        return QPoint(w / 2, h);
+    case PivotPreset::BottomRight:
+        return QPoint(w, h);
+    case PivotPreset::Custom:
+    default:
+        return QPoint(w / 2, h);
+    }
+}
+
+QPoint SpriteDocument::boxPivot(int index) const
+{
+    if (index >= 0 && index < m_boxes.size()) {
+        return m_boxes.at(index).effectivePivot();
+    }
+    return QPoint(0, 0);
+}
+
+bool SpriteDocument::boxHasCustomPivot(int index) const
+{
+    if (index >= 0 && index < m_boxes.size()) {
+        return m_boxes.at(index).hasCustomPivot;
+    }
+    return false;
+}
+
+void SpriteDocument::setBoxPivot(int index, const QPoint &pivot, bool custom)
+{
+    if (index < 0 || index >= m_boxes.size()) return;
+    if (m_boxes[index].pivot == pivot && m_boxes[index].hasCustomPivot == custom) return;
+
+    m_boxes[index].pivot = pivot;
+    m_boxes[index].hasCustomPivot = custom;
+    emit boxPivotChanged(index, pivot);
+    emit frameUpdated(index);
+}
+
+void SpriteDocument::setBoxesPivot(const QList<int> &indices, const QPoint &pivot, bool custom)
+{
+    for (int idx : indices) {
+        if (idx >= 0 && idx < m_boxes.size()) {
+            m_boxes[idx].pivot = pivot;
+            m_boxes[idx].hasCustomPivot = custom;
+            emit boxPivotChanged(idx, pivot);
+            emit frameUpdated(idx);
+        }
+    }
+}
+
+void SpriteDocument::applyPivotPreset(const QList<int> &indices, PivotPreset preset)
+{
+    for (int idx : indices) {
+        if (idx >= 0 && idx < m_boxes.size()) {
+            QPoint p = SpriteBox::calculatePresetPivot(preset, m_boxes[idx].rect.size());
+            m_boxes[idx].pivot = p;
+            m_boxes[idx].hasCustomPivot = true;
+            emit boxPivotChanged(idx, p);
+            emit frameUpdated(idx);
+        }
+    }
+}
+
+QRect SpriteDocument::computeAnimationEnvelope(const QString &animName) const
+{
+    QList<int> frameIndices;
+    if (m_animations.contains(animName)) {
+        frameIndices = m_animations.value(animName).frameIndices;
+    } else if (animName.isEmpty() || animName == QLatin1String("current")) {
+        if (m_animations.contains(QLatin1String("current"))) {
+            frameIndices = m_animations.value(QLatin1String("current")).frameIndices;
+        } else {
+            for (int i = 0; i < m_frames.size(); ++i) {
+                frameIndices.append(i);
+            }
+        }
+    }
+
+    if (frameIndices.isEmpty()) {
+        int w = qMax(1, m_maxFrameWidth);
+        int h = qMax(1, m_maxFrameHeight);
+        return QRect(w / 2, h, w, h);
+    }
+
+    int maxPx = 0;
+    int maxPy = 0;
+    int maxRightDist = 0;
+    int maxBottomDist = 0;
+
+    for (int idx : frameIndices) {
+        if (idx < 0 || idx >= m_boxes.size()) continue;
+        const SpriteBox &b = m_boxes.at(idx);
+        QPoint p = b.effectivePivot();
+        int w = b.rect.width();
+        int h = b.rect.height();
+
+        if (p.x() > maxPx) maxPx = p.x();
+        if (p.y() > maxPy) maxPy = p.y();
+
+        int rightDist = w - p.x();
+        if (rightDist > maxRightDist) maxRightDist = rightDist;
+
+        int bottomDist = h - p.y();
+        if (bottomDist > maxBottomDist) maxBottomDist = bottomDist;
+    }
+
+    int originX = maxPx;
+    int originY = maxPy;
+    int canvasW = qMax(1, originX + maxRightDist);
+    int canvasH = qMax(1, originY + maxBottomDist);
+
+    return QRect(originX, originY, canvasW, canvasH);
+}
+
 SpriteAnimation SpriteDocument::animation(const QString &name) const
 {
     return m_animations.value(name);

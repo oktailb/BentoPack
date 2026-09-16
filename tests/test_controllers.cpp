@@ -66,6 +66,9 @@ private slots:
     void testTimelineReorderFrames();
     void testAnimationLoopModePersistence();
     void testTransportSpeedTimingStability();
+    void testAnimationControllerPivotAlignment();
+    void testAnimationControllerReticleToggle();
+    void testAtlasBoxItemPivotDrag();
 
     // AtlasViewController tests
     void testAtlasViewControllerToolMode();
@@ -2137,6 +2140,95 @@ void TestControllers::testFilterAutoDetectBoxes()
         retroDlg.setAutoDetectBoxesEnabled(true);
         QCOMPARE(retroDlg.isAutoDetectBoxesEnabled(), true);
     }
+}
+
+void TestControllers::testAnimationControllerPivotAlignment()
+{
+    SpriteDocument doc;
+    QImage atlas(100, 100, QImage::Format_ARGB32);
+    atlas.fill(Qt::transparent);
+    doc.setAtlas(atlas);
+
+    // Frame 0: 20x20, default pivot (10, 20)
+    int idx0 = doc.addSlice(QRect(0, 0, 20, 20));
+    // Frame 1: 40x60, default pivot (20, 60)
+    int idx1 = doc.addSlice(QRect(20, 0, 40, 60));
+
+    doc.setAnimation(QStringLiteral("walk"), {idx0, idx1}, 12, true);
+
+    QGraphicsView view;
+    AnimationController animCtrl(&doc, nullptr, nullptr, nullptr, &view);
+    animCtrl.selectAnimation(QStringLiteral("walk"));
+
+    // Check envelope
+    QRect env = doc.computeAnimationEnvelope(QStringLiteral("walk"));
+    QCOMPARE(env.x(), 20);
+    QCOMPARE(env.y(), 60);
+    QCOMPARE(env.width(), 40);
+    QCOMPARE(env.height(), 60);
+
+    // Seek to sequence index 0 (Frame 0)
+    animCtrl.seek(0);
+    QGraphicsScene *scene = animCtrl.previewScene();
+    QVERIFY(scene != nullptr);
+    QList<QGraphicsItem*> items = scene->items();
+    QGraphicsPixmapItem *pixItem = nullptr;
+    for (QGraphicsItem *it : items) {
+        pixItem = dynamic_cast<QGraphicsPixmapItem*>(it);
+        if (pixItem) break;
+    }
+    QVERIFY(pixItem != nullptr);
+    // Frame 0 pos in scene: (originX - px0, originY - py0) = (20 - 10, 60 - 20) = (10, 40)
+    QCOMPARE(pixItem->pos(), QPointF(10, 40));
+    // Absolute pivot in scene = pos + local pivot = (20, 60)
+    QCOMPARE(pixItem->pos() + doc.boxPivot(idx0), QPointF(20, 60));
+
+    // Seek to sequence index 1 (Frame 1)
+    animCtrl.seek(1);
+    // Frame 1 pos in scene: (originX - px1, originY - py1) = (20 - 20, 60 - 60) = (0, 0)
+    QCOMPARE(pixItem->pos(), QPointF(0, 0));
+    // Absolute pivot in scene = pos + local pivot = (20, 60)
+    QCOMPARE(pixItem->pos() + doc.boxPivot(idx1), QPointF(20, 60));
+}
+
+void TestControllers::testAnimationControllerReticleToggle()
+{
+    SpriteDocument doc;
+    QImage atlas(50, 50, QImage::Format_ARGB32);
+    atlas.fill(Qt::white);
+    doc.setAtlas(atlas);
+    int idx = doc.addSlice(QRect(0, 0, 30, 30));
+    doc.setAnimation(QStringLiteral("anim"), {idx}, 12, true);
+
+    QGraphicsView view;
+    AnimationController animCtrl(&doc, nullptr, nullptr, nullptr, &view);
+    animCtrl.selectAnimation(QStringLiteral("anim"));
+
+    QCOMPARE(animCtrl.showPivotReticle(), false);
+
+    QSignalSpy spyReticle(&animCtrl, &AnimationController::showPivotReticleChanged);
+    animCtrl.setShowPivotReticle(true);
+    QCOMPARE(spyReticle.count(), 1);
+    QCOMPARE(animCtrl.showPivotReticle(), true);
+
+    animCtrl.setShowPivotReticle(false);
+    QCOMPARE(spyReticle.count(), 2);
+    QCOMPARE(animCtrl.showPivotReticle(), false);
+}
+
+void TestControllers::testAtlasBoxItemPivotDrag()
+{
+    QRect bounds(0, 0, 200, 200);
+    AtlasBoxItem item(0, QRect(10, 10, 50, 50), bounds);
+
+    // Initial default pivot: (25, 50)
+    QCOMPARE(item.boxPivot(), QPoint(25, 50));
+    QCOMPARE(item.hasCustomPivot(), false);
+
+    // Set custom pivot
+    item.setBoxPivot(QPoint(15, 30), true);
+    QCOMPARE(item.boxPivot(), QPoint(15, 30));
+    QCOMPARE(item.hasCustomPivot(), true);
 }
 
 #include <QApplication>

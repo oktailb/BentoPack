@@ -39,6 +39,12 @@ AtlasViewController::AtlasViewController(QGraphicsView *view,
         connect(m_document, &SpriteDocument::frameUpdated, this, [this](int index) {
             if (index >= 0 && index < m_boxItems.size() && m_boxItems[index]) {
                 m_boxItems[index]->setBoxRect(m_document->box(index).rect);
+                m_boxItems[index]->setBoxPivot(m_document->box(index).effectivePivot(), m_document->box(index).hasCustomPivot);
+            }
+        });
+        connect(m_document, &SpriteDocument::boxPivotChanged, this, [this](int index, const QPoint &pivot) {
+            if (index >= 0 && index < m_boxItems.size() && m_boxItems[index]) {
+                m_boxItems[index]->setBoxPivot(pivot, m_document->boxHasCustomPivot(index));
             }
         });
     }
@@ -177,6 +183,7 @@ void AtlasViewController::syncAtlasBoxes()
 
     for (int i = 0; i < count; ++i) {
         AtlasBoxItem *boxItem = new AtlasBoxItem(i, m_document->box(i).rect, atlasBounds);
+        boxItem->setBoxPivot(m_document->box(i).effectivePivot(), m_document->box(i).hasCustomPivot);
         m_scene->addItem(boxItem);
         m_boxItems.append(boxItem);
 
@@ -184,6 +191,13 @@ void AtlasViewController::syncAtlasBoxes()
                 this, &AtlasViewController::onBoxItemSelected);
         connect(boxItem, &AtlasBoxItem::boxGeometryChanged,
                 this, &AtlasViewController::onBoxItemGeometryChanged);
+        connect(boxItem, &AtlasBoxItem::boxPivotChanged, this, [this](int index, const QPoint &newPivot, const QPoint &oldPivot) {
+            if (m_undoStack) {
+                m_undoStack->push(new ChangePivotCommand(m_document, index, oldPivot, newPivot, true));
+            } else if (m_document) {
+                m_document->setBoxPivot(index, newPivot, true);
+            }
+        });
         connect(boxItem, &AtlasBoxItem::boxContextMenuRequested,
                 this, &AtlasViewController::onBoxContextMenu);
         connect(boxItem, &AtlasBoxItem::boxInteractiveMoved,

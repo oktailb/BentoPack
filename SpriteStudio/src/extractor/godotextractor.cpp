@@ -121,6 +121,9 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
     QRegularExpression regionRegex(QStringLiteral(
         R"re(region\s*=\s*Rect2\(\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*\))re"
     ));
+    QRegularExpression marginRegex(QStringLiteral(
+        R"re(margin\s*=\s*Rect2\(\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*\))re"
+    ));
 
     QMap<QString, int> subResToFrameIdx;
     QList<SpriteBox> boxes;
@@ -149,6 +152,22 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
         box.rect = boxRect;
         box.index = frameIndex;
         box.selected = false;
+
+        QRegularExpressionMatch marginMatch = marginRegex.match(body);
+        if (marginMatch.hasMatch()) {
+            double ox = marginMatch.captured(1).toDouble();
+            double oy = marginMatch.captured(2).toDouble();
+            double cw = marginMatch.captured(3).toDouble();
+            double ch = marginMatch.captured(4).toDouble();
+            int px = qRound((cw / 2.0) - ox);
+            int py = qRound(ch - oy);
+            box.pivot = QPoint(px, py);
+            box.hasCustomPivot = true;
+        } else {
+            box.pivot = QPoint(rw / 2, rh);
+            box.hasCustomPivot = false;
+        }
+
         boxes.append(box);
 
         QImage frameImg = atlasImg.copy(boxRect);
@@ -345,7 +364,24 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         QString subResId = QString("AtlasTexture_%1").arg(i);
         out << "[sub_resource type=\"AtlasTexture\" id=\"" << subResId << "\"]\n";
         out << "atlas = ExtResource(\"1_atlas\")\n";
-        out << "region = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n\n";
+        out << "region = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n";
+
+        // Find which animation contains frame i
+        QString animName;
+        for (auto it = doc.animations().begin(); it != doc.animations().end(); ++it) {
+            if (it.value().frameIndices.contains(i)) {
+                animName = it.key();
+                break;
+            }
+        }
+        QRect env = doc.computeAnimationEnvelope(animName);
+        QPoint piv = doc.boxPivot(i);
+        int ox = env.x() - piv.x();
+        int oy = env.y() - piv.y();
+        if (env.width() > r.width() || env.height() > r.height() || ox != 0 || oy != 0) {
+            out << "margin = Rect2(" << ox << ", " << oy << ", " << env.width() << ", " << env.height() << ")\n";
+        }
+        out << "\n";
     }
 
     out << "[resource]\n";

@@ -28,6 +28,7 @@ public:
         Bottom,
         BottomLeft,
         Left,
+        Pivot,
         Move
     };
 
@@ -39,6 +40,10 @@ public:
 
     QRect boxRect() const { return m_rect.toRect(); }
     void setBoxRect(const QRect &rect);
+
+    QPoint boxPivot() const { return m_pivot; }
+    void setBoxPivot(const QPoint &pivot, bool custom = true);
+    bool hasCustomPivot() const { return m_hasCustomPivot; }
 
     bool isSelectedBox() const { return m_selected; }
     void setSelectedBox(bool sel);
@@ -56,6 +61,7 @@ public:
 signals:
     void boxSelected(int index, bool selected, Qt::KeyboardModifiers modifiers);
     void boxGeometryChanged(int index, const QRect &newRect, const QRect &oldRect);
+    void boxPivotChanged(int index, const QPoint &newPivot, const QPoint &oldPivot);
     void boxContextMenuRequested(int index, const QPoint &screenPos);
     void boxInteractiveMoved(int index, const QPoint &delta);
     void boxInteractiveMoveFinished(int index, const QPoint &totalDelta);
@@ -78,6 +84,10 @@ private:
     QRect    m_atlasBounds;
     bool     m_selected = false;
     bool     m_hovered = false;
+
+    QPoint   m_pivot = QPoint(0, 0);
+    bool     m_hasCustomPivot = false;
+    QPoint   m_initialPivot;
 
     Handle   m_activeHandle = None;
     QPointF  m_pressScenePos;

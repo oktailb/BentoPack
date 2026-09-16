@@ -98,6 +98,41 @@ void MainWindow::onBoxContextMenuRequested(int index, const QPoint &screenPos)
     removeBgAction->setEnabled(m_document && !m_document->atlas().isNull());
     connect(removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
 
+    menu.addSeparator();
+
+    QMenu *pivotMenu = menu.addMenu(tr("KEY_CTX_PIVOT_SUBMENU"));
+    QAction *actGround = pivotMenu->addAction(tr("KEY_PIVOT_BOTTOMCENTER") + QStringLiteral(" (") + tr("KEY_PIVOT_GROUND_HINT") + QStringLiteral(")"));
+    connect(actGround, &QAction::triggered, this, [this]() {
+        applyPivotPresetToSelection(PivotPreset::BottomCenter);
+    });
+    QAction *actCenter = pivotMenu->addAction(tr("KEY_PIVOT_CENTER"));
+    connect(actCenter, &QAction::triggered, this, [this]() {
+        applyPivotPresetToSelection(PivotPreset::Center);
+    });
+    QAction *actTopLeft = pivotMenu->addAction(tr("KEY_PIVOT_TOPLEFT") + QStringLiteral(" (") + tr("KEY_PIVOT_UI_HINT") + QStringLiteral(")"));
+    connect(actTopLeft, &QAction::triggered, this, [this]() {
+        applyPivotPresetToSelection(PivotPreset::TopLeft);
+    });
+    pivotMenu->addSeparator();
+
+    QMenu *morePresets = pivotMenu->addMenu(tr("KEY_CTX_MORE_PRESETS"));
+    struct PresetItem { const char* key; PivotPreset preset; };
+    const PresetItem items[] = {
+        {"KEY_PIVOT_TOPCENTER", PivotPreset::TopCenter},
+        {"KEY_PIVOT_TOPRIGHT", PivotPreset::TopRight},
+        {"KEY_PIVOT_CENTERLEFT", PivotPreset::CenterLeft},
+        {"KEY_PIVOT_CENTERRIGHT", PivotPreset::CenterRight},
+        {"KEY_PIVOT_BOTTOMLEFT", PivotPreset::BottomLeft},
+        {"KEY_PIVOT_BOTTOMRIGHT", PivotPreset::BottomRight}
+    };
+    for (const auto &item : items) {
+        QAction *act = morePresets->addAction(tr(item.key));
+        PivotPreset p = item.preset;
+        connect(act, &QAction::triggered, this, [this, p]() {
+            applyPivotPresetToSelection(p);
+        });
+    }
+
     menu.exec(screenPos);
 }
 

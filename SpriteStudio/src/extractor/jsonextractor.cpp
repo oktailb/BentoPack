@@ -261,6 +261,17 @@ void JsonExtractor::extractFromTexturePackerFormat(const QJsonObject &framesObj,
         box.selected = false;
         box.index = currentIndex;
 
+        if (frameObj.contains("pivot") && frameObj["pivot"].isObject()) {
+            QJsonObject pObj = frameObj["pivot"].toObject();
+            double normX = pObj.value("x").toDouble(0.5);
+            double normY = pObj.value("y").toDouble(1.0);
+            box.pivot = QPoint(qRound(normX * w), qRound(normY * h));
+            box.hasCustomPivot = true;
+        } else {
+            box.pivot = QPoint(w / 2, h);
+            box.hasCustomPivot = false;
+        }
+
         frames.append(frameImg);
         boxes.append(box);
 
@@ -311,6 +322,17 @@ void JsonExtractor::extractFromArrayFormat(const QJsonArray &framesArray,
         box.rect = QRect(x, y, w, h);
         box.selected = false;
         box.index = currentIndex;
+
+        if (frameObj.contains("pivot") && frameObj["pivot"].isObject()) {
+            QJsonObject pObj = frameObj["pivot"].toObject();
+            double normX = pObj.value("x").toDouble(0.5);
+            double normY = pObj.value("y").toDouble(1.0);
+            box.pivot = QPoint(qRound(normX * w), qRound(normY * h));
+            box.hasCustomPivot = true;
+        } else {
+            box.pivot = QPoint(w / 2, h);
+            box.hasCustomPivot = false;
+        }
 
         frames.append(frameImg);
         boxes.append(box);
@@ -441,6 +463,14 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         srcSize["w"] = r.width();
         srcSize["h"] = r.height();
         frameData["sourceSize"] = srcSize;
+
+        QPoint piv = doc.boxPivot(i);
+        double normX = r.width() > 0 ? static_cast<double>(piv.x()) / r.width() : 0.5;
+        double normY = r.height() > 0 ? static_cast<double>(piv.y()) / r.height() : 1.0;
+        QJsonObject pivotObj;
+        pivotObj["x"] = normX;
+        pivotObj["y"] = normY;
+        frameData["pivot"] = pivotObj;
 
         QString frameKey = QStringLiteral("%1_%2").arg(baseName).arg(i, 4, 10, QLatin1Char('0'));
         framesObj[frameKey] = frameData;

@@ -418,3 +418,64 @@ void RemoveBackgroundCommand::undo()
     m_doc->setAnimations(m_animationsBackup);
 }
 
+// ChangePivotCommand
+ChangePivotCommand::ChangePivotCommand(SpriteDocument *doc,
+                                       const QList<int> &indices,
+                                       const QList<QPoint> &newPivots,
+                                       bool custom,
+                                       QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+{
+    setText(QObject::tr("KEY_CMD_CHANGE_PIVOT"));
+    for (int i = 0; i < indices.size(); ++i) {
+        int idx = indices[i];
+        if (m_doc && idx >= 0 && idx < m_doc->boxes().size()) {
+            PivotInfo info;
+            info.index = idx;
+            info.oldPivot = m_doc->box(idx).pivot;
+            info.oldCustom = m_doc->box(idx).hasCustomPivot;
+            info.newPivot = (i < newPivots.size()) ? newPivots[i] : (newPivots.isEmpty() ? QPoint(0, 0) : newPivots.first());
+            info.newCustom = custom;
+            m_pivots.append(info);
+        }
+    }
+}
+
+ChangePivotCommand::ChangePivotCommand(SpriteDocument *doc,
+                                       int index,
+                                       const QPoint &oldPivot,
+                                       const QPoint &newPivot,
+                                       bool custom,
+                                       QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+{
+    setText(QObject::tr("KEY_CMD_CHANGE_PIVOT"));
+    if (m_doc && index >= 0 && index < m_doc->boxes().size()) {
+        PivotInfo info;
+        info.index = index;
+        info.oldPivot = oldPivot;
+        info.oldCustom = m_doc->box(index).hasCustomPivot;
+        info.newPivot = newPivot;
+        info.newCustom = custom;
+        m_pivots.append(info);
+    }
+}
+
+void ChangePivotCommand::undo()
+{
+    if (!m_doc) return;
+    for (const auto &info : m_pivots) {
+        m_doc->setBoxPivot(info.index, info.oldPivot, info.oldCustom);
+    }
+}
+
+void ChangePivotCommand::redo()
+{
+    if (!m_doc) return;
+    for (const auto &info : m_pivots) {
+        m_doc->setBoxPivot(info.index, info.newPivot, info.newCustom);
+    }
+}
+

@@ -315,6 +315,229 @@
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QGroupBox" name="grpPivot">
+         <property name="title">
+          <string>KEY_GRP_PIVOT</string>
+         </property>
+         <layout class="QVBoxLayout" name="pivotLayout">
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="pivotQuickButtonsLayout">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QToolButton" name="btnPivotGround">
+              <property name="toolTip">
+               <string>KEY_TOOLTIP_PIVOT_GROUND</string>
+              </property>
+              <property name="text">
+               <string>⬇️ Sol</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnPivotCenter">
+              <property name="toolTip">
+               <string>KEY_TOOLTIP_PIVOT_CENTER</string>
+              </property>
+              <property name="text">
+               <string>🎯 Centre</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnPivotTopLeft">
+              <property name="toolTip">
+               <string>KEY_TOOLTIP_PIVOT_TOPLEFT</string>
+              </property>
+              <property name="text">
+               <string>↖️ UI</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="spacerPivotQuick">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>10</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnShowReticle">
+              <property name="toolTip">
+               <string>KEY_TOOLTIP_SHOW_RETICLE</string>
+              </property>
+              <property name="text">
+               <string>🎯 Mire</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="pivotPresetComboLayout">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblPivotPreset">
+              <property name="text">
+               <string>Preset:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cmbPivotPreset">
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_TOPLEFT</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_TOPCENTER</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_TOPRIGHT</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_CENTERLEFT</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_CENTER</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_CENTERRIGHT</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_BOTTOMLEFT</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_BOTTOMCENTER</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_BOTTOMRIGHT</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KEY_PIVOT_CUSTOM</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="pivotCoordsLayout">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblPivotX">
+              <property name="text">
+               <string>X:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinPivotX">
+              <property name="minimum">
+               <number>-9999</number>
+              </property>
+              <property name="maximum">
+               <number>9999</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblPivotY">
+              <property name="text">
+               <string>Y:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinPivotY">
+              <property name="minimum">
+               <number>-9999</number>
+              </property>
+              <property name="maximum">
+               <number>9999</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="pivotBatchButtonsLayout">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="btnApplyPivotAnim">
+              <property name="toolTip">
+               <string>KEY_TOOLTIP_APPLY_PIVOT_ANIM</string>
+              </property>
+              <property name="text">
+               <string>KEY_BTN_APPLY_PIVOT_ANIM</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnApplyPivotAll">
+              <property name="toolTip">
+               <string>KEY_TOOLTIP_APPLY_PIVOT_ALL</string>
+              </property>
+              <property name="text">
+               <string>KEY_BTN_APPLY_PIVOT_ALL</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>

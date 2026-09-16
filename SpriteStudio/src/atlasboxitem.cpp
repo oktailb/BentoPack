@@ -14,6 +14,7 @@ AtlasBoxItem::AtlasBoxItem(int index, const QRect &rect, const QRect &atlasBound
     , m_index(index)
     , m_rect(rect)
     , m_atlasBounds(atlasBounds)
+    , m_pivot(rect.width() / 2, rect.height())
 {
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
@@ -28,12 +29,25 @@ void AtlasBoxItem::setIndex(int idx)
     }
 }
 
+void AtlasBoxItem::setBoxPivot(const QPoint &pivot, bool custom)
+{
+    if (m_pivot != pivot || m_hasCustomPivot != custom) {
+        prepareGeometryChange();
+        m_pivot = pivot;
+        m_hasCustomPivot = custom;
+        update();
+    }
+}
+
 void AtlasBoxItem::setBoxRect(const QRect &rect)
 {
     QRectF newRect(rect);
     if (m_rect != newRect) {
         prepareGeometryChange();
         m_rect = newRect;
+        if (!m_hasCustomPivot) {
+            m_pivot = QPoint(rect.width() / 2, rect.height());
+        }
         update();
     }
 }
@@ -69,7 +83,12 @@ QRectF AtlasBoxItem::boundingRect() const
 {
     double hs = currentHandleSize();
     double margin = std::max(hs / 2.0 + 2.0, AppConfig::instance().visuals().handleMargin);
-    return m_rect.adjusted(-margin, -margin, margin, margin);
+    QRectF base = m_rect.adjusted(-margin, -margin, margin, margin);
+    if (m_selected) {
+        QPointF p = m_rect.topLeft() + m_pivot;
+        base = base.united(QRectF(p.x() - 15.0, p.y() - 15.0, 30.0, 30.0));
+    }
+    return base;
 }
 
 QPainterPath AtlasBoxItem::shape() const
@@ -81,6 +100,8 @@ QPainterPath AtlasBoxItem::shape() const
         for (int h = TopLeft; h <= Left; ++h) {
             path.addRect(getHandleRect(static_cast<Handle>(h), handleSize));
         }
+        QPointF p = m_rect.topLeft() + m_pivot;
+        path.addEllipse(p, 8.0, 8.0);
     }
     return path;
 }
@@ -134,7 +155,14 @@ QRectF AtlasBoxItem::getHandleRect(Handle handle, double handleSize) const
 AtlasBoxItem::Handle AtlasBoxItem::handleAt(const QPointF &pos, double handleSize) const
 {
     if (m_selected) {
-        // Test corners first
+        // Test pivot first
+        QPointF pivotPos = m_rect.topLeft() + m_pivot;
+        double grabRadius = std::max(handleSize * 1.2, 8.0);
+        if (QLineF(pos, pivotPos).length() <= grabRadius) {
+            return Pivot;
+        }
+
+        // Test corners
         const Handle corners[] = { TopLeft, TopRight, BottomRight, BottomLeft };
         for (Handle h : corners) {
             if (getHandleRect(h, handleSize).contains(pos)) {
@@ -176,6 +204,9 @@ void AtlasBoxItem::updateCursor(Handle handle)
     case Right:
         setCursor(Qt::SizeHorCursor);
         break;
+    case Pivot:
+        setCursor(Qt::CrossCursor);
+        break;
     case Move:
         setCursor(m_selected ? Qt::SizeAllCursor : Qt::PointingHandCursor);
         break;
@@ -209,6 +240,7 @@ void AtlasBoxItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         m_activeHandle = handleAt(event->pos(), handleSize);
         m_pressScenePos = event->scenePos();
         m_initialRect = m_rect;
+        m_initialPivot = m_pivot;
         m_hasMoved = false;
 
         emit boxSelected(m_index, true, event->modifiers());
@@ -222,6 +254,19 @@ void AtlasBoxItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_activeHandle == None) {
         QGraphicsObject::mouseMoveEvent(event);
+        return;
+    }
+
+    if (m_activeHandle == Pivot) {
+        QPointF delta = event->scenePos() - m_pressScenePos;
+        QPoint newPivot(static_cast<int>(std::round(m_initialPivot.x() + delta.x())),
+                        static_cast<int>(std::round(m_initialPivot.y() + delta.y())));
+        prepareGeometryChange();
+        m_pivot = newPivot;
+        m_hasCustomPivot = true;
+        m_hasMoved = true;
+        update();
+        event->accept();
         return;
     }
 
@@ -360,6 +405,18 @@ void AtlasBoxItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void AtlasBoxItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && m_activeHandle != None) {
+        if (m_activeHandle == Pivot) {
+            if (m_hasMoved) {
+                if (m_pivot != m_initialPivot) {
+                    emit boxPivotChanged(m_index, m_pivot, m_initialPivot);
+                }
+            }
+            m_activeHandle = None;
+            m_hasMoved = false;
+            event->accept();
+            return;
+        }
+
         if (m_activeHandle == Move) {
             if (m_hasMoved) {
                 QPoint intTotalDelta(static_cast<int>(std::round(m_rect.left() - m_initialRect.left())),
@@ -466,6 +523,43 @@ void AtlasBoxItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
             QRectF hr = getHandleRect(static_cast<Handle>(h), handleSize);
             painter->drawRect(hr);
         }
+
+        // 5. Pivot Reticle (only when selected)
+        painter->save();
+        painter->setRenderHint(QPainter::Antialiasing, true);
+
+        QPointF p = m_rect.topLeft() + m_pivot;
+
+        // Draw dark shadow/halo for high contrast against any background
+        QPen shadowPen(QColor(0, 0, 0, 200), 3.0);
+        shadowPen.setCosmetic(true);
+        painter->setPen(shadowPen);
+        painter->setBrush(Qt::NoBrush);
+        painter->drawEllipse(p, 6.0, 6.0);
+        painter->drawLine(QPointF(p.x() - 11.0, p.y()), QPointF(p.x() - 3.0, p.y()));
+        painter->drawLine(QPointF(p.x() + 3.0, p.y()), QPointF(p.x() + 11.0, p.y()));
+        painter->drawLine(QPointF(p.x(), p.y() - 11.0), QPointF(p.x(), p.y() - 3.0));
+        painter->drawLine(QPointF(p.x(), p.y() + 3.0), QPointF(p.x(), p.y() + 11.0));
+
+        // Draw bright neon reticle (cyan, or golden yellow if active/hovered)
+        bool pivotActive = (m_activeHandle == Pivot);
+        QColor reticleColor = pivotActive ? QColor(255, 220, 40) : QColor(0, 230, 255);
+
+        QPen reticlePen(reticleColor, 1.5);
+        reticlePen.setCosmetic(true);
+        painter->setPen(reticlePen);
+        painter->drawEllipse(p, 6.0, 6.0);
+        painter->drawLine(QPointF(p.x() - 10.0, p.y()), QPointF(p.x() - 3.0, p.y()));
+        painter->drawLine(QPointF(p.x() + 3.0, p.y()), QPointF(p.x() + 10.0, p.y()));
+        painter->drawLine(QPointF(p.x(), p.y() - 10.0), QPointF(p.x(), p.y() - 3.0));
+        painter->drawLine(QPointF(p.x(), p.y() + 3.0), QPointF(p.x(), p.y() + 10.0));
+
+        // Center dot
+        painter->setBrush(reticleColor);
+        painter->setPen(Qt::NoPen);
+        painter->drawEllipse(p, 2.0, 2.0);
+
+        painter->restore();
     }
 
     painter->restore();

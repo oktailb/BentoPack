@@ -213,6 +213,10 @@ void TestProject::testProjectSerializationFidelity()
     doc.setAnimation(QStringLiteral("run"), {0, 1}, 10, true);
     doc.setAnimation(QStringLiteral("jump"), {2}, 8, false);
 
+    // Set pivots: box 0 default, box 1 custom pivot, box 2 preset
+    doc.setBoxPivot(1, QPoint(12, 14));
+    doc.applyPivotPreset({2}, PivotPreset::TopRight);
+
     // Serialize
     QByteArray json = ProjectManager::serializeDocumentToJson(doc, QStringLiteral("assets/atlas.png"), 2.0, QPointF(10, 20));
     QVERIFY(!json.isEmpty());
@@ -234,6 +238,14 @@ void TestProject::testProjectSerializationFidelity()
     QCOMPARE(restoredDoc.box(0).rect, QRect(0, 0, 16, 16));
     QCOMPARE(restoredDoc.box(1).rect, QRect(16, 0, 16, 16));
     QCOMPARE(restoredDoc.box(2).rect, QRect(0, 16, 32, 32));
+
+    // Verify pivot roundtrip
+    QCOMPARE(restoredDoc.box(0).hasCustomPivot, false);
+    QCOMPARE(restoredDoc.box(0).effectivePivot(), QPoint(8, 16));
+    QCOMPARE(restoredDoc.box(1).hasCustomPivot, true);
+    QCOMPARE(restoredDoc.box(1).pivot, QPoint(12, 14));
+    QCOMPARE(restoredDoc.box(2).hasCustomPivot, true);
+    QCOMPARE(restoredDoc.box(2).pivot, QPoint(32, 0));
 
     QVERIFY(restoredDoc.hasAnimation(QStringLiteral("run")));
     QCOMPARE(restoredDoc.animation(QStringLiteral("run")).fps, 10);

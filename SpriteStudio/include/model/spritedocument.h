@@ -9,6 +9,19 @@
 #include <QString>
 #include <QStringList>
 
+enum class PivotPreset {
+    TopLeft,
+    TopCenter,
+    TopRight,
+    CenterLeft,
+    Center,
+    CenterRight,
+    BottomLeft,
+    BottomCenter,
+    BottomRight,
+    Custom
+};
+
 /**
  * @brief Structure representing the bounding box of a sprite frame in the atlas.
  */
@@ -18,9 +31,18 @@ struct SpriteBox {
     int         index = 0;
     int         groupId = 0;
     QList<int>  overlappingBoxes;
+    QPoint      pivot = QPoint(0, 0); // Local position relative to the box's top-left corner
+    bool        hasCustomPivot = false;
+
+    QPoint effectivePivot() const {
+        return hasCustomPivot ? pivot : QPoint(rect.width() / 2, rect.height());
+    }
+
+    static QPoint calculatePresetPivot(PivotPreset preset, const QSize &size);
 
     bool operator==(const SpriteBox &other) const {
-        return rect == other.rect && index == other.index && selected == other.selected;
+        return rect == other.rect && index == other.index && selected == other.selected
+               && pivot == other.pivot && hasCustomPivot == other.hasCustomPivot;
     }
 };
 
@@ -101,6 +123,14 @@ public:
     QList<int> selectedFrameIndices() const;
     void setSelectedFrameIndices(const QList<int> &indices);
 
+    // Pivots & Origins
+    QPoint boxPivot(int index) const;
+    bool boxHasCustomPivot(int index) const;
+    void setBoxPivot(int index, const QPoint &pivot, bool custom = true);
+    void setBoxesPivot(const QList<int> &indices, const QPoint &pivot, bool custom = true);
+    void applyPivotPreset(const QList<int> &indices, PivotPreset preset);
+    QRect computeAnimationEnvelope(const QString &animName) const;
+
     // Dimensions
     int maxFrameWidth() const { return m_maxFrameWidth; }
     int maxFrameHeight() const { return m_maxFrameHeight; }
@@ -133,6 +163,7 @@ signals:
     void atlasChanged();
     void framesChanged();
     void frameUpdated(int index);
+    void boxPivotChanged(int index, const QPoint &pivot);
     void animationsChanged();
     void documentReset();
 

@@ -149,6 +149,10 @@ void TestExtractors::testJsonExtractorReadWrite()
     QVERIFY(doc.frameCount() > 0);
     QVERIFY(!doc.animations().isEmpty());
 
+    // Set custom pivot on frame 0 to test export & import roundtrip
+    QPoint customPiv(doc.box(0).rect.width() / 4, doc.box(0).rect.height() / 2);
+    doc.setBoxPivot(0, customPiv);
+
     // Test export round-trip to a temporary directory
     QTemporaryDir tempDir;
     QVERIFY(tempDir.isValid());
@@ -170,6 +174,8 @@ void TestExtractors::testJsonExtractorReadWrite()
     QVERIFY2(readBackOk, qPrintable(readBackErr.toString()));
     QCOMPARE(doc2.frameCount(), doc.frameCount());
     QCOMPARE(doc2.animations().size(), doc.animations().size());
+    QVERIFY(doc2.box(0).hasCustomPivot);
+    QCOMPARE(doc2.box(0).pivot, customPiv);
 }
 
 void TestExtractors::testGodotExtractorReadWrite()

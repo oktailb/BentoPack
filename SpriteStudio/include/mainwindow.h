@@ -167,7 +167,20 @@ private slots:
     // Image processing
     void removeAtlasBackgroundAndRefresh();
 
+    // Pivot controls
+    void on_btnPivotGround_clicked();
+    void on_btnPivotCenter_clicked();
+    void on_btnPivotTopLeft_clicked();
+    void on_btnShowReticle_toggled(bool checked);
+    void on_cmbPivotPreset_currentIndexChanged(int index);
+    void on_spinPivotX_valueChanged(int val);
+    void on_spinPivotY_valueChanged(int val);
+    void on_btnApplyPivotAnim_clicked();
+    void on_btnApplyPivotAll_clicked();
+
 private:
+    void updatePivotUiFromSelection();
+    void applyPivotPresetToSelection(PivotPreset preset);
     void setupControllers();
     void setupErgonomicLayout();
     void setupUIConnections();
@@ -213,6 +226,7 @@ private:
     QProgressBar *progressBar = nullptr;
     TimelineFilmstripWidget *m_timelineWidget = nullptr;
     bool m_isSyncingSelection = false;
+    bool m_isSyncingPivotUi = false;
 };
 
 #endif // MAINWINDOW_H

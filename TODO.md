@@ -12,7 +12,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M0** | [Assainissement Architectural & Dette Technique (Audit Critique)](#m0--assainissement-architectural--dette-technique-audit-critique) | **Haute** | Haute | 🟢 Clôturé & Validé (73 tests CTest 100% — Multiplateforme) |
 | **M1** | [Édition Interactive des Bounding Boxes (Atlas Slicing)](#m1--édition-interactive-des-bounding-boxes-atlas-slicing) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% — Poignées, Group Drag, Shift Slice) |
 | **M2** | [Gestionnaire Complet d'Animations & Timeline](#m2--gestionnaire-complet-danimations--timeline) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Ergonomie Splitters, Filmstrip Drag&Drop, LoopModes, Undo/Redo) |
-| **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Haute (Critique)** | Faible | 📝 Planifié (Prochaine Étape Immédiate) |
+| **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Haute (Critique)** | Faible | 🟢 Clôturé & Validé (100% CTest — Réticules, Sol, Alignement Envelope, Godot/JSON) |
 | **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (85 tests CTest 100% — Session, Lock, Crash Recovery, Atomic Save, LibGit2 Find) |
 | **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟢 Clôturé & Validé (Socle FilterRegistry, Despill, Outline, ColorSwap 100% CTest) |
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 📝 Planifié (Compacité de Production) |
@@ -272,30 +272,62 @@ Dans l'interface actuelle, le bloc de droite `animationArea` combine :
 
 ---
 
-## M3 : Points d'Ancrage & Pivots (Origins & Offsets)
+## M3 : Points d'Ancrage & Pivots (Origins & Offsets) — ✅ TERMINÉ & VALIDÉ (100%)
 
 ### Contexte & Objectif
 Lorsqu'un personnage donne un coup d'épée ou saute, la boîte de découpe de chaque frame change souvent de taille. Si les frames sont centrées arbitrairement sans point d'ancrage commun, le personnage "saute" ou glisse visuellement dans le moteur de jeu.  
 Le point d'ancrage (ou pivot) définit le point de référence (souvent au niveau des pieds ou au centre du corps) pour aligner rigoureusement les frames.
 
-### Spécifications Fonctionnelles
-1. **Édition Visuelle du Pivot :**
-   - Affichage d'un réticule / mire (croix colorée semi-transparente) sur la vue de la frame ou dans le lecteur d'animation.
-   - Déplacement interactif à la souris du point de pivot.
-   - Préréglages rapides en un clic par frame:
-     - `Bottom-Center` (standard pour personnages au sol).
-     - `Center` (standard pour projectiles, vaisseaux, effets visuels).
-     - `Top-Left` (standard pour éléments d'interface).
-     - `Custom (X, Y)` avec champs numériques spinbox.
-2. **Portée d'Application :**
-   - Bouton "Appliquer à toute l'animation" ou "Appliquer à tous les sprites".
-3. **Export dans les Moteurs de Jeux :**
-   - **Godot 4 :** Enregistrement dans le champ d'offset ou la sous-ressource de l'AtlasTexture.
-   - **JSON (TexturePacker / Aseprite) :** Calcul des champs `spriteSourceSize`, `sourceSize` et offset correspondant.
+### Réalisations & Architecture Validée (100% Tests CTest Validés)
+1. **Modèle de Données & Préréglages Géométriques (`SpriteBox` & `SpriteDocument`) :**
+   - Ajout des champs `QPoint pivot` et `bool hasCustomPivot` dans `SpriteBox` (coordonnées locales pixel relatives au coin supérieur gauche de la tranche).
+   - Méthode dynamique `effectivePivot()` : retourne le pivot personnalisé s'il a été défini ou édité, sinon calcule par défaut le bas-centre `(width / 2, height)` s'adaptant automatiquement aux redimensionnements de la boîte.
+   - Énumération des 9 préréglages cardinaux `PivotPreset` (`TopLeft`, `TopCenter`, `TopRight`, `CenterLeft`, `Center`, `CenterRight`, `BottomLeft`, `BottomCenter`, `BottomRight`, `Custom`).
+   - Méthodes documentaires `setBoxPivot()`, `setBoxesPivot()`, `applyPivotPreset()`, `computeAnimationEnvelope()` émettant le signal `boxPivotChanged(int index, const QPoint &pivot)`.
 
-### Fichiers & Composants Cibles
-- `SpriteStudio/include/model/spritedocument.h` : Ajout de `QPoint origin` dans `SpriteBox`.
-- `SpriteStudio/src/extractor/godotextractor.cpp` et `jsonextractor.cpp` : Prise en compte dans la sérialisation.
+2. **Historique d'Annulation / Rétablissement (`ChangePivotCommand`) :**
+   - Commande `QUndoCommand` unifiée gérant la modification unitaire, multi-sélection ou par lot de pivots.
+   - Restauration exacte des états précédents et réactivation transparente de l'indicateur de pivot personnalisé.
+
+3. **Édition Graphique Interactive dans l'Atlas (`AtlasBoxItem` & `AtlasViewController`) :**
+   - Détection de la poignée interactive `Handle::Pivot` sur le réticule de visée.
+   - Réticule de contraste élevé à double anneau (cercle blanc et mire intérieure noire) garantissant une visibilité parfaite sur tout fond clair, sombre ou transparent.
+   - Déplacement fluide par glisser-déposer à la souris avec émission en temps réel du signal `boxPivotChanged`.
+   - Sous-menu contextuel "Point d'ancrage (Pivot)" dans le clic-droit de la boîte atlas offrant les 9 préréglages instantanés.
+
+4. **Stabilisation Sans Saut d'Animation (`AnimationController`) :**
+   - Calcul de l'enveloppe englobante commune de l'animation (`computeAnimationEnvelope`) alignant les pivots sur une origine partagée $(originX, originY)$.
+   - Élimination mathématique de tout sautillement (*jittering*) lors de la lecture d'animations aux frames de dimensions inégales.
+   - Ligne de sol pointillée subtile (*dashed ground line*) et réticule de pivot centrés sur le point d'impact.
+   - Bouton à bascule `[ 🎯 Mire ]` permettant d'afficher ou masquer la mire dans la scène de prévisualisation.
+
+5. **Panneau Ergonomique IHM & Actions par Lot (`MainWindow`) :**
+   - Groupe IHM `grpPivot` intégré dans le panneau d'édition avec boutons rapides `[ ⬇️ Sol ]`, `[ 🎯 Centre ]`, `[ ↖️ UI ]`.
+   - Sélecteur combo des 9 préréglages et spinboxes numériques `X` et `Y`.
+   - Boutons d'application en masse : "Appliquer à l'anim" et "Appliquer à tous".
+   - Synchronisation bidirectionnelle instantanée lors des sélections et changements de frame.
+
+6. **Fidélité des Codecs Moteurs & Sérialisation :**
+   - **Godot 4 :** Export automatique du champ `margin = Rect2(...)` dans les sous-ressources `AtlasTexture` des fichiers `.tres`, et réimport transparent.
+   - **TexturePacker / Aseprite JSON :** Export et réimport de l'objet normalisé `"pivot": { "x": ..., "y": ... }`.
+   - **Projet Natif `.ssp` :** Sauvegarde et restauration complètes des coordonnées et du flag `hasCustomPivot`.
+
+7. **Internationalisation (i18n) & Couverture de Tests :**
+   - 29 nouvelles clés traduites à 100% en Français, Anglais et Japonais (517 chaînes, 0 non traduite).
+   - Tests automatisés dans `tests/test_core.cpp`, `tests/test_controllers.cpp`, `tests/test_project.cpp` et `tests/test_extractors.cpp` validant la totalité des comportements.
+
+| Spécification M3 | Statut | Composant / Fichier | Diagnostic & Observations |
+|---|:---:|---|---|
+| **Structure de pivot dans SpriteBox** | ✅ **RÉSOLU & VALIDÉ** | `spritedocument.h`, `spritedocument.cpp` | `pivot`, `hasCustomPivot`, `effectivePivot()`, 9 presets cardinaux. |
+| **Commande Undo/Redo ChangePivotCommand** | ✅ **RÉSOLU & VALIDÉ** | `commands.h`, `commands.cpp` | Annulation et rétablissement fiables en unitaire et par lot. |
+| **Réticule interactif dans AtlasBoxItem** | ✅ **RÉSOLU & VALIDÉ** | `atlasboxitem.h`, `atlasboxitem.cpp` | Drag & drop à la souris du pivot avec poignée `Handle::Pivot` et halo de contraste. |
+| **Stabilisation de lecture d'animation** | ✅ **RÉSOLU & VALIDÉ** | `animationcontroller.cpp` | Alignement sur l'enveloppe commune, élimination de tout sautillement, ligne de sol. |
+| **Contrôles IHM & Préréglages rapides** | ✅ **RÉSOLU & VALIDÉ** | `mainwindow.ui`, `mainwindow.cpp` | Boutons Sol/Centre/UI, combo 9 presets, spinboxes X/Y, batch "Appliquer à l'anim / tous". |
+| **Export/Import Godot 4 (margin Rect2)** | ✅ **RÉSOLU & VALIDÉ** | `godotextractor.cpp` | Écriture et lecture du décalage de marge dans les sous-ressources `AtlasTexture`. |
+| **Export/Import JSON (pivot normalisé)** | ✅ **RÉSOLU & VALIDÉ** | `jsonextractor.cpp` | Round-trip exact du pivot normalisé `{ "x", "y" }`. |
+| **Format de Projet Natif .ssp** | ✅ **RÉSOLU & VALIDÉ** | `projectmanager.cpp` | Sérialisation et désérialisation JSON pérennes. |
+| **Traductions FR / EN / JA** | ✅ **RÉSOLU & VALIDÉ** | `sprite_studio_*.ts` | 100% traduit (0 unfinished, 517 strings). |
+| **Tests CTest automatisés** | ✅ **RÉSOLU & VALIDÉ** | `test_core`, `test_controllers`, `test_extractors`, `test_project` | 100% de succès sur la suite complète. |
 
 ---
 

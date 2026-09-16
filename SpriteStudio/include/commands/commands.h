@@ -266,4 +266,39 @@ private:
     QMap<QString, SpriteAnimation>  m_animationsBackup;
 };
 
+/**
+ * @brief Command to change pivot point(s) of one or multiple boxes with undo/redo.
+ */
+class ChangePivotCommand : public QUndoCommand
+{
+public:
+    struct PivotInfo {
+        int index;
+        QPoint oldPivot;
+        bool oldCustom;
+        QPoint newPivot;
+        bool newCustom;
+    };
+
+    ChangePivotCommand(SpriteDocument *doc,
+                       const QList<int> &indices,
+                       const QList<QPoint> &newPivots,
+                       bool custom = true,
+                       QUndoCommand *parent = nullptr);
+
+    ChangePivotCommand(SpriteDocument *doc,
+                       int index,
+                       const QPoint &oldPivot,
+                       const QPoint &newPivot,
+                       bool custom = true,
+                       QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument*    m_doc;
+    QList<PivotInfo>   m_pivots;
+};
+
 #endif // COMMANDS_H

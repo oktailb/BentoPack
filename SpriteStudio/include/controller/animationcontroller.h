@@ -88,6 +88,9 @@ public:
     void attachScrubberSlider(QSlider *slider, QLabel *frameIndicator = nullptr);
     void attachLoopModeComboBox(QComboBox *combo);
 
+    bool showPivotReticle() const { return m_showPivotReticle; }
+    void setShowPivotReticle(bool show);
+
     AnimationPlayer* player() const { return m_player; }
     QGraphicsScene* previewScene() const { return m_previewScene; }
     TimelineFilmstripWidget* timelineWidget() const { return m_timelineWidget; }
@@ -101,6 +104,7 @@ signals:
     void animationListChanged();
     void statusMessage(const QString &message);
     void framesSelectedInAnimation(const QList<int> &frameIndices);
+    void showPivotReticleChanged(bool show);
 
 private slots:
     void onPlayerFrameChanged(int seqIndex, int globalIndex);
@@ -122,6 +126,8 @@ private:
     QGraphicsView           *m_previewView = nullptr;
     QGraphicsScene          *m_previewScene = nullptr;
     QGraphicsPixmapItem     *m_previewPixmapItem = nullptr;
+    QGraphicsItemGroup      *m_reticleGroup = nullptr;
+    bool                     m_showPivotReticle = false;
     TimelineFilmstripWidget *m_timelineWidget = nullptr;
     QSlider                 *m_scrubberSlider = nullptr;
     QLabel                  *m_frameIndicator = nullptr;

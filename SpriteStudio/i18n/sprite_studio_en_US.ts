@@ -1491,7 +1491,7 @@ Do you want to save them before proceeding?</translation>
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>Main Toolbar</translation>
     </message>
-</context>
+<message><source>KEY_GRP_PIVOT</source><translation>Anchor &amp; Pivot</translation></message><message><source>KEY_TOOLTIP_PIVOT_GROUND</source><translation>Set pivot to Ground (Bottom-Center)</translation></message><message><source>KEY_TOOLTIP_PIVOT_CENTER</source><translation>Set pivot to Center</translation></message><message><source>KEY_TOOLTIP_PIVOT_TOPLEFT</source><translation>Set pivot to Top-Left (UI)</translation></message><message><source>KEY_TOOLTIP_SHOW_RETICLE</source><translation>Show/hide pivot reticle and ground line</translation></message><message><source>KEY_PIVOT_TOPLEFT</source><translation>Top-Left</translation></message><message><source>KEY_PIVOT_TOPCENTER</source><translation>Top-Center</translation></message><message><source>KEY_PIVOT_TOPRIGHT</source><translation>Top-Right</translation></message><message><source>KEY_PIVOT_CENTERLEFT</source><translation>Center-Left</translation></message><message><source>KEY_PIVOT_CENTER</source><translation>Center</translation></message><message><source>KEY_PIVOT_CENTERRIGHT</source><translation>Center-Right</translation></message><message><source>KEY_PIVOT_BOTTOMLEFT</source><translation>Bottom-Left</translation></message><message><source>KEY_PIVOT_BOTTOMCENTER</source><translation>Bottom-Center</translation></message><message><source>KEY_PIVOT_BOTTOMRIGHT</source><translation>Bottom-Right</translation></message><message><source>KEY_PIVOT_CUSTOM</source><translation>Custom</translation></message><message><source>KEY_BTN_APPLY_PIVOT_ANIM</source><translation>Apply to Anim</translation></message><message><source>KEY_TOOLTIP_APPLY_PIVOT_ANIM</source><translation>Apply this pivot point to all frames in the current animation</translation></message><message><source>KEY_BTN_APPLY_PIVOT_ALL</source><translation>Apply to All</translation></message><message><source>KEY_TOOLTIP_APPLY_PIVOT_ALL</source><translation>Apply this pivot point to all frames in the project</translation></message><message><source>KEY_CTX_PIVOT_SUBMENU</source><translation>Anchor &amp; Pivot</translation></message><message><source>KEY_PIVOT_GROUND_HINT</source><translation>Ground</translation></message><message><source>KEY_PIVOT_UI_HINT</source><translation>UI</translation></message><message><source>KEY_CTX_MORE_PRESETS</source><translation>More presets...</translation></message><message><source>⬇️ Sol</source><translation>⬇️ Ground</translation></message><message><source>🎯 Centre</source><translation>🎯 Center</translation></message><message><source>↖️ UI</source><translation>↖️ UI</translation></message><message><source>🎯 Mire</source><translation>🎯 Reticle</translation></message><message><source>KEY_UNKNOWN_FEATURE</source><translation>Unknown feature</translation></message></context>
 <context>
     <name>OutlineFilter</name>
     <message>
@@ -1992,7 +1992,7 @@ Do you want to save them before proceeding?</translation>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Please open or import a sprite sheet first before applying a filter.</translation>
     </message>
-</context>
+<message><source>KEY_CMD_CHANGE_PIVOT</source><translation>Change Anchor Pivot</translation></message></context>
 <context>
     <name>RetroPaletteFilter</name>
     <message>

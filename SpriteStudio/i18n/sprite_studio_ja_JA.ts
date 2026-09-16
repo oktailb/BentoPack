@@ -1491,7 +1491,7 @@ Strict removal clears the pixel.</source>
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>メインツールバー</translation>
     </message>
-</context>
+<message><source>KEY_GRP_PIVOT</source><translation>原点・ピボット</translation></message><message><source>KEY_TOOLTIP_PIVOT_GROUND</source><translation>ピボットを地面（中央下）に設定</translation></message><message><source>KEY_TOOLTIP_PIVOT_CENTER</source><translation>ピボットを中央に設定</translation></message><message><source>KEY_TOOLTIP_PIVOT_TOPLEFT</source><translation>ピボットを左上（UI）に設定</translation></message><message><source>KEY_TOOLTIP_SHOW_RETICLE</source><translation>ピボットレティクルとグラウンドラインを表示/非表示</translation></message><message><source>KEY_PIVOT_TOPLEFT</source><translation>左上</translation></message><message><source>KEY_PIVOT_TOPCENTER</source><translation>中央上</translation></message><message><source>KEY_PIVOT_TOPRIGHT</source><translation>右上</translation></message><message><source>KEY_PIVOT_CENTERLEFT</source><translation>中央左</translation></message><message><source>KEY_PIVOT_CENTER</source><translation>中央</translation></message><message><source>KEY_PIVOT_CENTERRIGHT</source><translation>中央右</translation></message><message><source>KEY_PIVOT_BOTTOMLEFT</source><translation>左下</translation></message><message><source>KEY_PIVOT_BOTTOMCENTER</source><translation>中央下</translation></message><message><source>KEY_PIVOT_BOTTOMRIGHT</source><translation>右下</translation></message><message><source>KEY_PIVOT_CUSTOM</source><translation>カスタム</translation></message><message><source>KEY_BTN_APPLY_PIVOT_ANIM</source><translation>アニメに適用</translation></message><message><source>KEY_TOOLTIP_APPLY_PIVOT_ANIM</source><translation>現在のアニメーションのすべてのフレームにこのピボットを適用</translation></message><message><source>KEY_BTN_APPLY_PIVOT_ALL</source><translation>すべてに適用</translation></message><message><source>KEY_TOOLTIP_APPLY_PIVOT_ALL</source><translation>プロジェクト内のすべてのフレームにこのピボットを適用</translation></message><message><source>KEY_CTX_PIVOT_SUBMENU</source><translation>原点・ピボット</translation></message><message><source>KEY_PIVOT_GROUND_HINT</source><translation>地面</translation></message><message><source>KEY_PIVOT_UI_HINT</source><translation>UI</translation></message><message><source>KEY_CTX_MORE_PRESETS</source><translation>その他のプリセット...</translation></message><message><source>⬇️ Sol</source><translation>⬇️ 地面</translation></message><message><source>🎯 Centre</source><translation>🎯 中央</translation></message><message><source>↖️ UI</source><translation>↖️ UI</translation></message><message><source>🎯 Mire</source><translation>🎯 レティクル</translation></message><message><source>KEY_UNKNOWN_FEATURE</source><translation>不明な機能</translation></message></context>
 <context>
     <name>OutlineFilter</name>
     <message>
@@ -1990,7 +1990,7 @@ Strict removal clears the pixel.</source>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>フィルターを適用する前に、まずスプライトシートを開くかインポートしてください。</translation>
     </message>
-</context>
+<message><source>KEY_CMD_CHANGE_PIVOT</source><translation>ピボット位置を変更</translation></message></context>
 <context>
     <name>RetroPaletteFilter</name>
     <message>

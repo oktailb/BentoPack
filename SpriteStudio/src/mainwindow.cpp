@@ -73,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
     updateRecentFilesMenu();
     updateRecentProjectsMenu();
     updateWindowTitle();
+    updatePivotUiFromSelection();
 
     // Check for crash recovery / orphan sessions
     QTimer::singleShot(100, this, &MainWindow::checkCrashRecovery);
@@ -176,6 +177,12 @@ void MainWindow::setupControllers()
 
         // Update transient current animation
         m_animationController->updateCurrentAnimation(indices);
+
+        updatePivotUiFromSelection();
+    });
+
+    connect(m_document, &SpriteDocument::boxPivotChanged, this, [this](int /*index*/, const QPoint &/*pivot*/) {
+        updatePivotUiFromSelection();
     });
 
     connect(m_atlasController.get(), &AtlasViewController::zoomChanged, this, [this](double zoomFactor) {
@@ -778,6 +785,198 @@ void MainWindow::retranslateUi()
     }
     if (m_timelineWidget) {
         m_timelineWidget->retranslateUi();
+    }
+}
+
+void MainWindow::updatePivotUiFromSelection()
+{
+    if (m_isSyncingPivotUi || !m_document) return;
+    m_isSyncingPivotUi = true;
+
+    QList<int> sel = m_document->selectedFrameIndices();
+    if (sel.isEmpty()) {
+        ui->grpPivot->setEnabled(false);
+        ui->spinPivotX->setValue(0);
+        ui->spinPivotY->setValue(0);
+    } else {
+        ui->grpPivot->setEnabled(true);
+        int firstIdx = sel.first();
+        QPoint p = m_document->boxPivot(firstIdx);
+        ui->spinPivotX->blockSignals(true);
+        ui->spinPivotY->blockSignals(true);
+        ui->spinPivotX->setValue(p.x());
+        ui->spinPivotY->setValue(p.y());
+        ui->spinPivotX->blockSignals(false);
+        ui->spinPivotY->blockSignals(false);
+
+        // Detect preset if applicable
+        const SpriteBox &b = m_document->box(firstIdx);
+        QSize sz = b.rect.size();
+        int matchedPreset = 9; // Custom
+        const PivotPreset presets[] = {
+            PivotPreset::TopLeft, PivotPreset::TopCenter, PivotPreset::TopRight,
+            PivotPreset::CenterLeft, PivotPreset::Center, PivotPreset::CenterRight,
+            PivotPreset::BottomLeft, PivotPreset::BottomCenter, PivotPreset::BottomRight
+        };
+        for (int i = 0; i < 9; ++i) {
+            if (p == SpriteBox::calculatePresetPivot(presets[i], sz)) {
+                matchedPreset = i;
+                break;
+            }
+        }
+        ui->cmbPivotPreset->blockSignals(true);
+        ui->cmbPivotPreset->setCurrentIndex(matchedPreset);
+        ui->cmbPivotPreset->blockSignals(false);
+    }
+
+    m_isSyncingPivotUi = false;
+}
+
+void MainWindow::applyPivotPresetToSelection(PivotPreset preset)
+{
+    if (!m_document) return;
+    QList<int> sel = m_document->selectedFrameIndices();
+    if (sel.isEmpty() && m_animationController) {
+        int gIdx = m_animationController->currentGlobalFrameIndex();
+        if (gIdx >= 0 && gIdx < m_document->frameCount()) {
+            sel = {gIdx};
+        }
+    }
+    if (sel.isEmpty()) return;
+
+    QList<QPoint> newPivots;
+    for (int idx : sel) {
+        newPivots.append(SpriteBox::calculatePresetPivot(preset, m_document->box(idx).rect.size()));
+    }
+
+    if (m_undoStack) {
+        m_undoStack->push(new ChangePivotCommand(m_document, sel, newPivots, true));
+    } else {
+        m_document->applyPivotPreset(sel, preset);
+    }
+}
+
+void MainWindow::on_btnPivotGround_clicked()
+{
+    applyPivotPresetToSelection(PivotPreset::BottomCenter);
+}
+
+void MainWindow::on_btnPivotCenter_clicked()
+{
+    applyPivotPresetToSelection(PivotPreset::Center);
+}
+
+void MainWindow::on_btnPivotTopLeft_clicked()
+{
+    applyPivotPresetToSelection(PivotPreset::TopLeft);
+}
+
+void MainWindow::on_btnShowReticle_toggled(bool checked)
+{
+    if (m_animationController) {
+        m_animationController->setShowPivotReticle(checked);
+    }
+}
+
+void MainWindow::on_cmbPivotPreset_currentIndexChanged(int index)
+{
+    if (m_isSyncingPivotUi) return;
+    if (index >= 0 && index < 9) {
+        const PivotPreset presets[] = {
+            PivotPreset::TopLeft, PivotPreset::TopCenter, PivotPreset::TopRight,
+            PivotPreset::CenterLeft, PivotPreset::Center, PivotPreset::CenterRight,
+            PivotPreset::BottomLeft, PivotPreset::BottomCenter, PivotPreset::BottomRight
+        };
+        applyPivotPresetToSelection(presets[index]);
+    }
+}
+
+void MainWindow::on_spinPivotX_valueChanged(int val)
+{
+    if (m_isSyncingPivotUi || !m_document) return;
+    QList<int> sel = m_document->selectedFrameIndices();
+    if (sel.isEmpty()) return;
+
+    QList<QPoint> newPivots;
+    for (int idx : sel) {
+        QPoint p = m_document->boxPivot(idx);
+        p.setX(val);
+        newPivots.append(p);
+    }
+
+    if (m_undoStack) {
+        m_undoStack->push(new ChangePivotCommand(m_document, sel, newPivots, true));
+    } else {
+        for (int i = 0; i < sel.size(); ++i) {
+            m_document->setBoxPivot(sel[i], newPivots[i], true);
+        }
+    }
+}
+
+void MainWindow::on_spinPivotY_valueChanged(int val)
+{
+    if (m_isSyncingPivotUi || !m_document) return;
+    QList<int> sel = m_document->selectedFrameIndices();
+    if (sel.isEmpty()) return;
+
+    QList<QPoint> newPivots;
+    for (int idx : sel) {
+        QPoint p = m_document->boxPivot(idx);
+        p.setY(val);
+        newPivots.append(p);
+    }
+
+    if (m_undoStack) {
+        m_undoStack->push(new ChangePivotCommand(m_document, sel, newPivots, true));
+    } else {
+        for (int i = 0; i < sel.size(); ++i) {
+            m_document->setBoxPivot(sel[i], newPivots[i], true);
+        }
+    }
+}
+
+void MainWindow::on_btnApplyPivotAnim_clicked()
+{
+    if (!m_document || !m_animationController) return;
+    QString animName = m_animationController->currentAnimationName();
+    if (animName.isEmpty() || !m_document->hasAnimation(animName)) return;
+
+    QList<int> animFrames = m_document->animation(animName).frameIndices;
+    if (animFrames.isEmpty()) return;
+
+    QList<int> sel = m_document->selectedFrameIndices();
+    QPoint targetPivot = (sel.isEmpty() ? m_document->boxPivot(animFrames.first()) : m_document->boxPivot(sel.first()));
+
+    QList<QPoint> newPivots;
+    for (int i = 0; i < animFrames.size(); ++i) {
+        newPivots.append(targetPivot);
+    }
+
+    if (m_undoStack) {
+        m_undoStack->push(new ChangePivotCommand(m_document, animFrames, newPivots, true));
+    } else {
+        m_document->setBoxesPivot(animFrames, targetPivot, true);
+    }
+}
+
+void MainWindow::on_btnApplyPivotAll_clicked()
+{
+    if (!m_document || m_document->frameCount() == 0) return;
+
+    QList<int> sel = m_document->selectedFrameIndices();
+    QPoint targetPivot = (sel.isEmpty() ? m_document->boxPivot(0) : m_document->boxPivot(sel.first()));
+
+    QList<int> allIndices;
+    QList<QPoint> newPivots;
+    for (int i = 0; i < m_document->frameCount(); ++i) {
+        allIndices.append(i);
+        newPivots.append(targetPivot);
+    }
+
+    if (m_undoStack) {
+        m_undoStack->push(new ChangePivotCommand(m_document, allIndices, newPivots, true));
+    } else {
+        m_document->setBoxesPivot(allIndices, targetPivot, true);
     }
 }
 

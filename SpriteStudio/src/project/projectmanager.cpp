@@ -51,10 +51,10 @@ QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
         rObj[QStringLiteral("h")] = b.rect.height();
         bObj[QStringLiteral("rect")] = rObj;
 
-        // Default pivot at bottom center (ready for M3)
         QJsonObject pObj;
-        pObj[QStringLiteral("x")] = b.rect.width() / 2;
-        pObj[QStringLiteral("y")] = b.rect.height();
+        pObj[QStringLiteral("x")] = b.effectivePivot().x();
+        pObj[QStringLiteral("y")] = b.effectivePivot().y();
+        pObj[QStringLiteral("custom")] = b.hasCustomPivot;
         bObj[QStringLiteral("pivot")] = pObj;
 
         if (!b.overlappingBoxes.isEmpty()) {
@@ -186,6 +186,16 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
             for (const QJsonValue &v : ovArray) {
                 box.overlappingBoxes.append(v.toInt());
             }
+        }
+
+        if (bObj.contains(QStringLiteral("pivot"))) {
+            QJsonObject pObj = bObj.value(QStringLiteral("pivot")).toObject();
+            box.pivot = QPoint(pObj.value(QStringLiteral("x")).toInt(rect.width() / 2),
+                               pObj.value(QStringLiteral("y")).toInt(rect.height()));
+            box.hasCustomPivot = pObj.value(QStringLiteral("custom")).toBool(false);
+        } else {
+            box.pivot = QPoint(rect.width() / 2, rect.height());
+            box.hasCustomPivot = false;
         }
 
         boxes.append(box);

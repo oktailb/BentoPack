@@ -55,6 +55,11 @@ private slots:
     void testMultiplatformPathSeparators();
     void testMultiplatformImageFormats();
     void testMultiplatformAppConfigLocations();
+
+    // Pivot tests (3 tests)
+    void testPivotPresetsCalculation();
+    void testDocumentPivotMethods();
+    void testCommandChangePivot();
 };
 
 void TestCore::initTestCase()
@@ -640,6 +645,89 @@ void TestCore::testMultiplatformAppConfigLocations()
 
     // Cleanup config path
     cfg.setConfigFilePath(QString());
+}
+
+void TestCore::testPivotPresetsCalculation()
+{
+    QSize sz(100, 200);
+
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::TopLeft, sz), QPoint(0, 0));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::TopCenter, sz), QPoint(50, 0));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::TopRight, sz), QPoint(100, 0));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::CenterLeft, sz), QPoint(0, 100));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::Center, sz), QPoint(50, 100));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::CenterRight, sz), QPoint(100, 100));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::BottomLeft, sz), QPoint(0, 200));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::BottomCenter, sz), QPoint(50, 200));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::BottomRight, sz), QPoint(100, 200));
+    QCOMPARE(SpriteBox::calculatePresetPivot(PivotPreset::Custom, sz), QPoint(50, 200));
+}
+
+void TestCore::testDocumentPivotMethods()
+{
+    SpriteDocument doc;
+    QImage atlas(200, 200, QImage::Format_ARGB32);
+    atlas.fill(Qt::white);
+    doc.setAtlas(atlas);
+
+    // Frame 0: 40x60
+    int idx0 = doc.addSlice(QRect(0, 0, 40, 60));
+    // Frame 1: 50x80
+    int idx1 = doc.addSlice(QRect(50, 0, 50, 80));
+
+    // Default pivot should be BottomCenter: w/2, h
+    QCOMPARE(doc.boxPivot(idx0), QPoint(20, 60));
+    QCOMPARE(doc.boxHasCustomPivot(idx0), false);
+    QCOMPARE(doc.boxPivot(idx1), QPoint(25, 80));
+    QCOMPARE(doc.boxHasCustomPivot(idx1), false);
+
+    // Set custom pivot on frame 0
+    QSignalSpy spyPivot(&doc, &SpriteDocument::boxPivotChanged);
+    doc.setBoxPivot(idx0, QPoint(15, 45), true);
+    QCOMPARE(spyPivot.count(), 1);
+    QCOMPARE(doc.boxPivot(idx0), QPoint(15, 45));
+    QCOMPARE(doc.boxHasCustomPivot(idx0), true);
+
+    // Apply preset Center to frame 1
+    doc.applyPivotPreset({idx1}, PivotPreset::Center);
+    QCOMPARE(doc.boxPivot(idx1), QPoint(25, 40));
+    QCOMPARE(doc.boxHasCustomPivot(idx1), true);
+
+    // Set multi-boxes pivot
+    doc.setBoxesPivot({idx0, idx1}, QPoint(10, 10), true);
+    QCOMPARE(doc.boxPivot(idx0), QPoint(10, 10));
+    QCOMPARE(doc.boxPivot(idx1), QPoint(10, 10));
+
+    // Envelope calculation
+    doc.setAnimation(QStringLiteral("test_anim"), {idx0, idx1}, 12, true);
+    QRect env = doc.computeAnimationEnvelope(QStringLiteral("test_anim"));
+    QCOMPARE(env.x(), 10);
+    QCOMPARE(env.y(), 10);
+    QCOMPARE(env.width(), 50);
+    QCOMPARE(env.height(), 80);
+}
+
+void TestCore::testCommandChangePivot()
+{
+    SpriteDocument doc;
+    QImage atlas(100, 100, QImage::Format_ARGB32);
+    atlas.fill(Qt::white);
+    doc.setAtlas(atlas);
+    int idx = doc.addSlice(QRect(0, 0, 30, 40));
+
+    QUndoStack undoStack;
+    QPoint oldPivot = doc.boxPivot(idx);
+    QPoint newPivot(12, 34);
+
+    undoStack.push(new ChangePivotCommand(&doc, idx, oldPivot, newPivot, true));
+    QCOMPARE(doc.boxPivot(idx), newPivot);
+    QCOMPARE(doc.boxHasCustomPivot(idx), true);
+
+    undoStack.undo();
+    QCOMPARE(doc.boxPivot(idx), oldPivot);
+
+    undoStack.redo();
+    QCOMPARE(doc.boxPivot(idx), newPivot);
 }
 
 #include <QApplication>

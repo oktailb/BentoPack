@@ -7,6 +7,9 @@
 #include <QUndoStack>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QGraphicsLineItem>
+#include <QGraphicsEllipseItem>
+#include <QGraphicsItemGroup>
 
 AnimationController::AnimationController(SpriteDocument *document,
                                          QUndoStack *undoStack,
@@ -38,6 +41,9 @@ AnimationController::AnimationController(SpriteDocument *document,
             if (m_player && m_player->currentGlobalFrameIndex() == globalIdx) {
                 renderCurrentFrame(globalIdx);
             }
+        });
+        connect(m_document, &SpriteDocument::boxPivotChanged, this, [this](int, const QPoint &) {
+            updatePreview();
         });
     }
 
@@ -630,6 +636,15 @@ void AnimationController::updatePreview()
     }
 }
 
+void AnimationController::setShowPivotReticle(bool show)
+{
+    if (m_showPivotReticle != show) {
+        m_showPivotReticle = show;
+        updatePreview();
+        emit showPivotReticleChanged(show);
+    }
+}
+
 void AnimationController::renderCurrentFrame(int globalFrameIndex)
 {
     if (!m_document || globalFrameIndex < 0 || globalFrameIndex >= m_document->frameCount()) {
@@ -640,20 +655,72 @@ void AnimationController::renderCurrentFrame(int globalFrameIndex)
     if (frameImg.isNull()) return;
     QPixmap currentFrame = QPixmap::fromImage(frameImg);
 
-    int maxWidth = qMax(1, m_document->maxFrameWidth());
-    int maxHeight = qMax(1, m_document->maxFrameHeight());
-    m_previewScene->setSceneRect(0, 0, maxWidth, maxHeight);
+    QRect envelope = m_document->computeAnimationEnvelope(m_currentAnimationName);
+    int canvasW = qMax(1, envelope.width());
+    int canvasH = qMax(1, envelope.height());
+    m_previewScene->setSceneRect(0, 0, canvasW, canvasH);
 
     if (!m_previewPixmapItem || m_previewPixmapItem->scene() != m_previewScene) {
         m_previewScene->clear();
+        m_reticleGroup = nullptr;
         m_previewPixmapItem = m_previewScene->addPixmap(currentFrame);
+        m_previewPixmapItem->setZValue(1.0);
     } else {
         m_previewPixmapItem->setPixmap(currentFrame);
     }
 
-    qreal xOffset = (maxWidth - currentFrame.width()) / 2.0;
-    qreal yOffset = (maxHeight - currentFrame.height()) / 2.0;
+    QPoint pivot = m_document->boxPivot(globalFrameIndex);
+    qreal xOffset = envelope.x() - pivot.x();
+    qreal yOffset = envelope.y() - pivot.y();
     m_previewPixmapItem->setPos(xOffset, yOffset);
+
+    // Update or create reticle & ground line
+    if (m_showPivotReticle) {
+        if (!m_reticleGroup || m_reticleGroup->scene() != m_previewScene) {
+            m_reticleGroup = new QGraphicsItemGroup();
+            m_reticleGroup->setZValue(10.0);
+            m_previewScene->addItem(m_reticleGroup);
+        } else {
+            qDeleteAll(m_reticleGroup->childItems());
+        }
+
+        qreal px = envelope.x();
+        qreal py = envelope.y();
+
+        // 1. Ground line (horizontal dashed line at pivot Y across entire canvas)
+        QGraphicsLineItem *groundLine = new QGraphicsLineItem(0, py, canvasW, py);
+        QPen groundPen(QColor(255, 60, 60, 180), 1.0, Qt::DashLine);
+        groundPen.setCosmetic(true);
+        groundLine->setPen(groundPen);
+        m_reticleGroup->addToGroup(groundLine);
+
+        // 2. Vertical line across canvas
+        QGraphicsLineItem *vertLine = new QGraphicsLineItem(px, 0, px, canvasH);
+        QPen vertPen(QColor(60, 160, 255, 140), 1.0, Qt::DashLine);
+        vertPen.setCosmetic(true);
+        vertLine->setPen(vertPen);
+        m_reticleGroup->addToGroup(vertLine);
+
+        // 3. Center crosshair circle
+        QGraphicsEllipseItem *circle = new QGraphicsEllipseItem(px - 5, py - 5, 10, 10);
+        QPen circlePen(QColor(0, 230, 255), 1.5);
+        circlePen.setCosmetic(true);
+        circle->setPen(circlePen);
+        circle->setBrush(Qt::NoBrush);
+        m_reticleGroup->addToGroup(circle);
+
+        // Center dot
+        QGraphicsEllipseItem *dot = new QGraphicsEllipseItem(px - 1.5, py - 1.5, 3, 3);
+        dot->setPen(Qt::NoPen);
+        dot->setBrush(QColor(0, 230, 255));
+        m_reticleGroup->addToGroup(dot);
+
+        m_reticleGroup->setVisible(true);
+    } else {
+        if (m_reticleGroup) {
+            m_reticleGroup->setVisible(false);
+        }
+    }
 
     if (m_previewView) {
         m_previewView->viewport()->update();
