@@ -788,7 +788,12 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
   - *Réalisé :* Fichier `.github/workflows/ci.yml` configuré et stabilisé sans artifices fragiles :
     - **Linux (Ubuntu GCC / Ninja) :** Installation directe via les paquets officiels APT (`qt6-base-dev qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libgit2-dev`). Suppression intégrale de Python et d'`aqtinstall`. Temps d'exécution réduit à quelques secondes avec une fiabilité totale.
     - **Windows (MinGW 64-bit / Ninja) :** Déploiement propre via `msys2/setup-msys2` avec la chaîne MinGW64 officielle (`gcc`, `ninja`, `qt6-base`, `qt6-tools`, `libgit2`).
-    - Exécution automatisée de `ctest --output-on-failure --verbose` sur les deux cibles (100% de succès).
+    - **macOS (Apple Silicon Clang / Ninja) :** Déploiement propre avec Homebrew (`qt@6`, `libgit2`, `ninja`).
+    - **Haiku OS (x86_64 QEMU VM via `vmactions/haiku-vm`) :**
+      - Éradication des blocages VM (remplacement du montage `sshfs` sujet aux deadlocks FUSE par `sync: rsync`, allocation `mem: 4096` et `cpu: 2`, limitation de la concurrence Ninja à `-j 2` pour prévenir l'épuisement mémoire, `timeout-minutes: 35`).
+      - Automatisation non interactive de `pkgman` avec injection de confirmation (`echo 1 | pkgman install ...`).
+      - Rétrocompatibilité universelle `libgit2` : prise en charge des versions historiques (`libgit2 0.25` fourni par HaikuPorts) en fournissant un alias automatique `git_buf_dispose` vers `git_buf_free` pour les versions `< 0.28` dans `appconfig.cpp`.
+    - Exécution automatisée de `ctest --output-on-failure --verbose` sur l'ensemble des cibles avec 100% de succès.
 
 - **Portabilité Multiplateforme & Rétrocompatibilité Versions Qt (Qt 6.4 à 6.10+) — ✅ TERMINÉ :**
   - *Réalisé :*

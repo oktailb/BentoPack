@@ -11,6 +11,9 @@
 #if defined(HAVE_LIBGIT2) && __has_include(<git2.h>)
 #define APPCONFIG_HAS_LIBGIT2 1
 #include <git2.h>
+#if !defined(LIBGIT2_VER_MAJOR) || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR < 28)
+#define git_buf_dispose git_buf_free
+#endif
 #endif
 
 void GitConfig::detectSystemIdentity(QString *name, QString *email)
