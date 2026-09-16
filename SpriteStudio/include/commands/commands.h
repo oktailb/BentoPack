@@ -2,7 +2,7 @@
 #define COMMANDS_H
 
 #include <QUndoCommand>
-#include <QPixmap>
+#include <QImage>
 #include <QList>
 #include <QMap>
 #include "model/spritedocument.h"
@@ -244,12 +244,12 @@ class RemoveBackgroundCommand : public QUndoCommand
 {
 public:
     RemoveBackgroundCommand(SpriteDocument *doc,
-                            const QImage &oldAtlas, const QList<QPixmap> &oldFrames, const QList<SpriteBox> &oldBoxes,
-                            const QImage &newAtlas, const QList<QPixmap> &newFrames, const QList<SpriteBox> &newBoxes,
+                            const QImage &oldAtlas, const QList<QImage> &oldFrames, const QList<SpriteBox> &oldBoxes,
+                            const QImage &newAtlas, const QList<QImage> &newFrames, const QList<SpriteBox> &newBoxes,
                             QUndoCommand *parent = nullptr);
 
     RemoveBackgroundCommand(SpriteDocument *doc,
-                            const QImage &newAtlas, const QList<QPixmap> &newFrames, const QList<SpriteBox> &newBoxes,
+                            const QImage &newAtlas, const QList<QImage> &newFrames, const QList<SpriteBox> &newBoxes,
                             QUndoCommand *parent = nullptr);
 
     void undo() override;
@@ -258,10 +258,10 @@ public:
 private:
     SpriteDocument*                 m_doc;
     QImage                          m_oldAtlas;
-    QList<QPixmap>                  m_oldFrames;
+    QList<QImage>                  m_oldFrames;
     QList<SpriteBox>                m_oldBoxes;
     QImage                          m_newAtlas;
-    QList<QPixmap>                  m_newFrames;
+    QList<QImage>                  m_newFrames;
     QList<SpriteBox>                m_newBoxes;
     QMap<QString, SpriteAnimation>  m_animationsBackup;
 };

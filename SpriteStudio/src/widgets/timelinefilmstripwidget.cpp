@@ -146,13 +146,13 @@ void TimelineFilmstripWidget::rebuildItems()
         int globalIdx = anim.frameIndices.at(seqIdx);
         auto *item = new QListWidgetItem(m_listWidget);
 
-        QPixmap pix;
+        QImage img;
         if (globalIdx >= 0 && globalIdx < m_document->frameCount()) {
-            pix = m_document->frame(globalIdx);
+            img = m_document->frame(globalIdx);
         }
 
-        if (!pix.isNull()) {
-            item->setIcon(QIcon(pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+        if (!img.isNull()) {
+            item->setIcon(QIcon(QPixmap::fromImage(img.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation))));
         }
 
         item->setText(tr("#%1 (F%2)").arg(seqIdx + 1).arg(globalIdx + 1));

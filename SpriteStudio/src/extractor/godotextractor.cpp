@@ -124,7 +124,7 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
 
     QMap<QString, int> subResToFrameIdx;
     QList<SpriteBox> boxes;
-    QList<QPixmap> frames;
+    QList<QImage> frames;
 
     QRegularExpressionMatchIterator iter = subResBlockRegex.globalMatch(content);
     int frameIndex = 0;
@@ -151,8 +151,8 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
         box.selected = false;
         boxes.append(box);
 
-        QPixmap framePix = QPixmap::fromImage(atlasImg.copy(boxRect));
-        frames.append(framePix);
+        QImage frameImg = atlasImg.copy(boxRect);
+        frames.append(frameImg);
 
         subResToFrameIdx.insert(subResId, frameIndex);
         frameIndex++;

@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QImage>
-#include <QPixmap>
 #include <QList>
 #include <QMap>
 #include <QTimer>
@@ -66,7 +65,7 @@ protected:
 
     // Factorized bounding box and frame slicing helper for all derived filters
     void updatePreviewFramesAndBoxes(const QImage &previewAtlas,
-                                    QList<QPixmap> &outFrames,
+                                    QList<QImage> &outFrames,
                                     QList<SpriteBox> &outBoxes,
                                     const SpriteDetectionOptions *customOpts = nullptr);
 
@@ -82,7 +81,7 @@ protected:
 
     // Snapshot of document state when the dialog opened
     QImage                          m_initialAtlas;
-    QList<QPixmap>                  m_initialFrames;
+    QList<QImage>                  m_initialFrames;
     QList<SpriteBox>                m_initialBoxes;
     QMap<QString, SpriteAnimation>  m_initialAnimations;
 

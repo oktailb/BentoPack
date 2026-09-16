@@ -123,17 +123,11 @@ bool SpriteExtractor::extractFromImage(const QImage &sourceImage, SpriteDocument
         return false;
     }
 
-    QList<QPixmap> frames;
-    frames.reserve(frameImages.size());
-    for (const QImage &img : frameImages) {
-        frames.append(QPixmap::fromImage(img));
-    }
-
     QImage atlasImg = (sourceImage.format() == QImage::Format_ARGB32)
         ? sourceImage
         : sourceImage.convertToFormat(QImage::Format_ARGB32);
 
     outDoc.setAtlas(atlasImg);
-    outDoc.setFrames(frames, boxes);
+    outDoc.setFrames(frameImages, boxes);
     return true;
 }

@@ -63,7 +63,7 @@ private:
     QRgb                            m_strokeColor = qRgb(0, 0, 0); // Default black outline
 
     QImage                          m_previewAtlas;
-    QList<QPixmap>                  m_previewFrames;
+    QList<QImage>                  m_previewFrames;
     QList<SpriteBox>                m_previewBoxes;
 
     QLabel*                         m_swatchLabel = nullptr;

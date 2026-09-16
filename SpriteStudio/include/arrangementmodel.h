@@ -42,12 +42,29 @@ public:
   QMimeData *mimeData(const QModelIndexList &indexes) const override;
 
   /**
+   * @brief Connects a SpriteDocument to enable on-demand thumbnail generation.
+   */
+  void setDocument(class SpriteDocument *doc);
+
+  /**
+   * @brief Clears the generated thumbnail cache.
+   */
+  void clearThumbnailCache();
+
+  /**
+   * @brief Overrides data to lazily provide 64x64 thumbnails for Qt::DecorationRole.
+   */
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+  /**
    * @brief Handles the final drop action.
-   *    * This method is responsible for detecting if the drop occurred *onto* an existing
+   *
+   * This method is responsible for detecting if the drop occurred *onto* an existing
    * item (`parent.isValid()`), which signifies a **merge operation**. If it is a merge,
    * it emits the @c mergeRequested signal and returns true. Otherwise, it delegates
    * to the standard implementation for reordering (insertion between items).
-   *    * @param data The QMimeData being dropped.
+   *
+   * @param data The QMimeData being dropped.
    * @param action The requested drop action.
    * @param row The target row index (if dropping between items).
    * @param column The target column index.
@@ -60,11 +77,17 @@ public:
 signals:
   /**
    * @brief Signal emitted when a merge operation is requested by dropping a frame onto another.
-   *    * This signal is connected to a slot in the MainWindow to execute the frame merging logic.
-   *    * @param sourceRow The row index of the frame being dragged.
+   *
+   * This signal is connected to a slot in the MainWindow to execute the frame merging logic.
+   *
+   * @param sourceRow The row index of the frame being dragged.
    * @param targetRow The row index of the frame being dropped upon.
    */
   void mergeRequested(int sourceRow, int targetRow);
+
+private:
+  class SpriteDocument*            m_document = nullptr;
+  mutable QHash<int, QPixmap>      m_thumbnailCache;
 };
 
 #endif // ARRANGEMENTMODEL_H

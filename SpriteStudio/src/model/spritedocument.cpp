@@ -38,15 +38,15 @@ void SpriteDocument::setAtlas(const QImage &image)
     emit atlasChanged();
 }
 
-QPixmap SpriteDocument::frame(int index) const
+QImage SpriteDocument::frame(int index) const
 {
     if (index >= 0 && index < m_frames.size()) {
         return m_frames.at(index);
     }
-    return QPixmap();
+    return QImage();
 }
 
-void SpriteDocument::setFrames(const QList<QPixmap> &frames, const QList<SpriteBox> &boxes)
+void SpriteDocument::setFrames(const QList<QImage> &frames, const QList<SpriteBox> &boxes)
 {
     m_frames = frames;
     m_boxes = boxes;
@@ -60,22 +60,22 @@ void SpriteDocument::setFrames(const QList<QPixmap> &frames, const QList<SpriteB
     emit framesChanged();
 }
 
-void SpriteDocument::addFrame(const QPixmap &pixmap, const SpriteBox &box)
+void SpriteDocument::addFrame(const QImage &image, const SpriteBox &box)
 {
-    if (!pixmap.isNull()) {
-        m_frames.append(pixmap);
+    if (!image.isNull()) {
+        m_frames.append(image);
         m_boxes.append(box);
-        if (pixmap.width() > m_maxFrameWidth) m_maxFrameWidth = pixmap.width();
-        if (pixmap.height() > m_maxFrameHeight) m_maxFrameHeight = pixmap.height();
+        if (image.width() > m_maxFrameWidth) m_maxFrameWidth = image.width();
+        if (image.height() > m_maxFrameHeight) m_maxFrameHeight = image.height();
         emit framesChanged();
     }
 }
 
-void SpriteDocument::insertFrame(int index, const QPixmap &pixmap, const SpriteBox &box)
+void SpriteDocument::insertFrame(int index, const QImage &image, const SpriteBox &box)
 {
-    if (index < 0 || index > m_frames.size() || pixmap.isNull()) return;
+    if (index < 0 || index > m_frames.size() || image.isNull()) return;
 
-    m_frames.insert(index, pixmap);
+    m_frames.insert(index, image);
     m_boxes.insert(index, box);
 
     // Shift frame indices in animations that are >= index
@@ -102,11 +102,11 @@ void SpriteDocument::insertFrame(int index, const QPixmap &pixmap, const SpriteB
     emit animationsChanged();
 }
 
-void SpriteDocument::replaceFrame(int index, const QPixmap &pixmap, const SpriteBox &box)
+void SpriteDocument::replaceFrame(int index, const QImage &image, const SpriteBox &box)
 {
     if (index < 0 || index >= m_frames.size()) return;
 
-    m_frames[index] = pixmap;
+    m_frames[index] = image;
     if (index < m_boxes.size() && !box.rect.isNull()) {
         m_boxes[index] = box;
     }
@@ -216,7 +216,7 @@ void SpriteDocument::reorderFrames(const QList<int> &newOrder)
 {
     if (newOrder.size() != m_frames.size()) return;
 
-    QList<QPixmap> reorderedFrames;
+    QList<QImage> reorderedFrames;
     QList<SpriteBox> reorderedBoxes;
 
     for (int idx : newOrder) {
@@ -269,20 +269,20 @@ void SpriteDocument::mergeFrames(int sourceIndex, int targetIndex)
     SpriteBox tgtBox = m_boxes.value(targetIndex);
 
     QRect unitedRect = srcBox.rect.united(tgtBox.rect);
-    QPixmap mergedPixmap;
+    QImage mergedImage;
 
     if (!m_atlas.isNull() && unitedRect.isValid()) {
-        mergedPixmap = QPixmap::fromImage(m_atlas).copy(unitedRect);
+        mergedImage = m_atlas.copy(unitedRect);
     } else {
-        // Fallback: draw both pixmaps side by side or overlay
+        // Fallback: draw both images side by side or overlay
         QSize combinedSize = m_frames[targetIndex].size().expandedTo(m_frames[sourceIndex].size());
         QImage composite(combinedSize, QImage::Format_ARGB32_Premultiplied);
         composite.fill(Qt::transparent);
         QPainter p(&composite);
-        p.drawPixmap(0, 0, m_frames[targetIndex]);
-        p.drawPixmap(0, 0, m_frames[sourceIndex]);
+        p.drawImage(0, 0, m_frames[targetIndex]);
+        p.drawImage(0, 0, m_frames[sourceIndex]);
         p.end();
-        mergedPixmap = QPixmap::fromImage(composite);
+        mergedImage = composite;
     }
 
     SpriteBox newBox;
@@ -291,7 +291,7 @@ void SpriteDocument::mergeFrames(int sourceIndex, int targetIndex)
     newBox.index = tgtBox.index;
 
     m_boxes[targetIndex] = newBox;
-    m_frames[targetIndex] = mergedPixmap;
+    m_frames[targetIndex] = mergedImage;
 
     removeFrame(sourceIndex);
 }
@@ -321,7 +321,7 @@ void SpriteDocument::updateBoxRect(int index, const QRect &newRect)
 
     m_boxes[index].rect = clampedRect;
     if (index < m_frames.size()) {
-        m_frames[index] = QPixmap::fromImage(m_atlas.copy(clampedRect));
+        m_frames[index] = m_atlas.copy(clampedRect);
     }
     recalculateMaxFrameDimensions();
     emit frameUpdated(index);
@@ -340,8 +340,8 @@ int SpriteDocument::addSlice(const QRect &rect)
     newBox.index = newIndex;
     newBox.selected = true;
 
-    QPixmap framePixmap = QPixmap::fromImage(m_atlas.copy(clampedRect));
-    m_frames.append(framePixmap);
+    QImage frameImage = m_atlas.copy(clampedRect);
+    m_frames.append(frameImage);
     m_boxes.append(newBox);
     m_selectedFrameIndices.append(newIndex);
 
@@ -547,8 +547,8 @@ void SpriteDocument::recalculateMaxFrameDimensions()
 {
     m_maxFrameWidth = 0;
     m_maxFrameHeight = 0;
-    for (const QPixmap &pix : m_frames) {
-        if (pix.width() > m_maxFrameWidth) m_maxFrameWidth = pix.width();
-        if (pix.height() > m_maxFrameHeight) m_maxFrameHeight = pix.height();
+    for (const QImage &img : m_frames) {
+        if (img.width() > m_maxFrameWidth) m_maxFrameWidth = img.width();
+        if (img.height() > m_maxFrameHeight) m_maxFrameHeight = img.height();
     }
 }

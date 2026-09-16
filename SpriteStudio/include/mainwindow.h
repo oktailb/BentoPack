@@ -180,7 +180,7 @@ private:
     bool maybeSave();
     void saveLayoutState();
     void syncFromDocument();
-    void populateFrameList(const QList<QPixmap> &frameList, const QList<SpriteBox> &boxList);
+    void populateFrameList(const QList<QImage> &frameList, const QList<SpriteBox> &boxList);
     void refreshFrameListDisplay();
     void setupViewMenuActions();
     void retranslateUi();

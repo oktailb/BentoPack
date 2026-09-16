@@ -2,7 +2,6 @@
 #define ATLASPACKER_H
 
 #include <QImage>
-#include <QPixmap>
 #include <QList>
 #include <QRect>
 #include <QSize>
@@ -33,13 +32,13 @@ public:
     };
 
     /**
-     * @brief Packs a list of pixmaps into a single atlas image.
+     * @brief Packs a list of images into a single atlas image.
      * @param frames The frames to pack.
      * @param padding Pixel spacing between frames.
      * @param algo The packing algorithm to use.
      * @return AtlasPackResult containing the atlas image and frame rectangles.
      */
-    static AtlasPackResult pack(const QList<QPixmap> &frames, int padding = 2, Algorithm algo = RowPacker);
+    static AtlasPackResult pack(const QList<QImage> &frames, int padding = 2, Algorithm algo = RowPacker);
 
     /**
      * @brief Packs only the frames referenced by a specific animation.
@@ -48,7 +47,7 @@ public:
      * @param padding Pixel spacing between frames.
      * @return AtlasPackResult containing the animation's atlas and rectangles.
      */
-    static AtlasPackResult packIndices(const QList<QPixmap> &allFrames, const QList<int> &frameIndices, int padding = 2);
+    static AtlasPackResult packIndices(const QList<QImage> &allFrames, const QList<int> &frameIndices, int padding = 2);
 
 private:
     static int nextPowerOfTwo(int n);

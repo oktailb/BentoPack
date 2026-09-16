@@ -71,7 +71,7 @@ void TestCore::cleanupTestCase()
 
 void TestCore::testAtlasPackerEmpty()
 {
-    QList<QPixmap> emptyFrames;
+    QList<QImage> emptyFrames;
     AtlasPackResult res = AtlasPacker::pack(emptyFrames);
     QVERIFY(!res.success);
     QVERIFY(res.atlas.isNull());
@@ -82,9 +82,8 @@ void TestCore::testAtlasPackerSingleFrame()
 {
     QImage img(32, 24, QImage::Format_ARGB32_Premultiplied);
     img.fill(Qt::red);
-    QPixmap pm = QPixmap::fromImage(img);
 
-    AtlasPackResult res = AtlasPacker::pack({pm}, 4, AtlasPacker::RowPacker);
+    AtlasPackResult res = AtlasPacker::pack({img}, 4, AtlasPacker::RowPacker);
     QVERIFY(res.success);
     QCOMPARE(res.frameRects.size(), 1);
     QCOMPARE(res.frameRects[0].width(), 32);
@@ -95,14 +94,14 @@ void TestCore::testAtlasPackerSingleFrame()
 
 void TestCore::testAtlasPackerRowPacker()
 {
-    QList<QPixmap> frames;
+    QList<QImage> frames;
     QList<QSize> sizes = { QSize(16, 16), QSize(32, 48), QSize(64, 20), QSize(20, 60) };
     QList<QColor> colors = { Qt::red, Qt::green, Qt::blue, Qt::yellow };
 
     for (int i = 0; i < sizes.size(); ++i) {
         QImage img(sizes[i], QImage::Format_ARGB32_Premultiplied);
         img.fill(colors[i]);
-        frames.append(QPixmap::fromImage(img));
+        frames.append(img);
     }
 
     AtlasPackResult res = AtlasPacker::pack(frames, 2, AtlasPacker::RowPacker);
@@ -132,11 +131,11 @@ void TestCore::testAtlasPackerRowPacker()
 
 void TestCore::testAtlasPackerGridPacker()
 {
-    QList<QPixmap> frames;
+    QList<QImage> frames;
     for (int i = 0; i < 6; ++i) {
         QImage img(24, 24, QImage::Format_ARGB32_Premultiplied);
         img.fill(Qt::cyan);
-        frames.append(QPixmap::fromImage(img));
+        frames.append(img);
     }
 
     AtlasPackResult res = AtlasPacker::pack(frames, 2, AtlasPacker::GridPacker);
@@ -153,11 +152,11 @@ void TestCore::testAtlasPackerGridPacker()
 
 void TestCore::testAtlasPackerPowerOfTwoPacker()
 {
-    QList<QPixmap> frames;
+    QList<QImage> frames;
     for (int i = 0; i < 5; ++i) {
         QImage img(35, 45, QImage::Format_ARGB32_Premultiplied);
         img.fill(Qt::magenta);
-        frames.append(QPixmap::fromImage(img));
+        frames.append(img);
     }
 
     AtlasPackResult res = AtlasPacker::pack(frames, 2, AtlasPacker::PowerOfTwoPacker);
@@ -172,11 +171,11 @@ void TestCore::testAtlasPackerPowerOfTwoPacker()
 
 void TestCore::testAtlasPackerPackIndices()
 {
-    QList<QPixmap> frames;
+    QList<QImage> frames;
     for (int i = 0; i < 4; ++i) {
         QImage img(10 * (i + 1), 10 * (i + 1), QImage::Format_ARGB32_Premultiplied);
         img.fill(Qt::white);
-        frames.append(QPixmap::fromImage(img));
+        frames.append(img);
     }
 
     // Pack only frame indices 1 and 3 (sizes 20x20 and 40x40)
@@ -195,10 +194,9 @@ void TestCore::testAtlasPackerPadding()
 {
     QImage img(20, 20, QImage::Format_ARGB32_Premultiplied);
     img.fill(Qt::black);
-    QPixmap pm = QPixmap::fromImage(img);
 
     int padding = 8;
-    AtlasPackResult res = AtlasPacker::pack({pm, pm}, padding, AtlasPacker::RowPacker);
+    AtlasPackResult res = AtlasPacker::pack({img, img}, padding, AtlasPacker::RowPacker);
     QVERIFY(res.success);
     QCOMPARE(res.frameRects.size(), 2);
 
@@ -249,13 +247,13 @@ void TestCore::testDocumentInsertAndReplaceFrame()
     QImage atlas(200, 200, QImage::Format_ARGB32);
     doc.setAtlas(atlas);
 
-    QPixmap pm1(20, 20);
-    QPixmap pm2(30, 40);
-    QPixmap pmInsert(60, 25);
-    QPixmap pmReplace(80, 15);
+    QImage img1(20, 20, QImage::Format_ARGB32);
+    QImage img2(30, 40, QImage::Format_ARGB32);
+    QImage imgInsert(60, 25, QImage::Format_ARGB32);
+    QImage imgReplace(80, 15, QImage::Format_ARGB32);
 
-    doc.addFrame(pm1);
-    doc.addFrame(pm2);
+    doc.addFrame(img1);
+    doc.addFrame(img2);
     QCOMPARE(doc.frameCount(), 2);
     QCOMPARE(doc.maxFrameWidth(), 30);
     QCOMPARE(doc.maxFrameHeight(), 40);
@@ -263,7 +261,7 @@ void TestCore::testDocumentInsertAndReplaceFrame()
     // Insert at index 1
     SpriteBox insertBox;
     insertBox.rect = QRect(0, 0, 60, 25);
-    doc.insertFrame(1, pmInsert, insertBox);
+    doc.insertFrame(1, imgInsert, insertBox);
     QCOMPARE(doc.frameCount(), 3);
     QCOMPARE(doc.frame(1).width(), 60);
     QCOMPARE(doc.maxFrameWidth(), 60);
@@ -271,7 +269,7 @@ void TestCore::testDocumentInsertAndReplaceFrame()
     // Replace at index 0
     SpriteBox replaceBox;
     replaceBox.rect = QRect(0, 0, 80, 15);
-    doc.replaceFrame(0, pmReplace, replaceBox);
+    doc.replaceFrame(0, imgReplace, replaceBox);
     QCOMPARE(doc.frameCount(), 3);
     QCOMPARE(doc.frame(0).width(), 80);
     QCOMPARE(doc.maxFrameWidth(), 80);
@@ -281,11 +279,11 @@ void TestCore::testDocumentRemoveFramesMulti()
 {
     SpriteDocument doc;
     for (int i = 0; i < 4; ++i) {
-        QPixmap pm(10 * (i + 1), 10);
+        QImage img(10 * (i + 1), 10, QImage::Format_ARGB32);
         SpriteBox box;
         box.rect = QRect(i * 10, 0, 10 * (i + 1), 10);
         box.index = i;
-        doc.addFrame(pm, box);
+        doc.addFrame(img, box);
     }
     QCOMPARE(doc.frameCount(), 4);
 
@@ -300,11 +298,11 @@ void TestCore::testDocumentReorderFrames()
 {
     SpriteDocument doc;
     for (int i = 0; i < 3; ++i) {
-        QPixmap pm(10 * (i + 1), 10);
+        QImage img(10 * (i + 1), 10, QImage::Format_ARGB32);
         SpriteBox box;
         box.rect = QRect(i * 10, 0, 10 * (i + 1), 10);
         box.index = i;
-        doc.addFrame(pm, box);
+        doc.addFrame(img, box);
     }
 
     doc.setAnimation(QStringLiteral("run"), {0, 1, 2}, 12, true);

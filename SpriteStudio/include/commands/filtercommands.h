@@ -3,7 +3,6 @@
 
 #include <QUndoCommand>
 #include <QImage>
-#include <QPixmap>
 #include <QList>
 #include <QMap>
 #include "model/spritedocument.h"
@@ -17,11 +16,11 @@ public:
     ApplyFilterCommand(SpriteDocument *doc,
                        const QString &filterTitle,
                        const QImage &oldAtlas,
-                       const QList<QPixmap> &oldFrames,
+                       const QList<QImage> &oldFrames,
                        const QList<SpriteBox> &oldBoxes,
                        const QMap<QString, SpriteAnimation> &oldAnimations,
                        const QImage &newAtlas,
-                       const QList<QPixmap> &newFrames,
+                       const QList<QImage> &newFrames,
                        const QList<SpriteBox> &newBoxes,
                        const QMap<QString, SpriteAnimation> &newAnimations = QMap<QString, SpriteAnimation>(),
                        QUndoCommand *parent = nullptr);
@@ -32,12 +31,12 @@ public:
 private:
     SpriteDocument*                 m_doc;
     QImage                          m_oldAtlas;
-    QList<QPixmap>                  m_oldFrames;
+    QList<QImage>                  m_oldFrames;
     QList<SpriteBox>                m_oldBoxes;
     QMap<QString, SpriteAnimation>  m_oldAnimations;
 
     QImage                          m_newAtlas;
-    QList<QPixmap>                  m_newFrames;
+    QList<QImage>                  m_newFrames;
     QList<SpriteBox>                m_newBoxes;
     QMap<QString, SpriteAnimation>  m_newAnimations;
 };

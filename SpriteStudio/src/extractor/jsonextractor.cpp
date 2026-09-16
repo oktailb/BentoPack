@@ -143,7 +143,7 @@ bool JsonExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extrac
 
     setProgress(30);
 
-    QList<QPixmap> frames;
+    QList<QImage> frames;
     QList<SpriteBox> boxes;
     QMap<QString, QList<int>> animationFrames;
 
@@ -228,7 +228,7 @@ bool JsonExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extrac
 
 void JsonExtractor::extractFromTexturePackerFormat(const QJsonObject &framesObj,
                                                   const QImage &atlasImage,
-                                                  QList<QPixmap> &frames,
+                                                  QList<QImage> &frames,
                                                   QList<SpriteBox> &boxes,
                                                   QMap<QString, QList<int>> &animationFrames)
 {
@@ -253,7 +253,7 @@ void JsonExtractor::extractFromTexturePackerFormat(const QJsonObject &framesObj,
             continue;
         }
 
-        QPixmap framePix = QPixmap::fromImage(atlasImage.copy(x, y, w, h));
+        QImage frameImg = atlasImage.copy(x, y, w, h);
         int currentIndex = baseIndex + frames.size();
 
         SpriteBox box;
@@ -261,7 +261,7 @@ void JsonExtractor::extractFromTexturePackerFormat(const QJsonObject &framesObj,
         box.selected = false;
         box.index = currentIndex;
 
-        frames.append(framePix);
+        frames.append(frameImg);
         boxes.append(box);
 
         QString animName = extractAnimationName(frameName);
@@ -273,7 +273,7 @@ void JsonExtractor::extractFromTexturePackerFormat(const QJsonObject &framesObj,
 
 void JsonExtractor::extractFromArrayFormat(const QJsonArray &framesArray,
                                           const QImage &atlasImage,
-                                          QList<QPixmap> &frames,
+                                          QList<QImage> &frames,
                                           QList<SpriteBox> &boxes,
                                           QMap<QString, QList<int>> &animationFrames)
 {
@@ -304,7 +304,7 @@ void JsonExtractor::extractFromArrayFormat(const QJsonArray &framesArray,
             continue;
         }
 
-        QPixmap framePix = QPixmap::fromImage(atlasImage.copy(x, y, w, h));
+        QImage frameImg = atlasImage.copy(x, y, w, h);
         int currentIndex = baseIndex + frames.size();
 
         SpriteBox box;
@@ -312,7 +312,7 @@ void JsonExtractor::extractFromArrayFormat(const QJsonArray &framesArray,
         box.selected = false;
         box.index = currentIndex;
 
-        frames.append(framePix);
+        frames.append(frameImg);
         boxes.append(box);
 
         if (frameObj.contains("filename") && frameObj["filename"].isString()) {

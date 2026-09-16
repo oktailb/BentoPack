@@ -19,7 +19,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Faible | 📝 Spécifié (Intégration Pipelines Studios) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifications Détaillées (Optimisation Mobile & Switch) |
-| **AUDIT** | [Points à Revoir & Dette Technique Résiduelle (Recommandations d'Amélioration)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟡 Phase 1 Clôturée / Phase 2 Prioritaire (QImage multi-thread, Cache LRU) |
+| **AUDIT** | [Dette de Thread-Safety & Modèle Pur (Audit Étape 2)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Clôturé & Validé (Modèle pur QImage, Cache Vignettes, 0 conversion I/O, 100% CTest) |
 
 ---
 
@@ -828,9 +828,9 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 1. **Étape 4 — Points d'Ancrage / Pivots (M3) — 🔥 PRIORITÉ ABSOLUE & CRITIQUE :**
    - *Objectif :* Éradiquer le sautillement ("jittering") des animations en jeu vidéo lors de l'export vers Godot ou JSON.
    - *Livrables :* `QPoint origin` dans `SpriteBox`, réticule interactif sur l'atlas et l'animation preview, presets (`Bottom-Center`, `Center`, `Top-Left`), injection dans les ressources Godot 4 (`AtlasTexture` offsets) et le JSON TexturePacker.
-2. **Étape 5 — Assainissement Architectural & Thread-Safety (AUDIT-Phase 2) :**
-   - *Objectif :* Sécuriser l'étanchéité multi-thread pour les traitements asynchrones et l'export batch.
-   - *Livrables :* Migration de `SpriteDocument::m_frames` de `QList<QPixmap>` vers `QList<QImage>`. Déport de la conversion `QPixmap` uniquement dans les composants d'affichage GUI.
+2. **Étape 5 — Assainissement Architectural & Thread-Safety (AUDIT-Phase 2) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
+   - *Objectif :* Sécuriser l'étanchéité multi-thread pour les traitements asynchrones (`QtConcurrent`) et l'export batch.
+   - *Livrables :* Migration complète de `SpriteDocument::m_frames`, `AtlasPacker`, codecs (`SpriteExtractor`, `GifExtractor`, `JsonExtractor`, `GodotExtractor`), `ProjectManager` et `QUndoCommand` vers `QImage` pure (zéro conversion display-server en mémoire). Déport de la conversion `QPixmap` uniquement dans les composants graphiques finaux (`AtlasViewController`, `AnimationController`, `TimelineFilmstripWidget`). Virtualisation et cache paresseux des vignettes dans `ArrangementModel` (affichage instantané même avec plusieurs centaines de frames).
 3. **Étape 6 — Nettoyage Périphérique Anti-Halo, Filtres Plugins & Retouche (M7) — ✅ TERMINÉ & VALIDÉ (100%) :**
    - *Objectif :* Offrir une architecture de filtres modulaire, un détourage parfait sans liseré de 1 px, des variantes de couleurs et des contours.
    - *Livrables :* Socle `FilterPlugin` + `FilterRegistry`, commande d'annulation universelle `ApplyFilterCommand`, filtres `DespillFilter` (Color Clamping / strict), `OutlineFilter` (1-4px, connexité 4/8, silhouette pleine), et `ColorSwapFilter` (Shading HSV préservé). 5 tests automatisés dédiés validés sous CTest.
@@ -844,17 +844,14 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 5. **Étape 8 — Outil en Ligne de Commande Headless (M-CLI / `spritestudio-cli`) :**
    - *Objectif :* Intégrer SpriteStudio dans les chaînes de compilation automatisées (CI/CD) des studios pros.
    - *Livrables :* Binaire autonome `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`) supportant `pack`, `slice` et `export`.
-6. **Étape 9 — Virtualisation & Fluidité des Vignettes (AUDIT-Phase 2) :**
-   - *Objectif :* Éliminer les micro-gels sur les planches massives (> 300 frames).
-   - *Livrables :* Remplacement de `ArrangementModel` par un `QAbstractListModel` personnalisé avec lazy-loading asynchrone et cache LRU.
 
 ---
 
 ### 🎯 Phase C — Spécialisation, Retouche & Haute Performance GPU (Long Terme)
-7. **Étape 10 — Outil de Retouche Pixel Chirurgicale (M4 allégé) :**
+6. **Étape 9 — Outil de Retouche Pixel Chirurgicale (M4 allégé) :**
    - *Objectif :* Corriger rapidement un pixel oublié ou un artefact sans devoir rouvrir un éditeur externe.
    - *Cadrage strict :* Outils limités (crayon 1px, gomme, pipette, seau de remplissage) pour éviter le risque de dispersion (*feature creep*).
-8. **Étape 11 — Empaquetage Polygonal & Maillages Serrés (M8 - Tight Mesh) :**
+7. **Étape 10 — Empaquetage Polygonal & Maillages Serrés (M8 - Tight Mesh) :**
    - *Objectif :* Éradiquer l'overdraw GPU et maximiser la compacité (+20% à +50%) pour mobile et Nintendo Switch.
    - *Livrables :* Contouring Marching Squares, simplification Ramer-Douglas-Peucker (6-12 sommets), triangulation Ear-Clipping et export Godot `Polygon2D`.
 
@@ -866,6 +863,6 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 |---|:---:|:---:|---|---|
 | **1. Absence de Pivots (M3)** | **Critique** | **Haute** | Les animations exportées dans les moteurs de jeux subissent des décalages visuels si les boîtes ont des tailles hétérogènes. | **Priorisation immédiate de M3** avant tout autre nouveau filtre ou fonctionnalité graphique. |
 | **2. Absence d'Interface CLI** | **Élevée** | **Haute** | SpriteStudio reste exclu des pipelines de production automatisés (CI/CD) des studios professionnels de jeux vidéo. | Création de la cible légère `spritestudio-cli` liée à `SpriteStudioCore` sans dépendance GUI. |
-| **3. Thread-Safety du Modèle (`QPixmap`)** | **Moyenne** | **Moyenne** | Instanciation de `QPixmap` hors-thread provoquant des plantages intermittents sous Linux (X11/Wayland) et macOS. | Migration planifiée de `SpriteDocument::m_frames` vers `QImage` pure. |
+| **3. Thread-Safety du Modèle (`QPixmap`)** | **Moyenne** | **Nulle (Résolu)** | Instanciation de `QPixmap` hors-thread provoquant des plantages intermittents sous Linux (X11/Wayland) et macOS. | **✅ Résolu & Validé :** Modèle, codecs et commandes 100% migrés sur `QImage` pure en mémoire CPU. |
 | **4. Dispersion Fonctionnelle (*Feature Creep*)** | **Élevée** | **Moyenne** | Vouloir réinventer Aseprite (dessin pixel) et Photoshop épuise les ressources et dégrade la clarté du produit. | Définir SpriteStudio comme le **couteau suisse du conditionnement et de la préparation**, pas un outil d'illustration. Cadrer M4 sur la retouche chirurgicale. |
 | **5. Consommation RAM sur Grands Atlas** | **Moyenne** | **Faible** | Clonage d'images volumineuses dans la pile `QUndoStack` (atlas 4K avec 50 étapes d'annulation). | Exploiter le Copy-On-Write (COW) implicite de `QImage` et stocker uniquement des rectangles de diffs pour les filtres locaux. |

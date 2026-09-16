@@ -391,7 +391,7 @@ void TestControllers::testProjectControllerDominantBackgroundColorAndUndo()
     // 2. RemoveBackgroundCommand test with undo and redo
     SpriteDocument doc;
     doc.setAtlas(testImg);
-    QList<QPixmap> origFrames = { QPixmap::fromImage(testImg.copy(10, 10, 8, 8)) };
+    QList<QImage> origFrames = { testImg.copy(10, 10, 8, 8) };
     SpriteBox box1;
     box1.rect = QRect(10, 10, 8, 8);
     box1.index = 0;
@@ -401,9 +401,9 @@ void TestControllers::testProjectControllerDominantBackgroundColorAndUndo()
 
     // Prepare new state
     QImage cleaned = ProjectController::removeBackgroundFromImage(testImg, 10);
-    QList<QPixmap> newFrames = {
-        QPixmap::fromImage(cleaned.copy(10, 10, 8, 8)),
-        QPixmap::fromImage(cleaned.copy(30, 30, 8, 8))
+    QList<QImage> newFrames = {
+        cleaned.copy(10, 10, 8, 8),
+        cleaned.copy(30, 30, 8, 8)
     };
     SpriteBox box2;
     box2.rect = QRect(30, 30, 8, 8);
@@ -1937,7 +1937,7 @@ void TestControllers::testPixelRescaleFilterAlgorithm()
     SpriteBox b0;
     b0.rect = QRect(1, 1, 2, 2);
     b0.index = 0;
-    doc.setFrames({ QPixmap::fromImage(src.copy(b0.rect)) }, { b0 });
+    doc.setFrames({ src.copy(b0.rect) }, { b0 });
 
     QUndoStack stack;
     PixelRescaleFilterDialog dlg(&doc, &stack);
@@ -2035,7 +2035,7 @@ void TestControllers::testApplyFilterCommandUndoRedo()
     SpriteBox b1;
     b1.rect = QRect(0, 0, 10, 10);
     b1.index = 0;
-    doc.setFrames({ QPixmap::fromImage(img1) }, { b1 });
+    doc.setFrames({ img1 }, { b1 });
 
     QImage img2(10, 10, QImage::Format_ARGB32);
     img2.fill(qRgb(0, 0, 255));
@@ -2043,7 +2043,7 @@ void TestControllers::testApplyFilterCommandUndoRedo()
     QUndoStack stack;
     stack.push(new ApplyFilterCommand(&doc, QStringLiteral("Blue Filter"),
                                       img1, doc.frames(), doc.boxes(), doc.animations(),
-                                      img2, { QPixmap::fromImage(img2) }, { b1 }, doc.animations()));
+                                      img2, { img2 }, { b1 }, doc.animations()));
 
     QCOMPARE(qBlue(doc.atlas().pixel(0, 0)), 255);
     QCOMPARE(qRed(doc.atlas().pixel(0, 0)), 0);
@@ -2074,7 +2074,7 @@ void TestControllers::testFilterAutoDetectBoxes()
     SpriteBox initialBox;
     initialBox.rect = QRect(12, 12, 8, 8);
     initialBox.index = 0;
-    doc.setFrames({ QPixmap::fromImage(baseImg.copy(initialBox.rect)) }, { initialBox });
+    doc.setFrames({ baseImg.copy(initialBox.rect) }, { initialBox });
 
     // 1. Test OutlineFilterDialog with auto-detect enabled (default for outline)
     {
@@ -2095,7 +2095,7 @@ void TestControllers::testFilterAutoDetectBoxes()
     {
         // Reset document to initial state
         doc.setAtlas(baseImg);
-        doc.setFrames({ QPixmap::fromImage(baseImg.copy(initialBox.rect)) }, { initialBox });
+        doc.setFrames({ baseImg.copy(initialBox.rect) }, { initialBox });
 
         QUndoStack stack;
         OutlineFilterDialog dlg(&doc, &stack);

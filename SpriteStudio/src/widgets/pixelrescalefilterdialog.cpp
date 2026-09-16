@@ -269,7 +269,7 @@ void PixelRescaleFilterDialog::applyPreview()
         m_previewFrames.reserve(m_previewBoxes.size());
         for (const SpriteBox &box : m_previewBoxes) {
             QRect r = box.rect.intersected(m_previewAtlas.rect());
-            m_previewFrames.append(QPixmap::fromImage(m_previewAtlas.copy(r)));
+            m_previewFrames.append(m_previewAtlas.copy(r));
         }
     }
 

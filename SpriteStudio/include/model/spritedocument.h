@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QImage>
-#include <QPixmap>
 #include <QList>
 #include <QMap>
 #include <QRect>
@@ -78,12 +77,12 @@ public:
 
     // Frames
     int frameCount() const { return m_frames.size(); }
-    const QList<QPixmap>& frames() const { return m_frames; }
-    QPixmap frame(int index) const;
-    void setFrames(const QList<QPixmap> &frames, const QList<SpriteBox> &boxes);
-    void addFrame(const QPixmap &pixmap, const SpriteBox &box = SpriteBox());
-    void insertFrame(int index, const QPixmap &pixmap, const SpriteBox &box);
-    void replaceFrame(int index, const QPixmap &pixmap, const SpriteBox &box = SpriteBox());
+    const QList<QImage>& frames() const { return m_frames; }
+    QImage frame(int index) const;
+    void setFrames(const QList<QImage> &frames, const QList<SpriteBox> &boxes);
+    void addFrame(const QImage &image, const SpriteBox &box = SpriteBox());
+    void insertFrame(int index, const QImage &image, const SpriteBox &box);
+    void replaceFrame(int index, const QImage &image, const SpriteBox &box = SpriteBox());
     void removeFrame(int index);
     void removeFrames(const QList<int> &indices);
     void reorderFrames(const QList<int> &newOrder);
@@ -141,7 +140,7 @@ private:
     void recalculateMaxFrameDimensions();
 
     QImage                          m_atlas;
-    QList<QPixmap>                  m_frames;
+    QList<QImage>                   m_frames;
     QList<SpriteBox>                m_boxes;
     QList<int>                      m_selectedFrameIndices;
     QMap<QString, SpriteAnimation>  m_animations;

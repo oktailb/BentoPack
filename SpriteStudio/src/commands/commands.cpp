@@ -18,7 +18,7 @@ DeleteFramesCommand::DeleteFramesCommand(SpriteDocument *doc, const QList<int> &
         if (idx >= 0 && idx < m_doc->frameCount()) {
             FrameBackup fb;
             fb.originalIndex = idx;
-            fb.image = m_doc->frame(idx).toImage();
+            fb.image = m_doc->frame(idx);
             fb.box = m_doc->box(idx);
             m_deletedFrames.append(fb);
         }
@@ -36,7 +36,7 @@ void DeleteFramesCommand::undo()
 {
     // Reinsert deleted frames in ascending order
     for (const FrameBackup &fb : m_deletedFrames) {
-        m_doc->insertFrame(fb.originalIndex, QPixmap::fromImage(fb.image), fb.box);
+        m_doc->insertFrame(fb.originalIndex, fb.image, fb.box);
     }
 
     // Restore exact animations state
@@ -61,7 +61,7 @@ EraseAtlasPixelsCommand::EraseAtlasPixelsCommand(SpriteDocument *doc, const QLis
         if (idx >= 0 && idx < m_doc->frameCount()) {
             FrameBackup fb;
             fb.originalIndex = idx;
-            fb.image = m_doc->frame(idx).toImage();
+            fb.image = m_doc->frame(idx);
             fb.box = m_doc->box(idx);
             m_deletedFrames.append(fb);
         }
@@ -94,7 +94,7 @@ void EraseAtlasPixelsCommand::undo()
 {
     m_doc->setAtlas(m_atlasBefore);
     for (const FrameBackup &fb : m_deletedFrames) {
-        m_doc->insertFrame(fb.originalIndex, QPixmap::fromImage(fb.image), fb.box);
+        m_doc->insertFrame(fb.originalIndex, fb.image, fb.box);
     }
     for (auto it = m_animationsBackup.begin(); it != m_animationsBackup.end(); ++it) {
         m_doc->setAnimation(it.key(), it.value().frameIndices, it.value().fps, it.value().loop);
@@ -111,9 +111,9 @@ MergeFramesCommand::MergeFramesCommand(SpriteDocument *doc, int sourceIndex, int
 {
     setText(QObject::tr("Merge Frame %1 into %2").arg(sourceIndex + 1).arg(targetIndex + 1));
 
-    m_sourceImage = m_doc->frame(sourceIndex).toImage();
+    m_sourceImage = m_doc->frame(sourceIndex);
     m_sourceBox = m_doc->box(sourceIndex);
-    m_targetOriginalImage = m_doc->frame(targetIndex).toImage();
+    m_targetOriginalImage = m_doc->frame(targetIndex);
     m_targetOriginalBox = m_doc->box(targetIndex);
     m_animationsBackup = m_doc->animations();
 }
@@ -133,11 +133,11 @@ void MergeFramesCommand::undo()
 
     // Reinsert both original frames
     if (m_sourceIndex <= m_targetIndex) {
-        m_doc->insertFrame(m_sourceIndex, QPixmap::fromImage(m_sourceImage), m_sourceBox);
-        m_doc->insertFrame(m_targetIndex, QPixmap::fromImage(m_targetOriginalImage), m_targetOriginalBox);
+        m_doc->insertFrame(m_sourceIndex, m_sourceImage, m_sourceBox);
+        m_doc->insertFrame(m_targetIndex, m_targetOriginalImage, m_targetOriginalBox);
     } else {
-        m_doc->insertFrame(m_targetIndex, QPixmap::fromImage(m_targetOriginalImage), m_targetOriginalBox);
-        m_doc->insertFrame(m_sourceIndex, QPixmap::fromImage(m_sourceImage), m_sourceBox);
+        m_doc->insertFrame(m_targetIndex, m_targetOriginalImage, m_targetOriginalBox);
+        m_doc->insertFrame(m_sourceIndex, m_sourceImage, m_sourceBox);
     }
 
     // Restore animations
@@ -354,12 +354,12 @@ void AddSliceCommand::redo()
     if (m_createdIndex < 0) {
         m_createdIndex = m_doc->addSlice(m_rect);
     } else {
-        QPixmap pm = QPixmap::fromImage(m_doc->atlas().copy(m_rect));
+        QImage img = m_doc->atlas().copy(m_rect);
         SpriteBox box;
         box.rect = m_rect;
         box.index = m_createdIndex;
         box.selected = true;
-        m_doc->insertFrame(m_createdIndex, pm, box);
+        m_doc->insertFrame(m_createdIndex, img, box);
     }
 }
 
@@ -374,8 +374,8 @@ void AddSliceCommand::undo()
 // RemoveBackgroundCommand
 // ============================================================================
 RemoveBackgroundCommand::RemoveBackgroundCommand(SpriteDocument *doc,
-                                                 const QImage &oldAtlas, const QList<QPixmap> &oldFrames, const QList<SpriteBox> &oldBoxes,
-                                                 const QImage &newAtlas, const QList<QPixmap> &newFrames, const QList<SpriteBox> &newBoxes,
+                                                 const QImage &oldAtlas, const QList<QImage> &oldFrames, const QList<SpriteBox> &oldBoxes,
+                                                 const QImage &newAtlas, const QList<QImage> &newFrames, const QList<SpriteBox> &newBoxes,
                                                  QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_doc(doc)
@@ -393,11 +393,11 @@ RemoveBackgroundCommand::RemoveBackgroundCommand(SpriteDocument *doc,
 }
 
 RemoveBackgroundCommand::RemoveBackgroundCommand(SpriteDocument *doc,
-                                                 const QImage &newAtlas, const QList<QPixmap> &newFrames, const QList<SpriteBox> &newBoxes,
+                                                 const QImage &newAtlas, const QList<QImage> &newFrames, const QList<SpriteBox> &newBoxes,
                                                  QUndoCommand *parent)
     : RemoveBackgroundCommand(doc,
                               doc ? doc->atlas() : QImage(),
-                              doc ? doc->frames() : QList<QPixmap>(),
+                              doc ? doc->frames() : QList<QImage>(),
                               doc ? doc->boxes() : QList<SpriteBox>(),
                               newAtlas, newFrames, newBoxes, parent)
 {

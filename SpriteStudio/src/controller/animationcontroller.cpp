@@ -636,8 +636,9 @@ void AnimationController::renderCurrentFrame(int globalFrameIndex)
         return;
     }
 
-    const QPixmap &currentFrame = m_document->frame(globalFrameIndex);
-    if (currentFrame.isNull()) return;
+    QImage frameImg = m_document->frame(globalFrameIndex);
+    if (frameImg.isNull()) return;
+    QPixmap currentFrame = QPixmap::fromImage(frameImg);
 
     int maxWidth = qMax(1, m_document->maxFrameWidth());
     int maxHeight = qMax(1, m_document->maxFrameHeight());

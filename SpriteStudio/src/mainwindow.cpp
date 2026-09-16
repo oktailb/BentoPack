@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setAcceptDrops(true);
 
+    frameModel->setDocument(m_document);
+
     // Initialize configuration, extractor registry, and filter registry
     AppConfig::instance();
     ExtractorRegistry::instance();
@@ -229,11 +231,9 @@ void MainWindow::setupControllers()
 
     connect(m_document, &SpriteDocument::frameUpdated, this, [this](int index) {
         if (frameModel && index >= 0 && index < frameModel->rowCount()) {
-            QStandardItem *it = frameModel->item(index);
-            if (it) {
-                QPixmap pixmap = m_document->frame(index);
-                QPixmap thumbnail = pixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-                it->setData(thumbnail, Qt::DecorationRole);
+            QModelIndex mIdx = frameModel->index(index, 0);
+            if (mIdx.isValid()) {
+                emit frameModel->dataChanged(mIdx, mIdx, {Qt::DecorationRole});
             }
         }
     });

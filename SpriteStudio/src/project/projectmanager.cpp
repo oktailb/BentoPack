@@ -7,7 +7,6 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QImage>
-#include <QPixmap>
 
 QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
                                                     const QString &relativeAtlasPath,
@@ -161,7 +160,7 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
     // Reconstruct Boxes and Frames
     QJsonArray boxesArray = root.value(QStringLiteral("boxes")).toArray();
     QList<SpriteBox> boxes;
-    QList<QPixmap> frames;
+    QList<QImage> frames;
     boxes.reserve(boxesArray.size());
     frames.reserve(boxesArray.size());
 
@@ -195,12 +194,12 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
         if (!atlasImage.isNull() && rect.isValid()) {
             QRect intersect = rect.intersected(atlasImage.rect());
             if (intersect.isValid() && !intersect.isEmpty()) {
-                frames.append(QPixmap::fromImage(atlasImage.copy(intersect)));
+                frames.append(atlasImage.copy(intersect));
             } else {
-                frames.append(QPixmap());
+                frames.append(QImage());
             }
         } else {
-            frames.append(QPixmap());
+            frames.append(QImage());
         }
     }
 

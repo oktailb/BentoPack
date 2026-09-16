@@ -70,7 +70,7 @@ jsonExtractorDialog::jsonExtractorDialog(const SpriteDocument &doc, const QStrin
         if (!anim.value().frameIndices.isEmpty()) {
             int firstIdx = anim.value().frameIndices.first();
             if (firstIdx >= 0 && firstIdx < doc.frameCount()) {
-                QImage deco = doc.frame(firstIdx).toImage();
+                QImage deco = doc.frame(firstIdx);
                 listItem->setData(Qt::DecorationRole, deco.scaled(60, 64, Qt::KeepAspectRatio));
             }
         }

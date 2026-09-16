@@ -38,12 +38,12 @@ private:
                                         const SpriteDocument &doc);
     void extractFromTexturePackerFormat(const QJsonObject &framesObj,
                                        const QImage &atlasImage,
-                                       QList<QPixmap> &frames,
+                                       QList<QImage> &frames,
                                        QList<SpriteBox> &boxes,
                                        QMap<QString, QList<int>> &animationFrames);
     void extractFromArrayFormat(const QJsonArray &framesArray,
                                 const QImage &atlasImage,
-                                QList<QPixmap> &frames,
+                                QList<QImage> &frames,
                                 QList<SpriteBox> &boxes,
                                 QMap<QString, QList<int>> &animationFrames);
     void extractAnimationsFromFrameTags(const QJsonArray &frameTagsArray,

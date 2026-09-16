@@ -42,7 +42,7 @@ bool GifExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extract
     }
 
     int expectedCount = reader.imageCount();
-    QList<QPixmap> framePixmaps;
+    QList<QImage> frameImages;
     int totalDelayMs = 0;
     int frameIndex = 0;
 
@@ -54,7 +54,7 @@ bool GifExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extract
         QImage frameImg = reader.read();
         if (frameImg.isNull()) break;
 
-        framePixmaps.append(QPixmap::fromImage(frameImg));
+        frameImages.append(frameImg);
         frameIndex++;
 
         if (expectedCount > 0) {
@@ -62,7 +62,7 @@ bool GifExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extract
         }
     }
 
-    if (framePixmaps.isEmpty()) {
+    if (frameImages.isEmpty()) {
         if (error) {
             error->code = ExtractorError::CorruptedData;
             error->message = tr("No valid frames could be decoded from GIF: %1").arg(filePath);
@@ -75,7 +75,7 @@ bool GifExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extract
     setProgress(75);
 
     // Pack frames into an atlas
-    AtlasPackResult packResult = AtlasPacker::pack(framePixmaps, 2);
+    AtlasPackResult packResult = AtlasPacker::pack(frameImages, 2);
     if (!packResult.success) {
         if (error) {
             error->code = ExtractorError::PackingFailed;
@@ -96,23 +96,23 @@ bool GifExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extract
     }
 
     // Determine FPS
-    int avgDelay = totalDelayMs / qMax(1, framePixmaps.size());
+    int avgDelay = totalDelayMs / qMax(1, frameImages.size());
     int fps = (avgDelay > 0) ? qRound(1000.0 / avgDelay) : 12;
     if (fps <= 0) fps = 12;
 
     outDoc.setFilePath(filePath);
     outDoc.setAtlas(packResult.atlas);
-    outDoc.setFrames(framePixmaps, boxes);
+    outDoc.setFrames(frameImages, boxes);
 
     QList<int> allIndices;
-    allIndices.reserve(framePixmaps.size());
-    for (int i = 0; i < framePixmaps.size(); ++i) {
+    allIndices.reserve(frameImages.size());
+    for (int i = 0; i < frameImages.size(); ++i) {
         allIndices.append(i);
     }
     outDoc.setAnimation(QStringLiteral("default"), allIndices, fps, true);
 
     setProgress(100);
-    setStatusMessage(tr("Extracted %1 GIF frames").arg(framePixmaps.size()));
-    emit extractionFinished(framePixmaps.size());
+    setStatusMessage(tr("Extracted %1 GIF frames").arg(frameImages.size()));
+    emit extractionFinished(frameImages.size());
     return true;
 }

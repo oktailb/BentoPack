@@ -58,7 +58,7 @@ private:
     QRgb                            m_targetColor = qRgb(220, 30, 30); // Default red (fire variant)
 
     QImage                          m_previewAtlas;
-    QList<QPixmap>                  m_previewFrames;
+    QList<QImage>                  m_previewFrames;
     QList<SpriteBox>                m_previewBoxes;
 
     QLabel*                         m_srcSwatchLabel = nullptr;

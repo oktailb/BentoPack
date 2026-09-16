@@ -2,9 +2,10 @@
 #include "ui_mainwindow.h"
 #include <QStandardItem>
 
-void MainWindow::populateFrameList(const QList<QPixmap> &frameList, const QList<SpriteBox> &boxList)
+void MainWindow::populateFrameList(const QList<QImage> &frameList, const QList<SpriteBox> &boxList)
 {
     m_isSyncingSelection = true;
+    frameModel->clearThumbnailCache();
     frameModel->clear();
     frameModel->setColumnCount(1);
 
@@ -13,13 +14,9 @@ void MainWindow::populateFrameList(const QList<QPixmap> &frameList, const QList<
     if (statusLabel) statusLabel->setText(tr("KEY_STATUS_POPULATING"));
 
     for (int i = 0; i < itemCount; ++i) {
-        const QPixmap &pixmap = frameList.at(i);
         const SpriteBox &box = boxList.at(i);
 
         QStandardItem *item = new QStandardItem();
-        QPixmap thumbnail = pixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        item->setData(thumbnail, Qt::DecorationRole);
-
         QString displayText = tr("KEY_FRAME_LABEL").arg(i + 1);
         if (box.selected) {
             displayText += " ✓";

@@ -612,14 +612,8 @@ bool ProjectController::removeAtlasBackgroundAndRefresh(int alphaThreshold,
         return false;
     }
 
-    QList<QPixmap> frames;
-    frames.reserve(frameImages.size());
-    for (const QImage &img : frameImages) {
-        frames.append(QPixmap::fromImage(img));
-    }
-
     m_document->setAtlas(cleanedImage);
-    m_document->setFrames(frames, boxes);
+    m_document->setFrames(frameImages, boxes);
 
     emit backgroundRemoved();
     emit statusMessage(tr("Background removed."));
@@ -689,16 +683,9 @@ void ProjectController::onAsyncJobFinished()
         return;
     }
 
-    // Convert QImage frames to QPixmap on GUI thread
-    QList<QPixmap> frames;
-    frames.reserve(res.frameImages.size());
-    for (const QImage &img : res.frameImages) {
-        frames.append(QPixmap::fromImage(img));
-    }
-
     if (m_document) {
         m_document->setAtlas(res.atlas);
-        m_document->setFrames(frames, res.boxes);
+        m_document->setFrames(res.frameImages, res.boxes);
     }
 
     if (res.type == AsyncExtractionResult::JobOpen) {

@@ -88,7 +88,7 @@ private:
 
     // Preview state
     QImage                          m_previewAtlas;
-    QList<QPixmap>                  m_previewFrames;
+    QList<QImage>                  m_previewFrames;
     QList<SpriteBox>                m_previewBoxes;
 
     // Active palette colors

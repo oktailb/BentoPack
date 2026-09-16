@@ -1,10 +1,59 @@
 #include "arrangementmodel.h"
+#include "model/spritedocument.h"
 #include <QDebug>
 #include <QIODevice>
+#include <QPixmap>
 
 ArrangementModel::ArrangementModel(QObject *parent)
     : QStandardItemModel(parent)
 {
+}
+
+void ArrangementModel::setDocument(SpriteDocument *doc)
+{
+    if (m_document == doc) return;
+    if (m_document) {
+        disconnect(m_document, nullptr, this, nullptr);
+    }
+    m_document = doc;
+    clearThumbnailCache();
+
+    if (m_document) {
+        connect(m_document, &SpriteDocument::framesChanged, this, &ArrangementModel::clearThumbnailCache);
+        connect(m_document, &SpriteDocument::documentReset, this, &ArrangementModel::clearThumbnailCache);
+        connect(m_document, &SpriteDocument::frameUpdated, this, [this](int idx) {
+            m_thumbnailCache.remove(idx);
+            QModelIndex mIdx = index(idx, 0);
+            if (mIdx.isValid()) {
+                emit dataChanged(mIdx, mIdx, {Qt::DecorationRole});
+            }
+        });
+    }
+}
+
+void ArrangementModel::clearThumbnailCache()
+{
+    m_thumbnailCache.clear();
+}
+
+QVariant ArrangementModel::data(const QModelIndex &index, int role) const
+{
+    if (role == Qt::DecorationRole && index.isValid()) {
+        int row = index.row();
+        auto it = m_thumbnailCache.constFind(row);
+        if (it != m_thumbnailCache.constEnd()) {
+            return it.value();
+        }
+        if (m_document && row >= 0 && row < m_document->frameCount()) {
+            const QImage &img = m_document->frame(row);
+            if (!img.isNull()) {
+                QPixmap pm = QPixmap::fromImage(img.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                m_thumbnailCache.insert(row, pm);
+                return pm;
+            }
+        }
+    }
+    return QStandardItemModel::data(index, role);
 }
 
 Qt::ItemFlags ArrangementModel::flags(const QModelIndex &index) const

@@ -53,7 +53,7 @@ private:
 
     // Current preview state (result of last segmentation)
     QImage                          m_previewAtlas;
-    QList<QPixmap>                  m_previewFrames;
+    QList<QImage>                  m_previewFrames;
     QList<SpriteBox>                m_previewBoxes;
 
     // Filter-specific UI Widgets

@@ -15,7 +15,7 @@ int AtlasPacker::nextPowerOfTwo(int n)
     return n + 1;
 }
 
-AtlasPackResult AtlasPacker::pack(const QList<QPixmap> &frames, int padding, Algorithm algo)
+AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, int padding, Algorithm algo)
 {
     AtlasPackResult result;
     if (frames.isEmpty()) {
@@ -27,9 +27,9 @@ AtlasPackResult AtlasPacker::pack(const QList<QPixmap> &frames, int padding, Alg
     int maxFrameW = 0;
     int maxFrameH = 0;
 
-    for (const QPixmap &pix : frames) {
-        int w = pix.width() + padding * 2;
-        int h = pix.height() + padding * 2;
+    for (const QImage &img : frames) {
+        int w = img.width() + padding * 2;
+        int h = img.height() + padding * 2;
         totalArea += w * h;
         if (w > maxFrameW) maxFrameW = w;
         if (h > maxFrameH) maxFrameH = h;
@@ -51,9 +51,9 @@ AtlasPackResult AtlasPacker::pack(const QList<QPixmap> &frames, int padding, Alg
     QList<QRect> computedRects;
     computedRects.reserve(frames.size());
 
-    for (const QPixmap &pix : frames) {
-        int fw = pix.width();
-        int fh = pix.height();
+    for (const QImage &img : frames) {
+        int fw = img.width();
+        int fh = img.height();
 
         if (currentX + fw + padding > targetWidth && currentX > padding) {
             // New shelf
@@ -86,7 +86,7 @@ AtlasPackResult AtlasPacker::pack(const QList<QPixmap> &frames, int padding, Alg
 
     QPainter painter(&atlasImage);
     for (int i = 0; i < frames.size(); ++i) {
-        painter.drawPixmap(computedRects[i].topLeft(), frames[i]);
+        painter.drawImage(computedRects[i].topLeft(), frames[i]);
     }
     painter.end();
 
@@ -98,14 +98,14 @@ AtlasPackResult AtlasPacker::pack(const QList<QPixmap> &frames, int padding, Alg
     return result;
 }
 
-AtlasPackResult AtlasPacker::packIndices(const QList<QPixmap> &allFrames, const QList<int> &frameIndices, int padding)
+AtlasPackResult AtlasPacker::packIndices(const QList<QImage> &allFrames, const QList<int> &frameIndices, int padding)
 {
     AtlasPackResult result;
     if (frameIndices.isEmpty() || allFrames.isEmpty()) {
         return result;
     }
 
-    QList<QPixmap> subset;
+    QList<QImage> subset;
     subset.reserve(frameIndices.size());
     for (int idx : frameIndices) {
         if (idx >= 0 && idx < allFrames.size()) {

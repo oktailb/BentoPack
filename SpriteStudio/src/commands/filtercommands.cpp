@@ -3,11 +3,11 @@
 ApplyFilterCommand::ApplyFilterCommand(SpriteDocument *doc,
                                        const QString &filterTitle,
                                        const QImage &oldAtlas,
-                                       const QList<QPixmap> &oldFrames,
+                                       const QList<QImage> &oldFrames,
                                        const QList<SpriteBox> &oldBoxes,
                                        const QMap<QString, SpriteAnimation> &oldAnimations,
                                        const QImage &newAtlas,
-                                       const QList<QPixmap> &newFrames,
+                                       const QList<QImage> &newFrames,
                                        const QList<SpriteBox> &newBoxes,
                                        const QMap<QString, SpriteAnimation> &newAnimations,
                                        QUndoCommand *parent)

@@ -11,7 +11,6 @@
 #include <QStringList>
 #include <QVersionNumber>
 #include <QImage>
-#include <QPixmap>
 #include <QList>
 #include "export.h"
 #include "model/spritedocument.h"

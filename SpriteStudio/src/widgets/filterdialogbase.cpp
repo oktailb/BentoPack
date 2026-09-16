@@ -151,7 +151,7 @@ void FilterDialogBase::onPreviewTimeout()
 }
 
 void FilterDialogBase::updatePreviewFramesAndBoxes(const QImage &previewAtlas,
-                                                   QList<QPixmap> &outFrames,
+                                                   QList<QImage> &outFrames,
                                                    QList<SpriteBox> &outBoxes,
                                                    const SpriteDetectionOptions *customOpts)
 {
@@ -173,19 +173,13 @@ void FilterDialogBase::updatePreviewFramesAndBoxes(const QImage &previewAtlas,
             opts.overlapThreshold = 0.10;
         }
 
-        QList<QImage> detectedImages;
-        SpriteDetector::detectToImages(previewAtlas, detectedImages, outBoxes, opts);
-
-        outFrames.reserve(detectedImages.size());
-        for (const QImage &img : detectedImages) {
-            outFrames.append(QPixmap::fromImage(img));
-        }
+        SpriteDetector::detectToImages(previewAtlas, outFrames, outBoxes, opts);
     } else {
         outBoxes = m_initialBoxes;
         outFrames.reserve(outBoxes.size());
         for (const SpriteBox &box : outBoxes) {
             QRect r = box.rect.intersected(previewAtlas.rect());
-            outFrames.append(QPixmap::fromImage(previewAtlas.copy(r)));
+            outFrames.append(previewAtlas.copy(r));
         }
     }
 }

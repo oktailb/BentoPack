@@ -60,7 +60,7 @@ private:
     QRgb                            m_fringeColor = 0;
 
     QImage                          m_previewAtlas;
-    QList<QPixmap>                  m_previewFrames;
+    QList<QImage>                  m_previewFrames;
     QList<SpriteBox>                m_previewBoxes;
 
     QLabel*                         m_swatchLabel = nullptr;
