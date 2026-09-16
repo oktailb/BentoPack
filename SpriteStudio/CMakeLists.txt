@@ -230,12 +230,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Haiku")
-    set(CPACK_GENERATOR "External")
-    add_custom_command(
-        TARGET ${PROJECT_NAME}
-        POST_BUILD
-        COMMAND package create -i ${CMAKE_BINARY_DIR}/generated/haiku.PackageInfo -C ${PROJECT_NAME} ${PROJECT_NAME}-${PROJECT_VERSION}-1-x86_64.hpkg
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    add_custom_target(haiku_package
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/haiku_pkg
+        COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR} --prefix ${CMAKE_BINARY_DIR}/haiku_pkg
+        COMMAND package create -i ${CMAKE_BINARY_DIR}/generated/haiku.PackageInfo -C ${CMAKE_BINARY_DIR}/haiku_pkg ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}-1-x86_64.hpkg
+        DEPENDS ${PROJECT_NAME}
+        COMMENT "Creating Haiku HPKG package"
     )
 endif()
 

@@ -8,8 +8,6 @@ if(POLICY CMP0144)
 endif()
 
 set(PROJECT_VERSION_MAJOR 0)
-set(PROJECT_VERSION_MINOR 9)
-set(PROJECT_VERSION_PATCH 3)
 set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
 project(SpriteStudio    VERSION ${PROJECT_VERSION}
@@ -84,8 +82,13 @@ endif()
 
 if (HAIKU)
     message("This is haiku")
-    install(FILES     ${CMAKE_CURRENT_LIST_DIR}/LICENSE
-        DESTINATION ${CMAKE_BINARY_DIR}
+    install(FILES ${CMAKE_CURRENT_LIST_DIR}/LICENSE
+        DESTINATION data/licenses
+        RENAME "Apache License Version 2.0"
+    )
+    install(FILES ${CMAKE_CURRENT_LIST_DIR}/LICENSE
+        DESTINATION data/licenses
+        RENAME "Apache v2"
     )
     configure_file(
         SpriteStudio/src/haiku.PackageInfo.in
