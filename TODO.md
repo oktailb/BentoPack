@@ -796,6 +796,12 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
       - Découplage du packaging HPKG : suppression du hook intrusif `POST_BUILD` sur l'exécutable `SpriteStudio`, remplacement par une cible dédiée `haiku_package` et installation conforme des licences dans `data/licenses` (`Apache License Version 2.0` / `Apache v2`) pour valider les règles de conformité Haiku.
     - Exécution automatisée de `ctest --output-on-failure --verbose` sur l'ensemble des cibles avec 100% de succès.
 
+- **Automatisation Intégrale des Releases GitHub (Multiplateforme) — ✅ TERMINÉ :**
+  - *Réalisé :* Workflow `.github/workflows/release.yml` étendu et fiabilisé :
+    - Déclenchement universel sur les tags standards SemVer sans forcer de préfixe `v` (motifs `'v*'` et `'[0-9]+.*'`), ainsi que via `workflow_dispatch` manuel avec paramètre optionnel `tag_name`.
+    - Résolution dynamique du tag et publication automatisée des assets via `softprops/action-gh-release@v2` (fichiers `.deb`, `.rpm`, `.AppImage`, `.zip` portable, `Setup.exe` NSIS, `.dmg`, `.hpkg`).
+    - Élimination des restrictions de condition `startsWith(..., 'refs/tags/v')` qui sautaient la publication lors de déclenchements manuels ou de tags sans `v`.
+
 - **Portabilité Multiplateforme & Rétrocompatibilité Versions Qt (Qt 6.4 à 6.10+) — ✅ TERMINÉ :**
   - *Réalisé :*
     - Résolution de l'omission de l'en-tête `<QGuiApplication>` dans `atlasviewcontroller.h` requis pour `QGuiApplication::keyboardModifiers()`.
