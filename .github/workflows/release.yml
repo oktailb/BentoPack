@@ -214,6 +214,7 @@ jobs:
   release-haiku:
     name: Build Haiku OS Deliverables (HPKG)
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -224,16 +225,19 @@ jobs:
         uses: vmactions/haiku-vm@v1
         with:
           usesh: true
-          sync: sshfs
+          sync: rsync
+          copyback: true
+          mem: 4096
+          cpu: 2
           prepare: |
             pkgman refresh
-            pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git qt6_base_devel qt6_tools_devel devel:libgit2 || \
-            pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git qt6_base_devel qt6_tools_devel
+            echo 1 | pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git qt6_base_devel qt6_tools_devel devel:libgit2 || \
+            echo 1 | pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git qt6_base_devel qt6_tools_devel
           run: |
             cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-            cmake --build build --parallel
+            cmake --build build -j 2
             export QT_QPA_PLATFORM=offscreen
-            ctest --test-dir build --output-on-failure --verbose
+            ctest --test-dir build --output-on-failure --verbose --timeout 60
             
             mkdir -p dist
             cmake --install build --prefix haiku_pkg
