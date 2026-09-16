@@ -6,6 +6,7 @@
 #include "include/project/sessionmanager.h"
 #include "include/widgets/githistorydock.h"
 #include "include/widgets/settingsdialog.h"
+#include "include/filters/filterregistry.h"
 #include <QShortcut>
 #include <QSettings>
 #include <QFileInfo>
@@ -25,9 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setAcceptDrops(true);
 
-    // Initialize configuration and extractor registry
+    // Initialize configuration, extractor registry, and filter registry
     AppConfig::instance();
     ExtractorRegistry::instance();
+    FilterRegistry::instance().initDefaultFilters();
 
     setupControllers();
     setupGitHistoryDock();
@@ -423,12 +425,10 @@ void MainWindow::setupShortcuts()
     m_prefAction->setShortcut(QKeySequence::Preferences);
     connect(m_prefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
 
-    // Create Filters Menu
-    m_filtersMenu = new QMenu(tr("KEY_MENU_FILTERS", "Filtres"), this);
+    // Create Filters Menu dynamically from FilterRegistry
+    m_filtersMenu = new QMenu(tr("KEY_MENU_FILTERS"), this);
     menuBar()->insertMenu(ui->menuHelp->menuAction(), m_filtersMenu);
-    m_removeBgAction = m_filtersMenu->addAction(tr("KEY_ACTION_REMOVE_BG", "Suppression d'arrière-plan..."));
-    m_removeBgAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
-    connect(m_removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
+    FilterRegistry::instance().populateMenu(m_filtersMenu, m_document, m_undoStack, this);
 
     ui->menuHelp->addSeparator();
     m_helpPrefAction = ui->menuHelp->addAction(tr("KEY_ACTION_SETTINGS"));
@@ -739,8 +739,9 @@ void MainWindow::retranslateUi()
     if (m_redoAction) {
         m_redoAction->setText(tr("KEY_ACTION_REDO"));
     }
-    if (m_removeBgAction) {
-        m_removeBgAction->setText(tr("KEY_ACTION_REMOVE_BG"));
+    if (m_filtersMenu) {
+        m_filtersMenu->setTitle(tr("KEY_MENU_FILTERS"));
+        FilterRegistry::instance().populateMenu(m_filtersMenu, m_document, m_undoStack, this);
     }
     if (m_prefAction) {
         m_prefAction->setText(tr("KEY_ACTION_SETTINGS"));

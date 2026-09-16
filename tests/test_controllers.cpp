@@ -7,6 +7,7 @@
 #include <QTranslator>
 #include <QSpinBox>
 #include <QMainWindow>
+#include <QMenu>
 #include <QDockWidget>
 #include <QSettings>
 
@@ -19,6 +20,12 @@
 #include "commands/commands.h"
 #include "atlasboxitem.h"
 #include "project/projectmanager.h"
+#include "filters/filterregistry.h"
+#include "widgets/backgroundremovaldialog.h"
+#include "widgets/despillfilterdialog.h"
+#include "widgets/outlinefilterdialog.h"
+#include "widgets/colorswapfilterdialog.h"
+#include "commands/filtercommands.h"
 
 class TestControllers : public QObject
 {
@@ -76,6 +83,14 @@ private slots:
     void testAtlasViewControllerContinuousSlice();
     void testDockStatePersistence();
     void testSelectionOrderPreserved();
+
+    // Filter & Plugin Architecture tests
+    void testFilterRegistry();
+    void testDespillFilterAlgorithm();
+    void testOutlineFilterAlgorithm();
+    void testColorSwapFilterAlgorithm();
+    void testApplyFilterCommandUndoRedo();
+    void testFilterAutoDetectBoxes();
 
 private:
     QString m_sampleDir;
@@ -1367,6 +1382,10 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_UNTITLED_PROJECT"), QStringLiteral("Projet sans titre"));
         QCOMPARE(QCoreApplication::translate("ProjectController", "KEY_UNTITLED_PROJECT"), QStringLiteral("Projet sans titre"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_LANG_HINT"), QStringLiteral("Les modifications de langue s'appliquent immédiatement."));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_MENU_FILTERS"), QStringLiteral("&Filtres"));
+        QCOMPARE(QCoreApplication::translate("BackgroundRemovalDialog", "Background Removal"), QStringLiteral("Suppression d'arrière-plan"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Live Preview"), QStringLiteral("Aperçu en direct"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Auto-detect Sprite Boxes"), QStringLiteral("Détection auto des boîtes"));
 
         QCoreApplication::removeTranslator(&frTranslator);
     }
@@ -1394,6 +1413,10 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_UNTITLED_PROJECT"), QStringLiteral("Untitled Project"));
         QCOMPARE(QCoreApplication::translate("ProjectController", "KEY_UNTITLED_PROJECT"), QStringLiteral("Untitled Project"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_LANG_HINT"), QStringLiteral("Language changes are applied immediately."));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_MENU_FILTERS"), QStringLiteral("&Filters"));
+        QCOMPARE(QCoreApplication::translate("BackgroundRemovalDialog", "Background Removal"), QStringLiteral("Background Removal"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Live Preview"), QStringLiteral("Live Preview"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Auto-detect Sprite Boxes"), QStringLiteral("Auto-detect Sprite Boxes"));
 
         QCoreApplication::removeTranslator(&enTranslator);
     }
@@ -1421,6 +1444,10 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_UNTITLED_PROJECT"), QStringLiteral("無題のプロジェクト"));
         QCOMPARE(QCoreApplication::translate("ProjectController", "KEY_UNTITLED_PROJECT"), QStringLiteral("無題のプロジェクト"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_LANG_HINT"), QStringLiteral("言語の変更は即座に適用されます。"));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_MENU_FILTERS"), QStringLiteral("フィルター(&F)"));
+        QCOMPARE(QCoreApplication::translate("BackgroundRemovalDialog", "Background Removal"), QStringLiteral("背景の削除"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Live Preview"), QStringLiteral("リアルタイムプレビュー"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Auto-detect Sprite Boxes"), QStringLiteral("スプライト枠の自動検出"));
 
         QCoreApplication::removeTranslator(&jaTranslator);
     }
@@ -1701,6 +1728,214 @@ void TestControllers::testSelectionOrderPreserved()
     animCtrl.createAnimation(QStringLiteral("ordered_anim"), QList<int>{4, 2, 5, 1});
     QVERIFY(doc.hasAnimation(QStringLiteral("ordered_anim")));
     QCOMPARE(doc.animation(QStringLiteral("ordered_anim")).frameIndices, (QList<int>{4, 2, 5, 1}));
+}
+
+void TestControllers::testFilterRegistry()
+{
+    FilterRegistry &reg = FilterRegistry::instance();
+    reg.initDefaultFilters();
+
+    QVERIFY(reg.filters().size() >= 4);
+    QVERIFY(reg.findFilter(QStringLiteral("background_removal")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("despill")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("outline")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("color_swap")) != nullptr);
+
+    QStringList cats = reg.categories();
+    QVERIFY(!cats.isEmpty());
+
+    QMenu testMenu;
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    reg.populateMenu(&testMenu, &doc, &undoStack, nullptr);
+    QVERIFY(testMenu.actions().size() >= 4);
+}
+
+void TestControllers::testDespillFilterAlgorithm()
+{
+    QImage src(20, 20, QImage::Format_ARGB32);
+    src.fill(qRgba(0, 0, 0, 0));
+
+    QRgb greenFringe = qRgb(0, 255, 0);
+    QRgb redBody = qRgb(255, 0, 0);
+
+    for (int y = 6; y <= 13; ++y) {
+        for (int x = 6; x <= 13; ++x) {
+            src.setPixel(x, y, redBody);
+        }
+    }
+    for (int x = 5; x <= 14; ++x) {
+        src.setPixel(x, 5, greenFringe);
+        src.setPixel(x, 14, greenFringe);
+    }
+    for (int y = 5; y <= 14; ++y) {
+        src.setPixel(5, y, greenFringe);
+        src.setPixel(14, y, greenFringe);
+    }
+
+    // 1. StrictAlpha mode
+    int modifiedAlpha = 0;
+    QImage resAlpha = DespillFilterDialog::applyDespill(src, greenFringe, 30, DespillFilterDialog::StrictAlpha, {}, &modifiedAlpha);
+    QVERIFY(modifiedAlpha > 0);
+    QCOMPARE(qAlpha(resAlpha.pixel(5, 5)), 0);
+    QCOMPARE(qAlpha(resAlpha.pixel(6, 6)), 255);
+    QCOMPARE(resAlpha.pixel(6, 6), redBody);
+
+    // 2. ColorClamping mode: green fringe pixel is converted to adjacent red
+    int modifiedClamp = 0;
+    QImage resClamp = DespillFilterDialog::applyDespill(src, greenFringe, 30, DespillFilterDialog::ColorClamping, {}, &modifiedClamp);
+    QVERIFY(modifiedClamp > 0);
+    QCOMPARE(qAlpha(resClamp.pixel(5, 6)), 255);
+    QCOMPARE(qRed(resClamp.pixel(5, 6)), 255);
+    QCOMPARE(qGreen(resClamp.pixel(5, 6)), 0);
+}
+
+void TestControllers::testOutlineFilterAlgorithm()
+{
+    QImage src(12, 12, QImage::Format_ARGB32);
+    src.fill(qRgba(0, 0, 0, 0));
+
+    QRgb body = qRgb(200, 50, 50);
+    QRgb blackOutline = qRgb(0, 0, 0);
+
+    for (int y = 4; y <= 7; ++y) {
+        for (int x = 4; x <= 7; ++x) {
+            src.setPixel(x, y, body);
+        }
+    }
+
+    // 1px 4-connected outline
+    QImage res = OutlineFilterDialog::applyOutline(src, 1, blackOutline, OutlineFilterDialog::FourConnected, false);
+
+    QCOMPARE(qAlpha(res.pixel(4, 3)), 255);
+    QCOMPARE(qRed(res.pixel(4, 3)), 0);
+    QCOMPARE(qAlpha(res.pixel(3, 4)), 255);
+    QCOMPARE(qRed(res.pixel(3, 4)), 0);
+    QCOMPARE(qAlpha(res.pixel(3, 3)), 0); // corner is 0 in 4-connected
+    QCOMPARE(res.pixel(5, 5), body); // interior untouched
+
+    // Silhouette mode
+    QImage resSil = OutlineFilterDialog::applyOutline(src, 1, blackOutline, OutlineFilterDialog::FourConnected, true);
+    QCOMPARE(qRed(resSil.pixel(5, 5)), 0);
+}
+
+void TestControllers::testColorSwapFilterAlgorithm()
+{
+    QImage src(10, 10, QImage::Format_ARGB32);
+    src.fill(qRgba(0, 0, 0, 0));
+
+    QRgb greenBase = qRgb(0, 200, 0);
+    QRgb redTarget = qRgb(220, 20, 20);
+
+    src.setPixel(3, 3, greenBase);
+
+    int modified = 0;
+    QImage res = ColorSwapFilterDialog::applyColorSwap(src, greenBase, redTarget, 20, true, {}, &modified);
+    QCOMPARE(modified, 1);
+
+    QRgb swapped = res.pixel(3, 3);
+    QCOMPARE(qAlpha(swapped), 255);
+    QVERIFY(qRed(swapped) > 160);
+    QVERIFY(qGreen(swapped) < 60);
+}
+
+void TestControllers::testApplyFilterCommandUndoRedo()
+{
+    SpriteDocument doc;
+    QImage img1(10, 10, QImage::Format_ARGB32);
+    img1.fill(qRgb(255, 255, 255));
+    doc.setAtlas(img1);
+
+    SpriteBox b1;
+    b1.rect = QRect(0, 0, 10, 10);
+    b1.index = 0;
+    doc.setFrames({ QPixmap::fromImage(img1) }, { b1 });
+
+    QImage img2(10, 10, QImage::Format_ARGB32);
+    img2.fill(qRgb(0, 0, 255));
+
+    QUndoStack stack;
+    stack.push(new ApplyFilterCommand(&doc, QStringLiteral("Blue Filter"),
+                                      img1, doc.frames(), doc.boxes(), doc.animations(),
+                                      img2, { QPixmap::fromImage(img2) }, { b1 }, doc.animations()));
+
+    QCOMPARE(qBlue(doc.atlas().pixel(0, 0)), 255);
+    QCOMPARE(qRed(doc.atlas().pixel(0, 0)), 0);
+
+    stack.undo();
+    QCOMPARE(qRed(doc.atlas().pixel(0, 0)), 255);
+    QCOMPARE(qBlue(doc.atlas().pixel(0, 0)), 255);
+
+    stack.redo();
+    QCOMPARE(qBlue(doc.atlas().pixel(0, 0)), 255);
+    QCOMPARE(qRed(doc.atlas().pixel(0, 0)), 0);
+}
+
+void TestControllers::testFilterAutoDetectBoxes()
+{
+    SpriteDocument doc;
+    QImage baseImg(32, 32, QImage::Format_ARGB32);
+    baseImg.fill(qRgba(0, 0, 0, 0));
+
+    // Draw an 8x8 white square in the center (from 12,12 to 19,19)
+    for (int y = 12; y < 20; ++y) {
+        for (int x = 12; x < 20; ++x) {
+            baseImg.setPixel(x, y, qRgb(255, 255, 255));
+        }
+    }
+    doc.setAtlas(baseImg);
+
+    SpriteBox initialBox;
+    initialBox.rect = QRect(12, 12, 8, 8);
+    initialBox.index = 0;
+    doc.setFrames({ QPixmap::fromImage(baseImg.copy(initialBox.rect)) }, { initialBox });
+
+    // 1. Test OutlineFilterDialog with auto-detect enabled (default for outline)
+    {
+        QUndoStack stack;
+        OutlineFilterDialog dlg(&doc, &stack);
+        QCOMPARE(dlg.isAutoDetectBoxesEnabled(), true);
+
+        // Accept the dialog to commit
+        dlg.accept();
+
+        QVERIFY(doc.boxes().size() >= 1);
+        QRect detectedRect = doc.boxes().first().rect;
+        // Outline thickness is 1 by default (or 1px expanded: 12-1=11 to 19+1=20 => 10x10)
+        QCOMPARE(detectedRect, QRect(11, 11, 10, 10));
+    }
+
+    // 2. Test with auto-detect disabled
+    {
+        // Reset document to initial state
+        doc.setAtlas(baseImg);
+        doc.setFrames({ QPixmap::fromImage(baseImg.copy(initialBox.rect)) }, { initialBox });
+
+        QUndoStack stack;
+        OutlineFilterDialog dlg(&doc, &stack);
+        dlg.setAutoDetectBoxesEnabled(false);
+        QCOMPARE(dlg.isAutoDetectBoxesEnabled(), false);
+
+        dlg.accept();
+
+        // When auto-detect is disabled, the initial box rect is preserved
+        QCOMPARE(doc.boxes().size(), 1);
+        QCOMPARE(doc.boxes().first().rect, QRect(12, 12, 8, 8));
+    }
+
+    // 3. Test DespillFilterDialog and ColorSwapFilterDialog have auto-detect disabled by default
+    {
+        QUndoStack stack;
+        DespillFilterDialog despillDlg(&doc, &stack);
+        QCOMPARE(despillDlg.isAutoDetectBoxesEnabled(), false);
+        despillDlg.setAutoDetectBoxesEnabled(true);
+        QCOMPARE(despillDlg.isAutoDetectBoxesEnabled(), true);
+
+        ColorSwapFilterDialog swapDlg(&doc, &stack);
+        QCOMPARE(swapDlg.isAutoDetectBoxesEnabled(), false);
+        swapDlg.setAutoDetectBoxesEnabled(true);
+        QCOMPARE(swapDlg.isAutoDetectBoxesEnabled(), true);
+    }
 }
 
 #include <QApplication>

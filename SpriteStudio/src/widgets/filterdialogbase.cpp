@@ -1,4 +1,6 @@
 #include "widgets/filterdialogbase.h"
+#include "image/spritedetector.h"
+#include "config/appconfig.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QCheckBox>
@@ -16,7 +18,7 @@ FilterDialogBase::FilterDialogBase(SpriteDocument *doc, QUndoStack *undoStack, Q
     , m_previewApplied(false)
 {
     setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
-    setMinimumWidth(380);
+    setMinimumWidth(460);
 
     // Capture initial document state for guaranteed rollback on Cancel
     if (m_document) {
@@ -51,14 +53,20 @@ void FilterDialogBase::setupBaseUI()
     sep->setFrameShadow(QFrame::Sunken);
     m_mainLayout->addWidget(sep);
 
-    // Bottom control bar (Live preview, Status badge, Reset button)
+    // Bottom control bar (Live preview, Auto-detect boxes, Status badge, Reset button)
     QHBoxLayout *bottomRow = new QHBoxLayout();
     bottomRow->setContentsMargins(0, 0, 0, 0);
+    bottomRow->setSpacing(12);
 
-    m_livePreviewCheck = new QCheckBox(tr("Aperçu en direct"), this);
+    m_livePreviewCheck = new QCheckBox(tr("Live Preview"), this);
     m_livePreviewCheck->setChecked(true);
-    m_livePreviewCheck->setToolTip(tr("Mettre à jour l'atlas et les frames en temps réel pendant le réglage"));
+    m_livePreviewCheck->setToolTip(tr("Update atlas and frames in real-time while adjusting parameters"));
     bottomRow->addWidget(m_livePreviewCheck);
+
+    m_autoDetectBoxesCheck = new QCheckBox(tr("Auto-detect Sprite Boxes"), this);
+    m_autoDetectBoxesCheck->setChecked(false);
+    m_autoDetectBoxesCheck->setToolTip(tr("Automatically recalculate sprite bounding boxes after filtering"));
+    bottomRow->addWidget(m_autoDetectBoxesCheck);
 
     m_statusBadge = new QLabel(this);
     m_statusBadge->setStyleSheet(QStringLiteral("color: #27ae60; font-weight: bold;"));
@@ -66,8 +74,8 @@ void FilterDialogBase::setupBaseUI()
 
     bottomRow->addStretch();
 
-    m_resetDefaultsBtn = new QPushButton(tr("Valeurs par défaut"), this);
-    m_resetDefaultsBtn->setToolTip(tr("Rétablir les valeurs recommandées pour ce filtre"));
+    m_resetDefaultsBtn = new QPushButton(tr("Reset Defaults"), this);
+    m_resetDefaultsBtn->setToolTip(tr("Restore recommended default values for this filter"));
     bottomRow->addWidget(m_resetDefaultsBtn);
 
     m_mainLayout->addLayout(bottomRow);
@@ -85,6 +93,10 @@ void FilterDialogBase::setupBaseUI()
         }
     });
 
+    connect(m_autoDetectBoxesCheck, &QCheckBox::toggled, this, [this](bool) {
+        schedulePreview();
+    });
+
     connect(m_resetDefaultsBtn, &QPushButton::clicked, this, &FilterDialogBase::resetToDefaults);
     connect(m_buttonBox, &QDialogButtonBox::accepted, this, &FilterDialogBase::accept);
     connect(m_buttonBox, &QDialogButtonBox::rejected, this, &FilterDialogBase::reject);
@@ -93,6 +105,18 @@ void FilterDialogBase::setupBaseUI()
 bool FilterDialogBase::isLivePreviewEnabled() const
 {
     return m_livePreviewCheck && m_livePreviewCheck->isChecked();
+}
+
+bool FilterDialogBase::isAutoDetectBoxesEnabled() const
+{
+    return m_autoDetectBoxesCheck && m_autoDetectBoxesCheck->isChecked();
+}
+
+void FilterDialogBase::setAutoDetectBoxesEnabled(bool enabled)
+{
+    if (m_autoDetectBoxesCheck) {
+        m_autoDetectBoxesCheck->setChecked(enabled);
+    }
 }
 
 void FilterDialogBase::setStatusText(const QString &text)
@@ -111,6 +135,9 @@ void FilterDialogBase::schedulePreview()
 
 void FilterDialogBase::resetToDefaults()
 {
+    if (m_autoDetectBoxesCheck) {
+        m_autoDetectBoxesCheck->setChecked(defaultAutoDetectBoxes());
+    }
     resetDefaults();
     schedulePreview();
 }
@@ -120,6 +147,46 @@ void FilterDialogBase::onPreviewTimeout()
     if (m_document && isLivePreviewEnabled()) {
         applyPreview();
         m_previewApplied = true;
+    }
+}
+
+void FilterDialogBase::updatePreviewFramesAndBoxes(const QImage &previewAtlas,
+                                                   QList<QPixmap> &outFrames,
+                                                   QList<SpriteBox> &outBoxes,
+                                                   const SpriteDetectionOptions *customOpts)
+{
+    outFrames.clear();
+    outBoxes.clear();
+
+    if (previewAtlas.isNull()) return;
+
+    if (isAutoDetectBoxesEnabled()) {
+        SpriteDetectionOptions opts;
+        if (customOpts) {
+            opts = *customOpts;
+        } else {
+            const auto &cfg = AppConfig::instance();
+            opts.alphaThreshold = cfg.atlas().defaultAlphaThreshold;
+            opts.verticalTolerance = cfg.atlas().defaultVerticalTolerance > 0 ? cfg.atlas().defaultVerticalTolerance : 10;
+            opts.minSliceSize = cfg.atlas().minSliceSize;
+            opts.smartCrop = true;
+            opts.overlapThreshold = 0.10;
+        }
+
+        QList<QImage> detectedImages;
+        SpriteDetector::detectToImages(previewAtlas, detectedImages, outBoxes, opts);
+
+        outFrames.reserve(detectedImages.size());
+        for (const QImage &img : detectedImages) {
+            outFrames.append(QPixmap::fromImage(img));
+        }
+    } else {
+        outBoxes = m_initialBoxes;
+        outFrames.reserve(outBoxes.size());
+        for (const SpriteBox &box : outBoxes) {
+            QRect r = box.rect.intersected(previewAtlas.rect());
+            outFrames.append(QPixmap::fromImage(previewAtlas.copy(r)));
+        }
     }
 }
 
@@ -133,7 +200,7 @@ void FilterDialogBase::restoreInitialState()
     m_previewApplied = false;
 
     if (m_statusBadge) {
-        m_statusBadge->setText(tr("%1 frame(s) d'origine").arg(m_initialBoxes.size()));
+        m_statusBadge->setText(tr("%1 initial frame(s)").arg(m_initialBoxes.size()));
     }
 }
 

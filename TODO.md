@@ -14,7 +14,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M2** | [Gestionnaire Complet d'Animations & Timeline](#m2--gestionnaire-complet-danimations--timeline) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Ergonomie Splitters, Filmstrip Drag&Drop, LoopModes, Undo/Redo) |
 | **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Haute (Critique)** | Faible | 📝 Planifié (Prochaine Étape Immédiate) |
 | **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (85 tests CTest 100% — Session, Lock, Crash Recovery, Atomic Save, LibGit2 Find) |
-| **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟡 En cours (Socle FilterDialogBase & BackgroundRemoval validés, Despill à venir) |
+| **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟢 Clôturé & Validé (Socle FilterRegistry, Despill, Outline, ColorSwap 100% CTest) |
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 📝 Planifié (Compacité de Production) |
 | **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Faible | 📝 Spécifié (Intégration Pipelines Studios) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
@@ -411,10 +411,18 @@ L'exportation actuelle vers Godot ou TexturePacker utilise un placement en grill
 
 ## M7 : Suppression Avancée d'Arrière-Plan & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)
 
-### 🏛️ Architecture Générique des Filtres Graphiques (`FilterDialogBase`)
+### 🏛️ Architecture Extensible de Plugins de Filtres Graphiques (`FilterPlugin` & `FilterRegistry`) — ✅ TERMINÉ & VALIDÉ (100%)
 
-Pour éviter la prolifération de fenêtres ad-hoc et uniformiser l'expérience utilisateur, l'ensemble des filtres et traitements d'image de SpriteStudio s'appuient sur une architecture commune inspirée des fenêtres de filtres de GIMP et Photoshop :
+Pour éviter la prolifération de fenêtres ad-hoc et permettre l'ajout modulaire de nouveaux traitements sans modifier `MainWindow`, SpriteStudio s'appuie désormais sur une architecture standardisée de plugins et de registre centralisée :
 
+- **Interface Abstraite de Plugin `FilterPlugin` (`include/filters/filterplugin.h`) :**
+  - Contrat standardisé pour chaque filtre : `id()`, `name()`, `description()`, `category()`, `shortcut()`, et fabrique de dialogue `createDialog(parent, projectController)`.
+  - Catégorisation hiérarchique intégrée (`Cleanup`, `Colors`, `Effects`, `Geometry`).
+- **Registre Singleton `FilterRegistry` (`include/filters/filterregistry.h`, `src/filters/filterregistry.cpp`) :**
+  - Enregistrement déclaratif de plugins (`registerFilter()`, `unregisterFilter()`, `filter()`, `filters()`).
+  - Génération et alimentation dynamique du menu `Filtres` dans la barre de menus (`populateMenu()`), groupé par catégories logiques et séparateurs avec gestion gracieuse de l'activation selon la présence d'un document ouvert.
+- **Commande Universelle `ApplyFilterCommand` (`include/commands/filtercommands.h`, `src/commands/filtercommands.cpp`) :**
+  - `QUndoCommand` universelle pour les filtres graphiques préservant et restaurant l'atlas complet, les frames découpées, et les boîtes géométriques en cas d'Undo/Redo (`Ctrl+Z` / `Ctrl+Y`).
 - **Composant Socle `FilterDialogBase` (`include/widgets/filterdialogbase.h`, `src/widgets/filterdialogbase.cpp`) :**
   - **Dialogue Flottant Non-Bloquant :** La fenêtre reste légère au-dessus de l'espace de travail sans masquer l'atlas ni bloquer l'interaction visuelle.
   - **Aperçu Réactif en Direct (Live Preview) :**
@@ -425,7 +433,7 @@ Pour éviter la prolifération de fenêtres ad-hoc et uniformiser l'expérience 
     - À l'ouverture du filtre, un snapshot complet et non-destructif de l'état du document est conservé (`m_initialAtlas`, `m_initialFrames`, `m_initialBoxes`, `m_initialAnimations`).
     - Tout clic sur **Annuler**, appui sur la touche **Échap** ou fermeture de la fenêtre rétablit fidèlement l'état d'origine du document en 0 ms sans laisser d'effets secondaires.
   - **Validation & Annulation Complète (`QUndoStack` / `accept()`) :**
-    - Tout clic sur **OK** ou appui sur **Entrée** applique l'effet et pousse un `QUndoCommand` dédié sur la pile d'annulation du projet (`Ctrl+Z` / `Ctrl+Y`).
+    - Tout clic sur **OK** ou appui sur **Entrée** applique l'effet et pousse un `ApplyFilterCommand` dédié sur la pile d'annulation du projet (`Ctrl+Z` / `Ctrl+Y`).
   - **Portée d'Application (Scope) :**
     - Permet d'appliquer le traitement soit à la planche entière (*Entire Atlas*), soit uniquement aux frames sélectionnées (*Selected Slices*).
   - **Bouton « Valeurs par défaut » :**
@@ -435,8 +443,9 @@ Pour éviter la prolifération de fenêtres ad-hoc et uniformiser l'expérience 
 
 ### 🎨 Catalogue Détaillé des Filtres Prévus & Conçus
 
-#### 1. Suppression d'Arrière-Plan (`BackgroundRemovalDialog`) — 🟢 Validé & Opérationnel
+#### 1. Suppression d'Arrière-Plan (`BackgroundRemovalFilter` / `BackgroundRemovalDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Éliminer le fond uni d'une planche importée et recalculer automatiquement les boîtes englobantes de chaque sprite.
+- **Plugin :** ID `org.spritestudio.filter.background_removal`, catégorie `Cleanup`.
 - **Paramètres :**
   - Échantillonnage automatique et pastille visuelle de la couleur dominante (#RRGGBB).
   - Curseur Tolérance de couleur (0 à 100).
@@ -445,29 +454,32 @@ Pour éviter la prolifération de fenêtres ad-hoc et uniformiser l'expérience 
   - Options de rognage intelligent (Smart Crop) et seuil de chevauchement.
 - **Retour visuel :** Badge dynamique informant du nombre exact de frames détectées en temps réel.
 
-#### 2. Débavurage & Anti-Halo (*Despill / Edge Cleanup*) — 📝 Prochaine Étape
+#### 2. Débavurage & Anti-Halo (*Despill / Edge Cleanup*) (`DespillFilter` / `DespillFilterDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Éliminer le liseré verdâtre, blanc ou magenta de 1 pixel persistant sur le pourtour des sprites après détourage d'un fond JPEG ou antialiasé.
+- **Plugin :** ID `org.spritestudio.filter.despill`, catégorie `Cleanup`.
 - **Paramètres :**
   - Pipette / Sélecteur de couleur du liseré à neutraliser.
-  - Curseur Tolérance de détection périphérique.
+  - Curseur Tolérance de détection périphérique (0 à 100).
   - Mode d'action :
-    - *Suppression stricte :* Rend transparents les pixels périphériques contaminés.
     - *Color Clamping / Despill doux :* Conserve l'alpha mais remplace la teinte du liseré par la couleur opaque du pixel intérieur adjacent (évite d'amputer les contours fins).
-- **Portée :** Tout l'atlas ou sélection de frames.
+    - *Suppression stricte :* Rend transparents les pixels périphériques contaminés.
+- **Portée :** Tout l'atlas ou sélection de frames actives (`isSelectedFramesOnly()`).
 
-#### 3. Échange de Palette & Color Swap (*Alt-Skins / Recoloring*) — 📝 Planifié
+#### 3. Échange de Palette & Color Swap (*Alt-Skins / Recoloring*) (`ColorSwapFilter` / `ColorSwapFilterDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Générer en un clic des variantes de personnages (Joueur 1 vs Joueur 2, variantes d'ennemis Gobelin vert $\rightarrow$ Gobelin de feu rouge) sans redessiner.
+- **Plugin :** ID `org.spritestudio.filter.color_swap`, catégorie `Colors`.
 - **Paramètres :**
   - Sélecteur de couleur source (pipette) et couleur de destination.
-  - Curseur de tolérance colorimétrique (teinte / RVB).
-  - Case à cocher *« Préserver la luminosité (Shading) »* : permute la teinte générale tout en conservant les dégradés d'ombres et reflets d'origine du pixel art.
+  - Curseur de tolérance colorimétrique (0 à 100).
+  - Case à cocher *« Préserver l'ombrage (Shading HSV) »* : permute la teinte générale tout en conservant les dégradés d'ombres et reflets d'origine du pixel art.
 - **Aperçu direct :** Permet d'observer la nouvelle variante s'animer immédiatement dans le lecteur de preview.
 
-#### 4. Générateur de Contours & Silhouettes (*Outline & Stroke Generator*) — 📝 Planifié
+#### 4. Générateur de Contours & Silhouettes (*Outline & Stroke Generator*) (`OutlineFilter` / `OutlineFilterDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Ajouter un contour marqué autour des sprites (effet de surbrillance/hover, style sticker, lisibilité sur décors sombres) ou produire des masques d'impact.
+- **Plugin :** ID `org.spritestudio.filter.outline`, catégorie `Effects`.
 - **Paramètres :**
   - Curseur Épaisseur (1 à 4 px).
-  - Sélecteur de couleur du trait (noir `#000000`, blanc `#ffffff`, doré, etc.).
+  - Sélecteur de couleur du trait (noir `#000000`, blanc `#ffffff`, doré `#ffcc00`, ou personnalisé via dialogue de couleur).
   - Voisinage : 4-connecté (croix nette pour pixel art rétro) ou 8-connecté (diagonales lissées).
   - Option *« Silhouette pleine »* : remplit l'intérieur pour créer une ombre portée ou un flash blanc de dégât (*hit-flash*).
 
@@ -722,6 +734,40 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
       - **Validation Undoable (OK / Entrée) :** Création et empilement d'une commande `RemoveBackgroundCommand` dans `QUndoStack` (permettant un `Ctrl+Z` / `Ctrl+Y` instantané) et mémorisation des préférences dans `AppConfig`.
     - **Validation par tests automatisés (`tests/test_controllers.cpp`) :** Test `testProjectControllerDominantBackgroundColorAndUndo` validant la détection de dominante RGB et la réversibilité stricte `undo()` / `redo()` du `RemoveBackgroundCommand`. 100% des tests CTest validés.
 
+- **Système Extensible de Plugins de Filtres Graphiques & Filtres à Valeur Ajoutée (M7) — ✅ TERMINÉ & VALIDÉ (100%) :**
+  - *Constat :* Chaque traitement d'image (détourage, correction de liseré, création de variantes) risquait d'être codé en dur dans `MainWindow`, provoquant couplage fort et dette technique.
+  - *Réalisé :*
+    - **Architecture de Plugins (`FilterPlugin` / `FilterRegistry`) :**
+      - Création de l'interface abstraite `FilterPlugin` (`include/filters/filterplugin.h`) avec métadonnées (`id`, `name`, `description`, `category`, `shortcut`) et fabrique virtuelle `createDialog()`.
+      - Création du registre singleton `FilterRegistry` (`include/filters/filterregistry.h`, `src/filters/filterregistry.cpp`) orchestrant l'enregistrement des filtres et la génération dynamique du menu `Filtres` dans `MainWindow`.
+      - Commande Undo/Redo universelle `ApplyFilterCommand` (`include/commands/filtercommands.h`, `src/commands/filtercommands.cpp`) assurant la réversibilité stricte (atlas complet, frames découpées, boîtes englobantes).
+    - **Migration du Filtre de Fond en Plugin (`BackgroundRemovalFilter`) :**
+      - Intégration transparente de `BackgroundRemovalDialog` dans le registre sous la catégorie `Cleanup`.
+    - **Filtre Débavurage & Anti-Halo / Despill (`DespillFilter` / `DespillFilterDialog`) :**
+      - Neutralisation du liseré de 1 px avec deux modes : *Color Clamping* (substitution de teinte par le pixel intérieur opaque sans amputer les contours fins) et *Suppression stricte* (alpha à 0).
+      - Sélecteur de couleur cible, curseur de tolérance et support du ciblage sélectif des frames actives (`isSelectedFramesOnly()`).
+    - **Filtre Générateur de Contours & Silhouettes (`OutlineFilter` / `OutlineFilterDialog`) :**
+      - Épaisseur paramétrable (1 à 4 px), connexité 4 (pixel art net) ou 8 (diagonales lissées), palette de couleurs (presets noir, blanc, or, personnalisé).
+      - Option *Silhouette pleine* pour générer des masques de flash de dégât (*hit-flash*) ou des ombres portées.
+    - **Filtre Échange de Palette & Variantes Alt-Skins (`ColorSwapFilter` / `ColorSwapFilterDialog`) :**
+      - Remplacement colorimétrique ciblé avec tolérance ajustable et préservation subtile du dégradé d'ombrage (espace colorimétrique HSV Shading Preservation).
+    - **Généralisation de la Redétection Automatique des Boîtes (`FilterDialogBase`) — ✅ TERMINÉ :**
+      - Intégration dans la barre de contrôle commune d'une case à cocher *Détection auto des boîtes* (`Auto-detect Sprite Boxes`), au même niveau que *Live Preview*.
+      - Méthode factorisée `updatePreviewFramesAndBoxes()` ré-exécutant `SpriteDetector::detectToImages()` sur l'atlas filtré lorsque la case est cochée (ajustant instantanément les boîtes aux contours élargis de l'Outline ou aux découpes du Despill), ou préservant fidèlement le partitionnement initial si décochée.
+      - Activée par défaut pour la *Suppression de fond* et pour le *Générateur de contours* (où l'élargissement de 1 à 4 px impose un agrandissement des boîtes), débrayable en un clic.
+    - **Validation par tests automatisés (`tests/test_controllers.cpp`) :**
+      - 6 tests unitaires complets (`testFilterRegistry`, `testDespillFilterAlgorithm`, `testOutlineFilterAlgorithm`, `testColorSwapFilterAlgorithm`, `testApplyFilterCommandUndoRedo`, `testFilterAutoDetectBoxes`). 100% de succès sous CTest (49/49 tests passés).
+
+- **Internationalisation Complète (i18n) & Localisation (FR, EN, JA) — ✅ TERMINÉ :**
+  - *Contexte & Problème résolu :* Élimination des clés internes brutes (`KEY_MENU_FILTERS`, `KEY_DIALOG_REMOVE_BG_TITLE`) affichées dans l'IHM et des textes français codés en dur dans les boîtes de dialogue de filtres lorsque l'interface était basculée en anglais ou japonais.
+  - *Standardisation des sources :* Normalisation de l'ensemble des chaînes sources C++ en anglais standard (`tr("Live Preview")`, `tr("Reset Defaults")`, `tr("Background Removal")`, `tr("Despill & Edge Cleanup")`, `tr("Outline & Silhouette Generator")`, `tr("Color Swap & Alt-Skins")`, tooltips, badges et labels).
+  - *Couverture intégrale des catalogues linguistiques :*
+    - `sprite_studio_fr_FR.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
+    - `sprite_studio_en_US.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
+    - `sprite_studio_ja_JA.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
+  - *Mise à jour dynamique de l'IHM :* Prise en charge du rechargement à la volée du menu Filtres et de ses catégories lors d'un événement `QEvent::LanguageChange`.
+  - *Validation par tests automatisés :* Extension de `testLanguageCatalogLoad()` dans `tests/test_controllers.cpp` validant la traduction de `KEY_MENU_FILTERS`, `BackgroundRemovalDialog`, `FilterDialogBase` et du contrôleur de projet pour les 3 langues.
+
 ---
 
 ### 3. DevOps, Build & Automatisation (Tests & CI/CD)
@@ -764,9 +810,9 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 2. **Étape 5 — Assainissement Architectural & Thread-Safety (AUDIT-Phase 2) :**
    - *Objectif :* Sécuriser l'étanchéité multi-thread pour les traitements asynchrones et l'export batch.
    - *Livrables :* Migration de `SpriteDocument::m_frames` de `QList<QPixmap>` vers `QList<QImage>`. Déport de la conversion `QPixmap` uniquement dans les composants d'affichage GUI.
-3. **Étape 6 — Nettoyage Périphérique Anti-Halo / Despill (M7-Suite) :**
-   - *Objectif :* Offrir un détourage parfait des rips de planches Web sans laisser de liseré de 1 px.
-   - *Livrables :* Filtre `DespillDialog` dérivé de `FilterDialogBase` avec live preview debouncé et color clamping doux.
+3. **Étape 6 — Nettoyage Périphérique Anti-Halo, Filtres Plugins & Retouche (M7) — ✅ TERMINÉ & VALIDÉ (100%) :**
+   - *Objectif :* Offrir une architecture de filtres modulaire, un détourage parfait sans liseré de 1 px, des variantes de couleurs et des contours.
+   - *Livrables :* Socle `FilterPlugin` + `FilterRegistry`, commande d'annulation universelle `ApplyFilterCommand`, filtres `DespillFilter` (Color Clamping / strict), `OutlineFilter` (1-4px, connexité 4/8, silhouette pleine), et `ColorSwapFilter` (Shading HSV préservé). 5 tests automatisés dédiés validés sous CTest.
 
 ---
 

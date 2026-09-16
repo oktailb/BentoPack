@@ -18,7 +18,7 @@ BackgroundRemovalDialog::BackgroundRemovalDialog(SpriteDocument *doc, QUndoStack
     : FilterDialogBase(doc, undoStack, parent)
     , m_detectedBgColor(0)
 {
-    setWindowTitle(tr("KEY_DIALOG_REMOVE_BG_TITLE", "Suppression d'arrière-plan"));
+    setWindowTitle(tr("Background Removal"));
 
     // Detect dominant background color from initial atlas
     if (m_document && !m_initialAtlas.isNull()) {
@@ -26,6 +26,9 @@ BackgroundRemovalDialog::BackgroundRemovalDialog(SpriteDocument *doc, QUndoStack
     }
 
     setupFilterUI();
+
+    // Enable auto-detection of sprite boxes by default for background removal
+    setAutoDetectBoxesEnabled(true);
 
     // Trigger initial preview computation
     applyPreview();
@@ -62,7 +65,7 @@ void BackgroundRemovalDialog::setupFilterUI()
     const auto &cfg = AppConfig::instance();
 
     // --- 1. Detected Background Color GroupBox ---
-    QGroupBox *colorGroup = new QGroupBox(tr("Couleur d'arrière-plan détectée"), this);
+    QGroupBox *colorGroup = new QGroupBox(tr("Detected Background Color"), this);
     QHBoxLayout *colorLayout = new QHBoxLayout(colorGroup);
 
     m_swatchLabel = new QLabel(this);
@@ -86,12 +89,12 @@ void BackgroundRemovalDialog::setupFilterUI()
     contentLayout()->addWidget(colorGroup);
 
     // --- 2. Parameters GroupBox ---
-    QGroupBox *paramGroup = new QGroupBox(tr("Paramètres de détourage"), this);
+    QGroupBox *paramGroup = new QGroupBox(tr("Removal Parameters"), this);
     QVBoxLayout *paramLayout = new QVBoxLayout(paramGroup);
 
     // Row: Color Tolerance
     QHBoxLayout *colorTolRow = new QHBoxLayout();
-    QLabel *lblTol = new QLabel(tr("Tolérance de couleur :"), this);
+    QLabel *lblTol = new QLabel(tr("Color tolerance:"), this);
     lblTol->setFixedWidth(140);
     m_colorToleranceSlider = new QSlider(Qt::Horizontal, this);
     m_colorToleranceSlider->setRange(0, 100);
@@ -109,7 +112,7 @@ void BackgroundRemovalDialog::setupFilterUI()
 
     // Row: Alpha Threshold
     QHBoxLayout *alphaRow = new QHBoxLayout();
-    QLabel *lblAlpha = new QLabel(tr("Seuil Alpha :"), this);
+    QLabel *lblAlpha = new QLabel(tr("Alpha threshold:"), this);
     lblAlpha->setFixedWidth(140);
     m_alphaThresholdSlider = new QSlider(Qt::Horizontal, this);
     m_alphaThresholdSlider->setRange(0, 255);
@@ -127,7 +130,7 @@ void BackgroundRemovalDialog::setupFilterUI()
 
     // Row: Vertical Tolerance
     QHBoxLayout *vertRow = new QHBoxLayout();
-    QLabel *lblVert = new QLabel(tr("Tolérance verticale :"), this);
+    QLabel *lblVert = new QLabel(tr("Vertical tolerance:"), this);
     lblVert->setFixedWidth(140);
     m_verticalToleranceSlider = new QSlider(Qt::Horizontal, this);
     m_verticalToleranceSlider->setRange(0, 50);
@@ -148,9 +151,9 @@ void BackgroundRemovalDialog::setupFilterUI()
     QHBoxLayout *cropRow = new QHBoxLayout();
     m_smartCropCheck = new QCheckBox(tr("Smart Crop"), this);
     m_smartCropCheck->setChecked(true);
-    m_smartCropCheck->setToolTip(tr("Élimine automatiquement les découpes parasites ou imbriquées"));
+    m_smartCropCheck->setToolTip(tr("Automatically shrink-wrap bounding boxes around opaque sprite pixels"));
 
-    QLabel *lblOverlap = new QLabel(tr("Seuil chevauchement :"), this);
+    QLabel *lblOverlap = new QLabel(tr("Overlap threshold:"), this);
     m_overlapSpin = new QDoubleSpinBox(this);
     m_overlapSpin->setRange(0.0, 1.0);
     m_overlapSpin->setSingleStep(0.05);
@@ -181,6 +184,13 @@ void BackgroundRemovalDialog::setupFilterUI()
 
     connect(m_smartCropCheck, &QCheckBox::toggled, this, &BackgroundRemovalDialog::onParametersChanged);
     connect(m_overlapSpin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BackgroundRemovalDialog::onParametersChanged);
+
+    if (m_autoDetectBoxesCheck) {
+        connect(m_autoDetectBoxesCheck, &QCheckBox::toggled, this, [this](bool enabled) {
+            if (m_smartCropCheck) m_smartCropCheck->setEnabled(enabled);
+            if (m_overlapSpin) m_overlapSpin->setEnabled(enabled);
+        });
+    }
 }
 
 void BackgroundRemovalDialog::updateColorSwatch(QRgb color)
@@ -215,28 +225,24 @@ void BackgroundRemovalDialog::applyPreview()
     m_previewAtlas = ProjectController::removeBackgroundFromImage(
         m_initialAtlas, colorTolerance());
 
-    // Step 2: Extract bounding boxes and individual sprite frames
+    // Step 2: Extract bounding boxes and individual sprite frames using factorized helper
     SpriteDetectionOptions opts;
     opts.alphaThreshold = alphaThreshold();
     opts.verticalTolerance = verticalTolerance();
     opts.smartCrop = isSmartCropEnabled();
     opts.overlapThreshold = overlapThreshold();
 
-    QList<QImage> detectedImages;
-    m_previewBoxes.clear();
-    SpriteDetector::detectToImages(m_previewAtlas, detectedImages, m_previewBoxes, opts);
-
-    m_previewFrames.clear();
-    m_previewFrames.reserve(detectedImages.size());
-    for (const QImage &img : detectedImages) {
-        m_previewFrames.append(QPixmap::fromImage(img));
-    }
+    updatePreviewFramesAndBoxes(m_previewAtlas, m_previewFrames, m_previewBoxes, &opts);
 
     // Step 3: Update document directly so the main graphics scene reflects the result
     m_document->setAtlas(m_previewAtlas);
     m_document->setFrames(m_previewFrames, m_previewBoxes);
 
-    setStatusText(tr("%1 frame(s) détectée(s)").arg(m_previewBoxes.size()));
+    if (isAutoDetectBoxesEnabled()) {
+        setStatusText(tr("%1 frame(s) detected").arg(m_previewBoxes.size()));
+    } else {
+        setStatusText(tr("%1 initial frame(s)").arg(m_previewBoxes.size()));
+    }
 }
 
 QUndoCommand* BackgroundRemovalDialog::createUndoCommand()

@@ -40,6 +40,7 @@ protected:
     QUndoCommand* createUndoCommand() override;
     void resetDefaults() override;
     void saveSettings() override;
+    bool defaultAutoDetectBoxes() const override { return true; }
 
 private slots:
     void onParametersChanged();

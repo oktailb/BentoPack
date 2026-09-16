@@ -203,7 +203,6 @@ private:
     QMenu *m_filtersMenu = nullptr;
     QAction *m_undoAction = nullptr;
     QAction *m_redoAction = nullptr;
-    QAction *m_removeBgAction = nullptr;
     QAction *m_prefAction = nullptr;
     QAction *m_helpPrefAction = nullptr;
     GitHistoryDock *m_gitDock = nullptr;

@@ -20,7 +20,11 @@
 * **Smart Sprite Sheet Slicing:** Automatic sprite detection and extraction with configurable alpha and color tolerance.
 * **Animated GIF Decompilation:** Instant extraction of multi-frame animated GIFs into ordered frame sequences.
 * **Format Parsers:** Import existing sprite atlases with associated **JSON** (TexturePacker / Aseprite) or **Godot 4 `.tres`** metadata.
-* **Non-Destructive Background Removal:** Pick transparent chroma colors and remove background colors with instant visual feedback.
+* **Non-Destructive Filter & Cleanup Suite:** Extensible filter plugin system featuring real-time debounced live preview, non-destructive rollback, and full `QUndoStack` integration:
+  * **Chroma Background Removal:** Dominant color auto-detection, alpha thresholding, and smart crop.
+  * **Despill / Anti-Halo:** Clean up 1-pixel colored fringes left by antialiased edges using *Color Clamping* or strict removal.
+  * **Outline & Silhouette Generator:** 1-4px customizable stroke (4-connected or 8-connected) and solid hit-flash silhouette masks.
+  * **Color Swap (Alt-Skins):** Instant palette replacement preserving pixel art shading gradients (HSV).
 
 ![Background Removal Demo](RemoveBackground.gif)
 
@@ -136,7 +140,7 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 | **License & Pricing** | **Open-Source (Apache 2.0)** | Commercial (~40€) | Commercial (~20€) / Source | Free (Abandoned) | Open-Source (MIT) | Integrated (MIT) |
 | **Core Technology** | C++17 / Qt 6 | C++ / Qt | C++ / Skia | Adobe AIR / Flash | Electron / Web | C++ / Godot Core |
 | **Smart Atlas Slicing** | 🟢 **Advanced (O(N) SpatialGrid)** | 🔴 None (requires loose images) | 🟡 Basic | 🟢 Historic pioneer | 🔴 None (requires loose files) | 🟡 Basic (Grid / Alpha) |
-| **Live Background Removal** | 🟢 **Yes (Live preview, filters)** | 🔴 None | 🔴 Manual | 🟢 Yes | 🔴 None | 🔴 None |
+| **Live Filters & Background Cleanup** | 🟢 **Yes (Plugin Registry, Despill, Outline, Color Swap)** | 🔴 None | 🔴 Manual | 🟢 Historic (BG only) | 🔴 None | 🔴 None |
 | **Timeline & Filmstrip** | 🟢 **Yes (Filmstrip, Ping-Pong)** | 🔴 None (Static preview) | 🟢 **Full animation studio** | 🔴 None | 🔴 None | 🟢 Engine-integrated |
 | **Packing Algorithms** | 🟡 Row / Grid / PoT *(MaxRects planned)* | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
 | **Anchor Points / Pivots** | 📝 *Planned (M3)* | 🟢 Yes (All presets) | 🟢 Yes (Canvas origin) | 🟡 Basic | 🟢 Yes | 🟢 Yes |
@@ -156,7 +160,7 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 - [x] **M1 — Interactive Atlas Slicing:** 8 cosmetic handles, mouse-centered zoom, group drag, pixel-perfect nudge, alpha trim, frame merging
 - [x] **M2 — Timeline & Animation Manager:** Filmstrip ribbon, scrubber with milliseconds counter, loop modes (Loop, Once, Ping-Pong), auto-play
 - [x] **M5 — Native `.ssp` Project Format & Time-Travel:** ZIP container atomic saves, crash detection & recovery lock, LibGit2 continuous Git history dock
-- [ ] **M7 — Advanced Filter System & Cleanup:** *(In Progress)* Live preview floating dialogs (`FilterDialogBase`), despill / edge anti-halo, color swap, retro palette snapping
+- [x] **M7 — Advanced Filter System & Cleanup:** Plugin registry (`FilterPlugin` / `FilterRegistry`), universal Undo (`ApplyFilterCommand`), live preview (`FilterDialogBase`), Despill/Anti-Halo (color clamping), Outline & Silhouettes, Color Swap (HSV shading)
 - [ ] **M3 — Interactive Pivots & Alignment:** *(Next Up)* Visual crosshair gizmo, batch alignment presets (Bottom-Center, Top-Left, Center), engine offset export (Godot 4 `.tres` / JSON)
 - [ ] **M6 — Advanced Bin-Packing:** MaxRects (*Best Short Side Fit* / *Best Area Fit*), padding, 1px extrusion, frame deduplication
 - [ ] **M-CLI — Headless Command-Line Interface:** `spritestudio-cli` for automated game studio build scripts and CI/CD pipelines

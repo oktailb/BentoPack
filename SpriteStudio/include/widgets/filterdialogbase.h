@@ -28,6 +28,8 @@ class QUndoCommand;
  * - Standardized control bar: "Live preview" checkbox, dynamic status badge, "Reset defaults" button, and OK/Cancel button box.
  * - Seamless Undo/Redo integration: pushes created QUndoCommand onto QUndoStack on OK (accept()).
  */
+struct SpriteDetectionOptions;
+
 class FilterDialogBase : public QDialog
 {
     Q_OBJECT
@@ -42,11 +44,15 @@ public:
     QUndoStack* undoStack() const { return m_undoStack; }
 
     bool isLivePreviewEnabled() const;
+    bool isAutoDetectBoxesEnabled() const;
+    void setAutoDetectBoxesEnabled(bool enabled);
     void setStatusText(const QString &text);
 
 public slots:
     void schedulePreview();
     void resetToDefaults();
+    void reject() override;
+    void accept() override;
 
 protected:
     // Pure virtual lifecycle hooks to be implemented by derived filters
@@ -55,12 +61,17 @@ protected:
     virtual void resetDefaults() = 0;
     virtual void saveSettings() {}
 
+    // Default configuration for auto-detection checkbox
+    virtual bool defaultAutoDetectBoxes() const { return false; }
+
+    // Factorized bounding box and frame slicing helper for all derived filters
+    void updatePreviewFramesAndBoxes(const QImage &previewAtlas,
+                                    QList<QPixmap> &outFrames,
+                                    QList<SpriteBox> &outBoxes,
+                                    const SpriteDetectionOptions *customOpts = nullptr);
+
     // Layout extension point: derived dialogs add custom controls to this layout
     QVBoxLayout* contentLayout() const { return m_contentLayout; }
-
-    // Dialog lifecycle overrides
-    void reject() override;
-    void accept() override;
 
     // State restoration
     void restoreInitialState();
@@ -82,6 +93,7 @@ protected:
     QVBoxLayout*                    m_mainLayout = nullptr;
     QVBoxLayout*                    m_contentLayout = nullptr;
     QCheckBox*                      m_livePreviewCheck = nullptr;
+    QCheckBox*                      m_autoDetectBoxesCheck = nullptr;
     QLabel*                         m_statusBadge = nullptr;
     QPushButton*                    m_resetDefaultsBtn = nullptr;
     QDialogButtonBox*               m_buttonBox = nullptr;

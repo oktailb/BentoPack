@@ -55,6 +55,15 @@ set(SpriteStudioCore_SRC
     src/widgets/timelinefilmstripwidget.cpp
     src/widgets/filterdialogbase.cpp
     src/widgets/backgroundremovaldialog.cpp
+    src/widgets/despillfilterdialog.cpp
+    src/widgets/outlinefilterdialog.cpp
+    src/widgets/colorswapfilterdialog.cpp
+    src/filters/filterregistry.cpp
+    src/filters/backgroundremovalfilter.cpp
+    src/filters/despillfilter.cpp
+    src/filters/outlinefilter.cpp
+    src/filters/colorswapfilter.cpp
+    src/commands/filtercommands.cpp
     src/localizationmanager.cpp
     src/zip/miniz.c
     src/version.h.in
@@ -77,6 +86,7 @@ set(SpriteStudioCore_INCLUDE
     include/packer/atlaspacker.h
     include/animation/animationplayer.h
     include/commands/commands.h
+    include/commands/filtercommands.h
     include/image/spritedetector.h
     include/atlasboxitem.h
     include/project/sessionmanager.h
@@ -86,6 +96,15 @@ set(SpriteStudioCore_INCLUDE
     include/widgets/timelinefilmstripwidget.h
     include/widgets/filterdialogbase.h
     include/widgets/backgroundremovaldialog.h
+    include/widgets/despillfilterdialog.h
+    include/widgets/outlinefilterdialog.h
+    include/widgets/colorswapfilterdialog.h
+    include/filters/filterplugin.h
+    include/filters/filterregistry.h
+    include/filters/backgroundremovalfilter.h
+    include/filters/despillfilter.h
+    include/filters/outlinefilter.h
+    include/filters/colorswapfilter.h
     include/localizationmanager.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h
