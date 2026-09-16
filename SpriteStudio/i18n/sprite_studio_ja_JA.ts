@@ -1,84 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <TS version="2.1" language="ja">
 <context>
-    <name />
-    <message>
-        <source>Failed to decode image from: %1</source>
-        <translation type="vanished">画像 %1 のデコードに失敗しました</translation>
-    </message>
-    <message>
-        <source>Failed to segment sprite frames.</source>
-        <translation type="vanished">スプライトフレームの検出に失敗しました。</translation>
-    </message>
-    <message>
-        <source>Failed to remove background from atlas.</source>
-        <translation type="vanished">アトラスからの背景削除に失敗しました。</translation>
-    </message>
-    <message>
-        <source>Failed to segment frames after background removal.</source>
-        <translation type="vanished">背景削除後のフレーム検出に失敗しました。</translation>
-    </message>
-</context>
-<context>
     <name>AboutDialog</name>
-    <message>
-        <source>_about</source>
-        <translation type="vanished">情報</translation>
-    </message>
-    <message>
-        <source>_credits</source>
-        <translation type="vanished">クレジット</translation>
-    </message>
-    <message>
-        <source>_licence</source>
-        <translation type="vanished">ライセンス</translation>
-    </message>
-    <message>
-        <source>_close</source>
-        <translation type="vanished">閉</translation>
-    </message>
-    <message>
-        <source>_purpose</source>
-        <translation type="vanished">スプライトを抽出してアニメーション化する強力なツール</translation>
-    </message>
-    <message>
-        <source>_build_with</source>
-        <translation type="vanished">構築する</translation>
-    </message>
-    <message>
-        <source>_platform</source>
-        <translation type="vanished">ビルドプラットフォーム</translation>
-    </message>
-    <message>
-        <source>_git_info</source>
-        <translation type="vanished">Git情報</translation>
-    </message>
-    <message>
-        <source>_branch</source>
-        <translation type="vanished">Gitブランチ</translation>
-    </message>
-    <message>
-        <source>_commit</source>
-        <translation type="vanished">Gitの最後のコミット</translation>
-    </message>
-    <message>
-        <source>_last_commit_date</source>
-        <translation type="vanished">Gitの最終コミット日</translation>
-    </message>
-    <message>
-        <source>_last_author</source>
-        <translation type="vanished">最後の著者</translation>
-    </message>
-    <message>
-        <source>_credits_and_greetings</source>
-        <translation type="vanished">クレジットと謝辞</translation>
-    </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="20" />
         <location filename="../src/aboutdialog.cpp" line="78" />
-        <location filename="../../tests/test_controllers.cpp" line="1376" />
-        <location filename="../../tests/test_controllers.cpp" line="1406" />
-        <location filename="../../tests/test_controllers.cpp" line="1436" />
         <source>KEY_DIALOG_ABOUT_TITLE</source>
         <translation>情報</translation>
     </message>
@@ -186,18 +112,6 @@
 <context>
     <name>AnimationController</name>
     <message>
-        <source>New Animation</source>
-        <translation type="vanished">新規アニメーション</translation>
-    </message>
-    <message>
-        <source>Animation name:</source>
-        <translation type="vanished">アニメーション名 :</translation>
-    </message>
-    <message>
-        <source>anim_%1</source>
-        <translation type="vanished">anim_%1</translation>
-    </message>
-    <message>
         <location filename="../src/controller/animationcontroller.cpp" line="65" />
         <source>KEY_ANIM_COL_NAME</source>
         <translation>名前</translation>
@@ -271,18 +185,6 @@
 <context>
     <name>AtlasViewController</name>
     <message>
-        <source>Trim %1 Slices</source>
-        <translation type="vanished">%1 個のスライスの余白を自動調整</translation>
-    </message>
-    <message>
-        <source>Merge %1 Slices</source>
-        <translation type="vanished">%1 個のスライスを結合</translation>
-    </message>
-    <message>
-        <source>Move %1 Slices</source>
-        <translation type="vanished">%1 個のスライスを移動</translation>
-    </message>
-    <message>
         <location filename="../src/controller/atlasviewcontroller.cpp" line="288" />
         <source>KEY_CMD_TRIM_SLICES</source>
         <translation>%1 個のスライスの余白を自動調整</translation>
@@ -302,9 +204,6 @@
     <name>BackgroundRemovalDialog</name>
     <message>
         <location filename="../src/widgets/backgroundremovaldialog.cpp" line="21" />
-        <location filename="../../tests/test_controllers.cpp" line="1384" />
-        <location filename="../../tests/test_controllers.cpp" line="1414" />
-        <location filename="../../tests/test_controllers.cpp" line="1444" />
         <source>Background Removal</source>
         <translation>背景の削除</translation>
     </message>
@@ -370,6 +269,83 @@
         <location filename="../src/filters/backgroundremovalfilter.cpp" line="12" />
         <source>Detects dominant background color and makes pixels transparent with automatic bounding box recalculation.</source>
         <translation>主要な背景色を検出して透明化し、境界ボックスを自動再計算します。</translation>
+    </message>
+</context>
+<context>
+    <name>ColorAdjustFilter</name>
+    <message>
+        <location filename="../src/filters/coloradjustfilter.cpp" line="7" />
+        <source>Color Adjustment (HSV &amp; Contrast)...</source>
+        <translation>カラー調整 (HSV・コントラスト)...</translation>
+    </message>
+    <message>
+        <location filename="../src/filters/coloradjustfilter.cpp" line="12" />
+        <source>Adjusts hue rotation, saturation, brightness, and contrast globally or on selected frames.</source>
+        <translation>色相の回転、彩度、明度、コントラストを全体または選択したフレームに対して調整します。</translation>
+    </message>
+</context>
+<context>
+    <name>ColorAdjustFilterDialog</name>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="18" />
+        <source>Color Adjustment (HSV &amp; Contrast)</source>
+        <translation>カラー調整 (HSV・コントラスト)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="27" />
+        <source>Adjustment Parameters</source>
+        <translation>調整パラメーター</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="33" />
+        <source>Hue Shift:</source>
+        <translation>色相シフト：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="48" />
+        <source>Saturation:</source>
+        <translation>彩度：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="63" />
+        <source>Brightness:</source>
+        <translation>明度：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="78" />
+        <source>Contrast:</source>
+        <translation>コントラスト：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="95" />
+        <source>Target Scope</source>
+        <translation>適用範囲</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="98" />
+        <source>Apply to selected frames only</source>
+        <translation>選択したフレームにのみ適用</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="103" />
+        <source>No frames selected: applies to entire atlas</source>
+        <translation>フレームが選択されていません：アトラス全体に適用されます</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="291" />
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="294" />
+        <source>Adjusted (H:%1° S:%2% V:%3% C:%4%)</source>
+        <translation>調整完了 (H:%1° S:%2% V:%3% C:%4%)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="292" />
+        <source>%1 frame(s) detected</source>
+        <translation>%1 フレーム検出</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="304" />
+        <source>Filter: Color Adjustment</source>
+        <translation>フィルター：カラー調整</translation>
     </message>
 </context>
 <context>
@@ -566,9 +542,6 @@ Strict removal clears the pixel.</source>
     <name>FilterDialogBase</name>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="61" />
-        <location filename="../../tests/test_controllers.cpp" line="1385" />
-        <location filename="../../tests/test_controllers.cpp" line="1415" />
-        <location filename="../../tests/test_controllers.cpp" line="1445" />
         <source>Live Preview</source>
         <translation>リアルタイムプレビュー</translation>
     </message>
@@ -609,37 +582,28 @@ Strict removal clears the pixel.</source>
         <location filename="../src/filters/backgroundremovalfilter.cpp" line="18" />
         <location filename="../src/filters/despillfilter.cpp" line="18" />
         <source>Cleanup &amp; Extraction</source>
-        <translation>クリーンアップ・抽出</translation>
+        <translation>クリーンアップと抽出</translation>
     </message>
     <message>
         <location filename="../src/filters/outlinefilter.cpp" line="18" />
         <source>Effects &amp; Outlines</source>
-        <translation>エフェクト・輪郭</translation>
+        <translation>エフェクトと輪郭</translation>
     </message>
     <message>
+        <location filename="../src/filters/coloradjustfilter.cpp" line="18" />
         <location filename="../src/filters/colorswapfilter.cpp" line="18" />
+        <location filename="../src/filters/retropalettefilter.cpp" line="18" />
         <source>Colors &amp; Palettes</source>
-        <translation>カラー・パレット</translation>
+        <translation>カラーとパレット</translation>
+    </message>
+    <message>
+        <location filename="../src/filters/pixelrescalefilter.cpp" line="18" />
+        <source>Geometry &amp; Transform</source>
+        <translation>ジオメトリと変形</translation>
     </message>
 </context>
 <context>
     <name>GifExtractor</name>
-    <message>
-        <source>_error</source>
-        <translation type="vanished">エラー</translation>
-    </message>
-    <message>
-        <source>_invalid_gif</source>
-        <translation type="vanished">GIFファイルが無効であるか、存在しません</translation>
-    </message>
-    <message>
-        <source>_gif_no_frames</source>
-        <translation type="vanished">GIFにフレームがありません</translation>
-    </message>
-    <message>
-        <source>_extracted_frames</source>
-        <translation type="vanished">抽出されたフレーム</translation>
-    </message>
     <message>
         <location filename="../src/extractor/gifextractor.cpp" line="21" />
         <source>Reading GIF frames from %1...</source>
@@ -708,22 +672,6 @@ Strict removal clears the pixel.</source>
         <translation>Git履歴</translation>
     </message>
     <message>
-        <source>KEY_GIT_TIP_MSG</source>
-        <translation type="vanished">メッセージ</translation>
-    </message>
-    <message>
-        <source>KEY_GIT_TIP_AUTHOR</source>
-        <translation type="vanished">作成者</translation>
-    </message>
-    <message>
-        <source>KEY_GIT_TIP_DATE</source>
-        <translation type="vanished">日時</translation>
-    </message>
-    <message>
-        <source>KEY_GIT_TIP_RESTORE_HINT</source>
-        <translation type="vanished">ダブルクリックでこのリビジョンを復元</translation>
-    </message>
-    <message>
         <location filename="../src/widgets/githistorydock.cpp" line="168" />
         <location filename="../src/widgets/githistorydock.cpp" line="479" />
         <source>KEY_GIT_REFRESH_TOOLTIP</source>
@@ -775,9 +723,6 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/githistorydock.cpp" line="246" />
         <location filename="../src/widgets/githistorydock.cpp" line="492" />
-        <location filename="../../tests/test_controllers.cpp" line="1379" />
-        <location filename="../../tests/test_controllers.cpp" line="1409" />
-        <location filename="../../tests/test_controllers.cpp" line="1439" />
         <source>KEY_GIT_BTN_RESTORE</source>
         <translation>このリビジョンを復元</translation>
     </message>
@@ -870,38 +815,6 @@ Strict removal clears the pixel.</source>
 <context>
     <name>JsonExtractor</name>
     <message>
-        <source>_critical_error</source>
-        <translation type="vanished">致命的なエラー</translation>
-    </message>
-    <message>
-        <source>_painter_start</source>
-        <translation type="vanished">アトラスのペインターを開始できません</translation>
-    </message>
-    <message>
-        <source>_write_error</source>
-        <translation type="vanished">書き込みエラー</translation>
-    </message>
-    <message>
-        <source>_png_permissions</source>
-        <translation type="vanished">PNGファイルに書き込めません。権限を確認してください。</translation>
-    </message>
-    <message>
-        <source>_export_success</source>
-        <translation type="vanished">エクスポート成功</translation>
-    </message>
-    <message>
-        <source>_export_atlas_success</source>
-        <translation type="vanished">アトラスとメタデータは正常にエクスポートされました:</translation>
-    </message>
-    <message>
-        <source>_json_permissions</source>
-        <translation type="vanished">JSONファイルに書き込めません。権限を確認してください。</translation>
-    </message>
-    <message>
-        <source>_success</source>
-        <translation type="vanished">成功</translation>
-    </message>
-    <message>
         <location filename="../src/extractor/jsonextractor.cpp" line="96" />
         <source>Reading JSON sprite atlas %1...</source>
         <translation>JSONスプライトアトラス %1 を読み込んでいます...</translation>
@@ -967,10 +880,6 @@ Strict removal clears the pixel.</source>
         <translation>読み込みエラー</translation>
     </message>
     <message>
-        <source>_timing</source>
-        <translation type="vanished">フレーム間隔</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.cpp" line="311" />
         <source>KEY_STATUS_READY_TO_START</source>
         <translation>まずファイルをインポートしてください。</translation>
@@ -1007,15 +916,8 @@ Strict removal clears the pixel.</source>
         <translation>やり直し(&amp;R)</translation>
     </message>
     <message>
-        <source>KEY_ACTION_REMOVE_BG</source>
-        <translation type="vanished">背景を自動で削除(&amp;B)</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.cpp" line="429" />
         <location filename="../src/mainwindow.cpp" line="743" />
-        <location filename="../../tests/test_controllers.cpp" line="1383" />
-        <location filename="../../tests/test_controllers.cpp" line="1413" />
-        <location filename="../../tests/test_controllers.cpp" line="1443" />
         <source>KEY_MENU_FILTERS</source>
         <translation>フィルター(&amp;F)</translation>
     </message>
@@ -1058,205 +960,12 @@ Strict removal clears the pixel.</source>
         <translation>最近開いたプロジェクト履歴をクリア</translation>
     </message>
     <message>
-        <source>Untitled</source>
-        <translation type="vanished">無題</translation>
-    </message>
-    <message>
-        <source>Unknown date</source>
-        <translation type="vanished">不明な日時</translation>
-    </message>
-    <message>
-        <source>An interrupted work session was detected:
-
-Project: %1
-Date: %2
-
-Do you want to restore this session?</source>
-        <translation type="vanished">中断された作業セッションが検出されました:
-
-プロジェクト: %1
-日時: %2
-
-このセッションを復元しますか？</translation>
-    </message>
-    <message>
-        <source>Crash Recovery</source>
-        <translation type="vanished">クラッシュ復元</translation>
-    </message>
-    <message>
-        <source>Recovery Error</source>
-        <translation type="vanished">復元エラー</translation>
-    </message>
-    <message>
-        <source>Unsaved Changes</source>
-        <translation type="vanished">未保存の変更</translation>
-    </message>
-    <message>
-        <source>The current project '%1' has unsaved changes.
-Do you want to save them before proceeding?</source>
-        <translation type="vanished">現在のプロジェクト '%1' には未保存の変更があります。
-続行する前に保存しますか？</translation>
-    </message>
-    <message>
-        <source>_ready_to_start</source>
-        <translation type="vanished">まずファイルをインポートしてください。</translation>
-    </message>
-    <message>
-        <source>_progress</source>
-        <translation type="vanished">進捗率</translation>
-    </message>
-    <message>
-        <source>_delete_background</source>
-        <translation type="vanished">背景を自動で削除</translation>
-    </message>
-    <message>
-        <source>_confirm</source>
-        <translation type="vanished">確認</translation>
-    </message>
-    <message numerus="yes">
-        <source>_confirm_delete</source>
-        <translation type="vanished">
-            <numerusform>このアニメーションを削除してもよろしいですか?</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>_delete_animation</source>
-        <translation type="vanished">アニメーションを削除</translation>
-    </message>
-    <message>
-        <source>_create_animation</source>
-        <translation type="vanished">選択範囲からアニメーションを作成する</translation>
-    </message>
-    <message>
-        <source>_delete_selected_frames</source>
-        <translation type="vanished">選択したフレームを削除</translation>
-    </message>
-    <message>
-        <source>_delete_frame</source>
-        <translation type="vanished">フレームを削除</translation>
-    </message>
-    <message>
-        <source>_invert_selection</source>
-        <translation type="vanished">選択を反転</translation>
-    </message>
-    <message>
-        <source>_reverse_order</source>
-        <translation type="vanished">順序を逆にする</translation>
-    </message>
-    <message>
-        <source>_open_file</source>
-        <translation type="vanished">ファイルを開く</translation>
-    </message>
-    <message>
-        <source>_images</source>
-        <translation type="vanished">画像 </translation>
-    </message>
-    <message>
-        <source>_file_error</source>
-        <translation type="vanished">ファイルエラー</translation>
-    </message>
-    <message>
-        <source>_gif_error</source>
-        <translation type="vanished">無効なGIFファイルです。</translation>
-    </message>
-    <message>
-        <source>_select_frames_first</source>
-        <translation type="vanished">少なくとも 1 つの画像を選択してください。</translation>
-    </message>
-    <message>
-        <source>_confirm_delete_frames</source>
-        <translation type="vanished">選択した写真を削除しますか</translation>
-    </message>
-    <message>
-        <source>_success</source>
-        <translation type="vanished">成功</translation>
-    </message>
-    <message>
-        <source>_frames_deleted</source>
-        <translation type="vanished">写真を削除しました。</translation>
-    </message>
-    <message>
-        <source>_export_error</source>
-        <translation type="vanished">エクスポートできません</translation>
-    </message>
-    <message>
-        <source>_please_load_frames</source>
-        <translation type="vanished">エクスポートを要求する前にフレームを選択またはロードしてください</translation>
-    </message>
-    <message>
-        <source>_export_formats_json</source>
-        <translation type="vanished">スプライトアトラス </translation>
-    </message>
-    <message>
-        <source>_export_formats_png</source>
-        <translation type="vanished">PNG画像 </translation>
-    </message>
-    <message>
-        <source>_export_atlas</source>
-        <translation type="vanished">スプライトアトラスをエクスポート</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">エクスポート</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">開く</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="32" />
         <source>Sprite Studio</source>
         <translation>スプライトスタジオ</translation>
     </message>
     <message>
-        <source>Play</source>
-        <translation type="vanished">再生</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="vanished">一時停止</translation>
-    </message>
-    <message>
-        <source>Alpha threshold </source>
-        <translation type="vanished">アルファしきい値</translation>
-    </message>
-    <message>
-        <source>Vertical tolerance</source>
-        <translation type="vanished">垂直トレランス</translation>
-    </message>
-    <message>
-        <source>FPS</source>
-        <translation type="vanished">FPS</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">名</translation>
-    </message>
-    <message>
-        <source>Frames</source>
-        <translation type="vanished">フレーム</translation>
-    </message>
-    <message>
-        <source>Timing: </source>
-        <translation type="vanished">フレーム間隔：</translation>
-    </message>
-    <message>
-        <source>Smart Crop</source>
-        <translation type="vanished">スマート切り抜き</translation>
-    </message>
-    <message>
-        <source>Overlap Threshold</source>
-        <translation type="vanished">重なり閾値</translation>
-    </message>
-    <message>
-        <source>Crop Strategy</source>
-        <translation type="vanished">切り抜き戦略</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="740" />
-        <location filename="../../tests/test_controllers.cpp" line="1374" />
-        <location filename="../../tests/test_controllers.cpp" line="1404" />
-        <location filename="../../tests/test_controllers.cpp" line="1434" />
         <source>KEY_TOOL_SELECT</source>
         <translation>選択・編集</translation>
     </message>
@@ -1296,42 +1005,6 @@ Do you want to save them before proceeding?</source>
         <translation>背景色を自動削除してスプライトを抽出</translation>
     </message>
     <message>
-        <source>Background removal</source>
-        <translation type="vanished">背景削除</translation>
-    </message>
-    <message>
-        <source>Merge</source>
-        <translation type="vanished">結合</translation>
-    </message>
-    <message>
-        <source>Separate</source>
-        <translation type="vanished">分離</translation>
-    </message>
-    <message>
-        <source>Boundary</source>
-        <translation type="vanished">境界線</translation>
-    </message>
-    <message>
-        <source>Alpha Channel</source>
-        <translation type="vanished">アルファチャンネル</translation>
-    </message>
-    <message>
-        <source>Edit current frame pixels</source>
-        <translation type="vanished">現在のフレームのピクセルを編集</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="vanished">...</translation>
-    </message>
-    <message>
-        <source>Set fixed point</source>
-        <translation type="vanished">基準点を設定</translation>
-    </message>
-    <message>
-        <source>hh:mm:ss</source>
-        <translation type="vanished">hh:mm:ss</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="442" />
         <location filename="../src/mainwindow.cpp" line="257" />
         <location filename="../src/mainwindow.cpp" line="719" />
@@ -1354,9 +1027,6 @@ Do you want to save them before proceeding?</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="636" />
-        <location filename="../../tests/test_controllers.cpp" line="1368" />
-        <location filename="../../tests/test_controllers.cpp" line="1398" />
-        <location filename="../../tests/test_controllers.cpp" line="1428" />
         <source>KEY_MENU_FILE</source>
         <translation>ファイル</translation>
     </message>
@@ -1398,18 +1068,12 @@ Do you want to save them before proceeding?</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="699" />
-        <location filename="../../tests/test_controllers.cpp" line="1372" />
-        <location filename="../../tests/test_controllers.cpp" line="1402" />
-        <location filename="../../tests/test_controllers.cpp" line="1432" />
         <source>KEY_ACTION_OPEN</source>
         <translation>開く(&amp;O)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="704" />
         <location filename="../src/mainwindow_callbacks.cpp" line="133" />
-        <location filename="../../tests/test_controllers.cpp" line="1373" />
-        <location filename="../../tests/test_controllers.cpp" line="1403" />
-        <location filename="../../tests/test_controllers.cpp" line="1433" />
         <source>KEY_ACTION_SAVE</source>
         <translation>保存(&amp;S)</translation>
     </message>
@@ -1443,61 +1107,10 @@ Do you want to save them before proceeding?</source>
         <translation>終了(&amp;X)</translation>
     </message>
     <message>
-        <source>File</source>
-        <translation type="vanished">ファイル</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">ヘルプ</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">開始</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">停止</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">保存</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="vanished">終了</translation>
-    </message>
-    <message>
-        <source>Licence</source>
-        <translation type="vanished">ライセンス</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="vanished">情報</translation>
-    </message>
-    <message>
-        <source>_new_animation</source>
-        <translation type="vanished">新しいアニメーション</translation>
-    </message>
-    <message>
-        <source>_animation_name</source>
-        <translation type="vanished">アニメーション名</translation>
-    </message>
-    <message>
-        <source>_info</source>
-        <translation type="vanished">情報</translation>
-    </message>
-    <message>
-        <source>_select_animation_first</source>
-        <translation type="vanished">&gt;少なくとも 1 つのアニメーションを選択してください。</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="206" />
         <location filename="../src/mainwindow_animation.cpp" line="94" />
         <location filename="../src/mainwindow_atlas.cpp" line="62" />
         <location filename="../src/mainwindow_atlas.cpp" line="108" />
-        <location filename="../../tests/test_controllers.cpp" line="1375" />
-        <location filename="../../tests/test_controllers.cpp" line="1405" />
-        <location filename="../../tests/test_controllers.cpp" line="1435" />
+        <location filename="../src/mainwindow_callbacks.cpp" line="206" />
         <source>KEY_CTX_CREATE_ANIM</source>
         <translation>選択範囲からアニメーションを作成する</translation>
     </message>
@@ -1524,16 +1137,16 @@ Do you want to save them before proceeding?</source>
         <translation>スライスの結合</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="216" />
         <location filename="../src/mainwindow_atlas.cpp" line="85" />
         <location filename="../src/mainwindow_atlas.cpp" line="130" />
+        <location filename="../src/mainwindow_callbacks.cpp" line="216" />
         <source>KEY_CTX_DELETE_FRAMES</source>
         <translation>選択したフレームを削除</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="220" />
         <location filename="../src/mainwindow_atlas.cpp" line="90" />
         <location filename="../src/mainwindow_atlas.cpp" line="136" />
+        <location filename="../src/mainwindow_callbacks.cpp" line="220" />
         <source>KEY_CTX_ERASE_PIXELS</source>
         <translation>ピクセル消去とフレーム削除 (Shift+Del)</translation>
     </message>
@@ -1544,8 +1157,8 @@ Do you want to save them before proceeding?</source>
         <translation>背景を自動で削除</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="230" />
         <location filename="../src/mainwindow_atlas.cpp" line="142" />
+        <location filename="../src/mainwindow_callbacks.cpp" line="230" />
         <source>KEY_CTX_INVERT_SEL</source>
         <translation>選択を反転</translation>
     </message>
@@ -1616,15 +1229,7 @@ Do you want to save them before proceeding?</source>
         <translation>準備完了</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1477" />
-        <source>KEY_UNKNOWN_FEATURE</source>
-        <translation>不明な機能</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="652" />
-        <location filename="../../tests/test_controllers.cpp" line="1369" />
-        <location filename="../../tests/test_controllers.cpp" line="1399" />
-        <location filename="../../tests/test_controllers.cpp" line="1429" />
         <source>KEY_MENU_VIEW</source>
         <translation>表示(&amp;V)</translation>
     </message>
@@ -1678,9 +1283,6 @@ Do you want to save them before proceeding?</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76" />
-        <location filename="../../tests/test_controllers.cpp" line="1371" />
-        <location filename="../../tests/test_controllers.cpp" line="1401" />
-        <location filename="../../tests/test_controllers.cpp" line="1431" />
         <source>KEY_DOCK_PREVIEW</source>
         <translation>アニメーションプレビュー</translation>
     </message>
@@ -1841,11 +1443,8 @@ Do you want to save them before proceeding?</source>
         <translation>このアニメーションを複製</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="609" />
         <location filename="../src/controller/projectcontroller.cpp" line="77" />
-        <location filename="../../tests/test_controllers.cpp" line="1380" />
-        <location filename="../../tests/test_controllers.cpp" line="1410" />
-        <location filename="../../tests/test_controllers.cpp" line="1440" />
+        <location filename="../src/mainwindow.cpp" line="609" />
         <source>KEY_UNTITLED_PROJECT</source>
         <translation>無題のプロジェクト</translation>
     </message>
@@ -1889,30 +1488,8 @@ Do you want to save them before proceeding?</source>
         <location filename="../src/mainwindow.ui" line="598" />
         <location filename="../src/mainwindow.cpp" line="265" />
         <location filename="../src/mainwindow.cpp" line="713" />
-        <location filename="../../tests/test_controllers.cpp" line="1370" />
-        <location filename="../../tests/test_controllers.cpp" line="1400" />
-        <location filename="../../tests/test_controllers.cpp" line="1430" />
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>メインツールバー</translation>
-    </message>
-</context>
-<context>
-    <name>None</name>
-    <message>
-        <source>Failed to decode image from: %1</source>
-        <translation type="vanished">画像 %1 のデコードに失敗しました</translation>
-    </message>
-    <message>
-        <source>Failed to segment sprite frames.</source>
-        <translation type="vanished">スプライトフレームの検出に失敗しました。</translation>
-    </message>
-    <message>
-        <source>Failed to remove background from atlas.</source>
-        <translation type="vanished">アトラスからの背景削除に失敗しました。</translation>
-    </message>
-    <message>
-        <source>Failed to segment frames after background removal.</source>
-        <translation type="vanished">背景削除後のフレーム検出に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -2018,6 +1595,92 @@ Do you want to save them before proceeding?</source>
     </message>
 </context>
 <context>
+    <name>PixelRescaleFilter</name>
+    <message>
+        <location filename="../src/filters/pixelrescalefilter.cpp" line="7" />
+        <source>Pixel Art Rescale...</source>
+        <translation>ピクセルアートリサイズ...</translation>
+    </message>
+    <message>
+        <location filename="../src/filters/pixelrescalefilter.cpp" line="12" />
+        <source>Rescales the atlas cleanly using Nearest-Neighbor (pixel-perfect) or Scale2x (smooth contours).</source>
+        <translation>最近傍補間（ピクセルパーフェクト）またはScale2x（輪郭補間）を使用してアトラスを綺麗に拡大・縮小します。</translation>
+    </message>
+</context>
+<context>
+    <name>PixelRescaleFilterDialog</name>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="16" />
+        <source>Pixel Art Rescale</source>
+        <translation>ピクセルアートリサイズ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="25" />
+        <source>Rescale Parameters</source>
+        <translation>リサイズ設定</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="31" />
+        <source>Scale Factor:</source>
+        <translation>スケール倍率：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="33" />
+        <source>0.5x (Downscale 50%)</source>
+        <translation>0.5倍 (50% 縮小)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="34" />
+        <source>2x (Double 200%)</source>
+        <translation>2倍 (200% 拡大)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="35" />
+        <source>3x (Triple 300%)</source>
+        <translation>3倍 (300% 拡大)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="36" />
+        <source>4x (Quadruple 400%)</source>
+        <translation>4倍 (400% 拡大)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="43" />
+        <source>Resampling Engine:</source>
+        <translation>リサンプリングエンジン：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="45" />
+        <source>Nearest-Neighbor (Sharp / Pixel-Perfect)</source>
+        <translation>最近傍補間 (シャープ / ピクセルパーフェクト)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="46" />
+        <source>Scale2x / AdvMAME2x (Smooth Contours)</source>
+        <translation>Scale2x / AdvMAME2x (滑らかな輪郭)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="84" />
+        <source>Atlas Dimensions: %1x%2 -&gt; %3x%4 px</source>
+        <translation>アトラス解像度：%1x%2 -&gt; %3x%4 px</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="275" />
+        <source>Rescaled %1x (%2)</source>
+        <translation>リサイズ完了 %1倍 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="276" />
+        <source>%1 frame(s) detected</source>
+        <translation>%1 フレーム検出</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="285" />
+        <source>Filter: Pixel Art Rescale</source>
+        <translation>フィルター：ピクセルアートリサイズ</translation>
+    </message>
+</context>
+<context>
     <name>ProjectController</name>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="298" />
@@ -2038,17 +1701,6 @@ Do you want to save them before proceeding?</source>
         <location filename="../src/controller/projectcontroller.cpp" line="317" />
         <source>No active SpriteDocument.</source>
         <translation>アクティブな SpriteDocument がありません。</translation>
-    </message>
-    <message>
-        <source>Untitled Project</source>
-        <translation type="vanished">無題のプロジェクト</translation>
-    </message>
-    <message>
-        <location filename="../../tests/test_controllers.cpp" line="1381" />
-        <location filename="../../tests/test_controllers.cpp" line="1411" />
-        <location filename="../../tests/test_controllers.cpp" line="1441" />
-        <source>KEY_UNTITLED_PROJECT</source>
-        <translation>無題のプロジェクト</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="107" />
@@ -2309,34 +1961,211 @@ Do you want to save them before proceeding?</source>
         <translation>JSONルートはオブジェクトである必要があります。</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="103" />
+        <location filename="../src/filters/filterregistry.cpp" line="109" />
         <source>Cleanup</source>
         <translation>クリーンアップ</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="104" />
+        <location filename="../src/filters/filterregistry.cpp" line="110" />
         <source>Colors</source>
         <translation>カラー</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="105" />
+        <location filename="../src/filters/filterregistry.cpp" line="111" />
         <source>Effects</source>
         <translation>エフェクト</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="106" />
+        <location filename="../src/filters/filterregistry.cpp" line="112" />
         <source>Geometry</source>
         <translation>ジオメトリ</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="128" />
+        <location filename="../src/filters/filterregistry.cpp" line="134" />
         <source>No Atlas Loaded</source>
         <translation>アトラスが読み込まれていません</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="129" />
+        <location filename="../src/filters/filterregistry.cpp" line="135" />
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>フィルターを適用する前に、まずスプライトシートを開くかインポートしてください。</translation>
+    </message>
+</context>
+<context>
+    <name>RetroPaletteFilter</name>
+    <message>
+        <location filename="../src/filters/retropalettefilter.cpp" line="7" />
+        <source>Retro Palette &amp; Dithering...</source>
+        <translation>レトロパレット＆ディザリング...</translation>
+    </message>
+    <message>
+        <location filename="../src/filters/retropalettefilter.cpp" line="12" />
+        <source>Quantizes colors to authentic retro hardware palettes with optional ordered Bayer dithering.</source>
+        <translation>本格的なレトロハードウェアパレットに色を減色し、Bayerディザリング（規則的階調表現）を適用します。</translation>
+    </message>
+</context>
+<context>
+    <name>RetroPaletteFilterDialog</name>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="56" />
+        <source>Retro Palette &amp; Dithering</source>
+        <translation>レトロパレット＆ディザリング</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="68" />
+        <source>Retro Hardware Palette</source>
+        <translation>レトロハードウェアパレット</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="72" />
+        <source>Palette Preset:</source>
+        <translation>パレットプリセット：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="74" />
+        <source>Game Boy DMG (4 Greens)</source>
+        <translation>ゲームボーイ DMG (緑4階調)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="75" />
+        <source>Game Boy Pocket (4 Grays)</source>
+        <translation>ゲームボーイポケット (モノクロ4階調)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="76" />
+        <source>PICO-8 (16 Colors)</source>
+        <translation>PICO-8 (16色)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="77" />
+        <source>NES / Famicom (54 Colors)</source>
+        <translation>ファミコン / NES (54色)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="78" />
+        <source>Commodore 64 (16 Colors)</source>
+        <translation>コモドール64 (16色)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="79" />
+        <source>CGA Mode 1 (Cyan/Magenta/White)</source>
+        <translation>CGA モード1 (シアン/マゼンタ/白)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="80" />
+        <source>CGA Mode 2 (Red/Green/Yellow)</source>
+        <translation>CGA モード2 (赤/緑/黄)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="81" />
+        <source>Endesga 32 (32 Pixel Art Colors)</source>
+        <translation>Endesga 32 (32色 ピクセルアート)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="82" />
+        <source>Custom / Imported Palette</source>
+        <translation>カスタム / インポートパレット</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="86" />
+        <source>Import...</source>
+        <translation>インポート...</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="87" />
+        <source>Import palette from .hex, .gpl, .pal or .png image</source>
+        <translation>.hex, .gpl, .pal ファイルまたは .png 画像からパレットをインポート</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="103" />
+        <source>Ordered Dithering (Bayer Matrix)</source>
+        <translation>組織的ディザリング (Bayerマトリクス)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="106" />
+        <source>Dither Pattern:</source>
+        <translation>ディザーパターン：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="108" />
+        <source>None (Exact Nearest Match)</source>
+        <translation>なし (最も近い色に単純減色)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="109" />
+        <source>Bayer 2x2 Matrix</source>
+        <translation>Bayer 2x2 マトリクス</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="110" />
+        <source>Bayer 4x4 Matrix (Classic Retro)</source>
+        <translation>Bayer 4x4 マトリクス (クラシックレトロ)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="111" />
+        <source>Bayer 8x8 Matrix (Smooth Gradients)</source>
+        <translation>Bayer 8x8 マトリクス (滑らかな階調)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="117" />
+        <source>Dither Strength:</source>
+        <translation>ディザー強度：</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="134" />
+        <source>Target Scope</source>
+        <translation>適用範囲</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="137" />
+        <source>Apply to selected frames only</source>
+        <translation>選択したフレームにのみ適用</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="142" />
+        <source>No frames selected: applies to entire atlas</source>
+        <translation>フレームが選択されていません：アトラス全体に適用されます</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="206" />
+        <source>Import Color Palette</source>
+        <translation>カラーパレットのインポート</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="208" />
+        <source>Palette Files (*.hex *.gpl *.pal *.png *.bmp);;All Files (*)</source>
+        <translation>パレットファイル (*.hex *.gpl *.pal *.png *.bmp);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="215" />
+        <source>Import Failed</source>
+        <translation>インポート失敗</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="216" />
+        <source>No valid colors found in file.</source>
+        <translation>ファイル内に有効な色情報が見つかりませんでした。</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="256" />
+        <source>%1 active color(s)</source>
+        <translation>%1 色のアクティブカラー</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="550" />
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="553" />
+        <source>Quantized (%1 colors, %2)</source>
+        <translation>減色完了 (%1色, %2)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="551" />
+        <source>%1 frame(s) detected</source>
+        <translation>%1 フレーム検出</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="563" />
+        <source>Filter: Retro Palette &amp; Dithering</source>
+        <translation>フィルター：レトロパレット＆ディザリング</translation>
     </message>
 </context>
 <context>
@@ -2447,9 +2276,6 @@ Do you want to save them before proceeding?</source>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="22" />
         <location filename="../src/widgets/settingsdialog.cpp" line="457" />
-        <location filename="../../tests/test_controllers.cpp" line="1377" />
-        <location filename="../../tests/test_controllers.cpp" line="1407" />
-        <location filename="../../tests/test_controllers.cpp" line="1437" />
         <source>KEY_SETTINGS_TITLE</source>
         <translation>設定</translation>
     </message>
@@ -2546,9 +2372,6 @@ Do you want to save them before proceeding?</source>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="181" />
         <location filename="../src/widgets/settingsdialog.cpp" line="477" />
-        <location filename="../../tests/test_controllers.cpp" line="1382" />
-        <location filename="../../tests/test_controllers.cpp" line="1412" />
-        <location filename="../../tests/test_controllers.cpp" line="1442" />
         <source>KEY_SETTINGS_LANG_HINT</source>
         <translation>言語の変更は即座に適用されます。</translation>
     </message>
@@ -2736,9 +2559,6 @@ Do you want to save them before proceeding?</source>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="34" />
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="237" />
-        <location filename="../../tests/test_controllers.cpp" line="1378" />
-        <location filename="../../tests/test_controllers.cpp" line="1408" />
-        <location filename="../../tests/test_controllers.cpp" line="1438" />
         <source>KEY_TIMELINE_ADD_SELECTION</source>
         <translation>+ 選択を追加</translation>
     </message>

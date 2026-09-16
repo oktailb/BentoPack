@@ -3,6 +3,9 @@
 #include "filters/despillfilter.h"
 #include "filters/outlinefilter.h"
 #include "filters/colorswapfilter.h"
+#include "filters/coloradjustfilter.h"
+#include "filters/pixelrescalefilter.h"
+#include "filters/retropalettefilter.h"
 #include "widgets/filterdialogbase.h"
 #include "model/spritedocument.h"
 #include <QMenu>
@@ -75,6 +78,9 @@ void FilterRegistry::initDefaultFilters()
     registerFilter(std::make_unique<DespillFilter>());
     registerFilter(std::make_unique<OutlineFilter>());
     registerFilter(std::make_unique<ColorSwapFilter>());
+    registerFilter(std::make_unique<ColorAdjustFilter>());
+    registerFilter(std::make_unique<PixelRescaleFilter>());
+    registerFilter(std::make_unique<RetroPaletteFilter>());
 
     m_initialized = true;
 }

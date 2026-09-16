@@ -58,11 +58,17 @@ set(SpriteStudioCore_SRC
     src/widgets/despillfilterdialog.cpp
     src/widgets/outlinefilterdialog.cpp
     src/widgets/colorswapfilterdialog.cpp
+    src/widgets/coloradjustfilterdialog.cpp
+    src/widgets/pixelrescalefilterdialog.cpp
+    src/widgets/retropalettefilterdialog.cpp
     src/filters/filterregistry.cpp
     src/filters/backgroundremovalfilter.cpp
     src/filters/despillfilter.cpp
     src/filters/outlinefilter.cpp
     src/filters/colorswapfilter.cpp
+    src/filters/coloradjustfilter.cpp
+    src/filters/pixelrescalefilter.cpp
+    src/filters/retropalettefilter.cpp
     src/commands/filtercommands.cpp
     src/localizationmanager.cpp
     src/zip/miniz.c
@@ -99,12 +105,18 @@ set(SpriteStudioCore_INCLUDE
     include/widgets/despillfilterdialog.h
     include/widgets/outlinefilterdialog.h
     include/widgets/colorswapfilterdialog.h
+    include/widgets/coloradjustfilterdialog.h
+    include/widgets/pixelrescalefilterdialog.h
+    include/widgets/retropalettefilterdialog.h
     include/filters/filterplugin.h
     include/filters/filterregistry.h
     include/filters/backgroundremovalfilter.h
     include/filters/despillfilter.h
     include/filters/outlinefilter.h
     include/filters/colorswapfilter.h
+    include/filters/coloradjustfilter.h
+    include/filters/pixelrescalefilter.h
+    include/filters/retropalettefilter.h
     include/localizationmanager.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h

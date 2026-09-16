@@ -1,84 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <TS version="2.1" language="fr">
 <context>
-    <name />
-    <message>
-        <source>Failed to decode image from: %1</source>
-        <translation type="vanished">Impossible de décoder l'image : %1</translation>
-    </message>
-    <message>
-        <source>Failed to segment sprite frames.</source>
-        <translation type="vanished">Échec de la découpe des sprites.</translation>
-    </message>
-    <message>
-        <source>Failed to remove background from atlas.</source>
-        <translation type="vanished">Échec de la suppression du fond de l'atlas.</translation>
-    </message>
-    <message>
-        <source>Failed to segment frames after background removal.</source>
-        <translation type="vanished">Échec de la découpe des frames après suppression du fond.</translation>
-    </message>
-</context>
-<context>
     <name>AboutDialog</name>
-    <message>
-        <source>_about</source>
-        <translation type="vanished">À propos</translation>
-    </message>
-    <message>
-        <source>_credits</source>
-        <translation type="vanished">Crédits</translation>
-    </message>
-    <message>
-        <source>_licence</source>
-        <translation type="vanished">Licence</translation>
-    </message>
-    <message>
-        <source>_close</source>
-        <translation type="vanished">Fermer</translation>
-    </message>
-    <message>
-        <source>_purpose</source>
-        <translation type="vanished">Un outil puissant pour l'extraction et l'animation de sprites</translation>
-    </message>
-    <message>
-        <source>_build_with</source>
-        <translation type="vanished">Compilé avec</translation>
-    </message>
-    <message>
-        <source>_platform</source>
-        <translation type="vanished">Plateforme</translation>
-    </message>
-    <message>
-        <source>_git_info</source>
-        <translation type="vanished">Informations GIT</translation>
-    </message>
-    <message>
-        <source>_branch</source>
-        <translation type="vanished">Branche</translation>
-    </message>
-    <message>
-        <source>_commit</source>
-        <translation type="vanished">ID du dernier commit</translation>
-    </message>
-    <message>
-        <source>_last_commit_date</source>
-        <translation type="vanished">Date du dernier commit</translation>
-    </message>
-    <message>
-        <source>_last_author</source>
-        <translation type="vanished">Dernier auteur</translation>
-    </message>
-    <message>
-        <source>_credits_and_greetings</source>
-        <translation type="vanished">Crédits et remerciements</translation>
-    </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="20" />
         <location filename="../src/aboutdialog.cpp" line="78" />
-        <location filename="../../tests/test_controllers.cpp" line="1376" />
-        <location filename="../../tests/test_controllers.cpp" line="1406" />
-        <location filename="../../tests/test_controllers.cpp" line="1436" />
         <source>KEY_DIALOG_ABOUT_TITLE</source>
         <translation>À propos</translation>
     </message>
@@ -186,18 +112,6 @@
 <context>
     <name>AnimationController</name>
     <message>
-        <source>New Animation</source>
-        <translation type="vanished">Nouvelle animation</translation>
-    </message>
-    <message>
-        <source>Animation name:</source>
-        <translation type="vanished">Nom de l'animation :</translation>
-    </message>
-    <message>
-        <source>anim_%1</source>
-        <translation type="vanished">anim_%1</translation>
-    </message>
-    <message>
         <location filename="../src/controller/animationcontroller.cpp" line="65" />
         <source>KEY_ANIM_COL_NAME</source>
         <translation>Nom</translation>
@@ -271,18 +185,6 @@
 <context>
     <name>AtlasViewController</name>
     <message>
-        <source>Trim %1 Slices</source>
-        <translation type="vanished">Ajuster %1 boîte(s)</translation>
-    </message>
-    <message>
-        <source>Merge %1 Slices</source>
-        <translation type="vanished">Fusionner %1 boîte(s)</translation>
-    </message>
-    <message>
-        <source>Move %1 Slices</source>
-        <translation type="vanished">Déplacer %1 boîte(s)</translation>
-    </message>
-    <message>
         <location filename="../src/controller/atlasviewcontroller.cpp" line="288" />
         <source>KEY_CMD_TRIM_SLICES</source>
         <translation>Ajuster %1 boîte(s)</translation>
@@ -302,9 +204,6 @@
     <name>BackgroundRemovalDialog</name>
     <message>
         <location filename="../src/widgets/backgroundremovaldialog.cpp" line="21" />
-        <location filename="../../tests/test_controllers.cpp" line="1384" />
-        <location filename="../../tests/test_controllers.cpp" line="1414" />
-        <location filename="../../tests/test_controllers.cpp" line="1444" />
         <source>Background Removal</source>
         <translation>Suppression d'arrière-plan</translation>
     </message>
@@ -370,6 +269,83 @@
         <location filename="../src/filters/backgroundremovalfilter.cpp" line="12" />
         <source>Detects dominant background color and makes pixels transparent with automatic bounding box recalculation.</source>
         <translation>Détecte la couleur dominante du fond et rend les pixels transparents avec recalcul automatique des boîtes englobantes.</translation>
+    </message>
+</context>
+<context>
+    <name>ColorAdjustFilter</name>
+    <message>
+        <location filename="../src/filters/coloradjustfilter.cpp" line="7" />
+        <source>Color Adjustment (HSV &amp; Contrast)...</source>
+        <translation>Ajustement des Couleurs (HSV &amp; Contraste)...</translation>
+    </message>
+    <message>
+        <location filename="../src/filters/coloradjustfilter.cpp" line="12" />
+        <source>Adjusts hue rotation, saturation, brightness, and contrast globally or on selected frames.</source>
+        <translation>Ajuste la teinte, la saturation, la luminosité et le contraste globalement ou sur les frames sélectionnées.</translation>
+    </message>
+</context>
+<context>
+    <name>ColorAdjustFilterDialog</name>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="18" />
+        <source>Color Adjustment (HSV &amp; Contrast)</source>
+        <translation>Ajustement des Couleurs (HSV &amp; Contraste)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="27" />
+        <source>Adjustment Parameters</source>
+        <translation>Paramètres d'ajustement</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="33" />
+        <source>Hue Shift:</source>
+        <translation>Décalage de teinte :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="48" />
+        <source>Saturation:</source>
+        <translation>Saturation :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="63" />
+        <source>Brightness:</source>
+        <translation>Luminosité :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="78" />
+        <source>Contrast:</source>
+        <translation>Contraste :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="95" />
+        <source>Target Scope</source>
+        <translation>Portée de l'effet</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="98" />
+        <source>Apply to selected frames only</source>
+        <translation>Appliquer uniquement aux frames sélectionnées</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="103" />
+        <source>No frames selected: applies to entire atlas</source>
+        <translation>Aucune frame sélectionnée : s'applique à tout l'atlas</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="291" />
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="294" />
+        <source>Adjusted (H:%1° S:%2% V:%3% C:%4%)</source>
+        <translation>Ajusté (H:%1° S:%2% V:%3% C:%4%)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="292" />
+        <source>%1 frame(s) detected</source>
+        <translation>%1 frame(s) détectée(s)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="304" />
+        <source>Filter: Color Adjustment</source>
+        <translation>Filtre : Ajustement des Couleurs</translation>
     </message>
 </context>
 <context>
@@ -566,9 +542,6 @@ La suppression stricte efface le pixel.</translation>
     <name>FilterDialogBase</name>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="61" />
-        <location filename="../../tests/test_controllers.cpp" line="1385" />
-        <location filename="../../tests/test_controllers.cpp" line="1415" />
-        <location filename="../../tests/test_controllers.cpp" line="1445" />
         <source>Live Preview</source>
         <translation>Aperçu en direct</translation>
     </message>
@@ -617,29 +590,20 @@ La suppression stricte efface le pixel.</translation>
         <translation>Effets &amp; Bordures</translation>
     </message>
     <message>
+        <location filename="../src/filters/coloradjustfilter.cpp" line="18" />
         <location filename="../src/filters/colorswapfilter.cpp" line="18" />
+        <location filename="../src/filters/retropalettefilter.cpp" line="18" />
         <source>Colors &amp; Palettes</source>
         <translation>Couleurs &amp; Palettes</translation>
+    </message>
+    <message>
+        <location filename="../src/filters/pixelrescalefilter.cpp" line="18" />
+        <source>Geometry &amp; Transform</source>
+        <translation>Géométrie &amp; Transformations</translation>
     </message>
 </context>
 <context>
     <name>GifExtractor</name>
-    <message>
-        <source>_error</source>
-        <translation type="vanished">Erreur</translation>
-    </message>
-    <message>
-        <source>_invalid_gif</source>
-        <translation type="vanished">Fichier GIF invalide ou non existant</translation>
-    </message>
-    <message>
-        <source>_gif_no_frames</source>
-        <translation type="vanished">Le fichier GIF est invalide ou ne contient aucune image</translation>
-    </message>
-    <message>
-        <source>_extracted_frames</source>
-        <translation type="vanished">Frames extraites</translation>
-    </message>
     <message>
         <location filename="../src/extractor/gifextractor.cpp" line="21" />
         <source>Reading GIF frames from %1...</source>
@@ -708,22 +672,6 @@ La suppression stricte efface le pixel.</translation>
         <translation>Historique Git</translation>
     </message>
     <message>
-        <source>KEY_GIT_TIP_MSG</source>
-        <translation type="vanished">Message</translation>
-    </message>
-    <message>
-        <source>KEY_GIT_TIP_AUTHOR</source>
-        <translation type="vanished">Auteur</translation>
-    </message>
-    <message>
-        <source>KEY_GIT_TIP_DATE</source>
-        <translation type="vanished">Date</translation>
-    </message>
-    <message>
-        <source>KEY_GIT_TIP_RESTORE_HINT</source>
-        <translation type="vanished">Double-cliquez pour restaurer cette révision</translation>
-    </message>
-    <message>
         <location filename="../src/widgets/githistorydock.cpp" line="168" />
         <location filename="../src/widgets/githistorydock.cpp" line="479" />
         <source>KEY_GIT_REFRESH_TOOLTIP</source>
@@ -775,9 +723,6 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/githistorydock.cpp" line="246" />
         <location filename="../src/widgets/githistorydock.cpp" line="492" />
-        <location filename="../../tests/test_controllers.cpp" line="1379" />
-        <location filename="../../tests/test_controllers.cpp" line="1409" />
-        <location filename="../../tests/test_controllers.cpp" line="1439" />
         <source>KEY_GIT_BTN_RESTORE</source>
         <translation>Restaurer cette révision</translation>
     </message>
@@ -870,38 +815,6 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
 <context>
     <name>JsonExtractor</name>
     <message>
-        <source>_critical_error</source>
-        <translation type="vanished">Erreur critique</translation>
-    </message>
-    <message>
-        <source>_painter_start</source>
-        <translation type="vanished">Impossible de démarer le painter pour la création de l'Atlas</translation>
-    </message>
-    <message>
-        <source>_png_permissions</source>
-        <translation type="vanished">Impossible d'écrite dans le fichier PNG. Veuillez vérifier ses permissions.</translation>
-    </message>
-    <message>
-        <source>_export_success</source>
-        <translation type="vanished">Export réussi</translation>
-    </message>
-    <message>
-        <source>_export_atlas_success</source>
-        <translation type="vanished">Atlas et mét données exportées avec succès dans :</translation>
-    </message>
-    <message>
-        <source>_json_permissions</source>
-        <translation type="vanished">Impossible d'écrite dans le fichier JSON. Veuillez vérifier ses permissions.</translation>
-    </message>
-    <message>
-        <source>_write_error</source>
-        <translation type="vanished">Erreur d'écriture</translation>
-    </message>
-    <message>
-        <source>_success</source>
-        <translation type="vanished">Succès</translation>
-    </message>
-    <message>
         <location filename="../src/extractor/jsonextractor.cpp" line="96" />
         <source>Reading JSON sprite atlas %1...</source>
         <translation>Lecture de l'atlas de sprites JSON %1...</translation>
@@ -965,54 +878,7 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Sprite Studio</translation>
     </message>
     <message>
-        <source>Play</source>
-        <translation type="vanished">Jouer</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="vanished">Pause</translation>
-    </message>
-    <message>
-        <source>Alpha threshold </source>
-        <translation type="vanished">Seuil de transparence</translation>
-    </message>
-    <message>
-        <source>Vertical tolerance</source>
-        <translation type="vanished">Tolérance verticale</translation>
-    </message>
-    <message>
-        <source>FPS</source>
-        <translation type="vanished">FPS</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nom</translation>
-    </message>
-    <message>
-        <source>Frames</source>
-        <translation type="vanished">Frames</translation>
-    </message>
-    <message>
-        <source>Timing: </source>
-        <translation type="vanished">Délai</translation>
-    </message>
-    <message>
-        <source>Smart Crop</source>
-        <translation type="vanished">Découpage intelligent</translation>
-    </message>
-    <message>
-        <source>Overlap Threshold</source>
-        <translation type="vanished">Seuil de chevauchement</translation>
-    </message>
-    <message>
-        <source>Crop Strategy</source>
-        <translation type="vanished">Stratégie de découpage</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="740" />
-        <location filename="../../tests/test_controllers.cpp" line="1374" />
-        <location filename="../../tests/test_controllers.cpp" line="1404" />
-        <location filename="../../tests/test_controllers.cpp" line="1434" />
         <source>KEY_TOOL_SELECT</source>
         <translation>Sélectionner</translation>
     </message>
@@ -1052,42 +918,6 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Supprimer automatiquement la couleur de fond et extraire les sprites</translation>
     </message>
     <message>
-        <source>Background removal</source>
-        <translation type="vanished">Suppression du fond</translation>
-    </message>
-    <message>
-        <source>Merge</source>
-        <translation type="vanished">Fusionner</translation>
-    </message>
-    <message>
-        <source>Separate</source>
-        <translation type="vanished">Séparer</translation>
-    </message>
-    <message>
-        <source>Boundary</source>
-        <translation type="vanished">Contour</translation>
-    </message>
-    <message>
-        <source>Alpha Channel</source>
-        <translation type="vanished">Canal Alpha</translation>
-    </message>
-    <message>
-        <source>Edit current frame pixels</source>
-        <translation type="vanished">Éditer les pixels de la frame actuelle</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="vanished">...</translation>
-    </message>
-    <message>
-        <source>Set fixed point</source>
-        <translation type="vanished">Définir le point d'ancrage</translation>
-    </message>
-    <message>
-        <source>hh:mm:ss</source>
-        <translation type="vanished">hh:mm:ss</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="442" />
         <location filename="../src/mainwindow.cpp" line="257" />
         <location filename="../src/mainwindow.cpp" line="719" />
@@ -1110,9 +940,6 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="636" />
-        <location filename="../../tests/test_controllers.cpp" line="1368" />
-        <location filename="../../tests/test_controllers.cpp" line="1398" />
-        <location filename="../../tests/test_controllers.cpp" line="1428" />
         <source>KEY_MENU_FILE</source>
         <translation>Fichier</translation>
     </message>
@@ -1154,18 +981,12 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="699" />
-        <location filename="../../tests/test_controllers.cpp" line="1372" />
-        <location filename="../../tests/test_controllers.cpp" line="1402" />
-        <location filename="../../tests/test_controllers.cpp" line="1432" />
         <source>KEY_ACTION_OPEN</source>
         <translation>&amp;Ouvrir</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="704" />
         <location filename="../src/mainwindow_callbacks.cpp" line="133" />
-        <location filename="../../tests/test_controllers.cpp" line="1373" />
-        <location filename="../../tests/test_controllers.cpp" line="1403" />
-        <location filename="../../tests/test_controllers.cpp" line="1433" />
         <source>KEY_ACTION_SAVE</source>
         <translation>&amp;Enregistrer</translation>
     </message>
@@ -1199,55 +1020,11 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <source>File</source>
-        <translation type="vanished">Fichier</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Aide</translation>
-    </message>
-    <message>
-        <source>Licence</source>
-        <translation type="vanished">Contrat de licence</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="vanished">À propos</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Démarrer</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Stop</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">Ouvrir</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Sauvegarder</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Exporter</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="vanished">Quitter</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.cpp" line="130" />
         <location filename="../src/mainwindow.cpp" line="594" />
         <location filename="../src/mainwindow_callbacks.cpp" line="69" />
         <source>KEY_MSG_LOAD_ERROR</source>
         <translation>Erreur de chargement</translation>
-    </message>
-    <message>
-        <source>_timing</source>
-        <translation type="vanished">Intervale</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="311" />
@@ -1286,15 +1063,8 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>&amp;Rétablir</translation>
     </message>
     <message>
-        <source>KEY_ACTION_REMOVE_BG</source>
-        <translation type="vanished">Supprimer l'&amp;arrière-plan</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.cpp" line="429" />
         <location filename="../src/mainwindow.cpp" line="743" />
-        <location filename="../../tests/test_controllers.cpp" line="1383" />
-        <location filename="../../tests/test_controllers.cpp" line="1413" />
-        <location filename="../../tests/test_controllers.cpp" line="1443" />
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Filtres</translation>
     </message>
@@ -1337,172 +1107,10 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Effacer les projets récents</translation>
     </message>
     <message>
-        <source>Untitled</source>
-        <translation type="vanished">Sans titre</translation>
-    </message>
-    <message>
-        <source>Unknown date</source>
-        <translation type="vanished">Date inconnue</translation>
-    </message>
-    <message>
-        <source>An interrupted work session was detected:
-
-Project: %1
-Date: %2
-
-Do you want to restore this session?</source>
-        <translation type="vanished">Une session de travail interrompue a été détectée :
-
-Projet : %1
-Date : %2
-
-Voulez-vous restaurer cette session ?</translation>
-    </message>
-    <message>
-        <source>Crash Recovery</source>
-        <translation type="vanished">Récupération après fermeture inattendue</translation>
-    </message>
-    <message>
-        <source>Recovery Error</source>
-        <translation type="vanished">Erreur de récupération</translation>
-    </message>
-    <message>
-        <source>Unsaved Changes</source>
-        <translation type="vanished">Modifications non enregistrées</translation>
-    </message>
-    <message>
-        <source>The current project '%1' has unsaved changes.
-Do you want to save them before proceeding?</source>
-        <translation type="vanished">Le projet actif '%1' comporte des modifications non enregistrées.
-Voulez-vous les enregistrer avant de continuer ?</translation>
-    </message>
-    <message>
-        <source>_ready_to_start</source>
-        <translation type="vanished">En attente de l'ouverture d'un projet</translation>
-    </message>
-    <message>
-        <source>_progress</source>
-        <translation type="vanished">Progression</translation>
-    </message>
-    <message>
-        <source>_delete_background</source>
-        <translation type="vanished">Supprimer le fond</translation>
-    </message>
-    <message>
-        <source>_confirm</source>
-        <translation type="vanished">Confirmation</translation>
-    </message>
-    <message numerus="yes">
-        <source>_confirm_delete</source>
-        <translation type="vanished">
-            <numerusform>Voulez-vous vraiment supprimer l'animation) ?</numerusform>
-            <numerusform>Voulez-vous vraiment supprimer les animations ?</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>_delete_animation</source>
-        <translation type="vanished">Supprimer l'animation</translation>
-    </message>
-    <message>
-        <source>_create_animation</source>
-        <translation type="vanished">Créer une animation depuis la sélection</translation>
-    </message>
-    <message>
-        <source>_delete_selected_frames</source>
-        <translation type="vanished">Supprimer les frames sélectionnés</translation>
-    </message>
-    <message>
-        <source>_delete_frame</source>
-        <translation type="vanished">Supprimer la frame</translation>
-    </message>
-    <message>
-        <source>_invert_selection</source>
-        <translation type="vanished">Inverser la sélection</translation>
-    </message>
-    <message>
-        <source>_reverse_order</source>
-        <translation type="vanished">Renverser l'ordre de la sélection</translation>
-    </message>
-    <message>
-        <source>_open_file</source>
-        <translation type="vanished">Ouvrir</translation>
-    </message>
-    <message>
-        <source>_images</source>
-        <translation type="vanished">Images </translation>
-    </message>
-    <message>
-        <source>_file_error</source>
-        <translation type="vanished">Erreur de fichier</translation>
-    </message>
-    <message>
-        <source>_gif_error</source>
-        <translation type="vanished">Fichier GIF invalide</translation>
-    </message>
-    <message>
-        <source>_select_frames_first</source>
-        <translation type="vanished">Veuillez d'abord selectionner une frame</translation>
-    </message>
-    <message>
-        <source>_confirm_delete_frames</source>
-        <translation type="vanished">Cette suppression sera définivite, confirmer la suppression ?</translation>
-    </message>
-    <message>
-        <source>_success</source>
-        <translation type="vanished">Suppressuin faite avec succes</translation>
-    </message>
-    <message>
-        <source>_frames_deleted</source>
-        <translation type="vanished">Frames supprimées</translation>
-    </message>
-    <message>
-        <source>_export_error</source>
-        <translation type="vanished">Export impossible</translation>
-    </message>
-    <message>
-        <source>_please_load_frames</source>
-        <translation type="vanished">Veuillez sélectionner ou charger des frames avant d'exporter</translation>
-    </message>
-    <message>
-        <source>_export_formats_json</source>
-        <translation type="vanished">Sprite Atlas </translation>
-    </message>
-    <message>
-        <source>_export_formats_png</source>
-        <translation type="vanished">Image PNG </translation>
-    </message>
-    <message>
-        <source>_export_atlas</source>
-        <translation type="vanished">Exporter l'altas de sprites</translation>
-    </message>
-    <message>
-        <source>_new_animation</source>
-        <translation type="vanished">Nouvelle animation</translation>
-    </message>
-    <message>
-        <source>_animation_name</source>
-        <translation type="vanished">Nom de l'animation :</translation>
-    </message>
-    <message>
-        <source>_info</source>
-        <translation type="vanished">Informations</translation>
-    </message>
-    <message>
-        <source>_select_animation_first</source>
-        <translation type="vanished">Veuiilez d'abord sélectionner une animation</translation>
-    </message>
-    <message>
-        <source>_error</source>
-        <translation type="vanished">Erreur</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="206" />
         <location filename="../src/mainwindow_animation.cpp" line="94" />
         <location filename="../src/mainwindow_atlas.cpp" line="62" />
         <location filename="../src/mainwindow_atlas.cpp" line="108" />
-        <location filename="../../tests/test_controllers.cpp" line="1375" />
-        <location filename="../../tests/test_controllers.cpp" line="1405" />
-        <location filename="../../tests/test_controllers.cpp" line="1435" />
+        <location filename="../src/mainwindow_callbacks.cpp" line="206" />
         <source>KEY_CTX_CREATE_ANIM</source>
         <translation>Créer une animation depuis la sélection</translation>
     </message>
@@ -1529,16 +1137,16 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Fusionner les boîtes</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="216" />
         <location filename="../src/mainwindow_atlas.cpp" line="85" />
         <location filename="../src/mainwindow_atlas.cpp" line="130" />
+        <location filename="../src/mainwindow_callbacks.cpp" line="216" />
         <source>KEY_CTX_DELETE_FRAMES</source>
         <translation>Supprimer les boîtes sélectionnées</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="220" />
         <location filename="../src/mainwindow_atlas.cpp" line="90" />
         <location filename="../src/mainwindow_atlas.cpp" line="136" />
+        <location filename="../src/mainwindow_callbacks.cpp" line="220" />
         <source>KEY_CTX_ERASE_PIXELS</source>
         <translation>Effacer les pixels et supprimer les boîtes</translation>
     </message>
@@ -1549,8 +1157,8 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Supprimer l'arrière-plan de l'atlas</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="230" />
         <location filename="../src/mainwindow_atlas.cpp" line="142" />
+        <location filename="../src/mainwindow_callbacks.cpp" line="230" />
         <source>KEY_CTX_INVERT_SEL</source>
         <translation>Inverser la sélection</translation>
     </message>
@@ -1621,15 +1229,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Prêt</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1477" />
-        <source>KEY_UNKNOWN_FEATURE</source>
-        <translation>Fonctionnalité inconnue</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="652" />
-        <location filename="../../tests/test_controllers.cpp" line="1369" />
-        <location filename="../../tests/test_controllers.cpp" line="1399" />
-        <location filename="../../tests/test_controllers.cpp" line="1429" />
         <source>KEY_MENU_VIEW</source>
         <translation>Affichage</translation>
     </message>
@@ -1683,9 +1283,6 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76" />
-        <location filename="../../tests/test_controllers.cpp" line="1371" />
-        <location filename="../../tests/test_controllers.cpp" line="1401" />
-        <location filename="../../tests/test_controllers.cpp" line="1431" />
         <source>KEY_DOCK_PREVIEW</source>
         <translation>Aperçu de l'animation</translation>
     </message>
@@ -1846,11 +1443,8 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Dupliquer cette animation</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="609" />
         <location filename="../src/controller/projectcontroller.cpp" line="77" />
-        <location filename="../../tests/test_controllers.cpp" line="1380" />
-        <location filename="../../tests/test_controllers.cpp" line="1410" />
-        <location filename="../../tests/test_controllers.cpp" line="1440" />
+        <location filename="../src/mainwindow.cpp" line="609" />
         <source>KEY_UNTITLED_PROJECT</source>
         <translation>Projet sans titre</translation>
     </message>
@@ -1894,9 +1488,6 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <location filename="../src/mainwindow.ui" line="598" />
         <location filename="../src/mainwindow.cpp" line="265" />
         <location filename="../src/mainwindow.cpp" line="713" />
-        <location filename="../../tests/test_controllers.cpp" line="1370" />
-        <location filename="../../tests/test_controllers.cpp" line="1400" />
-        <location filename="../../tests/test_controllers.cpp" line="1430" />
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>Barre d'outils principale</translation>
     </message>
@@ -2004,6 +1595,92 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
 </context>
 <context>
+    <name>PixelRescaleFilter</name>
+    <message>
+        <location filename="../src/filters/pixelrescalefilter.cpp" line="7" />
+        <source>Pixel Art Rescale...</source>
+        <translation>Redimensionnement Pixel Art...</translation>
+    </message>
+    <message>
+        <location filename="../src/filters/pixelrescalefilter.cpp" line="12" />
+        <source>Rescales the atlas cleanly using Nearest-Neighbor (pixel-perfect) or Scale2x (smooth contours).</source>
+        <translation>Redimensionne proprement l'atlas via Plus Proche Voisin (pixel-perfect) ou Scale2x (contours lissés).</translation>
+    </message>
+</context>
+<context>
+    <name>PixelRescaleFilterDialog</name>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="16" />
+        <source>Pixel Art Rescale</source>
+        <translation>Redimensionnement Pixel Art</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="25" />
+        <source>Rescale Parameters</source>
+        <translation>Paramètres de redimensionnement</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="31" />
+        <source>Scale Factor:</source>
+        <translation>Facteur d'échelle :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="33" />
+        <source>0.5x (Downscale 50%)</source>
+        <translation>0.5x (Réduction 50%)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="34" />
+        <source>2x (Double 200%)</source>
+        <translation>2x (Doubler 200%)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="35" />
+        <source>3x (Triple 300%)</source>
+        <translation>3x (Tripler 300%)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="36" />
+        <source>4x (Quadruple 400%)</source>
+        <translation>4x (Quadrupler 400%)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="43" />
+        <source>Resampling Engine:</source>
+        <translation>Moteur de rééchantillonnage :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="45" />
+        <source>Nearest-Neighbor (Sharp / Pixel-Perfect)</source>
+        <translation>Plus Proche Voisin (Net / Pixel-Perfect)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="46" />
+        <source>Scale2x / AdvMAME2x (Smooth Contours)</source>
+        <translation>Scale2x / AdvMAME2x (Contours lissés)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="84" />
+        <source>Atlas Dimensions: %1x%2 -&gt; %3x%4 px</source>
+        <translation>Dimensions de l'atlas : %1x%2 -&gt; %3x%4 px</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="275" />
+        <source>Rescaled %1x (%2)</source>
+        <translation>Redimensionné %1x (%2)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="276" />
+        <source>%1 frame(s) detected</source>
+        <translation>%1 frame(s) détectée(s)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="285" />
+        <source>Filter: Pixel Art Rescale</source>
+        <translation>Filtre : Redimensionnement Pixel Art</translation>
+    </message>
+</context>
+<context>
     <name>ProjectController</name>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="298" />
@@ -2024,17 +1701,6 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <location filename="../src/controller/projectcontroller.cpp" line="317" />
         <source>No active SpriteDocument.</source>
         <translation>Aucun SpriteDocument actif.</translation>
-    </message>
-    <message>
-        <source>Untitled Project</source>
-        <translation type="vanished">Projet sans titre</translation>
-    </message>
-    <message>
-        <location filename="../../tests/test_controllers.cpp" line="1381" />
-        <location filename="../../tests/test_controllers.cpp" line="1411" />
-        <location filename="../../tests/test_controllers.cpp" line="1441" />
-        <source>KEY_UNTITLED_PROJECT</source>
-        <translation>Projet sans titre</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="107" />
@@ -2297,34 +1963,211 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>La racine JSON doit être un objet.</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="103" />
+        <location filename="../src/filters/filterregistry.cpp" line="109" />
         <source>Cleanup</source>
         <translation>Nettoyage</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="104" />
+        <location filename="../src/filters/filterregistry.cpp" line="110" />
         <source>Colors</source>
         <translation>Couleurs</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="105" />
+        <location filename="../src/filters/filterregistry.cpp" line="111" />
         <source>Effects</source>
         <translation>Effets</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="106" />
+        <location filename="../src/filters/filterregistry.cpp" line="112" />
         <source>Geometry</source>
         <translation>Géométrie</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="128" />
+        <location filename="../src/filters/filterregistry.cpp" line="134" />
         <source>No Atlas Loaded</source>
         <translation>Aucun atlas chargé</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="129" />
+        <location filename="../src/filters/filterregistry.cpp" line="135" />
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Veuillez d'abord ouvrir ou importer une planche de sprites avant d'appliquer un filtre.</translation>
+    </message>
+</context>
+<context>
+    <name>RetroPaletteFilter</name>
+    <message>
+        <location filename="../src/filters/retropalettefilter.cpp" line="7" />
+        <source>Retro Palette &amp; Dithering...</source>
+        <translation>Palette Rétro &amp; Tramage (Dithering)...</translation>
+    </message>
+    <message>
+        <location filename="../src/filters/retropalettefilter.cpp" line="12" />
+        <source>Quantizes colors to authentic retro hardware palettes with optional ordered Bayer dithering.</source>
+        <translation>Quantifie les couleurs selon d'authentiques palettes rétro avec tramage ordonné de Bayer optionnel.</translation>
+    </message>
+</context>
+<context>
+    <name>RetroPaletteFilterDialog</name>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="56" />
+        <source>Retro Palette &amp; Dithering</source>
+        <translation>Palette Rétro &amp; Tramage (Dithering)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="68" />
+        <source>Retro Hardware Palette</source>
+        <translation>Palette Matérielle Rétro</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="72" />
+        <source>Palette Preset:</source>
+        <translation>Préréglage de palette :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="74" />
+        <source>Game Boy DMG (4 Greens)</source>
+        <translation>Game Boy DMG (4 Verts)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="75" />
+        <source>Game Boy Pocket (4 Grays)</source>
+        <translation>Game Boy Pocket (4 Gris)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="76" />
+        <source>PICO-8 (16 Colors)</source>
+        <translation>PICO-8 (16 Couleurs)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="77" />
+        <source>NES / Famicom (54 Colors)</source>
+        <translation>NES / Famicom (54 Couleurs)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="78" />
+        <source>Commodore 64 (16 Colors)</source>
+        <translation>Commodore 64 (16 Couleurs)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="79" />
+        <source>CGA Mode 1 (Cyan/Magenta/White)</source>
+        <translation>CGA Mode 1 (Cyan/Magenta/Blanc)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="80" />
+        <source>CGA Mode 2 (Red/Green/Yellow)</source>
+        <translation>CGA Mode 2 (Rouge/Vert/Jaune)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="81" />
+        <source>Endesga 32 (32 Pixel Art Colors)</source>
+        <translation>Endesga 32 (32 Couleurs Pixel Art)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="82" />
+        <source>Custom / Imported Palette</source>
+        <translation>Palette personnalisée / importée</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="86" />
+        <source>Import...</source>
+        <translation>Importer...</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="87" />
+        <source>Import palette from .hex, .gpl, .pal or .png image</source>
+        <translation>Importer une palette depuis un fichier .hex, .gpl, .pal ou une image .png</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="103" />
+        <source>Ordered Dithering (Bayer Matrix)</source>
+        <translation>Tramage ordonné (Matrice de Bayer)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="106" />
+        <source>Dither Pattern:</source>
+        <translation>Motif de tramage :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="108" />
+        <source>None (Exact Nearest Match)</source>
+        <translation>Aucun (Couleur la plus proche)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="109" />
+        <source>Bayer 2x2 Matrix</source>
+        <translation>Matrice Bayer 2x2</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="110" />
+        <source>Bayer 4x4 Matrix (Classic Retro)</source>
+        <translation>Matrice Bayer 4x4 (Rétro classique)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="111" />
+        <source>Bayer 8x8 Matrix (Smooth Gradients)</source>
+        <translation>Matrice Bayer 8x8 (Dégradés subtils)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="117" />
+        <source>Dither Strength:</source>
+        <translation>Intensité du tramage :</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="134" />
+        <source>Target Scope</source>
+        <translation>Portée de l'effet</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="137" />
+        <source>Apply to selected frames only</source>
+        <translation>Appliquer uniquement aux frames sélectionnées</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="142" />
+        <source>No frames selected: applies to entire atlas</source>
+        <translation>Aucune frame sélectionnée : s'applique à tout l'atlas</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="206" />
+        <source>Import Color Palette</source>
+        <translation>Importer une palette de couleurs</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="208" />
+        <source>Palette Files (*.hex *.gpl *.pal *.png *.bmp);;All Files (*)</source>
+        <translation>Fichiers de palette (*.hex *.gpl *.pal *.png *.bmp);;Tous les fichiers (*)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="215" />
+        <source>Import Failed</source>
+        <translation>Échec de l'importation</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="216" />
+        <source>No valid colors found in file.</source>
+        <translation>Aucune couleur valide trouvée dans le fichier.</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="256" />
+        <source>%1 active color(s)</source>
+        <translation>%1 couleur(s) active(s)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="550" />
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="553" />
+        <source>Quantized (%1 colors, %2)</source>
+        <translation>Quantifié (%1 couleurs, %2)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="551" />
+        <source>%1 frame(s) detected</source>
+        <translation>%1 frame(s) détectée(s)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="563" />
+        <source>Filter: Retro Palette &amp; Dithering</source>
+        <translation>Filtre : Palette Rétro &amp; Tramage</translation>
     </message>
 </context>
 <context>
@@ -2435,9 +2278,6 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="22" />
         <location filename="../src/widgets/settingsdialog.cpp" line="457" />
-        <location filename="../../tests/test_controllers.cpp" line="1377" />
-        <location filename="../../tests/test_controllers.cpp" line="1407" />
-        <location filename="../../tests/test_controllers.cpp" line="1437" />
         <source>KEY_SETTINGS_TITLE</source>
         <translation>Préférences</translation>
     </message>
@@ -2534,9 +2374,6 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="181" />
         <location filename="../src/widgets/settingsdialog.cpp" line="477" />
-        <location filename="../../tests/test_controllers.cpp" line="1382" />
-        <location filename="../../tests/test_controllers.cpp" line="1412" />
-        <location filename="../../tests/test_controllers.cpp" line="1442" />
         <source>KEY_SETTINGS_LANG_HINT</source>
         <translation>Les modifications de langue s'appliquent immédiatement.</translation>
     </message>
@@ -2724,9 +2561,6 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="34" />
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="237" />
-        <location filename="../../tests/test_controllers.cpp" line="1378" />
-        <location filename="../../tests/test_controllers.cpp" line="1408" />
-        <location filename="../../tests/test_controllers.cpp" line="1438" />
         <source>KEY_TIMELINE_ADD_SELECTION</source>
         <translation>+ Ajouter la sélection</translation>
     </message>

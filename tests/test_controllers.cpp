@@ -25,6 +25,9 @@
 #include "widgets/despillfilterdialog.h"
 #include "widgets/outlinefilterdialog.h"
 #include "widgets/colorswapfilterdialog.h"
+#include "widgets/coloradjustfilterdialog.h"
+#include "widgets/pixelrescalefilterdialog.h"
+#include "widgets/retropalettefilterdialog.h"
 #include "commands/filtercommands.h"
 
 class TestControllers : public QObject
@@ -89,6 +92,9 @@ private slots:
     void testDespillFilterAlgorithm();
     void testOutlineFilterAlgorithm();
     void testColorSwapFilterAlgorithm();
+    void testColorAdjustFilterAlgorithm();
+    void testPixelRescaleFilterAlgorithm();
+    void testRetroPaletteFilterAlgorithm();
     void testApplyFilterCommandUndoRedo();
     void testFilterAutoDetectBoxes();
 
@@ -1380,12 +1386,15 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ Ajouter la sélection"));
         QCOMPARE(QCoreApplication::translate("GitHistoryDock", "KEY_GIT_BTN_RESTORE"), QStringLiteral("Restaurer cette révision"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_UNTITLED_PROJECT"), QStringLiteral("Projet sans titre"));
-        QCOMPARE(QCoreApplication::translate("ProjectController", "KEY_UNTITLED_PROJECT"), QStringLiteral("Projet sans titre"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_LANG_HINT"), QStringLiteral("Les modifications de langue s'appliquent immédiatement."));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_MENU_FILTERS"), QStringLiteral("&Filtres"));
         QCOMPARE(QCoreApplication::translate("BackgroundRemovalDialog", "Background Removal"), QStringLiteral("Suppression d'arrière-plan"));
         QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Live Preview"), QStringLiteral("Aperçu en direct"));
         QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Auto-detect Sprite Boxes"), QStringLiteral("Détection auto des boîtes"));
+        QCOMPARE(QCoreApplication::translate("ColorAdjustFilter", "Color Adjustment (HSV & Contrast)..."), QStringLiteral("Ajustement des Couleurs (HSV & Contraste)..."));
+        QCOMPARE(QCoreApplication::translate("PixelRescaleFilter", "Pixel Art Rescale..."), QStringLiteral("Redimensionnement Pixel Art..."));
+        QCOMPARE(QCoreApplication::translate("RetroPaletteFilter", "Retro Palette & Dithering..."), QStringLiteral("Palette Rétro & Tramage (Dithering)..."));
+        QCOMPARE(QCoreApplication::translate("FilterRegistry", "Geometry & Transform"), QStringLiteral("Géométrie & Transformations"));
 
         QCoreApplication::removeTranslator(&frTranslator);
     }
@@ -1411,12 +1420,15 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ Add Selection"));
         QCOMPARE(QCoreApplication::translate("GitHistoryDock", "KEY_GIT_BTN_RESTORE"), QStringLiteral("Restore this revision"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_UNTITLED_PROJECT"), QStringLiteral("Untitled Project"));
-        QCOMPARE(QCoreApplication::translate("ProjectController", "KEY_UNTITLED_PROJECT"), QStringLiteral("Untitled Project"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_LANG_HINT"), QStringLiteral("Language changes are applied immediately."));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_MENU_FILTERS"), QStringLiteral("&Filters"));
         QCOMPARE(QCoreApplication::translate("BackgroundRemovalDialog", "Background Removal"), QStringLiteral("Background Removal"));
         QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Live Preview"), QStringLiteral("Live Preview"));
         QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Auto-detect Sprite Boxes"), QStringLiteral("Auto-detect Sprite Boxes"));
+        QCOMPARE(QCoreApplication::translate("ColorAdjustFilter", "Color Adjustment (HSV & Contrast)..."), QStringLiteral("Color Adjustment (HSV & Contrast)..."));
+        QCOMPARE(QCoreApplication::translate("PixelRescaleFilter", "Pixel Art Rescale..."), QStringLiteral("Pixel Art Rescale..."));
+        QCOMPARE(QCoreApplication::translate("RetroPaletteFilter", "Retro Palette & Dithering..."), QStringLiteral("Retro Palette & Dithering..."));
+        QCOMPARE(QCoreApplication::translate("FilterRegistry", "Geometry & Transform"), QStringLiteral("Geometry & Transform"));
 
         QCoreApplication::removeTranslator(&enTranslator);
     }
@@ -1442,12 +1454,15 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ 選択を追加"));
         QCOMPARE(QCoreApplication::translate("GitHistoryDock", "KEY_GIT_BTN_RESTORE"), QStringLiteral("このリビジョンを復元"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_UNTITLED_PROJECT"), QStringLiteral("無題のプロジェクト"));
-        QCOMPARE(QCoreApplication::translate("ProjectController", "KEY_UNTITLED_PROJECT"), QStringLiteral("無題のプロジェクト"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_LANG_HINT"), QStringLiteral("言語の変更は即座に適用されます。"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_MENU_FILTERS"), QStringLiteral("フィルター(&F)"));
         QCOMPARE(QCoreApplication::translate("BackgroundRemovalDialog", "Background Removal"), QStringLiteral("背景の削除"));
         QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Live Preview"), QStringLiteral("リアルタイムプレビュー"));
         QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Auto-detect Sprite Boxes"), QStringLiteral("スプライト枠の自動検出"));
+        QCOMPARE(QCoreApplication::translate("ColorAdjustFilter", "Color Adjustment (HSV & Contrast)..."), QStringLiteral("カラー調整 (HSV・コントラスト)..."));
+        QCOMPARE(QCoreApplication::translate("PixelRescaleFilter", "Pixel Art Rescale..."), QStringLiteral("ピクセルアートリサイズ..."));
+        QCOMPARE(QCoreApplication::translate("RetroPaletteFilter", "Retro Palette & Dithering..."), QStringLiteral("レトロパレット＆ディザリング..."));
+        QCOMPARE(QCoreApplication::translate("FilterRegistry", "Geometry & Transform"), QStringLiteral("ジオメトリと変形"));
 
         QCoreApplication::removeTranslator(&jaTranslator);
     }
@@ -1735,11 +1750,14 @@ void TestControllers::testFilterRegistry()
     FilterRegistry &reg = FilterRegistry::instance();
     reg.initDefaultFilters();
 
-    QVERIFY(reg.filters().size() >= 4);
+    QVERIFY(reg.filters().size() >= 7);
     QVERIFY(reg.findFilter(QStringLiteral("background_removal")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("despill")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("outline")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("color_swap")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("color_adjust")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("pixel_rescale")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("retro_palette")) != nullptr);
 
     QStringList cats = reg.categories();
     QVERIFY(!cats.isEmpty());
@@ -1748,7 +1766,7 @@ void TestControllers::testFilterRegistry()
     SpriteDocument doc;
     QUndoStack undoStack;
     reg.populateMenu(&testMenu, &doc, &undoStack, nullptr);
-    QVERIFY(testMenu.actions().size() >= 4);
+    QVERIFY(testMenu.actions().size() >= 7);
 }
 
 void TestControllers::testDespillFilterAlgorithm()
@@ -1839,6 +1857,174 @@ void TestControllers::testColorSwapFilterAlgorithm()
     QVERIFY(qGreen(swapped) < 60);
 }
 
+void TestControllers::testColorAdjustFilterAlgorithm()
+{
+    QImage src(10, 10, QImage::Format_ARGB32);
+    src.fill(qRgba(0, 0, 0, 0));
+
+    // Pure red pixel at (2, 2)
+    src.setPixel(2, 2, qRgb(255, 0, 0));
+    // Neutral gray pixel at (5, 5)
+    src.setPixel(5, 5, qRgb(128, 128, 128));
+
+    // 1. Hue Shift: +120° on pure red -> should become predominantly green
+    QImage hueRes = ColorAdjustFilterDialog::applyColorAdjust(src, 120, 0, 0, 0);
+    QRgb shiftedRed = hueRes.pixel(2, 2);
+    QCOMPARE(qAlpha(shiftedRed), 255);
+    QVERIFY(qGreen(shiftedRed) > 200);
+    QVERIFY(qRed(shiftedRed) < 50);
+    // Transparent pixel remains transparent
+    QCOMPARE(qAlpha(hueRes.pixel(0, 0)), 0);
+
+    // 2. Saturation: -100% on pure red -> should become grayscale (R == G == B)
+    QImage desatRes = ColorAdjustFilterDialog::applyColorAdjust(src, 0, -100, 0, 0);
+    QRgb grayPix = desatRes.pixel(2, 2);
+    QCOMPARE(qAlpha(grayPix), 255);
+    QCOMPARE(qRed(grayPix), qGreen(grayPix));
+    QCOMPARE(qGreen(grayPix), qBlue(grayPix));
+
+    // 3. Brightness/Value: -100% -> should become completely black
+    QImage darkRes = ColorAdjustFilterDialog::applyColorAdjust(src, 0, 0, -100, 0);
+    QRgb darkPix = darkRes.pixel(2, 2);
+    QCOMPARE(qAlpha(darkPix), 255);
+    QCOMPARE(qRed(darkPix), 0);
+    QCOMPARE(qGreen(darkPix), 0);
+    QCOMPARE(qBlue(darkPix), 0);
+
+    // 4. Target Areas scope test: only pixels inside the rect are altered
+    QList<QRect> scope = { QRect(1, 1, 3, 3) }; // covers (2,2), not (5,5)
+    QImage scopedRes = ColorAdjustFilterDialog::applyColorAdjust(src, 0, 0, -100, 0, scope);
+    QCOMPARE(qRed(scopedRes.pixel(2, 2)), 0); // modified
+    QCOMPARE(qRed(scopedRes.pixel(5, 5)), 128); // untouched
+}
+
+void TestControllers::testPixelRescaleFilterAlgorithm()
+{
+    // Create a 4x4 test pattern
+    QImage src(4, 4, QImage::Format_ARGB32);
+    src.fill(qRgb(255, 255, 255));
+    src.setPixel(1, 1, qRgb(255, 0, 0));
+    src.setPixel(2, 2, qRgb(0, 0, 255));
+
+    // 1. Nearest 2x -> 8x8 image
+    QImage near2x = PixelRescaleFilterDialog::applyNearest(src, 2.0);
+    QCOMPARE(near2x.width(), 8);
+    QCOMPARE(near2x.height(), 8);
+    QCOMPARE(near2x.pixel(2, 2), qRgb(255, 0, 0));
+    QCOMPARE(near2x.pixel(3, 3), qRgb(255, 0, 0));
+    QCOMPARE(near2x.pixel(4, 4), qRgb(0, 0, 255));
+    QCOMPARE(near2x.pixel(0, 0), qRgb(255, 255, 255));
+
+    // 2. Nearest 0.5x -> 2x2 image
+    QImage nearHalf = PixelRescaleFilterDialog::applyNearest(src, 0.5);
+    QCOMPARE(nearHalf.width(), 2);
+    QCOMPARE(nearHalf.height(), 2);
+
+    // 3. Scale2x -> 8x8 image
+    QImage scale2x = PixelRescaleFilterDialog::applyScale2x(src);
+    QCOMPARE(scale2x.width(), 8);
+    QCOMPARE(scale2x.height(), 8);
+    QVERIFY(!scale2x.isNull());
+
+    // 4. Scale3x -> 12x12 image
+    QImage scale3x = PixelRescaleFilterDialog::applyScale3x(src);
+    QCOMPARE(scale3x.width(), 12);
+    QCOMPARE(scale3x.height(), 12);
+
+    // 5. Test Bounding Box proportional rescaling in dialog
+    SpriteDocument doc;
+    doc.setAtlas(src);
+    SpriteBox b0;
+    b0.rect = QRect(1, 1, 2, 2);
+    b0.index = 0;
+    doc.setFrames({ QPixmap::fromImage(src.copy(b0.rect)) }, { b0 });
+
+    QUndoStack stack;
+    PixelRescaleFilterDialog dlg(&doc, &stack);
+    // Auto-detect disabled: bounding box is scaled mathematically
+    dlg.setAutoDetectBoxesEnabled(false);
+    // Dialog accepts default 2x scale
+    dlg.accept();
+
+    QCOMPARE(doc.atlas().width(), 8);
+    QCOMPARE(doc.atlas().height(), 8);
+    QCOMPARE(doc.boxes().size(), 1);
+    QCOMPARE(doc.boxes().first().rect, QRect(2, 2, 4, 4));
+
+    // Undo restores original atlas and box
+    stack.undo();
+    QCOMPARE(doc.atlas().width(), 4);
+    QCOMPARE(doc.atlas().height(), 4);
+    QCOMPARE(doc.boxes().first().rect, QRect(1, 1, 2, 2));
+}
+
+void TestControllers::testRetroPaletteFilterAlgorithm()
+{
+    // 1. Built-in Preset verification
+    QVector<QRgb> dmg = RetroPaletteFilterDialog::getPresetPalette(RetroPaletteFilterDialog::GameBoyDMG);
+    QCOMPARE(dmg.size(), 4);
+
+    QVector<QRgb> pico8 = RetroPaletteFilterDialog::getPresetPalette(RetroPaletteFilterDialog::Pico8);
+    QCOMPARE(pico8.size(), 16);
+
+    QVector<QRgb> nes = RetroPaletteFilterDialog::getPresetPalette(RetroPaletteFilterDialog::NES);
+    QCOMPARE(nes.size(), 54);
+
+    QVector<QRgb> endesga = RetroPaletteFilterDialog::getPresetPalette(RetroPaletteFilterDialog::Endesga32);
+    QCOMPARE(endesga.size(), 32);
+
+    // 2. Nearest Quantization without dithering
+    QImage src(4, 4, QImage::Format_ARGB32);
+    src.fill(qRgba(0, 0, 0, 0));
+    src.setPixel(0, 0, qRgb(0, 0, 0));       // Pure black -> Darkest DMG green (15, 56, 15)
+    src.setPixel(1, 1, qRgb(255, 255, 255)); // Pure white -> Lightest DMG green (155, 188, 15)
+
+    QImage quantNone = RetroPaletteFilterDialog::applyRetroPalette(
+        src, dmg, RetroPaletteFilterDialog::DitherNone, 0);
+
+    QCOMPARE(qAlpha(quantNone.pixel(0, 0)), 255);
+    QCOMPARE(quantNone.pixel(0, 0), dmg[0]); // darkest green
+    QCOMPARE(quantNone.pixel(1, 1), dmg[3]); // lightest green
+    QCOMPARE(qAlpha(quantNone.pixel(2, 2)), 0); // transparent pixel untouched
+
+    // 3. Ordered Bayer Dithering
+    QImage ditherSrc(8, 8, QImage::Format_ARGB32);
+    // Fill with intermediate gray to trigger spatial alternating pattern
+    ditherSrc.fill(qRgb(100, 120, 50));
+    QImage ditherRes = RetroPaletteFilterDialog::applyRetroPalette(
+        ditherSrc, dmg, RetroPaletteFilterDialog::Bayer4x4, 50);
+
+    // Verify dithering generated spatial variation (multiple palette tones) across uniform input
+    QSet<QRgb> uniqueDitherColors;
+    for (int y = 0; y < 8; ++y) {
+        for (int x = 0; x < 8; ++x) {
+            uniqueDitherColors.insert(ditherRes.pixel(x, y));
+        }
+    }
+    QVERIFY(uniqueDitherColors.size() >= 2);
+
+    // 4. Custom Palette Parser test
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    QString hexFile = tempDir.filePath(QStringLiteral("test_palette.hex"));
+    {
+        QFile f(hexFile);
+        QVERIFY(f.open(QIODevice::WriteOnly | QIODevice::Text));
+        QTextStream out(&f);
+        out << "#ff0000\n";
+        out << "00ff00\n";
+        out << "#0000ff\n";
+    }
+
+    QString parseErr;
+    QVector<QRgb> parsed = RetroPaletteFilterDialog::loadPaletteFromFile(hexFile, &parseErr);
+    QVERIFY(parseErr.isEmpty());
+    QCOMPARE(parsed.size(), 3);
+    QCOMPARE(parsed[0], qRgb(255, 0, 0));
+    QCOMPARE(parsed[1], qRgb(0, 255, 0));
+    QCOMPARE(parsed[2], qRgb(0, 0, 255));
+}
+
 void TestControllers::testApplyFilterCommandUndoRedo()
 {
     SpriteDocument doc;
@@ -1923,7 +2109,7 @@ void TestControllers::testFilterAutoDetectBoxes()
         QCOMPARE(doc.boxes().first().rect, QRect(12, 12, 8, 8));
     }
 
-    // 3. Test DespillFilterDialog and ColorSwapFilterDialog have auto-detect disabled by default
+    // 3. Test Despill, ColorSwap, ColorAdjust, PixelRescale, RetroPalette have auto-detect disabled by default
     {
         QUndoStack stack;
         DespillFilterDialog despillDlg(&doc, &stack);
@@ -1935,6 +2121,21 @@ void TestControllers::testFilterAutoDetectBoxes()
         QCOMPARE(swapDlg.isAutoDetectBoxesEnabled(), false);
         swapDlg.setAutoDetectBoxesEnabled(true);
         QCOMPARE(swapDlg.isAutoDetectBoxesEnabled(), true);
+
+        ColorAdjustFilterDialog adjustDlg(&doc, &stack);
+        QCOMPARE(adjustDlg.isAutoDetectBoxesEnabled(), false);
+        adjustDlg.setAutoDetectBoxesEnabled(true);
+        QCOMPARE(adjustDlg.isAutoDetectBoxesEnabled(), true);
+
+        PixelRescaleFilterDialog rescaleDlg(&doc, &stack);
+        QCOMPARE(rescaleDlg.isAutoDetectBoxesEnabled(), false);
+        rescaleDlg.setAutoDetectBoxesEnabled(true);
+        QCOMPARE(rescaleDlg.isAutoDetectBoxesEnabled(), true);
+
+        RetroPaletteFilterDialog retroDlg(&doc, &stack);
+        QCOMPARE(retroDlg.isAutoDetectBoxesEnabled(), false);
+        retroDlg.setAutoDetectBoxesEnabled(true);
+        QCOMPARE(retroDlg.isAutoDetectBoxesEnabled(), true);
     }
 }
 

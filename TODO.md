@@ -483,25 +483,34 @@ Pour éviter la prolifération de fenêtres ad-hoc et permettre l'ajout modulair
   - Voisinage : 4-connecté (croix nette pour pixel art rétro) ou 8-connecté (diagonales lissées).
   - Option *« Silhouette pleine »* : remplit l'intérieur pour créer une ombre portée ou un flash blanc de dégât (*hit-flash*).
 
-#### 5. Ajustements Teinte / Saturation / Valeur / Contraste (*HSV Adjust*) — 📝 Planifié
+#### 5. Ajustements Teinte / Saturation / Valeur / Contraste (*HSV Adjust*) (`ColorAdjustFilter` / `ColorAdjustFilterDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Harmoniser les couleurs d'une planche ou simuler des états d'altération (personnage empoisonné teinté de violet, personnage gelé bleuté, scène de nuit désaturée).
+- **Plugin :** ID `color_adjust`, catégorie `Colors & Palettes`.
 - **Paramètres :**
-  - Teinte (Hue) : $-180^\circ$ à $+180^\circ$.
-  - Saturation : $-100\%$ (niveaux de gris) à $+100\%$.
-  - Luminosité / Valeur : $-100\%$ à $+100\%$.
-  - Contraste : $-100\%$ à $+100\%$.
+  - Teinte (Hue) : $-180^\circ$ à $+180^\circ$ avec sliders et spinboxes bidirectionnels.
+  - Saturation : $-100\%$ (niveaux de gris complet) à $+100\%$.
+  - Luminosité / Valeur : $-100\%$ (noir complet) à $+100\%$ (blanchiment/surbrillance).
+  - Contraste : $-100\%$ (aplat à luminance moyenne 128) à $+100\%$ (contraste binaire marqué).
+  - Ciblage sélectif : application globale ou restreinte aux frames sélectionnées.
+  - Aperçu en direct réactif avec rollback non-destructif, case à cocher de relance de détection auto et intégration complète `QUndoStack`.
 
-#### 6. Redimensionnement Pixel Art Net (*Pixel Rescale / Nearest-Neighbor & xBRZ*) — 📝 Planifié
+#### 6. Redimensionnement Pixel Art Net (*Pixel Rescale / Nearest-Neighbor & Scale2x*) (`PixelRescaleFilter` / `PixelRescaleFilterDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Agrandir ou réduire un atlas sans que l'interpolation bilinéaire standard ne génère de flou destructeur sur le pixel art.
+- **Plugin :** ID `pixel_rescale`, catégorie `Geometry & Transform`.
 - **Paramètres :**
-  - Facteur d'échelle : Entiers ($2\times, 3\times, 4\times, 0.5\times$).
-  - Moteur de filtrage : Nearest-Neighbor (pixels nets d'origine), Scale2x / AdvMAME2x ou xBRZ (lissage cartoon haute définition).
+  - Facteur d'échelle : Entiers et fractions ($0.5\times$, $2\times$, $3\times$, $4\times$).
+  - Moteur de filtrage : Nearest-Neighbor (pixels nets d'origine, respect absolu des proportions de blocs) et Scale2x / AdvMAME2x (lissage procédural sans flou des arêtes diagonales, avec Scale3x pour le facteur $3\times$).
+  - Mise à l'échelle automatique des rectangles de découpe (`SpriteBox`) avec recalcul proportionnel ou relance de la détection automatique intelligente (`SpriteDetector`).
 
-#### 7. Quantification & Palettes Rétro (*Palette Snapping & Bayer Dithering*) — 📝 Planifié
-- **Rôle :** Forcer une planche à adopter une palette matérielle rétro authentique.
+#### 7. Quantification & Palettes Rétro (*Palette Snapping & Bayer Dithering*) (`RetroPaletteFilter` / `RetroPaletteFilterDialog`) — ✅ Validé & Opérationnel
+- **Rôle :** Forcer une planche à adopter une palette matérielle rétro authentique avec simulation de tramage ordonné d'époque.
+- **Plugin :** ID `retro_palette`, catégorie `Colors & Palettes`.
 - **Paramètres :**
-  - Sélecteur de presets : Game Boy (4 teintes de vert), PICO-8 (16 couleurs), NES (54 couleurs), Endesga 32, ou palette importée.
-  - Option *« Tramage ordonné (Bayer Dithering) »* avec matrice $2\times 2$, $4\times 4$ ou $8\times 8$ pour reproduire les dégradés d'époque.
+  - Sélecteur de presets matériels intégrés : Game Boy DMG (4 verts authentiques), Game Boy Pocket (4 niveaux de gris), PICO-8 (16 couleurs fantasy console), NES / Famicom (54 teintes), Commodore 64 (16 couleurs VIC-II), CGA Mode 1 (cyan/magenta/blanc), CGA Mode 2 (rouge/vert/jaune), Endesga 32 (palette moderne pixel art).
+  - Importation de palettes externes : prise en charge des formats `.hex` (Lospec), `.gpl` (GIMP/Aseprite), `.pal` (JASC/RGB), images `.png`/`.bmp` (extraction automatique des couleurs uniques).
+  - Bandeau d'aperçu d'échantillons de couleurs dynamiques (*swatch strip*).
+  - Tramage ordonné (*Ordered Bayer Dithering*) : matrices $2\times 2$, $4\times 4$ classique rétro, $8\times 8$ dégradés subtils, avec curseur d'intensité $0\%$ à $100\%$.
+  - Distance colorimétrique perceptuelle pondérée pour l'œil humain ($\Delta E^2 = 2\Delta R^2 + 4\Delta G^2 + 3\Delta B^2$).
 
 ---
 
