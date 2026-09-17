@@ -36,6 +36,12 @@
 
 ![Frame Fusion Demo](Fusion.gif)
 
+### 🎯 Interactive Anchor Points & Pivots
+* **Zero-Jittering Animation Stabilization:** Shared animation envelope alignment guarantees rock-solid anchored characters during motion, attacks, or jumps without visual shaking or sliding.
+* **Dual-Surface Direct Editing:** Move the high-contrast reticle directly within the atlas slices or right inside the live animation preview with real-time coordinate updates and Shift+Click snapping.
+* **Instant Cardinal Presets & Batch Actions:** One-click shortcuts for Ground/Bottom-Center, Center, and Top-Left (UI), with batch propagation to entire animations or the full project.
+* **Intelligent Preview Navigation:** Automatic optimal framing (*Fit In View*), 5000% razor-sharp pixel art wheel zoom, and pan controls.
+
 ### 💾 Native `.ssp` Project Architecture
 * **All-in-One Compressed Format:** `.ssp` project files package project metadata, frame descriptors, and source assets into a structured ZIP archive.
 * **Atomic Transactions & Crash Recovery:** Atomic file writing with journaled crash-recovery safeguard prevents project corruption.
@@ -133,24 +139,24 @@ ctest --test-dir build --output-on-failure --verbose
 
 ## ⚔️ Comparison & Market Positioning
 
-SpriteStudio bridges the gap between raw asset extraction/cleanup (historically handled by tools like *ShoeBox*), sprite atlas packing (*TexturePacker*), and animation sequencing (*Aseprite / Godot SpriteFrames*).
+SpriteStudio bridges the gap between raw asset extraction/cleanup (historically handled by tools like *ShoeBox*), sprite atlas packing (*TexturePacker*), and animation sequencing (*Aseprite / Pixelorama / Godot SpriteFrames*).
 
-| Feature / Criterion | **SpriteStudio** | **TexturePacker** | **Aseprite** | **ShoeBox** *(Discontinued)* | **Free Texture Packer** | **Godot 4 Editor** *(Built-in)* |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **License & Pricing** | **Open-Source (Apache 2.0)** | Commercial (~40€) | Commercial (~20€) / Source | Free (Abandoned) | Open-Source (MIT) | Integrated (MIT) |
-| **Core Technology** | C++17 / Qt 6 | C++ / Qt | C++ / Skia | Adobe AIR / Flash | Electron / Web | C++ / Godot Core |
-| **Smart Atlas Slicing** | 🟢 **Advanced (O(N) SpatialGrid)** | 🔴 None (requires loose images) | 🟡 Basic | 🟢 Historic pioneer | 🔴 None (requires loose files) | 🟡 Basic (Grid / Alpha) |
-| **Live Filters & Background Cleanup** | 🟢 **Yes (Plugin Registry, Despill, Outline, Color Swap)** | 🔴 None | 🔴 Manual | 🟢 Historic (BG only) | 🔴 None | 🔴 None |
-| **Timeline & Filmstrip** | 🟢 **Yes (Filmstrip, Ping-Pong)** | 🔴 None (Static preview) | 🟢 **Full animation studio** | 🔴 None | 🔴 None | 🟢 Engine-integrated |
-| **Packing Algorithms** | 🟡 Row / Grid / PoT *(MaxRects planned)* | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
-| **Anchor Points / Pivots** | 📝 *Planned (M3)* | 🟢 Yes (All presets) | 🟢 Yes (Canvas origin) | 🟡 Basic | 🟢 Yes | 🟢 Yes |
-| **Embedded Time-Travel** | 🟢 **Unique (Git / LibGit2 dock)** | 🔴 None | 🔴 Local undo only | 🔴 None | 🔴 None | 🟡 External Git |
-| **Godot 4 Integration** | 🟢 **Native (`.tres` SpriteFrames)** | 🟢 Supported | 🟡 Via community plugins | 🔴 None | 🟡 JSON export | 🟢 Native |
-| **Headless CLI for CI/CD** | 📝 *Planned (`spritestudio-cli`)* | 🟢 **Industry standard** | 🟢 Full CLI | 🔴 None | 🟢 npm CLI | 🟢 Headless Godot |
-| **VRAM Texture Compression** | 🔴 Raw PNG *(VRAM formats planned)* | 🟢 **ASTC, ETC2, KTX2, Basis** | 🔴 PNG / GIF | 🔴 PNG | 🟡 TinyPNG API | 🟢 Engine import |
+| Feature / Criterion | **SpriteStudio** | **TexturePacker** | **Aseprite** | **Pixelorama** | **ShoeBox** *(Discontinued)* | **Free Texture Packer** | **Godot 4 Editor** *(Built-in)* |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **License & Pricing** | **Open-Source (Apache 2.0)** | Commercial (~40€) | Commercial (~20€) / Source | **Open-Source (MIT)** | Free (Abandoned) | Open-Source (MIT) | Integrated (MIT) |
+| **Core Technology** | C++17 / Qt 6 | C++ / Qt | C++ / Skia | GDScript / Godot Engine | Adobe AIR / Flash | Electron / Web | C++ / Godot Core |
+| **Smart Atlas Slicing** | 🟢 **Advanced (O(N) SpatialGrid)** | 🔴 None (requires loose images) | 🟡 Basic | 🔴 None (canvas drawing) | 🟢 Historic pioneer | 🔴 None (requires loose files) | 🟡 Basic (Grid / Alpha) |
+| **Live Filters & Background Cleanup** | 🟢 **Yes (Plugin Registry, Despill, Outline, Color Swap)** | 🔴 None | 🔴 Manual | 🟡 Basic image effects | 🟢 Historic (BG only) | 🔴 None | 🔴 None |
+| **Timeline & Filmstrip** | 🟢 **Yes (Filmstrip, Ping-Pong)** | 🔴 None (Static preview) | 🟢 **Full animation studio** | 🟢 **Full animation studio** | 🔴 None | 🔴 None | 🟢 Engine-integrated |
+| **Packing Algorithms** | 🟡 Row / Grid / PoT *(MaxRects planned)* | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
+| **Anchor Points / Pivots** | 🟢 **Yes (Interactive Reticle, Zero-Jittering, Godot 4 / JSON)** | 🟢 Yes (All presets) | 🟢 Yes (Canvas origin) | 🟡 Canvas origin | 🟡 Basic | 🟢 Yes | 🟢 Yes |
+| **Embedded Time-Travel** | 🟢 **Unique (Git / LibGit2 dock)** | 🔴 None | 🔴 Local undo only | 🔴 Local undo only | 🔴 None | 🔴 None | 🟡 External Git |
+| **Godot 4 Integration** | 🟢 **Native (`.tres` SpriteFrames)** | 🟢 Supported | 🟡 Via community plugins | 🟢 **Native (Built in Godot)** | 🔴 None | 🟡 JSON export | 🟢 Native |
+| **Headless CLI for CI/CD** | 📝 *Planned (`spritestudio-cli`)* | 🟢 **Industry standard** | 🟢 Full CLI | 🟡 Basic Godot CLI flags | 🔴 None | 🟢 npm CLI | 🟢 Headless Godot |
+| **VRAM Texture Compression** | 🔴 Raw PNG *(VRAM formats planned)* | 🟢 **ASTC, ETC2, KTX2, Basis** | 🔴 PNG / GIF | 🔴 PNG | 🔴 PNG | 🟡 TinyPNG API | 🟢 Engine import |
 
 > [!TIP]
-> **Why SpriteStudio?** While *TexturePacker* excels at packing clean loose PNGs for AAA pipelines and *Aseprite* is the definitive pixel art authoring tool, **SpriteStudio** is uniquely built to **rescue, decompile, clean, organize, and bridge existing 2D sheets** into production-ready game engine resources without external dependencies.
+> **Why SpriteStudio?** While *TexturePacker* excels at packing clean loose PNGs for AAA pipelines and *Aseprite* / *Pixelorama* are dedicated pixel art authoring tools, **SpriteStudio** is uniquely built to **rescue, decompile, clean, organize, and bridge existing 2D sheets** into production-ready game engine resources without external dependencies.
 
 ---
 
@@ -161,8 +167,8 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 - [x] **M2 — Timeline & Animation Manager:** Filmstrip ribbon, scrubber with milliseconds counter, loop modes (Loop, Once, Ping-Pong), auto-play
 - [x] **M5 — Native `.ssp` Project Format & Time-Travel:** ZIP container atomic saves, crash detection & recovery lock, LibGit2 continuous Git history dock
 - [x] **M7 — Advanced Filter System & Cleanup:** Plugin registry (`FilterPlugin` / `FilterRegistry`), universal Undo (`ApplyFilterCommand`), live preview (`FilterDialogBase`), Despill/Anti-Halo (color clamping), Outline & Silhouettes, Color Swap (HSV shading)
-- [ ] **M3 — Interactive Pivots & Alignment:** *(Next Up)* Visual crosshair gizmo, batch alignment presets (Bottom-Center, Top-Left, Center), engine offset export (Godot 4 `.tres` / JSON)
-- [ ] **M6 — Advanced Bin-Packing:** MaxRects (*Best Short Side Fit* / *Best Area Fit*), padding, 1px extrusion, frame deduplication
+- [x] **M3 — Interactive Pivots & Alignment:** High-contrast double-ring reticle, interactive pivot drag in atlas & live preview, Shift+Click snapping, zero-jittering animation envelope stabilization, ground line, cardinal presets (Bottom-Center, Center, Top-Left, UI), batch application, optimal fit & 5000% zoom, engine offset export (Godot 4 margin Rect2 / JSON / .ssp)
+- [ ] **M6 — Advanced Bin-Packing:** *(Next Up)* MaxRects (*Best Short Side Fit* / *Best Area Fit*), padding, 1px extrusion, frame deduplication
 - [ ] **M-CLI — Headless Command-Line Interface:** `spritestudio-cli` for automated game studio build scripts and CI/CD pipelines
 - [ ] **M4 — In-App Pixel Art Cleanup Editor:** Surgical 1-bit pencil, eraser, eyedropper, flood fill, pixel grid
 - [ ] **M8 — Polygon & Tight Mesh Packing:** Marching squares contouring, Ramer-Douglas-Peucker simplification, ear-clipping triangulation, Godot `Polygon2D` export to eradicate GPU overdraw

@@ -313,8 +313,14 @@ Le point d'ancrage (ou pivot) définit le point de référence (souvent au nivea
    - **Projet Natif `.ssp` :** Sauvegarde et restauration complètes des coordonnées et du flag `hasCustomPivot`.
 
 7. **Internationalisation (i18n) & Couverture de Tests :**
-   - 29 nouvelles clés traduites à 100% en Français, Anglais et Japonais (517 chaînes, 0 non traduite).
+   - 29 nouvelles clés traduites à 100% en Français, Anglais et Japonais (519 chaînes, 0 non traduite).
    - Tests automatisés dans `tests/test_core.cpp`, `tests/test_controllers.cpp`, `tests/test_project.cpp` et `tests/test_extractors.cpp` validant la totalité des comportements.
+
+8. **Interactivité Complète de la Vue d'Aperçu (Mire Déplaçable, Pan & Zoom, Cadrage Optimal) :**
+   - Saisie et déplacement fluide de la mire à la souris directement dans la fenêtre d'aperçu de droite, avec pause automatique lors de la saisie, retour en direct sur les spinboxes X/Y et enregistrement dans la pile Undo/Redo.
+   - Raccourci `Shift + Clic gauche` pour positionner instantanément le pivot sous le pointeur de la souris.
+   - Cadrage optimal automatique (*Fit In View*) sur l'enveloppe de l'animation lors du chargement, bouton dédié `[ ⛶ ]` et raccourci double-clic dans la vue.
+   - Zoom manuel à la molette centré sur le curseur (jusqu'à 5000% avec filtrage net sans flou pour le pixel art), translation de vue (*Pan*) par clic molette ou clic droit, et réinitialisation rapide `[ 1:1 ]`.
 
 | Spécification M3 | Statut | Composant / Fichier | Diagnostic & Observations |
 |---|:---:|---|---|
@@ -322,11 +328,12 @@ Le point d'ancrage (ou pivot) définit le point de référence (souvent au nivea
 | **Commande Undo/Redo ChangePivotCommand** | ✅ **RÉSOLU & VALIDÉ** | `commands.h`, `commands.cpp` | Annulation et rétablissement fiables en unitaire et par lot. |
 | **Réticule interactif dans AtlasBoxItem** | ✅ **RÉSOLU & VALIDÉ** | `atlasboxitem.h`, `atlasboxitem.cpp` | Drag & drop à la souris du pivot avec poignée `Handle::Pivot` et halo de contraste. |
 | **Stabilisation de lecture d'animation** | ✅ **RÉSOLU & VALIDÉ** | `animationcontroller.cpp` | Alignement sur l'enveloppe commune, élimination de tout sautillement, ligne de sol. |
+| **Aperçu interactif (Mire drag, Pan/Zoom, Fit)** | ✅ **RÉSOLU & VALIDÉ** | `animationcontroller.cpp`, `mainwindow.ui` | Déplacement direct de la mire dans l'aperçu, Shift+Clic, zoom molette 5000%, pan clic droit/molette, boutons ⛶ et 1:1, double-clic fit. |
 | **Contrôles IHM & Préréglages rapides** | ✅ **RÉSOLU & VALIDÉ** | `mainwindow.ui`, `mainwindow.cpp` | Boutons Sol/Centre/UI, combo 9 presets, spinboxes X/Y, batch "Appliquer à l'anim / tous". |
 | **Export/Import Godot 4 (margin Rect2)** | ✅ **RÉSOLU & VALIDÉ** | `godotextractor.cpp` | Écriture et lecture du décalage de marge dans les sous-ressources `AtlasTexture`. |
 | **Export/Import JSON (pivot normalisé)** | ✅ **RÉSOLU & VALIDÉ** | `jsonextractor.cpp` | Round-trip exact du pivot normalisé `{ "x", "y" }`. |
 | **Format de Projet Natif .ssp** | ✅ **RÉSOLU & VALIDÉ** | `projectmanager.cpp` | Sérialisation et désérialisation JSON pérennes. |
-| **Traductions FR / EN / JA** | ✅ **RÉSOLU & VALIDÉ** | `sprite_studio_*.ts` | 100% traduit (0 unfinished, 517 strings). |
+| **Traductions FR / EN / JA** | ✅ **RÉSOLU & VALIDÉ** | `sprite_studio_*.ts` | 100% traduit (0 unfinished, 519 strings). |
 | **Tests CTest automatisés** | ✅ **RÉSOLU & VALIDÉ** | `test_core`, `test_controllers`, `test_extractors`, `test_project` | 100% de succès sur la suite complète. |
 
 ---

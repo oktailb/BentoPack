@@ -228,6 +228,27 @@ void MainWindow::setupControllers()
         }
     });
 
+    connect(ui->btnPreviewFit, &QToolButton::clicked, this, [this]() {
+        if (m_animationController) {
+            m_animationController->fitInView();
+        }
+    });
+
+    connect(ui->btnPreviewResetZoom, &QToolButton::clicked, this, [this]() {
+        if (m_animationController) {
+            m_animationController->resetZoom();
+        }
+    });
+
+    connect(m_animationController.get(), &AnimationController::pivotDragged, this, [this](int frameIdx, const QPoint &piv) {
+        if (m_document && m_document->selectedFrameIndices().contains(frameIdx)) {
+            m_isSyncingPivotUi = true;
+            ui->spinPivotX->setValue(piv.x());
+            ui->spinPivotY->setValue(piv.y());
+            m_isSyncingPivotUi = false;
+        }
+    });
+
     // Connect Document frame updates to UI model
     connect(m_document, &SpriteDocument::framesChanged, this, [this]() {
         populateFrameList(m_document->frames(), m_document->boxes());

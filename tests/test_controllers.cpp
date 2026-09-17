@@ -69,6 +69,8 @@ private slots:
     void testAnimationControllerPivotAlignment();
     void testAnimationControllerReticleToggle();
     void testAtlasBoxItemPivotDrag();
+    void testAnimationPreviewZoomAndFit();
+    void testAnimationPreviewPivotInteraction();
 
     // AtlasViewController tests
     void testAtlasViewControllerToolMode();
@@ -2229,6 +2231,97 @@ void TestControllers::testAtlasBoxItemPivotDrag()
     item.setBoxPivot(QPoint(15, 30), true);
     QCOMPARE(item.boxPivot(), QPoint(15, 30));
     QCOMPARE(item.hasCustomPivot(), true);
+}
+
+void TestControllers::testAnimationPreviewZoomAndFit()
+{
+    SpriteDocument doc;
+    QImage atlas(100, 100, QImage::Format_ARGB32);
+    atlas.fill(Qt::blue);
+    doc.setAtlas(atlas);
+    int idx = doc.addSlice(QRect(0, 0, 40, 40));
+    doc.setAnimation(QStringLiteral("run"), {idx}, 10, true);
+
+    QGraphicsView view;
+    view.resize(300, 300);
+    view.show();
+
+    AnimationController animCtrl(&doc, nullptr, nullptr, nullptr, &view);
+    animCtrl.selectAnimation(QStringLiteral("run"));
+
+    QSignalSpy spyZoom(&animCtrl, &AnimationController::zoomChanged);
+
+    // Initial zoom
+    QVERIFY(animCtrl.zoomFactor() > 0.0);
+
+    // Zoom in
+    double zBefore = animCtrl.zoomFactor();
+    animCtrl.zoomIn();
+    QVERIFY(animCtrl.zoomFactor() > zBefore);
+    QVERIFY(!spyZoom.isEmpty());
+
+    // Zoom out
+    animCtrl.zoomOut();
+    QCOMPARE(animCtrl.zoomFactor(), zBefore);
+
+    // Reset zoom
+    animCtrl.resetZoom();
+    QCOMPARE(animCtrl.zoomFactor(), 1.0);
+
+    // Fit in view
+    animCtrl.fitInView();
+    QVERIFY(animCtrl.zoomFactor() > 0.0);
+}
+
+void TestControllers::testAnimationPreviewPivotInteraction()
+{
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    QImage atlas(100, 100, QImage::Format_ARGB32);
+    atlas.fill(Qt::yellow);
+    doc.setAtlas(atlas);
+    int idx = doc.addSlice(QRect(0, 0, 50, 50));
+    doc.setAnimation(QStringLiteral("idle"), {idx}, 8, true);
+
+    QGraphicsView view;
+    view.resize(400, 400);
+    view.show();
+
+    AnimationController animCtrl(&doc, &undoStack, nullptr, nullptr, &view);
+    animCtrl.selectAnimation(QStringLiteral("idle"));
+    animCtrl.setShowPivotReticle(true);
+
+    // Default pivot is (25, 50)
+    QCOMPARE(doc.boxPivot(idx), QPoint(25, 50));
+
+    QSignalSpy spyDrag(&animCtrl, &AnimationController::pivotDragged);
+    QSignalSpy spyFinish(&animCtrl, &AnimationController::pivotDragFinished);
+
+    // Simulate Shift+Click at position (150, 150) in viewport to place pivot directly
+    QPoint clickPos(150, 150);
+
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPointF(clickPos), QPointF(clickPos), QPointF(clickPos), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+    QApplication::sendEvent(view.viewport(), &pressEvent);
+
+    QCOMPARE(spyDrag.count(), 1);
+
+    // Release mouse
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPointF(clickPos), QPointF(clickPos), QPointF(clickPos), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(view.viewport(), &releaseEvent);
+
+    QCOMPARE(spyFinish.count(), 1);
+    QVERIFY(doc.box(idx).hasCustomPivot);
+
+    // Undo restores default pivot
+    QVERIFY(undoStack.canUndo());
+    undoStack.undo();
+    QCOMPARE(doc.box(idx).hasCustomPivot, false);
+    QCOMPARE(doc.boxPivot(idx), QPoint(25, 50));
+
+    // Redo restores dragged pivot
+    QVERIFY(undoStack.canRedo());
+    undoStack.redo();
+    QCOMPARE(doc.box(idx).hasCustomPivot, true);
 }
 
 #include <QApplication>

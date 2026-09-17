@@ -88,6 +88,15 @@ public:
     void attachScrubberSlider(QSlider *slider, QLabel *frameIndicator = nullptr);
     void attachLoopModeComboBox(QComboBox *combo);
 
+    // Zoom & Pan
+    double zoomFactor() const { return m_zoomFactor; }
+    void setZoomFactor(double factor);
+    void zoomIn(double step = 1.15);
+    void zoomOut(double step = 1.15);
+    void zoomAt(const QPointF &viewportPos, double factor);
+    void fitInView();
+    void resetZoom();
+
     bool showPivotReticle() const { return m_showPivotReticle; }
     void setShowPivotReticle(bool show);
 
@@ -105,6 +114,12 @@ signals:
     void statusMessage(const QString &message);
     void framesSelectedInAnimation(const QList<int> &frameIndices);
     void showPivotReticleChanged(bool show);
+    void zoomChanged(double factor);
+    void pivotDragged(int frameIndex, const QPoint &pivot);
+    void pivotDragFinished(int frameIndex, const QPoint &pivot);
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private slots:
     void onPlayerFrameChanged(int seqIndex, int globalIndex);
@@ -117,6 +132,7 @@ private slots:
 private:
     void renderCurrentFrame(int globalFrameIndex);
     void updateScrubberState();
+    void updateReticleVisualPos(const QPointF &scenePos);
 
     SpriteDocument          *m_document = nullptr;
     QUndoStack              *m_undoStack = nullptr;
@@ -134,6 +150,17 @@ private:
     QComboBox               *m_loopModeCombo = nullptr;
     QString                  m_currentAnimationName;
     bool                     m_isSyncingUi = false;
+
+    // Zoom, pan & interactive reticle state
+    double                   m_zoomFactor = 1.0;
+    bool                     m_isPanning = false;
+    QPoint                   m_panStartPos;
+    bool                     m_isDraggingReticle = false;
+    int                      m_dragFrameIndex = -1;
+    QPoint                   m_dragStartPivot;
+    QPoint                   m_currentDragPivot;
+    QPointF                  m_dragFrameTopLeft;
+    bool                     m_wasPlayingBeforeDrag = false;
 };
 
 #endif // ANIMATIONCONTROLLER_H
