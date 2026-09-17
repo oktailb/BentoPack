@@ -15,8 +15,8 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M3** | [Points d'Ancrage & Pivots (Origins & Offsets)](#m3--points-dancrage--pivots-origins--offsets) | **Haute (Critique)** | Faible | 🟢 Clôturé & Validé (100% CTest — Réticules interactifs atlas & aperçu, Mire déplaçable, Pan/Zoom 5000%, Fit in View, Sol, Enveloppe, Godot/JSON/SSP) |
 | **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (100% CTest — Session, Lock, Crash Recovery, Atomic Save, Git Time-Travel & UI Dock) |
 | **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Architecture Plugins, 7 Filtres opérationnels, Live Preview, Auto-Detect Boxes, Rollback) |
-| **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 🚀 **Prochaine Étape Immédiate** (Compacité de Production, MaxRects BSSF/BAF, Déduplication, Padding/Extrude) |
-| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 📝 Spécifications Complètes (Drop-in Replacement 100% TexturePacker, Compatibilité Aseprite & Godot 4) |
+| **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — MaxRects BSSF/BAF/BLSF, POT, Extrude, Déduplication, ExportDialog) |
+| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 🚀 **Prochaine Étape Immédiate** (Drop-in Replacement 100% TexturePacker, Compatibilité Aseprite & Godot 4) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifié & Documenté (Optimisation Mobile & Switch, Tight Polygon Mesh) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
@@ -594,6 +594,61 @@ Les planches de sprites issues du Web (rips JPEG sans couche alpha, compression 
 1. **Artefacts de sonnerie JPEG :** Résolu par le seuil de tolérance couplé au seuil alpha et au filtre de médiane.
 2. **Sur-fusion des sprites proches :** Résolu par le partitionnement spatial `SpatialGrid2D` et la coupure de connexité par profil de projection.
 3. **Cavités internes closes :** Approche hybride combinant flood-fill extérieur et ré-évaluation colorimétrique des cavités internes.
+
+---
+
+## M6 : Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)
+
+### Contexte & Enjeux Métier
+L'empaquetage d'atlas (*texture packing*) est au cœur des performances d'affichage des moteurs de jeu modernes (Godot, Unity, Defold, Raylib, Unreal Engine). Les algorithmes basiques en étagères (*Row/Shelf Packing*) ou en grilles uniformes gaspillent typiquement 40% à 60% de la surface de la texture dès que les sprites ont des dimensions hétérogènes.  
+Le chantier **M6** dote **Sprite Studio** du standard industriel de bin-packing 2D : l'algorithme **MaxRects** (*Maximal Rectangles Algorithm* de Jukka Jylänki), couplé à la déduplication visuelle intelligente (*auto-aliasing*), au débordement de pixels anti-saignement (*extrusion*), et aux contraintes matérielles GPU (*Power of Two*).
+
+---
+
+### 🔬 Fonctionnalités Implémentées & Validées
+
+#### 1. Algorithme MaxRects Complet (`MaxRectsPacker`) — ✅ Validé & Opérationnel
+- **Gestion des rectangles libres maximaux :** Découpage à 4 quadrants après chaque placement (`splitFreeNode`), arithmétique en coordonnées d'intervalles demi-ouverts prévenant les erreurs de dépassement 1px de Qt, élagage strict des sous-rectangles redondants (`pruneFreeList` / `isContainedIn`).
+- **5 Heuristiques de placement optimales :**
+  - `BestShortSideFit` (BSSF, défaut) : Minimise le côté court résiduel de l'espace libre.
+  - `BestLongSideFit` (BLSF) : Minimise le côté long résiduel.
+  - `BestAreaFit` (BAF) : Minimise la surface libre restante.
+  - `BottomLeft` : Favorise le regroupement vers le coin inférieur gauche.
+  - `ContactPoint` : Maximise le périmètre en contact avec les bordures et les sprites déjà placés.
+- **Tri préliminaire adaptatif :** Tri décroissant selon la hauteur et la surface pour maximiser le taux de remplissage.
+- **Indicateur d'occupation :** Calcul en temps réel du taux d'occupation (`occupancy()`) et du rendement effectif (`efficiency`).
+
+#### 2. Contraintes GPU & Dimensions Personnalisées (`AtlasPacker::PackOptions`) — ✅ Validé & Opérationnel
+- **Recherche automatique de puissance de deux ($2^n$) :** Expansion progressive ($64, 128, 256, 512, 1024, 2048, 4096$) pour garantir la compatibilité maximale avec les GPU sans gaspillage.
+- **Contrainte Carrée (*Force Square*) :** Largeur égale à la hauteur ($W = H$) sur demande.
+- **Mode Compact (*Shrink to Fit*) :** Ajustement au plus près de la surface réelle occupée par les sprites pour l'exportation vers des moteurs supportant les dimensions libres (NPOT).
+
+#### 3. Protection du Filtrage Bilinéaire & Marges (`Padding` & `Extrude`) — ✅ Validé & Opérationnel
+- **Espacement interne (*Inner Padding*) :** Évite que les sprites adjacents ne se touchent.
+- **Marge externe (*Border Padding*) :** Marge de sécurité sur le pourtour extérieur de la texture.
+- **Extrusion de bordure (*Border Pixel Extrusion*) :** Répétition vers l'extérieur des pixels des 4 arêtes et des 4 coins (1-2 px). Éradique totalement le phénomène de saignement de texture (*texture bleeding*) causé par le filtrage bilinéaire ou le mipmapping dans les moteurs 2D/3D.
+
+#### 4. Déduplication Visuelle Automatique (*Auto-Aliasing*) — ✅ Validé & Opérationnel
+- **Comparaison bit-à-bit optimisée :** Détection des frames strictement identiques par balayage scanline et `std::memcmp`.
+- **Réassignation transparente :** Les frames dupliquées partagent le même sous-rectangle dans l'atlas sans dupliquer les pixels.
+- **Intégration transparente dans les animations :** `GodotExtractor` (`.tres`) et `JsonExtractor` (TexturePacker/Aseprite) conservent la timeline temporelle exacte tout en référençant la frame canonique unique.
+
+#### 5. Boîte de Dialogue d'Export Interactive (`ExportDialog`) — ✅ Validé & Opérationnel
+- **Remplacement de la boîte standard :** Raccourci `Ctrl+E` ou menu *Fichier > Exporter* ouvre désormais un dialogue complet dédié.
+- **Paramétrage intuitif :** Choix du format (Godot SpriteFrames, JSON TexturePacker/Aseprite, PNG/ZIP), algorithme (MaxRects, Power of Two, Row, Grid), padding, extrusion, cases POT/Square/Deduplicate.
+- **Aperçu des statistiques en temps réel :** Calcul avec anti-rebond (*debounce* 60 ms) des dimensions résultantes, du taux d'efficacité (%) et du nombre de frames dupliquées économisées.
+
+---
+
+### 📊 Bilan des Réalisations M6 (Statut : 🟢 100% CTest)
+
+| Composant M6 | Statut | Fichier(s) | Diagnostic & Réalisations |
+|---|:---:|---|---|
+| **Moteur MaxRects** | ✅ **RÉSOLU & VALIDÉ** | `maxrectspacker.h`, `maxrectspacker.cpp` | MaxRects 2D complet, arithmétique d'intervalles demi-ouverts, 5 heuristiques, élagage. |
+| **Pipeline AtlasPacker** | ✅ **RÉSOLU & VALIDÉ** | `atlaspacker.h`, `atlaspacker.cpp` | `PackOptions` enrichi, recherche POT, extrusion de bordures, déduplication scanline. |
+| **Codecs Godot & JSON** | ✅ **RÉSOLU & VALIDÉ** | `godotextractor.cpp`, `jsonextractor.cpp`, `export.h` | Prise en charge des `PackOptions` et réassignation des sous-ressources dupliquées. |
+| **Interface ExportDialog** | ✅ **RÉSOLU & VALIDÉ** | `exportdialog.h`, `exportdialog.cpp`, `exportdialog.ui` | Dialogue ergonomique, live stats débouncé, intégration dans `MainWindow`. |
+| **Couverture Tests CTest (100%)** | ✅ **RÉSOLU & VALIDÉ** | `tests/test_core.cpp` | 7 tests dédiés (Basic, Heuristics, MaxRects, POT, Deduplication, Extrude, Efficiency). |
 
 ---
 

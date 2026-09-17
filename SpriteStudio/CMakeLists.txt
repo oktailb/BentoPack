@@ -34,6 +34,7 @@ set(SpriteStudioCore_SRC
     src/controller/atlasviewcontroller.cpp
     src/model/spritedocument.cpp
     src/packer/atlaspacker.cpp
+    src/packer/maxrectspacker.cpp
     src/animation/animationplayer.cpp
     src/commands/commands.cpp
     src/extractor.cpp
@@ -53,6 +54,7 @@ set(SpriteStudioCore_SRC
     src/widgets/githistorydock.cpp
     src/widgets/settingsdialog.cpp
     src/widgets/timelinefilmstripwidget.cpp
+    src/widgets/exportdialog.cpp
     src/widgets/filterdialogbase.cpp
     src/widgets/backgroundremovaldialog.cpp
     src/widgets/despillfilterdialog.cpp
@@ -80,6 +82,7 @@ set(SpriteStudioCore_SRC
 set(SpriteStudioCore_UI
     src/mainwindow.ui
     src/extractor/jsonExtractordialog.ui
+    src/widgets/exportdialog.ui
 )
 
 set(SpriteStudioCore_INCLUDE
@@ -90,6 +93,7 @@ set(SpriteStudioCore_INCLUDE
     include/controller/atlasviewcontroller.h
     include/model/spritedocument.h
     include/packer/atlaspacker.h
+    include/packer/maxrectspacker.h
     include/animation/animationplayer.h
     include/commands/commands.h
     include/commands/filtercommands.h
@@ -100,6 +104,7 @@ set(SpriteStudioCore_INCLUDE
     include/widgets/githistorydock.h
     include/widgets/settingsdialog.h
     include/widgets/timelinefilmstripwidget.h
+    include/widgets/exportdialog.h
     include/widgets/filterdialogbase.h
     include/widgets/backgroundremovaldialog.h
     include/widgets/despillfilterdialog.h

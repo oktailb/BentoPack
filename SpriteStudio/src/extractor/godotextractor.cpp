@@ -299,8 +299,6 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
 
 bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, const ExportOptions &options, ExtractorError *error)
 {
-    Q_UNUSED(options);
-
     if (doc.frameCount() == 0) {
         if (error) {
             error->code = ExtractorError::WriteFailed;
@@ -320,7 +318,12 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     QString imagePath = dir.filePath(imageFilename);
     QString tresPath = dir.filePath(baseName + ".tres");
 
-    AtlasPackResult packResult = AtlasPacker::pack(doc.frames(), 2);
+    AtlasPacker::PackOptions packOpts = options.packOptions;
+    if (options.padding > 0 && packOpts.padding == 2) {
+        packOpts.padding = options.padding;
+    }
+
+    AtlasPackResult packResult = AtlasPacker::pack(doc.frames(), packOpts);
     if (!packResult.success) {
         if (error) {
             error->code = ExtractorError::PackingFailed;

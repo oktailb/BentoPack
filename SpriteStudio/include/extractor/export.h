@@ -2,6 +2,7 @@
 #define __EXPORT_H__
 
 #include <QString>
+#include "packer/atlaspacker.h"
 
 class Extractor;
 
@@ -22,18 +23,19 @@ enum AtlasStrategy {
 };
 
 struct ExportOptions {
-    Format format;
-    bool trimSprites;
-    bool rotateSprites;
-    int padding;
-    bool compressJson;
-    bool embedAnimations;
+    Format format = FORMAT_GODOT;
+    bool trimSprites = false;
+    bool rotateSprites = false;
+    int padding = 2;
+    bool compressJson = false;
+    bool embedAnimations = true;
     QString namingConvention;
+
+    AtlasPacker::PackOptions packOptions;
 };
 
 class ExportManager {
 public:
-
     virtual bool exportFrames(const QString &basePath, const QString &projectName, Extractor* in) = 0;
 };
 

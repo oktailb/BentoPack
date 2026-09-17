@@ -392,8 +392,6 @@ QString JsonExtractor::extractAnimationName(const QString &frameName)
 
 bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, const ExportOptions &options, ExtractorError *error)
 {
-    Q_UNUSED(options);
-
     if (doc.frameCount() == 0) {
         if (error) {
             error->code = ExtractorError::WriteFailed;
@@ -412,7 +410,12 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
     setStatusMessage(tr("Packing atlas for JSON export..."));
     setProgress(20);
 
-    AtlasPackResult packResult = AtlasPacker::pack(doc.frames(), 2);
+    AtlasPacker::PackOptions packOpts = options.packOptions;
+    if (options.padding > 0 && packOpts.padding == 2) {
+        packOpts.padding = options.padding;
+    }
+
+    AtlasPackResult packResult = AtlasPacker::pack(doc.frames(), packOpts);
     if (!packResult.success) {
         if (error) {
             error->code = ExtractorError::PackingFailed;

@@ -146,6 +146,8 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
+#include "widgets/exportdialog.h"
+
 void MainWindow::on_actionExport_triggered()
 {
     if (!m_projectController || !m_document || m_document->isEmpty()) {
@@ -153,17 +155,15 @@ void MainWindow::on_actionExport_triggered()
         return;
     }
 
-    QString initialDir = m_projectController->currentFilePath().isEmpty()
-        ? QDir::homePath()
-        : QFileInfo(m_projectController->currentFilePath()).absolutePath();
+    ExportDialog dlg(m_document, QString(), this);
+    if (dlg.exec() != QDialog::Accepted) {
+        return;
+    }
 
-    const QString filter = ExtractorRegistry::instance().saveFilterString();
-    QString selectedFilter;
-    QString selectedFile = QFileDialog::getSaveFileName(this, tr("KEY_DIALOG_EXPORT_TITLE"), initialDir, filter, &selectedFilter);
-
+    QString selectedFile = dlg.exportFilePath();
     if (selectedFile.isEmpty()) return;
 
-    ExportOptions options;
+    ExportOptions options = dlg.exportOptions();
     QString errorMsg;
     if (!m_projectController->exportData(selectedFile, options, &errorMsg)) {
         QMessageBox::critical(this, tr("KEY_MSG_EXPORT_ERROR"), errorMsg);

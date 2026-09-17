@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ExportDialog</class>
+ <widget class="QDialog" name="ExportDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>540</width>
+    <height>520</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Export Atlas &amp; Animations</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="grpDestination">
+     <property name="title">
+      <string>Destination</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayoutDest">
+      <item>
+       <widget class="QLineEdit" name="txtFilePath">
+        <property name="placeholderText">
+         <string>Select export file path...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnBrowse">
+        <property name="text">
+         <string>Browse...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpFormat">
+     <property name="title">
+      <string>Format &amp; Packing Algorithm</string>
+     </property>
+     <layout class="QFormLayout" name="formLayoutFormat">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblFormat">
+        <property name="text">
+         <string>Export Format:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboFormat">
+        <item>
+         <property name="text">
+          <string>Godot 4 (*.tres + *.png)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>TexturePacker JSON (*.json + *.png)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Aseprite JSON (*.json + *.png)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblAlgorithm">
+        <property name="text">
+         <string>Packing Algorithm:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="comboAlgorithm">
+        <item>
+         <property name="text">
+          <string>MaxRects (Best Short Side Fit — Recommended)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MaxRects (Best Area Fit)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MaxRects (Best Long Side Fit)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MaxRects (Bottom Left)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Power of Two (Row Shelf)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Row / Shelf</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Uniform Grid</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpGeometry">
+     <property name="title">
+      <string>Layout &amp; Margins</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayoutGeometry">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblPadding">
+        <property name="text">
+         <string>Inner Padding (px):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinPadding">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>32</number>
+        </property>
+        <property name="value">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="lblExtrude">
+        <property name="text">
+         <string>Border Extrude (px):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QSpinBox" name="spinExtrude">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>4</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblBorderPadding">
+        <property name="text">
+         <string>Border Padding (px):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="spinBorderPadding">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>32</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="chkPowerOfTwo">
+        <property name="text">
+         <string>Force Power of Two (2^n)</string>
+        </property>
+        <property name="toolTip">
+         <string>Ensures atlas dimensions are powers of 2 for GPU hardware compatibility</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" colspan="2">
+       <widget class="QCheckBox" name="chkForceSquare">
+        <property name="text">
+         <string>Force Square (1:1)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="chkDeduplicate">
+        <property name="text">
+         <string>Deduplicate Identical Frames</string>
+        </property>
+        <property name="toolTip">
+         <string>Identical frames share texture space in the atlas while preserving animation sequences</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" colspan="2">
+       <widget class="QCheckBox" name="chkTrim">
+        <property name="text">
+         <string>Trim Transparent Borders</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpStats">
+     <property name="title">
+      <string>Packing Statistics (Live Estimation)</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayoutStats">
+      <item>
+       <widget class="QLabel" name="lblDimensions">
+        <property name="text">
+         <string>Dimensions: --</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblEfficiency">
+        <property name="text">
+         <string>Packing Efficiency: --</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblFrames">
+        <property name="text">
+         <string>Frames: --</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>ExportDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ExportDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

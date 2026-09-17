@@ -11,6 +11,7 @@
 
 #include "model/spritedocument.h"
 #include "packer/atlaspacker.h"
+#include "packer/maxrectspacker.h"
 #include "commands/commands.h"
 #include "config/appconfig.h"
 
@@ -30,6 +31,15 @@ private slots:
     void testAtlasPackerPowerOfTwoPacker();
     void testAtlasPackerPackIndices();
     void testAtlasPackerPadding();
+
+    // MaxRects & Advanced Packing tests (M6)
+    void testMaxRectsPackerBasic();
+    void testMaxRectsHeuristics();
+    void testAtlasPackerMaxRects();
+    void testAtlasPackerPowerOfTwo();
+    void testAtlasPackerDeduplication();
+    void testAtlasPackerExtrude();
+    void testAtlasPackerEfficiency();
 
     // SpriteDocument tests (8 tests)
     void testDocumentClearAndEmpty();
@@ -214,6 +224,210 @@ void TestCore::testAtlasPackerPadding()
         int gap = res.frameRects[1].left() - res.frameRects[0].right();
         QVERIFY(gap >= padding);
     }
+}
+
+void TestCore::testMaxRectsPackerBasic()
+{
+    MaxRectsPacker packer;
+    packer.init(128, 128);
+
+    QList<QSize> sizes = { QSize(32, 32), QSize(64, 32), QSize(16, 64), QSize(48, 48) };
+    QList<QRect> placed = packer.insert(sizes, MaxRectsHeuristic::BestShortSideFit);
+
+    QCOMPARE(placed.size(), sizes.size());
+
+    // 1. All rects fit inside 128x128
+    QRect binRect(0, 0, 128, 128);
+    for (int i = 0; i < placed.size(); ++i) {
+        QVERIFY(binRect.contains(placed[i]));
+        QCOMPARE(placed[i].size(), sizes[i]);
+    }
+
+    // 2. No rects overlap
+    for (int i = 0; i < placed.size(); ++i) {
+        for (int j = i + 1; j < placed.size(); ++j) {
+            QVERIFY(!placed[i].intersects(placed[j]));
+        }
+    }
+
+    // 3. Occupancy
+    double occupancy = packer.occupancy();
+    int usedArea = 32 * 32 + 64 * 32 + 16 * 64 + 48 * 48;
+    double expectedOccupancy = static_cast<double>(usedArea) / (128.0 * 128.0);
+    QVERIFY(qAbs(occupancy - expectedOccupancy) < 0.0001);
+}
+
+void TestCore::testMaxRectsHeuristics()
+{
+    QList<MaxRectsHeuristic> heuristics = {
+        MaxRectsHeuristic::BestShortSideFit,
+        MaxRectsHeuristic::BestLongSideFit,
+        MaxRectsHeuristic::BestAreaFit,
+        MaxRectsHeuristic::BottomLeft,
+        MaxRectsHeuristic::ContactPoint
+    };
+
+    QList<QSize> sizes = { QSize(20, 30), QSize(40, 20), QSize(30, 30), QSize(15, 25), QSize(50, 20) };
+
+    for (MaxRectsHeuristic h : heuristics) {
+        MaxRectsPacker packer;
+        packer.init(128, 128);
+        QList<QRect> placed = packer.insert(sizes, h);
+        QCOMPARE(placed.size(), sizes.size());
+
+        for (int i = 0; i < placed.size(); ++i) {
+            QVERIFY(QRect(0, 0, 128, 128).contains(placed[i]));
+            for (int j = i + 1; j < placed.size(); ++j) {
+                QVERIFY(!placed[i].intersects(placed[j]));
+            }
+        }
+    }
+}
+
+void TestCore::testAtlasPackerMaxRects()
+{
+    QList<QImage> frames;
+    QList<QSize> sizes = { QSize(24, 24), QSize(48, 32), QSize(32, 64), QSize(16, 16) };
+    QList<QColor> colors = { Qt::red, Qt::green, Qt::blue, Qt::yellow };
+
+    for (int i = 0; i < sizes.size(); ++i) {
+        QImage img(sizes[i], QImage::Format_ARGB32_Premultiplied);
+        img.fill(colors[i]);
+        frames.append(img);
+    }
+
+    AtlasPacker::PackOptions opts;
+    opts.algorithm = AtlasPacker::MaxRects;
+    opts.heuristic = MaxRectsHeuristic::BestShortSideFit;
+    opts.padding = 2;
+    opts.borderPadding = 2;
+
+    AtlasPackResult res = AtlasPacker::pack(frames, opts);
+    QVERIFY(res.success);
+    QCOMPARE(res.frameRects.size(), frames.size());
+
+    // Check containment and non-overlapping
+    for (int i = 0; i < res.frameRects.size(); ++i) {
+        QVERIFY(res.atlas.rect().contains(res.frameRects[i]));
+        QCOMPARE(res.frameRects[i].size(), sizes[i]);
+        for (int j = i + 1; j < res.frameRects.size(); ++j) {
+            QVERIFY(!res.frameRects[i].intersects(res.frameRects[j]));
+        }
+        // Pixel fidelity
+        QCOMPARE(res.atlas.pixelColor(res.frameRects[i].center()).name(), colors[i].name());
+    }
+}
+
+void TestCore::testAtlasPackerPowerOfTwo()
+{
+    QList<QImage> frames;
+    for (int i = 0; i < 3; ++i) {
+        QImage img(40, 40, QImage::Format_ARGB32_Premultiplied);
+        img.fill(Qt::cyan);
+        frames.append(img);
+    }
+
+    AtlasPacker::PackOptions opts;
+    opts.algorithm = AtlasPacker::MaxRects;
+    opts.powerOfTwo = true;
+    opts.forceSquare = true;
+
+    AtlasPackResult res = AtlasPacker::pack(frames, opts);
+    QVERIFY(res.success);
+
+    int w = res.atlas.width();
+    int h = res.atlas.height();
+    QVERIFY(w > 0 && (w & (w - 1)) == 0);
+    QVERIFY(h > 0 && (h & (h - 1)) == 0);
+    QCOMPARE(w, h);
+}
+
+void TestCore::testAtlasPackerDeduplication()
+{
+    // Create 4 frames: frames 0 and 2 identical red, frame 1 green, frame 3 blue
+    QImage red(20, 20, QImage::Format_ARGB32_Premultiplied);
+    red.fill(Qt::red);
+
+    QImage green(20, 20, QImage::Format_ARGB32_Premultiplied);
+    green.fill(Qt::green);
+
+    QImage blue(20, 20, QImage::Format_ARGB32_Premultiplied);
+    blue.fill(Qt::blue);
+
+    QList<QImage> frames = { red, green, red, blue };
+
+    // With deduplication enabled
+    AtlasPacker::PackOptions opts;
+    opts.algorithm = AtlasPacker::MaxRects;
+    opts.deduplicate = true;
+
+    AtlasPackResult res = AtlasPacker::pack(frames, opts);
+    QVERIFY(res.success);
+    QCOMPARE(res.frameRects.size(), 4);
+    QCOMPARE(res.uniqueFramesCount, 3);
+    QCOMPARE(res.duplicateMapping.size(), 4);
+    QCOMPARE(res.duplicateMapping[0], 0);
+    QCOMPARE(res.duplicateMapping[1], 1);
+    QCOMPARE(res.duplicateMapping[2], 0); // frame 2 mapped to frame 0
+    QCOMPARE(res.duplicateMapping[3], 2); // frame 3 mapped to unique frame 2
+
+    // Frame rect 0 and frame rect 2 must be identical in atlas
+    QCOMPARE(res.frameRects[0], res.frameRects[2]);
+
+    // With deduplication disabled
+    opts.deduplicate = false;
+    AtlasPackResult resNoDedup = AtlasPacker::pack(frames, opts);
+    QVERIFY(resNoDedup.success);
+    QCOMPARE(resNoDedup.uniqueFramesCount, 4);
+    QVERIFY(resNoDedup.frameRects[0] != resNoDedup.frameRects[2]);
+}
+
+void TestCore::testAtlasPackerExtrude()
+{
+    // 8x8 frame filled with solid yellow
+    QImage img(8, 8, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::yellow);
+
+    AtlasPacker::PackOptions opts;
+    opts.algorithm = AtlasPacker::MaxRects;
+    opts.padding = 4;
+    opts.borderPadding = 4;
+    opts.extrude = 1;
+
+    AtlasPackResult res = AtlasPacker::pack({img}, opts);
+    QVERIFY(res.success);
+    QCOMPARE(res.frameRects.size(), 1);
+
+    QRect r = res.frameRects[0];
+    QString yellowName = QColor(Qt::yellow).name();
+    // Check pixel directly left of frame (extruded pixel)
+    QPoint leftPixel(r.left() - 1, r.center().y());
+    QCOMPARE(res.atlas.pixelColor(leftPixel).name(), yellowName);
+
+    // Check pixel directly above frame (extruded pixel)
+    QPoint topPixel(r.center().x(), r.top() - 1);
+    QCOMPARE(res.atlas.pixelColor(topPixel).name(), yellowName);
+
+    // Check pixel directly right of frame
+    QPoint rightPixel(r.right() + 1, r.center().y());
+    QCOMPARE(res.atlas.pixelColor(rightPixel).name(), yellowName);
+
+    // Check pixel directly bottom of frame
+    QPoint bottomPixel(r.center().x(), r.bottom() + 1);
+    QCOMPARE(res.atlas.pixelColor(bottomPixel).name(), yellowName);
+}
+
+void TestCore::testAtlasPackerEfficiency()
+{
+    QImage img(50, 50, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::white);
+
+    AtlasPacker::PackOptions opts;
+    opts.algorithm = AtlasPacker::MaxRects;
+
+    AtlasPackResult res = AtlasPacker::pack({img}, opts);
+    QVERIFY(res.success);
+    QVERIFY(res.efficiency > 0.0 && res.efficiency <= 100.0);
 }
 
 // =============================================================================
