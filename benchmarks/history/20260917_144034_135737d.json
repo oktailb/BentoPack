@@ -1,0 +1,223 @@
+{
+  "timestamp": "2026-09-17 14:40:34",
+  "commit": "135737d",
+  "branch": "main",
+  "total_tests": 24,
+  "passed_tests": 24,
+  "pass_rate": 100.0,
+  "total_duration_ms": 3165.38,
+  "throughput_fps": 357.0,
+  "results": [
+    {
+      "name": "TP_MaxRects_BSSF",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 59.06,
+      "details": "MaxRects BestShortSideFit + Extrude 1",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_MaxRects_BAF",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 56.43,
+      "details": "MaxRects BestAreaFit heuristic",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_MaxRects_BLSF",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 59.26,
+      "details": "MaxRects BestLongSideFit heuristic",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_MaxRects_BottomLeft",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 67.54,
+      "details": "MaxRects BottomLeft heuristic",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_MaxRects_ContactPoint",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 44.26,
+      "details": "MaxRects ContactPoint heuristic",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_SizeConstraints_POT",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 121.03,
+      "details": "Power-Of-Two forced: 512x256",
+      "metrics": {
+        "w": 512,
+        "h": 256
+      }
+    },
+    {
+      "name": "TP_Extrude_Border",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 48.5,
+      "details": "Border pixel extrusion 2px anti-bleeding",
+      "metrics": {}
+    },
+    {
+      "name": "TP_Trim_Mode_Trim",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 98.76,
+      "details": "Transparency trimmed (20 frames)",
+      "metrics": {}
+    },
+    {
+      "name": "TP_AutoAlias_Deduplication",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 202.22,
+      "details": "100 frames compacted to 40 unique atlas regions (60% saved)",
+      "metrics": {
+        "unique_frames": 40
+      }
+    },
+    {
+      "name": "TP_AutoAlias_Disabled",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 74.45,
+      "details": "All 100 frames preserved without deduplication",
+      "metrics": {}
+    },
+    {
+      "name": "TP_CustomPivots",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 47.1,
+      "details": "Normalized pivot point (0.5, 1.0) validated in JSON",
+      "metrics": {}
+    },
+    {
+      "name": "Aseprite_Packed",
+      "category": "Aseprite",
+      "status": "PASS",
+      "duration_ms": 44.03,
+      "details": "Aseprite -b batch packed mode",
+      "metrics": {}
+    },
+    {
+      "name": "Aseprite_RowPacker",
+      "category": "Aseprite",
+      "status": "PASS",
+      "duration_ms": 44.03,
+      "details": "Horizontal row filmstrip arrangement",
+      "metrics": {}
+    },
+    {
+      "name": "Aseprite_GridPacker",
+      "category": "Aseprite",
+      "status": "PASS",
+      "duration_ms": 48.27,
+      "details": "Matrix uniform grid layout",
+      "metrics": {}
+    },
+    {
+      "name": "Aseprite_ListTags",
+      "category": "Aseprite",
+      "status": "PASS",
+      "duration_ms": 231.0,
+      "details": "frameTags exported (3 animation tags found)",
+      "metrics": {}
+    },
+    {
+      "name": "Godot_SpriteFrames",
+      "category": "Godot 4",
+      "status": "PASS",
+      "duration_ms": 45.75,
+      "details": "Native SpriteFrames (.tres) with AtlasTexture sub-resources",
+      "metrics": {}
+    },
+    {
+      "name": "Godot_UID_Preservation",
+      "category": "Godot 4",
+      "status": "PASS",
+      "duration_ms": 86.94,
+      "details": "UID preserved across builds: uid://1a010fbdeee5",
+      "metrics": {}
+    },
+    {
+      "name": "Godot_SceneGen",
+      "category": "Godot 4",
+      "status": "PASS",
+      "duration_ms": 51.53,
+      "details": "AnimatedSprite2D (.tscn) scene generated & ready to instantiate",
+      "metrics": {}
+    },
+    {
+      "name": "Native_Slice_Raw",
+      "category": "Native Commands",
+      "status": "PASS",
+      "duration_ms": 89.9,
+      "details": "Segmented 16 sprites from transparent sheet in O(N)",
+      "metrics": {}
+    },
+    {
+      "name": "Native_Slice_RemoveBg",
+      "category": "Native Commands",
+      "status": "PASS",
+      "duration_ms": 71.28,
+      "details": "Dominant background removed + 16 sprites segmented",
+      "metrics": {}
+    },
+    {
+      "name": "Native_Filter_Despill",
+      "category": "Native Commands",
+      "status": "PASS",
+      "duration_ms": 37.66,
+      "details": "Despill edge cleanup filter applied headless",
+      "metrics": {}
+    },
+    {
+      "name": "Native_Filter_Outline",
+      "category": "Native Commands",
+      "status": "PASS",
+      "duration_ms": 37.12,
+      "details": "2px red procedural silhouette outline applied",
+      "metrics": {}
+    },
+    {
+      "name": "POSIX_ExitCodes",
+      "category": "Compliance",
+      "status": "PASS",
+      "duration_ms": 98.69,
+      "details": "Strict POSIX codes verified: 1 (syntax), 2 (not found), 3 (constraints)",
+      "metrics": {}
+    },
+    {
+      "name": "Massive_500_Stress",
+      "category": "Scalability",
+      "status": "PASS",
+      "duration_ms": 1400.57,
+      "details": "Packed 500 frames into 816x816 atlas (78.1% occupancy) at 357.0 frames/sec",
+      "metrics": {
+        "throughput_fps": 357.0,
+        "efficiency": 78.1,
+        "dimensions": "816x816"
+      }
+    }
+  ]
+}

@@ -46,3 +46,7 @@ CMakeLists.txt.user*
 *.~undo-tree~
 .vscode/
 .idea/
+benchmarks/dataset/
+benchmarks/output/
+scripts/__pycache__/
+
