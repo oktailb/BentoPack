@@ -16,7 +16,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (100% CTest — Session, Lock, Crash Recovery, Atomic Save, Git Time-Travel & UI Dock) |
 | **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Architecture Plugins, 7 Filtres opérationnels, Live Preview, Auto-Detect Boxes, Rollback) |
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 🚀 **Prochaine Étape Immédiate** (Compacité de Production, MaxRects BSSF/BAF, Déduplication, Padding/Extrude) |
-| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Faible | 📝 Spécifié (Intégration Pipelines Studios, CLI Headless autonome) |
+| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 📝 Spécifications Complètes (Drop-in Replacement 100% TexturePacker, Compatibilité Aseprite & Godot 4) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifié & Documenté (Optimisation Mobile & Switch, Tight Polygon Mesh) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
@@ -701,36 +701,259 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 
 ---
 
-## M-CLI : Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)
+## M-CLI : Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`) — 🚀 Compatibilité Totale TexturePacker, Aseprite & Godot 4
 
-### Contexte & Enjeux Industriels
-Dans les studios professionnels et les productions indépendantes d'envergure, les artistes poussent leurs fichiers sources (Aseprite, Photoshop, PNG) sur le dépôt Git. Des scripts de build et des pipelines d'Intégration Continue (GitHub Actions, GitLab CI) ré-empaquettent automatiquement les atlas de sprites et régénèrent les métadonnées de moteur de jeu (`.tres`, `.json`) sans nécessiter d'intervention humaine dans une interface graphique.
-TexturePacker doit l'essentiel de son monopole en studio à son binaire en ligne de commande scriptable.  
-Grâce à la factorisation de la bibliothèque statique `SpriteStudioCore`, SpriteStudio peut fournir une cible autonome légère `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen` / `QCoreApplication`).
+### 📌 Contexte & Enjeux Industriels
+Dans les studios professionnels et les productions indépendantes d'envergure, les artistes ne manipulent pas manuellement une interface graphique pour exporter 50 planches à chaque mise à jour de sprites. Des scripts de build (Makefiles, scripts Python, CMake) et des pipelines d'Intégration Continue (GitHub Actions, GitLab CI) ré-empaquettent automatiquement les atlas et régénèrent les métadonnées de moteur de jeu (`.tres`, `.json`).
 
-### Spécifications Fonctionnelles
-1. **Commandes & Actions Principales :**
-   - `spritestudio-cli pack <options>` : Empaquette un ensemble d'images ou découpe une planche selon les paramètres spécifiés.
-   - `spritestudio-cli slice <image> <options>` : Découpe automatique d'une planche avec seuil alpha et tolérance de fond.
-   - `spritestudio-cli export <projet.ssp> <options>` : Convertit un projet `.ssp` existant vers un format cible (Godot 4 `.tres`, JSON TexturePacker) de manière headless.
-2. **Options & Arguments Standardisés :**
-   - `--input <path>` / `-i <path>` : Fichier source ou dossier d'images à traiter.
-   - `--output <path>` / `-o <path>` : Fichier image atlas généré (`.png`).
-   - `--format <godot4|json|aseprite>` / `-f` : Format d'export des métadonnées d'animation et de texture.
-   - `--padding <px>` (défaut: 2) : Espacement anti-saignement (*bleeding*) entre les sprites.
-   - `--algorithm <maxrects|row|grid>` (défaut: maxrects) : Algorithme d'empaquetage 2D.
-   - `--pot` : Force des dimensions d'atlas en puissances de deux ($2^n$, standard GPU).
-   - `--trim` / `--no-trim` : Rognage automatique des bordures transparentes (Alpha Trim).
-   - `--pivot <preset>` : Positionnement des points d'ancrage (`bottom-center`, `center`, `top-left`).
-   - `--remove-bg [hexColor]` : Détection et suppression automatique de la couleur de fond spécifiée (ex. `#00FF00`).
-   - `--tolerance <0-100>` : Tolérance colorimétrique pour la suppression de fond.
-3. **Comportement en Sortie & Intégration CI :**
-   - Sortie console claire et concise, avec option `--json` pour exploitation directe par d'autres outils de pipeline.
-   - Codes de retour POSIX déterministes (0 en succès, 1 sur argument invalide, 2 sur fichier introuvable, 3 sur échec d'export).
+**TexturePacker** doit l'essentiel de son quasi-monopole en studio à son binaire en ligne de commande scriptable. De son côté, **Aseprite** est omniprésent pour le dessin et l'export batch de frames via son interface `-b` (`aseprite -b`). Enfin, **Godot 4** est devenu le moteur 2D de référence exigeant des fichiers de ressources natifs (`SpriteFrames` `.tres`) avec sous-textures `AtlasTexture`.
+
+**Objectifs Stratégiques Majeurs de SpriteStudio :**
+1. **Drop-in Replacement 100% de TexturePacker :** Remplacer purement et simplement le binaire `TexturePacker` dans n'importe quel pipeline studio existant sans modifier un seul script de build (compatibilité syntaxique des flags et sémantique des formats d'export JSON/Godot).
+2. **Compatibilité Étendue avec Aseprite CLI :** Accepter la syntaxe de compilation de feuilles de sprites d'Aseprite (`--sheet`, `--data`, `--list-tags`, `--sheet-type`, etc.).
+3. **Intégration Native & Transparente Godot 4 :** Générer directement des ressources `.tres` `SpriteFrames` riches avec `margin = Rect2(...)` (pivots M3 & trim M1) et préservation des UIDs Godot 4 (`uid://...`), évitant toute importation manuelle dans l'éditeur.
+4. **Moteur Headless Ultra-Rapide ($< 80$ ms) :** Binaire console autonome lié à la bibliothèque statique `SpriteStudioCore` fonctionnant hors-affichage (`QT_QPA_PLATFORM=offscreen` / `QCoreApplication`), sans dépendance GUI.
+
+---
+
+### 📚 Références & Liens vers les Documentations Officielles
+- 📖 [TexturePacker CLI Documentation & Command-Line Arguments (CodeAndWeb)](https://www.codeandweb.com/texturepacker/documentation/command-line)
+- 📖 [Aseprite Command-Line Interface Manual](https://www.aseprite.org/docs/cli/)
+- 📖 [Godot 4 Command Line Tutorial & Headless Mode](https://docs.godotengine.org/en/stable/tutorials/editor/command_line_tutorial.html)
+- 📖 [Godot 4 `SpriteFrames` & `AtlasTexture` Resource Specification](https://docs.godotengine.org/en/stable/classes/class_spriteframes.html)
+
+---
+
+### 🏛️ Architecture Multi-Saveurs du Parser CLI (`CliDispatcher`)
+
+Pour supporter à la fois la syntaxe TexturePacker, la syntaxe Aseprite et les sous-commandes natives SpriteStudio sans collision de paramètres, le binaire repose sur une architecture à détection de saveur (*CLI Flavor Detection*) :
+
+```
+                        [Invocation CLI / argv]
+                                   │
+                    ┌──────────────┴──────────────┐
+                    ▼                             ▼
+       [argv[0] == "TexturePacker"]     [argv[0] == "aseprite"]
+                    │                             │
+                    ▼                             ▼
+       ┌──────────────────────────┐  ┌──────────────────────────┐
+       │ TexturePacker Flavor     │  │ Aseprite Flavor          │
+       │ (100% Flags TexturePacker│  │ (Flags --sheet, --data,  │
+       │  --sheet, --data, --opt) │  │  --list-tags, -b batch)  │
+       └────────────┬─────────────┘  └────────────┬─────────────┘
+                    │                             │
+                    └──────────────┬──────────────┘
+                                   │
+        [argv[0] == "spritestudio-cli" ou --flavor=...]
+                                   ▼
+                    ┌──────────────────────────┐
+                    │ Universal / Native Mode  │
+                    │ (Subcommands pack, slice,│
+                    │  filter, export, ssp)    │
+                    └──────────────┬───────────┘
+                                   │
+                                   ▼
+                      [CliOptionMapper / Core API]
+                                   │
+         ┌─────────────────────────┼─────────────────────────┐
+         ▼                         ▼                         ▼
+  [AtlasPacker]            [SpriteDetector]          [FilterRegistry]
+  (MaxRects / POT)       (Auto-Slice / RemBg)      (7 Filtres Plugins)
+         │                         │                         │
+         └─────────────────────────┼─────────────────────────┘
+                                   │
+                                   ▼
+                    [Sorties : Atlas PNG + JSON / TRES]
+```
+
+- **Détection Automatique par Alias (`argv[0]`) :**
+  - Si le binaire est invoqué sous le nom `TexturePacker` (ou `TexturePacker.exe` via lien symbolique, wrapper shell ou copie dans le `PATH`), il active par défaut la saveur stricte TexturePacker.
+  - Si invoqué sous `aseprite`, il active la saveur Aseprite.
+  - Si invoqué sous `spritestudio-cli`, il accepte soit les sous-commandes natives, soit les options TexturePacker/Aseprite de façon universelle.
+  - Un paramètre explicite `--flavor <texturepacker|aseprite|godot|native>` permet de forcer la saveur si nécessaire.
+
+---
+
+### 📦 1. Compatibilité Totale avec TexturePacker CLI (Drop-In Replacement)
+
+TexturePacker est émulé à 100% de sa syntaxe et de ses fonctionnalités de packing d'atlas :
+
+| Argument TexturePacker | Type / Valeurs | Rôle & Équivalence Métier SpriteStudio |
+|---|---|---|
+| `--sheet <file>` | Fichier (`.png`) | Fichier image de sortie de l'atlas composite (`AtlasPacker::pack()`). |
+| `--data <file>` | Fichier (`.json`, `.tres`) | Fichier de métadonnées généré (JSON TexturePacker ou Godot 4 SpriteFrames). |
+| `--format <format>` | `json`, `json-array`, `json-hash`, `godot`, `godot4`, `phaser`, `unity`, `libgdx` | Format des métadonnées. `json-array` et `godot4` traités nativement avec fidélité absolue. |
+| `--texture-format <fmt>` | `png`, `webp`, `jpg` | Format d'encodage de la texture finale (défaut : `png` 32-bit ARGB). |
+| `--algorithm <algo>` | `MaxRects`, `Basic` | Algorithme d'empaquetage 2D (MaxRects M6 par défaut, ou Grille/Ligne). |
+| `--maxrects-heuristics <h>` | `BestShortSideFit`, `BestLongSideFit`, `BestAreaFit`, `BottomLeft`, `ContactPoint` | Heuristique de sélection des rectangles libres de MaxRects. |
+| `--opt <pixel_format>` | `RGBA8888`, `BGRA8888`, `RGBA4444`, `RGB888`, `RGB565` | Format mémoire des pixels de l'image (mappé sur `QImage::Format`). |
+| `--size-constraints <c>` | `POT`, `AnySize`, `WordAligned` | `POT` force les dimensions en puissances de deux ($2^n$, standard GPU). |
+| `--max-size <w> <h>` / `--max-width <w>` / `--max-height <h>` | Entiers (ex: `2048 2048`) | Dimensions maximales autorisées pour la feuille de texture. |
+| `--width <w>` / `--height <h>` | Entiers | Force une largeur/hauteur fixe de l'atlas. |
+| `--scale <factor>` | Flottant (ex: `0.5`, `1.0`, `2.0`) | Facteur de redimensionnement de l'atlas ou des sprites. |
+| `--scale-mode <mode>` | `Smooth`, `Fast` | `Smooth` = interpolation bilinéaire, `Fast` = Nearest-Neighbor ou Scale2x sans flou pour pixel art. |
+| `--trim-mode <mode>` | `Trim`, `Crop`, `None` | `Trim` : rogne les bordures transparentes tout en conservant les dimensions d'origine dans le JSON/TRES (`computeTrimmedRect()`). `None` : conserve la boîte intégrale. |
+| `--trim-threshold <0-255>` | Entier (défaut: `1`) | Seuil alpha en-deçà duquel un pixel est considéré transparent. |
+| `--padding <px>` | Entier (défaut: `2`) | Espacement global entre chaque sprite pour prévenir le saignement de texture (*texture bleeding*). |
+| `--shape-padding <px>` | Entier | Espacement spécifique autour de la silhouette de chaque sprite. |
+| `--border-padding <px>` | Entier | Marge extérieure le long des 4 bords de l'atlas. |
+| `--extrude <px>` | Entier (0, 1, 2) | Répétition des pixels de bordure sur N pixels pour le filtrage bilinéaire GPU. |
+| `--enable-auto-alias` (défaut) / `--detect-identical-sprites` | Booléen | Détection et déduplication automatique des frames strictement identiques (redirection d'indices d'animation). |
+| `--disable-auto-alias` | Booléen | Désactive la déduplication (conserve toutes les frames dupliquées séparément dans l'atlas). |
+| `--pivot-point <x> <y>` | Flottants $[0.0, 1.0]$ ou mots-clés | Point d'ancrage global des sprites (`0.5 1.0` pour bas-centre, `0.5 0.5` pour centre, `0.0 0.0` pour haut-gauche). Mappé sur les pivots M3. |
+| `--variant <scale>:<suffix>` | Chaîne (ex: `0.5:@0.5x`) | Génération multi-résolution pour écrans HD/SD. |
+| `--prepend-folder-name` | Booléen | Inclut le nom des sous-dossiers dans les identifiants de frames du JSON. |
+| `--quiet` / `--verbose` | Drapeaux | Contrôle de la verbosité de la sortie console. |
+| `<images / dossiers...>` | Arguments positionnels | Liste des fichiers PNG/JPG sources ou dossiers récursifs à empaqueter. |
+
+**Exemple d'Exécution en Drop-in Replacement TexturePacker :**
+```bash
+# Appel strict identique à TexturePacker dans un Makefile ou script de build
+spritestudio-cli --sheet characters.png --data characters.json \
+  --format json-array --algorithm MaxRects --maxrects-heuristics BestShortSideFit \
+  --padding 2 --extrude 1 --trim-mode Trim --size-constraints POT \
+  --max-size 2048 2048 assets/sprites/*.png
+```
+
+---
+
+### 🎨 2. Compatibilité Étendue avec Aseprite CLI (`aseprite -b`)
+
+Aseprite est le standard de création pixel art. `spritestudio-cli` supporte les commandes d'export de planches et de métadonnées d'animation d'Aseprite :
+
+| Argument Aseprite | Type / Valeurs | Rôle & Équivalence Métier SpriteStudio |
+|---|---|---|
+| `-b`, `--batch` | Drapeau | Mode non-interactif / headless (implicite et natif dans `spritestudio-cli`). |
+| `--sheet <file>` | Fichier image (`.png`) | Fichier de destination de la planche de sprites générée. |
+| `--data <file>` | Fichier JSON (`.json`) | Fichier de données JSON exporté avec tags d'animations et frames. |
+| `--format <fmt>` | `json-array`, `json-hash` | Structure du JSON Aseprite (`frames`, `meta`, `frameTags`). |
+| `--sheet-type <type>` | `horizontal`, `vertical`, `matrix`, `packed` | Disposition : bande horizontale (`RowPacker`), colonne, grille (`GridPacker`), ou compactée (`MaxRects`). |
+| `--sheet-width <w>` / `--sheet-height <h>` | Entiers | Dimensions cibles de la feuille. |
+| `--sheet-columns <n>` / `--sheet-rows <n>` | Entiers | Nombre de colonnes ou de rangées de la grille. |
+| `--list-tags` | Drapeau | Exporte le tableau `frameTags` contenant les animations nommées, leurs bornes (`from`, `to`) et leur sens (`forward`, `reverse`, `pingpong`). Directement relié à `SpriteAnimation` M2. |
+| `--list-layers` | Drapeau | Exporte la liste des calques d'origine. |
+| `--list-slices` | Drapeau | Exporte les découpes et boîtes (`SpriteBox`). |
+| `--trim` / `--trim-sprite` | Drapeaux | Rognage automatique de la transparence périphérique. |
+| `--inner-padding <px>` | Entier | Rembourrage intérieur de chaque frame. |
+| `--border-padding <px>` | Entier | Marge extérieure de la feuille. |
+| `--shape-padding <px>` | Entier | Espacement entre chaque frame. |
+| `--extrude` | Drapeau | Extrusion des pixels de bordure anti-saignement. |
+| `--ignore-empty` | Drapeau | Ignore les frames 100% transparentes sans les empaqueter. |
+| `--split-tags` | Drapeau | Génère un fichier atlas distinct pour chaque animation taggée (`walk.png`, `idle.png`, `attack.png`). |
+| `--save-as <file>` | Fichier de sortie | Conversion universelle en ligne de commande (ex: convertir un `.ssp` ou `.gif` en atlas PNG). |
+
+**Exemple d'Exécution Compatible Aseprite :**
+```bash
+# Compilation d'atlas Aseprite avec extraction des animations
+spritestudio-cli -b character.ssp --sheet character_sheet.png --data character_sheet.json \
+  --format json-array --list-tags --sheet-type packed --trim
+```
+
+---
+
+### 🎮 3. Intégration Native & Optimisations Spécifiques pour Godot 4
+
+L'intégration avec Godot 4 va au-delà d'un simple export de texture : elle produit des ressources nativement exploitables dans l'arbre de scène de Godot :
+
+1. **Ressource Native `.tres` (`SpriteFrames`) :**
+   - Génération directe de fichiers texte `.tres` sans aucune conversion intermédiaire.
+   - Sous-ressources `AtlasTexture` automatiquement imbriquées avec :
+     - `atlas = ExtResource("1_atlas")` : Référence propre à la texture PNG de l'atlas.
+     - `region = Rect2(x, y, w, h)` : Boîte englobante exacte de la frame dans l'atlas.
+     - `margin = Rect2(offsetX, offsetY, originalWidth, originalHeight)` : Décalage de marge calculé à partir du pivot M3 et du trim M1 pour éradiquer tout sautillement (*jittering*).
+     - `filter = Nearest` : Préréglage de filtrage net pour les jeux en pixel art.
+2. **Gestion Intelligente des UIDs Godot 4 (`--godot-uid`) :**
+   - Godot 4 associe un identifiant unique universel `uid://...` à chaque fichier de ressource.
+   - Lors d'une régénération automatique en CI/CD, `spritestudio-cli` conserve l'UID préexistant dans le fichier `.tres` cible ou en calcule un déterministe pour éviter de briser les dépendances et de polluer les diffs Git.
+3. **Génération Optionnelle de Scène Complète (`--godot-scene <node.tscn>`) :**
+   - Option `--godot-scene player.tscn` produisant une scène 2D instantiable avec un nœud `[node name="Player" type="AnimatedSprite2D"]` pré-câblé avec toutes ses animations (`idle`, `run`, `jump`), son FPS exact et sa configuration de boucle (`loop = true/false`).
+4. **Enchaînement CI Headless avec Godot :**
+   - `spritestudio-cli` retourne des codes d'état POSIX stricts permettant d'enchaîner directement dans un pipeline GitHub Actions :
+     ```bash
+     spritestudio-cli pack --format godot4 --sheet res://assets/sprites.png --data res://assets/sprites.tres assets/raw/*.png
+     godot --headless --import  # Importation automatique dans le projet Godot sans interface graphique !
+     ```
+
+---
+
+### ⚡ 4. Super-Pouvoirs Exclusifs SpriteStudio (Au-delà de la Concurrence)
+
+Là où TexturePacker et Aseprite exigent que les sprites soient déjà découpés en amont dans des fichiers PNG individuels, `spritestudio-cli` apporte ses algorithmes de découpage et de filtrage uniques :
+
+1. **Découpage Automatique de Planches Brutes (`spritestudio-cli slice`) :**
+   - Découpe automatique d'une planche brute ou d'un rip JPEG en sprites individuels sans fichier de métadonnées préalable.
+   - Algorithme de composantes connexes accéléré par `SpatialGrid2D` ($O(N)$ en $< 20$ ms).
+   - Arguments :
+     - `--remove-bg [hexColor]` : Suppression automatique de la couleur de fond (ou détection de dominante).
+     - `--tolerance <0-100>` : Tolérance colorimétrique sur le fond.
+     - `--alpha-threshold <0-255>` : Seuil d'opacité.
+     - `--smart-crop` : Recalcul serré des boîtes sur les pixels opaques.
+     - `--order <row-major|column-major>` : Tri séquentiel de lecture des frames.
+     - `--output-project <file.ssp>` : Sauvegarde directe sous forme de projet complet `.ssp`.
+
+2. **Application de Filtres Graphiques Headless (`spritestudio-cli filter`) :**
+   - Applique en ligne de commande les filtres M7 sur une planche ou un projet sans ouvrir l'IHM :
+     - `--despill [hexColor] --despill-mode <clamp|strict>` : Suppression du liseré périphérique de 1 px.
+     - `--outline <1-4> --outline-color <hexColor>` : Génération de contours vectoriels nets.
+     - `--color-swap "<srcHex>:<dstHex>"` : Remplacement de couleurs avec préservation de l'ombrage HSV.
+     - `--color-adjust --hue <deg> --saturation <pct> --contrast <pct>` : Harmonisation colorimétrique.
+     - `--pixel-rescale <2x|3x|4x> --filter <scale2x|nearest>` : Agrandissement procédural sans flou.
+     - `--retro-palette <preset|file.hex|file.gpl> --dither <bayer4x4>` : Quantification rétro.
+
+3. **Time-Travel & Manipulation de Projets `.ssp` (`spritestudio-cli ssp`) :**
+   - `--checkout-revision <hash>` : Extraction headless d'une révision Git historique embarquée dans un `.ssp`.
+   - `--export <format>` : Conversion d'un `.ssp` vers Godot, JSON, ou GIF animé.
+
+---
+
+### 🖥️ Spécification des Codes de Sortie POSIX & Format JSON
+
+Pour garantir une intégration sans faille dans les scripts Bash, PowerShell et les orchestrateurs CI/CD :
+
+- **Codes de Sortie POSIX Déterministes :**
+  - `0` : Succès absolu, atlas et données générés conformément.
+  - `1` : Erreur de syntaxe dans les arguments de ligne de commande (option inconnue, valeur hors bornes).
+  - `2` : Fichier ou répertoire source introuvable ou illisible.
+  - `3` : Contrainte d'empaquetage non réalisable (ex: les sprites dépassent la taille maximale `--max-size` spécifiée).
+  - `4` : Erreur d'écriture disque ou permissions insuffisantes sur la cible.
+
+- **Option `--json` pour Intégration Pipeline :**
+  En mode `--json`, les sorties d'état sont sérialisées sur `stdout` pour être analysées par d'autres scripts :
+  ```json
+  {
+    "status": "success",
+    "atlas": "characters.png",
+    "data": "characters.json",
+    "dimensions": { "width": 1024, "height": 1024 },
+    "frames_count": 48,
+    "packing_efficiency": 0.874,
+    "elapsed_ms": 42
+  }
+  ```
+
+---
+
+### 📊 Feuille de Route & Statut M-CLI
+
+| Composant M-CLI | Statut | Fichier(s) Cibles | Diagnostic & Livrables |
+|---|:---:|---|---|
+| **Spécification Multi-Saveur & Rétrocompatibilité** | ✅ **RÉSOLU & VALIDÉ** | `TODO.md` | Spécifications complètes 100% TexturePacker, Aseprite et Godot 4. |
+| **Socle Moteur Headless (`SpriteStudioCore`)** | ✅ **RÉSOLU & VALIDÉ** | `SpriteStudioCore` | Bibliothèque découplée de l'IHM, opérant sur `QImage` pure en offscreen. |
+| **Parser Universel & Dispatcher (`CliDispatcher`)** | ⏳ **À implémenter** | `include/cli/cliparser.h`, `src/cli/cliparser.cpp` | Détection par `argv[0]`, analyse des arguments et validation POSIX. |
+| **Émulateur TexturePacker (`TexturePackerMonkey`)** | ⏳ **À implémenter** | `include/cli/tp_adapter.h`, `src/cli/tp_adapter.cpp` | Mapping complet des 22 arguments TexturePacker vers le moteur de packing M6. |
+| **Émulateur Aseprite (`AsepriteAdapter`)** | ⏳ **À implémenter** | `include/cli/aseprite_adapter.h`, `src/cli/aseprite_adapter.cpp` | Support de `-b`, `--sheet`, `--data`, `--list-tags`, `--sheet-type`. |
+| **Pipeline Natif Godot 4 (`GodotPipeline`)** | ⏳ **À implémenter** | `include/cli/godot_pipeline.h`, `src/cli/godot_pipeline.cpp` | Génération `.tres` SpriteFrames, UIDs stables, marges de pivots et hints de filtrage. |
+| **Commandes Étendues (`slice`, `filter`, `ssp`)** | ⏳ **À implémenter** | `src/cli/commands_*.cpp` | Automatisation headless de `SpriteDetector`, des filtres M7 et de `ProjectManager`. |
+| **Cible Exécutable CMake (`spritestudio-cli`)** | ⏳ **À implémenter** | `SpriteStudio/CMakeLists.txt` | Cible console légère liée à `SpriteStudioCore`, sans dépendance d'affichage. |
+| **Suite de Tests CLI Headless** | ⏳ **À implémenter** | `tests/test_cli.cpp` | Tests automatisés de compatibilité des syntaxes, codes d'erreur et reproductibilité des sorties. |
 
 ### Fichiers & Composants Cibles
-- `SpriteStudio/src/cli/main_cli.cpp` : Point d'entrée de la commande console utilisant `QCommandLineParser`.
-- `SpriteStudio/CMakeLists.txt` : Déclaration de la cible exécutable `spritestudio-cli` liée directement à `SpriteStudioCore`.
+- `SpriteStudio/include/cli/cliparser.h` / `src/cli/cliparser.cpp` : Moteur de dispatching et parsing multi-saveur.
+- `SpriteStudio/include/cli/tp_adapter.h` / `src/cli/tp_adapter.cpp` : Adaptateur de rétrocompatibilité TexturePacker 100%.
+- `SpriteStudio/include/cli/aseprite_adapter.h` / `src/cli/aseprite_adapter.cpp` : Adaptateur Aseprite.
+- `SpriteStudio/include/cli/godot_pipeline.h` / `src/cli/godot_pipeline.cpp` : Pipeline Godot 4 SpriteFrames & UIDs.
+- `SpriteStudio/src/cli/main_cli.cpp` : Point d'entrée de l'application console.
+- `SpriteStudio/CMakeLists.txt` : Déclaration de la cible console `spritestudio-cli`.
 
 ---
 
@@ -908,8 +1131,8 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
    - *Objectif :* Atteindre une densité d'atlas comparable à TexturePacker pour minimiser la VRAM en production.
    - *Livrables :* Algorithmes *Best Short Side Fit* (BSSF) et *Best Area Fit* (BAF), padding anti-saignement, extrusion de bordure (1 px) et déduplication des frames identiques.
 5. **Étape 8 — Outil en Ligne de Commande Headless (M-CLI / `spritestudio-cli`) :**
-   - *Objectif :* Intégrer SpriteStudio dans les chaînes de compilation automatisées (CI/CD) des studios pros.
-   - *Livrables :* Binaire autonome `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`) supportant `pack`, `slice` et `export`.
+   - *Objectif :* Intégrer SpriteStudio dans les chaînes de compilation automatisées (CI/CD) des studios pros en fournissant un drop-in replacement 100% compatible avec TexturePacker, une compatibilité avec la CLI Aseprite (`aseprite -b`) et un pipeline natif Godot 4.
+   - *Livrables :* Binaire autonome `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`), dispatcher multi-saveurs, support complet des 22 arguments TexturePacker (`--sheet`, `--data`, `--format`, `--opt`, `--trim-mode`, `--extrude`, etc.), options Aseprite (`-b`, `--list-tags`, `--sheet-type`) et génération directe de ressources Godot 4 `.tres` (avec préservation des UIDs et marges de pivots).
 
 ---
 
