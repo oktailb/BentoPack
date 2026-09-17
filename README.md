@@ -174,6 +174,30 @@ spritestudio-cli slice --remove-bg --tolerance 15 --smart-crop --output-dir out/
 spritestudio-cli filter --outline 2 red --output-dir out/ sprites/*.png
 ```
 
+### Reactive Watch & Multi-Instance Daemon (`--watch`)
+Live background surveillance with intelligent burst debouncing and directory-isolated locking (`QLockFile`):
+```bash
+# Interactive watch with 300ms burst debouncing
+spritestudio-cli pack --sheet atlas.png --data atlas.json --watch assets/sprites/
+
+# Multi-instance daemon mode (isolated per directory)
+spritestudio-cli pack --sheet char_atlas.png --data char.json --watch --daemon assets/characters/
+spritestudio-cli pack --sheet ui_atlas.png --data ui.json --watch --daemon assets/ui/
+
+# Stop active daemon guarding a specific folder
+spritestudio-cli --stop-watch assets/characters/
+```
+
+### Transparent Drop-In Wrappers
+Ready-to-use scripts located in `wrappers/` allow legacy makefiles to call `TexturePacker` or `aseprite` seamlessly:
+```bash
+# Windows
+wrappers\TexturePacker.bat --sheet atlas.png --data atlas.json sprites/*.png
+
+# Linux / macOS
+wrappers/TexturePacker --sheet atlas.png --data atlas.json sprites/*.png
+```
+
 ### Benchmarks & Regression Tracking
 Execute the autonomous 24-scenario benchmark suite with performance diffing and KPI reporting:
 ```bash
