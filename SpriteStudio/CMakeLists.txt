@@ -84,6 +84,7 @@ set(SpriteStudioCore_SRC
     src/cli/aseprite_adapter.cpp
     src/cli/godot_pipeline.cpp
     src/cli/native_commands.cpp
+    src/cli/watch_daemon.cpp
 )
 
 set(SpriteStudioCore_UI
@@ -148,6 +149,7 @@ set(SpriteStudioCore_INCLUDE
     include/cli/aseprite_adapter.h
     include/cli/godot_pipeline.h
     include/cli/native_commands.h
+    include/cli/watch_daemon.h
 )
 
 # Bibliothèque statique commune pour l'application et la suite de tests

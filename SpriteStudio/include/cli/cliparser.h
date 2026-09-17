@@ -15,7 +15,8 @@ enum ExitCode {
     ExitSyntaxError         = 1, ///< Invalid arguments, unknown options, or missing parameters
     ExitFileNotFound        = 2, ///< Input files, directories, or assets not found
     ExitConstraintFailed    = 3, ///< Packing constraints unsatisfied (e.g. sprites exceed max-size)
-    ExitIoError             = 4  ///< Disk read/write permissions or file creation error
+    ExitIoError             = 4, ///< Disk read/write permissions or file creation error
+    ExitLockConflict        = 5  ///< Another watch daemon instance is already active for this directory
 };
 
 /**
@@ -78,8 +79,15 @@ public:
     bool isVerbose() const { return m_verbose; }
     CliFlavor flavor() const { return m_flavor; }
 
+    bool isWatchMode() const { return m_watchMode; }
+    bool isDaemonMode() const { return m_daemonMode; }
+    int debounceMs() const { return m_debounceMs; }
+    QString stopWatchDir() const { return m_stopWatchDir; }
+
     static QString helpText();
     static QString versionText();
+
+    CliResult dispatchCommand(const QStringList &cleanArgs);
 
 private:
     CliFlavor detectFlavor(const QString &programName, const QStringList &args) const;
@@ -88,6 +96,15 @@ private:
     bool m_quiet = false;
     bool m_verbose = false;
     CliFlavor m_flavor = CliFlavor::Auto;
+
+    bool m_watchMode = false;
+    bool m_daemonMode = false;
+    int m_debounceMs = 300;
+    QString m_stopWatchDir;
+
+    QString m_watchSheetPath;
+    QString m_watchDataPath;
+    QStringList m_watchInputPaths;
 };
 
 } // namespace SpriteStudioCli

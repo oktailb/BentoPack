@@ -6,6 +6,7 @@
 #include <QJsonArray>
 #include "cli/cliparser.h"
 #include "cli/godot_pipeline.h"
+#include "cli/watch_daemon.h"
 
 using namespace SpriteStudioCli;
 
@@ -26,6 +27,8 @@ private slots:
     void testNativeFilterCommand();
     void testPosixExitCodes();
     void testJsonOutputMode();
+    void testWatchLockAcquisitionAndConflict();
+    void testWatchDebouncedRepack();
 
 private:
     QTemporaryDir m_tempDir;
@@ -317,6 +320,90 @@ void TestCli::testJsonOutputMode()
     QVERIFY(res.json.contains(QStringLiteral("atlas")));
     QVERIFY(res.json.contains(QStringLiteral("width")));
     QVERIFY(res.json.contains(QStringLiteral("height")));
+}
+
+void TestCli::testWatchLockAcquisitionAndConflict()
+{
+    QString dirA = m_tempDir.filePath(QStringLiteral("project_alpha"));
+    QString dirB = m_tempDir.filePath(QStringLiteral("project_beta"));
+    QDir().mkpath(dirA);
+    QDir().mkpath(dirB);
+
+    WatchDaemon daemon1;
+    qint64 pid1 = 0;
+    QVERIFY(daemon1.acquireDirectoryLock(dirA, pid1));
+
+    qint64 checkPid = 0;
+    QVERIFY(WatchDaemon::isDirectoryLocked(dirA, checkPid));
+    QCOMPARE(checkPid, static_cast<qint64>(QCoreApplication::applicationPid()));
+
+    // Attempting concurrent lock on the same directory MUST fail (isolated lock)
+    WatchDaemon daemonConflict;
+    qint64 conflictPid = 0;
+    bool lockedSame = daemonConflict.acquireDirectoryLock(dirA, conflictPid);
+    QVERIFY(!lockedSame);
+    QCOMPARE(conflictPid, checkPid);
+
+    // Multi-instance: attempting lock on a DIFFERENT directory MUST succeed
+    WatchDaemon daemon2;
+    qint64 pid2 = 0;
+    bool lockedDiff = daemon2.acquireDirectoryLock(dirB, pid2);
+    QVERIFY(lockedDiff);
+    QVERIFY(WatchDaemon::isDirectoryLocked(dirB, pid2));
+
+    // Release dirA lock and verify it can now be acquired
+    daemon1.releaseDirectoryLock();
+    QVERIFY(!WatchDaemon::isDirectoryLocked(dirA, checkPid));
+
+    bool nowAcquired = daemonConflict.acquireDirectoryLock(dirA, conflictPid);
+    QVERIFY(nowAcquired);
+
+    daemonConflict.releaseDirectoryLock();
+    daemon2.releaseDirectoryLock();
+}
+
+void TestCli::testWatchDebouncedRepack()
+{
+    QString watchFolder = m_tempDir.filePath(QStringLiteral("watch_sprites"));
+    QDir().mkpath(watchFolder);
+
+    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
+    QString frame1 = QDir(watchFolder).filePath(QStringLiteral("frame_01.png"));
+    QFile::copy(sampleHero, frame1);
+
+    QString outSheet = m_tempDir.filePath(QStringLiteral("watch_atlas.png"));
+    QString outData = m_tempDir.filePath(QStringLiteral("watch_atlas.json"));
+
+    int repackCount = 0;
+    auto repackCb = [&repackCount, outSheet, outData, watchFolder]() -> CliResult {
+        repackCount++;
+        CliParser p;
+        return p.parseAndExecute({
+            QStringLiteral("spritestudio-cli"),
+            QStringLiteral("--sheet"), outSheet,
+            QStringLiteral("--data"), outData,
+            watchFolder
+        });
+    };
+
+    WatchDaemon daemon;
+    CliResult startRes = daemon.startWatching({ watchFolder }, outSheet, outData, repackCb, 50);
+    QCOMPARE(startRes.exitCode, ExitSuccess);
+
+    // Initial pack executed on start
+    QCOMPARE(repackCount, 1);
+    QVERIFY(QFile::exists(outSheet));
+    QVERIFY(QFile::exists(outData));
+
+    // Simulate file addition in watched directory
+    QString frame2 = QDir(watchFolder).filePath(QStringLiteral("frame_02.png"));
+    QFile::copy(sampleHero, frame2);
+
+    // Wait for QFileSystemWatcher and debounce timer (50ms debounce)
+    QTest::qWait(200);
+
+    QVERIFY(repackCount >= 2);
+    daemon.releaseDirectoryLock();
 }
 
 #include <QApplication>

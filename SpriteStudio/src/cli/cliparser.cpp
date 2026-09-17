@@ -2,7 +2,22 @@
 #include "cli/tp_adapter.h"
 #include "cli/aseprite_adapter.h"
 #include "cli/native_commands.h"
+#include "cli/watch_daemon.h"
 #include <QFileInfo>
+#include <QCoreApplication>
+#include <QDir>
+#include <csignal>
+
+#if defined(Q_OS_WIN)
+#include <windows.h>
+static BOOL WINAPI consoleCtrlHandler(DWORD signal) {
+    if (signal == CTRL_C_EVENT || signal == CTRL_CLOSE_EVENT || signal == CTRL_BREAK_EVENT) {
+        QCoreApplication::quit();
+        return TRUE;
+    }
+    return FALSE;
+}
+#endif
 
 namespace SpriteStudioCli {
 
@@ -27,6 +42,11 @@ QString CliParser::helpText()
         "  --quiet                     Suppress progress and status messages\n"
         "  --verbose                   Display verbose debug details\n"
         "  --flavor <tp|aseprite|godot|native>  Force CLI syntax flavor\n\n"
+        "Watch & Daemon Options:\n"
+        "  --watch                     Watch input files/folders and automatically re-pack on change\n"
+        "  --daemon                    Run watch mode as a background service with isolated lock\n"
+        "  --debounce <ms>             Debounce delay in milliseconds before re-packing (default: 300)\n"
+        "  --stop-watch <dir>          Terminate active watch daemon guarding the specified directory\n\n"
         "Commands:\n"
         "  pack                        Pack individual images, folders or projects into sprite sheet\n"
         "  slice                       Auto-slice raw sheet with connected components & background removal\n"
@@ -91,49 +111,8 @@ CliFlavor CliParser::detectFlavor(const QString &programName, const QStringList 
     return CliFlavor::Auto;
 }
 
-CliResult CliParser::parseAndExecute(const QStringList &args)
+CliResult CliParser::dispatchCommand(const QStringList &cleanArgs)
 {
-    if (args.size() <= 1) {
-        return CliResult::success(helpText());
-    }
-
-    QString progName = args.first();
-    QStringList rawArgs = args.mid(1);
-
-    // Global flags detection
-    QStringList cleanArgs;
-    for (int i = 0; i < rawArgs.size(); ++i) {
-        const QString &arg = rawArgs[i];
-        if (arg == QStringLiteral("-h") || arg == QStringLiteral("--help")) {
-            return CliResult::success(helpText());
-        }
-        if (arg == QStringLiteral("-v") || arg == QStringLiteral("--version")) {
-            return CliResult::success(versionText());
-        }
-        if (arg == QStringLiteral("--json")) {
-            m_jsonOutput = true;
-            continue;
-        }
-        if (arg == QStringLiteral("--quiet")) {
-            m_quiet = true;
-            continue;
-        }
-        if (arg == QStringLiteral("--verbose")) {
-            m_verbose = true;
-            continue;
-        }
-        if (arg == QStringLiteral("--flavor") && i + 1 < rawArgs.size()) {
-            ++i; // skip flavor value
-            continue;
-        }
-        if (arg.startsWith(QStringLiteral("--flavor="))) {
-            continue;
-        }
-        cleanArgs.append(arg);
-    }
-
-    m_flavor = detectFlavor(progName, rawArgs);
-
     if (m_flavor == CliFlavor::TexturePacker) {
         return TexturePackerAdapter::execute(cleanArgs);
     }
@@ -175,6 +154,115 @@ CliResult CliParser::parseAndExecute(const QStringList &args)
     }
 
     return CliResult::success(helpText());
+}
+
+CliResult CliParser::parseAndExecute(const QStringList &args)
+{
+    if (args.size() <= 1) {
+        return CliResult::success(helpText());
+    }
+
+    QString progName = args.first();
+    QStringList rawArgs = args.mid(1);
+
+    // Global flags detection
+    QStringList cleanArgs;
+    for (int i = 0; i < rawArgs.size(); ++i) {
+        const QString &arg = rawArgs[i];
+        if (arg == QStringLiteral("-h") || arg == QStringLiteral("--help")) {
+            return CliResult::success(helpText());
+        }
+        if (arg == QStringLiteral("-v") || arg == QStringLiteral("--version")) {
+            return CliResult::success(versionText());
+        }
+        if (arg == QStringLiteral("--json")) {
+            m_jsonOutput = true;
+            continue;
+        }
+        if (arg == QStringLiteral("--quiet")) {
+            m_quiet = true;
+            continue;
+        }
+        if (arg == QStringLiteral("--verbose")) {
+            m_verbose = true;
+            continue;
+        }
+        if (arg == QStringLiteral("--flavor") && i + 1 < rawArgs.size()) {
+            ++i; // skip flavor value
+            continue;
+        }
+        if (arg.startsWith(QStringLiteral("--flavor="))) {
+            continue;
+        }
+        if (arg == QStringLiteral("--watch")) {
+            m_watchMode = true;
+            continue;
+        }
+        if (arg == QStringLiteral("--daemon")) {
+            m_daemonMode = true;
+            m_watchMode = true;
+            continue;
+        }
+        if (arg == QStringLiteral("--debounce") && i + 1 < rawArgs.size()) {
+            m_debounceMs = rawArgs[i + 1].toInt();
+            ++i;
+            continue;
+        }
+        if (arg == QStringLiteral("--stop-watch") && i + 1 < rawArgs.size()) {
+            m_stopWatchDir = rawArgs[i + 1];
+            ++i;
+            return WatchDaemon::stopWatch(m_stopWatchDir);
+        }
+
+        // Detect target output files
+        if (arg == QStringLiteral("--sheet") && i + 1 < rawArgs.size()) {
+            m_watchSheetPath = rawArgs[i + 1];
+        }
+        if (arg == QStringLiteral("--data") && i + 1 < rawArgs.size()) {
+            m_watchDataPath = rawArgs[i + 1];
+        }
+
+        // If not a flag, collect as potential watch inputs
+        if (!arg.startsWith(QStringLiteral("-")) && arg != QStringLiteral("pack") &&
+            arg != QStringLiteral("slice") && arg != QStringLiteral("filter") && arg != QStringLiteral("ssp")) {
+            m_watchInputPaths.append(arg);
+        }
+
+        cleanArgs.append(arg);
+    }
+
+    m_flavor = detectFlavor(progName, rawArgs);
+
+    if (m_watchMode) {
+        // Install console interrupt handlers for clean unlocking
+#if defined(Q_OS_WIN)
+        SetConsoleCtrlHandler(consoleCtrlHandler, TRUE);
+#else
+        std::signal(SIGINT, [](int){ QCoreApplication::quit(); });
+        std::signal(SIGTERM, [](int){ QCoreApplication::quit(); });
+#endif
+
+        if (m_watchInputPaths.isEmpty()) {
+            m_watchInputPaths.append(QDir::currentPath());
+        }
+
+        auto daemon = new WatchDaemon(qApp);
+        auto repackFn = [this, cleanArgs]() -> CliResult {
+            return this->dispatchCommand(cleanArgs);
+        };
+
+        CliResult startRes = daemon->startWatching(m_watchInputPaths, m_watchSheetPath, m_watchDataPath,
+                                                  repackFn, m_debounceMs, m_daemonMode);
+        if (startRes.exitCode != ExitSuccess) {
+            return startRes;
+        }
+
+        int ret = QCoreApplication::exec();
+        return CliResult::success(QStringLiteral("Watch daemon terminated cleanly."),
+                                 QJsonObject{{QStringLiteral("exit_code"), ret}});
+    }
+
+    return dispatchCommand(cleanArgs);
 }
 
 } // namespace SpriteStudioCli
