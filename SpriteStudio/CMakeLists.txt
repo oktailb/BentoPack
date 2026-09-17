@@ -79,6 +79,11 @@ set(SpriteStudioCore_SRC
     src/version.h.in
     src/haiku.PackageInfo.in
     ${CMAKE_CURRENT_BINARY_DIR}/generated/version.h
+    src/cli/cliparser.cpp
+    src/cli/tp_adapter.cpp
+    src/cli/aseprite_adapter.cpp
+    src/cli/godot_pipeline.cpp
+    src/cli/native_commands.cpp
 )
 
 set(SpriteStudioCore_UI
@@ -138,6 +143,11 @@ set(SpriteStudioCore_INCLUDE
     include/arrangementmodel.h
     include/aboutdialog.h
     include/zip/miniz.h
+    include/cli/cliparser.h
+    include/cli/tp_adapter.h
+    include/cli/aseprite_adapter.h
+    include/cli/godot_pipeline.h
+    include/cli/native_commands.h
 )
 
 # Bibliothèque statique commune pour l'application et la suite de tests
@@ -237,6 +247,39 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_BINARY_DIR}
 )
+
+# Exécutable console spritestudio-cli
+add_executable(spritestudio-cli
+    src/cli/main_cli.cpp
+)
+
+target_link_libraries(spritestudio-cli PRIVATE
+    SpriteStudioCore
+)
+
+set_target_properties(spritestudio-cli PROPERTIES
+    WIN32_EXECUTABLE FALSE
+)
+
+if (MINGW)
+    target_link_options(spritestudio-cli PRIVATE -mconsole)
+endif()
+
+if(LibGit2_FOUND)
+    if(WIN32 AND LIBGIT2_DLL)
+        add_custom_command(
+            TARGET spritestudio-cli POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${LIBGIT2_DLL}" "$<TARGET_FILE_DIR:spritestudio-cli>"
+            COMMENT "Copying libgit2.dll to CLI directory"
+        )
+    endif()
+endif()
+
+target_include_directories(spritestudio-cli PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
+
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Haiku")
     add_custom_target(haiku_package

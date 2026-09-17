@@ -16,7 +16,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (100% CTest — Session, Lock, Crash Recovery, Atomic Save, Git Time-Travel & UI Dock) |
 | **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Architecture Plugins, 7 Filtres opérationnels, Live Preview, Auto-Detect Boxes, Rollback) |
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — MaxRects BSSF/BAF/BLSF, POT, Extrude, Déduplication, ExportDialog) |
-| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 🚀 **Prochaine Étape Immédiate** (Drop-in Replacement 100% TexturePacker, Compatibilité Aseprite & Godot 4) |
+| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Drop-in 100% TexturePacker, Aseprite -b, Godot 4 UID/Scene, Slice, Filter, SSP, POSIX, JSON) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifié & Documenté (Optimisation Mobile & Switch, Tight Polygon Mesh) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
@@ -1005,13 +1005,13 @@ Pour garantir une intégration sans faille dans les scripts Bash, PowerShell et 
 |---|:---:|---|---|
 | **Spécification Multi-Saveur & Rétrocompatibilité** | ✅ **RÉSOLU & VALIDÉ** | `TODO.md` | Spécifications complètes 100% TexturePacker, Aseprite et Godot 4. |
 | **Socle Moteur Headless (`SpriteStudioCore`)** | ✅ **RÉSOLU & VALIDÉ** | `SpriteStudioCore` | Bibliothèque découplée de l'IHM, opérant sur `QImage` pure en offscreen. |
-| **Parser Universel & Dispatcher (`CliDispatcher`)** | ⏳ **À implémenter** | `include/cli/cliparser.h`, `src/cli/cliparser.cpp` | Détection par `argv[0]`, analyse des arguments et validation POSIX. |
-| **Émulateur TexturePacker (`TexturePackerMonkey`)** | ⏳ **À implémenter** | `include/cli/tp_adapter.h`, `src/cli/tp_adapter.cpp` | Mapping complet des 22 arguments TexturePacker vers le moteur de packing M6. |
-| **Émulateur Aseprite (`AsepriteAdapter`)** | ⏳ **À implémenter** | `include/cli/aseprite_adapter.h`, `src/cli/aseprite_adapter.cpp` | Support de `-b`, `--sheet`, `--data`, `--list-tags`, `--sheet-type`. |
-| **Pipeline Natif Godot 4 (`GodotPipeline`)** | ⏳ **À implémenter** | `include/cli/godot_pipeline.h`, `src/cli/godot_pipeline.cpp` | Génération `.tres` SpriteFrames, UIDs stables, marges de pivots et hints de filtrage. |
-| **Commandes Étendues (`slice`, `filter`, `ssp`)** | ⏳ **À implémenter** | `src/cli/commands_*.cpp` | Automatisation headless de `SpriteDetector`, des filtres M7 et de `ProjectManager`. |
-| **Cible Exécutable CMake (`spritestudio-cli`)** | ⏳ **À implémenter** | `SpriteStudio/CMakeLists.txt` | Cible console légère liée à `SpriteStudioCore`, sans dépendance d'affichage. |
-| **Suite de Tests CLI Headless** | ⏳ **À implémenter** | `tests/test_cli.cpp` | Tests automatisés de compatibilité des syntaxes, codes d'erreur et reproductibilité des sorties. |
+| **Parser Universel & Dispatcher (`CliDispatcher`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/cliparser.h`, `src/cli/cliparser.cpp` | Détection par `argv[0]`, analyse des arguments et validation POSIX. |
+| **Émulateur TexturePacker (`TexturePackerAdapter`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/tp_adapter.h`, `src/cli/tp_adapter.cpp` | Mapping complet des 22 arguments TexturePacker vers le moteur de packing M6. |
+| **Émulateur Aseprite (`AsepriteAdapter`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/aseprite_adapter.h`, `src/cli/aseprite_adapter.cpp` | Support de `-b`, `--sheet`, `--data`, `--list-tags`, `--sheet-type`, `--trim`. |
+| **Pipeline Natif Godot 4 (`GodotPipeline`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/godot_pipeline.h`, `src/cli/godot_pipeline.cpp` | Génération `.tres` SpriteFrames, UIDs stables, marges de pivots et scènes `.tscn`. |
+| **Commandes Étendues (`slice`, `filter`, `ssp`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/native_commands.h`, `src/cli/native_commands.cpp` | Automatisation headless de `SpriteDetector`, des filtres M7 et de `ProjectManager`. |
+| **Cible Exécutable CMake (`spritestudio-cli`)** | ✅ **RÉSOLU & VALIDÉ** | `SpriteStudio/CMakeLists.txt` | Cible console légère liée à `SpriteStudioCore`, sans dépendance d'affichage. |
+| **Suite de Tests CLI Headless** | ✅ **RÉSOLU & VALIDÉ** | `tests/test_cli.cpp` | 9 tests unitaires automatisés validant syntaxes, formats, codes POSIX et sortie JSON (100% CTest). |
 
 ### Fichiers & Composants Cibles
 - `SpriteStudio/include/cli/cliparser.h` / `src/cli/cliparser.cpp` : Moteur de dispatching et parsing multi-saveur.
@@ -1192,13 +1192,13 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 
 ---
 
-### 📦 Phase B — Compacité d'Atlas & Automatisation Industrielle (Moyen Terme) — 🚀 EN COURS
-4. **Étape 7 — Empaquetage Avancé MaxRects (M6) — 🔥 PROCHAINE ÉTAPE IMMÉDIATE :**
+### 📦 Phase B — Compacité d'Atlas & Automatisation Industrielle (Moyen Terme) — 🟢 100% CLÔTURÉE
+4. **Étape 7 — Empaquetage Avancé MaxRects (M6) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Atteindre une densité d'atlas comparable à TexturePacker pour minimiser la VRAM en production.
-   - *Livrables :* Algorithmes *Best Short Side Fit* (BSSF) et *Best Area Fit* (BAF), padding anti-saignement, extrusion de bordure (1 px) et déduplication des frames identiques.
-5. **Étape 8 — Outil en Ligne de Commande Headless (M-CLI / `spritestudio-cli`) :**
+   - *Livrables :* Algorithmes *Best Short Side Fit* (BSSF) et *Best Area Fit* (BAF), padding anti-saignement, extrusion de bordure (1 px), déduplication des frames identiques et dialogue interactif dans l'IHM.
+5. **Étape 8 — Outil en Ligne de Commande Headless (M-CLI / `spritestudio-cli`) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Intégrer SpriteStudio dans les chaînes de compilation automatisées (CI/CD) des studios pros en fournissant un drop-in replacement 100% compatible avec TexturePacker, une compatibilité avec la CLI Aseprite (`aseprite -b`) et un pipeline natif Godot 4.
-   - *Livrables :* Binaire autonome `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`), dispatcher multi-saveurs, support complet des 22 arguments TexturePacker (`--sheet`, `--data`, `--format`, `--opt`, `--trim-mode`, `--extrude`, etc.), options Aseprite (`-b`, `--list-tags`, `--sheet-type`) et génération directe de ressources Godot 4 `.tres` (avec préservation des UIDs et marges de pivots).
+   - *Livrables :* Binaire autonome `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`), dispatcher multi-saveurs, support complet des arguments TexturePacker (`--sheet`, `--data`, `--format`, `--opt`, `--trim-mode`, `--extrude`, etc.), options Aseprite (`-b`, `--list-tags`, `--sheet-type`), génération directe de ressources Godot 4 `.tres` (avec préservation des UIDs et marges de pivots), sous-commandes natives (`pack`, `slice`, `filter`, `ssp`), codes de sortie POSIX et sortie JSON structurée (`--json`).
 
 ---
 
