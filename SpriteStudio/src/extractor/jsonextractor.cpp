@@ -415,7 +415,19 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         packOpts.padding = options.padding;
     }
 
-    AtlasPackResult packResult = AtlasPacker::pack(doc.frames(), packOpts);
+    AtlasPackResult packResult;
+    if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
+        packResult.atlas = doc.atlas();
+        packResult.frameRects.reserve(doc.boxes().size());
+        for (const SpriteBox &box : doc.boxes()) {
+            packResult.frameRects.append(box.rect);
+        }
+        packResult.dimensions = doc.atlas().size();
+        packResult.uniqueFramesCount = doc.frameCount();
+        packResult.success = true;
+    } else {
+        packResult = AtlasPacker::pack(doc.frames(), packOpts);
+    }
     if (!packResult.success) {
         if (error) {
             error->code = ExtractorError::PackingFailed;

@@ -30,6 +30,7 @@ class AtlasPacker
 {
 public:
     enum Algorithm {
+        KeepLayout,       // Keep current atlas layout as-is (WYSIWYG / no repacking)
         RowPacker,        // Fast row-by-row shelf packer
         GridPacker,       // Uniform grid packer
         PowerOfTwoPacker, // Row packing rounded up to next power-of-two texture dimensions

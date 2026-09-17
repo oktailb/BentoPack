@@ -86,6 +86,11 @@
        <widget class="QComboBox" name="comboAlgorithm">
         <item>
          <property name="text">
+          <string>Keep Current Layout (WYSIWYG — As Displayed)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>MaxRects (Best Short Side Fit — Recommended)</string>
          </property>
         </item>

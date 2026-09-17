@@ -2,8 +2,10 @@
 #include "ui_mainwindow.h"
 #include "config/appconfig.h"
 #include "widgets/backgroundremovaldialog.h"
+#include "widgets/atlaspackingdialog.h"
 #include <QMenu>
 #include <QAction>
+#include <QMessageBox>
 
 void MainWindow::on_actionToolSelect_triggered()
 {
@@ -45,6 +47,18 @@ void MainWindow::on_actionZoomReset_triggered()
     if (zoomSlider) {
         zoomSlider->setValue(100);
     }
+}
+
+void MainWindow::on_actionPackAtlas_triggered()
+{
+    if (!m_document || m_document->atlas().isNull() || m_document->frameCount() == 0) {
+        QMessageBox::information(this, tr("Empaquetage d'Atlas"),
+                                 tr("Veuillez d'abord ouvrir ou importer une planche de sprites avec des frames."));
+        return;
+    }
+
+    AtlasPackingDialog dlg(m_document, m_undoStack, this);
+    dlg.exec();
 }
 
 void MainWindow::onBoxContextMenuRequested(int index, const QPoint &screenPos)

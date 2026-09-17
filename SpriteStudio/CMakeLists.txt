@@ -63,6 +63,7 @@ set(SpriteStudioCore_SRC
     src/widgets/coloradjustfilterdialog.cpp
     src/widgets/pixelrescalefilterdialog.cpp
     src/widgets/retropalettefilterdialog.cpp
+    src/widgets/atlaspackingdialog.cpp
     src/filters/filterregistry.cpp
     src/filters/backgroundremovalfilter.cpp
     src/filters/despillfilter.cpp
@@ -71,6 +72,7 @@ set(SpriteStudioCore_SRC
     src/filters/coloradjustfilter.cpp
     src/filters/pixelrescalefilter.cpp
     src/filters/retropalettefilter.cpp
+    src/filters/atlaspackingfilter.cpp
     src/commands/filtercommands.cpp
     src/localizationmanager.cpp
     src/zip/miniz.c
@@ -105,6 +107,7 @@ set(SpriteStudioCore_INCLUDE
     include/widgets/settingsdialog.h
     include/widgets/timelinefilmstripwidget.h
     include/widgets/exportdialog.h
+    include/widgets/atlaspackingdialog.h
     include/widgets/filterdialogbase.h
     include/widgets/backgroundremovaldialog.h
     include/widgets/despillfilterdialog.h
@@ -122,6 +125,7 @@ set(SpriteStudioCore_INCLUDE
     include/filters/coloradjustfilter.h
     include/filters/pixelrescalefilter.h
     include/filters/retropalettefilter.h
+    include/filters/atlaspackingfilter.h
     include/localizationmanager.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h

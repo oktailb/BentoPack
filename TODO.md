@@ -635,8 +635,17 @@ Le chantier **M6** dote **Sprite Studio** du standard industriel de bin-packing 
 
 #### 5. Boîte de Dialogue d'Export Interactive (`ExportDialog`) — ✅ Validé & Opérationnel
 - **Remplacement de la boîte standard :** Raccourci `Ctrl+E` ou menu *Fichier > Exporter* ouvre désormais un dialogue complet dédié.
-- **Paramétrage intuitif :** Choix du format (Godot SpriteFrames, JSON TexturePacker/Aseprite, PNG/ZIP), algorithme (MaxRects, Power of Two, Row, Grid), padding, extrusion, cases POT/Square/Deduplicate.
+- **Paramétrage intuitif :** Choix du format (Godot SpriteFrames, JSON TexturePacker/Aseprite, PNG/ZIP), algorithme (Conserver l'agencement actuel WYSIWYG, MaxRects, Power of Two, Row, Grid), padding, extrusion, cases POT/Square/Deduplicate.
+- **Mode WYSIWYG Direct (*Keep Current Layout*) :** Option par défaut permettant d'exporter fidèlement l'atlas et les découpes tels qu'affichés à l'écran dans l'éditeur (notamment après l'application du filtre de packing d'atlas) sans recalcul ni risque de divergence.
 - **Aperçu des statistiques en temps réel :** Calcul avec anti-rebond (*debounce* 60 ms) des dimensions résultantes, du taux d'efficacité (%) et du nombre de frames dupliquées économisées.
+
+#### 6. Empaquetage d'Atlas Interactif en Direct dans l'IHM (`AtlasPackingFilter` & `AtlasPackingDialog`) — ✅ Validé & Opérationnel
+- **Prévisualisation en direct sur le canevas (*In-Editor Live Preview*) :** Déclenchée via le menu *Filtres > Géométrie & Transformations > Empaquetage d'Atlas (MaxRects)...* ou par le raccourci direct `Ctrl+Shift+P`.
+- **Préservation stricte et non-destructive des animations :**
+  - Sans déduplication : mise à jour des positions d'atlas et préservation absolue des indices temporels.
+  - Avec déduplication (*Auto-Aliasing*) : fusion des frames graphiquement identiques et remappage automatique et transparent des index de timelines (`newIdx = duplicateMapping[oldIdx]`). La cadence FPS, la durée et les boucles d'animation sont **100% préservées**.
+- **Annulation & Rétablissement universels (*Undo/Redo*) :** Intégration dans `QUndoStack` via `ApplyFilterCommand`. Un simple `Ctrl+Z` restaure l'atlas d'origine, toutes les tranches et les animations initiales.
+- **Rollback instantané :** En cas d'annulation (*Annuler* ou touche `Échap`), l'état du document est restauré immédiatement sans altération.
 
 ---
 
@@ -648,7 +657,8 @@ Le chantier **M6** dote **Sprite Studio** du standard industriel de bin-packing 
 | **Pipeline AtlasPacker** | ✅ **RÉSOLU & VALIDÉ** | `atlaspacker.h`, `atlaspacker.cpp` | `PackOptions` enrichi, recherche POT, extrusion de bordures, déduplication scanline. |
 | **Codecs Godot & JSON** | ✅ **RÉSOLU & VALIDÉ** | `godotextractor.cpp`, `jsonextractor.cpp`, `export.h` | Prise en charge des `PackOptions` et réassignation des sous-ressources dupliquées. |
 | **Interface ExportDialog** | ✅ **RÉSOLU & VALIDÉ** | `exportdialog.h`, `exportdialog.cpp`, `exportdialog.ui` | Dialogue ergonomique, live stats débouncé, intégration dans `MainWindow`. |
-| **Couverture Tests CTest (100%)** | ✅ **RÉSOLU & VALIDÉ** | `tests/test_core.cpp` | 7 tests dédiés (Basic, Heuristics, MaxRects, POT, Deduplication, Extrude, Efficiency). |
+| **Filtre Interactif IHM** | ✅ **RÉSOLU & VALIDÉ** | `atlaspackingdialog.h/cpp`, `atlaspackingfilter.h/cpp` | Live preview sur canevas, remappage animations non-destructif, Undo/Redo `Ctrl+Z`. |
+| **Couverture Tests CTest (100%)** | ✅ **RÉSOLU & VALIDÉ** | `tests/test_core.cpp`, `tests/test_controllers.cpp` | 8 tests dédiés validant MaxRects, heuristiques, POT, déduplication, remappage d'animations et Undo. |
 
 ---
 

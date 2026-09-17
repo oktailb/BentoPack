@@ -158,6 +158,7 @@ private slots:
     void on_actionZoomIn_triggered();
     void on_actionZoomOut_triggered();
     void on_actionZoomReset_triggered();
+    void on_actionPackAtlas_triggered();
 
     // Context menus
     void onAtlasContextMenuRequested(const QPoint &pos);

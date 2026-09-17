@@ -30,7 +30,7 @@ void ApplyFilterCommand::redo()
     if (!m_doc) return;
     m_doc->setAtlas(m_newAtlas);
     m_doc->setFrames(m_newFrames, m_newBoxes);
-    if (!m_newAnimations.isEmpty()) {
+    if (!m_newAnimations.isEmpty() || !m_oldAnimations.isEmpty()) {
         m_doc->setAnimations(m_newAnimations);
     }
 }
@@ -40,7 +40,7 @@ void ApplyFilterCommand::undo()
     if (!m_doc) return;
     m_doc->setAtlas(m_oldAtlas);
     m_doc->setFrames(m_oldFrames, m_oldBoxes);
-    if (!m_oldAnimations.isEmpty()) {
+    if (!m_newAnimations.isEmpty() || !m_oldAnimations.isEmpty()) {
         m_doc->setAnimations(m_oldAnimations);
     }
 }

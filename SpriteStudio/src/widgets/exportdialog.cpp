@@ -76,33 +76,35 @@ ExportOptions ExportDialog::exportOptions() const
     int algoIdx = ui->comboAlgorithm->currentIndex();
     switch (algoIdx) {
     case 0:
-        pOpts.algorithm = AtlasPacker::MaxRects;
-        pOpts.heuristic = MaxRectsHeuristic::BestShortSideFit;
+        pOpts.algorithm = AtlasPacker::KeepLayout;
         break;
     case 1:
         pOpts.algorithm = AtlasPacker::MaxRects;
-        pOpts.heuristic = MaxRectsHeuristic::BestAreaFit;
+        pOpts.heuristic = MaxRectsHeuristic::BestShortSideFit;
         break;
     case 2:
         pOpts.algorithm = AtlasPacker::MaxRects;
-        pOpts.heuristic = MaxRectsHeuristic::BestLongSideFit;
+        pOpts.heuristic = MaxRectsHeuristic::BestAreaFit;
         break;
     case 3:
         pOpts.algorithm = AtlasPacker::MaxRects;
-        pOpts.heuristic = MaxRectsHeuristic::BottomLeft;
+        pOpts.heuristic = MaxRectsHeuristic::BestLongSideFit;
         break;
     case 4:
-        pOpts.algorithm = AtlasPacker::PowerOfTwoPacker;
+        pOpts.algorithm = AtlasPacker::MaxRects;
+        pOpts.heuristic = MaxRectsHeuristic::BottomLeft;
         break;
     case 5:
-        pOpts.algorithm = AtlasPacker::RowPacker;
+        pOpts.algorithm = AtlasPacker::PowerOfTwoPacker;
         break;
     case 6:
+        pOpts.algorithm = AtlasPacker::RowPacker;
+        break;
+    case 7:
         pOpts.algorithm = AtlasPacker::GridPacker;
         break;
     default:
-        pOpts.algorithm = AtlasPacker::MaxRects;
-        pOpts.heuristic = MaxRectsHeuristic::BestShortSideFit;
+        pOpts.algorithm = AtlasPacker::KeepLayout;
         break;
     }
 
@@ -161,6 +163,22 @@ void ExportDialog::updateStats()
     }
 
     ExportOptions opts = exportOptions();
+
+    if (opts.packOptions.algorithm == AtlasPacker::KeepLayout) {
+        if (!m_document->atlas().isNull()) {
+            ui->lblDimensions->setText(tr("Dimensions: %1 x %2 px (Current Atlas)")
+                .arg(m_document->atlas().width())
+                .arg(m_document->atlas().height()));
+            ui->lblEfficiency->setText(tr("Packing Efficiency: Preserved as-is (WYSIWYG)"));
+            ui->lblFrames->setText(tr("Frames: %1 total").arg(m_document->frameCount()));
+        } else {
+            ui->lblDimensions->setText(tr("Dimensions: No current atlas"));
+            ui->lblEfficiency->setText(tr("Packing Efficiency: --"));
+            ui->lblFrames->setText(tr("Frames: %1 total").arg(m_document->frameCount()));
+        }
+        return;
+    }
+
     AtlasPackResult res = AtlasPacker::pack(m_document->frames(), opts.packOptions);
 
     if (res.success) {

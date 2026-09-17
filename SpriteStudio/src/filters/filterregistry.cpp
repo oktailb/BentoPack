@@ -6,6 +6,7 @@
 #include "filters/coloradjustfilter.h"
 #include "filters/pixelrescalefilter.h"
 #include "filters/retropalettefilter.h"
+#include "filters/atlaspackingfilter.h"
 #include "widgets/filterdialogbase.h"
 #include "model/spritedocument.h"
 #include <QMenu>
@@ -81,6 +82,7 @@ void FilterRegistry::initDefaultFilters()
     registerFilter(std::make_unique<ColorAdjustFilter>());
     registerFilter(std::make_unique<PixelRescaleFilter>());
     registerFilter(std::make_unique<RetroPaletteFilter>());
+    registerFilter(std::make_unique<AtlasPackingFilter>());
 
     m_initialized = true;
 }

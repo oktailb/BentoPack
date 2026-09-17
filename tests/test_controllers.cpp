@@ -6,6 +6,7 @@
 #include <QContextMenuEvent>
 #include <QTranslator>
 #include <QSpinBox>
+#include <QCheckBox>
 #include <QMainWindow>
 #include <QMenu>
 #include <QDockWidget>
@@ -28,6 +29,8 @@
 #include "widgets/coloradjustfilterdialog.h"
 #include "widgets/pixelrescalefilterdialog.h"
 #include "widgets/retropalettefilterdialog.h"
+#include "widgets/atlaspackingdialog.h"
+#include "filters/atlaspackingfilter.h"
 #include "commands/filtercommands.h"
 
 class TestControllers : public QObject
@@ -102,6 +105,7 @@ private slots:
     void testRetroPaletteFilterAlgorithm();
     void testApplyFilterCommandUndoRedo();
     void testFilterAutoDetectBoxes();
+    void testAtlasPackingFilterInteractive();
 
 private:
     QString m_sampleDir;
@@ -1755,7 +1759,7 @@ void TestControllers::testFilterRegistry()
     FilterRegistry &reg = FilterRegistry::instance();
     reg.initDefaultFilters();
 
-    QVERIFY(reg.filters().size() >= 7);
+    QVERIFY(reg.filters().size() >= 8);
     QVERIFY(reg.findFilter(QStringLiteral("background_removal")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("despill")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("outline")) != nullptr);
@@ -1763,6 +1767,7 @@ void TestControllers::testFilterRegistry()
     QVERIFY(reg.findFilter(QStringLiteral("color_adjust")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("pixel_rescale")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("retro_palette")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("atlas_packing")) != nullptr);
 
     QStringList cats = reg.categories();
     QVERIFY(!cats.isEmpty());
@@ -1771,7 +1776,7 @@ void TestControllers::testFilterRegistry()
     SpriteDocument doc;
     QUndoStack undoStack;
     reg.populateMenu(&testMenu, &doc, &undoStack, nullptr);
-    QVERIFY(testMenu.actions().size() >= 7);
+    QVERIFY(testMenu.actions().size() >= 8);
 }
 
 void TestControllers::testDespillFilterAlgorithm()
@@ -2142,6 +2147,100 @@ void TestControllers::testFilterAutoDetectBoxes()
         retroDlg.setAutoDetectBoxesEnabled(true);
         QCOMPARE(retroDlg.isAutoDetectBoxesEnabled(), true);
     }
+}
+
+void TestControllers::testAtlasPackingFilterInteractive()
+{
+    SpriteDocument doc;
+    QUndoStack stack;
+
+    // Create 4 frames:
+    // Frame 0: 20x20 red
+    // Frame 1: 30x20 green
+    // Frame 2: 20x20 red (identical to frame 0)
+    // Frame 3: 25x25 blue
+    QImage red(20, 20, QImage::Format_ARGB32);
+    red.fill(Qt::red);
+
+    QImage green(30, 20, QImage::Format_ARGB32);
+    green.fill(Qt::green);
+
+    QImage blue(25, 25, QImage::Format_ARGB32);
+    blue.fill(Qt::blue);
+
+    QList<QImage> initialFrames = { red, green, red, blue };
+
+    // Arrange in a naive 200x200 atlas
+    QImage initialAtlas(200, 200, QImage::Format_ARGB32);
+    initialAtlas.fill(Qt::transparent);
+
+    QList<SpriteBox> initialBoxes;
+    initialBoxes.reserve(4);
+    for (int i = 0; i < 4; ++i) {
+        SpriteBox b;
+        b.rect = QRect(i * 35, 0, initialFrames[i].width(), initialFrames[i].height());
+        b.index = i;
+        b.pivot = QPoint(5, 5);
+        b.hasCustomPivot = true;
+        initialBoxes.append(b);
+    }
+
+    doc.setAtlas(initialAtlas);
+    doc.setFrames(initialFrames, initialBoxes);
+
+    // Create an animation referencing frames [0, 1, 2, 3, 2, 1]
+    doc.setAnimation(QStringLiteral("walk"), {0, 1, 2, 3, 2, 1}, 12, true, SpriteAnimation::Loop);
+    QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{0, 1, 2, 3, 2, 1}));
+
+    // 1. Instantiate dialog with Deduplication ENABLED
+    AtlasPackingDialog dlg(&doc, &stack);
+    dlg.setDeduplicate(true);
+
+    // Call accept() to apply and create undo command
+    dlg.accept();
+
+    // Verification:
+    // With deduplication, unique frames count is 3 (frame 2 merged into frame 0)
+    QCOMPARE(doc.frameCount(), 3);
+    QCOMPARE(doc.boxes().size(), 3);
+
+    // Animation frames must be remapped seamlessly:
+    // Frame 0 -> 0
+    // Frame 1 -> 1
+    // Frame 2 -> 0 (merged with 0)
+    // Frame 3 -> 2
+    // Expected sequence: [0, 1, 0, 2, 0, 1]
+    SpriteAnimation packedAnim = doc.animation(QStringLiteral("walk"));
+    QCOMPARE(packedAnim.frameIndices, (QList<int>{0, 1, 0, 2, 0, 1}));
+    QCOMPARE(packedAnim.fps, 12);
+    QCOMPARE(packedAnim.loopMode, SpriteAnimation::Loop);
+
+    // Bounding boxes must not overlap in the packed atlas
+    for (int i = 0; i < doc.boxes().size(); ++i) {
+        QVERIFY(doc.atlas().rect().contains(doc.boxes()[i].rect));
+        for (int j = i + 1; j < doc.boxes().size(); ++j) {
+            QVERIFY(!doc.boxes()[i].rect.intersects(doc.boxes()[j].rect));
+        }
+    }
+
+    // 2. Undo test: Ctrl+Z must restore 4 frames and original animation [0, 1, 2, 3, 2, 1]
+    stack.undo();
+    QCOMPARE(doc.frameCount(), 4);
+    QCOMPARE(doc.boxes().size(), 4);
+    QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{0, 1, 2, 3, 2, 1}));
+    QCOMPARE(doc.atlas().size(), QSize(200, 200));
+
+    // 3. Redo test: Ctrl+Y reapplies packing and remapped animation
+    stack.redo();
+    QCOMPARE(doc.frameCount(), 3);
+    QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{0, 1, 0, 2, 0, 1}));
+
+    // 4. Reject / Cancel test:
+    AtlasPackingDialog dlgCancel(&doc, &stack);
+    dlgCancel.reject();
+    // Verify document remains in the 3-frame packed state without corruption
+    QCOMPARE(doc.frameCount(), 3);
+    QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{0, 1, 0, 2, 0, 1}));
 }
 
 void TestControllers::testAnimationControllerPivotAlignment()
