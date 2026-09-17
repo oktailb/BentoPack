@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Transparent drop-in wrapper for TexturePacker using SpriteStudio CLI
+exec spritestudio-cli --flavor tp "$@"
