@@ -61,6 +61,7 @@ add_subdirectory(tests)
 
 install(TARGETS
     ${PROJECT_NAME}
+    spritestudio-cli
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

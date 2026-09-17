@@ -286,7 +286,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Haiku")
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/haiku_pkg
         COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR} --prefix ${CMAKE_BINARY_DIR}/haiku_pkg
         COMMAND package create -i ${CMAKE_BINARY_DIR}/generated/haiku.PackageInfo -C ${CMAKE_BINARY_DIR}/haiku_pkg ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}-1-x86_64.hpkg
-        DEPENDS ${PROJECT_NAME}
+        DEPENDS ${PROJECT_NAME} spritestudio-cli
         COMMENT "Creating Haiku HPKG package"
     )
 endif()

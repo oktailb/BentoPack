@@ -134,6 +134,52 @@ ctest --test-dir build --output-on-failure --verbose
 | `test_project` | `.ssp` serialization, atomic saves, journal recovery, and LibGit2 versioning |
 | `test_extractors` | GIF, JSON, Godot 4 `.tres`, and Sprite Sheet detectors using sample assets |
 | `test_controllers` | Undo/Redo commands, frame merging, selection, and timeline controller logic |
+| `test_cli` | Headless CLI parser, TexturePacker & Aseprite emulation, Godot 4 UID/scene generation, native commands, and POSIX exit codes |
+
+---
+
+## ⚡ Command-Line Interface (`spritestudio-cli`)
+
+SpriteStudio includes an autonomous, 100% headless console binary **`spritestudio-cli`** designed for game studio build pipelines and CI/CD runners (zero GUI/display required):
+
+### TexturePacker Drop-In Mode
+Replaces `TexturePacker` directly in existing build scripts without modifying Makefile or CMake commands:
+```bash
+spritestudio-cli --sheet atlas.png --data atlas.json \
+  --format json-array --algorithm MaxRects --maxrects-heuristics BestShortSideFit \
+  --padding 2 --extrude 1 --trim-mode Trim --size-constraints POT \
+  --enable-auto-alias assets/sprites/*.png
+```
+
+### Aseprite Batch Mode
+```bash
+spritestudio-cli -b sprites/*.png --sheet atlas.png --data atlas.json \
+  --sheet-type packed --list-tags
+```
+
+### Godot 4 Native Resource & Scene Generation
+Generates complete `.tres` `SpriteFrames` with jitter-free margins, UID stability across builds, and an instantiable `.tscn` scene:
+```bash
+spritestudio-cli pack --format godot4 \
+  --sheet res/player_atlas.png --data res/player_frames.tres \
+  --godot-scene res/player.tscn assets/player/*.png
+```
+
+### Native Headless Slicing & Filters
+```bash
+# Auto-slice raw sheet into individual sprites with background removal
+spritestudio-cli slice --remove-bg --tolerance 15 --smart-crop --output-dir out/ sheet.png
+
+# Apply procedural outline headless
+spritestudio-cli filter --outline 2 red --output-dir out/ sprites/*.png
+```
+
+### Benchmarks & Regression Tracking
+Execute the autonomous 24-scenario benchmark suite with performance diffing and KPI reporting:
+```bash
+python scripts/benchmark_cli.py
+```
+Reports are automatically written to [`benchmarks/REPORT.md`](benchmarks/REPORT.md) with historical tracking snapshots in `benchmarks/history/`.
 
 ---
 
@@ -148,11 +194,11 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 | **Smart Atlas Slicing** | 🟢 **Advanced (O(N) SpatialGrid)** | 🔴 None (requires loose images) | 🟡 Basic | 🔴 None (canvas drawing) | 🟢 Historic pioneer | 🔴 None (requires loose files) | 🟡 Basic (Grid / Alpha) |
 | **Live Filters & Background Cleanup** | 🟢 **Yes (Plugin Registry, Despill, Outline, Color Swap)** | 🔴 None | 🔴 Manual | 🟡 Basic image effects | 🟢 Historic (BG only) | 🔴 None | 🔴 None |
 | **Timeline & Filmstrip** | 🟢 **Yes (Filmstrip, Ping-Pong)** | 🔴 None (Static preview) | 🟢 **Full animation studio** | 🟢 **Full animation studio** | 🔴 None | 🔴 None | 🟢 Engine-integrated |
-| **Packing Algorithms** | 🟡 Row / Grid / PoT *(MaxRects planned)* | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
+| **Packing Algorithms** | 🟢 **MaxRects (5 heuristics), Basic, Grid, Auto-Alias, Extrude** | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
 | **Anchor Points / Pivots** | 🟢 **Yes (Interactive Reticle, Zero-Jittering, Godot 4 / JSON)** | 🟢 Yes (All presets) | 🟢 Yes (Canvas origin) | 🟡 Canvas origin | 🟡 Basic | 🟢 Yes | 🟢 Yes |
 | **Embedded Time-Travel** | 🟢 **Unique (Git / LibGit2 dock)** | 🔴 None | 🔴 Local undo only | 🔴 Local undo only | 🔴 None | 🔴 None | 🟡 External Git |
-| **Godot 4 Integration** | 🟢 **Native (`.tres` SpriteFrames)** | 🟢 Supported | 🟡 Via community plugins | 🟢 **Native (Built in Godot)** | 🔴 None | 🟡 JSON export | 🟢 Native |
-| **Headless CLI for CI/CD** | 📝 *Planned (`spritestudio-cli`)* | 🟢 **Industry standard** | 🟢 Full CLI | 🟡 Basic Godot CLI flags | 🔴 None | 🟢 npm CLI | 🟢 Headless Godot |
+| **Godot 4 Integration** | 🟢 **Native (`.tres` SpriteFrames & `.tscn`)** | 🟢 Supported | 🟡 Via community plugins | 🟢 **Native (Built in Godot)** | 🔴 None | 🟡 JSON export | 🟢 Native |
+| **Headless CLI for CI/CD** | 🟢 **Yes (`spritestudio-cli`, TexturePacker, Aseprite, Godot 4)** | 🟢 **Industry standard** | 🟢 Full CLI | 🟡 Basic Godot CLI flags | 🔴 None | 🟢 npm CLI | 🟢 Headless Godot |
 | **VRAM Texture Compression** | 🔴 Raw PNG *(VRAM formats planned)* | 🟢 **ASTC, ETC2, KTX2, Basis** | 🔴 PNG / GIF | 🔴 PNG | 🔴 PNG | 🟡 TinyPNG API | 🟢 Engine import |
 
 > [!TIP]
@@ -168,8 +214,8 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 - [x] **M5 — Native `.ssp` Project Format & Time-Travel:** ZIP container atomic saves, crash detection & recovery lock, LibGit2 continuous Git history dock
 - [x] **M7 — Advanced Filter System & Cleanup:** Plugin registry (`FilterPlugin` / `FilterRegistry`), universal Undo (`ApplyFilterCommand`), live preview (`FilterDialogBase`), Despill/Anti-Halo (color clamping), Outline & Silhouettes, Color Swap (HSV shading)
 - [x] **M3 — Interactive Pivots & Alignment:** High-contrast double-ring reticle, interactive pivot drag in atlas & live preview, Shift+Click snapping, zero-jittering animation envelope stabilization, ground line, cardinal presets (Bottom-Center, Center, Top-Left, UI), batch application, optimal fit & 5000% zoom, engine offset export (Godot 4 margin Rect2 / JSON / .ssp)
-- [ ] **M6 — Advanced Bin-Packing:** *(Next Up)* MaxRects (*Best Short Side Fit* / *Best Area Fit*), padding, 1px extrusion, frame deduplication
-- [ ] **M-CLI — Headless Command-Line Interface:** `spritestudio-cli` for automated game studio build scripts and CI/CD pipelines
+- [x] **M6 — Advanced Bin-Packing:** MaxRects (5 heuristics: BestShortSideFit, BestAreaFit, BestLongSideFit, BottomLeft, ContactPoint), padding, 1-2px extrusion anti-bleeding, Power-Of-Two / AnySize, auto-alias visual frame deduplication
+- [x] **M-CLI — Headless Command-Line Interface:** `spritestudio-cli` with multi-flavor dispatch (TexturePacker drop-in, Aseprite batch, Godot 4 pipeline, native slice/filter/ssp), POSIX codes, JSON output, automated benchmarks & regression tracking
 - [ ] **M4 — In-App Pixel Art Cleanup Editor:** Surgical 1-bit pencil, eraser, eyedropper, flood fill, pixel grid
 - [ ] **M8 — Polygon & Tight Mesh Packing:** Marching squares contouring, Ramer-Douglas-Peucker simplification, ear-clipping triangulation, Godot `Polygon2D` export to eradicate GPU overdraw
 
