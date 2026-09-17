@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 #include <QFrame>
+#include <QEvent>
 #include <QUndoStack>
 #include <QUndoCommand>
 
@@ -100,6 +101,8 @@ void FilterDialogBase::setupBaseUI()
     connect(m_resetDefaultsBtn, &QPushButton::clicked, this, &FilterDialogBase::resetToDefaults);
     connect(m_buttonBox, &QDialogButtonBox::accepted, this, &FilterDialogBase::accept);
     connect(m_buttonBox, &QDialogButtonBox::rejected, this, &FilterDialogBase::reject);
+
+    retranslateBaseUi();
 }
 
 bool FilterDialogBase::isLivePreviewEnabled() const
@@ -229,4 +232,36 @@ void FilterDialogBase::accept()
     }
 
     QDialog::accept();
+}
+
+void FilterDialogBase::retranslateBaseUi()
+{
+    if (m_livePreviewCheck) {
+        m_livePreviewCheck->setText(tr("Live Preview"));
+        m_livePreviewCheck->setToolTip(tr("Update atlas and frames in real-time while adjusting parameters"));
+    }
+    if (m_autoDetectBoxesCheck) {
+        m_autoDetectBoxesCheck->setText(tr("Auto-detect Sprite Boxes"));
+        m_autoDetectBoxesCheck->setToolTip(tr("Automatically recalculate sprite bounding boxes after filtering"));
+    }
+    if (m_resetDefaultsBtn) {
+        m_resetDefaultsBtn->setText(tr("Reset Defaults"));
+        m_resetDefaultsBtn->setToolTip(tr("Restore recommended default values for this filter"));
+    }
+    if (m_buttonBox) {
+        if (QPushButton *ok = m_buttonBox->button(QDialogButtonBox::Ok)) {
+            ok->setText(tr("OK"));
+        }
+        if (QPushButton *cancel = m_buttonBox->button(QDialogButtonBox::Cancel)) {
+            cancel->setText(tr("Cancel"));
+        }
+    }
+}
+
+void FilterDialogBase::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateBaseUi();
+    }
+    QDialog::changeEvent(event);
 }

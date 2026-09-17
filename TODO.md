@@ -659,6 +659,7 @@ Le chantier **M6** dote **Sprite Studio** du standard industriel de bin-packing 
 | **Interface ExportDialog** | ✅ **RÉSOLU & VALIDÉ** | `exportdialog.h`, `exportdialog.cpp`, `exportdialog.ui` | Dialogue ergonomique, live stats débouncé, intégration dans `MainWindow`. |
 | **Filtre Interactif IHM** | ✅ **RÉSOLU & VALIDÉ** | `atlaspackingdialog.h/cpp`, `atlaspackingfilter.h/cpp` | Live preview sur canevas, remappage animations non-destructif, Undo/Redo `Ctrl+Z`. |
 | **Couverture Tests CTest (100%)** | ✅ **RÉSOLU & VALIDÉ** | `tests/test_core.cpp`, `tests/test_controllers.cpp` | 8 tests dédiés validant MaxRects, heuristiques, POT, déduplication, remappage d'animations et Undo. |
+| **Internationalisation (i18n)** | ✅ **RÉSOLU & VALIDÉ** | `scripts/update_i18n.py`, `i18n/*.ts`, `i18n/*.qm` | 100% des libellés traduits (0 inachevée) en Français, Anglais et Japonais pour `ExportDialog`, `AtlasPackingDialog` et `AtlasPackingFilter`. Support dynamique `LanguageChange`. |
 
 ---
 

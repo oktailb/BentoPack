@@ -55,8 +55,18 @@ bool LocalizationManager::setLanguage(const QString &langCode)
     }
     candidates << QStringLiteral("sprite_studio_en_US"); // ultimate fallback
 
-    // Remove existing translator before loading the new catalog
+    // Remove existing translators before loading the new catalogs
     QCoreApplication::removeTranslator(&m_appTranslator);
+    QCoreApplication::removeTranslator(&m_qtTranslator);
+
+    // Try loading Qt standard base translations (qtbase_fr.qm, qtbase_ja.qm, etc.)
+    QString qtBaseLocale = locale.startsWith(QStringLiteral("fr"), Qt::CaseInsensitive) ? QStringLiteral("fr")
+                         : (locale.startsWith(QStringLiteral("ja"), Qt::CaseInsensitive) ? QStringLiteral("ja")
+                         : QStringLiteral("en"));
+    if (m_qtTranslator.load(QStringLiteral("qtbase_") + qtBaseLocale, QLibraryInfo::path(QLibraryInfo::TranslationsPath)) ||
+        m_qtTranslator.load(QStringLiteral("qt_") + qtBaseLocale, QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
+        QCoreApplication::installTranslator(&m_qtTranslator);
+    }
 
     bool loaded = false;
     for (const QString &cand : candidates) {

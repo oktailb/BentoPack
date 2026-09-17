@@ -52,8 +52,8 @@ void MainWindow::on_actionZoomReset_triggered()
 void MainWindow::on_actionPackAtlas_triggered()
 {
     if (!m_document || m_document->atlas().isNull() || m_document->frameCount() == 0) {
-        QMessageBox::information(this, tr("Empaquetage d'Atlas"),
-                                 tr("Veuillez d'abord ouvrir ou importer une planche de sprites avec des frames."));
+        QMessageBox::information(this, tr("Atlas Bin-Packing"),
+                                 tr("Please open or import a sprite sheet with frames first."));
         return;
     }
 

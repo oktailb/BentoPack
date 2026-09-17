@@ -14,9 +14,12 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
 {
     ui->setupUi(this);
 
-    // Set OK button text to "Export"
+    // Set button texts
     if (QPushButton *okBtn = ui->buttonBox->button(QDialogButtonBox::Ok)) {
         okBtn->setText(tr("Export"));
+    }
+    if (QPushButton *cancelBtn = ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+        cancelBtn->setText(tr("Cancel"));
     }
 
     // Initialize default path
@@ -205,3 +208,19 @@ void ExportDialog::updateStats()
         ui->lblFrames->setText(tr("Frames: %1").arg(m_document->frameCount()));
     }
 }
+
+void ExportDialog::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+        if (QPushButton *okBtn = ui->buttonBox->button(QDialogButtonBox::Ok)) {
+            okBtn->setText(tr("Export"));
+        }
+        if (QPushButton *cancelBtn = ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+            cancelBtn->setText(tr("Cancel"));
+        }
+        updateStats();
+    }
+    QDialog::changeEvent(event);
+}
+

@@ -23,6 +23,9 @@ public:
     QString exportFilePath() const;
     ExportOptions exportOptions() const;
 
+protected:
+    void changeEvent(QEvent *event) override;
+
 private slots:
     void onBrowseClicked();
     void updateStats();

@@ -122,6 +122,8 @@ void SettingsDialog::setupUI()
     if (restoreBtn) {
         connect(restoreBtn, &QPushButton::clicked, this, &SettingsDialog::restoreDefaults);
     }
+
+    retranslateUi();
 }
 
 QWidget* SettingsDialog::createGeneralPage()
@@ -501,4 +503,19 @@ void SettingsDialog::retranslateUi()
     if (m_lblFitPadding) m_lblFitPadding->setText(tr("KEY_SETTINGS_FIT_PADDING"));
     if (m_grpSlicing) m_grpSlicing->setTitle(tr("KEY_SETTINGS_GRP_SLICING"));
     if (m_lblMinSliceSize) m_lblMinSliceSize->setText(tr("KEY_SETTINGS_MIN_SLICE_SIZE"));
+
+    if (m_buttonBox) {
+        if (QPushButton *ok = m_buttonBox->button(QDialogButtonBox::Ok)) {
+            ok->setText(tr("OK"));
+        }
+        if (QPushButton *cancel = m_buttonBox->button(QDialogButtonBox::Cancel)) {
+            cancel->setText(tr("Cancel"));
+        }
+        if (QPushButton *apply = m_buttonBox->button(QDialogButtonBox::Apply)) {
+            apply->setText(tr("Apply"));
+        }
+        if (QPushButton *restore = m_buttonBox->button(QDialogButtonBox::RestoreDefaults)) {
+            restore->setText(tr("Restore Defaults"));
+        }
+    }
 }

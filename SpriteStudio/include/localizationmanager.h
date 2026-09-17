@@ -57,6 +57,7 @@ private:
 
     QString m_currentLanguage = QStringLiteral("system");
     QTranslator m_appTranslator;
+    QTranslator m_qtTranslator;
 };
 
 #endif // LOCALIZATIONMANAGER_H

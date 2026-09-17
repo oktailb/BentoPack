@@ -3,6 +3,7 @@
 #include <QGraphicsPixmapItem>
 #include <QMetaEnum>
 #include <QStandardItemModel>
+#include <QPushButton>
 
 void setupImageFormatComboBox(QComboBox *comboBox) {
     const QMetaObject &metaObject = QImage::staticMetaObject;
@@ -101,6 +102,13 @@ jsonExtractorDialog::jsonExtractorDialog(const SpriteDocument &doc, const QStrin
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    if (QPushButton *ok = ui->buttonBox->button(QDialogButtonBox::Ok)) {
+        ok->setText(tr("Export"));
+    }
+    if (QPushButton *cancel = ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+        cancel->setText(tr("Cancel"));
+    }
 }
 
 jsonExtractorDialog::~jsonExtractorDialog()

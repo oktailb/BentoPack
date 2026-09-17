@@ -1404,6 +1404,24 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("PixelRescaleFilter", "Pixel Art Rescale..."), QStringLiteral("Redimensionnement Pixel Art..."));
         QCOMPARE(QCoreApplication::translate("RetroPaletteFilter", "Retro Palette & Dithering..."), QStringLiteral("Palette Rétro & Tramage (Dithering)..."));
         QCOMPARE(QCoreApplication::translate("FilterRegistry", "Geometry & Transform"), QStringLiteral("Géométrie & Transformations"));
+        QCOMPARE(QCoreApplication::translate("AtlasPackingFilter", "Atlas Bin-Packing (MaxRects)..."), QStringLiteral("Empaquetage d'Atlas (MaxRects)..."));
+        QCOMPARE(QCoreApplication::translate("AtlasPackingDialog", "Atlas Bin-Packing (MaxRects)"), QStringLiteral("Empaquetage d'Atlas (MaxRects)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Export Atlas & Animations"), QStringLiteral("Exporter l'Atlas & les Animations"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Keep Current Layout (WYSIWYG — As Displayed)"), QStringLiteral("Conserver l'agencement actuel (WYSIWYG — Tel quel)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "MaxRects (Best Short Side Fit — Recommended)"), QStringLiteral("MaxRects (Best Short Side Fit — Recommandé)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Force Power of Two (2^n)"), QStringLiteral("Forcer la Puissance de Deux (2^n)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Packing Efficiency: Preserved as-is (WYSIWYG)"), QStringLiteral("Efficacité d'empaquetage : Conservée telle quelle (WYSIWYG)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Cancel"), QStringLiteral("Annuler"));
+
+        // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "OK"), QStringLiteral("OK"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Cancel"), QStringLiteral("Annuler"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Discard"), QStringLiteral("Ne pas enregistrer"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Save"), QStringLiteral("Enregistrer"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Apply"), QStringLiteral("Appliquer"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Cancel"), QStringLiteral("Annuler"));
+        QCOMPARE(QCoreApplication::translate("SettingsDialog", "Cancel"), QStringLiteral("Annuler"));
+        QCOMPARE(QCoreApplication::translate("SettingsDialog", "Apply"), QStringLiteral("Appliquer"));
 
         QCoreApplication::removeTranslator(&frTranslator);
     }
@@ -1438,6 +1456,24 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("PixelRescaleFilter", "Pixel Art Rescale..."), QStringLiteral("Pixel Art Rescale..."));
         QCOMPARE(QCoreApplication::translate("RetroPaletteFilter", "Retro Palette & Dithering..."), QStringLiteral("Retro Palette & Dithering..."));
         QCOMPARE(QCoreApplication::translate("FilterRegistry", "Geometry & Transform"), QStringLiteral("Geometry & Transform"));
+        QCOMPARE(QCoreApplication::translate("AtlasPackingFilter", "Atlas Bin-Packing (MaxRects)..."), QStringLiteral("Atlas Bin-Packing (MaxRects)..."));
+        QCOMPARE(QCoreApplication::translate("AtlasPackingDialog", "Atlas Bin-Packing (MaxRects)"), QStringLiteral("Atlas Bin-Packing (MaxRects)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Export Atlas & Animations"), QStringLiteral("Export Atlas & Animations"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Keep Current Layout (WYSIWYG — As Displayed)"), QStringLiteral("Keep Current Layout (WYSIWYG — As Displayed)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "MaxRects (Best Short Side Fit — Recommended)"), QStringLiteral("MaxRects (Best Short Side Fit — Recommended)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Force Power of Two (2^n)"), QStringLiteral("Force Power of Two (2^n)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Packing Efficiency: Preserved as-is (WYSIWYG)"), QStringLiteral("Packing Efficiency: Preserved as-is (WYSIWYG)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Cancel"), QStringLiteral("Cancel"));
+
+        // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "OK"), QStringLiteral("OK"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Cancel"), QStringLiteral("Cancel"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Discard"), QStringLiteral("Discard"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Save"), QStringLiteral("Save"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Apply"), QStringLiteral("Apply"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Cancel"), QStringLiteral("Cancel"));
+        QCOMPARE(QCoreApplication::translate("SettingsDialog", "Cancel"), QStringLiteral("Cancel"));
+        QCOMPARE(QCoreApplication::translate("SettingsDialog", "Apply"), QStringLiteral("Apply"));
 
         QCoreApplication::removeTranslator(&enTranslator);
     }
@@ -1472,6 +1508,24 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("PixelRescaleFilter", "Pixel Art Rescale..."), QStringLiteral("ピクセルアートリサイズ..."));
         QCOMPARE(QCoreApplication::translate("RetroPaletteFilter", "Retro Palette & Dithering..."), QStringLiteral("レトロパレット＆ディザリング..."));
         QCOMPARE(QCoreApplication::translate("FilterRegistry", "Geometry & Transform"), QStringLiteral("ジオメトリと変形"));
+        QCOMPARE(QCoreApplication::translate("AtlasPackingFilter", "Atlas Bin-Packing (MaxRects)..."), QStringLiteral("アトラスビンパッキング (MaxRects)..."));
+        QCOMPARE(QCoreApplication::translate("AtlasPackingDialog", "Atlas Bin-Packing (MaxRects)"), QStringLiteral("アトラスビンパッキング (MaxRects)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Export Atlas & Animations"), QStringLiteral("アトラスとアニメーションのエクスポート"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Keep Current Layout (WYSIWYG — As Displayed)"), QStringLiteral("現在の配置を維持 (WYSIWYG — 表示通り)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "MaxRects (Best Short Side Fit — Recommended)"), QStringLiteral("MaxRects (Best Short Side Fit — 推奨)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Force Power of Two (2^n)"), QStringLiteral("2の累乗サイズに強制 (2^n)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Packing Efficiency: Preserved as-is (WYSIWYG)"), QStringLiteral("充填効率：そのまま維持 (WYSIWYG)"));
+        QCOMPARE(QCoreApplication::translate("ExportDialog", "Cancel"), QStringLiteral("キャンセル"));
+
+        // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "OK"), QStringLiteral("OK"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Cancel"), QStringLiteral("キャンセル"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Discard"), QStringLiteral("破棄"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Save"), QStringLiteral("保存"));
+        QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Apply"), QStringLiteral("適用"));
+        QCOMPARE(QCoreApplication::translate("FilterDialogBase", "Cancel"), QStringLiteral("キャンセル"));
+        QCOMPARE(QCoreApplication::translate("SettingsDialog", "Cancel"), QStringLiteral("キャンセル"));
+        QCOMPARE(QCoreApplication::translate("SettingsDialog", "Apply"), QStringLiteral("適用"));
 
         QCoreApplication::removeTranslator(&jaTranslator);
     }

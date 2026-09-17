@@ -54,6 +54,9 @@ public slots:
     void accept() override;
 
 protected:
+    void changeEvent(QEvent *event) override;
+    virtual void retranslateBaseUi();
+
     // Pure virtual lifecycle hooks to be implemented by derived filters
     virtual void applyPreview() = 0;
     virtual QUndoCommand* createUndoCommand() = 0;
