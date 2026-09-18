@@ -35,6 +35,7 @@ set(SpriteStudioCore_SRC
     src/model/spritedocument.cpp
     src/packer/atlaspacker.cpp
     src/packer/maxrectspacker.cpp
+    src/packer/tightpolygonpacker.cpp
     src/animation/animationplayer.cpp
     src/commands/commands.cpp
     src/extractor.cpp
@@ -43,6 +44,8 @@ set(SpriteStudioCore_SRC
     src/extractor/gifextractor.cpp
     src/extractor/jsonextractor.cpp
     src/extractor/godotextractor.cpp
+    src/extractor/unityextractor.cpp
+    src/extractor/unrealextractor.cpp
     src/extractor/jsonExtractordialog.cpp
     src/arrangementmodel.cpp
     src/aboutdialog.cpp
@@ -107,6 +110,7 @@ set(SpriteStudioCore_INCLUDE
     include/model/spritedocument.h
     include/packer/atlaspacker.h
     include/packer/maxrectspacker.h
+    include/packer/tightpolygonpacker.h
     include/animation/animationplayer.h
     include/commands/commands.h
     include/commands/filtercommands.h
@@ -144,6 +148,8 @@ set(SpriteStudioCore_INCLUDE
     include/extractor/gifextractor.h
     include/extractor/jsonextractor.h
     include/extractor/godotextractor.h
+    include/extractor/unityextractor.h
+    include/extractor/unrealextractor.h
     include/extractor/jsonExtractordialog.h
     include/extractor/export.h
     include/arrangementmodel.h

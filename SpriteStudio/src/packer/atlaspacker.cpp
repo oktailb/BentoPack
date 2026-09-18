@@ -1,4 +1,5 @@
 #include "packer/atlaspacker.h"
+#include "packer/tightpolygonpacker.h"
 #include <QPainter>
 #include <cmath>
 #include <cstring>
@@ -102,7 +103,7 @@ void AtlasPacker::applyExtrusion(QImage &atlas, const QRect &targetRect, const Q
     }
 }
 
-AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions &options)
+AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions &options, const QList<QPolygonF> &polygons)
 {
     AtlasPackResult result;
     if (frames.isEmpty()) {
@@ -111,6 +112,7 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
 
     // Deduplication step (Auto-Aliasing)
     QList<QImage> uniqueFrames;
+    QList<QPolygonF> uniquePolygons;
     QList<int> mapping;
     mapping.reserve(frames.size());
 
@@ -131,10 +133,16 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
             } else {
                 mapping.append(uniqueFrames.size());
                 uniqueFrames.append(img);
+                if (i < polygons.size()) {
+                    uniquePolygons.append(polygons.at(i));
+                } else {
+                    uniquePolygons.append(QPolygonF());
+                }
             }
         }
     } else {
         uniqueFrames = frames;
+        uniquePolygons = polygons;
         for (int i = 0; i < frames.size(); ++i) {
             mapping.append(i);
         }
@@ -144,6 +152,8 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
     result.duplicateMapping = mapping;
 
     switch (options.algorithm) {
+    case TightPolygon:
+        return TightPolygonPacker::pack(uniqueFrames, mapping, options, uniquePolygons);
     case GridPacker:
         return packGrid(uniqueFrames, mapping, options);
     case RowPacker:

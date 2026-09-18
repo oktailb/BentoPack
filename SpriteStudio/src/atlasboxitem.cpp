@@ -188,7 +188,11 @@ QRectF AtlasBoxItem::boundingRect() const
 QPainterPath AtlasBoxItem::shape() const
 {
     QPainterPath path;
-    path.addRect(m_rect);
+    if (m_hasPolygonMesh && m_showPolygonMesh && !m_polygon.isEmpty()) {
+        path.addPolygon(m_polygon.translated(m_rect.topLeft()));
+    } else {
+        path.addRect(m_rect);
+    }
     if (m_selected) {
         const double handleSize = currentHandleSize();
         for (int h = TopLeft; h <= Left; ++h) {
@@ -343,7 +347,11 @@ AtlasBoxItem::Handle AtlasBoxItem::handleAt(const QPointF &pos, double handleSiz
         }
     }
 
-    if (m_rect.contains(pos)) {
+    if (m_hasPolygonMesh && m_showPolygonMesh && !m_polygon.isEmpty()) {
+        if (m_polygon.containsPoint(pos - m_rect.topLeft(), Qt::OddEvenFill)) {
+            return Move;
+        }
+    } else if (m_rect.contains(pos)) {
         return Move;
     }
 

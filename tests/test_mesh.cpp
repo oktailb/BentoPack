@@ -12,6 +12,16 @@
 #include "commands/meshcommands.h"
 #include "project/projectmanager.h"
 #include "atlasboxitem.h"
+#include "packer/tightpolygonpacker.h"
+#include "packer/atlaspacker.h"
+#include "extractor/jsonextractor.h"
+#include "extractor/unityextractor.h"
+#include "extractor/unrealextractor.h"
+#include "extractor/godotextractor.h"
+#include "widgets/atlaspackingdialog.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 using namespace SpriteStudioGeometry;
 using namespace SpriteStudioCommands;
@@ -48,6 +58,17 @@ private slots:
 
     // 6. Interactive Atlas Vertex Manipulation Tests
     void testAtlasBoxItemVertexManipulation();
+
+    // 7. Tight Polygon Packing & Hit Testing
+    void testTightPolygonPackingAlgorithm();
+    void testAtlasBoxItemPolygonShapeHitTest();
+
+    // 8. Multi-Engine Polygon Mesh Export/Import Tests
+    void testTexturePackerJsonPolygonExportAndImport();
+    void testUnityExtractorExport();
+    void testUnrealExtractorExport();
+    void testGodotExtractorCompanionTres();
+    void testAtlasPackingDialogPreservesPolygons();
 };
 
 void TestMesh::initTestCase()
@@ -375,6 +396,327 @@ void TestMesh::testAtlasBoxItemVertexManipulation()
     QCOMPARE(item.polygon().size(), 3);
     QCOMPARE(item.triangles().size(), 3);
     QVERIFY(!item.hasSelectedVertices());
+}
+
+void TestMesh::testTightPolygonPackingAlgorithm()
+{
+    // Create two 50x50 images with interlocking triangular shapes
+    // Triangle A: Top-left triangle (x + y <= 35)
+    QImage imgA(50, 50, QImage::Format_ARGB32_Premultiplied);
+    imgA.fill(Qt::transparent);
+    {
+        QPainter p(&imgA);
+        QPolygonF poly;
+        poly << QPointF(0, 0) << QPointF(35, 0) << QPointF(0, 35) << QPointF(0, 0);
+        p.setBrush(Qt::red);
+        p.setPen(Qt::NoPen);
+        p.drawPolygon(poly);
+    }
+    QPolygonF polyA;
+    polyA << QPointF(0, 0) << QPointF(35, 0) << QPointF(0, 35) << QPointF(0, 0);
+
+    // Triangle B: Bottom-right triangle (x + y >= 45)
+    QImage imgB(50, 50, QImage::Format_ARGB32_Premultiplied);
+    imgB.fill(Qt::transparent);
+    {
+        QPainter p(&imgB);
+        QPolygonF poly;
+        poly << QPointF(50, 15) << QPointF(50, 50) << QPointF(15, 50) << QPointF(50, 15);
+        p.setBrush(Qt::blue);
+        p.setPen(Qt::NoPen);
+        p.drawPolygon(poly);
+    }
+    QPolygonF polyB;
+    polyB << QPointF(50, 15) << QPointF(50, 50) << QPointF(15, 50) << QPointF(50, 15);
+
+    QList<QImage> frames = { imgA, imgB };
+    QList<QPolygonF> polys = { polyA, polyB };
+
+    AtlasPacker::PackOptions options;
+    options.algorithm = AtlasPacker::TightPolygon;
+    options.padding = 1;
+    options.borderPadding = 1;
+    options.powerOfTwo = false;
+    options.forceSquare = false;
+
+    AtlasPackResult res = AtlasPacker::pack(frames, options, polys);
+    QVERIFY(res.success);
+    QCOMPARE(res.frameRects.size(), 2);
+    QVERIFY(!res.atlas.isNull());
+
+    // Verify interlocking: bounding boxes intersect or atlas width is less than naive 100px
+    bool boxesOverlap = res.frameRects[0].intersects(res.frameRects[1]);
+    QVERIFY(boxesOverlap || res.dimensions.width() < 100 || res.dimensions.height() < 100);
+
+    // Verify non-transparent pixels in the generated atlas do not corrupt each other
+    int redCount = 0;
+    int blueCount = 0;
+    for (int y = 0; y < res.atlas.height(); ++y) {
+        for (int x = 0; x < res.atlas.width(); ++x) {
+            QRgb p = res.atlas.pixel(x, y);
+            if (qRed(p) > 200 && qBlue(p) < 50) redCount++;
+            if (qBlue(p) > 200 && qRed(p) < 50) blueCount++;
+        }
+    }
+    QVERIFY(redCount > 0);
+    QVERIFY(blueCount > 0);
+}
+
+void TestMesh::testAtlasBoxItemPolygonShapeHitTest()
+{
+    // A 100x100 box at (10, 10) with a triangle polygon (0,0)-(60,0)-(0,60)
+    AtlasBoxItem item(0, QRect(10, 10, 100, 100), QRect(0, 0, 500, 500));
+    QPolygonF poly;
+    poly << QPointF(0, 0) << QPointF(60, 0) << QPointF(0, 60);
+    QList<int> tris = { 0, 1, 2 };
+    item.setPolygonMesh(poly, tris, true);
+    item.setSelectedBox(false);
+
+    // Point (20, 20) is at local (10, 10) inside the triangle -> shape must contain it
+    QVERIFY(item.shape().contains(QPointF(20, 20)));
+    QVERIFY(item.contains(QPointF(20, 20)));
+
+    // Point (90, 90) is inside the 100x100 bounding box (10..110, 10..110),
+    // but OUTSIDE the triangle polygon (local 80, 80) -> shape must NOT contain it!
+    QVERIFY(!item.shape().contains(QPointF(90, 90)));
+    QVERIFY(!item.contains(QPointF(90, 90)));
+}
+
+void TestMesh::testTexturePackerJsonPolygonExportAndImport()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    QString jsonPath = tempDir.filePath("spritesheet.json");
+
+    SpriteDocument doc;
+    QImage img(32, 32, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::green);
+    SpriteBox box(QRect(0, 0, 32, 32));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(32, 0) << QPointF(16, 32) << QPointF(0, 0);
+    box.vertices = { QPointF(0, 0), QPointF(32, 0), QPointF(16, 32) };
+    box.triangles = { 0, 1, 2 };
+    doc.addFrame(img, box);
+
+    // Export with JsonExtractor
+    JsonExtractor jsonExt;
+    ExportOptions opts;
+    opts.format = FORMAT_TEXTUREPACKER_JSON;
+    opts.packOptions.algorithm = AtlasPacker::MaxRects;
+    opts.packOptions.padding = 1;
+
+    ExtractorError err;
+    bool writeOk = jsonExt.write(jsonPath, doc, opts, &err);
+    QVERIFY2(writeOk, qPrintable(err.message));
+    QVERIFY(QFile::exists(jsonPath));
+
+    // Verify JSON content has polygon fields
+    QFile f(jsonPath);
+    QVERIFY(f.open(QIODevice::ReadOnly));
+    QJsonDocument jdoc = QJsonDocument::fromJson(f.readAll());
+    f.close();
+    QVERIFY(jdoc.isObject());
+    QJsonObject framesObj = jdoc.object()["frames"].toObject();
+    QVERIFY(!framesObj.isEmpty());
+    QJsonObject f0 = framesObj.begin().value().toObject();
+    QVERIFY(f0.contains("vertices"));
+    QVERIFY(f0.contains("verticesUV"));
+    QVERIFY(f0.contains("triangles"));
+    QCOMPARE(f0["vertices"].toArray().size(), 3);
+    QCOMPARE(f0["triangles"].toArray().size(), 1); // 1 triangle = [ [0, 1, 2] ]
+
+    // Import back with JsonExtractor
+    SpriteDocument importedDoc;
+    bool readOk = jsonExt.read(jsonPath, importedDoc, &err);
+    QVERIFY2(readOk, qPrintable(err.message));
+    QCOMPARE(importedDoc.frameCount(), 1);
+    const SpriteBox &impBox = importedDoc.box(0);
+    QVERIFY(impBox.hasPolygonMesh);
+    QCOMPARE(impBox.vertices.size(), 3);
+    QCOMPARE(impBox.triangles.size(), 3);
+}
+
+void TestMesh::testUnityExtractorExport()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    QString unityPath = tempDir.filePath("character.unity.json");
+
+    SpriteDocument doc;
+    QImage img(32, 32, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::yellow);
+    SpriteBox box(QRect(0, 0, 32, 32));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(32, 0) << QPointF(16, 32) << QPointF(0, 0);
+    box.vertices = { QPointF(0, 0), QPointF(32, 0), QPointF(16, 32) };
+    box.triangles = { 0, 1, 2 };
+    doc.addFrame(img, box);
+
+    UnityExtractor unityExt;
+    ExportOptions opts;
+    opts.format = FORMAT_UNITY;
+    opts.packOptions.algorithm = AtlasPacker::MaxRects;
+
+    ExtractorError err;
+    bool writeOk = unityExt.write(unityPath, doc, opts, &err);
+    QVERIFY2(writeOk, qPrintable(err.message));
+    QVERIFY(QFile::exists(unityPath));
+    QVERIFY(QFile::exists(tempDir.filePath("character.png")));
+
+    // Verify JSON structure
+    QFile f(unityPath);
+    QVERIFY(f.open(QIODevice::ReadOnly));
+    QJsonDocument jdoc = QJsonDocument::fromJson(f.readAll());
+    f.close();
+    QVERIFY(jdoc.isObject());
+    QJsonObject root = jdoc.object();
+    QCOMPARE(root["format"].toString(), QStringLiteral("Unity2D_SpriteMesh"));
+    QJsonArray sprites = root["sprites"].toArray();
+    QCOMPARE(sprites.size(), 1);
+    QJsonObject s0 = sprites[0].toObject();
+    QVERIFY(s0.contains("vertices"));
+    QVERIFY(s0.contains("uvs"));
+    QVERIFY(s0.contains("triangles"));
+    QCOMPARE(s0["vertices"].toArray().size(), 3);
+    QCOMPARE(s0["triangles"].toArray().size(), 3);
+}
+
+void TestMesh::testUnrealExtractorExport()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    QString unrealPath = tempDir.filePath("paper_char.paper2d.json");
+
+    SpriteDocument doc;
+    QImage img(32, 32, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::magenta);
+    SpriteBox box(QRect(0, 0, 32, 32));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(32, 0) << QPointF(16, 32) << QPointF(0, 0);
+    box.vertices = { QPointF(0, 0), QPointF(32, 0), QPointF(16, 32) };
+    box.triangles = { 0, 1, 2 };
+    doc.addFrame(img, box);
+
+    UnrealExtractor unrealExt;
+    ExportOptions opts;
+    opts.format = FORMAT_UNREAL;
+    opts.packOptions.algorithm = AtlasPacker::MaxRects;
+
+    ExtractorError err;
+    bool writeOk = unrealExt.write(unrealPath, doc, opts, &err);
+    QVERIFY2(writeOk, qPrintable(err.message));
+    QVERIFY(QFile::exists(unrealPath));
+    QVERIFY(QFile::exists(tempDir.filePath("paper_char.png")));
+
+    // Verify Paper2D JSON structure
+    QFile f(unrealPath);
+    QVERIFY(f.open(QIODevice::ReadOnly));
+    QJsonDocument jdoc = QJsonDocument::fromJson(f.readAll());
+    f.close();
+    QVERIFY(jdoc.isObject());
+    QJsonObject root = jdoc.object();
+    QCOMPARE(root["format"].toString(), QStringLiteral("UnrealEngine_Paper2D"));
+    QJsonArray sprites = root["sprites"].toArray();
+    QCOMPARE(sprites.size(), 1);
+    QJsonObject s0 = sprites[0].toObject();
+    QVERIFY(s0.contains("renderGeometry"));
+    QVERIFY(s0.contains("collisionGeometry"));
+    QJsonObject renderGeom = s0["renderGeometry"].toObject();
+    QCOMPARE(renderGeom["vertices"].toArray().size(), 3);
+    QCOMPARE(renderGeom["triangles"].toArray().size(), 1);
+}
+
+void TestMesh::testGodotExtractorCompanionTres()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    QString godotPath = tempDir.filePath("player.tres");
+
+    SpriteDocument doc;
+    QImage img(32, 32, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::cyan);
+    SpriteBox box(QRect(0, 0, 32, 32));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(32, 0) << QPointF(16, 32) << QPointF(0, 0);
+    box.vertices = { QPointF(0, 0), QPointF(32, 0), QPointF(16, 32) };
+    box.triangles = { 0, 1, 2 };
+    doc.addFrame(img, box);
+
+    GodotExtractor godotExt;
+    ExportOptions opts;
+    opts.format = FORMAT_GODOT;
+    opts.packOptions.algorithm = AtlasPacker::MaxRects;
+
+    ExtractorError err;
+    bool writeOk = godotExt.write(godotPath, doc, opts, &err);
+    QVERIFY2(writeOk, qPrintable(err.message));
+    QVERIFY(QFile::exists(godotPath));
+    QVERIFY(QFile::exists(tempDir.filePath("player.png")));
+
+    // Check companion player_mesh.tres
+    QString meshPath = tempDir.filePath("player_mesh.tres");
+    QVERIFY(QFile::exists(meshPath));
+
+    QFile mf(meshPath);
+    QVERIFY(mf.open(QIODevice::ReadOnly | QIODevice::Text));
+    QString meshContent = QString::fromUtf8(mf.readAll());
+    mf.close();
+
+    QVERIFY(meshContent.contains("metadata/frame_0/polygon"));
+    QVERIFY(meshContent.contains("metadata/frame_0/uv"));
+    QVERIFY(meshContent.contains("metadata/frame_0/triangles"));
+}
+
+void TestMesh::testAtlasPackingDialogPreservesPolygons()
+{
+    SpriteDocument doc;
+    QImage atlas(100, 100, QImage::Format_ARGB32_Premultiplied);
+    atlas.fill(Qt::transparent);
+    doc.setAtlas(atlas);
+
+    QImage img1(30, 30, QImage::Format_ARGB32_Premultiplied);
+    img1.fill(Qt::red);
+    SpriteBox box1(QRect(0, 0, 30, 30));
+    box1.hasPolygonMesh = true;
+    box1.polygon << QPointF(0, 0) << QPointF(30, 0) << QPointF(0, 30) << QPointF(0, 0);
+    box1.vertices = { QPointF(0, 0), QPointF(30, 0), QPointF(0, 30) };
+    box1.triangles = { 0, 1, 2 };
+    doc.addFrame(img1, box1);
+
+    QImage img2(30, 30, QImage::Format_ARGB32_Premultiplied);
+    img2.fill(Qt::blue);
+    SpriteBox box2(QRect(30, 0, 30, 30));
+    box2.hasPolygonMesh = true;
+    box2.polygon << QPointF(0, 0) << QPointF(30, 0) << QPointF(30, 30) << QPointF(0, 0);
+    box2.vertices = { QPointF(0, 0), QPointF(30, 0), QPointF(30, 30) };
+    box2.triangles = { 0, 1, 2 };
+    doc.addFrame(img2, box2);
+
+    QUndoStack undoStack;
+    struct TestPackingDialog : public AtlasPackingDialog {
+        using AtlasPackingDialog::AtlasPackingDialog;
+        using AtlasPackingDialog::applyPreview;
+    };
+    TestPackingDialog dlg(&doc, &undoStack, nullptr);
+
+    // Opening dialog automatically defaults to TightPolygon when meshes exist
+    QCOMPARE(dlg.packOptions().algorithm, AtlasPacker::TightPolygon);
+
+    dlg.applyPreview();
+    dlg.waitForPendingPreview();
+
+    QCOMPARE(doc.frameCount(), 2);
+    const SpriteBox &resultBox1 = doc.box(0);
+    QVERIFY(resultBox1.hasPolygonMesh);
+    QVERIFY(!resultBox1.polygon.isEmpty());
+    QCOMPARE(resultBox1.polygon.size(), 4);
+    QCOMPARE(resultBox1.triangles.size(), 3);
+
+    const SpriteBox &resultBox2 = doc.box(1);
+    QVERIFY(resultBox2.hasPolygonMesh);
+    QVERIFY(!resultBox2.polygon.isEmpty());
+    QCOMPARE(resultBox2.polygon.size(), 4);
+    QCOMPARE(resultBox2.triangles.size(), 3);
 }
 
 #include <QApplication>

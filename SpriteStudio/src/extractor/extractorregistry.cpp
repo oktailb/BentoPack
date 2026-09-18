@@ -3,6 +3,8 @@
 #include "extractor/gifextractor.h"
 #include "extractor/jsonextractor.h"
 #include "extractor/godotextractor.h"
+#include "extractor/unityextractor.h"
+#include "extractor/unrealextractor.h"
 #include <QDir>
 #include <QFileInfo>
 #include <QPluginLoader>
@@ -62,7 +64,13 @@ void ExtractorRegistry::initDefaultExtractors()
     // 4. Godot Engine 4.x SpriteFrames (.tres)
     registerExtractor(std::make_unique<GodotExtractor>());
 
-    // 5. Look for external dynamic plugins in plugins/ directory
+    // 5. Unity 2D Sprite Mesh (.unity.json)
+    registerExtractor(std::make_unique<UnityExtractor>());
+
+    // 6. Unreal Engine Paper2D (.paper2d.json)
+    registerExtractor(std::make_unique<UnrealExtractor>());
+
+    // 7. Look for external dynamic plugins in plugins/ directory
     QString pluginsPath = QDir(QCoreApplication::applicationDirPath()).filePath("plugins");
     loadPlugins(pluginsPath);
 }

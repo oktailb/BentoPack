@@ -69,8 +69,12 @@ ExportOptions ExportDialog::exportOptions() const
         opts.format = FORMAT_GODOT;
     } else if (fmtIdx == 1) {
         opts.format = FORMAT_TEXTUREPACKER_JSON;
-    } else {
+    } else if (fmtIdx == 2) {
         opts.format = FORMAT_ASEPRITE_JSON;
+    } else if (fmtIdx == 3) {
+        opts.format = FORMAT_UNITY;
+    } else if (fmtIdx == 4) {
+        opts.format = FORMAT_UNREAL;
     }
 
     // PackOptions
@@ -98,12 +102,15 @@ ExportOptions ExportDialog::exportOptions() const
         pOpts.heuristic = MaxRectsHeuristic::BottomLeft;
         break;
     case 5:
-        pOpts.algorithm = AtlasPacker::PowerOfTwoPacker;
+        pOpts.algorithm = AtlasPacker::TightPolygon;
         break;
     case 6:
-        pOpts.algorithm = AtlasPacker::RowPacker;
+        pOpts.algorithm = AtlasPacker::PowerOfTwoPacker;
         break;
     case 7:
+        pOpts.algorithm = AtlasPacker::RowPacker;
+        break;
+    case 8:
         pOpts.algorithm = AtlasPacker::GridPacker;
         break;
     default:
@@ -130,6 +137,10 @@ void ExportDialog::onBrowseClicked()
     int fmtIdx = ui->comboFormat->currentIndex();
     if (fmtIdx == 0) {
         filter = tr("Godot 4 Resource (*.tres);;All Files (*.*)");
+    } else if (fmtIdx == 3) {
+        filter = tr("Unity 2D Sprite Mesh (*.unity.json);;JSON (*.json);;All Files (*.*)");
+    } else if (fmtIdx == 4) {
+        filter = tr("Unreal Paper2D (*.paper2d.json);;JSON (*.json);;All Files (*.*)");
     } else {
         filter = tr("JSON SpriteSheet (*.json);;All Files (*.*)");
     }
@@ -150,8 +161,17 @@ void ExportDialog::onFormatChanged(int index)
     QString current = ui->txtFilePath->text();
     if (!current.isEmpty()) {
         QFileInfo fi(current);
-        QString ext = (index == 0) ? ".tres" : ".json";
-        ui->txtFilePath->setText(fi.dir().filePath(fi.completeBaseName() + ext));
+        QString base = fi.completeBaseName();
+        if (base.endsWith(QStringLiteral(".unity"), Qt::CaseInsensitive)) base.chop(6);
+        if (base.endsWith(QStringLiteral(".paper2d"), Qt::CaseInsensitive)) base.chop(8);
+
+        QString ext;
+        if (index == 0) ext = ".tres";
+        else if (index == 3) ext = ".unity.json";
+        else if (index == 4) ext = ".paper2d.json";
+        else ext = ".json";
+
+        ui->txtFilePath->setText(fi.dir().filePath(base + ext));
     }
     m_debounceTimer->start();
 }
@@ -182,7 +202,13 @@ void ExportDialog::updateStats()
         return;
     }
 
-    AtlasPackResult res = AtlasPacker::pack(m_document->frames(), opts.packOptions);
+    QList<QPolygonF> docPolygons;
+    docPolygons.reserve(m_document->frameCount());
+    for (int i = 0; i < m_document->frameCount(); ++i) {
+        docPolygons.append(m_document->box(i).hasPolygonMesh ? m_document->box(i).polygon : QPolygonF());
+    }
+
+    AtlasPackResult res = AtlasPacker::pack(m_document->frames(), opts.packOptions, docPolygons);
 
     if (res.success) {
         ui->lblDimensions->setText(tr("Dimensions: %1 x %2 px")

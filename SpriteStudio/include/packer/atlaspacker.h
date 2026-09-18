@@ -7,6 +7,8 @@
 #include <QSize>
 #include "packer/maxrectspacker.h"
 
+#include <QPolygonF>
+
 /**
  * @brief Represents the result of an atlas packing operation.
  */
@@ -34,7 +36,8 @@ public:
         RowPacker,        // Fast row-by-row shelf packer
         GridPacker,       // Uniform grid packer
         PowerOfTwoPacker, // Row packing rounded up to next power-of-two texture dimensions
-        MaxRects          // Advanced 2D bin-packing with minimal wasted space
+        MaxRects,         // Advanced 2D bin-packing with minimal wasted space
+        TightPolygon      // High-density tight polygon nesting allowing overlapping AABBs
     };
 
     /**
@@ -51,12 +54,13 @@ public:
         bool                deduplicate = false;    ///< Detect and share identical frames
         int                 maxWidth = 4096;
         int                 maxHeight = 4096;
+        int                 threadCount = 0;        ///< Worker threads (0 = auto / ideal thread count)
     };
 
     /**
-     * @brief Packs a list of images using comprehensive PackOptions.
+     * @brief Packs a list of images using comprehensive PackOptions and optional polygons.
      */
-    static AtlasPackResult pack(const QList<QImage> &frames, const PackOptions &options);
+    static AtlasPackResult pack(const QList<QImage> &frames, const PackOptions &options, const QList<QPolygonF> &polygons = {});
 
     /**
      * @brief Backward-compatible pack method.

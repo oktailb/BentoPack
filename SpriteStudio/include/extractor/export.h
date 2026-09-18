@@ -13,7 +13,8 @@ enum Format {
     FORMAT_CSS_SPRITES,
     FORMAT_UNITY,
     FORMAT_GODOT,
-    FORMAT_ASEPRITE_JSON
+    FORMAT_ASEPRITE_JSON,
+    FORMAT_UNREAL
 };
 
 enum AtlasStrategy {

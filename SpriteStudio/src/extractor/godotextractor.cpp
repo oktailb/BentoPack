@@ -323,6 +323,12 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         packOpts.padding = options.padding;
     }
 
+    QList<QPolygonF> docPolygons;
+    docPolygons.reserve(doc.frameCount());
+    for (int i = 0; i < doc.frameCount(); ++i) {
+        docPolygons.append(doc.box(i).hasPolygonMesh ? doc.box(i).polygon : QPolygonF());
+    }
+
     AtlasPackResult packResult;
     if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
         packResult.atlas = doc.atlas();
@@ -334,7 +340,7 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         packResult.uniqueFramesCount = doc.frameCount();
         packResult.success = true;
     } else {
-        packResult = AtlasPacker::pack(doc.frames(), packOpts);
+        packResult = AtlasPacker::pack(doc.frames(), packOpts, docPolygons);
     }
     if (!packResult.success) {
         if (error) {
@@ -435,6 +441,72 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     }
 
     outFile.close();
+
+    // If any frame has a tight polygon mesh, write companion _mesh.tres resource
+    bool hasMesh = false;
+    for (int i = 0; i < doc.frameCount(); ++i) {
+        if (doc.box(i).hasPolygonMesh && !doc.box(i).polygon.isEmpty() && !doc.box(i).triangles.isEmpty()) {
+            hasMesh = true;
+            break;
+        }
+    }
+
+    if (hasMesh) {
+        QString meshTresPath = dir.filePath(baseName + "_mesh.tres");
+        QFile meshFile(meshTresPath);
+        if (meshFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream mOut(&meshFile);
+            mOut << "[gd_resource type=\"Resource\" format=3]\n\n";
+            mOut << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_atlas\"]\n\n";
+            mOut << "[resource]\n";
+            mOut << "metadata/texture = ExtResource(\"1_atlas\")\n";
+            mOut << "metadata/atlas_width = " << packResult.dimensions.width() << "\n";
+            mOut << "metadata/atlas_height = " << packResult.dimensions.height() << "\n";
+
+            const double aW = packResult.dimensions.width();
+            const double aH = packResult.dimensions.height();
+
+            for (int i = 0; i < packResult.frameRects.size(); ++i) {
+                const QRect &r = packResult.frameRects[i];
+                if (i < doc.frameCount()) {
+                    const SpriteBox &b = doc.box(i);
+                    if (b.hasPolygonMesh && !b.polygon.isEmpty() && !b.triangles.isEmpty()) {
+                        mOut << "metadata/frame_" << i << "/rect = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n";
+
+                        const QList<QPointF> meshVertices = !b.vertices.isEmpty() ? b.vertices :
+                            (b.polygon.isClosed() && b.polygon.size() >= 4 ? b.polygon.mid(0, b.polygon.size() - 1).toList() : b.polygon.toList());
+
+                        // Polygon coordinates
+                        mOut << "metadata/frame_" << i << "/polygon = PackedVector2Array(";
+                        for (int p = 0; p < meshVertices.size(); ++p) {
+                            if (p > 0) mOut << ", ";
+                            mOut << meshVertices[p].x() << ", " << meshVertices[p].y();
+                        }
+                        mOut << ")\n";
+
+                        // UV coordinates
+                        mOut << "metadata/frame_" << i << "/uv = PackedVector2Array(";
+                        for (int p = 0; p < meshVertices.size(); ++p) {
+                            if (p > 0) mOut << ", ";
+                            double u = (aW > 0.0) ? ((r.x() + meshVertices[p].x()) / aW) : 0.0;
+                            double v = (aH > 0.0) ? ((r.y() + meshVertices[p].y()) / aH) : 0.0;
+                            mOut << u << ", " << v;
+                        }
+                        mOut << ")\n";
+
+                        // Triangles
+                        mOut << "metadata/frame_" << i << "/triangles = PackedInt32Array(";
+                        for (int t = 0; t < b.triangles.size(); ++t) {
+                            if (t > 0) mOut << ", ";
+                            mOut << b.triangles[t];
+                        }
+                        mOut << ")\n";
+                    }
+                }
+            }
+            meshFile.close();
+        }
+    }
 
     setProgress(100);
     setStatusMessage(tr("Exported Godot resource: %1 and image %2").arg(QFileInfo(tresPath).fileName(), imageFilename));

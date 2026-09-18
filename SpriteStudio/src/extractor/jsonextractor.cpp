@@ -1,6 +1,7 @@
 #include "extractor/jsonextractor.h"
 #include "extractor/jsonExtractordialog.h"
 #include "packer/atlaspacker.h"
+#include "geometry/triangulator.h"
 #include "generated/version.h"
 #include <QDebug>
 #include <QImage>
@@ -272,6 +273,43 @@ void JsonExtractor::extractFromTexturePackerFormat(const QJsonObject &framesObj,
             box.hasCustomPivot = false;
         }
 
+        if (frameObj.contains("vertices") && frameObj["vertices"].isArray()) {
+            QPolygonF poly;
+            QJsonArray vArr = frameObj["vertices"].toArray();
+            for (const QJsonValue &vVal : vArr) {
+                if (vVal.isArray()) {
+                    QJsonArray xy = vVal.toArray();
+                    if (xy.size() >= 2) {
+                        poly.append(QPointF(xy[0].toDouble(), xy[1].toDouble()));
+                    }
+                }
+            }
+            if (poly.size() >= 3) {
+                box.polygon = poly;
+                box.vertices = poly.toList();
+
+                QList<int> tris;
+                if (frameObj.contains("triangles") && frameObj["triangles"].isArray()) {
+                    QJsonArray tArr = frameObj["triangles"].toArray();
+                    for (const QJsonValue &tVal : tArr) {
+                        if (tVal.isArray()) {
+                            QJsonArray tri = tVal.toArray();
+                            for (const QJsonValue &idxVal : tri) {
+                                tris.append(idxVal.toInt());
+                            }
+                        } else if (tVal.isDouble()) {
+                            tris.append(tVal.toInt());
+                        }
+                    }
+                }
+                if (tris.isEmpty() || tris.size() % 3 != 0) {
+                    tris = SpriteStudioGeometry::Triangulator::triangulate(poly);
+                }
+                box.triangles = tris;
+                box.hasPolygonMesh = true;
+            }
+        }
+
         frames.append(frameImg);
         boxes.append(box);
 
@@ -332,6 +370,43 @@ void JsonExtractor::extractFromArrayFormat(const QJsonArray &framesArray,
         } else {
             box.pivot = QPoint(w / 2, h);
             box.hasCustomPivot = false;
+        }
+
+        if (frameObj.contains("vertices") && frameObj["vertices"].isArray()) {
+            QPolygonF poly;
+            QJsonArray vArr = frameObj["vertices"].toArray();
+            for (const QJsonValue &vVal : vArr) {
+                if (vVal.isArray()) {
+                    QJsonArray xy = vVal.toArray();
+                    if (xy.size() >= 2) {
+                        poly.append(QPointF(xy[0].toDouble(), xy[1].toDouble()));
+                    }
+                }
+            }
+            if (poly.size() >= 3) {
+                box.polygon = poly;
+                box.vertices = poly.toList();
+
+                QList<int> tris;
+                if (frameObj.contains("triangles") && frameObj["triangles"].isArray()) {
+                    QJsonArray tArr = frameObj["triangles"].toArray();
+                    for (const QJsonValue &tVal : tArr) {
+                        if (tVal.isArray()) {
+                            QJsonArray tri = tVal.toArray();
+                            for (const QJsonValue &idxVal : tri) {
+                                tris.append(idxVal.toInt());
+                            }
+                        } else if (tVal.isDouble()) {
+                            tris.append(tVal.toInt());
+                        }
+                    }
+                }
+                if (tris.isEmpty() || tris.size() % 3 != 0) {
+                    tris = SpriteStudioGeometry::Triangulator::triangulate(poly);
+                }
+                box.triangles = tris;
+                box.hasPolygonMesh = true;
+            }
         }
 
         frames.append(frameImg);
@@ -415,6 +490,12 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         packOpts.padding = options.padding;
     }
 
+    QList<QPolygonF> docPolygons;
+    docPolygons.reserve(doc.frameCount());
+    for (int i = 0; i < doc.frameCount(); ++i) {
+        docPolygons.append(doc.box(i).hasPolygonMesh ? doc.box(i).polygon : QPolygonF());
+    }
+
     AtlasPackResult packResult;
     if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
         packResult.atlas = doc.atlas();
@@ -426,7 +507,7 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         packResult.uniqueFramesCount = doc.frameCount();
         packResult.success = true;
     } else {
-        packResult = AtlasPacker::pack(doc.frames(), packOpts);
+        packResult = AtlasPacker::pack(doc.frames(), packOpts, docPolygons);
     }
     if (!packResult.success) {
         if (error) {
@@ -486,6 +567,45 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         pivotObj["x"] = normX;
         pivotObj["y"] = normY;
         frameData["pivot"] = pivotObj;
+
+        if (i < doc.frameCount()) {
+            const SpriteBox &box = doc.box(i);
+            if (box.hasPolygonMesh && !box.polygon.isEmpty() && !box.triangles.isEmpty()) {
+                QJsonArray verticesArr;
+                QJsonArray verticesUVArr;
+                const double atlasW = packResult.dimensions.width();
+                const double atlasH = packResult.dimensions.height();
+
+                const QList<QPointF> meshVertices = !box.vertices.isEmpty() ? box.vertices :
+                    (box.polygon.isClosed() && box.polygon.size() >= 4 ? box.polygon.mid(0, box.polygon.size() - 1).toList() : box.polygon.toList());
+
+                for (const QPointF &pt : meshVertices) {
+                    QJsonArray ptArr;
+                    ptArr.append(pt.x());
+                    ptArr.append(pt.y());
+                    verticesArr.append(ptArr);
+
+                    QJsonArray uvArr;
+                    double u = (atlasW > 0.0) ? ((r.x() + pt.x()) / atlasW) : 0.0;
+                    double v = (atlasH > 0.0) ? ((r.y() + pt.y()) / atlasH) : 0.0;
+                    uvArr.append(u);
+                    uvArr.append(v);
+                    verticesUVArr.append(uvArr);
+                }
+                frameData["vertices"] = verticesArr;
+                frameData["verticesUV"] = verticesUVArr;
+
+                QJsonArray trianglesArr;
+                for (int t = 0; t + 2 < box.triangles.size(); t += 3) {
+                    QJsonArray tri;
+                    tri.append(box.triangles[t]);
+                    tri.append(box.triangles[t + 1]);
+                    tri.append(box.triangles[t + 2]);
+                    trianglesArr.append(tri);
+                }
+                frameData["triangles"] = trianglesArr;
+            }
+        }
 
         QString frameKey = QStringLiteral("%1_%2").arg(baseName).arg(i, 4, 10, QLatin1Char('0'));
         framesObj[frameKey] = frameData;
