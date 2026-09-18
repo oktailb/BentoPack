@@ -19,6 +19,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Drop-in 100% TexturePacker, Aseprite -b, Godot 4 UID/Scene, Slice, Filter, SSP, POSIX, JSON) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Marching Squares, RDP, Ear-Clipping, Wireframe HMI, Édition Sommets, Tight Packing Multithreadé & Configurable, Export Unity/Unreal/Godot, 22 tests CTest) |
+| **M9** | [Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC)](#m9--compression-de-textures-vram--formats-gpu-ktx2--basis-universal--astc) | **Moyenne** | Haute | 📝 Spécifié & Documenté (Conteneurs KTX2, Transcodage GPU, Élimination Décompression CPU) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
 | **AUDIT** | [Dette de Thread-Safety & Modèle Pur (Audit Étape 2)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Clôturé & Validé (Modèle pur QImage, Cache Vignettes, 0 conversion I/O, Miniz ZIP, 116 tests CTest 100%) |
 
@@ -771,6 +772,134 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 
 ---
 
+## M9 : Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC / ETC2 / BCn)
+
+### 📌 Contexte & Enjeux Métier
+Dans le développement de jeux vidéo 2D actuels (notamment sur mobile, Nintendo Switch, Steam Deck et Web), la mémoire vidéo (VRAM) et la bande passante du bus mémoire représentent les goulots d'étranglement majeurs pour la fluidité (60 / 120 FPS) et l'autonomie sur batterie.
+
+#### 1. Différence Fondamentale : Compression Fichier vs Compression VRAM Matérielle
+- **Compression Fichier (.png, .webp, .zip) :**
+  - Réduit l'espace de stockage sur le disque ou le temps de téléchargement Web.
+  - **Inconvénient critique :** À l'exécution, le processeur (CPU) doit décompresser l'intégralité de l'image en mémoire vive sous forme de bitmap 32-bit brut (**RGBA8888** à 4 octets par pixel), qui est ensuite téléversé en VRAM :
+    $$\text{Taille VRAM (RGBA8888)} = \text{Largeur} \times \text{Hauteur} \times 4\text{ octets}$$
+    - Un atlas $1024 \times 1024$ occupe **4 Mo** de VRAM.
+    - Un atlas $2048 \times 2048$ occupe **16 Mo** de VRAM.
+    - Un atlas $4096 \times 4096$ occupe **64 Mo** de VRAM.
+  - Le GPU doit transférer et échantillonner 32 bits pour chaque texel lors du rendu des sprites.
+- **Compression VRAM Matérielle par Blocs (Block Compression : ASTC, BC7, ETC2, KTX2) :**
+  - L'image est découpée en blocs de $4\times 4$ pixels (ou plus) encodés à un taux fixe (typiquement **4 à 8 bits par pixel** au lieu de 32 bits par pixel).
+  - **Avantage capital :** Le fichier compressé est **téléversé tel quel directement en VRAM sans aucune décompression CPU préalable** !
+  - L'échantillonneur matériel du GPU décompresse les texels à la volée dans son cache L1/L2 au moment exact du rendu.
+  - **Gains concrets :**
+    - Division de l'empreinte VRAM par **4x à 8x** (un atlas 2048x2048 passe de 16 Mo à 2.7–4 Mo).
+    - Division par 4 de la bande passante mémoire requise pour le GPU (diminution drastique de la surchauffe et de la consommation de batterie).
+    - Temps de chargement quasi-instantané dans le jeu (zéro décompression CPU).
+
+---
+
+### 🔬 Tour d'Horizon des Formats de Compression VRAM
+
+| Format | Développeur / Standard | Écosystème Cible | Taux de Compression | Qualité Pixel Art & Alpha |
+|---|---|---|---|---|
+| **ASTC** *(Adaptive Scalable Texture Compression)* | ARM / Khronos Group | iOS (A7+), Android moderne, Apple Silicon, Nintendo Switch | Configurable : $4\times 4$ (8 bpp) à $12\times 12$ (0.89 bpp) | 🟢 **Excellente** en profil $4\times 4$ (préserve la netteté et les bords alpha) |
+| **BC7 / BPTC** | Microsoft / Khronos | PC (DirectX 11/12, Vulkan), PS4/PS5, Xbox | 8 bpp ($4\times 4$ blocs) | 🟢 **Excellente** (couche alpha haute fidélité) |
+| **BC3 / DXT5** | Microsoft | PC legacy (DirectX 9/10), OpenGL classique | 8 bpp ($4\times 4$ blocs) | 🟡 Moyenne (artefacts sur dégradés fins) |
+| **ETC2 / EAC** | Ericsson / Khronos | Android (OpenGL ES 3.0+), WebGL 2.0 | 8 bpp ($4\times 4$ blocs) | 🟢 Bonne pour RGBA standard |
+| **KTX2 + Basis Universal** | Khronos Group / Binomial | **Universel multiplateforme** (Web, Mobile, Consoles, PC) | Supercompressé via UASTC/ETC1S + Zstandard | 🟢 **Idéal pour SpriteStudio** (transcodable à la volée vers tous les formats GPU) |
+
+---
+
+### 🏛️ Architecture Technique & Spécifications Métier pour SpriteStudio
+
+Pour égaler TexturePacker Pro tout en conservant une licence open-source pérenne (Apache 2.0 / sans dépendance propriétaire), l'implémentation reposera sur **Basis Universal / KTX2** (Khronos Group) :
+
+```
+[Atlas PNG Généré (SpriteDocument)]
+                 │
+                 ▼
+    [VramTextureCompressor]
+                 │
+      ┌──────────┴──────────┐
+      ▼                     ▼
+[Mode UASTC]          [Mode ETC1S]
+(Qualité Pixel Art    (Taille Fichier
+ Haute Fidélité)       Ultra-Basse)
+      │                     │
+      └──────────┬──────────┘
+                 │
+                 ▼
+      [Supercompression Zstandard] (Optionnelle, niveau 1 à 22)
+                 │
+                 ▼
+   [Conteneur KTX2 (.ktx2 / .basis)]
+                 │
+                 ├──► Godot 4 (Vulkan KTX2 Loader)
+                 ├──► Unity (KtxUnity / Package GLTF)
+                 ├──► Unreal Engine Paper2D
+                 └──► WebGL / Three.js / PixiJS (transcodage natif sans plugin)
+```
+
+#### 1. Moteur d'Encodage C++ (`VramTextureCompressor`) :
+- Création de `SpriteStudio/include/packer/vramtexturecompressor.h` et `src/packer/vramtexturecompressor.cpp`.
+- Intégration de la bibliothèque C++ open-source **`basis_universal`** (Apache 2.0 / Binomial / Khronos Group) via CMake `FetchContent` ou sous-module dans `lib/basis_universal`.
+- **Modes d'encodage supportés :**
+  - **`KTX2_UASTC` (Recommandé par défaut) :** Format universel $4\times 4$ (8 bpp) équivalent en qualité visuelle à ASTC $4\times 4$ et BC7, spécialement calibré pour préserver la précision des contours pixel art et des demi-transparences (anti-aliasing).
+  - **`KTX2_ETC1S` :** Mode à quantification de palettes globale, générant des fichiers extrêmement petits sur disque, idéal pour les interfaces UI et les atlas de grand volume.
+- **Supercompression Zstandard :**
+  - Intégration de l'étage de supercompression Zstd standardisé dans la spécification KTX2, réduisant drastiquement la taille du conteneur `.ktx2` sur disque tout en conservant la structure par blocs.
+- **Multithreading CPU :**
+  - Parallélisation de l'encodage des blocs de texture sur l'ensemble des cœurs logiques via `QThreadPool` (respect de la configuration de threads introduite en M8).
+
+#### 2. Intégration dans la Boîte de Dialogue d'Exportation (`ExportDialog`) :
+- Ajout d'une section dédiée **« Compression VRAM (Textures GPU) »** dans `ExportDialog` :
+  - Sélecteur de format de texture :
+    - `PNG Standard (Non compressé en VRAM, 32-bit RGBA8888)`
+    - `KTX2 Universel (UASTC — Qualité Pixel Art Maximale, transcodable ASTC/BC7)`
+    - `KTX2 Ultra-Compact (ETC1S — Empreinte Disque & VRAM Minimale)`
+  - Curseur de niveau de qualité d'encodage (1 à 5).
+  - Case à cocher : *Activer la supercompression Zstandard (Zstd)*.
+  - Case à cocher : *Générer les Mipmaps (avec pré-multiplication alpha pour éviter le noircissement des bords)*.
+  - Télémétrie en direct : estimation de l'empreinte VRAM (ex : *« VRAM : 16 Mo (PNG) → 4 Mo (KTX2 UASTC) — Économie : -75% »*).
+
+#### 3. Intégration dans l'Interface Ligne de Commande (`spritestudio-cli`) :
+- Extension des arguments CLI pour les pipelines d'intégration continue (CI/CD) des studios :
+  - Syntaxe TexturePacker émulée :
+    ```bash
+    spritestudio-cli --sheet atlas.ktx2 --data atlas.json \
+      --texture-format ktx2 --opt ASTC_4x4 assets/*.png
+    ```
+  - Syntaxe native SpriteStudio :
+    ```bash
+    spritestudio-cli pack --sheet atlas.ktx2 --data atlas.json \
+      --vram-format uastc --zstd-level 9 assets/sprites/
+    ```
+
+#### 4. Intégration avec les Moteurs de Jeu :
+- **Godot 4 :**
+  - Godot 4 intègre nativement le support du conteneur KTX2 via son architecture de rendu Vulkan. Les ressources `.tres` `SpriteFrames` référencent directement la texture `.ktx2`.
+- **Unity :**
+  - Prise en charge via le package officiel `KtxUnity` ou `Unity.Cloud.Gltf`, permettant au moteur de transcoder l'atlas KTX2 vers le format natif du GPU de l'appareil (ASTC sur iOS/Android, BC7 sur PC/Consoles).
+- **Web / HTML5 :**
+  - Support immédiat par tous les moteurs WebGL/WebGPU modernes (Three.js, Babylon.js, PixiJS, Phaser) via les transcodeurs WebAssembly officiels `basis_transcoder.wasm`.
+
+---
+
+### 📋 Phasage d'Implémentation Recommandé (Jalon M9)
+
+1. **Étape 1 — Socle CMake & Bibliothèque `basis_universal` :**
+   - Intégration de `basis_universal` dans `SpriteStudio/lib/` ou via CMake `FetchContent`.
+   - Initialisation globale du compresseur (`basisu::basisu_encoder_init()`).
+2. **Étape 2 — Moteur d'Encodage `VramTextureCompressor` :**
+   - Implémentation de la classe autonome convertissant une `QImage` en fichier `.ktx2` (UASTC et ETC1S) avec support Zstandard.
+   - Tests unitaires automatisés dans `tests/test_vram_compression.cpp` validant l'intégrité de l'encodage et la conformité des en-têtes KTX2.
+3. **Étape 3 — Câblage dans `ExportDialog` & IHM :**
+   - Ajout des options graphiques de compression VRAM dans la boîte de dialogue d'export.
+   - Prévisualisation du rendu compressé sur le canevas de l'atlas.
+4. **Étape 4 — Support CLI dans `spritestudio-cli` :**
+   - Intégration des flags `--texture-format ktx2`, `--opt` et `--zstd-level`.
+
+---
+
 ## M-CLI : Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`) — 🚀 Compatibilité Totale TexturePacker, Aseprite & Godot 4
 
 ### 📌 Contexte & Enjeux Industriels
@@ -1213,6 +1342,9 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 7. **Étape 10 — Empaquetage Polygonal & Maillages Serrés (M8 - Tight Mesh) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Éradiquer l'overdraw GPU (60% à 80% de fillrate économisé) et maximiser la compacité (+20% à +50%) pour mobile et Nintendo Switch.
    - *Livrables :* Contouring Marching Squares étanche, simplification RDP avec dilatation normale et budget de sommets (3-48), triangulation Ear-Clipping, édition interactive directe des sommets sur canevas (sélection, déplacement souris/clavier, insertion par double-clic, suppression `Suppr`), algorithme `TightPolygonPacker` haute densité avec multithreading configurable (1 à $N$ cœurs logiques `QThread::idealThreadCount()`), optimisation des ancres de placement (< 20 ms), IHM non-bloquante avec calcul à la demande et mémorisation des préférences, et exports multi-moteurs (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON). 22 tests unitaires sous CTest validés à 100%.
+8. **Étape 11 — Compression de Textures VRAM & Formats GPU (M9 - KTX2 / Basis Universal / ASTC) :**
+   - *Objectif :* Éradiquer la décompression CPU et réduire l'empreinte VRAM par 4x à 8x (de 16 Mo à 2.7–4 Mo pour un atlas 2048x2048) sur mobile, Switch et PC.
+   - *Livrables :* Moteur `VramTextureCompressor` basé sur `basis_universal` (open-source Apache 2.0 / Khronos Group), encodage multithreadé KTX2 UASTC (haute fidélité pixel art) et ETC1S avec supercompression Zstandard, interface dédiée dans `ExportDialog` avec télémétrie VRAM en direct, et flags CLI `--texture-format ktx2` / `--opt` pour CI/CD studio.
 
 ---
 
