@@ -65,6 +65,29 @@ QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
             bObj[QStringLiteral("overlapping")] = ovArray;
         }
 
+        if (b.hasPolygonMesh) {
+            bObj[QStringLiteral("hasPolygonMesh")] = true;
+            QJsonArray polyArray;
+            for (const QPointF &pt : b.polygon) {
+                polyArray.append(pt.x());
+                polyArray.append(pt.y());
+            }
+            bObj[QStringLiteral("polygon")] = polyArray;
+
+            QJsonArray vertArray;
+            for (const QPointF &pt : b.vertices) {
+                vertArray.append(pt.x());
+                vertArray.append(pt.y());
+            }
+            bObj[QStringLiteral("vertices")] = vertArray;
+
+            QJsonArray triArray;
+            for (int t : b.triangles) {
+                triArray.append(t);
+            }
+            bObj[QStringLiteral("triangles")] = triArray;
+        }
+
         boxesArray.append(bObj);
     }
     root[QStringLiteral("boxes")] = boxesArray;
@@ -196,6 +219,30 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
         } else {
             box.pivot = QPoint(rect.width() / 2, rect.height());
             box.hasCustomPivot = false;
+        }
+
+        if (bObj.value(QStringLiteral("hasPolygonMesh")).toBool(false)) {
+            box.hasPolygonMesh = true;
+            QJsonArray polyArray = bObj.value(QStringLiteral("polygon")).toArray();
+            for (int pIdx = 0; pIdx + 1 < polyArray.size(); pIdx += 2) {
+                box.polygon.append(QPointF(polyArray[pIdx].toDouble(), polyArray[pIdx + 1].toDouble()));
+            }
+            if (bObj.contains(QStringLiteral("vertices"))) {
+                QJsonArray vertArray = bObj.value(QStringLiteral("vertices")).toArray();
+                for (int vIdx = 0; vIdx + 1 < vertArray.size(); vIdx += 2) {
+                    box.vertices.append(QPointF(vertArray[vIdx].toDouble(), vertArray[vIdx + 1].toDouble()));
+                }
+            } else {
+                box.vertices = box.polygon.toList();
+                if (box.vertices.size() >= 4 && box.vertices.first() == box.vertices.last()) {
+                    box.vertices.removeLast();
+                }
+            }
+
+            QJsonArray triArray = bObj.value(QStringLiteral("triangles")).toArray();
+            for (const QJsonValue &v : triArray) {
+                box.triangles.append(v.toInt());
+            }
         }
 
         boxes.append(box);

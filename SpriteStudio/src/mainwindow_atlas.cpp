@@ -88,6 +88,11 @@ void MainWindow::onBoxContextMenuRequested(int index, const QPoint &screenPos)
         if (m_atlasController) m_atlasController->trimSelectedSlice(AppConfig::instance().atlas().defaultAlphaThreshold);
     });
 
+    QAction *meshAction = menu.addAction(tr("KEY_CTX_POLYGON_MESH"));
+    connect(meshAction, &QAction::triggered, this, [this, index]() {
+        openPolygonMeshDialog(index);
+    });
+
     QAction *mergeAction = menu.addAction(tr("KEY_CTX_MERGE_SLICES"));
     mergeAction->setEnabled(currentSel.size() >= 2);
     connect(mergeAction, &QAction::triggered, this, [this]() {
@@ -166,6 +171,12 @@ void MainWindow::onAtlasContextMenuRequested(const QPoint &pos)
     trimAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
     connect(trimAction, &QAction::triggered, this, [this]() {
         if (m_atlasController) m_atlasController->trimSelectedSlice(AppConfig::instance().atlas().defaultAlphaThreshold);
+    });
+
+    QAction *meshAction = menu.addAction(tr("KEY_CTX_POLYGON_MESH"));
+    meshAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
+    connect(meshAction, &QAction::triggered, this, [this]() {
+        openPolygonMeshDialog();
     });
 
     QAction *mergeSlicesAction = menu.addAction(tr("KEY_CTX_MERGE_SLICES"));

@@ -53,4 +53,15 @@ if (MINGW)
 endif()
 add_test(NAME test_cli COMMAND test_cli)
 
+# 6. test_mesh
+add_executable(test_mesh test_mesh.cpp)
+target_compile_definitions(test_mesh PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_mesh PRIVATE SpriteStudioCore Qt6::Test)
+set_target_properties(test_mesh PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_mesh PRIVATE -mconsole)
+endif()
+add_test(NAME test_mesh COMMAND test_mesh)
+
+
 

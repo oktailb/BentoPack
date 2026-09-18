@@ -6,6 +6,8 @@
 #include <QPen>
 #include <QBrush>
 #include <QFont>
+#include <QPolygonF>
+#include <QSet>
 
 /**
  * @brief Interactive QGraphicsObject representing a sprite bounding box on the atlas.
@@ -29,7 +31,8 @@ public:
         BottomLeft,
         Left,
         Pivot,
-        Move
+        Move,
+        Vertex
     };
 
     explicit AtlasBoxItem(int index, const QRect &rect, const QRect &atlasBounds, QGraphicsItem *parent = nullptr);
@@ -50,6 +53,22 @@ public:
 
     void setAtlasBounds(const QRect &bounds) { m_atlasBounds = bounds; }
 
+    // M8: 2D Polygon Mesh & Wireframe display
+    void setPolygonMesh(const QPolygonF &poly, const QList<int> &triangles, bool hasMesh);
+    bool hasPolygonMesh() const { return m_hasPolygonMesh; }
+    QPolygonF polygon() const { return m_polygon; }
+    QList<int> triangles() const { return m_triangles; }
+
+    void setShowPolygonMesh(bool show);
+    bool showPolygonMesh() const { return m_showPolygonMesh; }
+
+    bool hasSelectedVertices() const { return !m_selectedVertices.isEmpty(); }
+    QSet<int> selectedVertices() const { return m_selectedVertices; }
+    void selectVertex(int index, bool multiSelect = false);
+    void clearVertexSelection();
+    bool deleteSelectedVertices();
+    bool nudgeSelectedVertices(int dx, int dy);
+
     // QGraphicsItem interface
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
@@ -65,6 +84,8 @@ signals:
     void boxContextMenuRequested(int index, const QPoint &screenPos);
     void boxInteractiveMoved(int index, const QPoint &delta);
     void boxInteractiveMoveFinished(int index, const QPoint &totalDelta);
+    void boxPolygonMeshChanged(int index, const QPolygonF &newPoly, const QList<int> &newTris,
+                               const QPolygonF &oldPoly, const QList<int> &oldTris);
 
 protected:
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
@@ -72,10 +93,13 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
 private:
     Handle handleAt(const QPointF &pos, double handleSize) const;
+    int vertexAt(const QPointF &pos, double grabRadius) const;
+    int edgeAt(const QPointF &pos, double maxDist, QPointF *projectedPoint = nullptr) const;
     QRectF getHandleRect(Handle handle, double handleSize) const;
     void updateCursor(Handle handle);
 
@@ -93,6 +117,18 @@ private:
     QPointF  m_pressScenePos;
     QRectF   m_initialRect;
     bool     m_hasMoved = false;
+
+    // Polygon mesh data and vertex interaction
+    QPolygonF  m_polygon;
+    QList<int> m_triangles;
+    bool       m_hasPolygonMesh = false;
+    bool       m_showPolygonMesh = true;
+
+    int        m_activeVertexIndex = -1;
+    int        m_hoveredVertexIndex = -1;
+    QSet<int>  m_selectedVertices;
+    QPolygonF  m_initialPolygon;
+    QList<int> m_initialTriangles;
 };
 
 #endif // ATLASBOXITEM_H

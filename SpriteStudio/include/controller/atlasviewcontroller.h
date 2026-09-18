@@ -63,6 +63,10 @@ public:
     const QList<AtlasBoxItem*>& boxItems() const { return m_boxItems; }
     int boxCount() const { return m_boxItems.size(); }
 
+    // M8: Polygon Mesh Display
+    bool showPolygonMeshes() const { return m_showPolygonMeshes; }
+    void setShowPolygonMeshes(bool show);
+
     // Selection
     QList<int> selectedBoxIndices() const;
     void setSelectedBoxIndices(const QList<int> &indices);
@@ -80,6 +84,8 @@ public:
     void eraseSelectedSlicesPixels();
     void nudgeSelectedBoxes(int dx, int dy);
     void moveSelectedBoxes(int dx, int dy);
+    bool deleteSelectedMeshVertices();
+    bool nudgeSelectedMeshVertices(int dx, int dy);
 
     // Context Menu & Views
     void fitSelectedFramesInView(int padding = -1);
@@ -133,6 +139,8 @@ private:
     QList<int>           m_dragBaseSelection;
     QList<int>           m_dragCurrentSelection;
     Qt::KeyboardModifiers m_selectionModifiers = Qt::NoModifier;
+
+    bool                 m_showPolygonMeshes = true;
 };
 
 #endif // ATLASVIEWCONTROLLER_H

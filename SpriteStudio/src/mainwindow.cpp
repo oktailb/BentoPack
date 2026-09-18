@@ -6,6 +6,7 @@
 #include "include/project/sessionmanager.h"
 #include "include/widgets/githistorydock.h"
 #include "include/widgets/settingsdialog.h"
+#include "include/widgets/polygonmeshdialog.h"
 #include "include/filters/filterregistry.h"
 #include <QShortcut>
 #include <QSettings>
@@ -449,6 +450,13 @@ void MainWindow::setupShortcuts()
     m_editMenu->addAction(m_redoAction);
 
     m_editMenu->addSeparator();
+    m_actionPolygonMeshDialog = m_editMenu->addAction(tr("KEY_ACTION_POLYGON_MESH"));
+    m_actionPolygonMeshDialog->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
+    connect(m_actionPolygonMeshDialog, &QAction::triggered, this, [this]() {
+        openPolygonMeshDialog();
+    });
+
+    m_editMenu->addSeparator();
     m_prefAction = m_editMenu->addAction(tr("KEY_ACTION_SETTINGS"));
     m_prefAction->setShortcut(QKeySequence::Preferences);
     connect(m_prefAction, &QAction::triggered, this, &MainWindow::openSettingsDialog);
@@ -707,6 +715,18 @@ void MainWindow::openSettingsDialog()
     dlg.exec();
 }
 
+void MainWindow::openPolygonMeshDialog(int index)
+{
+    if (!m_document || m_document->frameCount() == 0) return;
+    int target = index;
+    if (target < 0 || target >= m_document->frameCount()) {
+        const QList<int> sel = m_document->selectedFrameIndices();
+        target = sel.isEmpty() ? 0 : sel.first();
+    }
+    SpriteStudioWidgets::PolygonMeshDialog dlg(m_document, m_undoStack, target, this);
+    dlg.exec();
+}
+
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
@@ -728,6 +748,20 @@ void MainWindow::setupViewMenuActions()
     }
     ui->menuAffichage->addSeparator();
     ui->menuAffichage->addAction(ui->mainToolBar->toggleViewAction());
+    ui->menuAffichage->addSeparator();
+
+    if (!m_actionTogglePolygonMesh) {
+        m_actionTogglePolygonMesh = new QAction(tr("KEY_ACTION_TOGGLE_POLYGON_MESH"), this);
+        m_actionTogglePolygonMesh->setCheckable(true);
+        m_actionTogglePolygonMesh->setChecked(m_atlasController ? m_atlasController->showPolygonMeshes() : true);
+        connect(m_actionTogglePolygonMesh, &QAction::toggled, this, [this](bool checked) {
+            if (m_atlasController) {
+                m_atlasController->setShowPolygonMeshes(checked);
+            }
+        });
+    }
+    ui->menuAffichage->addAction(m_actionTogglePolygonMesh);
+
     ui->menuAffichage->addSeparator();
     ui->menuAffichage->addAction(ui->actionResetLayout);
 }
@@ -776,6 +810,12 @@ void MainWindow::retranslateUi()
     }
     if (m_helpPrefAction) {
         m_helpPrefAction->setText(tr("KEY_ACTION_SETTINGS"));
+    }
+    if (m_actionPolygonMeshDialog) {
+        m_actionPolygonMeshDialog->setText(tr("KEY_ACTION_POLYGON_MESH"));
+    }
+    if (m_actionTogglePolygonMesh) {
+        m_actionTogglePolygonMesh->setText(tr("KEY_ACTION_TOGGLE_POLYGON_MESH"));
     }
 
     // Refresh view menu dock titles

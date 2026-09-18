@@ -1,5 +1,6 @@
 #include "atlasboxitem.h"
 #include "config/appconfig.h"
+#include "geometry/triangulator.h"
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -56,6 +57,99 @@ void AtlasBoxItem::setSelectedBox(bool sel)
 {
     if (m_selected != sel) {
         m_selected = sel;
+        if (!m_selected) {
+            m_selectedVertices.clear();
+        }
+        update();
+    }
+}
+
+void AtlasBoxItem::selectVertex(int index, bool multiSelect)
+{
+    if (index >= 0 && index < m_polygon.size()) {
+        if (!multiSelect) {
+            m_selectedVertices.clear();
+        }
+        m_selectedVertices.insert(index);
+        update();
+    }
+}
+
+void AtlasBoxItem::clearVertexSelection()
+{
+    if (!m_selectedVertices.isEmpty()) {
+        m_selectedVertices.clear();
+        update();
+    }
+}
+
+bool AtlasBoxItem::deleteSelectedVertices()
+{
+    if (!m_selected || !m_hasPolygonMesh || m_selectedVertices.isEmpty()) {
+        return false;
+    }
+
+    if (m_polygon.size() - m_selectedVertices.size() < 3) {
+        return false;
+    }
+
+    QPolygonF oldPoly = m_polygon;
+    QList<int> oldTris = m_triangles;
+
+    QPolygonF newPoly;
+    for (int i = 0; i < m_polygon.size(); ++i) {
+        if (!m_selectedVertices.contains(i)) {
+            newPoly.append(m_polygon[i]);
+        }
+    }
+
+    prepareGeometryChange();
+    m_polygon = newPoly;
+    m_triangles = SpriteStudioGeometry::Triangulator::triangulate(m_polygon);
+    m_selectedVertices.clear();
+
+    emit boxPolygonMeshChanged(m_index, m_polygon, m_triangles, oldPoly, oldTris);
+    update();
+    return true;
+}
+
+bool AtlasBoxItem::nudgeSelectedVertices(int dx, int dy)
+{
+    if (!m_selected || !m_hasPolygonMesh || m_selectedVertices.isEmpty()) {
+        return false;
+    }
+
+    QPolygonF oldPoly = m_polygon;
+    QList<int> oldTris = m_triangles;
+
+    prepareGeometryChange();
+    for (int idx : m_selectedVertices) {
+        if (idx >= 0 && idx < m_polygon.size()) {
+            QPointF pt = m_polygon[idx];
+            pt.rx() = std::clamp(pt.x() + dx, 0.0, static_cast<double>(m_rect.width()));
+            pt.ry() = std::clamp(pt.y() + dy, 0.0, static_cast<double>(m_rect.height()));
+            m_polygon[idx] = pt;
+        }
+    }
+
+    m_triangles = SpriteStudioGeometry::Triangulator::triangulate(m_polygon);
+    emit boxPolygonMeshChanged(m_index, m_polygon, m_triangles, oldPoly, oldTris);
+    update();
+    return true;
+}
+
+void AtlasBoxItem::setPolygonMesh(const QPolygonF &poly, const QList<int> &triangles, bool hasMesh)
+{
+    m_polygon = poly;
+    m_triangles = triangles;
+    m_hasPolygonMesh = hasMesh;
+    update();
+}
+
+void AtlasBoxItem::setShowPolygonMesh(bool show)
+{
+    if (m_showPolygonMesh != show) {
+        m_showPolygonMesh = show;
         update();
     }
 }
@@ -152,24 +246,95 @@ QRectF AtlasBoxItem::getHandleRect(Handle handle, double handleSize) const
     return QRectF(x - half, y - half, handleSize, handleSize);
 }
 
+int AtlasBoxItem::vertexAt(const QPointF &pos, double grabRadius) const
+{
+    if (!m_hasPolygonMesh || !m_showPolygonMesh || m_polygon.isEmpty()) {
+        return -1;
+    }
+
+    QPointF origin = m_rect.topLeft();
+    for (int i = 0; i < m_polygon.size(); ++i) {
+        QPointF vPos = origin + m_polygon[i];
+        if (QLineF(pos, vPos).length() <= grabRadius) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int AtlasBoxItem::edgeAt(const QPointF &pos, double maxDist, QPointF *projectedPoint) const
+{
+    if (!m_hasPolygonMesh || !m_showPolygonMesh || m_polygon.size() < 3) {
+        return -1;
+    }
+
+    QPointF localPos = pos - m_rect.topLeft();
+    int bestEdge = -1;
+    double bestDistSq = maxDist * maxDist;
+    QPointF bestProj;
+
+    const int n = m_polygon.size();
+    for (int i = 0; i < n; ++i) {
+        const QPointF &p1 = m_polygon[i];
+        const QPointF &p2 = m_polygon[(i + 1) % n];
+
+        QPointF seg = p2 - p1;
+        double lenSq = seg.x() * seg.x() + seg.y() * seg.y();
+        if (lenSq <= 1e-6) continue;
+
+        double t = ((localPos.x() - p1.x()) * seg.x() + (localPos.y() - p1.y()) * seg.y()) / lenSq;
+        // Check if projection falls within edge segment (with a small margin so we don't duplicate existing vertices)
+        if (t > 0.05 && t < 0.95) {
+            QPointF proj = p1 + t * seg;
+            double dx = localPos.x() - proj.x();
+            double dy = localPos.y() - proj.y();
+            double distSq = dx * dx + dy * dy;
+            if (distSq < bestDistSq) {
+                bestDistSq = distSq;
+                bestEdge = i;
+                bestProj = proj;
+            }
+        }
+    }
+
+    if (bestEdge >= 0 && projectedPoint) {
+        *projectedPoint = bestProj;
+    }
+    return bestEdge;
+}
+
 AtlasBoxItem::Handle AtlasBoxItem::handleAt(const QPointF &pos, double handleSize) const
 {
     if (m_selected) {
-        // Test pivot first
+        // 1. Test polygon vertices first if mesh is visible
+        if (m_hasPolygonMesh && m_showPolygonMesh) {
+            double scale = 1.0;
+            if (scene() && !scene()->views().isEmpty()) {
+                scale = scene()->views().first()->transform().m11();
+            }
+            double vRadius = (scale > 0.0) ? (7.0 / scale) : 7.0;
+            vRadius = std::max(vRadius, 4.0);
+            int vIdx = vertexAt(pos, vRadius);
+            if (vIdx >= 0) {
+                return Vertex;
+            }
+        }
+
+        // 2. Test pivot
         QPointF pivotPos = m_rect.topLeft() + m_pivot;
         double grabRadius = std::max(handleSize * 1.2, 8.0);
         if (QLineF(pos, pivotPos).length() <= grabRadius) {
             return Pivot;
         }
 
-        // Test corners
+        // 3. Test corners
         const Handle corners[] = { TopLeft, TopRight, BottomRight, BottomLeft };
         for (Handle h : corners) {
             if (getHandleRect(h, handleSize).contains(pos)) {
                 return h;
             }
         }
-        // Then test edges
+        // 4. Then test edges
         const Handle edges[] = { Top, Right, Bottom, Left };
         for (Handle h : edges) {
             if (getHandleRect(h, handleSize).contains(pos)) {
@@ -205,6 +370,7 @@ void AtlasBoxItem::updateCursor(Handle handle)
         setCursor(Qt::SizeHorCursor);
         break;
     case Pivot:
+    case Vertex:
         setCursor(Qt::CrossCursor);
         break;
     case Move:
@@ -222,13 +388,30 @@ void AtlasBoxItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
     double handleSize = currentHandleSize();
     Handle h = handleAt(event->pos(), handleSize);
     updateCursor(h);
-    update();
+
+    int oldHovered = m_hoveredVertexIndex;
+    if (h == Vertex) {
+        double scale = 1.0;
+        if (scene() && !scene()->views().isEmpty()) {
+            scale = scene()->views().first()->transform().m11();
+        }
+        double vRadius = (scale > 0.0) ? (7.0 / scale) : 7.0;
+        vRadius = std::max(vRadius, 4.0);
+        m_hoveredVertexIndex = vertexAt(event->pos(), vRadius);
+    } else {
+        m_hoveredVertexIndex = -1;
+    }
+
+    if (oldHovered != m_hoveredVertexIndex) {
+        update();
+    }
 }
 
 void AtlasBoxItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     Q_UNUSED(event);
     m_hovered = false;
+    m_hoveredVertexIndex = -1;
     unsetCursor();
     update();
 }
@@ -241,7 +424,41 @@ void AtlasBoxItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         m_pressScenePos = event->scenePos();
         m_initialRect = m_rect;
         m_initialPivot = m_pivot;
+        m_initialPolygon = m_polygon;
+        m_initialTriangles = m_triangles;
         m_hasMoved = false;
+
+        if (m_activeHandle == Vertex) {
+            double scale = 1.0;
+            if (scene() && !scene()->views().isEmpty()) {
+                scale = scene()->views().first()->transform().m11();
+            }
+            double vRadius = (scale > 0.0) ? (7.0 / scale) : 7.0;
+            vRadius = std::max(vRadius, 4.0);
+            m_activeVertexIndex = vertexAt(event->pos(), vRadius);
+
+            if (m_activeVertexIndex >= 0) {
+                if (event->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier)) {
+                    if (m_selectedVertices.contains(m_activeVertexIndex)) {
+                        m_selectedVertices.remove(m_activeVertexIndex);
+                    } else {
+                        m_selectedVertices.insert(m_activeVertexIndex);
+                    }
+                } else {
+                    if (!m_selectedVertices.contains(m_activeVertexIndex)) {
+                        m_selectedVertices.clear();
+                        m_selectedVertices.insert(m_activeVertexIndex);
+                    }
+                }
+            }
+            update();
+        } else {
+            m_activeVertexIndex = -1;
+            if (!m_selectedVertices.isEmpty()) {
+                m_selectedVertices.clear();
+                update();
+            }
+        }
 
         emit boxSelected(m_index, true, event->modifiers());
         event->accept();
@@ -255,6 +472,29 @@ void AtlasBoxItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (m_activeHandle == None) {
         QGraphicsObject::mouseMoveEvent(event);
         return;
+    }
+
+    if (m_activeHandle == Vertex) {
+        if (m_selectedVertices.isEmpty() && m_activeVertexIndex >= 0) {
+            m_selectedVertices.insert(m_activeVertexIndex);
+        }
+        if (!m_selectedVertices.isEmpty()) {
+            QPointF sceneDelta = event->scenePos() - m_pressScenePos;
+            prepareGeometryChange();
+            for (int idx : m_selectedVertices) {
+                if (idx >= 0 && idx < m_initialPolygon.size()) {
+                    QPointF newPt = m_initialPolygon[idx] + sceneDelta;
+                    newPt.setX(std::clamp(newPt.x(), 0.0, static_cast<double>(m_rect.width())));
+                    newPt.setY(std::clamp(newPt.y(), 0.0, static_cast<double>(m_rect.height())));
+                    m_polygon[idx] = newPt;
+                }
+            }
+            m_triangles = SpriteStudioGeometry::Triangulator::triangulate(m_polygon);
+            m_hasMoved = true;
+            update();
+            event->accept();
+            return;
+        }
     }
 
     if (m_activeHandle == Pivot) {
@@ -405,6 +645,18 @@ void AtlasBoxItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void AtlasBoxItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && m_activeHandle != None) {
+        if (m_activeHandle == Vertex) {
+            if (m_hasMoved && !m_selectedVertices.isEmpty()) {
+                emit boxPolygonMeshChanged(m_index, m_polygon, m_triangles, m_initialPolygon, m_initialTriangles);
+            }
+            m_activeHandle = None;
+            m_activeVertexIndex = -1;
+            m_hasMoved = false;
+            update();
+            event->accept();
+            return;
+        }
+
         if (m_activeHandle == Pivot) {
             if (m_hasMoved) {
                 if (m_pivot != m_initialPivot) {
@@ -442,6 +694,39 @@ void AtlasBoxItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
     QGraphicsObject::mouseReleaseEvent(event);
+}
+
+void AtlasBoxItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton && m_selected && m_hasPolygonMesh && m_showPolygonMesh) {
+        double scale = 1.0;
+        if (scene() && !scene()->views().isEmpty()) {
+            scale = scene()->views().first()->transform().m11();
+        }
+        double grabRadius = (scale > 0.0) ? (7.0 / scale) : 7.0;
+        grabRadius = std::max(grabRadius, 4.0);
+
+        QPointF newVertexLocal;
+        int edgeIdx = edgeAt(event->pos(), grabRadius, &newVertexLocal);
+        if (edgeIdx >= 0) {
+            QPolygonF oldPoly = m_polygon;
+            QList<int> oldTris = m_triangles;
+
+            prepareGeometryChange();
+            int insertIdx = edgeIdx + 1;
+            m_polygon.insert(insertIdx, newVertexLocal);
+            m_triangles = SpriteStudioGeometry::Triangulator::triangulate(m_polygon);
+
+            m_selectedVertices.clear();
+            m_selectedVertices.insert(insertIdx);
+
+            emit boxPolygonMeshChanged(m_index, m_polygon, m_triangles, oldPoly, oldTris);
+            update();
+            event->accept();
+            return;
+        }
+    }
+    QGraphicsObject::mouseDoubleClickEvent(event);
 }
 
 void AtlasBoxItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
@@ -509,6 +794,83 @@ void AtlasBoxItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setPen(m_selected ? Qt::black : Qt::white);
     painter->drawText(badgeRect, Qt::AlignCenter, labelText);
     painter->restore();
+
+    // 3.5. 2D Polygon Mesh Wireframe & Contour
+    if (m_showPolygonMesh && m_hasPolygonMesh && !m_polygon.isEmpty()) {
+        painter->save();
+        painter->translate(m_rect.topLeft());
+        painter->setRenderHint(QPainter::Antialiasing, true);
+
+        // Triangles wireframe
+        if (!m_triangles.isEmpty() && m_triangles.size() % 3 == 0) {
+            QPen triPen(QColor(0, 220, 255, 120), 1.0, Qt::DashLine);
+            triPen.setCosmetic(true);
+            painter->setPen(triPen);
+            painter->setBrush(Qt::NoBrush);
+
+            const int triCount = m_triangles.size() / 3;
+            for (int t = 0; t < triCount; ++t) {
+                int i0 = m_triangles[t * 3];
+                int i1 = m_triangles[t * 3 + 1];
+                int i2 = m_triangles[t * 3 + 2];
+                if (i0 < m_polygon.size() && i1 < m_polygon.size() && i2 < m_polygon.size()) {
+                    const QPointF &p0 = m_polygon[i0];
+                    const QPointF &p1 = m_polygon[i1];
+                    const QPointF &p2 = m_polygon[i2];
+                    painter->drawLine(p0, p1);
+                    painter->drawLine(p1, p2);
+                    painter->drawLine(p2, p0);
+                }
+            }
+        }
+
+        // Outer polygon boundary
+        QPen contourPen(QColor(0, 255, 128), 1.5, Qt::SolidLine);
+        contourPen.setCosmetic(true);
+        painter->setPen(contourPen);
+        painter->drawPolygon(m_polygon);
+
+        // Vertices control points when selected
+        if (m_selected) {
+            QPen defaultPen(Qt::black, 1.0);
+            defaultPen.setCosmetic(true);
+            QBrush defaultBrush(QColor(255, 230, 40)); // Yellow
+
+            QPen selectedPen(Qt::white, 1.5);
+            selectedPen.setCosmetic(true);
+            QBrush selectedBrush(QColor(0, 229, 255)); // Bright cyan
+
+            QPen hoveredPen(Qt::white, 1.2);
+            hoveredPen.setCosmetic(true);
+            QBrush hoveredBrush(QColor(128, 255, 255)); // Light cyan
+
+            for (int i = 0; i < m_polygon.size(); ++i) {
+                const QPointF &pt = m_polygon[i];
+                if (m_selectedVertices.contains(i)) {
+                    // Glowing outer ring for selected vertices
+                    QPen ringPen(QColor(0, 229, 255, 180), 2.5);
+                    ringPen.setCosmetic(true);
+                    painter->setPen(ringPen);
+                    painter->setBrush(Qt::NoBrush);
+                    painter->drawEllipse(pt, 5.5, 5.5);
+
+                    painter->setPen(selectedPen);
+                    painter->setBrush(selectedBrush);
+                    painter->drawEllipse(pt, 4.0, 4.0);
+                } else if (i == m_hoveredVertexIndex) {
+                    painter->setPen(hoveredPen);
+                    painter->setBrush(hoveredBrush);
+                    painter->drawEllipse(pt, 3.5, 3.5);
+                } else {
+                    painter->setPen(defaultPen);
+                    painter->setBrush(defaultBrush);
+                    painter->drawEllipse(pt, 2.5, 2.5);
+                }
+            }
+        }
+
+        painter->restore();
+    }
 
     // 4. Resize Handles (only when selected)
     if (m_selected) {

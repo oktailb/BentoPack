@@ -8,6 +8,8 @@
 #include <QRect>
 #include <QString>
 #include <QStringList>
+#include <QPolygonF>
+#include <QPointF>
 
 enum class PivotPreset {
     TopLeft,
@@ -34,15 +36,33 @@ struct SpriteBox {
     QPoint      pivot = QPoint(0, 0); // Local position relative to the box's top-left corner
     bool        hasCustomPivot = false;
 
+    // M8: 2D Polygon Mesh (local coordinates relative to rect.topLeft())
+    QPolygonF       polygon;
+    QList<QPointF>  vertices;
+    QList<int>      triangles;
+    bool            hasPolygonMesh = false;
+
+    double polygonArea() const;
+    double overdrawSavings() const;
+
     QPoint effectivePivot() const {
         return hasCustomPivot ? pivot : QPoint(rect.width() / 2, rect.height());
     }
 
     static QPoint calculatePresetPivot(PivotPreset preset, const QSize &size);
 
+    SpriteBox() = default;
+    explicit SpriteBox(const QRect &r) : rect(r) {}
+
     bool operator==(const SpriteBox &other) const {
         return rect == other.rect && index == other.index && selected == other.selected
-               && pivot == other.pivot && hasCustomPivot == other.hasCustomPivot;
+               && pivot == other.pivot && hasCustomPivot == other.hasCustomPivot
+               && hasPolygonMesh == other.hasPolygonMesh && polygon == other.polygon
+               && triangles == other.triangles;
+    }
+
+    bool operator!=(const SpriteBox &other) const {
+        return !(*this == other);
     }
 };
 

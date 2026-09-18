@@ -684,3 +684,30 @@ void SpriteDocument::recalculateMaxFrameDimensions()
         if (img.height() > m_maxFrameHeight) m_maxFrameHeight = img.height();
     }
 }
+
+double SpriteBox::polygonArea() const
+{
+    if (!hasPolygonMesh || polygon.size() < 3) {
+        return static_cast<double>(rect.width() * rect.height());
+    }
+    double area = 0.0;
+    int n = polygon.size();
+    for (int i = 0; i < n; ++i) {
+        int next = (i + 1) % n;
+        area += polygon[i].x() * polygon[next].y() - polygon[next].x() * polygon[i].y();
+    }
+    return std::abs(area) * 0.5;
+}
+
+double SpriteBox::overdrawSavings() const
+{
+    if (!hasPolygonMesh || rect.width() <= 0 || rect.height() <= 0) {
+        return 0.0;
+    }
+    double boxArea = static_cast<double>(rect.width() * rect.height());
+    double polyArea = polygonArea();
+    if (polyArea >= boxArea) {
+        return 0.0;
+    }
+    return std::clamp((boxArea - polyArea) / boxArea * 100.0, 0.0, 100.0);
+}

@@ -2,6 +2,7 @@
 #include "include/atlasboxitem.h"
 #include "include/model/spritedocument.h"
 #include "include/commands/commands.h"
+#include "include/commands/meshcommands.h"
 #include "include/config/appconfig.h"
 #include <QUndoStack>
 #include <QScrollBar>
@@ -38,8 +39,10 @@ AtlasViewController::AtlasViewController(QGraphicsView *view,
         connect(m_document, &SpriteDocument::framesChanged, this, &AtlasViewController::syncAtlasBoxes);
         connect(m_document, &SpriteDocument::frameUpdated, this, [this](int index) {
             if (index >= 0 && index < m_boxItems.size() && m_boxItems[index]) {
-                m_boxItems[index]->setBoxRect(m_document->box(index).rect);
-                m_boxItems[index]->setBoxPivot(m_document->box(index).effectivePivot(), m_document->box(index).hasCustomPivot);
+                const SpriteBox &box = m_document->box(index);
+                m_boxItems[index]->setBoxRect(box.rect);
+                m_boxItems[index]->setBoxPivot(box.effectivePivot(), box.hasCustomPivot);
+                m_boxItems[index]->setPolygonMesh(box.polygon, box.triangles, box.hasPolygonMesh);
             }
         });
         connect(m_document, &SpriteDocument::boxPivotChanged, this, [this](int index, const QPoint &pivot) {
@@ -182,8 +185,11 @@ void AtlasViewController::syncAtlasBoxes()
     int count = m_document->frameCount();
 
     for (int i = 0; i < count; ++i) {
-        AtlasBoxItem *boxItem = new AtlasBoxItem(i, m_document->box(i).rect, atlasBounds);
-        boxItem->setBoxPivot(m_document->box(i).effectivePivot(), m_document->box(i).hasCustomPivot);
+        const SpriteBox &sb = m_document->box(i);
+        AtlasBoxItem *boxItem = new AtlasBoxItem(i, sb.rect, atlasBounds);
+        boxItem->setBoxPivot(sb.effectivePivot(), sb.hasCustomPivot);
+        boxItem->setPolygonMesh(sb.polygon, sb.triangles, sb.hasPolygonMesh);
+        boxItem->setShowPolygonMesh(m_showPolygonMeshes);
         m_scene->addItem(boxItem);
         m_boxItems.append(boxItem);
 
@@ -204,9 +210,40 @@ void AtlasViewController::syncAtlasBoxes()
                 this, &AtlasViewController::onBoxItemInteractiveMoved);
         connect(boxItem, &AtlasBoxItem::boxInteractiveMoveFinished,
                 this, &AtlasViewController::onBoxItemInteractiveMoveFinished);
+        connect(boxItem, &AtlasBoxItem::boxPolygonMeshChanged, this, [this](int index, const QPolygonF &newPoly, const QList<int> &newTris, const QPolygonF &oldPoly, const QList<int> &oldTris) {
+            Q_UNUSED(oldPoly);
+            Q_UNUSED(oldTris);
+            using namespace SpriteStudioCommands;
+            if (m_undoStack) {
+                MeshState st;
+                st.index = index;
+                st.hasPolygonMesh = (!newPoly.isEmpty() && !newTris.isEmpty());
+                st.polygon = newPoly;
+                st.vertices = newPoly.toList();
+                st.triangles = newTris;
+                m_undoStack->push(new SetPolygonMeshCommand(m_document, {st}));
+            } else if (m_document) {
+                SpriteBox b = m_document->box(index);
+                b.hasPolygonMesh = (!newPoly.isEmpty() && !newTris.isEmpty());
+                b.polygon = newPoly;
+                b.vertices = newPoly.toList();
+                b.triangles = newTris;
+                m_document->setBox(index, b);
+            }
+        });
     }
 
     updateBoxSelectionVisuals(m_document->selectedFrameIndices());
+}
+
+void AtlasViewController::setShowPolygonMeshes(bool show)
+{
+    m_showPolygonMeshes = show;
+    for (AtlasBoxItem *item : m_boxItems) {
+        if (item) {
+            item->setShowPolygonMesh(show);
+        }
+    }
 }
 
 void AtlasViewController::clearAtlasBoxes()
@@ -429,6 +466,26 @@ void AtlasViewController::moveSelectedBoxes(int dx, int dy)
             m_undoStack->endMacro();
         }
     }
+}
+
+bool AtlasViewController::deleteSelectedMeshVertices()
+{
+    for (AtlasBoxItem *item : m_boxItems) {
+        if (item && item->hasSelectedVertices()) {
+            return item->deleteSelectedVertices();
+        }
+    }
+    return false;
+}
+
+bool AtlasViewController::nudgeSelectedMeshVertices(int dx, int dy)
+{
+    for (AtlasBoxItem *item : m_boxItems) {
+        if (item && item->hasSelectedVertices()) {
+            return item->nudgeSelectedVertices(dx, dy);
+        }
+    }
+    return false;
 }
 
 void AtlasViewController::fitSelectedFramesInView(int padding)

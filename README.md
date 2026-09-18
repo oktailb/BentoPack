@@ -47,6 +47,13 @@
 * **Atomic Transactions & Crash Recovery:** Atomic file writing with journaled crash-recovery safeguard prevents project corruption.
 * **Embedded Git Time-Travel:** Integrated non-destructive versioning engine powered by LibGit2. Browse commit history, inspect visual diffs, and revert to previous states without leaving the app.
 
+### 📐 2D Polygon & Tight Mesh Packing (M8)
+* **Alpha Contour Extraction:** Automatic watertight Marching Squares contouring on sprite alpha silhouettes.
+* **Intelligent Simplification:** Ramer-Douglas-Peucker (RDP) boundary reduction with outward normal dilation (0–8px padding) to prevent edge pixel clipping, with customizable vertex budget (3–48 vertices).
+* **Non-Convex Triangulation:** Robust Ear-Clipping triangulation generating GPU index buffers and slashing up to 60–80% of GPU transparent pixel overdraw.
+* **HMI Live Visualization & Controls:** Real-time wireframe view directly on the atlas canvas (cyan mesh lines, neon green boundary, and vertex handles). Toggleable in the View menu. Dedicated tuning dialog (`Ctrl+M` / right-click) with 400% zoomed interactive preview, slider controls, and live fillrate savings telemetry.
+* **Reversible & Persistent:** Full `QUndoStack` integration (`SetPolygonMeshCommand`) and lossless `.ssp` project serialization.
+
 ### 📤 Multi-Engine Export
 * **PNG Sprite Atlas:** Optimized packing of extracted frames into a consolidated texture sheet.
 * **Godot 4 Engine Exporter:** Generates ready-to-use Godot 4 `SpriteFrames` (`.tres`) resources with embedded `AtlasTexture` definitions and animations.

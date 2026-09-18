@@ -85,6 +85,11 @@ set(SpriteStudioCore_SRC
     src/cli/godot_pipeline.cpp
     src/cli/native_commands.cpp
     src/cli/watch_daemon.cpp
+    src/geometry/contourtracer.cpp
+    src/geometry/polygonsimplifier.cpp
+    src/geometry/triangulator.cpp
+    src/commands/meshcommands.cpp
+    src/widgets/polygonmeshdialog.cpp
 )
 
 set(SpriteStudioCore_UI
@@ -150,6 +155,11 @@ set(SpriteStudioCore_INCLUDE
     include/cli/godot_pipeline.h
     include/cli/native_commands.h
     include/cli/watch_daemon.h
+    include/geometry/contourtracer.h
+    include/geometry/polygonsimplifier.h
+    include/geometry/triangulator.h
+    include/commands/meshcommands.h
+    include/widgets/polygonmeshdialog.h
 )
 
 # Bibliothèque statique commune pour l'application et la suite de tests

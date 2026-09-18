@@ -49,6 +49,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 
     if (m_atlasController && m_document && !m_document->selectedFrameIndices().isEmpty()) {
+        // Delete / Backspace: Check first if polygon mesh vertices are selected
+        if ((key == Qt::Key_Delete || key == Qt::Key_Backspace) && !(event->modifiers() & Qt::ShiftModifier)) {
+            if (m_atlasController->deleteSelectedMeshVertices()) {
+                event->accept();
+                return;
+            }
+        }
+
         // Shift + Delete: Erase pixels from atlas & delete slice
         if ((key == Qt::Key_Delete || key == Qt::Key_Backspace) && (event->modifiers() & Qt::ShiftModifier)) {
             m_atlasController->eraseSelectedSlicesPixels();
@@ -63,7 +71,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             return;
         }
 
-        // Arrow keys: Nudge selected boxes
+        // Arrow keys: Nudge selected vertices or boxes
         if (key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || key == Qt::Key_Down) {
             const AtlasConfig &cfg = AppConfig::instance().atlas();
             int step = (event->modifiers() & Qt::ShiftModifier) ? cfg.nudgeStepLarge : cfg.nudgeStepSmall;
@@ -73,6 +81,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             if (key == Qt::Key_Right) dx = step;
             if (key == Qt::Key_Up)    dy = -step;
             if (key == Qt::Key_Down)  dy = step;
+
+            if (m_atlasController->nudgeSelectedMeshVertices(dx, dy)) {
+                event->accept();
+                return;
+            }
 
             m_atlasController->nudgeSelectedBoxes(dx, dy);
             event->accept();
