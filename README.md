@@ -52,12 +52,16 @@
 * **Intelligent Simplification:** Ramer-Douglas-Peucker (RDP) boundary reduction with outward normal dilation (0–8px padding) to prevent edge pixel clipping, with customizable vertex budget (3–48 vertices).
 * **Non-Convex Triangulation:** Robust Ear-Clipping triangulation generating GPU index buffers and slashing up to 60–80% of GPU transparent pixel overdraw.
 * **HMI Live Visualization & Controls:** Real-time wireframe view directly on the atlas canvas (cyan mesh lines, neon green boundary, and vertex handles). Toggleable in the View menu. Dedicated tuning dialog (`Ctrl+M` / right-click) with 400% zoomed interactive preview, slider controls, and live fillrate savings telemetry.
+* **Direct Canvas Vertex Editing:** Click-drag individual vertices, multi-select vertices with `Shift` or `Ctrl`, nudge with arrow keys, double-click edge to insert a vertex, and hit `Delete` to remove vertices with automatic re-triangulation.
+* **High-Density Tight Polygon Packing:** Compaction allowing bounding boxes to overlap without pixel collisions. Multi-threaded candidate evaluation with configurable thread count (up to hardware cores) and sub-20ms instant calculation.
 * **Reversible & Persistent:** Full `QUndoStack` integration (`SetPolygonMeshCommand`) and lossless `.ssp` project serialization.
 
 ### 📤 Multi-Engine Export
 * **PNG Sprite Atlas:** Optimized packing of extracted frames into a consolidated texture sheet.
-* **Godot 4 Engine Exporter:** Generates ready-to-use Godot 4 `SpriteFrames` (`.tres`) resources with embedded `AtlasTexture` definitions and animations.
-* **TexturePacker / Aseprite JSON:** Universal JSON metadata mapping frame bounds `(x, y, w, h)` and animation tags.
+* **Godot 4 Engine Exporter:** Generates ready-to-use Godot 4 `SpriteFrames` (`.tres`) resources with embedded `AtlasTexture` definitions, animations, and companion `_mesh.tres` 2D `ArrayMesh` resources.
+* **Unity 2D SpriteSheet Exporter:** Generates `.unity.json` metadata compatible with Unity's `SpriteMeshType.Tight`, including normalized UVs, inverted Y-axis coordinates, and face indices.
+* **Unreal Engine Paper2D Exporter:** Generates `.paper2d.json` descriptors containing both render and collision polygon geometries.
+* **TexturePacker / Aseprite JSON:** Universal JSON metadata mapping frame bounds `(x, y, w, h)`, animation tags, and optional mesh geometry (`vertices`, `verticesUV`, `triangles`).
 
 ---
 
@@ -142,6 +146,7 @@ ctest --test-dir build --output-on-failure --verbose
 | `test_extractors` | GIF, JSON, Godot 4 `.tres`, and Sprite Sheet detectors using sample assets |
 | `test_controllers` | Undo/Redo commands, frame merging, selection, and timeline controller logic |
 | `test_cli` | Headless CLI parser, TexturePacker & Aseprite emulation, Godot 4 UID/scene generation, native commands, and POSIX exit codes |
+| `test_mesh` | Watertight Marching Squares contouring, RDP boundary reduction, Ear-Clipping triangulation, canvas vertex manipulation, multithreaded tight polygon packing, and Unity/Unreal/Godot mesh exports (22 tests) |
 
 ---
 
@@ -225,7 +230,8 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 | **Smart Atlas Slicing** | 🟢 **Advanced (O(N) SpatialGrid)** | 🔴 None (requires loose images) | 🟡 Basic | 🔴 None (canvas drawing) | 🟢 Historic pioneer | 🔴 None (requires loose files) | 🟡 Basic (Grid / Alpha) |
 | **Live Filters & Background Cleanup** | 🟢 **Yes (Plugin Registry, Despill, Outline, Color Swap)** | 🔴 None | 🔴 Manual | 🟡 Basic image effects | 🟢 Historic (BG only) | 🔴 None | 🔴 None |
 | **Timeline & Filmstrip** | 🟢 **Yes (Filmstrip, Ping-Pong)** | 🔴 None (Static preview) | 🟢 **Full animation studio** | 🟢 **Full animation studio** | 🔴 None | 🔴 None | 🟢 Engine-integrated |
-| **Packing Algorithms** | 🟢 **MaxRects (5 heuristics), Basic, Grid, Auto-Alias, Extrude** | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
+| **Packing Algorithms** | 🟢 **MaxRects (5 heuristics), Tight Polygon Nesting (Multithreaded), Shelf, Grid, Auto-Alias, Extrude** | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
+| **2D Mesh & Tight Polygon Slicing** | 🟢 **Yes (Marching Squares, Ear-Clipping, Vertex Editor, Godot/Unity/Unreal)** | 🟢 Commercial Feature | 🔴 None | 🔴 None | 🔴 None | 🔴 None | 🟡 Collision Polygon only |
 | **Anchor Points / Pivots** | 🟢 **Yes (Interactive Reticle, Zero-Jittering, Godot 4 / JSON)** | 🟢 Yes (All presets) | 🟢 Yes (Canvas origin) | 🟡 Canvas origin | 🟡 Basic | 🟢 Yes | 🟢 Yes |
 | **Embedded Time-Travel** | 🟢 **Unique (Git / LibGit2 dock)** | 🔴 None | 🔴 Local undo only | 🔴 Local undo only | 🔴 None | 🔴 None | 🟡 External Git |
 | **Godot 4 Integration** | 🟢 **Native (`.tres` SpriteFrames & `.tscn`)** | 🟢 Supported | 🟡 Via community plugins | 🟢 **Native (Built in Godot)** | 🔴 None | 🟡 JSON export | 🟢 Native |
@@ -247,8 +253,8 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 - [x] **M3 — Interactive Pivots & Alignment:** High-contrast double-ring reticle, interactive pivot drag in atlas & live preview, Shift+Click snapping, zero-jittering animation envelope stabilization, ground line, cardinal presets (Bottom-Center, Center, Top-Left, UI), batch application, optimal fit & 5000% zoom, engine offset export (Godot 4 margin Rect2 / JSON / .ssp)
 - [x] **M6 — Advanced Bin-Packing:** MaxRects (5 heuristics: BestShortSideFit, BestAreaFit, BestLongSideFit, BottomLeft, ContactPoint), padding, 1-2px extrusion anti-bleeding, Power-Of-Two / AnySize, auto-alias visual frame deduplication
 - [x] **M-CLI — Headless Command-Line Interface:** `spritestudio-cli` with multi-flavor dispatch (TexturePacker drop-in, Aseprite batch, Godot 4 pipeline, native slice/filter/ssp), POSIX codes, JSON output, automated benchmarks & regression tracking
+- [x] **M8 — Polygon & Tight Mesh Packing:** Watertight Marching Squares, Ramer-Douglas-Peucker boundary reduction with outward dilation, Ear-Clipping triangulation, interactive canvas vertex editor (drag, multi-select, insert, delete), multithreaded tight polygon nesting (configurable CPU threads), and multi-engine exports (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON)
 - [ ] **M4 — In-App Pixel Art Cleanup Editor:** Surgical 1-bit pencil, eraser, eyedropper, flood fill, pixel grid
-- [ ] **M8 — Polygon & Tight Mesh Packing:** Marching squares contouring, Ramer-Douglas-Peucker simplification, ear-clipping triangulation, Godot `Polygon2D` export to eradicate GPU overdraw
 
 ---
 
