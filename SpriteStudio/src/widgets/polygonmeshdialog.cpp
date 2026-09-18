@@ -30,8 +30,6 @@
 using namespace SpriteStudioGeometry;
 using namespace SpriteStudioCommands;
 
-namespace SpriteStudioWidgets {
-
 PolygonMeshDialog::PolygonMeshDialog(SpriteDocument *document,
                                      QUndoStack *undoStack,
                                      int targetIndex,
@@ -550,5 +548,3 @@ void PolygonMeshDialog::removeMesh()
     }
     updatePreviewAndMetrics();
 }
-
-} // namespace SpriteStudioWidgets

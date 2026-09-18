@@ -56,6 +56,15 @@
 * **High-Density Tight Polygon Packing:** Compaction allowing bounding boxes to overlap without pixel collisions. Multi-threaded candidate evaluation with configurable thread count (up to hardware cores) and sub-20ms instant calculation.
 * **Reversible & Persistent:** Full `QUndoStack` integration (`SetPolygonMeshCommand`) and lossless `.ssp` project serialization.
 
+### 🖌️ Surgical Pixel-by-Pixel Editor (M4)
+* **High-Precision Canvas (`Ctrl+E`):** Fast, non-interpolated pixel art editor (`SmoothPixmapTransform = false`) for surgical touch-ups without switching to GIMP or Photoshop.
+* **Continuous Bresenham Drawing:** 1px pencil and 1px eraser guarantee continuous unbroken lines even during fast mouse sweeps.
+* **Instant Sampling & Flood Fill:** Eyedropper (`Alt+Click` or `I`) and 4-way flood fill bucket bounded by sprite limits and active selection.
+* **Flexible Selections & Floating Stamp:** Rectangular marquee and magic wand color selection; Cut (`Ctrl+X`), Copy (`Ctrl+C`), and Paste (`Ctrl+V`) with draggable floating stamp preview.
+* **Authentic Retro & Dynamic Palettes:** Real-time auto-extraction of unique sprite colors, alongside authentic historical palettes: **NES / Famicom** (54), **SNES / Super Famicom** (32), **Amiga OCS** (32), **NEC PC-Engine** (32), **Game Boy DMG** (4), **Pico-8** (16), and **Commodore 64** (16).
+* **Inter-Frame Navigation:** `[◀ Previous]` and `[Next ▶]` buttons (`Page Up` / `Page Down`) allow touching up entire walk cycles frame by frame in a single session.
+* **Two-Tier Undo/Redo:** Local stack for fine brush strokes and compound `EditSpritePixelsCommand` synchronizing frame and atlas texture seamlessly with `CompositionMode_Source`.
+
 ### 📤 Multi-Engine Export
 * **PNG Sprite Atlas:** Optimized packing of extracted frames into a consolidated texture sheet.
 * **Godot 4 Engine Exporter:** Generates ready-to-use Godot 4 `SpriteFrames` (`.tres`) resources with embedded `AtlasTexture` definitions, animations, and companion `_mesh.tres` 2D `ArrayMesh` resources.
@@ -232,6 +241,7 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 | **Timeline & Filmstrip** | 🟢 **Yes (Filmstrip, Ping-Pong)** | 🔴 None (Static preview) | 🟢 **Full animation studio** | 🟢 **Full animation studio** | 🔴 None | 🔴 None | 🟢 Engine-integrated |
 | **Packing Algorithms** | 🟢 **MaxRects (5 heuristics), Tight Polygon Nesting (Multithreaded), Shelf, Grid, Auto-Alias, Extrude** | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
 | **2D Mesh & Tight Polygon Slicing** | 🟢 **Yes (Marching Squares, Ear-Clipping, Vertex Editor, Godot/Unity/Unreal)** | 🟢 Commercial Feature | 🔴 None | 🔴 None | 🔴 None | 🔴 None | 🟡 Collision Polygon only |
+| **Surgical Pixel Editor** | 🟢 **Yes (Bresenham 1px, Wand, Retro Palettes, Stamp)** | 🔴 None | 🟢 **Full illustration editor** | 🟢 **Full illustration editor** | 🔴 None | 🔴 None | 🔴 None |
 | **Anchor Points / Pivots** | 🟢 **Yes (Interactive Reticle, Zero-Jittering, Godot 4 / JSON)** | 🟢 Yes (All presets) | 🟢 Yes (Canvas origin) | 🟡 Canvas origin | 🟡 Basic | 🟢 Yes | 🟢 Yes |
 | **Embedded Time-Travel** | 🟢 **Unique (Git / LibGit2 dock)** | 🔴 None | 🔴 Local undo only | 🔴 Local undo only | 🔴 None | 🔴 None | 🟡 External Git |
 | **Godot 4 Integration** | 🟢 **Native (`.tres` SpriteFrames & `.tscn`)** | 🟢 Supported | 🟡 Via community plugins | 🟢 **Native (Built in Godot)** | 🔴 None | 🟡 JSON export | 🟢 Native |
@@ -254,7 +264,10 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 - [x] **M6 — Advanced Bin-Packing:** MaxRects (5 heuristics: BestShortSideFit, BestAreaFit, BestLongSideFit, BottomLeft, ContactPoint), padding, 1-2px extrusion anti-bleeding, Power-Of-Two / AnySize, auto-alias visual frame deduplication
 - [x] **M-CLI — Headless Command-Line Interface:** `spritestudio-cli` with multi-flavor dispatch (TexturePacker drop-in, Aseprite batch, Godot 4 pipeline, native slice/filter/ssp), POSIX codes, JSON output, automated benchmarks & regression tracking
 - [x] **M8 — Polygon & Tight Mesh Packing:** Watertight Marching Squares, Ramer-Douglas-Peucker boundary reduction with outward dilation, Ear-Clipping triangulation, interactive canvas vertex editor (drag, multi-select, insert, delete), multithreaded tight polygon nesting (configurable CPU threads), and multi-engine exports (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON)
-- [ ] **M4 — In-App Pixel Art Cleanup Editor:** Surgical 1-bit pencil, eraser, eyedropper, flood fill, pixel grid
+- [x] **M4 — Surgical Pixel Art Cleanup Editor:** Continuous 1px Bresenham pencil, 1px eraser (alpha 0), eyedropper, flood fill, rectangular/color wand selection, floating stamp clipboard, retro palettes (NES, SNES, Amiga, NEC, GB, Pico-8, C64) & dynamic sprite colors, pixel grid (≥400%), inter-frame navigation, reversible atlas synchronization
+- [ ] **M9 — VRAM Texture Compression & GPU Formats:** KTX2 / Basis Universal / ASTC / ETC2 texture container generation, direct GPU VRAM upload, runtime decompression elimination
+
+---
 
 ---
 

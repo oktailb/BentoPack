@@ -17,7 +17,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Architecture Plugins, 7 Filtres opérationnels, Live Preview, Auto-Detect Boxes, Rollback) |
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — MaxRects BSSF/BAF/BLSF, POT, Extrude, Déduplication, ExportDialog) |
 | **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Drop-in 100% TexturePacker, Aseprite -b, Godot 4 UID/Scene, Slice, Filter, SSP, POSIX, JSON) |
-| **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
+| **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Bresenham 1px, Gomme alpha 0, Pipette, Seau, Sélections Marquee/Wand, Tampon Flottant, Palettes NES/SNES/Amiga/NEC/GB/Pico8/C64, Navigation Inter-frames, 19 tests CTest) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Marching Squares, RDP, Ear-Clipping, Wireframe HMI, Édition Sommets, Tight Packing Multithreadé & Configurable, Export Unity/Unreal/Godot, 22 tests CTest) |
 | **M9** | [Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC)](#m9--compression-de-textures-vram--formats-gpu-ktx2--basis-universal--astc) | **Moyenne** | Haute | 📝 Spécifié & Documenté (Conteneurs KTX2, Transcodage GPU, Élimination Décompression CPU) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
@@ -340,35 +340,61 @@ Le point d'ancrage (ou pivot) définit le point de référence (souvent au nivea
 
 ---
 
-## M4 : Outil d'Édition de Pixels (Pixel Art Retouching)
+## M4 : Outil d'Édition de Pixels (Pixel Art Retouching) — ✅ TERMINÉ & VALIDÉ (100%)
 
 ### Contexte & Objectif
 Les utilisateurs perdent un temps précieux s'ils doivent rouvrir Aseprite ou Photoshop pour corriger un unique pixel oublié, enlever un artefact de compression, ou boucher un trou transparent.  
-Sprite Studio doit intégrer un mini-éditeur de pixels intégré dédié à la retouche rapide de frames.
+Sprite Studio intègre désormais un atelier chirurgical d'édition de pixels dédié à la retouche rapide de frames avec un double niveau d'annulation et la synchronisation automatique de l'atlas.
 
-### Spécifications Fonctionnelles
-1. **Espace de Travail Pixel Art :**
-   - Dialogue ou dock dédié s'ouvrant sur la frame active (double-clic sur une frame).
-   - Niveau de zoom élevé (de 100% à 3200%) avec affichage optionnel de la **grille de pixels (*Pixel Grid*)**.
-   - Fond en damier pour visualiser la transparence.
-2. **Boîte à Outils Fondamentale :**
-   - **Crayon (*Pencil*) :** Dessin au pixel (taille 1px ou brosses carrées 2px, 3px).
-   - **Gomme (*Eraser*) :** Efface en restaurant l'alpha à 0.
-   - **Pipette (*Eyedropper*) :** Prélèvement de couleur sur la frame courante ou sur la palette.
-   - **Remplissage (*Paint Bucket*) :** Remplissage par flot (Flood Fill) des pixels contigus de même couleur/alpha.
-3. **Gestion de la Palette & Couleurs :**
-   - Sélecteur de couleur avec canaux RGBA et code Hexadécimal.
-   - Bandeau d'historique des couleurs récemment utilisées.
-   - Palette auto-extraite des couleurs uniques présentes dans le sprite en cours d'édition.
-4. **Synchronisation & Undo/Redo :**
-   - Historique Undo/Redo dédié à l'éditeur de pixels.
-   - Dès validation ou en temps réel : mise à jour de la frame dans la liste, dans l'atlas composite et dans le lecteur d'animation.
+### Réalisations & Architecture Validée (19 tests CTest 100% Succès)
+1. **Composant Canevas Graphique Haute Précision (`PixelCanvas`) :**
+   - Implémenté dans `include/widgets/pixelcanvas.h` et `src/widgets/pixelcanvas.cpp`.
+   - Tracé continu anti-aliasing désactivé (`SmoothPixmapTransform = false`) garantissant des pixels 100% nets.
+   - **Algorithme de ligne continue de Bresenham** : aucun saut de pixel lors des tracés rapides à la souris.
+   - **Gomme 1px** : réinitialise les pixels visés à `alpha = 0`.
+   - **Pipette (Eyedropper)** : échantillonnage instantané avec raccourci universel `Alt + clic` ou outil dédié `I`.
+   - **Seau de Remplissage (Flood Fill)** : propagation 4-connectée rapide, bornée strictement par les limites du sprite et de la sélection active.
+   - **Sélection de Zone & Baguette Magique** :
+     - Sélection rectangulaire par glisser-déposer (*Marquee*).
+     - Sélection par couleur (*Magic Wand*) extrayant tous les pixels identiques du sprite.
+     - Effacement ciblé (`Suppr` / `Backspace`), Sélectionner tout (`Ctrl+A`), Désélectionner (`Ctrl+D` / `Échap`).
+   - **Presse-papier & Tampon Flottant** :
+     - Copier (`Ctrl+C`), Couper (`Ctrl+X`), Coller (`Ctrl+V`).
+     - Le collage fait apparaître un tampon flottant interactif déplaçable à la souris avant estampage définitif (`Entrée` ou clic extérieur).
+   - **Transformations Chirurgicales** :
+     - Miroir Horizontal (`Flip H`), Miroir Vertical (`Flip V`), Rotation 90° horaire (`Rotate 90°`).
+   - **Ergonomie Visuelle** :
+     - Damier de transparence contrasté sombre.
+     - Grille de pixels (*Pixel Grid*) automatique dès que le zoom $\ge 400\%$ et débrayable.
+     - Zoom molette fluide et centré (100% à 6400%), bouton d'ajustement automatique à la vue (*Fit to View*).
 
-### Fichiers & Composants Cibles
-- `SpriteStudio/include/pixeleditor/pixeleditordialog.h` (ou `pixeleditorwidget.h`).
-- `SpriteStudio/src/pixeleditor/pixeleditorcanvas.cpp` : Canvas dérivé de `QGraphicsView` ou `QWidget` gérant le tracé pixelisé sans lissage (filtrage `Qt::FastTransformation`).
+2. **Atelier & Dialogue Ergonomique (`PixelEditorDialog`) :**
+   - Implémenté dans `include/widgets/pixeleditordialog.h` et `src/widgets/pixeleditordialog.cpp`.
+   - **Navigation inter-frames** : boutons `[◀ Précédent]` et `[Suivant ▶]` (raccourcis `Page Up` / `Page Down`) permettant d'éditer une suite d'animation frame par frame sans jamais fermer la boîte de dialogue.
+   - **Gestionnaire Avancé de Couleurs & Palettes** :
+     - Pastilles Primaire (clic gauche) et Secondaire (clic droit), bouton d'inversion rapide `[⇄]` (`X`).
+     - **Palette Dynamique du Sprite** : extraction automatique et instantanée de l'ensemble des teintes opaques uniques de la frame active.
+     - **7 Palettes Rétro Authentiques** intégrées :
+       - **NES / Famicom** (54 couleurs)
+       - **SNES / Super Famicom** (32 couleurs 15-bit)
+       - **Amiga OCS / Workbench** (32 couleurs 12-bit)
+       - **NEC PC-Engine** (32 couleurs 9-bit)
+       - **Game Boy DMG-01** (4 nuances monochromes)
+       - **Pico-8** (16 couleurs)
+       - **Commodore 64** (16 couleurs)
+     - Grille interactive de pastilles de couleurs avec infobulle hexadécimale/RGB.
+     - Mini-aperçu en direct à l'échelle 1:1 affiché en permanence sur fond transparent.
+
+3. **Double Niveau d'Undo / Redo & Commande Atomique Document (`EditSpritePixelsCommand`) :**
+   - *Niveau interne* : `PixelCanvas` intègre sa propre pile `QUndoStack` pour chaque trait, remplissage ou transformation (`Ctrl+Z` / `Ctrl+Y`).
+   - *Niveau document* : l'application des modifications émet une commande `EditSpritePixelsCommand` réversible, mettant à jour atomiquement la frame et la portion correspondante de la texture d'atlas avec `QPainter::CompositionMode_Source` (reflétant parfaitement les pixels effacés sur l'atlas).
+   - Intégration dans `MainWindow` : raccourci clavier `Ctrl+E`, menu Édition, et menu contextuel clic droit sur les boîtes d'atlas.
+
+4. **Tests Automatisés & Validation Qualité :**
+   - Suite de tests complète `tests/test_pixel_editor.cpp` (19 tests unitaires, 100% de succès en 7 ms).
 
 ---
+
 
 ## M5 : Format de Projet Natif (`.ssp` - Sprite Studio Project) — ✅ TERMINÉ & VALIDÉ (100%)
 
@@ -1336,9 +1362,9 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 ---
 
 ### 🎯 Phase C — Spécialisation, Retouche & Haute Performance GPU (Long Terme)
-6. **Étape 9 — Outil de Retouche Pixel Chirurgicale (M4 allégé) :**
+6. **Étape 9 — Outil de Retouche Pixel Chirurgicale (M4 allégé) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Corriger rapidement un pixel oublié ou un artefact sans devoir rouvrir un éditeur externe.
-   - *Cadrage strict :* Outils limités (crayon 1px, gomme, pipette, seau de remplissage) pour éviter le risque de dispersion (*feature creep*).
+   - *Livrables :* Atelier `PixelEditorDialog` et `PixelCanvas` haute précision sans interpolation (`SmoothPixmapTransform = false`), tracé continu de Bresenham 1px, gomme 1px (alpha 0), pipette instantanée (`Alt+clic` / `I`), remplissage par flot 4-connecté borné par la sélection active, sélections rectangulaire et baguette magique, copier/couper/coller avec tampon flottant déplaçable, miroir H/V, rotation 90°, grille de pixels ($\ge 400\%$), navigation inter-frames (`Page Up` / `Page Down`), palettes rétro authentiques (NES, SNES, Amiga, NEC, Game Boy, Pico-8, C64) et extraction automatique des couleurs du sprite, synchronisation réversible de l'atlas et du document (`EditSpritePixelsCommand`). 19 tests unitaires sous CTest validés à 100%.
 7. **Étape 10 — Empaquetage Polygonal & Maillages Serrés (M8 - Tight Mesh) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Éradiquer l'overdraw GPU (60% à 80% de fillrate économisé) et maximiser la compacité (+20% à +50%) pour mobile et Nintendo Switch.
    - *Livrables :* Contouring Marching Squares étanche, simplification RDP avec dilatation normale et budget de sommets (3-48), triangulation Ear-Clipping, édition interactive directe des sommets sur canevas (sélection, déplacement souris/clavier, insertion par double-clic, suppression `Suppr`), algorithme `TightPolygonPacker` haute densité avec multithreading configurable (1 à $N$ cœurs logiques `QThread::idealThreadCount()`), optimisation des ancres de placement (< 20 ms), IHM non-bloquante avec calcul à la demande et mémorisation des préférences, et exports multi-moteurs (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON). 22 tests unitaires sous CTest validés à 100%.

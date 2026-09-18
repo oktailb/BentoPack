@@ -301,4 +301,39 @@ private:
     QList<PivotInfo>   m_pivots;
 };
 
+/**
+ * @brief Command to edit pixels of one or multiple frames and synchronize the atlas with undo/redo.
+ */
+class EditSpritePixelsCommand : public QUndoCommand
+{
+public:
+    EditSpritePixelsCommand(SpriteDocument *doc,
+                            int frameIndex,
+                            const QImage &newFrame,
+                            QUndoCommand *parent = nullptr);
+
+    EditSpritePixelsCommand(SpriteDocument *doc,
+                            const QMap<int, QImage> &modifiedFrames,
+                            QUndoCommand *parent = nullptr);
+
+    EditSpritePixelsCommand(SpriteDocument *doc,
+                            int frameIndex,
+                            const QImage &oldFrame,
+                            const QImage &newFrame,
+                            const QImage &oldAtlas,
+                            const QImage &newAtlas,
+                            QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument*        m_doc;
+    QMap<int, QImage>      m_oldFrames;
+    QMap<int, QImage>      m_newFrames;
+    QImage                 m_oldAtlas;
+    QImage                 m_newAtlas;
+};
+
 #endif // COMMANDS_H
+

@@ -93,6 +93,8 @@ set(SpriteStudioCore_SRC
     src/geometry/triangulator.cpp
     src/commands/meshcommands.cpp
     src/widgets/polygonmeshdialog.cpp
+    src/widgets/pixelcanvas.cpp
+    src/widgets/pixeleditordialog.cpp
 )
 
 set(SpriteStudioCore_UI
@@ -166,6 +168,8 @@ set(SpriteStudioCore_INCLUDE
     include/geometry/triangulator.h
     include/commands/meshcommands.h
     include/widgets/polygonmeshdialog.h
+    include/widgets/pixelcanvas.h
+    include/widgets/pixeleditordialog.h
 )
 
 # Bibliothèque statique commune pour l'application et la suite de tests

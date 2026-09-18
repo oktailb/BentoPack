@@ -17,8 +17,6 @@ class QGroupBox;
 class QDialogButtonBox;
 class QUndoStack;
 
-namespace SpriteStudioWidgets {
-
 /**
  * @brief Interactive dialog for tuning 2D polygon and tight mesh parameters
  *        with live preview, wireframe rendering, and GPU overdraw reduction metrics.
@@ -99,6 +97,8 @@ private:
     void saveSettings();
 };
 
-} // namespace SpriteStudioWidgets
+namespace SpriteStudioWidgets {
+    using PolygonMeshDialog = ::PolygonMeshDialog;
+}
 
 #endif // POLYGONMESHDIALOG_H

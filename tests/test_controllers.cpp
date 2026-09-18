@@ -1412,6 +1412,11 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Force Power of Two (2^n)"), QStringLiteral("Forcer la Puissance de Deux (2^n)"));
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Packing Efficiency: Preserved as-is (WYSIWYG)"), QStringLiteral("Efficacité d'empaquetage : Conservée telle quelle (WYSIWYG)"));
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Cancel"), QStringLiteral("Annuler"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Tight Mesh & 2D Polygon Packing"), QStringLiteral("Maillage polygonal 2D & Découpage serré"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Approximation Tolerance (ε):"), QStringLiteral("Tolérance d'approximation (ε) :"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Apply to Selection"), QStringLiteral("Appliquer à la sélection"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — SpriteStudio"), QStringLiteral("Éditeur de pixels — SpriteStudio"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pencil (1px continuous Bresenham) [P]"), QStringLiteral("Crayon (Bresenham 1px continu) [P]"));
 
         // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
         QCOMPARE(QCoreApplication::translate("QPlatformTheme", "OK"), QStringLiteral("OK"));
@@ -1464,6 +1469,11 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Force Power of Two (2^n)"), QStringLiteral("Force Power of Two (2^n)"));
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Packing Efficiency: Preserved as-is (WYSIWYG)"), QStringLiteral("Packing Efficiency: Preserved as-is (WYSIWYG)"));
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Cancel"), QStringLiteral("Cancel"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Tight Mesh & 2D Polygon Packing"), QStringLiteral("Tight Mesh & 2D Polygon Packing"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Approximation Tolerance (ε):"), QStringLiteral("Approximation Tolerance (ε):"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Apply to Selection"), QStringLiteral("Apply to Selection"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — SpriteStudio"), QStringLiteral("Pixel Editor — SpriteStudio"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pencil (1px continuous Bresenham) [P]"), QStringLiteral("Pencil (1px continuous Bresenham) [P]"));
 
         // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
         QCOMPARE(QCoreApplication::translate("QPlatformTheme", "OK"), QStringLiteral("OK"));
@@ -1516,6 +1526,12 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Force Power of Two (2^n)"), QStringLiteral("2の累乗サイズに強制 (2^n)"));
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Packing Efficiency: Preserved as-is (WYSIWYG)"), QStringLiteral("充填効率：そのまま維持 (WYSIWYG)"));
         QCOMPARE(QCoreApplication::translate("ExportDialog", "Cancel"), QStringLiteral("キャンセル"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Tight Mesh & 2D Polygon Packing"), QStringLiteral("2Dポリゴンメッシュ＆タイトパッキング"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Approximation Tolerance (ε):"), QStringLiteral("近似許容値 (ε)："));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Apply to Selection"), QStringLiteral("選択範囲に適用"));
+        QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Target Frame %1: Rectangle mode (no mesh applied)"), QStringLiteral("対象フレーム %1：矩形モード（メッシュ未適用）"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — SpriteStudio"), QStringLiteral("ピクセルエディタ — SpriteStudio"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pencil (1px continuous Bresenham) [P]"), QStringLiteral("鉛筆（1px連続ブレゼンハム）[P]"));
 
         // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
         QCOMPARE(QCoreApplication::translate("QPlatformTheme", "OK"), QStringLiteral("OK"));

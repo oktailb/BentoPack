@@ -88,6 +88,11 @@ void MainWindow::onBoxContextMenuRequested(int index, const QPoint &screenPos)
         if (m_atlasController) m_atlasController->trimSelectedSlice(AppConfig::instance().atlas().defaultAlphaThreshold);
     });
 
+    QAction *pixelEditAction = menu.addAction(tr("KEY_CTX_EDIT_PIXELS") + "\tCtrl+E");
+    connect(pixelEditAction, &QAction::triggered, this, [this, index]() {
+        openPixelEditorDialog(index);
+    });
+
     QAction *meshAction = menu.addAction(tr("KEY_CTX_POLYGON_MESH"));
     connect(meshAction, &QAction::triggered, this, [this, index]() {
         openPolygonMeshDialog(index);
@@ -171,6 +176,12 @@ void MainWindow::onAtlasContextMenuRequested(const QPoint &pos)
     trimAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
     connect(trimAction, &QAction::triggered, this, [this]() {
         if (m_atlasController) m_atlasController->trimSelectedSlice(AppConfig::instance().atlas().defaultAlphaThreshold);
+    });
+
+    QAction *pixelEditAction = menu.addAction(tr("KEY_CTX_EDIT_PIXELS") + "\tCtrl+E");
+    pixelEditAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
+    connect(pixelEditAction, &QAction::triggered, this, [this]() {
+        openPixelEditorDialog();
     });
 
     QAction *meshAction = menu.addAction(tr("KEY_CTX_POLYGON_MESH"));

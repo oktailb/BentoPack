@@ -1,5 +1,6 @@
 #include "commands/commands.h"
 #include <algorithm>
+#include <QPainter>
 
 // --- DeleteFramesCommand ---
 
@@ -476,6 +477,89 @@ void ChangePivotCommand::redo()
     if (!m_doc) return;
     for (const auto &info : m_pivots) {
         m_doc->setBoxPivot(info.index, info.newPivot, info.newCustom);
+    }
+}
+
+// --- EditSpritePixelsCommand ---
+
+EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
+                                                 int frameIndex,
+                                                 const QImage &newFrame,
+                                                 QUndoCommand *parent)
+    : EditSpritePixelsCommand(doc, QMap<int, QImage>{{frameIndex, newFrame}}, parent)
+{
+}
+
+EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
+                                                 const QMap<int, QImage> &modifiedFrames,
+                                                 QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+    , m_newFrames(modifiedFrames)
+{
+    if (m_doc) {
+        m_oldAtlas = m_doc->atlas();
+        m_newAtlas = m_oldAtlas.copy();
+        QPainter p(&m_newAtlas);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+
+        for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
+            int idx = it.key();
+            const QImage &newImg = it.value();
+            m_oldFrames[idx] = m_doc->frame(idx);
+            if (idx >= 0 && idx < m_doc->boxes().size()) {
+                const SpriteBox &b = m_doc->box(idx);
+                if (!b.rect.isNull() && !m_newAtlas.isNull()) {
+                    p.drawImage(b.rect.topLeft(), newImg);
+                }
+            }
+        }
+        p.end();
+    }
+
+    if (m_newFrames.size() == 1) {
+        setText(QObject::tr("Edit Frame %1 Pixels").arg(m_newFrames.firstKey() + 1));
+    } else {
+        setText(QObject::tr("Edit Pixels (%1 Frames)").arg(m_newFrames.size()));
+    }
+}
+
+EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
+                                                 int frameIndex,
+                                                 const QImage &oldFrame,
+                                                 const QImage &newFrame,
+                                                 const QImage &oldAtlas,
+                                                 const QImage &newAtlas,
+                                                 QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+    , m_oldAtlas(oldAtlas)
+    , m_newAtlas(newAtlas)
+{
+    m_oldFrames[frameIndex] = oldFrame;
+    m_newFrames[frameIndex] = newFrame;
+    setText(QObject::tr("Edit Frame %1 Pixels").arg(frameIndex + 1));
+}
+
+void EditSpritePixelsCommand::redo()
+{
+    if (!m_doc) return;
+    if (!m_newAtlas.isNull()) {
+        m_doc->setAtlas(m_newAtlas);
+    }
+    for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
+        m_doc->replaceFrame(it.key(), it.value());
+    }
+}
+
+void EditSpritePixelsCommand::undo()
+{
+    if (!m_doc) return;
+    if (!m_oldAtlas.isNull()) {
+        m_doc->setAtlas(m_oldAtlas);
+    }
+    for (auto it = m_oldFrames.constBegin(); it != m_oldFrames.constEnd(); ++it) {
+        m_doc->replaceFrame(it.key(), it.value());
     }
 }
 

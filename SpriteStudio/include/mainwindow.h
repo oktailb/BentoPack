@@ -130,6 +130,7 @@ private slots:
     void on_actionExit_triggered();
     void openSettingsDialog();
     void openPolygonMeshDialog(int index = -1);
+    void openPixelEditorDialog(int index = -1);
 
     // Playback & FPS
     void on_Play_clicked();
@@ -224,6 +225,7 @@ private:
     QAction *m_actionToggleGitHistory = nullptr;
     QAction *m_actionTogglePolygonMesh = nullptr;
     QAction *m_actionPolygonMeshDialog = nullptr;
+    QAction *m_actionPixelEditorDialog = nullptr;
     QLabel *statusLabel = nullptr;
     QLabel *zoomLabel = nullptr;
     QSlider *zoomSlider = nullptr;
