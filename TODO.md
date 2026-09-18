@@ -18,7 +18,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — MaxRects BSSF/BAF/BLSF, POT, Extrude, Déduplication, ExportDialog) |
 | **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Drop-in 100% TexturePacker, Aseprite -b, Godot 4 UID/Scene, Slice, Filter, SSP, POSIX, JSON) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 📝 Planifié (Périmètre Restreint / Retouche Chirurgicale) |
-| **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Basse** | Haute | 📝 Spécifié & Documenté (Optimisation Mobile & Switch, Tight Polygon Mesh) |
+| **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Marching Squares, RDP, Ear-Clipping, Wireframe HMI, Édition Sommets, Tight Packing Multithreadé & Configurable, Export Unity/Unreal/Godot, 22 tests CTest) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
 | **AUDIT** | [Dette de Thread-Safety & Modèle Pur (Audit Étape 2)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Clôturé & Validé (Modèle pur QImage, Cache Vignettes, 0 conversion I/O, Miniz ZIP, 116 tests CTest 100%) |
 
@@ -663,7 +663,7 @@ Le chantier **M6** dote **Sprite Studio** du standard industriel de bin-packing 
 
 ---
 
-## M8 : Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)
+## M8 : Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing) — ✅ TERMINÉ & VALIDÉ (100% CTest)
 
 ### Contexte & Enjeux Techniques
 Dans l'empaquetage rectangulaire standard (M6), chaque frame est isolée dans un rectangle orthogonal $[x, y, w, h]$. Pour des sprites aux poses dynamiques (personnage en plein saut, bras levé, lame d'épée en diagonale, tentacules, queues, effets de foudre), ce rectangle contient souvent plus de 50% à 70% de pixels transparents inutilisés.  
@@ -673,76 +673,75 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 
 ---
 
-### 🔬 Pipeline Algorithmique Complet en 5 Étapes
+### 🔬 Réalisations Architecturales & Techniques Clôturées
 
-```
-[Canal Alpha] 
-     │
-     ▼ 1. Détection de Contour
-[Contour Pixel (Marching Squares / Moore-Neighbor)]
-     │
-     ▼ 2. Simplification Géométrique
-[Polygone Simplifié 8-12 sommets (Ramer-Douglas-Peucker)]
-     │
-     ▼ 3. Triangulation 2D
-[Maillage Triangulé GPU (Ear Clipping / Constrained Delaunay)]
-     │
-     ▼ 4. Bin-Packing Non-Convexe
-[Imbrication Puzzle Optimisée (No-Fit Polygon / Raster Dilation)]
-     │
-     ▼ 5. Export Multi-Moteurs
-[Atlas PNG Compact + JSON Maillage (Vertices, UVs, Triangles)]
-```
+#### 1. Pipeline Géométrique 2D Haute Performance (`SpriteStudioGeometry`) :
+- **Extraction de contours étanches (`ContourTracer`) :**
+  - Algorithme *Marching Squares* 2D évaluant la grille discrète du canal alpha (seuil configurable $\alpha \in [1..255]$).
+  - Échantillonnage sous-pixel étanche avec grille paddée de 1 pixel garantissant la fermeture géométrique absolue sans risque de boucle infinie.
+- **Simplification adaptative et anti-clipping (`PolygonSimplifier`) :**
+  - Réduction de sommets par algorithme *Ramer-Douglas-Peucker* (RDP).
+  - **Dilation normale sortante (*Outward Normal Padding*) :** calcul des bissectrices normales unitaires $\vec{n} = (\vec{n}_1 + \vec{n}_2) / \|\vec{n}_1 + \vec{n}_2\|$ étendant les sommets vers l'extérieur de 0.5 à 8.0 px avec bridage aux dimensions de la frame. Cette innovation élimine tout découpage accidentel des pixels d'art sur les angles vifs.
+  - **Budget de sommets strict (*Vertex Budget*) :** mécanisme itératif augmentant le seuil $\varepsilon$ si le nombre de sommets dépasse le budget alloué (ex: 8, 12, 16 jusqu'à 48 sommets maximum pour l'optimisation GPU).
+- **Triangulation Ear-Clipping & Métriques GPU (`Triangulator`) :**
+  - Décomposition robuste des polygones non convexes en triplets d'indices $[i_0, i_1, i_2]$ compatibles avec les buffers d'index OpenGL / Vulkan / DirectX / WebGPU.
+  - Calcul de l'aire par la formule de Shoelace (formule du lacet).
+  - Mesure en direct du gain d'overdraw GPU :
+    $$\text{Gain Overdraw (\%)} = \left(1 - \frac{\text{Aire}_{\text{Polygone}}}{\text{Aire}_{\text{BoundingBox}}}\right) \times 100\%$$
+    permettant de constater des réductions typiques de **60% à 80%** du coût de fillrate transparent sur GPU mobiles et consoles.
 
-#### 1. Détection de Contour Silhouette (*Contour Tracing*) :
-- Analyse du canal alpha de chaque frame selon un seuil d'opacité configurable ($\alpha > \text{alphaThreshold}$, ex. $\alpha \ge 1$).
-- Algorithme de contouring 2D (**Marching Squares** ou traçage de frontières de Moore-Neighbor) pour extraire la chaîne fermée ordonnée des pixels de bordure.
-- Prise en charge des silhouettes à composantes multiples ou îles disjointes (ex. projectile séparé du corps).
+#### 2. Modèle de Données & Persistance `.ssp` :
+- **Extension de `SpriteBox` :**
+  - Ajout des champs locaux : `QPolygonF polygon`, `QList<QPointF> vertices`, `QList<int> triangles`, `bool hasPolygonMesh`.
+  - Méthodes `polygonArea()` et `overdrawSavings()`.
+- **Sérialisation dans `ProjectManager` :**
+  - Sauvegarde et restauration complètes dans le schéma JSON des projets `.ssp` avec conservation absolue de la géométrie, des sommets et de la table des triangles.
 
-#### 2. Simplification Géométrique Adaptative (*Ramer-Douglas-Peucker*) :
-- Les contours bruts contiennent souvent 100 à 400 sommets par sprite, ce qui saturerait inutilement le GPU au stade vertex.
-- Application de l'algorithme de **Ramer-Douglas-Peucker (RDP)** avec paramètre d'écart $\epsilon$ (en pixels, ex: $\epsilon = 1.0$ à $2.5$ px) :
-  - Réduction de l'enveloppe à un polygone épuré de **6 à 12 sommets** seulement.
-  - **Plafond strict de sommets ($N \le 16$) :** Garantie d'un coût de transformation de sommets négligeable pour le moteur de jeu.
-  - **Garantie d'inclusion externe :** Dilatation légère (expansion d'un demi-pixel) pour garantir qu'aucun pixel opaque ne soit accidentellement tronqué par une arête simplifiée.
+#### 3. Visualisation & Rendu HMI en Direct :
+- **Superposition Wireframe dans `AtlasBoxItem` :**
+  - Lignes de maillage cyan pointillés (`#00FFFF`, 50% d'opacité) reliant les triangles.
+  - Contour extérieur vert néon (`#00FF88`, 1.5px cosmétique).
+  - Poignées de contrôle aux sommets (cercles blancs de 3px de rayon avec liseré sombre).
+- **Contrôle d'affichage dans le menu Vue :**
+  - Action cochable dans le menu **Affichage** : *"Afficher les maillages polygonaux (Wireframe)"*.
+  - Synchronisation instantanée avec tous les items de l'atlas via `AtlasViewController::setShowPolygonMeshes(bool)`.
+- **Dialogue de réglage interactif (`PolygonMeshDialog`, raccourci `Ctrl+M`) :**
+  - Zone de prévisualisation zoomée (400%) avec damier de transparence contrasté, boîte englobante d'origine en pointillés, et rendu fil de fer temps réel.
+  - Curseurs pour la tolérance $\varepsilon$, le seuil Alpha, la dilatation (Padding) et le budget de sommets.
+  - Tableau de bord avec nombre de sommets, de triangles, surface et pourcentage d'overdraw économisé en temps réel.
+  - Boutons d'application à la sélection, à tous les sprites, ou de réinitialisation au rectangle classique.
 
-#### 3. Triangulation 2D du Maillage (*Mesh Triangulation*) :
-- Transformation du polygone 2D simple (pouvant être concave) en un ensemble de triangles prêt pour le pipeline graphique GPU.
-- Algorithme d'**Ear-Clipping** (découpage d'oreilles) ou **Constrained Delaunay Triangulation (CDT)**.
-- Génération des triplets d'indices de faces (`triangles: [0, 1, 2, 0, 2, 3...]`).
+#### 4. Édition Interactive des Sommets sur Canevas (`AtlasBoxItem`) :
+- **Manipulation par point individuel :** Survol avec mire (`Qt::CrossCursor`), clic-glisser d'un sommet en direct avec re-triangulation immédiate.
+- **Multi-sélection de sommets (`Shift` / `Ctrl` + Clic) :** Sélection multiple avec halo cyan `#00E5FF`, déplacement simultané du groupe de sommets sélectionnés.
+- **Micro-déplacement au clavier (Touches Fléchées) :** Déplacement de 1 px (ou 5 px avec `Shift`) des sommets sélectionnés.
+- **Insertion par double-clic :** Double-cliquer sur une arête insère un nouveau sommet à la projection exacte du pointeur.
+- **Suppression (`Touche Suppr` / `Retour Arrière`) :** Supprime les sommets sélectionnés (tant que $\ge 3$ sommets subsistent) avec re-triangulation atomique.
+- **Annulation / Rétablissement complet (`QUndoStack`) :** Toute action crée une commande `SetPolygonMeshCommand` sur la pile `QUndoStack` (`Ctrl+Z` / `Ctrl+Y`).
+- **Hit-testing polygonal précis :** `AtlasBoxItem::shape()` exclut les clics dans les zones transparentes hors-polygone pour faciliter la sélection des sprites imbriqués.
 
-#### 4. Algorithme d'Empaquetage 2D Non-Convexe (*Polygon Bin-Packing*) :
-- Contrairement aux rectangles qui ne se superposent que sur leurs projections orthogonales, les polygones peuvent s'interpénétrer dans leurs zones concaves :
-  - **Méthode NFP (No-Fit Polygon) :** Calcul de la zone interdite entre deux polygones pour trouver la trajectoire de contact la plus étroite sans collision.
-  - **Approche Raster-Assisted (Hybride Rapide) :** Dilatation du masque de silhouette par la valeur de rembourrage (*padding*), et balayage par transformée de distance ou bounding boxes orientées (OBB - *Oriented Bounding Box*) à pas angulaire ($0^\circ, 90^\circ, 180^\circ, 270^\circ$).
-- Respect rigoureux d'un espacement de sécurité polygonal (*Polygon Padding*, 2 px par défaut) pour prévenir tout artefact de saignement de texture (*texture bleeding*) lors du filtrage bilinéaire.
+#### 5. Algorithme d'Empaquetage Serré (`TightPolygonPacker`) & Accélération :
+- **Nesting 2D Non-Convexe :**
+  - Les boîtes englobantes ($AABB$) sont autorisées à se chevaucher sans collision entre leurs pixels opaques et leurs marges dilatées.
+- **Optimisation massive des candidats (sub-20ms) :**
+  - Remplacement de 26 000 points de grille redondants par ~300 points d'ancrage ciblés (coins réels de contact, bordures, et quadrillage skyline de 64 px).
+  - Glissement exponentiel dichotomique dans `slidePosition()` : sauts en puissances de deux `{64, 32, 16, 8, 4, 2, 1}` (7 vérifications max au lieu de 64).
+  - Calibration de l'aire initiale pour réussir dès la première passe.
+- **Multithreading haute performance configurable :**
+  - Parallélisation de la préparation des masques et de l'évaluation des candidats via `QThreadPool` dédié et `QtConcurrent::blockingMap`.
+  - Sélecteur de threads (`QSpinBox`) dans `AtlasPackingDialog` borné de 1 au nombre maximal de cœurs logiques de la machine (`QThread::idealThreadCount()`).
+  - Mémorisation de la préférence dans `QSettings` (`atlasPacking/threads`).
+- **Ergonomie non-bloquante à l'ouverture :**
+  - Aucun lancement automatique du packing à l'ouverture de la boîte de dialogue (ouverture instantanée).
+  - Contrôles initialisés avec signaux bloqués, case `Live Preview` décochée par défaut à l'ouverture.
+  - Bouton d'action proéminent « Calculer le packing » pour lancer le calcul uniquement quand l'utilisateur est prêt.
 
-#### 5. Données d'Exportation & Formats Cibles :
-- **Format JSON Étendu (Structure Universelle) :**
-  Pour chaque frame de l'atlas :
-  - `vertices` : tableau des coordonnées 2D des sommets relatifs au point d'ancrage/pivot ($[x_0, y_0, x_1, y_1 \dots]$).
-  - `uvs` : tableau des coordonnées de texture normalisées $[0.0, 1.0]$ sur l'atlas final.
-  - `triangles` : liste d'indices reliant les sommets par triplets.
-  - `bounds` : bounding box rectangulaire de fallback pour compatibilité.
-- **Export Dédié Godot 4 :**
-  - Génération de fichiers de ressources maillage avec nœuds `Polygon2D` ou `ArrayMesh` 2D, utilisables directement dans les scènes sans aucune ligne de code supplémentaire.
-- **Export Dédié Unity :**
-  - Fichier de métadonnées `.meta` / JSON compatible avec le mode `SpriteMeshType.Tight` d'Unity.
-
----
-
-### 🎛️ Paramètres & Options dans l'Interface Utilisateur (UI)
-
-1. **Sélecteur de Mode d'Empaquetage :**
-   - `Rectangulaire (MaxRects — Standard & Universel)`
-   - `Polygonal (Tight Mesh — Optimisation VRAM & Overdraw)`
-2. **Curseur de Complexité du Maillage (Vertex Budget) :**
-   - *Ultra-Léger (6 à 8 sommets)* : Idéal pour jeux mobiles massifs et scènes à très grand nombre d'entités (bullet hell, foules).
-   - *Équilibré (8 à 12 sommets — recommandé)* : Compromis parfait entre gain d'atlas et charge géométrique.
-   - *Précis (12 à 16 sommets)* : Épouse au plus près les armes et détails fins.
-3. **Prévisualisation Interactive du Maillage :**
-   - Case à cocher *Afficher le maillage polygonal (Wireframe)* sur la vue de l'atlas pour inspecter visuellement les arêtes et les triangles générés.
-   - Statistiques en direct : comparaison du taux de remplissage (*Packing Efficiency : 64% en Rectangulaire $\rightarrow$ 89% en Polygonal*).
+#### 6. Export Multi-Moteurs :
+- **TexturePacker JSON Étendu :** Format universel enrichi avec `vertices`, `verticesUV` et `triangles`.
+- **Unity 2D (`.unity.json`) :** Format compatible avec `SpriteMeshType.Tight`, avec inversion d'axe UV Y et géométrie complète.
+- **Unreal Engine Paper2D (`.paper2d.json`) :** Format descriptif avec polygones de rendu et de collision.
+- **Godot 4 Compagnon `_mesh.tres` :** Génération de ressources `ArrayMesh` 2D prêtes à l'emploi avec `MeshInstance2D`.
+- **Dialogue d'export unifié (`ExportDialog`) :** Intégration des options de maillage polygonal dans l'interface d'export.
 
 ---
 
@@ -750,20 +749,25 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 
 | Critère | M6 : MaxRects Rectangulaire | M8 : Packing Polygonal / Tight Mesh |
 |---|---|---|
-| **Compatibilité Moteurs** | 🟢 **100% Universelle** (Tous moteurs, tous composants 2D) | 🟡 **Spécialisée** (Nécessite support `Polygon2D`, `MeshInstance` ou custom) |
+| **Compatibilité Moteurs** | 🟢 **100% Universelle** (Tous moteurs, tous composants 2D) | 🟢 **Large & Intégrée** (Godot 4 `ArrayMesh`, Unity `Tight`, Unreal Paper2D, TexturePacker JSON) |
 | **Gain de Surface d'Atlas** | Standard (Baseline) | 🟢 **+20% à +50% de compacité** (évite de doubler la taille d'atlas) |
 | **Consommation VRAM** | Moyenne | 🟢 **Minimale** (textures plus petites) |
-| **Overdraw GPU (Fillrate)** | Élevé sur formes ouvertes (quads transparents) | 🟢 **Quasi-nul** (les pixels transparents ne sont pas dessinés) |
-| **Coût CPU au Packing** | Rapide ($< 50$ ms) | Modéré (100 ms à 1-2 s selon le nombre de frames) |
-| **Complexité d'Intégration** | Faible | Haute (Tracé de contour + Simplification + Triangulation + NFP) |
+| **Overdraw GPU (Fillrate)** | Élevé sur formes ouvertes (quads transparents) | 🟢 **Quasi-nul** (60% à 80% d'overdraw économisé) |
+| **Temps CPU au Packing** | Rapide ($< 10$ ms) | 🟢 **Ultra-rapide** ($10$ à $20$ ms grâce aux ancres et au multithreading) |
+| **Édition Interactive** | Découpe rectangulaire classique | 🟢 **Directe sur canevas** (sélection, glisser, insérer, supprimer des sommets) |
 
 ---
 
-### Fichiers & Composants Cibles
-- `SpriteStudio/include/geometry/contourtracer.h` / `src/geometry/contourtracer.cpp` : Extraction de contours alpha par Marching Squares / Moore-Neighbor.
-- `SpriteStudio/include/geometry/triangulator.h` / `src/geometry/triangulator.cpp` : Simplification Ramer-Douglas-Peucker et triangulation Ear-Clipping.
-- `SpriteStudio/include/packer/polygonpacker.h` / `src/packer/polygonpacker.cpp` : Algorithme de bin-packing 2D non-convexe.
-- `SpriteStudio/include/extractor/godotextractor.h` : Extension d'export Godot vers nœuds `Polygon2D`.
+### 📁 Fichiers & Composants Réalisés
+- `SpriteStudio/include/geometry/contourtracer.h` / `src/geometry/contourtracer.cpp` : Marching Squares étanche 2D.
+- `SpriteStudio/include/geometry/polygonsimplifier.h` / `src/geometry/polygonsimplifier.cpp` : Simplification RDP, outward normal dilation, vertex budget.
+- `SpriteStudio/include/geometry/triangulator.h` / `src/geometry/triangulator.cpp` : Ear-Clipping triangulation, formule de Shoelace, télémétrie overdraw.
+- `SpriteStudio/include/packer/tightpolygonpacker.h` / `src/packer/tightpolygonpacker.cpp` : Algorithme de bin-packing polygonal avec multithreading et optimisation des ancres.
+- `SpriteStudio/include/widgets/polygonmeshdialog.h` / `src/widgets/polygonmeshdialog.cpp` : Boîte de dialogue interactive de réglage de maillage.
+- `SpriteStudio/include/widgets/atlaspackingdialog.h` / `src/widgets/atlaspackingdialog.cpp` : IHM d'empaquetage avec sélection de threads, calcul à la demande et contrôle de prévisualisation.
+- `SpriteStudio/src/widgets/atlasboxitem.cpp` : Rendu fil de fer, manipulation de sommets, hit-testing polygonal.
+- `SpriteStudio/src/extractor/unityextractor.cpp`, `unrealextractor.cpp`, `godotextractor.cpp` : Codecs d'export multi-moteurs.
+- `tests/test_mesh.cpp` : Suite automatisée de 22 tests unitaires (100% de réussite sous CTest).
 
 ---
 
@@ -1206,9 +1210,9 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 6. **Étape 9 — Outil de Retouche Pixel Chirurgicale (M4 allégé) :**
    - *Objectif :* Corriger rapidement un pixel oublié ou un artefact sans devoir rouvrir un éditeur externe.
    - *Cadrage strict :* Outils limités (crayon 1px, gomme, pipette, seau de remplissage) pour éviter le risque de dispersion (*feature creep*).
-7. **Étape 10 — Empaquetage Polygonal & Maillages Serrés (M8 - Tight Mesh) :**
-   - *Objectif :* Éradiquer l'overdraw GPU et maximiser la compacité (+20% à +50%) pour mobile et Nintendo Switch.
-   - *Livrables :* Contouring Marching Squares, simplification Ramer-Douglas-Peucker (6-12 sommets), triangulation Ear-Clipping et export Godot `Polygon2D`.
+7. **Étape 10 — Empaquetage Polygonal & Maillages Serrés (M8 - Tight Mesh) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
+   - *Objectif :* Éradiquer l'overdraw GPU (60% à 80% de fillrate économisé) et maximiser la compacité (+20% à +50%) pour mobile et Nintendo Switch.
+   - *Livrables :* Contouring Marching Squares étanche, simplification RDP avec dilatation normale et budget de sommets (3-48), triangulation Ear-Clipping, édition interactive directe des sommets sur canevas (sélection, déplacement souris/clavier, insertion par double-clic, suppression `Suppr`), algorithme `TightPolygonPacker` haute densité avec multithreading configurable (1 à $N$ cœurs logiques `QThread::idealThreadCount()`), optimisation des ancres de placement (< 20 ms), IHM non-bloquante avec calcul à la demande et mémorisation des préférences, et exports multi-moteurs (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON). 22 tests unitaires sous CTest validés à 100%.
 
 ---
 
