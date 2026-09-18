@@ -228,6 +228,16 @@ Reports are automatically written to [`benchmarks/REPORT.md`](benchmarks/REPORT.
 
 ---
 
+## 📚 Documentation
+
+Comprehensive documentation is available in the [`docs/`](docs/) directory:
+* **[User Guide](docs/USER_GUIDE.md):** Complete, step-by-step illustrated manual covering atlas slicing, timeline animations, anchor pivots, filters, MaxRects & tight mesh packing, surgical pixel editing, and multi-engine exports.
+* **[Developer & Extension Guide](docs/DEVELOPER_GUIDE.md):** Architectural deep-dive, step-by-step tutorial for writing custom I/O codecs (`Extractor`) and image filter plugins (`FilterPlugin`), memory scanline best practices, and headless unit testing.
+* **API Reference (Doxygen):** Build the complete C++ API reference with interactive inheritance graphs by running `cmake --build build --target doxygen` (outputs to `build/docs/html/index.html`).
+* **UNIX Manual Pages:** Traditional troff/groff manpages for [`spritestudio(1)`](docs/man/spritestudio.1) and [`spritestudio-cli(1)`](docs/man/spritestudio-cli.1).
+
+---
+
 ## ⚔️ Comparison & Market Positioning
 
 SpriteStudio bridges the gap between raw asset extraction/cleanup (historically handled by tools like *ShoeBox*), sprite atlas packing (*TexturePacker*), and animation sequencing (*Aseprite / Pixelorama / Godot SpriteFrames*).

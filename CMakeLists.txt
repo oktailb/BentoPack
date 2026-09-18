@@ -74,12 +74,39 @@ if (WIN32)
 #    )
 endif()
 
+find_package(Doxygen QUIET OPTIONAL_COMPONENTS dot)
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+    if(DOXYGEN_DOT_FOUND)
+        set(DOXYGEN_HAVE_DOT "YES")
+    else()
+        set(DOXYGEN_HAVE_DOT "NO")
+    endif()
+
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    add_custom_target(doxygen
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen..."
+        VERBATIM
+    )
+    add_custom_target(docs DEPENDS doxygen)
+    message(STATUS "Doxygen found: ${DOXYGEN_EXECUTABLE} (documentation target 'doxygen' / 'docs' available)")
+else()
+    message(STATUS "Doxygen not found. Documentation targets will not be built.")
+endif()
+
 if(UNIX AND NOT APPLE AND NOT HAIKU)
     install(FILES SpriteStudio/res/linux/SpriteStudio.desktop
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
     )
     install(FILES SpriteStudio/res/icons/spritestudio.png
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps
+    )
+    install(FILES docs/man/spritestudio.1 docs/man/spritestudio-cli.1
+        DESTINATION ${CMAKE_INSTALL_MANDIR}/man1
     )
 endif()
 
