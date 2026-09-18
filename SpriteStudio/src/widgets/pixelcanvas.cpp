@@ -287,7 +287,7 @@ void PixelCanvas::flipHorizontal()
             }
         }
     } else {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
         m_image = m_image.flipped(Qt::Horizontal);
 #else
         m_image = m_image.mirrored(true, false);
@@ -317,7 +317,7 @@ void PixelCanvas::flipVertical()
             }
         }
     } else {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
         m_image = m_image.flipped(Qt::Vertical);
 #else
         m_image = m_image.mirrored(false, true);
