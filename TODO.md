@@ -20,6 +20,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Bresenham 1px, Gomme alpha 0, Pipette, Seau, Sélections Marquee/Wand, Tampon Flottant, Palettes NES/SNES/Amiga/NEC/GB/Pico8/C64, Navigation Inter-frames, 19 tests CTest) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Marching Squares, RDP, Ear-Clipping, Wireframe HMI, Édition Sommets, Tight Packing Multithreadé & Configurable, Export Unity/Unreal/Godot, 22 tests CTest) |
 | **M9** | [Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC)](#m9--compression-de-textures-vram--formats-gpu-ktx2--basis-universal--astc) | **Moyenne** | Haute | 📝 Spécifié & Documenté (Conteneurs KTX2, Transcodage GPU, Élimination Décompression CPU) |
+| **M10** | [Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)](#m10--intégration-aux-écosystèmes--marchés-moteurs-de-jeu-godot-assetlib-unity-upm-unreal-fab) | **Moyenne** | Moyenne | 💡 Spécifié & Planifié (Plugins moteurs, Importateurs automatiques, Hot-Reload, Stores) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
 | **AUDIT** | [Dette de Thread-Safety & Modèle Pur (Audit Étape 2)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Clôturé & Validé (Modèle pur QImage, Cache Vignettes, 0 conversion I/O, Miniz ZIP, 116 tests CTest 100%) |
 
@@ -926,6 +927,108 @@ Pour égaler TexturePacker Pro tout en conservant une licence open-source péren
 
 ---
 
+## M10 : Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)
+
+### 📌 Contexte & Enjeux d'Adoption
+Pour qu'un atelier comme **SpriteStudio** s'impose durablement auprès de la communauté des créateurs de jeux vidéo indépendants comme des studios professionnels, la simple capacité à exporter des fichiers techniques (`.tres`, `.json`, `.png`) ne suffit pas. **L'intégration native, directe et fluide dans l'environnement de développement quotidien (Game Engine IDE)** est le catalyseur clé d'adoption.
+
+Les développeurs recherchent un flux de travail sans friction (*zero-friction workflow*) :
+1. **Découverte & Installation en 1 Clic :** Retrouver et installer l'extension SpriteStudio directement depuis les magasins et gestionnaires de paquets officiels intégrés au moteur (Godot Asset Library, Unity Package Manager, Epic Games Fab).
+2. **Importation & Conversion Transparentes :** Glisser-déposer un projet SpriteStudio (`.ssp`), un atlas ou un JSON dans l'arborescence du projet et voir le moteur créer instantanément les ressources 2D prêtes au jeu (Sprites, Animations, Colliders, Meshes) sans réglage manuel fastidieux.
+3. **Hot-Reloading Bidirectionnel en Temps Réel :** Retoucher un pixel, réordonner une séquence ou ajuster un pivot dans SpriteStudio, faire `Ctrl+S`, et constater le rechargement immédiat de la scène ou du jeu en cours d'exécution.
+
+---
+
+### 🏛️ Piliers d'Intégration par Moteur de Jeu
+
+```
+                ┌──────────────────────────────────────────────┐
+                │          SpriteStudio Desktop / CLI          │
+                │     (.ssp, Atlas PNG/KTX2, JSON, TRES, Mesh) │
+                └──────────────────────┬───────────────────────┘
+                                       │
+            ┌──────────────────────────┼──────────────────────────┐
+            ▼                          ▼                          ▼
+ ┌──────────────────────┐   ┌──────────────────────┐   ┌──────────────────────┐
+ │    Godot 4 Addon     │   │   Unity UPM Package  │   │  Unreal Engine (Fab) │
+ │ (Godot Asset Library)│   │ (Unity Package Mgr)  │   │ (Fab / UE Marketplace│
+ ├──────────────────────┤   ├──────────────────────┤   ├──────────────────────┤
+ │ • Plugin GDScript    │   │ • ScriptedImporter C#│   │ • Plugin C++ UE5     │
+ │ • Importateur .ssp   │   │ • SpriteMesh Tight M8│   │ • UFactory Paper2D/ZD│
+ │ • Daemon --watch     │   │ • AnimationClips auto│   │ • Tight Mesh overdraw│
+ │ • Menus inspecteur   │   │ • "Edit in SS" menu  │   │ • Hot-reload assets  │
+ └──────────────────────┘   └──────────────────────┘   └──────────────────────┘
+```
+
+#### 1. Écosystème Godot Engine (`godot-spritestudio-addon`)
+- **Distribution & Visibilité :**
+  - Publication officielle sur la **Godot Asset Library** (`godotengine.org/asset-library`), accessible en 1 clic dans l'onglet *AssetLib* de l'éditeur Godot 4.x.
+  - Dépôt GitHub dédié avec templates d'exemples (Platformer 2D, Top-Down).
+- **Architecture de l'Addon Godot :**
+  - **Nature :** `EditorPlugin` écrit en GDScript pur (zéro compilation requise, compatibilité garantie sur Windows, macOS, Linux, Web et Android Editor).
+  - **Importateur Automatique (`EditorFileSystemImportPlugin`) :**
+    - Intercepte l'ajout ou la modification de fichiers de projet natifs `.ssp`.
+    - Génère automatiquement dans `res://` :
+      - La texture d'atlas (PNG ou KTX2) et les sous-textures `AtlasTexture`.
+      - La ressource `SpriteFrames` avec toutes les animations configurées (noms, FPS, boucles Loop/PingPong).
+      - Les marges de décalage de pivot exactes (`margin = Rect2(...)`) supprimant le sautillement.
+      - Optionnellement, la ressource `ArrayMesh` 2D exploitant les maillages polygonaux serrés M8 pour un rendu sans overdraw via `MeshInstance2D`.
+  - **Live Hot-Reloading via Daemon (`spritestudio-cli --watch`) :**
+    - Synchronisation avec le mode veille de `spritestudio-cli` : à chaque sauvegarde de planche, l'éditeur Godot recharge à chaud les animations sans nécessiter de redémarrage.
+  - **Intégration Ergonomique à l'Inspecteur Godot :**
+    - Bouton d'accès rapide *"Ouvrir dans SpriteStudio"* dans l'inspecteur lors de la sélection d'un `AnimatedSprite2D`, `Sprite2D` ou d'un fichier `.tres`.
+
+#### 2. Écosystème Unity (`com.spritestudio.importer`)
+- **Distribution & Visibilité :**
+  - Paquet officiel **Unity Package Manager (UPM)** hébergé sur Git et référencé sur le registre communautaire standard **OpenUPM**.
+  - Soumission sur l'**Unity Asset Store** (catégorie *2D Tools / Utilities*) pour une découvrabilité maximale.
+- **Architecture du Package Unity :**
+  - **Importateur Personnalisé (`ScriptedImporter`) en C# :**
+    - Prise en charge transparente des fichiers `.ssp` et des fichiers JSON TexturePacker.
+    - Configuration automatique du `TextureImporter` (FilterMode `Point (no filter)`, format de compression texture optimal, alpha is transparency).
+    - Découpe automatique des sous-sprites (`SpriteMetaData`) avec pivots personnalisés (`Alignment.Custom` et coordonnées UV normalisées).
+    - **Injection Native des Maillages Serrés M8 (`SpriteMeshType.Tight`) :**
+      - Application directe des sommets et triangles calculés par SpriteStudio via `Sprite.OverrideGeometry()`.
+      - **Bénéfice majeur sous Unity :** Économie de 60% à 80% du fillrate GPU sans nécessiter de retouche manuelle du *Sprite Editor Mesh*.
+  - **Générateur Automatique d'Animations (`AnimationClip`) :**
+    - Création instantanée des clips d'animation avec courbes d'échange de frames (`SpriteRenderer.m_Sprite`) cadencées au framerate d'origine.
+  - **Menu Contextuel dans Unity :**
+    - Clic droit sur un sprite dans la fenêtre *Project* : *"SpriteStudio > Edit with SpriteStudio"*.
+
+#### 3. Écosystème Unreal Engine (`SpriteStudio UE5 Plugin`)
+- **Distribution & Visibilité :**
+  - Publication sur la nouvelle place de marché unifiée d'Epic Games : **Fab** (`fab.com`), remplaçant l'Unreal Engine Marketplace.
+  - Dépôt open-source compatible avec Unreal Engine 5.x.
+- **Architecture du Plugin Unreal :**
+  - **`UFactory` / `FAssetTypeActions` C++ :**
+    - Importation par glisser-déposer créant automatiquement des assets `UPaperSprite` et `UPaperFlipbook`.
+    - Prise en charge et interfaçage avec le plugin communautaire de référence **PaperZD** (State Machines 2D & AnimNodes).
+    - Application des polygones de rendu personnalisés (`RenderGeometry`) issus du maillage polygonal serré M8 pour réduire le coût de translucidité dans les scènes UE5.
+    - Configuration exacte des pivots de collision et de rendu.
+
+#### 4. Moteurs Web, C/C++ Indie & Fantasy Consoles
+- **Moteurs Web 2D :**
+  - Loaders et exemples documentés pour **Phaser.js**, **PixiJS**, **Defold** et **Three.js** (atlas JSON + KTX2).
+- **Moteurs Indie C/C++ & Lua :**
+  - Parseur léger open-source en C pur (*single-header library* `spritestudio.h`) pour **Raylib** et **Love2D**.
+- **Fantasy Consoles & Rétro :**
+  - Exportateurs directs vers formats cartouches **Pico-8** (`.p8` / spritesheet 128x128) et **TIC-80**.
+
+---
+
+### 📋 Phasage Recommandé pour le Jalon M10
+
+1. **Étape 1 — Formalisation de la Commande CLI Dédiée :**
+   - Implémentation de `spritestudio-cli export-engine --target=<godot|unity|unreal>` pour produire des bundles normalisés tout-en-un (textures, métadonnées, animations, maillages).
+2. **Étape 2 — Addon Officiel Godot 4 (`godot-spritestudio-addon`) :**
+   - Développement du plugin GDScript, validation multiplateforme et soumission à la Godot Asset Library.
+3. **Étape 3 — Package Unity UPM (`com.spritestudio.importer`) :**
+   - Développement du `ScriptedImporter` C#, packaging OpenUPM et soumission Asset Store.
+4. **Étape 4 — Plugin Unreal Engine 5 (Fab Marketplace) :**
+   - Développement du module C++ avec `UFactory` pour Paper2D/PaperZD et soumission sur le portail Fab.
+
+---
+
 ## M-CLI : Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`) — 🚀 Compatibilité Totale TexturePacker, Aseprite & Godot 4
 
 ### 📌 Contexte & Enjeux Industriels
@@ -1371,6 +1474,13 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 8. **Étape 11 — Compression de Textures VRAM & Formats GPU (M9 - KTX2 / Basis Universal / ASTC) :**
    - *Objectif :* Éradiquer la décompression CPU et réduire l'empreinte VRAM par 4x à 8x (de 16 Mo à 2.7–4 Mo pour un atlas 2048x2048) sur mobile, Switch et PC.
    - *Livrables :* Moteur `VramTextureCompressor` basé sur `basis_universal` (open-source Apache 2.0 / Khronos Group), encodage multithreadé KTX2 UASTC (haute fidélité pixel art) et ETC1S avec supercompression Zstandard, interface dédiée dans `ExportDialog` avec télémétrie VRAM en direct, et flags CLI `--texture-format ktx2` / `--opt` pour CI/CD studio.
+
+---
+
+### 🌐 Phase D — Écosystème Développeurs, Plugins Moteurs & Marchés (Long Terme / Rayonnement)
+9. **Étape 12 — Intégration aux Écosystèmes & Marchés Moteurs de Jeu (M10 - Godot AssetLib, Unity UPM, Unreal Fab) :**
+   - *Objectif :* Éliminer toute friction pour les développeurs en intégrant SpriteStudio directement dans leur environnement de développement quotidien et sur les magasins officiels d'assets.
+   - *Livrables :* Addon officiel Godot 4 (Asset Library) avec importateur direct `.ssp` et synchronisation live `--watch`, package Unity UPM (`com.spritestudio.importer`) avec `ScriptedImporter` et génération automatique de `SpriteMeshType.Tight`, plugin Unreal Engine 5 pour le store Fab avec `UFactory` pour Paper2D/PaperZD, et scripts d'intégration CI/CD pour pipelines studio.
 
 ---
 
