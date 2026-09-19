@@ -73,5 +73,16 @@ if (MINGW)
 endif()
 add_test(NAME test_pixel_editor COMMAND test_pixel_editor)
 
+# 8. test_vram_compression (M9)
+add_executable(test_vram_compression test_vram_compression.cpp)
+target_compile_definitions(test_vram_compression PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_vram_compression PRIVATE SpriteStudioCore Qt6::Test)
+set_target_properties(test_vram_compression PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_vram_compression PRIVATE -mconsole)
+endif()
+add_test(NAME test_vram_compression COMMAND test_vram_compression)
+
+
 
 

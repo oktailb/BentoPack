@@ -85,9 +85,14 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
     }
 
     if (imagePath.isEmpty() || !QFile::exists(imagePath)) {
-        QString candidate = dir.filePath(fileInfo.completeBaseName() + QStringLiteral(".png"));
-        if (QFile::exists(candidate)) {
-            imagePath = candidate;
+        QString candidateKtx2 = dir.filePath(fileInfo.completeBaseName() + QStringLiteral(".ktx2"));
+        if (QFile::exists(candidateKtx2)) {
+            imagePath = candidateKtx2;
+        } else {
+            QString candidatePng = dir.filePath(fileInfo.completeBaseName() + QStringLiteral(".png"));
+            if (QFile::exists(candidatePng)) {
+                imagePath = candidatePng;
+            }
         }
     }
 
@@ -102,11 +107,15 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
 
     setProgress(40);
 
-    QImage atlasImg(imagePath);
+    QString loadErr;
+    QImage atlasImg = VramTextureCompressor::loadAtlasImage(imagePath, &loadErr);
     if (atlasImg.isNull()) {
         if (error) {
             error->code = ExtractorError::ImageLoadFailed;
             error->message = tr("Failed to load texture atlas image: %1").arg(imagePath);
+            if (!loadErr.isEmpty()) {
+                error->message += QStringLiteral(" (%1)").arg(loadErr);
+            }
             error->filePath = imagePath;
         }
         return false;
@@ -280,6 +289,58 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
         parsedAnimations.insert(defAnim.name, defAnim);
     }
 
+    // 3.5 Look for companion _mesh.tres file to restore polygon meshes if available
+    QString meshTresPath = dir.filePath(fileInfo.completeBaseName() + QStringLiteral("_mesh.tres"));
+    if (QFile::exists(meshTresPath)) {
+        QFile meshFile(meshTresPath);
+        if (meshFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QString meshContent = QString::fromUtf8(meshFile.readAll());
+            meshFile.close();
+
+            QRegularExpression polyRegex(QStringLiteral(R"re(metadata/frame_(\d+)/polygon\s*=\s*PackedVector2Array\(([^)]*)\))re"));
+            QRegularExpression triRegex(QStringLiteral(R"re(metadata/frame_(\d+)/triangles\s*=\s*PackedInt32Array\(([^)]*)\))re"));
+
+            QRegularExpressionMatchIterator pIter = polyRegex.globalMatch(meshContent);
+            while (pIter.hasNext()) {
+                QRegularExpressionMatch match = pIter.next();
+                int idx = match.captured(1).toInt();
+                QString coordsStr = match.captured(2).trimmed();
+                if (idx >= 0 && idx < boxes.size() && !coordsStr.isEmpty()) {
+                    QStringList parts = coordsStr.split(QLatin1Char(','), Qt::SkipEmptyParts);
+                    QPolygonF poly;
+                    QList<QPointF> verts;
+                    for (int p = 0; p + 1 < parts.size(); p += 2) {
+                        double x = parts[p].trimmed().toDouble();
+                        double y = parts[p + 1].trimmed().toDouble();
+                        poly.append(QPointF(x, y));
+                        verts.append(QPointF(x, y));
+                    }
+                    if (!poly.isEmpty()) {
+                        boxes[idx].hasPolygonMesh = true;
+                        boxes[idx].polygon = poly;
+                        boxes[idx].vertices = verts;
+                    }
+                }
+            }
+
+            QRegularExpressionMatchIterator tIter = triRegex.globalMatch(meshContent);
+            while (tIter.hasNext()) {
+                QRegularExpressionMatch match = tIter.next();
+                int idx = match.captured(1).toInt();
+                QString triStr = match.captured(2).trimmed();
+                if (idx >= 0 && idx < boxes.size() && !triStr.isEmpty()) {
+                    QStringList parts = triStr.split(QLatin1Char(','), Qt::SkipEmptyParts);
+                    QList<int> tris;
+                    tris.reserve(parts.size());
+                    for (const QString &s : parts) {
+                        tris.append(s.trimmed().toInt());
+                    }
+                    boxes[idx].triangles = tris;
+                }
+            }
+        }
+    }
+
     // 4. Update SpriteDocument directly
     doc.clear();
     doc.setFilePath(filePath);
@@ -314,7 +375,21 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     QFileInfo fileInfo(filePath);
     QDir dir = fileInfo.dir();
     QString baseName = fileInfo.completeBaseName();
-    QString imageFilename = baseName + ".png";
+    if (baseName.trimmed().isEmpty()) {
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Export file name cannot be empty.");
+            error->filePath = filePath;
+        }
+        return false;
+    }
+    QString imageExt = QStringLiteral(".png");
+    if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) {
+        imageExt = QStringLiteral(".ktx2");
+    } else if (options.textureFormat == TEXTURE_FORMAT_BASIS) {
+        imageExt = QStringLiteral(".basis");
+    }
+    QString imageFilename = baseName + imageExt;
     QString imagePath = dir.filePath(imageFilename);
     QString tresPath = dir.filePath(baseName + ".tres");
 
@@ -353,13 +428,28 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     setProgress(60);
 
-    if (!packResult.atlas.save(imagePath, "PNG")) {
-        if (error) {
+    bool saveOk = false;
+    if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
+        VramCompressionOptions vOpts = options.vramOptions;
+        if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
+        else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
+        else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
+        QString vErr;
+        saveOk = VramTextureCompressor::compressToFile(packResult.atlas, imagePath, vOpts, nullptr, &vErr);
+        if (!saveOk && error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Failed to write Godot VRAM atlas texture: %1 (%2)").arg(imagePath, vErr);
+            error->filePath = imagePath;
+            return false;
+        }
+    } else {
+        saveOk = packResult.atlas.save(imagePath, "PNG");
+        if (!saveOk && error) {
             error->code = ExtractorError::WriteFailed;
             error->message = tr("Failed to write Godot atlas image: %1").arg(imagePath);
             error->filePath = imagePath;
+            return false;
         }
-        return false;
     }
 
     setProgress(80);

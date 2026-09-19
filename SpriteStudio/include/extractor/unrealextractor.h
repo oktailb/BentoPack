@@ -20,7 +20,7 @@ public:
     QString displayName() const override { return tr("Unreal Engine Paper2D (*.paper2d.json)"); }
     QString description() const override { return tr("Exports Unreal Engine Paper2D sprites with tight RenderGeometry."); }
     QStringList supportedExtensions() const override { return { QStringLiteral("paper2d.json"), QStringLiteral("json") }; }
-    Capabilities capabilities() const override { return CanExport | SupportsAnimations | SupportsAtlasMetadata; }
+    Capabilities capabilities() const override { return CanImport | CanExport | SupportsAnimations | SupportsAtlasMetadata; }
 
     bool canDecode(const QString &filePath) const override;
     bool read(const QString &filePath, SpriteDocument &outDoc, ExtractorError *error = nullptr) override;

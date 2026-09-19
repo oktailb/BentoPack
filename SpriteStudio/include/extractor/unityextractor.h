@@ -20,7 +20,7 @@ public:
     QString displayName() const override { return tr("Unity 2D Sprite Mesh (*.unity.json)"); }
     QString description() const override { return tr("Exports Unity 2D Sprite Mesh with vertex & triangle buffers."); }
     QStringList supportedExtensions() const override { return { QStringLiteral("unity.json"), QStringLiteral("json") }; }
-    Capabilities capabilities() const override { return CanExport | SupportsAnimations | SupportsAtlasMetadata; }
+    Capabilities capabilities() const override { return CanImport | CanExport | SupportsAnimations | SupportsAtlasMetadata; }
 
     bool canDecode(const QString &filePath) const override;
     bool read(const QString &filePath, SpriteDocument &outDoc, ExtractorError *error = nullptr) override;

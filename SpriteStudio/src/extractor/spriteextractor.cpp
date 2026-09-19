@@ -31,11 +31,15 @@ bool SpriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extr
         return false;
     }
 
-    QImage image(filePath);
+    QString loadErr;
+    QImage image = VramTextureCompressor::loadAtlasImage(filePath, &loadErr);
     if (image.isNull()) {
         if (error) {
             error->code = ExtractorError::ImageLoadFailed;
             error->message = tr("Failed to decode image from: %1").arg(filePath);
+            if (!loadErr.isEmpty()) {
+                error->message += QStringLiteral(" (%1)").arg(loadErr);
+            }
             error->filePath = filePath;
         }
         return false;
@@ -61,6 +65,14 @@ bool SpriteExtractor::write(const QString &filePath, const SpriteDocument &inDoc
     }
 
     QFileInfo fi(filePath);
+    if (fi.completeBaseName().trimmed().isEmpty()) {
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Export file name cannot be empty.");
+            error->filePath = filePath;
+        }
+        return false;
+    }
     QString format = fi.suffix().toUpper();
     if (format.isEmpty()) format = QStringLiteral("PNG");
 

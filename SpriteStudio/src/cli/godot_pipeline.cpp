@@ -1,4 +1,5 @@
 #include "cli/godot_pipeline.h"
+#include "packer/vramtexturecompressor.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -77,8 +78,19 @@ CliResult GodotPipeline::exportGodot(const ExportArgs &args)
     QDir().mkpath(tresInfo.dir().absolutePath());
 
     // 2. Save atlas texture
-    if (!args.atlas.save(args.sheetPath, "PNG")) {
-        return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas image: ") + args.sheetPath);
+    if (args.sheetPath.endsWith(QStringLiteral(".ktx2"), Qt::CaseInsensitive) ||
+        args.sheetPath.endsWith(QStringLiteral(".basis"), Qt::CaseInsensitive)) {
+        VramCompressionOptions vOpts;
+        vOpts.format = args.sheetPath.endsWith(QStringLiteral(".basis"), Qt::CaseInsensitive)
+            ? VramFormat::Basis_UASTC : VramFormat::KTX2_UASTC;
+        QString vErr;
+        if (!VramTextureCompressor::compressToFile(args.atlas, args.sheetPath, vOpts, nullptr, &vErr)) {
+            return CliResult::error(ExitIoError, QStringLiteral("Failed to compress VRAM atlas texture: ") + args.sheetPath + QStringLiteral(" (") + vErr + QStringLiteral(")"));
+        }
+    } else {
+        if (!args.atlas.save(args.sheetPath, "PNG")) {
+            return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas image: ") + args.sheetPath);
+        }
     }
 
     // 3. Resolve UID

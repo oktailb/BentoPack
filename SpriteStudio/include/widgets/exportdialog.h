@@ -23,6 +23,9 @@ public:
     QString exportFilePath() const;
     ExportOptions exportOptions() const;
 
+public slots:
+    void accept() override;
+
 protected:
     void changeEvent(QEvent *event) override;
 
@@ -30,6 +33,8 @@ private slots:
     void onBrowseClicked();
     void updateStats();
     void onFormatChanged(int index);
+    void onTextureFormatChanged(int index);
+    void validateFilePath();
 
 private:
     std::unique_ptr<Ui::ExportDialog> ui;

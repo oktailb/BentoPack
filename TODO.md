@@ -19,7 +19,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Drop-in 100% TexturePacker, Aseprite -b, Godot 4 UID/Scene, Slice, Filter, SSP, POSIX, JSON) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Bresenham 1px, Gomme alpha 0, Pipette, Seau, Sélections Marquee/Wand, Tampon Flottant, Palettes NES/SNES/Amiga/NEC/GB/Pico8/C64, Navigation Inter-frames, 19 tests CTest) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Marching Squares, RDP, Ear-Clipping, Wireframe HMI, Édition Sommets, Tight Packing Multithreadé & Configurable, Export Unity/Unreal/Godot, 22 tests CTest) |
-| **M9** | [Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC)](#m9--compression-de-textures-vram--formats-gpu-ktx2--basis-universal--astc) | **Moyenne** | Haute | 📝 Spécifié & Documenté (Conteneurs KTX2, Transcodage GPU, Élimination Décompression CPU) |
+| **M9** | [Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC)](#m9--compression-de-textures-vram--formats-gpu-ktx2--basis-universal--astc) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — KTX2, UASTC, ETC1S, Zstd, Décompression CPU 0, Transcodage RGBA, ExportDialog IHM & Télémétrie Live VRAM, CLI CI/CD, 12 tests CTest) |
 | **M10** | [Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)](#m10--intégration-aux-écosystèmes--marchés-moteurs-de-jeu-godot-assetlib-unity-upm-unreal-fab) | **Moyenne** | Moyenne | 💡 Spécifié & Planifié (Plugins moteurs, Importateurs automatiques, Hot-Reload, Stores) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
 | **AUDIT** | [Dette de Thread-Safety & Modèle Pur (Audit Étape 2)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Clôturé & Validé (Modèle pur QImage, Cache Vignettes, 0 conversion I/O, Miniz ZIP, 116 tests CTest 100%) |
@@ -911,19 +911,43 @@ Pour égaler TexturePacker Pro tout en conservant une licence open-source péren
 
 ---
 
-### 📋 Phasage d'Implémentation Recommandé (Jalon M9)
+### 📋 Réalisations & Bilan de Clôture (Jalon M9) — ✅ CLÔTURÉ & VALIDÉ (100%)
 
-1. **Étape 1 — Socle CMake & Bibliothèque `basis_universal` :**
-   - Intégration de `basis_universal` dans `SpriteStudio/lib/` ou via CMake `FetchContent`.
-   - Initialisation globale du compresseur (`basisu::basisu_encoder_init()`).
-2. **Étape 2 — Moteur d'Encodage `VramTextureCompressor` :**
-   - Implémentation de la classe autonome convertissant une `QImage` en fichier `.ktx2` (UASTC et ETC1S) avec support Zstandard.
-   - Tests unitaires automatisés dans `tests/test_vram_compression.cpp` validant l'intégrité de l'encodage et la conformité des en-têtes KTX2.
-3. **Étape 3 — Câblage dans `ExportDialog` & IHM :**
-   - Ajout des options graphiques de compression VRAM dans la boîte de dialogue d'export.
-   - Prévisualisation du rendu compressé sur le canevas de l'atlas.
-4. **Étape 4 — Support CLI dans `spritestudio-cli` :**
-   - Intégration des flags `--texture-format ktx2`, `--opt` et `--zstd-level`.
+1. **Intégration CMake & Khronos `basis_universal` (v2.50) :**
+   - Intégration modulaire dans le `CMakeLists.txt` racine avec détection de cache local et fallback `FetchContent`.
+   - Option débrayable `ENABLE_VRAM_COMPRESSION=ON` (par défaut).
+   - Bibliothèque statique `basisu_encoder` (`libbasisu_encoder.a`) avec support complet KTX2, UASTC, ETC1S et supercompression Zstandard.
+   - Résolution du conflit de macros Qt (`#define emit`) dans `basisu_enc.h` via `#pragma push_macro("emit")` / `#undef emit` / `#pragma pop_macro("emit")`.
+
+2. **Moteur d'Encodage Haute Performance (`VramTextureCompressor`) :**
+   - Création de `SpriteStudio/include/packer/vramtexturecompressor.h` et `src/packer/vramtexturecompressor.cpp`.
+   - Compression directe en mémoire `compressToKtx2(QImage, options)` et fichier `compressToFile()`.
+   - Transcodage direct `transcodeToRgba(ktx2Data)` vers `QImage` RGBA32 sans dépendance d'API GPU.
+   - Télémétrie en temps réel (`estimateVramBytes`, `VramCompressionStats`, taux d'économie VRAM).
+
+3. **Intégration des Codecs d'Exportation :**
+   - Mise à jour de `ExportOptions` (`TextureFormat`, `VramCompressionOptions`).
+   - `JsonExtractor`, `GodotExtractor`, `UnityExtractor`, `UnrealExtractor` émettent désormais automatiquement les textures compagnons `.ktx2` ou `.basis`.
+   - Godot 4 : Référencement direct de `res://atlas.ktx2` dans les fichiers `.tres`.
+
+4. **Interface Graphique & Télémétrie Live VRAM (`ExportDialog`) :**
+   - Ajout du groupe **VRAM Texture & GPU Compression (M9)** dans `exportdialog.ui`.
+   - Sélecteur de format (`PNG`, `KTX2 UASTC 4x4`, `KTX2 ETC1S`).
+   - Contrôles de qualité (Fast, Normal, High Quality), activation et curseur de niveau Zstandard (1-22).
+   - Affichage dynamique de l'économie VRAM en direct dans les statistiques (ex. `-75.0%` pour UASTC, `-87.5%` pour ETC1S vs RGBA8888).
+
+5. **Automatisation CLI & Compatibilité TexturePacker (`spritestudio-cli`) :**
+   - Prise en charge des arguments standard :
+     - `--texture-format <png|ktx2|basis>`
+     - `--opt <ASTC_4x4|BC7|ETC2_RGBA|RGBA8888>`
+     - `--vram-format <uastc|etc1s>`
+     - `--vram-quality <fast|normal|high|best>`
+     - `--zstd-level <1-22>` et `--no-zstd`
+   - Détection automatique de l'extension `.ktx2` / `.basis` et reporting JSON étendu (`vram_format`, `vram_bytes`, `vram_savings_percent`).
+
+6. **Validation Automatisée & Non-Régression (100% CTest) :**
+   - Création de la suite dédiée `tests/test_vram_compression.cpp` (12 tests unitaires validant headers KTX2, UASTC, ETC1S, Zstd, transcodage, écriture fichier, estimation et exports CLI).
+   - **8/8 suites de tests CTest validées (195 tests unitaires réussis à 100%).**
 
 ---
 

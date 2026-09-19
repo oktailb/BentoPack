@@ -251,9 +251,110 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="grpVram">
+     <property name="title">
+      <string>VRAM Texture &amp; GPU Compression (M9)</string>
+     </property>
+     <layout class="QFormLayout" name="formLayoutVram">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblTextureFormat">
+        <property name="text">
+         <string>Texture Format:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboTextureFormat">
+        <item>
+         <property name="text">
+          <string>PNG Standard (Uncompressed RGBA8888 in VRAM)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>KTX2 Universal (UASTC 4x4 — Highest Pixel Art Fidelity)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>KTX2 Ultra-Compact (ETC1S — Smallest Size)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblVramQuality">
+        <property name="text">
+         <string>Compression Quality:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="comboVramQuality">
+        <item>
+         <property name="text">
+          <string>Fast (Level 1)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Normal (Level 2 - Recommended)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>High Quality (Level 3)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="chkZstd">
+        <property name="text">
+         <string>Zstandard Supercompression</string>
+        </property>
+        <property name="toolTip">
+         <string>Applies Zstandard lossless compression to KTX2 payload</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="hLayoutZstd">
+        <item>
+         <widget class="QLabel" name="lblZstdLevel">
+          <property name="text">
+           <string>Zstd Level (1-22):</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinZstdLevel">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>22</number>
+          </property>
+          <property name="value">
+           <number>9</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="grpStats">
      <property name="title">
-      <string>Packing Statistics (Live Estimation)</string>
+      <string>Packing &amp; VRAM Statistics (Live Estimation)</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayoutStats">
       <item>
@@ -279,6 +380,18 @@
        <widget class="QLabel" name="lblFrames">
         <property name="text">
          <string>Frames: --</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblVramSavings">
+        <property name="text">
+         <string>GPU VRAM: --</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
         </property>
        </widget>
       </item>

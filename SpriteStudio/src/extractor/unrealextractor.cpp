@@ -16,18 +16,187 @@ UnrealExtractor::UnrealExtractor(QObject *parent)
 
 bool UnrealExtractor::canDecode(const QString &filePath) const
 {
-    return filePath.endsWith(QStringLiteral(".paper2d.json"), Qt::CaseInsensitive);
+    if (filePath.endsWith(QStringLiteral(".paper2d.json"), Qt::CaseInsensitive)) {
+        return true;
+    }
+    if (filePath.endsWith(QStringLiteral(".json"), Qt::CaseInsensitive)) {
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QString head = QString::fromUtf8(file.read(512));
+            return head.contains(QStringLiteral("Paper2D_SpriteAtlas")) || head.contains(QStringLiteral("UnrealEngine_Paper2D"));
+        }
+    }
+    return false;
 }
 
 bool UnrealExtractor::read(const QString &filePath, SpriteDocument &outDoc, ExtractorError *error)
 {
-    Q_UNUSED(filePath);
-    Q_UNUSED(outDoc);
-    if (error) {
-        error->code = ExtractorError::UnsupportedFormat;
-        error->message = tr("Unreal Paper2D export format is write-only.");
+    setStatusMessage(tr("Reading Unreal Engine Paper2D atlas %1...").arg(QFileInfo(filePath).fileName()));
+    setProgress(5);
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        if (error) {
+            error->code = ExtractorError::FileNotFound;
+            error->message = tr("Failed to open file: %1").arg(filePath);
+            error->filePath = filePath;
+        }
+        return false;
     }
-    return false;
+
+    QJsonParseError parseErr;
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &parseErr);
+    file.close();
+
+    if (parseErr.error != QJsonParseError::NoError || !doc.isObject()) {
+        if (error) {
+            error->code = ExtractorError::ParsingFailed;
+            error->message = tr("Failed to parse Unreal JSON: %1").arg(parseErr.errorString());
+            error->filePath = filePath;
+        }
+        return false;
+    }
+
+    QJsonObject root = doc.object();
+    QFileInfo jsonFi(filePath);
+    QDir dir = jsonFi.dir();
+
+    // 1. Locate texture atlas
+    QString texName = root.value(QStringLiteral("sourceTexture")).toString();
+    QString imgPath;
+    if (!texName.isEmpty()) {
+        if (dir.exists(texName)) {
+            imgPath = dir.filePath(texName);
+        } else {
+            QString fname = QFileInfo(texName).fileName();
+            if (dir.exists(fname)) imgPath = dir.filePath(fname);
+        }
+    }
+    if (imgPath.isEmpty() || !QFile::exists(imgPath)) {
+        QString base = jsonFi.completeBaseName();
+        if (base.endsWith(QStringLiteral(".paper2d"), Qt::CaseInsensitive)) base.chop(8);
+        if (QFile::exists(dir.filePath(base + QStringLiteral(".ktx2")))) {
+            imgPath = dir.filePath(base + QStringLiteral(".ktx2"));
+        } else if (QFile::exists(dir.filePath(base + QStringLiteral(".png")))) {
+            imgPath = dir.filePath(base + QStringLiteral(".png"));
+        }
+    }
+
+    if (imgPath.isEmpty() || !QFile::exists(imgPath)) {
+        if (error) {
+            error->code = ExtractorError::ImageLoadFailed;
+            error->message = tr("Associated texture atlas image not found for: %1").arg(filePath);
+            error->filePath = filePath;
+        }
+        return false;
+    }
+
+    setProgress(30);
+
+    QString loadErr;
+    QImage atlas = VramTextureCompressor::loadAtlasImage(imgPath, &loadErr);
+    if (atlas.isNull()) {
+        if (error) {
+            error->code = ExtractorError::ImageLoadFailed;
+            error->message = tr("Failed to load texture atlas image: %1 (%2)").arg(imgPath, loadErr);
+            error->filePath = imgPath;
+        }
+        return false;
+    }
+
+    setProgress(60);
+
+    // 2. Parse sprites array
+    QJsonArray spritesArr = root.value(QStringLiteral("sprites")).toArray();
+    QList<QImage> frames;
+    QList<SpriteBox> boxes;
+    QMap<QString, QList<int>> animations;
+
+    for (int i = 0; i < spritesArr.size(); ++i) {
+        QJsonObject sObj = spritesArr[i].toObject();
+        QString sName = sObj.value(QStringLiteral("name")).toString();
+        QJsonObject uvObj = sObj.value(QStringLiteral("sourceUV")).toObject();
+        QJsonObject dimObj = sObj.value(QStringLiteral("sourceDimension")).toObject();
+        int rx = uvObj.value(QStringLiteral("x")).toInt();
+        int ry = uvObj.value(QStringLiteral("y")).toInt();
+        int rw = dimObj.value(QStringLiteral("x")).toInt();
+        int rh = dimObj.value(QStringLiteral("y")).toInt();
+
+        QRect r(rx, ry, rw, rh);
+        r = r.intersected(atlas.rect());
+        if (r.isEmpty()) continue;
+
+        QImage frameImg = atlas.copy(r);
+
+        SpriteBox box;
+        box.rect = r;
+        box.index = frames.size();
+        box.selected = false;
+
+        if (sObj.contains(QStringLiteral("pivot")) && sObj[QStringLiteral("pivot")].isObject()) {
+            QJsonObject pObj = sObj[QStringLiteral("pivot")].toObject();
+            box.pivot = QPoint(pObj.value(QStringLiteral("x")).toInt(), pObj.value(QStringLiteral("y")).toInt());
+            box.hasCustomPivot = true;
+        }
+
+        if (sObj.contains(QStringLiteral("renderGeometry")) && sObj[QStringLiteral("renderGeometry")].isObject()) {
+            QJsonObject renderGeom = sObj[QStringLiteral("renderGeometry")].toObject();
+            bool hasTightMesh = renderGeom.value(QStringLiteral("hasTightMesh")).toBool(false);
+            if (hasTightMesh) {
+                QJsonArray vArr = renderGeom.value(QStringLiteral("vertices")).toArray();
+                QJsonArray tArr = renderGeom.value(QStringLiteral("triangles")).toArray();
+
+                QPolygonF poly;
+                QList<QPointF> verts;
+                for (const QJsonValue &vVal : vArr) {
+                    QJsonObject vObj = vVal.toObject();
+                    QPointF pt(vObj.value(QStringLiteral("x")).toDouble(), vObj.value(QStringLiteral("y")).toDouble());
+                    poly.append(pt);
+                    verts.append(pt);
+                }
+
+                QList<int> tris;
+                for (const QJsonValue &tVal : tArr) {
+                    if (tVal.isArray()) {
+                        QJsonArray tri = tVal.toArray();
+                        for (const QJsonValue &idxVal : tri) {
+                            tris.append(idxVal.toInt());
+                        }
+                    } else {
+                        tris.append(tVal.toInt());
+                    }
+                }
+
+                if (!poly.isEmpty()) {
+                    box.hasPolygonMesh = true;
+                    box.polygon = poly;
+                    box.vertices = verts;
+                    box.triangles = tris;
+                }
+            }
+        }
+
+        int fIdx = frames.size();
+        frames.append(frameImg);
+        boxes.append(box);
+
+        int lastUnderscore = sName.lastIndexOf(QLatin1Char('_'));
+        QString animName = (lastUnderscore > 0) ? sName.left(lastUnderscore) : QStringLiteral("default");
+        animations[animName].append(fIdx);
+    }
+
+    outDoc.clear();
+    outDoc.setFilePath(filePath);
+    outDoc.setAtlas(atlas);
+    outDoc.setFrames(frames, boxes);
+    for (auto it = animations.begin(); it != animations.end(); ++it) {
+        outDoc.setAnimation(it.key(), it.value(), 12, true);
+    }
+
+    setProgress(100);
+    setStatusMessage(tr("Imported %1 frames from Unreal Paper2D").arg(frames.size()));
+    emit extractionFinished(frames.size());
+    return true;
 }
 
 bool UnrealExtractor::write(const QString &filePath, const SpriteDocument &doc, const ExportOptions &options, ExtractorError *error)
@@ -50,7 +219,21 @@ bool UnrealExtractor::write(const QString &filePath, const SpriteDocument &doc, 
     if (baseName.endsWith(QStringLiteral(".paper2d"), Qt::CaseInsensitive)) {
         baseName.chop(8);
     }
-    QString pngFileName = baseName + ".png";
+    if (baseName.trimmed().isEmpty()) {
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Export file name cannot be empty.");
+            error->filePath = filePath;
+        }
+        return false;
+    }
+    QString imageExt = QStringLiteral(".png");
+    if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) {
+        imageExt = QStringLiteral(".ktx2");
+    } else if (options.textureFormat == TEXTURE_FORMAT_BASIS) {
+        imageExt = QStringLiteral(".basis");
+    }
+    QString pngFileName = baseName + imageExt;
     QString pngFilePath = dir.filePath(pngFileName);
 
     AtlasPacker::PackOptions packOpts = options.packOptions;
@@ -89,13 +272,28 @@ bool UnrealExtractor::write(const QString &filePath, const SpriteDocument &doc, 
 
     setProgress(50);
 
-    if (!packResult.atlas.save(pngFilePath, "PNG")) {
-        if (error) {
+    bool saveOk = false;
+    if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
+        VramCompressionOptions vOpts = options.vramOptions;
+        if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
+        else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
+        else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
+        QString vErr;
+        saveOk = VramTextureCompressor::compressToFile(packResult.atlas, pngFilePath, vOpts, nullptr, &vErr);
+        if (!saveOk && error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Failed to save companion VRAM texture: %1 (%2)").arg(pngFilePath, vErr);
+            error->filePath = pngFilePath;
+            return false;
+        }
+    } else {
+        saveOk = packResult.atlas.save(pngFilePath, "PNG");
+        if (!saveOk && error) {
             error->code = ExtractorError::WriteFailed;
             error->message = tr("Failed to save companion image: %1").arg(pngFilePath);
             error->filePath = pngFilePath;
+            return false;
         }
-        return false;
     }
 
     setProgress(75);

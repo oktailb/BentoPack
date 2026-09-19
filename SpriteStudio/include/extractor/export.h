@@ -3,6 +3,7 @@
 
 #include <QString>
 #include "packer/atlaspacker.h"
+#include "packer/vramtexturecompressor.h"
 
 class Extractor;
 
@@ -17,6 +18,13 @@ enum Format {
     FORMAT_UNREAL
 };
 
+enum TextureFormat {
+    TEXTURE_FORMAT_PNG,
+    TEXTURE_FORMAT_KTX2_UASTC,
+    TEXTURE_FORMAT_KTX2_ETC1S,
+    TEXTURE_FORMAT_BASIS
+};
+
 enum AtlasStrategy {
     ATLASSTRATEGY_ORIGINAL_ATLAS,
     ATLASSTRATEGY_ONE_ATLAS_FOR_ALL_ANIMATIONS,
@@ -25,6 +33,9 @@ enum AtlasStrategy {
 
 struct ExportOptions {
     Format format = FORMAT_GODOT;
+    TextureFormat textureFormat = TEXTURE_FORMAT_PNG;
+    VramCompressionOptions vramOptions;
+
     bool trimSprites = false;
     bool rotateSprites = false;
     int padding = 2;

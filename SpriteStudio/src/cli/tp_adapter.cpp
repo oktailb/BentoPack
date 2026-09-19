@@ -3,6 +3,7 @@
 #include "controller/projectcontroller.h"
 #include "extractor/extractorregistry.h"
 #include "extractor/gifextractor.h"
+#include "packer/vramtexturecompressor.h"
 #include "project/sessionmanager.h"
 #include <QDir>
 #include <QFileInfo>
@@ -235,6 +236,13 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
     QString godotScene;
     QStringList inputPaths;
 
+    // VRAM texture options
+    QString textureFormat = QStringLiteral("png");
+    QString vramFormatStr = QStringLiteral("uastc");
+    int vramQuality = 2;
+    bool zstd = true;
+    int zstdLevel = 9;
+
     for (int i = 0; i < args.size(); ++i) {
         const QString &arg = args[i];
         if (arg == QStringLiteral("--sheet") && i + 1 < args.size()) {
@@ -243,6 +251,32 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
             dataPath = args[++i];
         } else if (arg == QStringLiteral("--format") && i + 1 < args.size()) {
             format = args[++i].toLower();
+        } else if (arg == QStringLiteral("--texture-format") && i + 1 < args.size()) {
+            textureFormat = args[++i].toLower();
+        } else if (arg == QStringLiteral("--opt") && i + 1 < args.size()) {
+            QString optVal = args[++i].toUpper();
+            if (optVal.contains(QStringLiteral("ASTC")) || optVal.contains(QStringLiteral("BC7")) || optVal == QStringLiteral("UASTC")) {
+                textureFormat = QStringLiteral("ktx2");
+                vramFormatStr = QStringLiteral("uastc");
+            } else if (optVal.contains(QStringLiteral("ETC1")) || optVal == QStringLiteral("ETC1S")) {
+                textureFormat = QStringLiteral("ktx2");
+                vramFormatStr = QStringLiteral("etc1s");
+            } else if (optVal.contains(QStringLiteral("RGBA"))) {
+                textureFormat = QStringLiteral("png");
+            }
+        } else if (arg == QStringLiteral("--vram-format") && i + 1 < args.size()) {
+            vramFormatStr = args[++i].toLower();
+            if (textureFormat == QStringLiteral("png")) textureFormat = QStringLiteral("ktx2");
+        } else if (arg == QStringLiteral("--vram-quality") && i + 1 < args.size()) {
+            QString qStr = args[++i].toLower();
+            if (qStr == QStringLiteral("fast") || qStr == QStringLiteral("1")) vramQuality = 1;
+            else if (qStr == QStringLiteral("normal") || qStr == QStringLiteral("2")) vramQuality = 2;
+            else if (qStr == QStringLiteral("high") || qStr == QStringLiteral("3")) vramQuality = 3;
+            else if (qStr == QStringLiteral("best") || qStr == QStringLiteral("4")) vramQuality = 4;
+        } else if (arg == QStringLiteral("--zstd-level") && i + 1 < args.size()) {
+            zstdLevel = args[++i].toInt();
+        } else if (arg == QStringLiteral("--no-zstd")) {
+            zstd = false;
         } else if (arg == QStringLiteral("--algorithm") && i + 1 < args.size()) {
             algorithm = args[++i];
         } else if (arg == QStringLiteral("--maxrects-heuristics") && i + 1 < args.size()) {
@@ -391,7 +425,29 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
                                 .arg(maxWidth).arg(maxHeight));
     }
 
-    // 5. Export metadata
+    // 5. Setup VRAM options
+    bool isVram = (textureFormat == QStringLiteral("ktx2") || textureFormat == QStringLiteral("basis") ||
+                   sheetPath.endsWith(QStringLiteral(".ktx2"), Qt::CaseInsensitive) ||
+                   sheetPath.endsWith(QStringLiteral(".basis"), Qt::CaseInsensitive));
+    if (isVram && !sheetPath.endsWith(QStringLiteral(".ktx2"), Qt::CaseInsensitive) && !sheetPath.endsWith(QStringLiteral(".basis"), Qt::CaseInsensitive)) {
+        if (sheetPath.endsWith(QStringLiteral(".png"), Qt::CaseInsensitive)) {
+            sheetPath.chop(4);
+        }
+        sheetPath += (textureFormat == QStringLiteral("basis")) ? QStringLiteral(".basis") : QStringLiteral(".ktx2");
+    }
+
+    VramCompressionOptions vOpts;
+    if (sheetPath.endsWith(QStringLiteral(".basis"), Qt::CaseInsensitive)) {
+        vOpts.format = (vramFormatStr == QStringLiteral("etc1s")) ? VramFormat::Basis_ETC1S : VramFormat::Basis_UASTC;
+    } else {
+        vOpts.format = (vramFormatStr == QStringLiteral("etc1s")) ? VramFormat::KTX2_ETC1S : VramFormat::KTX2_UASTC;
+    }
+    vOpts.qualityLevel = vramQuality;
+    vOpts.zstdSupercompression = zstd;
+    vOpts.zstdLevel = zstdLevel;
+    VramCompressionStats vStats;
+
+    // 6. Export metadata
     bool isGodot = (format == QStringLiteral("godot") || format == QStringLiteral("godot4") ||
                     dataPath.endsWith(QStringLiteral(".tres"), Qt::CaseInsensitive));
 
@@ -416,8 +472,15 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
         // Save Sheet image
         QFileInfo sfi(sheetPath);
         QDir().mkpath(sfi.dir().absolutePath());
-        if (!packRes.atlas.save(sheetPath, "PNG")) {
-            return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas sheet image: ") + sheetPath);
+        if (isVram) {
+            QString vErr;
+            if (!VramTextureCompressor::compressToFile(packRes.atlas, sheetPath, vOpts, &vStats, &vErr)) {
+                return CliResult::error(ExitIoError, QStringLiteral("Failed to compress VRAM atlas: ") + sheetPath + QStringLiteral(" (") + vErr + QStringLiteral(")"));
+            }
+        } else {
+            if (!packRes.atlas.save(sheetPath, "PNG")) {
+                return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas sheet image: ") + sheetPath);
+            }
         }
 
         // Save JSON data
@@ -440,6 +503,11 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
     json[QStringLiteral("unique_frames")] = packRes.uniqueFramesCount;
     json[QStringLiteral("efficiency")] = static_cast<double>(packRes.efficiency);
     json[QStringLiteral("elapsed_ms")] = elapsedMs;
+    if (isVram) {
+        json[QStringLiteral("vram_format")] = VramTextureCompressor::formatName(vOpts.format);
+        json[QStringLiteral("vram_bytes")] = vStats.compressedBytes;
+        json[QStringLiteral("vram_savings_percent")] = vStats.vramSavingsPercent;
+    }
 
     QString summary = QStringLiteral("Packed %1 frames into %2x%3 atlas (%4% efficiency) in %5 ms.")
         .arg(packRes.frameRects.size())
@@ -447,6 +515,12 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
         .arg(packRes.dimensions.height())
         .arg(QString::number(packRes.efficiency, 'f', 1))
         .arg(elapsedMs);
+
+    if (isVram) {
+        summary += QStringLiteral(" [VRAM: %1, -%2% savings]")
+            .arg(VramTextureCompressor::formatName(vOpts.format))
+            .arg(QString::number(vStats.vramSavingsPercent, 'f', 1));
+    }
 
     return CliResult::success(summary, json);
 }

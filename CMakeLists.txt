@@ -49,6 +49,44 @@ else()
     message(STATUS "To enable LibGit2, configure with -DLIBGIT2_ROOT=<path_to_libgit2>")
 endif()
 
+# M9: VRAM Hardware Texture Compression (Basis Universal / KTX2)
+option(ENABLE_VRAM_COMPRESSION "Enable KTX2 / Basis Universal VRAM texture compression" ON)
+if(ENABLE_VRAM_COMPRESSION)
+    set(BASISU_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(BASISU_BUILD_PYTHON OFF CACHE BOOL "" FORCE)
+    set(BASISU_SUPPORT_ASTCENC OFF CACHE BOOL "" FORCE)
+    set(BASISU_ZSTD ON CACHE BOOL "" FORCE)
+    set(BASISU_BUILD_X64 ON CACHE BOOL "" FORCE)
+
+    if(DEFINED BASIS_UNIVERSAL_DIR AND EXISTS "${BASIS_UNIVERSAL_DIR}/CMakeLists.txt")
+        message(STATUS "Using Basis Universal from BASIS_UNIVERSAL_DIR: ${BASIS_UNIVERSAL_DIR}")
+        add_subdirectory(${BASIS_UNIVERSAL_DIR} basis_universal EXCLUDE_FROM_ALL)
+        set(basis_universal_SOURCE_DIR "${BASIS_UNIVERSAL_DIR}")
+    elseif(EXISTS "cots/basis_universal/CMakeLists.txt")
+        message(STATUS "Using Basis Universal from local cache")
+        set(LOCAL_BASIS_DIR "cots/basis_universal")
+        add_subdirectory(${LOCAL_BASIS_DIR} basis_universal EXCLUDE_FROM_ALL)
+        set(basis_universal_SOURCE_DIR "${LOCAL_BASIS_DIR}")
+    else()
+        include(FetchContent)
+        message(STATUS "Fetching Basis Universal (Khronos Group)...")
+        FetchContent_Declare(
+            basis_universal
+            GIT_REPOSITORY https://github.com/BinomialLLC/basis_universal.git
+            GIT_TAG v2_50
+            GIT_SHALLOW TRUE
+        )
+        FetchContent_MakeAvailable(basis_universal)
+    endif()
+
+    if(TARGET basisu_encoder)
+        message(STATUS "Basis Universal (KTX2 / UASTC / ETC1S) enabled successfully.")
+        add_compile_definitions(HAVE_BASIS_UNIVERSAL=1)
+        add_compile_definitions(BASISD_SUPPORT_KTX2_ZSTD=1)
+        add_compile_definitions(BASISD_SUPPORT_KTX2=1)
+    endif()
+endif()
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_CXX_STANDARD 17)

@@ -6,6 +6,7 @@
 #include "include/config/appconfig.h"
 #include "include/project/sessionmanager.h"
 #include "include/project/projectmanager.h"
+#include "packer/vramtexturecompressor.h"
 #include <QUndoStack>
 #include <QSettings>
 #include <QFile>
@@ -397,10 +398,14 @@ void ProjectController::openFileAsync(const QString &filePath)
         result.type = AsyncExtractionResult::JobOpen;
         result.filePath = filePath;
 
-        QImage image(filePath);
+        QString loadErr;
+        QImage image = VramTextureCompressor::loadAtlasImage(filePath, &loadErr);
         if (image.isNull()) {
             result.success = false;
             result.errorMessage = QObject::tr("Failed to decode image from: %1").arg(filePath);
+            if (!loadErr.isEmpty()) {
+                result.errorMessage += QStringLiteral(" (%1)").arg(loadErr);
+            }
             return result;
         }
 
@@ -426,8 +431,9 @@ bool ProjectController::save(const QString &filePath, QString *errorMsg)
 
 bool ProjectController::exportData(const QString &filePath, const ExportOptions &options, QString *errorMsg)
 {
-    if (filePath.isEmpty()) {
-        QString err = tr("File path is empty.");
+    QFileInfo fi(filePath);
+    if (filePath.trimmed().isEmpty() || fi.completeBaseName().trimmed().isEmpty() || fi.isDir()) {
+        QString err = tr("Export file path must have a valid file name: %1").arg(filePath);
         if (errorMsg) *errorMsg = err;
         return false;
     }
@@ -686,6 +692,7 @@ void ProjectController::onAsyncJobFinished()
     if (m_document) {
         m_document->setAtlas(res.atlas);
         m_document->setFrames(res.frameImages, res.boxes);
+        m_document->setFilePath(res.filePath);
     }
 
     if (res.type == AsyncExtractionResult::JobOpen) {

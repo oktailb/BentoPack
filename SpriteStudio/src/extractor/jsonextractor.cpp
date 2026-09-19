@@ -26,6 +26,10 @@ bool JsonExtractor::canDecode(const QString &filePath) const
     if (fi.suffix().toLower() != QStringLiteral("json")) {
         return false;
     }
+    if (filePath.endsWith(QStringLiteral(".unity.json"), Qt::CaseInsensitive) ||
+        filePath.endsWith(QStringLiteral(".paper2d.json"), Qt::CaseInsensitive)) {
+        return false;
+    }
 
     QFile jsonFile(filePath);
     if (!jsonFile.open(QIODevice::ReadOnly)) {
@@ -117,10 +121,20 @@ bool JsonExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extrac
     if (!imageFileName.isEmpty()) {
         imageFilePath = jsonFileInfo.dir().filePath(imageFileName);
         if (!QFile::exists(imageFilePath)) {
-            imageFilePath = jsonFileInfo.dir().filePath(jsonFileInfo.completeBaseName() + ".png");
+            QString candKtx2 = jsonFileInfo.dir().filePath(jsonFileInfo.completeBaseName() + QStringLiteral(".ktx2"));
+            if (QFile::exists(candKtx2)) {
+                imageFilePath = candKtx2;
+            } else {
+                imageFilePath = jsonFileInfo.dir().filePath(jsonFileInfo.completeBaseName() + QStringLiteral(".png"));
+            }
         }
     } else {
-        imageFilePath = jsonFileInfo.dir().filePath(jsonFileInfo.completeBaseName() + ".png");
+        QString candKtx2 = jsonFileInfo.dir().filePath(jsonFileInfo.completeBaseName() + QStringLiteral(".ktx2"));
+        if (QFile::exists(candKtx2)) {
+            imageFilePath = candKtx2;
+        } else {
+            imageFilePath = jsonFileInfo.dir().filePath(jsonFileInfo.completeBaseName() + QStringLiteral(".png"));
+        }
     }
 
     if (!QFile::exists(imageFilePath)) {
@@ -132,11 +146,15 @@ bool JsonExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extrac
         return false;
     }
 
-    QImage atlasImage(imageFilePath);
+    QString loadErr;
+    QImage atlasImage = VramTextureCompressor::loadAtlasImage(imageFilePath, &loadErr);
     if (atlasImage.isNull()) {
         if (error) {
             error->code = ExtractorError::ImageLoadFailed;
             error->message = tr("Failed to decode atlas image: %1").arg(imageFilePath);
+            if (!loadErr.isEmpty()) {
+                error->message += QStringLiteral(" (%1)").arg(loadErr);
+            }
             error->filePath = imageFilePath;
         }
         return false;
@@ -477,9 +495,23 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
     }
 
     QFileInfo fi(filePath);
-    QString baseName = fi.completeBaseName();
     QDir dir = fi.dir();
-    QString pngFileName = baseName + QStringLiteral(".png");
+    QString baseName = fi.completeBaseName();
+    if (baseName.trimmed().isEmpty()) {
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Export file name cannot be empty.");
+            error->filePath = filePath;
+        }
+        return false;
+    }
+    QString imageExt = QStringLiteral(".png");
+    if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) {
+        imageExt = QStringLiteral(".ktx2");
+    } else if (options.textureFormat == TEXTURE_FORMAT_BASIS) {
+        imageExt = QStringLiteral(".basis");
+    }
+    QString pngFileName = baseName + imageExt;
     QString pngFilePath = dir.filePath(pngFileName);
 
     setStatusMessage(tr("Packing atlas for JSON export..."));
@@ -520,13 +552,28 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
 
     setProgress(50);
 
-    if (!packResult.atlas.save(pngFilePath, "PNG")) {
-        if (error) {
+    bool saveOk = false;
+    if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
+        VramCompressionOptions vOpts = options.vramOptions;
+        if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
+        else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
+        else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
+        QString vErr;
+        saveOk = VramTextureCompressor::compressToFile(packResult.atlas, pngFilePath, vOpts, nullptr, &vErr);
+        if (!saveOk && error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Failed to save companion VRAM texture: %1 (%2)").arg(pngFilePath, vErr);
+            error->filePath = pngFilePath;
+            return false;
+        }
+    } else {
+        saveOk = packResult.atlas.save(pngFilePath, "PNG");
+        if (!saveOk && error) {
             error->code = ExtractorError::WriteFailed;
             error->message = tr("Failed to save companion image: %1").arg(pngFilePath);
             error->filePath = pngFilePath;
+            return false;
         }
-        return false;
     }
 
     setProgress(75);

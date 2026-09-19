@@ -36,6 +36,7 @@ set(SpriteStudioCore_SRC
     src/packer/atlaspacker.cpp
     src/packer/maxrectspacker.cpp
     src/packer/tightpolygonpacker.cpp
+    src/packer/vramtexturecompressor.cpp
     src/animation/animationplayer.cpp
     src/commands/commands.cpp
     src/extractor.cpp
@@ -113,6 +114,7 @@ set(SpriteStudioCore_INCLUDE
     include/packer/atlaspacker.h
     include/packer/maxrectspacker.h
     include/packer/tightpolygonpacker.h
+    include/packer/vramtexturecompressor.h
     include/animation/animationplayer.h
     include/commands/commands.h
     include/commands/filtercommands.h
@@ -232,6 +234,18 @@ target_link_libraries(SpriteStudioCore PUBLIC
 
 if(LibGit2_FOUND)
     target_link_libraries(SpriteStudioCore PUBLIC LibGit2::LibGit2)
+endif()
+
+if(TARGET basisu_encoder)
+    target_include_directories(SpriteStudioCore PUBLIC
+        ${basis_universal_SOURCE_DIR}
+        ${basis_universal_SOURCE_DIR}/encoder
+        ${basis_universal_SOURCE_DIR}/transcoder
+    )
+    target_link_libraries(SpriteStudioCore PUBLIC basisu_encoder)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(SpriteStudioCore PRIVATE -fno-strict-aliasing)
+    endif()
 endif()
 
 # Ressources d'icône Windows

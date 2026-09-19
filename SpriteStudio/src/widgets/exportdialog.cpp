@@ -1,10 +1,12 @@
 #include "widgets/exportdialog.h"
 #include "ui_exportdialog.h"
 #include "extractor/extractorregistry.h"
+#include "packer/vramtexturecompressor.h"
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QTimer>
 #include <QPushButton>
+#include <QMessageBox>
 
 ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaultPath, QWidget *parent)
     : QDialog(parent)
@@ -28,9 +30,15 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
     } else if (m_document && !m_document->filePath().isEmpty()) {
         QFileInfo fi(m_document->filePath());
         QString baseName = fi.completeBaseName();
+        if (baseName.isEmpty()) baseName = QStringLiteral("atlas");
         QString defExport = fi.dir().filePath(baseName + ".tres");
         ui->txtFilePath->setText(defExport);
+    } else {
+        QString defExport = QDir::current().filePath(QStringLiteral("atlas.tres"));
+        ui->txtFilePath->setText(defExport);
     }
+
+    connect(ui->txtFilePath, &QLineEdit::textChanged, this, &ExportDialog::validateFilePath);
 
     // Configure debounce timer for live stats calculation
     m_debounceTimer->setSingleShot(true);
@@ -49,6 +57,17 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
     connect(ui->chkDeduplicate, &QCheckBox::toggled, [this]() { m_debounceTimer->start(); });
     connect(ui->chkTrim, &QCheckBox::toggled, [this]() { m_debounceTimer->start(); });
 
+    // VRAM compression signals
+    connect(ui->comboTextureFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::onTextureFormatChanged);
+    connect(ui->comboVramQuality, QOverload<int>::of(&QComboBox::currentIndexChanged), [this]() { m_debounceTimer->start(); });
+    connect(ui->chkZstd, &QCheckBox::toggled, [this](bool checked) {
+        ui->spinZstdLevel->setEnabled(checked && ui->comboTextureFormat->currentIndex() > 0);
+        m_debounceTimer->start();
+    });
+    connect(ui->spinZstdLevel, QOverload<int>::of(&QSpinBox::valueChanged), [this]() { m_debounceTimer->start(); });
+
+    onTextureFormatChanged(ui->comboTextureFormat->currentIndex());
+    validateFilePath();
     updateStats();
 }
 
@@ -128,6 +147,23 @@ ExportOptions ExportDialog::exportOptions() const
     opts.padding = pOpts.padding;
     opts.trimSprites = ui->chkTrim->isChecked();
 
+    // VRAM texture options
+    int texFmtIdx = ui->comboTextureFormat->currentIndex();
+    if (texFmtIdx == 0) {
+        opts.textureFormat = TEXTURE_FORMAT_PNG;
+    } else if (texFmtIdx == 1) {
+        opts.textureFormat = TEXTURE_FORMAT_KTX2_UASTC;
+        opts.vramOptions.format = VramFormat::KTX2_UASTC;
+    } else if (texFmtIdx == 2) {
+        opts.textureFormat = TEXTURE_FORMAT_KTX2_ETC1S;
+        opts.vramOptions.format = VramFormat::KTX2_ETC1S;
+    }
+
+    int qIdx = ui->comboVramQuality->currentIndex();
+    opts.vramOptions.qualityLevel = (qIdx == 0 ? 1 : (qIdx == 1 ? 2 : 3));
+    opts.vramOptions.zstdSupercompression = ui->chkZstd->isChecked();
+    opts.vramOptions.zstdLevel = ui->spinZstdLevel->value();
+
     return opts;
 }
 
@@ -152,16 +188,22 @@ void ExportDialog::onBrowseClicked()
 
     QString chosen = QFileDialog::getSaveFileName(this, tr("Select Export Destination"), initialPath, filter);
     if (!chosen.isEmpty()) {
+        QFileInfo fi(chosen);
+        if (fi.completeBaseName().trimmed().isEmpty()) {
+            QString ext = fi.suffix().isEmpty() ? QStringLiteral("tres") : fi.suffix();
+            chosen = fi.dir().filePath(QStringLiteral("atlas.") + ext);
+        }
         ui->txtFilePath->setText(chosen);
     }
 }
 
 void ExportDialog::onFormatChanged(int index)
 {
-    QString current = ui->txtFilePath->text();
+    QString current = ui->txtFilePath->text().trimmed();
     if (!current.isEmpty()) {
         QFileInfo fi(current);
         QString base = fi.completeBaseName();
+        if (base.isEmpty()) base = QStringLiteral("atlas");
         if (base.endsWith(QStringLiteral(".unity"), Qt::CaseInsensitive)) base.chop(6);
         if (base.endsWith(QStringLiteral(".paper2d"), Qt::CaseInsensitive)) base.chop(8);
 
@@ -176,28 +218,70 @@ void ExportDialog::onFormatChanged(int index)
     m_debounceTimer->start();
 }
 
+void ExportDialog::onTextureFormatChanged(int index)
+{
+    bool isVram = (index > 0);
+    ui->lblVramQuality->setEnabled(isVram);
+    ui->comboVramQuality->setEnabled(isVram);
+    ui->chkZstd->setEnabled(isVram);
+    ui->lblZstdLevel->setEnabled(isVram && ui->chkZstd->isChecked());
+    ui->spinZstdLevel->setEnabled(isVram && ui->chkZstd->isChecked());
+
+    m_debounceTimer->start();
+}
+
 void ExportDialog::updateStats()
 {
     if (!m_document || m_document->frameCount() == 0) {
         ui->lblDimensions->setText(tr("Dimensions: --"));
         ui->lblEfficiency->setText(tr("Packing Efficiency: --"));
         ui->lblFrames->setText(tr("Frames: 0"));
+        ui->lblVramSavings->setText(tr("GPU VRAM: --"));
         return;
     }
 
     ExportOptions opts = exportOptions();
 
+    auto updateVramLabel = [this, &opts](int w, int h) {
+        if (w <= 0 || h <= 0) {
+            ui->lblVramSavings->setText(tr("GPU VRAM: --"));
+            return;
+        }
+
+        quint64 rgbaBytes = static_cast<quint64>(w) * h * 4;
+        double rgbaMb = static_cast<double>(rgbaBytes) / (1024.0 * 1024.0);
+
+        if (opts.textureFormat == TEXTURE_FORMAT_PNG) {
+            ui->lblVramSavings->setText(tr("GPU VRAM: %1 MB (Standard RGBA8888, uncompressed on GPU)")
+                .arg(QString::number(rgbaMb, 'f', 2)));
+        } else {
+            quint64 vramBytes = VramTextureCompressor::estimateVramBytes(w, h, opts.vramOptions.format);
+            double vramMb = static_cast<double>(vramBytes) / (1024.0 * 1024.0);
+            double savingsPct = (1.0 - static_cast<double>(vramBytes) / static_cast<double>(rgbaBytes)) * 100.0;
+            QString fmtName = (opts.vramOptions.format == VramFormat::KTX2_UASTC) ? QStringLiteral("UASTC 4x4") : QStringLiteral("ETC1S");
+
+            ui->lblVramSavings->setText(tr("GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA")
+                .arg(QString::number(vramMb, 'f', 2))
+                .arg(fmtName)
+                .arg(QString::number(savingsPct, 'f', 1)));
+        }
+    };
+
     if (opts.packOptions.algorithm == AtlasPacker::KeepLayout) {
         if (!m_document->atlas().isNull()) {
+            int w = m_document->atlas().width();
+            int h = m_document->atlas().height();
             ui->lblDimensions->setText(tr("Dimensions: %1 x %2 px (Current Atlas)")
-                .arg(m_document->atlas().width())
-                .arg(m_document->atlas().height()));
+                .arg(w)
+                .arg(h));
             ui->lblEfficiency->setText(tr("Packing Efficiency: Preserved as-is (WYSIWYG)"));
             ui->lblFrames->setText(tr("Frames: %1 total").arg(m_document->frameCount()));
+            updateVramLabel(w, h);
         } else {
             ui->lblDimensions->setText(tr("Dimensions: No current atlas"));
             ui->lblEfficiency->setText(tr("Packing Efficiency: --"));
             ui->lblFrames->setText(tr("Frames: %1 total").arg(m_document->frameCount()));
+            ui->lblVramSavings->setText(tr("GPU VRAM: --"));
         }
         return;
     }
@@ -211,9 +295,11 @@ void ExportDialog::updateStats()
     AtlasPackResult res = AtlasPacker::pack(m_document->frames(), opts.packOptions, docPolygons);
 
     if (res.success) {
+        int w = res.dimensions.width();
+        int h = res.dimensions.height();
         ui->lblDimensions->setText(tr("Dimensions: %1 x %2 px")
-            .arg(res.dimensions.width())
-            .arg(res.dimensions.height()));
+            .arg(w)
+            .arg(h));
 
         ui->lblEfficiency->setText(tr("Packing Efficiency: %1%")
             .arg(QString::number(res.efficiency, 'f', 1)));
@@ -228,10 +314,12 @@ void ExportDialog::updateStats()
             ui->lblFrames->setText(tr("Frames: %1 total (all unique)")
                 .arg(m_document->frameCount()));
         }
+        updateVramLabel(w, h);
     } else {
         ui->lblDimensions->setText(tr("Dimensions: Does not fit in maximum bounds!"));
         ui->lblEfficiency->setText(tr("Packing Efficiency: 0%"));
         ui->lblFrames->setText(tr("Frames: %1").arg(m_document->frameCount()));
+        ui->lblVramSavings->setText(tr("GPU VRAM: --"));
     }
 }
 
@@ -248,5 +336,31 @@ void ExportDialog::changeEvent(QEvent *event)
         updateStats();
     }
     QDialog::changeEvent(event);
+}
+
+void ExportDialog::validateFilePath()
+{
+    QString path = exportFilePath();
+    bool valid = false;
+    if (!path.isEmpty()) {
+        QFileInfo fi(path);
+        if (!fi.completeBaseName().trimmed().isEmpty() && !fi.isDir()) {
+            valid = true;
+        }
+    }
+    if (QPushButton *okBtn = ui->buttonBox->button(QDialogButtonBox::Ok)) {
+        okBtn->setEnabled(valid);
+    }
+}
+
+void ExportDialog::accept()
+{
+    QString path = exportFilePath();
+    QFileInfo fi(path);
+    if (path.isEmpty() || fi.completeBaseName().trimmed().isEmpty() || fi.isDir()) {
+        QMessageBox::warning(this, tr("Export"), tr("Please specify a valid file name before exporting."));
+        return;
+    }
+    QDialog::accept();
 }
 

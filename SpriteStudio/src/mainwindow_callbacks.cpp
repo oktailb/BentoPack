@@ -161,7 +161,7 @@ void MainWindow::on_actionExport_triggered()
     }
 
     QString selectedFile = dlg.exportFilePath();
-    if (selectedFile.isEmpty()) return;
+    if (selectedFile.trimmed().isEmpty() || QFileInfo(selectedFile).completeBaseName().trimmed().isEmpty()) return;
 
     ExportOptions options = dlg.exportOptions();
     QString errorMsg;
