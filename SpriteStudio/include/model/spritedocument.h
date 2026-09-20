@@ -123,6 +123,7 @@ public:
     int frameCount() const { return m_frames.size(); }
     const QList<QImage>& frames() const { return m_frames; }
     QImage frame(int index) const;
+    QImage polygonClippedFrame(int index) const;
     void setFrames(const QList<QImage> &frames, const QList<SpriteBox> &boxes);
     void addFrame(const QImage &image, const SpriteBox &box = SpriteBox());
     void insertFrame(int index, const QImage &image, const SpriteBox &box);

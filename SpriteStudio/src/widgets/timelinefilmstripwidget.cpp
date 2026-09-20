@@ -89,7 +89,16 @@ void TimelineFilmstripWidget::setupUi()
 
 void TimelineFilmstripWidget::setDocument(SpriteDocument *document)
 {
+    if (m_document == document) return;
+    if (m_document) {
+        disconnect(m_document, &SpriteDocument::framesChanged, this, &TimelineFilmstripWidget::refresh);
+        disconnect(m_document, &SpriteDocument::frameUpdated, this, &TimelineFilmstripWidget::refresh);
+    }
     m_document = document;
+    if (m_document) {
+        connect(m_document, &SpriteDocument::framesChanged, this, &TimelineFilmstripWidget::refresh);
+        connect(m_document, &SpriteDocument::frameUpdated, this, &TimelineFilmstripWidget::refresh);
+    }
     refresh();
 }
 
@@ -148,7 +157,7 @@ void TimelineFilmstripWidget::rebuildItems()
 
         QImage img;
         if (globalIdx >= 0 && globalIdx < m_document->frameCount()) {
-            img = m_document->frame(globalIdx);
+            img = m_document->polygonClippedFrame(globalIdx);
         }
 
         if (!img.isNull()) {

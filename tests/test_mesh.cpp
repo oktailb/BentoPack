@@ -69,6 +69,7 @@ private slots:
     void testUnrealExtractorExport();
     void testGodotExtractorCompanionTres();
     void testAtlasPackingDialogPreservesPolygons();
+    void testPolygonClippedFrame();
 };
 
 void TestMesh::initTestCase()
@@ -717,6 +718,46 @@ void TestMesh::testAtlasPackingDialogPreservesPolygons()
     QVERIFY(!resultBox2.polygon.isEmpty());
     QCOMPARE(resultBox2.polygon.size(), 4);
     QCOMPARE(resultBox2.triangles.size(), 3);
+}
+
+void TestMesh::testPolygonClippedFrame()
+{
+    SpriteDocument doc;
+    // 40x40 image:
+    // Green triangle (0,0)-(30,0)-(0,30)
+    // Red artifact at (35, 35) simulating a nested neighbor sprite from tight packing
+    QImage img(40, 40, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    {
+        QPainter p(&img);
+        p.setPen(Qt::NoPen);
+        p.setBrush(QColor(0, 255, 0, 255));
+        QPolygonF poly;
+        poly << QPointF(0, 0) << QPointF(30, 0) << QPointF(0, 30);
+        p.drawPolygon(poly);
+        p.fillRect(32, 32, 6, 6, QColor(255, 0, 0, 255));
+    }
+
+    SpriteBox box(QRect(0, 0, 40, 40));
+    doc.addFrame(img, box);
+
+    // 1. Without polygon mesh: returns raw unclipped frame
+    QCOMPARE(doc.polygonClippedFrame(0).pixelColor(35, 35), QColor(255, 0, 0, 255));
+
+    // 2. With polygon mesh enabled
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(30, 0) << QPointF(0, 30);
+    box.triangles = { 0, 1, 2 };
+    doc.setBox(0, box);
+
+    // Raw frame still has the neighbor artifact
+    QCOMPARE(doc.frame(0).pixelColor(35, 35), QColor(255, 0, 0, 255));
+
+    // polygonClippedFrame masks out the artifact completely
+    QImage clipped = doc.polygonClippedFrame(0);
+    QCOMPARE(clipped.pixelColor(35, 35).alpha(), 0);
+    // Green pixels inside the polygon are fully preserved
+    QCOMPARE(clipped.pixelColor(5, 5), QColor(0, 255, 0, 255));
 }
 
 #include <QApplication>

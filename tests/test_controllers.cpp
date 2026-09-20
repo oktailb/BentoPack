@@ -78,6 +78,7 @@ private slots:
     void testAtlasBoxItemPivotDrag();
     void testAnimationPreviewZoomAndFit();
     void testAnimationPreviewPivotInteraction();
+    void testAnimationPolygonMasking();
 
     // AtlasViewController tests
     void testAtlasViewControllerToolMode();
@@ -2644,6 +2645,47 @@ void TestControllers::testAnimationPreviewPivotInteraction()
     QVERIFY(undoStack.canRedo());
     undoStack.redo();
     QCOMPARE(doc.box(idx).hasCustomPivot, true);
+}
+
+void TestControllers::testAnimationPolygonMasking()
+{
+    SpriteDocument doc;
+    QImage img(40, 40, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    {
+        QPainter p(&img);
+        p.fillRect(0, 0, 20, 20, QColor(0, 255, 0, 255)); // Sprite content
+        p.fillRect(30, 30, 10, 10, QColor(255, 0, 0, 255)); // Neighbor trace
+    }
+
+    SpriteBox box(QRect(0, 0, 40, 40));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(20, 0) << QPointF(20, 20) << QPointF(0, 20);
+    box.triangles = { 0, 1, 2, 0, 2, 3 };
+    doc.addFrame(img, box);
+
+    doc.setAnimation(QStringLiteral("walk"), { 0 }, 12, true);
+
+    QGraphicsView view;
+    AnimationController animCtrl(&doc, nullptr, nullptr, nullptr, &view);
+    animCtrl.selectAnimation(QStringLiteral("walk"));
+    animCtrl.seek(0);
+
+    QGraphicsScene *scene = animCtrl.previewScene();
+    QVERIFY(scene != nullptr);
+
+    QGraphicsPixmapItem *pixItem = nullptr;
+    for (QGraphicsItem *it : scene->items()) {
+        pixItem = dynamic_cast<QGraphicsPixmapItem*>(it);
+        if (pixItem) break;
+    }
+    QVERIFY(pixItem != nullptr);
+
+    QImage rendered = pixItem->pixmap().toImage();
+    // Sprite pixels inside polygon are preserved
+    QCOMPARE(rendered.pixelColor(5, 5), QColor(0, 255, 0, 255));
+    // Neighbor trace outside polygon is transparent (alpha == 0)
+    QCOMPARE(rendered.pixelColor(35, 35).alpha(), 0);
 }
 
 #include <QApplication>

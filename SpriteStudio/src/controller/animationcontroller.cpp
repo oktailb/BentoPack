@@ -49,6 +49,9 @@ AnimationController::AnimationController(SpriteDocument *document,
         connect(m_document, &SpriteDocument::boxPivotChanged, this, [this](int, const QPoint &) {
             updatePreview();
         });
+        connect(m_document, &SpriteDocument::framesChanged, this, [this]() {
+            updatePreview();
+        });
     }
 
     if (treeWidget) {
@@ -669,7 +672,7 @@ void AnimationController::renderCurrentFrame(int globalFrameIndex)
         return;
     }
 
-    QImage frameImg = m_document->frame(globalFrameIndex);
+    QImage frameImg = m_document->polygonClippedFrame(globalFrameIndex);
     if (frameImg.isNull()) return;
     QPixmap currentFrame = QPixmap::fromImage(frameImg);
 

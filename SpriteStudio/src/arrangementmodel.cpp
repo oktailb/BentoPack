@@ -45,7 +45,7 @@ QVariant ArrangementModel::data(const QModelIndex &index, int role) const
             return it.value();
         }
         if (m_document && row >= 0 && row < m_document->frameCount()) {
-            const QImage &img = m_document->frame(row);
+            QImage img = m_document->polygonClippedFrame(row);
             if (!img.isNull()) {
                 QPixmap pm = QPixmap::fromImage(img.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 m_thumbnailCache.insert(row, pm);

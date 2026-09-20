@@ -80,6 +80,44 @@ QImage SpriteDocument::frame(int index) const
     return QImage();
 }
 
+QImage SpriteDocument::polygonClippedFrame(int index) const
+{
+    if (index < 0 || index >= m_frames.size()) {
+        return QImage();
+    }
+
+    const QImage &baseImage = m_frames.at(index);
+    if (baseImage.isNull() || index >= m_boxes.size()) {
+        return baseImage;
+    }
+
+    const SpriteBox &b = m_boxes.at(index);
+    if (!b.hasPolygonMesh || b.polygon.size() < 3) {
+        return baseImage;
+    }
+
+    // Build transparent mask and render the polygon
+    QImage mask(baseImage.size(), QImage::Format_ARGB32_Premultiplied);
+    mask.fill(Qt::transparent);
+    {
+        QPainter mp(&mask);
+        mp.setRenderHint(QPainter::Antialiasing, false);
+        mp.setBrush(Qt::white);
+        mp.setPen(Qt::NoPen);
+        mp.drawPolygon(b.polygon);
+    }
+
+    // Clip baseImage to mask using DestinationIn
+    QImage clipped = baseImage.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+    {
+        QPainter p(&clipped);
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.drawImage(0, 0, mask);
+    }
+
+    return clipped;
+}
+
 void SpriteDocument::setFrames(const QList<QImage> &frames, const QList<SpriteBox> &boxes)
 {
     m_frames = frames;
