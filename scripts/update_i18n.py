@@ -430,6 +430,78 @@ TRANSLATIONS = {
             "ja_JA": "ダブルクリックでこのリビジョンを復元"
         }
     },
+    "GitHistoryDock": {
+        "KEY_DOCK_GIT_HISTORY": {
+            "fr_FR": "Historique Git",
+            "en_US": "Git History",
+            "ja_JA": "Git履歴"
+        },
+        "KEY_GIT_REFRESH_TOOLTIP": {
+            "fr_FR": "Rafraîchir l'historique des révisions",
+            "en_US": "Refresh revision history",
+            "ja_JA": "リビジョン履歴を更新"
+        },
+        "KEY_GIT_RETURN_PRESENT": {
+            "fr_FR": "Revenir au présent",
+            "en_US": "Return to Present",
+            "ja_JA": "最新に戻る"
+        },
+        "KEY_GIT_RETURN_PRESENT_TOOLTIP": {
+            "fr_FR": "Restaurer la dernière version (HEAD de la branche)",
+            "en_US": "Restore the latest version (branch HEAD)",
+            "ja_JA": "最新バージョン (ブランチのHEAD) に復帰する"
+        },
+        "KEY_GIT_DISABLED_BANNER": {
+            "fr_FR": "L'intégration Git n'est pas activée sur ce système.\n(libgit2 non détectée lors de la compilation)",
+            "en_US": "Git integration is not enabled on this system.\n(libgit2 not detected at compile time)",
+            "ja_JA": "このシステムではGit連携が有効になっていません。\n(コンパイル時にlibgit2が検出されませんでした)"
+        },
+        "KEY_GIT_HDR_COMMIT": {
+            "fr_FR": "Commit :",
+            "en_US": "Commit:",
+            "ja_JA": "コミット :"
+        },
+        "KEY_GIT_HDR_DATE": {
+            "fr_FR": "Date :",
+            "en_US": "Date:",
+            "ja_JA": "日時 :"
+        },
+        "KEY_GIT_HDR_AUTHOR": {
+            "fr_FR": "Auteur :",
+            "en_US": "Author:",
+            "ja_JA": "作成者 :"
+        },
+        "KEY_GIT_HDR_ACTION": {
+            "fr_FR": "Action :",
+            "en_US": "Action:",
+            "ja_JA": "アクション :"
+        },
+        "KEY_GIT_BTN_RESTORE": {
+            "fr_FR": "Restaurer cette révision",
+            "en_US": "Restore this revision",
+            "ja_JA": "このリビジョンを復元"
+        },
+        "KEY_GIT_NO_ACTIVE_PROJECT": {
+            "fr_FR": "Aucun projet actif",
+            "en_US": "No active project",
+            "ja_JA": "アクティブなプロジェクトがありません"
+        },
+        "KEY_GIT_COMMITS_COUNT": {
+            "fr_FR": "%1 commit(s)",
+            "en_US": "%1 commit(s)",
+            "ja_JA": "%1 コミット"
+        },
+        "KEY_GIT_EMPTY_HISTORY": {
+            "fr_FR": "Historique Git vide pour ce projet.",
+            "en_US": "Git history is empty for this project.",
+            "ja_JA": "このプロジェクトのGit履歴は空です。"
+        },
+        "KEY_GIT_NO_SELECTION": {
+            "fr_FR": "Aucun commit sélectionné.\nCliquez sur un nœud pour afficher ses détails.",
+            "en_US": "No commit selected.\nClick a node to view its details.",
+            "ja_JA": "コミットが選択されていません。\nノードをクリックして詳細を表示します。"
+        }
+    },
     "MainWindow": {
         "KEY_GRP_PIVOT": {
             "fr_FR": "Point d'ancrage (Pivot)",
@@ -1128,6 +1200,21 @@ TRANSLATIONS = {
             "fr_FR": "Restauration de la révision %1 effectuée.",
             "en_US": "Checked out revision %1.",
             "ja_JA": "リビジョン %1 にチェックアウトしました。"
+        },
+        "New project": {
+            "fr_FR": "Nouveau projet",
+            "en_US": "New project",
+            "ja_JA": "新規プロジェクト"
+        },
+        "Export file path must have a valid file name: %1": {
+            "fr_FR": "Le chemin du fichier d'export doit comporter un nom de fichier valide : %1",
+            "en_US": "Export file path must have a valid file name: %1",
+            "ja_JA": "エクスポートファイルパスには有効なファイル名が必要です：%1"
+        },
+        "Open %1": {
+            "fr_FR": "Ouvrir %1",
+            "en_US": "Open %1",
+            "ja_JA": "%1 を開く"
         }
     },
     "QObject": {
@@ -1205,6 +1292,16 @@ TRANSLATIONS = {
             "fr_FR": "Définir le maillage polygonal",
             "en_US": "Set Polygon Mesh",
             "ja_JA": "ポリゴンメッシュを設定"
+        },
+        "Image file does not exist: %1": {
+            "fr_FR": "Le fichier image n'existe pas : %1",
+            "en_US": "Image file does not exist: %1",
+            "ja_JA": "画像ファイルが存在しません：%1"
+        },
+        "Failed to open file for reading: %1": {
+            "fr_FR": "Échec de l'ouverture du fichier en lecture : %1",
+            "en_US": "Failed to open file for reading: %1",
+            "ja_JA": "読み込み用ファイルのオープンに失敗しました：%1"
         }
     },
     "SessionManager": {
@@ -1775,6 +1872,51 @@ TRANSLATIONS = {
             "fr_FR": "Filtre : Empaquetage d'Atlas (MaxRects)",
             "en_US": "Filter: Atlas Bin-Packing (MaxRects)",
             "ja_JA": "フィルター：アトラスビンパッキング (MaxRects)"
+        },
+        "Ready — Adjust parameters and click 'Compute Packing'": {
+            "fr_FR": "Prêt — Ajustez vos paramètres et cliquez sur 'Calculer le packing'",
+            "en_US": "Ready — Adjust parameters and click 'Compute Packing'",
+            "ja_JA": "準備完了 — 設定を調整して「パッキング計算」をクリックしてください"
+        },
+        "Tight Polygon Packing (Nesting — Overlapping Rects)": {
+            "fr_FR": "Empaquetage polygonal serré (Imbrication — Rectangles superposés)",
+            "en_US": "Tight Polygon Packing (Nesting — Overlapping Rects)",
+            "ja_JA": "タイトポリゴンパッキング（ネスト — 矩形のオーバーラップ）"
+        },
+        "Crops transparent margins around frames while preserving animation pivots. Highly recommended for animation spritesheets to eliminate empty spaces and maximize packing density.": {
+            "fr_FR": "Rogne les marges transparentes autour des frames tout en préservant les pivots d'animation. Fortement recommandé pour les spritesheets animées afin d'éliminer les espaces vides et maximiser la densité.",
+            "en_US": "Crops transparent margins around frames while preserving animation pivots. Highly recommended for animation spritesheets to eliminate empty spaces and maximize packing density.",
+            "ja_JA": "アニメーションのピボットを保持しながらフレーム周囲の透明余白をトリミングします。空きスペースを排除しパッキング密度を最大化するため、アニメーションスプライトシートに強く推奨されます。"
+        },
+        "Performance & Multithreading": {
+            "fr_FR": "Performances & Multithreading",
+            "en_US": "Performance & Multithreading",
+            "ja_JA": "パフォーマンスとマルチスレッド"
+        },
+        "Number of CPU threads to use for parallel processing (1 to %1 cores)": {
+            "fr_FR": "Nombre de threads CPU à utiliser pour le calcul parallèle (1 à %1 cœurs)",
+            "en_US": "Number of CPU threads to use for parallel processing (1 to %1 cores)",
+            "ja_JA": "並列処理に使用するCPUスレッド数（1〜%1 コア）"
+        },
+        "Worker Threads:": {
+            "fr_FR": "Threads de calcul :",
+            "en_US": "Worker Threads:",
+            "ja_JA": "ワーカースレッド："
+        },
+        "Compute Packing": {
+            "fr_FR": "Calculer le packing",
+            "en_US": "Compute Packing",
+            "ja_JA": "パッキング計算"
+        },
+        "Computing...": {
+            "fr_FR": "Calcul en cours...",
+            "en_US": "Computing...",
+            "ja_JA": "計算中..."
+        },
+        "Computing packing...": {
+            "fr_FR": "Calcul du packing en cours...",
+            "en_US": "Computing packing...",
+            "ja_JA": "パッキング計算中..."
         }
     },
     "AtlasPackingFilter": {
@@ -2034,6 +2176,11 @@ TRANSLATIONS = {
             "fr_FR": "Annuler",
             "en_US": "Cancel",
             "ja_JA": "キャンセル"
+        },
+        "Please specify a valid file name before exporting.": {
+            "fr_FR": "Veuillez spécifier un nom de fichier valide avant d'exporter.",
+            "en_US": "Please specify a valid file name before exporting.",
+            "ja_JA": "エクスポートする前に有効なファイル名を指定してください。"
         }
     },
     "SettingsDialog": {
@@ -2390,6 +2537,233 @@ TRANSLATIONS = {
             "en_US": "&Open",
             "ja_JA": "開く(&O)"
         }
+    },
+    "BranchSelectionDialog": {
+        "Redo — Select Branch": {
+            "fr_FR": "Rétablir — Sélectionner la branche",
+            "en_US": "Redo — Select Branch",
+            "ja_JA": "やり直し — ブランチの選択"
+        },
+        "Multiple branches diverge from the current revision.\nChoose which branch to restore:": {
+            "fr_FR": "Plusieurs branches divergent de la révision actuelle.\nChoisissez la branche à restaurer :",
+            "en_US": "Multiple branches diverge from the current revision.\nChoose which branch to restore:",
+            "ja_JA": "現在のリビジョンから複数のブランチが分岐しています。\n復元するブランチを選択してください："
+        },
+        "(No message)": {
+            "fr_FR": "(Aucun message)",
+            "en_US": "(No message)",
+            "ja_JA": "(メッセージなし)"
+        },
+        "Unknown": {
+            "fr_FR": "Inconnu",
+            "en_US": "Unknown",
+            "ja_JA": "不明"
+        },
+        "Cancel": {
+            "fr_FR": "Annuler",
+            "en_US": "Cancel",
+            "ja_JA": "キャンセル"
+        },
+        "Restore Branch": {
+            "fr_FR": "Restaurer la branche",
+            "en_US": "Restore Branch",
+            "ja_JA": "ブランチを復元"
+        }
+    },
+    "GodotExtractor": {
+        "Export file name cannot be empty.": {
+            "fr_FR": "Le nom du fichier d'export ne peut pas être vide.",
+            "en_US": "Export file name cannot be empty.",
+            "ja_JA": "エクスポートファイル名を空にすることはできません。"
+        },
+        "Failed to write Godot VRAM atlas texture: %1 (%2)": {
+            "fr_FR": "Échec de l'écriture de la texture d'atlas VRAM Godot : %1 (%2)",
+            "en_US": "Failed to write Godot VRAM atlas texture: %1 (%2)",
+            "ja_JA": "Godot VRAMアトラステクスチャの書き込みに失敗しました：%1 (%2)"
+        }
+    },
+    "JsonExtractor": {
+        "Export file name cannot be empty.": {
+            "fr_FR": "Le nom du fichier d'export ne peut pas être vide.",
+            "en_US": "Export file name cannot be empty.",
+            "ja_JA": "エクスポートファイル名を空にすることはできません。"
+        },
+        "Failed to save companion VRAM texture: %1 (%2)": {
+            "fr_FR": "Échec de l'enregistrement de la texture VRAM associée : %1 (%2)",
+            "en_US": "Failed to save companion VRAM texture: %1 (%2)",
+            "ja_JA": "関連するVRAMテクスチャの保存に失敗しました：%1 (%2)"
+        }
+    },
+    "SpriteExtractor": {
+        "Export file name cannot be empty.": {
+            "fr_FR": "Le nom du fichier d'export ne peut pas être vide.",
+            "en_US": "Export file name cannot be empty.",
+            "ja_JA": "エクスポートファイル名を空にすることはできません。"
+        }
+    },
+    "UnityExtractor": {
+        "Reading Unity 2D Sprite Mesh %1...": {
+            "fr_FR": "Lecture du maillage de sprite Unity 2D %1...",
+            "en_US": "Reading Unity 2D Sprite Mesh %1...",
+            "ja_JA": "Unity 2Dスプライトメッシュ %1 を読み込み中..."
+        },
+        "Failed to open file: %1": {
+            "fr_FR": "Échec de l'ouverture du fichier : %1",
+            "en_US": "Failed to open file: %1",
+            "ja_JA": "ファイルのオープンに失敗しました：%1"
+        },
+        "Failed to parse Unity JSON: %1": {
+            "fr_FR": "Échec de l'analyse du JSON Unity : %1",
+            "en_US": "Failed to parse Unity JSON: %1",
+            "ja_JA": "Unity JSONの解析に失敗しました：%1"
+        },
+        "Associated texture atlas image not found for: %1": {
+            "fr_FR": "Image d'atlas de texture associée non trouvée pour : %1",
+            "en_US": "Associated texture atlas image not found for: %1",
+            "ja_JA": "関連付けられたテクスチャアトラス画像が見つかりません：%1"
+        },
+        "Failed to load texture atlas image: %1 (%2)": {
+            "fr_FR": "Échec du chargement de l'image de texture d'atlas : %1 (%2)",
+            "en_US": "Failed to load texture atlas image: %1 (%2)",
+            "ja_JA": "テクスチャアトラス画像の読み込みに失敗しました：%1 (%2)"
+        },
+        "Imported %1 frames from Unity 2D Sprite Mesh": {
+            "fr_FR": "%1 frames importées depuis le maillage Unity 2D",
+            "en_US": "Imported %1 frames from Unity 2D Sprite Mesh",
+            "ja_JA": "Unity 2Dスプライトメッシュから %1 フレームをインポートしました"
+        },
+        "No frames in document to export.": {
+            "fr_FR": "Aucune frame dans le document à exporter.",
+            "en_US": "No frames in document to export.",
+            "ja_JA": "エクスポートするフレームがドキュメントにありません。"
+        },
+        "Packing atlas for Unity...": {
+            "fr_FR": "Empaquetage de l'atlas pour Unity...",
+            "en_US": "Packing atlas for Unity...",
+            "ja_JA": "Unity用アトラスをパッキング中..."
+        },
+        "Export file name cannot be empty.": {
+            "fr_FR": "Le nom du fichier d'export ne peut pas être vide.",
+            "en_US": "Export file name cannot be empty.",
+            "ja_JA": "エクスポートファイル名を空にすることはできません。"
+        },
+        "Failed to pack frames for Unity export.": {
+            "fr_FR": "Échec de l'empaquetage des frames pour l'export Unity.",
+            "en_US": "Failed to pack frames for Unity export.",
+            "ja_JA": "Unityエクスポート用のフレームパッキングに失敗しました。"
+        },
+        "Failed to save companion VRAM texture: %1 (%2)": {
+            "fr_FR": "Échec de l'enregistrement de la texture VRAM associée : %1 (%2)",
+            "en_US": "Failed to save companion VRAM texture: %1 (%2)",
+            "ja_JA": "関連するVRAMテクスチャの保存に失敗しました：%1 (%2)"
+        },
+        "Failed to save companion image: %1": {
+            "fr_FR": "Échec de l'enregistrement de l'image associée : %1",
+            "en_US": "Failed to save companion image: %1",
+            "ja_JA": "関連する画像の保存に失敗しました：%1"
+        },
+        "Cannot write to Unity JSON file: %1": {
+            "fr_FR": "Impossible d'écrire dans le fichier JSON Unity : %1",
+            "en_US": "Cannot write to Unity JSON file: %1",
+            "ja_JA": "Unity JSONファイルに書き込めません：%1"
+        },
+        "Exported Unity Sprite Mesh: %1 and image %2": {
+            "fr_FR": "Maillage de sprite Unity exporté : %1 et image %2",
+            "en_US": "Exported Unity Sprite Mesh: %1 and image %2",
+            "ja_JA": "Unityスプライトメッシュをエクスポートしました：%1 および画像 %2"
+        },
+        "Unity 2D Sprite Mesh (*.unity.json)": {
+            "fr_FR": "Maillage de sprite Unity 2D (*.unity.json)",
+            "en_US": "Unity 2D Sprite Mesh (*.unity.json)",
+            "ja_JA": "Unity 2Dスプライトメッシュ (*.unity.json)"
+        },
+        "Exports Unity 2D Sprite Mesh with vertex & triangle buffers.": {
+            "fr_FR": "Exporte le maillage de sprite Unity 2D avec les tampons de sommets et triangles.",
+            "en_US": "Exports Unity 2D Sprite Mesh with vertex & triangle buffers.",
+            "ja_JA": "頂点および三角形バッファを含むUnity 2Dスプライトメッシュをエクスポートします。"
+        }
+    },
+    "UnrealExtractor": {
+        "Reading Unreal Engine Paper2D atlas %1...": {
+            "fr_FR": "Lecture de l'atlas Unreal Engine Paper2D %1...",
+            "en_US": "Reading Unreal Engine Paper2D atlas %1...",
+            "ja_JA": "Unreal Engine Paper2Dアトラス %1 を読み込み中..."
+        },
+        "Failed to open file: %1": {
+            "fr_FR": "Échec de l'ouverture du fichier : %1",
+            "en_US": "Failed to open file: %1",
+            "ja_JA": "ファイルのオープンに失敗しました：%1"
+        },
+        "Failed to parse Unreal JSON: %1": {
+            "fr_FR": "Échec de l'analyse du JSON Unreal : %1",
+            "en_US": "Failed to parse Unreal JSON: %1",
+            "ja_JA": "Unreal JSONの解析に失敗しました：%1"
+        },
+        "Associated texture atlas image not found for: %1": {
+            "fr_FR": "Image d'atlas de texture associée non trouvée pour : %1",
+            "en_US": "Associated texture atlas image not found for: %1",
+            "ja_JA": "関連付けられたテクスチャアトラス画像が見つかりません：%1"
+        },
+        "Failed to load texture atlas image: %1 (%2)": {
+            "fr_FR": "Échec du chargement de l'image de texture d'atlas : %1 (%2)",
+            "en_US": "Failed to load texture atlas image: %1 (%2)",
+            "ja_JA": "テクスチャアトラス画像の読み込みに失敗しました：%1 (%2)"
+        },
+        "Imported %1 frames from Unreal Paper2D": {
+            "fr_FR": "%1 frames importées depuis Unreal Paper2D",
+            "en_US": "Imported %1 frames from Unreal Paper2D",
+            "ja_JA": "Unreal Paper2Dから %1 フレームをインポートしました"
+        },
+        "No frames in document to export.": {
+            "fr_FR": "Aucune frame dans le document à exporter.",
+            "en_US": "No frames in document to export.",
+            "ja_JA": "エクスポートするフレームがドキュメントにありません。"
+        },
+        "Packing atlas for Unreal Engine Paper2D...": {
+            "fr_FR": "Empaquetage de l'atlas pour Unreal Engine Paper2D...",
+            "en_US": "Packing atlas for Unreal Engine Paper2D...",
+            "ja_JA": "Unreal Engine Paper2D用アトラスをパッキング中..."
+        },
+        "Export file name cannot be empty.": {
+            "fr_FR": "Le nom du fichier d'export ne peut pas être vide.",
+            "en_US": "Export file name cannot be empty.",
+            "ja_JA": "エクスポートファイル名を空にすることはできません。"
+        },
+        "Failed to pack frames for Unreal Paper2D export.": {
+            "fr_FR": "Échec de l'empaquetage des frames pour l'export Unreal Paper2D.",
+            "en_US": "Failed to pack frames for Unreal Paper2D export.",
+            "ja_JA": "Unreal Paper2Dエクスポート用のフレームパッキングに失敗しました。"
+        },
+        "Failed to save companion VRAM texture: %1 (%2)": {
+            "fr_FR": "Échec de l'enregistrement de la texture VRAM associée : %1 (%2)",
+            "en_US": "Failed to save companion VRAM texture: %1 (%2)",
+            "ja_JA": "関連するVRAMテクスチャの保存に失敗しました：%1 (%2)"
+        },
+        "Failed to save companion image: %1": {
+            "fr_FR": "Échec de l'enregistrement de l'image associée : %1",
+            "en_US": "Failed to save companion image: %1",
+            "ja_JA": "関連する画像の保存に失敗しました：%1"
+        },
+        "Cannot write to Unreal Paper2D JSON file: %1": {
+            "fr_FR": "Impossible d'écrire dans le fichier JSON Unreal Paper2D : %1",
+            "en_US": "Cannot write to Unreal Paper2D JSON file: %1",
+            "ja_JA": "Unreal Paper2D JSONファイルに書き込めません：%1"
+        },
+        "Exported Unreal Paper2D Sprite: %1 and image %2": {
+            "fr_FR": "Sprite Unreal Paper2D exporté : %1 et image %2",
+            "en_US": "Exported Unreal Paper2D Sprite: %1 and image %2",
+            "ja_JA": "Unreal Paper2Dスプライトをエクスポートしました：%1 および画像 %2"
+        },
+        "Unreal Engine Paper2D (*.paper2d.json)": {
+            "fr_FR": "Unreal Engine Paper2D (*.paper2d.json)",
+            "en_US": "Unreal Engine Paper2D (*.paper2d.json)",
+            "ja_JA": "Unreal Engine Paper2D (*.paper2d.json)"
+        },
+        "Exports Unreal Engine Paper2D sprites with tight RenderGeometry.": {
+            "fr_FR": "Exporte les sprites Unreal Engine Paper2D avec géométrie de rendu ajustée.",
+            "en_US": "Exports Unreal Engine Paper2D sprites with tight RenderGeometry.",
+            "ja_JA": "タイトなRenderGeometryを含むUnreal Engine Paper2Dスプライトをエクスポートします。"
+        }
     }
 }
 
@@ -2462,11 +2836,15 @@ if __name__ == "__main__":
 
     # Compile .ts into .qm with lrelease
     import subprocess
+    import shutil
     lrelease_paths = [
         r"C:\Qt\6.10.2\mingw_64\bin\lrelease.exe",
+        "/usr/bin/lrelease",
         "lrelease"
     ]
-    lrel = next((p for p in lrelease_paths if os.path.exists(p)), None)
+    lrel = next((p for p in lrelease_paths if os.path.exists(p) or shutil.which(p)), None)
+    if lrel and not os.path.exists(lrel):
+        lrel = shutil.which(lrel)
     if lrel:
         for l in ["fr_FR", "en_US", "ja_JA"]:
             ts_path = f"SpriteStudio/i18n/sprite_studio_{l}.ts"
