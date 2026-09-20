@@ -20,6 +20,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Bresenham 1px, Gomme alpha 0, Pipette, Seau, Sélections Marquee/Wand, Tampon Flottant, Palettes NES/SNES/Amiga/NEC/GB/Pico8/C64, Navigation Inter-frames, 19 tests CTest) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Marching Squares, RDP, Ear-Clipping, Wireframe HMI, Édition Sommets, Tight Packing Multithreadé & Configurable, Export Unity/Unreal/Godot, 22 tests CTest) |
 | **M9** | [Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC)](#m9--compression-de-textures-vram--formats-gpu-ktx2--basis-universal--astc) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — KTX2, UASTC, ETC1S, Zstd, Décompression CPU 0, Transcodage RGBA, ExportDialog IHM & Télémétrie Live VRAM, CLI CI/CD, 12 tests CTest) |
+| **M11** | [Architecture Dynamique de Plugins Qt6 & SDK Tiers](#m11--architecture-dynamique-de-plugins-qt6--sdk-tiers) | **Haute** | Haute | 🟢 Clôturé & Validé (100% CTest — libSpriteStudioCore.so, QPluginLoader, 9 filtres & 6 extracteurs externalisés, SDK d'extension, SpriteStudioConfig.cmake) |
 | **M10** | [Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)](#m10--intégration-aux-écosystèmes--marchés-moteurs-de-jeu-godot-assetlib-unity-upm-unreal-fab) | **Moyenne** | Moyenne | 💡 Spécifié & Planifié (Plugins moteurs, Importateurs automatiques, Hot-Reload, Stores) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
 | **AUDIT** | [Dette de Thread-Safety & Modèle Pur (Audit Étape 2)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Clôturé & Validé (Modèle pur QImage, Cache Vignettes, 0 conversion I/O, Miniz ZIP, 116 tests CTest 100%) |
@@ -951,6 +952,84 @@ Pour égaler TexturePacker Pro tout en conservant une licence open-source péren
 
 ---
 
+## M11 : Architecture Dynamique de Plugins Qt6 & SDK Tiers (Filtres & Codecs .so / .dll)
+
+### 📌 Contexte & Enjeux d'Extensibilité
+Pour transformer SpriteStudio en une plateforme extensible pérenne et ouverte aux studios et à la communauté, le couplage monolithique des filtres graphiques et des codecs d'import/export devait être totalement éliminé.
+
+Historiquement intégrés au cœur du binaire, l'ajout d'un filtre ou d'un format propriétaire imposait la recompilation de l'application entière. L'objectif du chantier **M11** a été de :
+1. Découpler l'intégralité des filtres et extracteurs en bibliothèques dynamiques partagées (`.so` sous Linux, `.dll` sous Windows, `.dylib` sous macOS) chargées à l'exécution.
+2. Établir une bibliothèque partagée `SpriteStudioCore` propre avec exportation systématique des symboles de l'API publique (`SPRITESTUDIOCORE_EXPORT`).
+3. Fournir un SDK d'extension complet avec fichiers CMake installables (`SpriteStudioConfig.cmake`) et projets d'exemples compilables en dehors de l'arborescence source.
+4. Rétablir une clarté IHM totale en séparant l'empaquetage polygonal serré (*Tight Polygon Packing (Nesting)*) de l'empaquetage rectangulaire classique (*MaxRects Bin-Packing*).
+
+---
+
+### 🏛️ Architecture Technique & Réalisations (100% Validé)
+
+```
+                       ┌─────────────────────────────────────┐
+                       │    libSpriteStudioCore.so / .dll    │
+                       │    (Moteur, Modèle, Registres)      │
+                       └──────────────────┬──────────────────┘
+                                          │
+                  ┌───────────────────────┴───────────────────────┐
+                  ▼                                               ▼
+     ┌────────────────────────┐                      ┌────────────────────────┐
+     │  `plugins/extractors/` │                      │   `plugins/filters/`   │
+     │  (Plugins I/O Codecs)  │                      │ (Plugins Traitements)  │
+     ├────────────────────────┤                      ├────────────────────────┤
+     │ • extractor_godot      │                      │ • filter_backgroundrem.│
+     │ • extractor_unity      │                      │ • filter_despill       │
+     │ • extractor_unreal     │                      │ • filter_outline       │
+     │ • extractor_spritesheet│                      │ • filter_colorswap     │
+     │ • extractor_gif        │                      │ • filter_coloradjust   │
+     │ • extractor_json       │                      │ • filter_pixelrescale  │
+     │                        │                      │ • filter_retropalette  │
+     │                        │                      │ • filter_atlaspacking  │
+     │                        │                      │ • filter_tightpolygonp.│
+     └────────────────────────┘                      └────────────────────────┘
+```
+
+1. **Extraction et Dynamisation des Filtres (`plugins/filters/`) :**
+   - 9 bibliothèques partagées autonomes déclarant `Q_PLUGIN_METADATA(IID FilterPlugin_iid)` :
+     - `filter_backgroundremoval` : Détourage chroma, détection de fond automatique (`Ctrl+Shift+B`).
+     - `filter_despill` : Anti-halo et serrage colorimétrique 1px.
+     - `filter_outline` : Contours procéduraux 1-4px et masques hit-flash.
+     - `filter_colorswap` : Remplacement de palettes respectant les dégradés HSV.
+     - `filter_coloradjust` : Teinte, saturation, valeur, luminosité, contraste.
+     - `filter_pixelrescale` : Redimensionnement entier sans flou bilinéaire.
+     - `filter_retropalette` : Dithering Floyd-Steinberg et palettes rétro cultes.
+     - `filter_atlaspacking` : MaxRects multi-heuristiques (`Ctrl+Shift+P`).
+     - **`filter_tightpolygonpacking` : Empaquetage polygonal serré concave/convexe dédié (`Ctrl+Shift+T`).**
+   - Correction de l'ergonomie : `Tight Polygon Packing` dispose désormais de son propre plugin et de sa propre entrée de menu dans `Filters -> Geometry & Transform`, préconfigurant directement l'algorithme polygonal (index 5) sans risque de confusion avec MaxRects.
+
+2. **Extraction et Dynamisation des Codecs d'Export (`plugins/extractors/`) :**
+   - 6 bibliothèques partagées autonomes déclarant `Q_PLUGIN_METADATA(IID Extractor_iid)` :
+     - `extractor_godot` : Format Godot 4 `.tres` SpriteFrames & scènes `.tscn`.
+     - `extractor_unity` : Format `.unity.json` avec maillages `SpriteMeshType.Tight`.
+     - `extractor_unreal` : Format Paper2D `.paper2d.json`.
+     - `extractor_spritesheet` : Feuilles PNG/BMP/JPG avec détection spatiale.
+     - `extractor_gif` : Décompilation de GIF animés multi-frames.
+     - `extractor_json` : TexturePacker & Aseprite JSON standard.
+
+3. **Cœur `SpriteStudioCore` Partagé & API Exportée :**
+   - Génération de l'en-tête d'export `spritestudiocore_export.h` via `GenerateExportHeader(SpriteStudioCore)`.
+   - Annotation systématique des classes et interfaces publiques avec `SPRITESTUDIOCORE_EXPORT` (`SpriteDocument`, `Extractor`, `ExtractorRegistry`, `FilterPlugin`, `FilterRegistry`, `AtlasPacker`, `VramTextureCompressor`, etc.).
+   - Idempotence et protection contre les doublons dans `FilterRegistry` et `ExtractorRegistry` lors des ré-initialisations successives.
+
+4. **SDK Développeur Tiers & Modèles de Référence :**
+   - Fichier de configuration CMake `cmake/SpriteStudioConfig.cmake.in` permettant l'utilisation de `find_package(SpriteStudio REQUIRED)` dans des projets tiers externes.
+   - Projets de démonstration complets et documentés :
+     - `examples/sample_filter_plugin` : Exemple de filtre d'inversion colorimétrique négative.
+     - `examples/sample_extractor_plugin` : Exemple d'exportateur CSV simple.
+
+5. **Validation CTest (100% Succès) :**
+   - Adaptation des suites de tests unitaires (`test_controllers`, `test_extractors`, `test_mesh`) pour lier et tester les plugins dynamiques.
+   - Les 8 suites de tests CTest sont validées avec 100% de succès.
+
+---
+
 ## M10 : Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)
 
 ### 📌 Contexte & Enjeux d'Adoption
@@ -1488,21 +1567,28 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 
 ---
 
-### 🎯 Phase C — Spécialisation, Retouche & Haute Performance GPU (Long Terme)
+### 🎯 Phase C — Spécialisation, Retouche & Haute Performance GPU (Long Terme) — 🟢 100% CLÔTURÉE
 6. **Étape 9 — Outil de Retouche Pixel Chirurgicale (M4 allégé) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Corriger rapidement un pixel oublié ou un artefact sans devoir rouvrir un éditeur externe.
    - *Livrables :* Atelier `PixelEditorDialog` et `PixelCanvas` haute précision sans interpolation (`SmoothPixmapTransform = false`), tracé continu de Bresenham 1px, gomme 1px (alpha 0), pipette instantanée (`Alt+clic` / `I`), remplissage par flot 4-connecté borné par la sélection active, sélections rectangulaire et baguette magique, copier/couper/coller avec tampon flottant déplaçable, miroir H/V, rotation 90°, grille de pixels ($\ge 400\%$), navigation inter-frames (`Page Up` / `Page Down`), palettes rétro authentiques (NES, SNES, Amiga, NEC, Game Boy, Pico-8, C64) et extraction automatique des couleurs du sprite, synchronisation réversible de l'atlas et du document (`EditSpritePixelsCommand`). 19 tests unitaires sous CTest validés à 100%.
 7. **Étape 10 — Empaquetage Polygonal & Maillages Serrés (M8 - Tight Mesh) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Éradiquer l'overdraw GPU (60% à 80% de fillrate économisé) et maximiser la compacité (+20% à +50%) pour mobile et Nintendo Switch.
    - *Livrables :* Contouring Marching Squares étanche, simplification RDP avec dilatation normale et budget de sommets (3-48), triangulation Ear-Clipping, édition interactive directe des sommets sur canevas (sélection, déplacement souris/clavier, insertion par double-clic, suppression `Suppr`), algorithme `TightPolygonPacker` haute densité avec multithreading configurable (1 à $N$ cœurs logiques `QThread::idealThreadCount()`), optimisation des ancres de placement (< 20 ms), IHM non-bloquante avec calcul à la demande et mémorisation des préférences, et exports multi-moteurs (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON). 22 tests unitaires sous CTest validés à 100%.
-8. **Étape 11 — Compression de Textures VRAM & Formats GPU (M9 - KTX2 / Basis Universal / ASTC) :**
+8. **Étape 11 — Compression de Textures VRAM & Formats GPU (M9 - KTX2 / Basis Universal / ASTC) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Éradiquer la décompression CPU et réduire l'empreinte VRAM par 4x à 8x (de 16 Mo à 2.7–4 Mo pour un atlas 2048x2048) sur mobile, Switch et PC.
-   - *Livrables :* Moteur `VramTextureCompressor` basé sur `basis_universal` (open-source Apache 2.0 / Khronos Group), encodage multithreadé KTX2 UASTC (haute fidélité pixel art) et ETC1S avec supercompression Zstandard, interface dédiée dans `ExportDialog` avec télémétrie VRAM en direct, et flags CLI `--texture-format ktx2` / `--opt` pour CI/CD studio.
+   - *Livrables :* Moteur `VramTextureCompressor` basé sur `basis_universal` (open-source Apache 2.0 / Khronos Group), encodage multithreadé KTX2 UASTC (haute fidélité pixel art) et ETC1S avec supercompression Zstandard, interface dédiée dans `ExportDialog` avec télémétrie VRAM en direct, flags CLI `--texture-format ktx2` / `--opt` pour CI/CD studio, et 12 tests unitaires validés sous CTest (`test_vram_compression`).
 
 ---
 
-### 🌐 Phase D — Écosystème Développeurs, Plugins Moteurs & Marchés (Long Terme / Rayonnement)
-9. **Étape 12 — Intégration aux Écosystèmes & Marchés Moteurs de Jeu (M10 - Godot AssetLib, Unity UPM, Unreal Fab) :**
+### 🧩 Phase D — Modularité Dynamique & Écosystème d'Extensions — 🟢 100% CLÔTURÉE
+9. **Étape 12 — Architecture Dynamique de Plugins Qt6 & SDK Tiers (M11) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
+   - *Objectif :* Découpler le cœur de l'application et ouvrir SpriteStudio aux extensions communautaires sans recompilation du binaire principal.
+   - *Livrables :* Transformation de `SpriteStudioCore` en bibliothèque partagée (`libSpriteStudioCore.so`), export des symboles d'API via macro dédiée (`SPRITESTUDIOCORE_EXPORT`), externalisation des 6 extracteurs de formats (`godot`, `unity`, `unreal`, `spritesheet`, `gif`, `json`) et des 9 filtres de traitement (`backgroundremoval`, `despill`, `outline`, `colorswap`, `coloradjust`, `pixelrescale`, `retropalette`, `atlaspacking`, `tightpolygonpacking`), raccourci et entrée de menu dédiée `Tight Polygon Packing (Nesting)...` (`Ctrl+Shift+T`), chargement dynamique multiplateforme via `QPluginLoader`, configuration CMake installable (`SpriteStudioConfig.cmake`), et projets modèles SDK documentés (`examples/sample_filter_plugin`, `examples/sample_extractor_plugin`). 8 suites CTest 100% passées.
+
+---
+
+### 🌐 Phase E — Écosystème Développeurs, Plugins Moteurs & Marchés (Long Terme / Rayonnement)
+10. **Étape 13 — Intégration aux Écosystèmes & Marchés Moteurs de Jeu (M10 - Godot AssetLib, Unity UPM, Unreal Fab) :**
    - *Objectif :* Éliminer toute friction pour les développeurs en intégrant SpriteStudio directement dans leur environnement de développement quotidien et sur les magasins officiels d'assets.
    - *Livrables :* Addon officiel Godot 4 (Asset Library) avec importateur direct `.ssp` et synchronisation live `--watch`, package Unity UPM (`com.spritestudio.importer`) avec `ScriptedImporter` et génération automatique de `SpriteMeshType.Tight`, plugin Unreal Engine 5 pour le store Fab avec `UFactory` pour Paper2D/PaperZD, et scripts d'intégration CI/CD pour pipelines studio.
 
@@ -1513,7 +1599,9 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 | Risque Identifié | Gravité | Probabilité | Impact Métier & Technique | Stratégie d'Atténuation Adoptée |
 |---|:---:|:---:|---|---|
 | **1. Absence de Pivots (M3)** | **Critique** | **Nulle (Résolu)** | Risque de sautillement d'animation et décalages moteurs de jeu. | **✅ Résolu & Validé :** Système de pivots M3 complet, enveloppe d'animation sans jittering, réticules interactifs atlas et aperçu, exports Godot/JSON/SSP, 100% CTest. |
-| **2. Absence d'Interface CLI** | **Élevée** | **Haute** | SpriteStudio reste exclu des pipelines de production automatisés (CI/CD) des studios professionnels de jeux vidéo. | Création de la cible légère `spritestudio-cli` liée à `SpriteStudioCore` sans dépendance GUI. |
+| **2. Absence d'Interface CLI** | **Élevée** | **Nulle (Résolu)** | SpriteStudio exclu des pipelines d'intégration continue (CI/CD) des studios pros. | **✅ Résolu & Validé :** Binaire headless autonome `spritestudio-cli` avec mode drop-in TexturePacker, Aseprite et pipeline natif Godot 4. |
 | **3. Thread-Safety du Modèle (`QPixmap`)** | **Moyenne** | **Nulle (Résolu)** | Instanciation de `QPixmap` hors-thread provoquant des plantages intermittents sous Linux (X11/Wayland) et macOS. | **✅ Résolu & Validé :** Modèle, codecs et commandes 100% migrés sur `QImage` pure en mémoire CPU. |
-| **4. Dispersion Fonctionnelle (*Feature Creep*)** | **Élevée** | **Moyenne** | Vouloir réinventer Aseprite (dessin pixel) et Photoshop épuise les ressources et dégrade la clarté du produit. | Définir SpriteStudio comme le **couteau suisse du conditionnement et de la préparation**, pas un outil d'illustration. Cadrer M4 sur la retouche chirurgicale. |
-| **5. Consommation RAM sur Grands Atlas** | **Moyenne** | **Faible** | Clonage d'images volumineuses dans la pile `QUndoStack` (atlas 4K avec 50 étapes d'annulation). | Exploiter le Copy-On-Write (COW) implicite de `QImage` et stocker uniquement des rectangles de diffs pour les filtres locaux. |
+| **4. Absence de Formats VRAM (M9)** | **Moyenne** | **Nulle (Résolu)** | Saturation de la mémoire vidéo et goulet d'étranglement de bande passante sur mobile et Switch. | **✅ Résolu & Validé :** Intégration de `basis_universal` (KTX2, UASTC, ETC1S, Zstd) et télémétrie live dans `ExportDialog` et le CLI. |
+| **5. Couplage Monolithique des Filtres & Codecs** | **Moyenne** | **Nulle (Résolu)** | Impossibilité pour les tiers d'étendre les formats ou d'ajouter des filtres sans forker et recompiler l'application entière. | **✅ Résolu & Validé (M11) :** Architecture dynamique `QPluginLoader`, `libSpriteStudioCore` partagée, macro d'export API, CMake package config et exemples SDK. |
+| **6. Dispersion Fonctionnelle (*Feature Creep*)** | **Élevée** | **Faible (Maîtrisé)** | Risque de diluer le produit en voulant concurrencer Photoshop ou Spine. | **✅ Maintenu :** Positionnement clair de **passerelle de conditionnement, découpe, empaquetage et optimisation** pour moteurs de jeu. |
+| **7. Consommation RAM sur Grands Atlas** | **Moyenne** | **Faible (Maîtrisé)** | Clonage d'images volumineuses dans la pile `QUndoStack` (atlas 4K/8K). | **✅ Optimisé :** Copies partielles par rectangles délimités (*dirty rects*) lors de l'édition pixel M4 et copy-on-write `QImage`. |
