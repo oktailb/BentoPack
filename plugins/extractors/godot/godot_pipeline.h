@@ -8,31 +8,10 @@
 #include <QImage>
 #include <QMap>
 #include "model/spritedocument.h"
-#include "cli/cliparser.h"
-
-namespace SpriteStudioCli {
 
 class GodotPipeline
 {
 public:
-    struct ExportArgs {
-        QString sheetPath;
-        QString tresPath;
-        QString scenePath;         ///< Optional .tscn scene generation
-        QString explicitUid;       ///< Explicit or requested UID (e.g. uid://...)
-        bool preserveExistingUid = true;
-        QList<QImage> frames;
-        QList<QRect> frameRects;
-        QList<QPoint> pivots;
-        QMap<QString, SpriteAnimation> animations;
-        QImage atlas;
-    };
-
-    /**
-     * @brief Exports Godot 4 SpriteFrames .tres and optional .tscn scene.
-     */
-    static CliResult exportGodot(const ExportArgs &args);
-
     /**
      * @brief Extracts existing UID from a .tres file if present.
      */
@@ -51,7 +30,5 @@ public:
                               const QString &defaultAnimName,
                               QString *outError = nullptr);
 };
-
-} // namespace SpriteStudioCli
 
 #endif // GODOT_PIPELINE_H

@@ -2,16 +2,22 @@
 #include "ui_exportdialog.h"
 #include "extractor/extractorregistry.h"
 #include "packer/vramtexturecompressor.h"
+#include "controller/projectcontroller.h"
+#include "config/appconfig.h"
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QTimer>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QCloseEvent>
+#include <QtConcurrent/QtConcurrent>
+#include <QFutureWatcher>
 
-ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaultPath, QWidget *parent)
+ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaultPath, QWidget *parent, ProjectController *controller)
     : QDialog(parent)
     , ui(std::make_unique<Ui::ExportDialog>())
     , m_document(document)
+    , m_controller(controller)
     , m_debounceTimer(new QTimer(this))
 {
     ui->setupUi(this);
@@ -82,7 +88,21 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
         ui->spinZstdLevel->setEnabled(checked && ui->comboTextureFormat->currentIndex() > 0);
         m_debounceTimer->start();
     });
-    connect(ui->spinZstdLevel, QOverload<int>::of(&QSpinBox::valueChanged), [this]() { m_debounceTimer->start(); });
+    const auto &expCfg = AppConfig::instance().exportSettings();
+    if (!expCfg.defaultFormatId.isEmpty()) {
+        int idx = ui->comboFormat->findData(expCfg.defaultFormatId);
+        if (idx >= 0) {
+            ui->comboFormat->setCurrentIndex(idx);
+        }
+    }
+    if (expCfg.defaultTextureFormatIndex >= 0 && expCfg.defaultTextureFormatIndex < ui->comboTextureFormat->count()) {
+        ui->comboTextureFormat->setCurrentIndex(expCfg.defaultTextureFormatIndex);
+    }
+    if (expCfg.defaultAlgorithmIndex >= 0 && expCfg.defaultAlgorithmIndex < ui->comboAlgorithm->count()) {
+        ui->comboAlgorithm->setCurrentIndex(expCfg.defaultAlgorithmIndex);
+    }
+    ui->chkZstd->setChecked(expCfg.defaultZstd);
+    ui->spinZstdLevel->setValue(expCfg.defaultZstdLevel);
 
     onTextureFormatChanged(ui->comboTextureFormat->currentIndex());
     validateFilePath();
@@ -371,14 +391,103 @@ void ExportDialog::validateFilePath()
     }
 }
 
+void ExportDialog::setControlsEnabled(bool enabled)
+{
+    ui->grpDestination->setEnabled(enabled);
+    ui->grpFormat->setEnabled(enabled);
+    ui->grpGeometry->setEnabled(enabled);
+    ui->grpVram->setEnabled(enabled);
+    if (QPushButton *okBtn = ui->buttonBox->button(QDialogButtonBox::Ok)) {
+        okBtn->setEnabled(enabled);
+    }
+    if (QPushButton *cancelBtn = ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+        cancelBtn->setEnabled(enabled);
+    }
+}
+
+void ExportDialog::closeEvent(QCloseEvent *event)
+{
+    if (m_isExporting) {
+        event->ignore();
+        return;
+    }
+    QDialog::closeEvent(event);
+}
+
+void ExportDialog::reject()
+{
+    if (m_isExporting) {
+        return;
+    }
+    QDialog::reject();
+}
+
 void ExportDialog::accept()
 {
+    if (m_isExporting) return;
+
     QString path = exportFilePath();
     QFileInfo fi(path);
     if (path.isEmpty() || fi.completeBaseName().trimmed().isEmpty() || fi.isDir()) {
         QMessageBox::warning(this, tr("Export"), tr("Please specify a valid file name before exporting."));
         return;
     }
-    QDialog::accept();
+
+    setControlsEnabled(false);
+    ui->progressBarExport->setVisible(true);
+    ui->progressBarExport->setRange(0, 0); // Animated indeterminate progress
+    ui->lblExportStatus->setVisible(true);
+    ui->lblExportStatus->setText(tr("Exporting and compressing textures (GPU VRAM / KTX2)..."));
+    m_isExporting = true;
+
+    ExportOptions options = exportOptions();
+    ProjectController *controller = m_controller;
+    const SpriteDocument *doc = m_document;
+
+    auto *watcher = new QFutureWatcher<QPair<bool, QString>>(this);
+    connect(watcher, &QFutureWatcher<QPair<bool, QString>>::finished, this, [this, watcher, path]() {
+        QPair<bool, QString> res = watcher->result();
+        watcher->deleteLater();
+        m_isExporting = false;
+
+        if (res.first) {
+            ui->progressBarExport->setRange(0, 100);
+            ui->progressBarExport->setValue(100);
+            ui->lblExportStatus->setText(tr("Export completed successfully!"));
+            if (m_controller) {
+                m_controller->addRecentFile(path);
+                emit m_controller->statusMessage(tr("Saved %1 successfully.").arg(QFileInfo(path).fileName()));
+                emit m_controller->fileSaved(path);
+            }
+            QDialog::accept();
+        } else {
+            ui->progressBarExport->setVisible(false);
+            ui->lblExportStatus->setVisible(false);
+            setControlsEnabled(true);
+            validateFilePath();
+            QMessageBox::critical(this, tr("Export Error"), res.second.isEmpty() ? tr("An error occurred during export.") : res.second);
+        }
+    });
+
+    QFuture<QPair<bool, QString>> future = QtConcurrent::run([doc, path, options, controller]() -> QPair<bool, QString> {
+        QString errStr;
+        bool ok = false;
+        if (controller) {
+            ok = controller->exportData(path, options, &errStr);
+        } else {
+            Extractor *extractor = ExtractorRegistry::instance().findEncoder(path);
+            if (!extractor) {
+                return qMakePair(false, QObject::tr("No suitable exporter found for format: %1").arg(path));
+            }
+            ExtractorError err;
+            ok = extractor->write(path, *doc, options, &err);
+            if (!ok) {
+                errStr = err.toString();
+            }
+        }
+        return qMakePair(ok, errStr);
+    });
+
+    watcher->setFuture(future);
 }
 

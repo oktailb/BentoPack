@@ -155,19 +155,8 @@ void MainWindow::on_actionExport_triggered()
         return;
     }
 
-    ExportDialog dlg(m_document, QString(), this);
-    if (dlg.exec() != QDialog::Accepted) {
-        return;
-    }
-
-    QString selectedFile = dlg.exportFilePath();
-    if (selectedFile.trimmed().isEmpty() || QFileInfo(selectedFile).completeBaseName().trimmed().isEmpty()) return;
-
-    ExportOptions options = dlg.exportOptions();
-    QString errorMsg;
-    if (!m_projectController->exportData(selectedFile, options, &errorMsg)) {
-        QMessageBox::critical(this, tr("KEY_MSG_EXPORT_ERROR"), errorMsg);
-    }
+    ExportDialog dlg(m_document, QString(), this, m_projectController.get());
+    dlg.exec();
 }
 
 void MainWindow::on_actionExit_triggered()

@@ -2,11 +2,12 @@
 #define NATIVE_COMMANDS_H
 
 #include <QStringList>
+#include "spritestudiocore_export.h"
 #include "cli/cliparser.h"
 
 namespace SpriteStudioCli {
 
-class NativeCommands
+class SPRITESTUDIO_CORE_EXPORT NativeCommands
 {
 public:
     static CliResult executePack(const QStringList &args);

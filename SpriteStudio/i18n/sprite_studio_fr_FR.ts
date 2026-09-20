@@ -189,8 +189,8 @@
 <context>
     <name>AtlasPackingDialog</name>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="21"/>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="545"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="25"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="549"/>
         <location filename="../../tests/test_controllers.cpp" line="1562"/>
         <location filename="../../tests/test_controllers.cpp" line="1619"/>
         <location filename="../../tests/test_controllers.cpp" line="1676"/>
@@ -198,203 +198,203 @@
         <translation>Empaquetage d&apos;Atlas (MaxRects)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="89"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="93"/>
         <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
         <translation>Prêt — Ajustez vos paramètres et cliquez sur &apos;Calculer le packing&apos;</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="106"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="110"/>
         <source>Packing Algorithm</source>
         <translation>Algorithme d&apos;empaquetage</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="110"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="114"/>
         <source>MaxRects — Best Short Side Fit (Default, Recommended)</source>
         <translation>MaxRects — Best Short Side Fit (Défaut, Recommandé)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="111"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="115"/>
         <source>MaxRects — Best Area Fit (Maximum Compaction)</source>
         <translation>MaxRects — Best Area Fit (Compacité maximale)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="112"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="116"/>
         <source>MaxRects — Best Long Side Fit</source>
         <translation>MaxRects — Best Long Side Fit</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="113"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="117"/>
         <source>MaxRects — Bottom Left Rule</source>
         <translation>MaxRects — Règle Bottom Left</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="114"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="118"/>
         <source>MaxRects — Contact Point Rule</source>
         <translation>MaxRects — Règle Contact Point</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="115"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="119"/>
         <source>Tight Polygon Packing (Nesting — Overlapping Rects)</source>
         <translation>Empaquetage polygonal serré (Imbrication — Rectangles superposés)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="116"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="120"/>
         <source>Power of Two Shelf Packer (2^n Dimensions)</source>
         <translation>Empaqueteur en étagère Puissance de Deux (Dimensions 2^n)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="117"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="121"/>
         <source>Basic Row / Shelf Packer</source>
         <translation>Empaqueteur basique en ligne / étagère</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="118"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="122"/>
         <source>Uniform Grid Packer</source>
         <translation>Empaqueteur en grille uniforme</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="123"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="127"/>
         <source>Spacing &amp; Texture Bleeding Protection</source>
         <translation>Espacement &amp; Protection Anti-Saignement</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="130"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="134"/>
         <source>Inner margin between adjacent sprites</source>
         <translation>Marge interne entre sprites adjacents</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="131"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="135"/>
         <source>Inner Padding:</source>
         <translation>Marge intérieure (Padding) :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="137"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="141"/>
         <source>Outer margin around the edges of the atlas</source>
         <translation>Marge extérieure autour de l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="138"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="142"/>
         <source>Border Padding:</source>
         <translation>Marge de bordure :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="144"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="148"/>
         <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
         <translation>Répète les pixels de bordure vers l&apos;extérieur (1-2px) pour éviter les artefacts de filtrage bilinéaire dans les moteurs</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="145"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="149"/>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>Extrusion (Anti-Saignement) :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="150"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="154"/>
         <source>GPU Constraints &amp; Optimizations</source>
         <translation>Contraintes &amp; Optimisations GPU</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="153"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="157"/>
         <source>Force Power of Two Dimensions (2^n: 512, 1024, 2048...)</source>
         <translation>Forcer les dimensions en Puissance de Deux (2^n : 512, 1024, 2048...)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="154"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="158"/>
         <source>Force Square Atlas (Width == Height)</source>
         <translation>Forcer un atlas carré (Largeur == Hauteur)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="155"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="159"/>
         <source>Auto-Aliasing (Merge identical frames without breaking animations)</source>
         <translation>Auto-Aliasing (Fusionner les frames identiques sans casser les animations)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="156"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="160"/>
         <source>Trim Transparent Borders before packing</source>
         <translation>Rogner les bordures transparentes avant empaquetage</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="157"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="161"/>
         <source>Crops transparent margins around frames while preserving animation pivots. Highly recommended for animation spritesheets to eliminate empty spaces and maximize packing density.</source>
         <translation>Rogne les marges transparentes autour des frames tout en préservant les pivots d&apos;animation. Fortement recommandé pour les spritesheets animées afin d&apos;éliminer les espaces vides et maximiser la densité.</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="166"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="170"/>
         <source>Performance &amp; Multithreading</source>
         <translation>Performances &amp; Multithreading</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="174"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="178"/>
         <source>Number of CPU threads to use for parallel processing (1 to %1 cores)</source>
         <translation>Nombre de threads CPU à utiliser pour le calcul parallèle (1 à %1 cœurs)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="175"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="179"/>
         <source>Worker Threads:</source>
         <translation>Threads de calcul :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="179"/>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="231"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="183"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="235"/>
         <source>Compute Packing</source>
         <translation>Calculer le packing</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="231"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="235"/>
         <source>Computing...</source>
         <translation>Calcul en cours...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="243"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="247"/>
         <source>Computing packing...</source>
         <translation>Calcul du packing en cours...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="192"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="196"/>
         <source>Live Packing Metrics</source>
         <translation>Métriques d&apos;Empaquetage en Direct</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="197"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="201"/>
         <source>Atlas Dimensions:</source>
         <translation>Dimensions de l&apos;atlas :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="201"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="205"/>
         <source>Packing Efficiency:</source>
         <translation>Efficacité d&apos;empaquetage :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="204"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="208"/>
         <source>Frames Count:</source>
         <translation>Nombre de frames :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="336"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="340"/>
         <source>Packing Failed (Exceeded max dimensions)</source>
         <translation>Échec d&apos;empaquetage (Dépassement des dimensions maximales)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="339"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="343"/>
         <source>Error: Cannot fit sprites in atlas</source>
         <translation>Erreur : Impossible d&apos;insérer tous les sprites dans l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="343"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="347"/>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="351"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="355"/>
         <source>%1 unique / %2 total (%3 frame(s) saved)</source>
         <translation>%1 uniques / %2 au total (%3 frame(s) économisée(s))</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="353"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="357"/>
         <source>%1 frame(s)</source>
         <translation>%1 frame(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="356"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="360"/>
         <source>Packed in %1x%2 (%3%)</source>
         <translation>Empaqueté en %1x%2 (%3%)</translation>
     </message>
@@ -406,7 +406,7 @@
 <context>
     <name>AtlasPackingFilter</name>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="11"/>
         <location filename="../../tests/test_controllers.cpp" line="1561"/>
         <location filename="../../tests/test_controllers.cpp" line="1618"/>
         <location filename="../../tests/test_controllers.cpp" line="1675"/>
@@ -414,7 +414,7 @@
         <translation>Empaquetage d&apos;Atlas (MaxRects)...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="16"/>
         <source>Repacks sprites into a compact atlas using MaxRects, Power of Two, and animation-safe deduplication.</source>
         <translation>Ré-agence les sprites dans un atlas compact via MaxRects, Puissance de Deux et déduplication sans altérer les animations.</translation>
     </message>
@@ -440,7 +440,7 @@
 <context>
     <name>BackgroundRemovalDialog</name>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="21"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="25"/>
         <location filename="../../tests/test_controllers.cpp" line="1554"/>
         <location filename="../../tests/test_controllers.cpp" line="1611"/>
         <location filename="../../tests/test_controllers.cpp" line="1668"/>
@@ -448,52 +448,52 @@
         <translation>Suppression d&apos;arrière-plan</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="68"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="72"/>
         <source>Detected Background Color</source>
         <translation>Couleur d&apos;arrière-plan détectée</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="92"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="96"/>
         <source>Removal Parameters</source>
         <translation>Paramètres de détourage</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="97"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="101"/>
         <source>Color tolerance:</source>
         <translation>Tolérance de couleur :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="115"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="119"/>
         <source>Alpha threshold:</source>
         <translation>Seuil Alpha :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="133"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="137"/>
         <source>Vertical tolerance:</source>
         <translation>Tolérance verticale :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="152"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="156"/>
         <source>Smart Crop</source>
         <translation>Smart Crop</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="154"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="158"/>
         <source>Automatically shrink-wrap bounding boxes around opaque sprite pixels</source>
         <translation>Ajuste automatiquement les rectangles de découpe autour des zones opaques</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="156"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="160"/>
         <source>Overlap threshold:</source>
         <translation>Seuil chevauchement :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="242"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="246"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 frame(s) détectée(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="244"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="248"/>
         <source>%1 initial frame(s)</source>
         <translation>%1 frame(s) d&apos;origine</translation>
     </message>
@@ -501,12 +501,12 @@
 <context>
     <name>BackgroundRemovalFilter</name>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="11"/>
         <source>Background Removal...</source>
         <translation>Suppression d&apos;arrière-plan...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="16"/>
         <source>Detects dominant background color and makes pixels transparent with automatic bounding box recalculation.</source>
         <translation>Détecte la couleur dominante du fond et rend les pixels transparents avec recalcul automatique des boîtes englobantes.</translation>
     </message>
@@ -549,7 +549,7 @@ Choisissez la branche à restaurer :</translation>
 <context>
     <name>ColorAdjustFilter</name>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="11"/>
         <location filename="../../tests/test_controllers.cpp" line="1557"/>
         <location filename="../../tests/test_controllers.cpp" line="1614"/>
         <location filename="../../tests/test_controllers.cpp" line="1671"/>
@@ -557,7 +557,7 @@ Choisissez la branche à restaurer :</translation>
         <translation>Ajustement des Couleurs (HSV &amp; Contraste)...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="16"/>
         <source>Adjusts hue rotation, saturation, brightness, and contrast globally or on selected frames.</source>
         <translation>Ajuste la teinte, la saturation, la luminosité et le contraste globalement ou sur les frames sélectionnées.</translation>
     </message>
@@ -565,63 +565,63 @@ Choisissez la branche à restaurer :</translation>
 <context>
     <name>ColorAdjustFilterDialog</name>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="18"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="22"/>
         <source>Color Adjustment (HSV &amp; Contrast)</source>
         <translation>Ajustement des Couleurs (HSV &amp; Contraste)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="27"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="31"/>
         <source>Adjustment Parameters</source>
         <translation>Paramètres d&apos;ajustement</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="33"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="37"/>
         <source>Hue Shift:</source>
         <translation>Décalage de teinte :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="48"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="52"/>
         <source>Saturation:</source>
         <translation>Saturation :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="63"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="67"/>
         <source>Brightness:</source>
         <translation>Luminosité :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="78"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="82"/>
         <source>Contrast:</source>
         <translation>Contraste :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="95"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="99"/>
         <source>Target Scope</source>
         <translation>Portée de l&apos;effet</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="98"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="102"/>
         <source>Apply to selected frames only</source>
         <translation>Appliquer uniquement aux frames sélectionnées</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="103"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="107"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>Aucune frame sélectionnée : s&apos;applique à tout l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="291"/>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="294"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="295"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="298"/>
         <source>Adjusted (H:%1° S:%2% V:%3% C:%4%)</source>
         <translation>Ajusté (H:%1° S:%2% V:%3% C:%4%)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="292"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="296"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 frame(s) détectée(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="304"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="308"/>
         <source>Filter: Color Adjustment</source>
         <translation>Filtre : Ajustement des Couleurs</translation>
     </message>
@@ -629,12 +629,12 @@ Choisissez la branche à restaurer :</translation>
 <context>
     <name>ColorSwapFilter</name>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="11"/>
         <source>Color Swap (Alt-Skins)...</source>
         <translation>Échange de Palette (Alt-Skins)...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="16"/>
         <source>Generates character/monster variants (Player 2, elemental skins) by swapping colors while preserving shading.</source>
         <translation>Génère des variantes de personnages ou monstres (Joueur 2, variantes élémentaires) en permutant les couleurs tout en préservant le shading.</translation>
     </message>
@@ -642,74 +642,74 @@ Choisissez la branche à restaurer :</translation>
 <context>
     <name>ColorSwapFilterDialog</name>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="19"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="23"/>
         <source>Color Swap &amp; Alt-Skins</source>
         <translation>Échange de Palette &amp; Variantes</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="31"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="35"/>
         <source>Source color to replace:</source>
         <translation>Couleur source à remplacer :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="36"/>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="45"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="40"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="49"/>
         <source>Pick...</source>
         <translation>Choisir...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="40"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="44"/>
         <source>Target new color:</source>
         <translation>Nouvelle couleur cible :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="52"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="56"/>
         <source>Hue / Color tolerance (0 - 100):</source>
         <translation>Tolérance de teinte / couleur (0 - 100) :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="68"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="72"/>
         <source>Preserve shading (Original shadows, gradients and highlights)</source>
         <translation>Préserver le shading (Ombres, dégradés et reflets originaux)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="70"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="74"/>
         <source>Swaps the hue while adapting relative lightness to keep pixel art depth and shading.</source>
         <translation>Permute la teinte tout en adaptant la luminosité relative pour conserver les ombres du pixel art.</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="74"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="78"/>
         <source>Apply to selected frames only</source>
         <translation>Appliquer uniquement aux frames sélectionnées</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="79"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="83"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>Aucune frame sélectionnée : s&apos;applique à tout l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="108"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="112"/>
         <source>Select source color to replace</source>
         <translation>Sélectionner la couleur source à remplacer</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="118"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="122"/>
         <source>Select new target color</source>
         <translation>Sélectionner la nouvelle couleur</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="269"/>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="271"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="273"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="275"/>
         <source>%1 pixel(s) modified</source>
         <translation>%1 pixel(s) modifiés</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="269"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="273"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 frame(s) détectée(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="281"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="285"/>
         <source>Filter: Color Swap</source>
         <translation>Filtre : Échange de Palette</translation>
     </message>
@@ -717,12 +717,12 @@ Choisissez la branche à restaurer :</translation>
 <context>
     <name>DespillFilter</name>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="11"/>
         <source>Despill &amp; Edge Cleanup...</source>
         <translation>Débavurage &amp; Anti-Halo...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="16"/>
         <source>Eliminates 1px colored fringe (green, white, magenta) along sprite borders after background extraction.</source>
         <translation>Élimine le liseré coloré (vert, blanc, magenta) de 1 px persistant sur le pourtour des sprites après détourage.</translation>
     </message>
@@ -730,80 +730,80 @@ Choisissez la branche à restaurer :</translation>
 <context>
     <name>DespillFilterDialog</name>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="21"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="25"/>
         <source>Despill &amp; Edge Cleanup</source>
         <translation>Débavurage &amp; Anti-Halo</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="40"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="44"/>
         <source>Fringe color (Halo):</source>
         <translation>Couleur du liseré (Halo) :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="49"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="53"/>
         <source>Pick...</source>
         <translation>Choisir...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="50"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="54"/>
         <source>Select the peripheral fringe color to eliminate</source>
         <translation>Sélectionner la couleur du halo périphérique à éliminer</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="57"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="61"/>
         <source>Action mode:</source>
         <translation>Mode d&apos;action :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="61"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="65"/>
         <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
         <translation>Color Clamping doux (Recommandé - Conserve les contours)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="62"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="66"/>
         <source>Strict removal (Alpha = 0)</source>
         <translation>Suppression stricte (Alpha = 0)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="63"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="67"/>
         <source>Soft clamping replaces fringe hue with interior neighbor color.
 Strict removal clears the pixel.</source>
         <translation>Le clamping doux remplace la couleur du liseré par la couleur intérieure adjacente.
 La suppression stricte efface le pixel.</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="68"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="72"/>
         <source>Detection tolerance (0 - 100):</source>
         <translation>Tolérance de détection (0 - 100) :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="84"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="88"/>
         <source>Apply to selected frames only</source>
         <translation>Appliquer uniquement aux frames sélectionnées</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="89"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="93"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>Aucune frame sélectionnée : s&apos;applique à tout l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="113"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="117"/>
         <source>Select Fringe Color</source>
         <translation>Choisir la couleur du liseré</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="284"/>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="286"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="288"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="290"/>
         <source>%1 fringe pixel(s) processed</source>
         <translation>%1 pixel(s) de liseré traités</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="284"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="288"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 frame(s) détectée(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="296"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="300"/>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>Filtre : Débavurage &amp; Anti-Halo</translation>
     </message>
@@ -1044,12 +1044,17 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="389"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="257"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="265"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="302"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="340"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="277"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="285"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="322"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="360"/>
         <source>GPU VRAM: --</source>
         <translation>VRAM GPU : --</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.ui" line="420"/>
+        <source>Exporting &amp; compressing textures...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Packing Statistics (Live Estimation)</source>
@@ -1057,14 +1062,14 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="363"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="254"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="274"/>
         <source>Dimensions: --</source>
         <translation>Dimensions : --</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="375"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="255"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="300"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="275"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="320"/>
         <source>Packing Efficiency: --</source>
         <translation>Efficacité d&apos;empaquetage : --</translation>
     </message>
@@ -1074,9 +1079,9 @@ La suppression stricte efface le pixel.</translation>
         <translation>Frames : --</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="21"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="349"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="379"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="27"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="369"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="432"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
@@ -1097,42 +1102,42 @@ La suppression stricte efface le pixel.</translation>
         <translation type="vanished">SpriteSheet JSON (*.json);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="198"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="218"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="200"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="220"/>
         <source>All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="208"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="228"/>
         <source>Select Export Destination</source>
         <translation>Sélectionner la destination d&apos;exportation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="256"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="276"/>
         <source>Frames: 0</source>
         <translation>Frames : 0</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="273"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="293"/>
         <source>GPU VRAM: %1 MB (Standard RGBA8888, uncompressed on GPU)</source>
         <translation>VRAM GPU : %1 Mo (RGBA8888 standard, non compressé sur GPU)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="281"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="301"/>
         <source>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</source>
         <translation>VRAM GPU : %1 Mo (%2) — Gain : -%3% vs RGBA</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="292"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="312"/>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Dimensions : %1 x %2 px (Atlas actuel)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="295"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="315"/>
         <location filename="../../tests/test_controllers.cpp" line="1567"/>
         <location filename="../../tests/test_controllers.cpp" line="1624"/>
         <location filename="../../tests/test_controllers.cpp" line="1681"/>
@@ -1140,59 +1145,84 @@ La suppression stricte efface le pixel.</translation>
         <translation>Efficacité d&apos;empaquetage : Conservée telle quelle (WYSIWYG)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="296"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="301"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="316"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="321"/>
         <source>Frames: %1 total</source>
         <translation>Frames : %1 au total</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="299"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="319"/>
         <source>Dimensions: No current atlas</source>
         <translation>Dimensions : Aucun atlas actuel</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="318"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="338"/>
         <source>Dimensions: %1 x %2 px</source>
         <translation>Dimensions : %1 x %2 px</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="322"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="342"/>
         <source>Packing Efficiency: %1%</source>
         <translation>Efficacité d&apos;empaquetage : %1%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="327"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="347"/>
         <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
         <translation>Frames : %1 au total (%2 uniques, %3 doublons économisés)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="332"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="352"/>
         <source>Frames: %1 total (all unique)</source>
         <translation>Frames : %1 au total (toutes uniques)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="337"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="357"/>
         <source>Dimensions: Does not fit in maximum bounds!</source>
         <translation>Dimensions : Dépasse les limites maximales !</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="338"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="358"/>
         <source>Packing Efficiency: 0%</source>
         <translation>Efficacité d&apos;empaquetage : 0%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="339"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="359"/>
         <source>Frames: %1</source>
         <translation>Frames : %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="379"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="432"/>
         <source>Please specify a valid file name before exporting.</source>
         <translation>Veuillez spécifier un nom de fichier valide avant d&apos;exporter.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="24"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="352"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="440"/>
+        <source>Exporting and compressing textures (GPU VRAM / KTX2)...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.cpp" line="456"/>
+        <source>Export completed successfully!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.cpp" line="459"/>
+        <source>Saved %1 successfully.</source>
+        <translation type="unfinished">%1 enregistré avec succès.</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.cpp" line="468"/>
+        <source>Export Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.cpp" line="468"/>
+        <source>An error occurred during export.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.cpp" line="30"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="372"/>
         <location filename="../../tests/test_controllers.cpp" line="1568"/>
         <location filename="../../tests/test_controllers.cpp" line="1625"/>
         <location filename="../../tests/test_controllers.cpp" line="1682"/>
@@ -1274,27 +1304,27 @@ La suppression stricte efface le pixel.</translation>
 <context>
     <name>FilterRegistry</name>
     <message>
-        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="18"/>
-        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="22"/>
+        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="22"/>
         <source>Cleanup &amp; Extraction</source>
         <translation>Nettoyage &amp; Extraction</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="22"/>
         <source>Effects &amp; Outlines</source>
         <translation>Effets &amp; Bordures</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="18"/>
-        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="18"/>
-        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="22"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="22"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="22"/>
         <source>Colors &amp; Palettes</source>
         <translation>Couleurs &amp; Palettes</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="18"/>
-        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="18"/>
-        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="22"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="22"/>
+        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="22"/>
         <location filename="../../tests/test_controllers.cpp" line="1560"/>
         <location filename="../../tests/test_controllers.cpp" line="1617"/>
         <location filename="../../tests/test_controllers.cpp" line="1674"/>
@@ -1305,37 +1335,37 @@ La suppression stricte efface le pixel.</translation>
 <context>
     <name>GifExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="21"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="25"/>
         <source>Reading GIF frames from %1...</source>
         <translation>Lecture des frames GIF depuis %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="28"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="32"/>
         <source>File not found: %1</source>
         <translation>Fichier non trouvé : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="38"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="42"/>
         <source>Unable to read GIF format: %1</source>
         <translation>Impossible de lire le format GIF : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="68"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="72"/>
         <source>No valid frames could be decoded from GIF: %1</source>
         <translation>Aucune frame valide n&apos;a pu être décodée depuis le GIF : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="74"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="78"/>
         <source>Assembling GIF atlas...</source>
         <translation>Assemblage de l&apos;atlas GIF...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="82"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="86"/>
         <source>Failed to pack GIF frames into texture atlas.</source>
         <translation>Échec de l&apos;assemblage des frames GIF dans l&apos;atlas de texture.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="115"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="119"/>
         <source>Extracted %1 GIF frames</source>
         <translation>%1 frames GIF extraites</translation>
     </message>
@@ -1455,142 +1485,182 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
 <context>
     <name>GodotExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="34"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="44"/>
         <source>Reading Godot SpriteFrames resource...</source>
         <translation>Lecture de la ressource Godot SpriteFrames...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="41"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="51"/>
         <source>Cannot open Godot resource file: %1</source>
         <translation>Impossible d&apos;ouvrir le fichier de ressource Godot : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="53"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="63"/>
         <source>File is not a valid Godot SpriteFrames resource: %1</source>
         <translation>Le fichier n&apos;est pas une ressource Godot SpriteFrames valide : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="102"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="112"/>
         <source>Referenced texture atlas image not found for: %1</source>
         <translation>Image d&apos;atlas de texture référencée non trouvée pour : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="115"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="125"/>
         <source>Failed to load texture atlas image: %1</source>
         <translation>Impossible de charger l&apos;image d&apos;atlas de texture : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="354"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="364"/>
         <source>Extracted %1 frames and %2 animations from Godot resource.</source>
         <translation>%1 frames et %2 animations extraites de la ressource Godot.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="366"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="376"/>
         <source>No frames in document to export.</source>
         <translation>Aucune frame dans le document à exporter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="372"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="382"/>
         <source>Packing atlas for Godot...</source>
         <translation>Assemblage de l&apos;atlas pour Godot...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="381"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="391"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="423"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="439"/>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Échec de l&apos;assemblage des frames d&apos;atlas pour l&apos;export Godot.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="441"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="457"/>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
         <translation>Échec de l&apos;écriture de la texture d&apos;atlas VRAM Godot : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="449"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="465"/>
         <source>Failed to write Godot atlas image: %1</source>
         <translation>Impossible d&apos;écrire l&apos;image d&apos;atlas Godot : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="461"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="477"/>
         <source>Cannot write to Godot resource file: %1</source>
         <translation>Impossible d&apos;écrire dans le fichier de ressource Godot : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="602"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="641"/>
         <source>Exported Godot resource: %1 and image %2</source>
         <translation>Ressource Godot exportée : %1 et image %2</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="657"/>
+        <source>Preserve existing Godot 4 UID (uid://...) on re-export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="667"/>
+        <source>Auto-generate AnimatedSprite2D scene (.tscn) companion file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="677"/>
+        <source>Godot Engine 4.x SpriteFrames exporter with AtlasTexture regions and collision mesh generation.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>JsonExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="100"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="110"/>
         <source>Reading JSON sprite atlas %1...</source>
         <translation>Lecture de l&apos;atlas de sprites JSON %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="142"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="152"/>
         <source>Associated atlas image not found: %1</source>
         <translation>Image d&apos;atlas associée non trouvée : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="153"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="163"/>
         <source>Failed to decode atlas image: %1</source>
         <translation>Impossible de décoder l&apos;image d&apos;atlas : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="205"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="215"/>
         <source>No frames could be extracted from JSON: %1</source>
         <translation>Aucune frame n&apos;a pu être extraite du JSON : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="242"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="252"/>
         <source>Imported %1 frames, %2 animations from JSON</source>
         <translation>%1 frames et %2 animations importées depuis le JSON</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="490"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="500"/>
         <source>No frames in document to export.</source>
         <translation>Aucune frame dans le document à exporter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="502"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="512"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="516"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="532"/>
         <source>Packing atlas for JSON export...</source>
         <translation>Assemblage de l&apos;atlas pour l&apos;export JSON...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="546"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="562"/>
         <source>Failed to pack frames for JSON export.</source>
         <translation>Échec de l&apos;assemblage des frames pour l&apos;export JSON.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="564"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="580"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>Échec de l&apos;enregistrement de la texture VRAM associée : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="572"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="588"/>
         <source>Failed to save companion image: %1</source>
         <translation>Impossible d&apos;enregistrer l&apos;image associée : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="698"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="739"/>
         <source>Cannot write to JSON file: %1</source>
         <translation>Impossible d&apos;écrire dans le fichier JSON : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="709"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="750"/>
         <source>Exported JSON descriptor %1 and image %2</source>
         <translation>Descripteur JSON exporté : %1 et image %2</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="767"/>
+        <source>Default JSON Structure:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="769"/>
+        <source>Hash Object (TexturePacker Hash)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="770"/>
+        <source>Array List (TexturePacker Array / Aseprite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="783"/>
+        <source>Include animation frameTags in metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="793"/>
+        <source>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1645,22 +1715,22 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="685"/>
-        <location filename="../src/mainwindow.cpp" line="287"/>
-        <location filename="../src/mainwindow.cpp" line="814"/>
+        <location filename="../src/mainwindow.cpp" line="295"/>
+        <location filename="../src/mainwindow.cpp" line="871"/>
         <source>KEY_ANIM_COL_NAME</source>
         <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="690"/>
-        <location filename="../src/mainwindow.cpp" line="287"/>
-        <location filename="../src/mainwindow.cpp" line="816"/>
+        <location filename="../src/mainwindow.cpp" line="295"/>
+        <location filename="../src/mainwindow.cpp" line="873"/>
         <source>KEY_ANIM_COL_FPS</source>
         <translation>FPS</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="700"/>
-        <location filename="../src/mainwindow.cpp" line="287"/>
-        <location filename="../src/mainwindow.cpp" line="815"/>
+        <location filename="../src/mainwindow.cpp" line="295"/>
+        <location filename="../src/mainwindow.cpp" line="872"/>
         <source>KEY_ANIM_COL_FRAMES</source>
         <translation>Frames</translation>
     </message>
@@ -1755,51 +1825,51 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="135"/>
-        <location filename="../src/mainwindow.cpp" line="651"/>
+        <location filename="../src/mainwindow.cpp" line="143"/>
+        <location filename="../src/mainwindow.cpp" line="659"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="69"/>
         <source>KEY_MSG_LOAD_ERROR</source>
         <translation>Erreur de chargement</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="341"/>
+        <location filename="../src/mainwindow.cpp" line="349"/>
         <source>KEY_STATUS_READY_TO_START</source>
         <translation>Prêt à démarrer</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="359"/>
-        <location filename="../src/mainwindow.cpp" line="862"/>
+        <location filename="../src/mainwindow.cpp" line="367"/>
+        <location filename="../src/mainwindow.cpp" line="919"/>
         <source>KEY_STATUS_PROGRESS</source>
         <translation>Progression</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="222"/>
-        <location filename="../src/mainwindow.cpp" line="436"/>
-        <location filename="../src/mainwindow.cpp" line="865"/>
+        <location filename="../src/mainwindow.cpp" line="230"/>
+        <location filename="../src/mainwindow.cpp" line="444"/>
+        <location filename="../src/mainwindow.cpp" line="922"/>
         <source>KEY_LABEL_TIMING</source>
         <translation>Timing</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="443"/>
-        <location filename="../src/mainwindow.cpp" line="829"/>
+        <location filename="../src/mainwindow.cpp" line="451"/>
+        <location filename="../src/mainwindow.cpp" line="886"/>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Édition</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="445"/>
-        <location filename="../src/mainwindow.cpp" line="832"/>
+        <location filename="../src/mainwindow.cpp" line="453"/>
+        <location filename="../src/mainwindow.cpp" line="889"/>
         <source>KEY_ACTION_UNDO</source>
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="450"/>
-        <location filename="../src/mainwindow.cpp" line="835"/>
+        <location filename="../src/mainwindow.cpp" line="458"/>
+        <location filename="../src/mainwindow.cpp" line="892"/>
         <source>KEY_ACTION_REDO</source>
         <translation>&amp;Rétablir</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="486"/>
-        <location filename="../src/mainwindow.cpp" line="838"/>
+        <location filename="../src/mainwindow.cpp" line="494"/>
+        <location filename="../src/mainwindow.cpp" line="895"/>
         <location filename="../../tests/test_controllers.cpp" line="1553"/>
         <location filename="../../tests/test_controllers.cpp" line="1610"/>
         <location filename="../../tests/test_controllers.cpp" line="1667"/>
@@ -1807,45 +1877,45 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>&amp;Filtres</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="505"/>
-        <location filename="../src/mainwindow.cpp" line="826"/>
+        <location filename="../src/mainwindow.cpp" line="513"/>
+        <location filename="../src/mainwindow.cpp" line="883"/>
         <source>KEY_MENU_RECENT_PROJECTS</source>
         <translation>Projets récents</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="509"/>
-        <location filename="../src/mainwindow.cpp" line="823"/>
+        <location filename="../src/mainwindow.cpp" line="517"/>
+        <location filename="../src/mainwindow.cpp" line="880"/>
         <source>KEY_MENU_RECENT_FILES</source>
         <translation>Fichiers récents</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="612"/>
+        <location filename="../src/mainwindow.cpp" line="620"/>
         <source>KEY_ACTION_NO_RECENT_FILES</source>
         <translation>Aucun fichier récent</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="617"/>
-        <location filename="../src/mainwindow.cpp" line="644"/>
+        <location filename="../src/mainwindow.cpp" line="625"/>
+        <location filename="../src/mainwindow.cpp" line="652"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="625"/>
+        <location filename="../src/mainwindow.cpp" line="633"/>
         <source>KEY_ACTION_CLEAR_RECENT_FILES</source>
         <translation>Effacer les fichiers récents</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="639"/>
+        <location filename="../src/mainwindow.cpp" line="647"/>
         <source>KEY_ACTION_NO_RECENT_PROJECTS</source>
         <translation>Aucun projet récent</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="657"/>
+        <location filename="../src/mainwindow.cpp" line="665"/>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Effacer les projets récents</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="206"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="195"/>
         <location filename="../src/mainwindow_animation.cpp" line="94"/>
         <location filename="../src/mainwindow_atlas.cpp" line="86"/>
         <location filename="../src/mainwindow_atlas.cpp" line="177"/>
@@ -1878,14 +1948,14 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Fusionner les boîtes</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="216"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="205"/>
         <location filename="../src/mainwindow_atlas.cpp" line="119"/>
         <location filename="../src/mainwindow_atlas.cpp" line="211"/>
         <source>KEY_CTX_DELETE_FRAMES</source>
         <translation>Supprimer les boîtes sélectionnées</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="220"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="209"/>
         <location filename="../src/mainwindow_atlas.cpp" line="124"/>
         <location filename="../src/mainwindow_atlas.cpp" line="217"/>
         <source>KEY_CTX_ERASE_PIXELS</source>
@@ -1898,7 +1968,7 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Supprimer l&apos;arrière-plan de l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="230"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="219"/>
         <location filename="../src/mainwindow_atlas.cpp" line="223"/>
         <source>KEY_CTX_INVERT_SEL</source>
         <translation>Inverser la sélection</translation>
@@ -1948,9 +2018,8 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation type="vanished">Exporter l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="169"/>
         <source>KEY_MSG_EXPORT_ERROR</source>
-        <translation>Erreur d&apos;exportation</translation>
+        <translation type="vanished">Erreur d&apos;exportation</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_frames.cpp" line="14"/>
@@ -1987,10 +2056,10 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Rétablir la disposition par défaut des panneaux</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="481"/>
-        <location filename="../src/mainwindow.cpp" line="491"/>
-        <location filename="../src/mainwindow.cpp" line="842"/>
-        <location filename="../src/mainwindow.cpp" line="845"/>
+        <location filename="../src/mainwindow.cpp" line="489"/>
+        <location filename="../src/mainwindow.cpp" line="499"/>
+        <location filename="../src/mainwindow.cpp" line="899"/>
+        <location filename="../src/mainwindow.cpp" line="902"/>
         <source>KEY_ACTION_SETTINGS</source>
         <translation>Préférences...</translation>
     </message>
@@ -2049,8 +2118,8 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Frames de l&apos;Atlas</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="552"/>
-        <location filename="../src/mainwindow.cpp" line="557"/>
+        <location filename="../src/mainwindow.cpp" line="560"/>
+        <location filename="../src/mainwindow.cpp" line="565"/>
         <source>KEY_DOCK_GIT_HISTORY</source>
         <translation>Historique Git</translation>
     </message>
@@ -2197,14 +2266,14 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="695"/>
-        <location filename="../src/mainwindow.cpp" line="287"/>
+        <location filename="../src/mainwindow.cpp" line="295"/>
         <source>KEY_ANIM_COL_MODE</source>
         <translation>Mode</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="705"/>
-        <location filename="../src/mainwindow.cpp" line="287"/>
-        <location filename="../src/mainwindow.cpp" line="817"/>
+        <location filename="../src/mainwindow.cpp" line="295"/>
+        <location filename="../src/mainwindow.cpp" line="874"/>
         <source>KEY_ANIM_COL_DURATION</source>
         <translation>Durée</translation>
     </message>
@@ -2214,7 +2283,7 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Dupliquer cette animation</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="666"/>
+        <location filename="../src/mainwindow.cpp" line="674"/>
         <location filename="../src/controller/projectcontroller.cpp" line="81"/>
         <location filename="../../tests/test_controllers.cpp" line="1551"/>
         <location filename="../../tests/test_controllers.cpp" line="1608"/>
@@ -2223,12 +2292,12 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Projet sans titre</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="685"/>
+        <location filename="../src/mainwindow.cpp" line="693"/>
         <source>KEY_UNKNOWN_DATE</source>
         <translation>Date inconnue</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="686"/>
+        <location filename="../src/mainwindow.cpp" line="694"/>
         <source>KEY_RECOVERY_PROMPT</source>
         <translation>Une session de travail interrompue a été détectée :
 
@@ -2238,30 +2307,35 @@ Date : %2
 Voulez-vous restaurer cette session ?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="691"/>
+        <location filename="../src/mainwindow.cpp" line="699"/>
         <source>KEY_RECOVERY_TITLE</source>
         <translation>Récupération après fermeture inattendue</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="699"/>
+        <location filename="../src/mainwindow.cpp" line="707"/>
         <source>KEY_RECOVERY_ERROR</source>
         <translation>Erreur de récupération</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="718"/>
+        <location filename="../src/mainwindow.cpp" line="752"/>
+        <source>💡 Update available: %1 (Check Settings -&gt; Updates)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="775"/>
         <source>KEY_UNSAVED_CHANGES_TITLE</source>
         <translation>Modifications non enregistrées</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="719"/>
+        <location filename="../src/mainwindow.cpp" line="776"/>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
         <translation>Le projet actif &apos;%1&apos; comporte des modifications non enregistrées.
 Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="841"/>
-        <location filename="../src/mainwindow.cpp" line="295"/>
-        <location filename="../src/mainwindow.cpp" line="808"/>
+        <location filename="../src/mainwindow.cpp" line="303"/>
+        <location filename="../src/mainwindow.cpp" line="865"/>
         <location filename="../../tests/test_controllers.cpp" line="1541"/>
         <location filename="../../tests/test_controllers.cpp" line="1598"/>
         <location filename="../../tests/test_controllers.cpp" line="1655"/>
@@ -2438,14 +2512,14 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Fonctionnalité inconnue</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="474"/>
-        <location filename="../src/mainwindow.cpp" line="848"/>
+        <location filename="../src/mainwindow.cpp" line="482"/>
+        <location filename="../src/mainwindow.cpp" line="905"/>
         <source>KEY_ACTION_POLYGON_MESH</source>
         <translation>Maillage polygonal 2D (Tight Mesh)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="787"/>
-        <location filename="../src/mainwindow.cpp" line="854"/>
+        <location filename="../src/mainwindow.cpp" line="844"/>
+        <location filename="../src/mainwindow.cpp" line="911"/>
         <source>KEY_ACTION_TOGGLE_POLYGON_MESH</source>
         <translation>Afficher les maillages polygonaux (Wireframe)</translation>
     </message>
@@ -2456,8 +2530,8 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Maillage polygonal 2D (Tight Mesh)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="468"/>
-        <location filename="../src/mainwindow.cpp" line="851"/>
+        <location filename="../src/mainwindow.cpp" line="476"/>
+        <location filename="../src/mainwindow.cpp" line="908"/>
         <source>KEY_ACTION_PIXEL_EDITOR</source>
         <translation>Éditeur de pixels (Sprite)...</translation>
     </message>
@@ -2471,12 +2545,12 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>OutlineFilter</name>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="11"/>
         <source>Outline &amp; Silhouette Generator...</source>
         <translation>Générateur de Contours &amp; Silhouettes...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="16"/>
         <source>Adds a distinct outline (1-4 px) around sprites (sticker effect, visibility) or creates solid silhouettes (hit-flash).</source>
         <translation>Ajoute un contour marqué (1-4 px) autour des sprites (effet sticker, lisibilité) ou produit des silhouettes pleines (hit-flash).</translation>
     </message>
@@ -2484,88 +2558,88 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>OutlineFilterDialog</name>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="19"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="23"/>
         <source>Outline &amp; Silhouette Generator</source>
         <translation>Générateur de Contours &amp; Silhouettes</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="31"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="35"/>
         <source>Outline color:</source>
         <translation>Couleur du contour :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="40"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="44"/>
         <source>Pick...</source>
         <translation>Choisir...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="44"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="48"/>
         <source>Black</source>
         <translation>Noir</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="45"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="49"/>
         <source>White</source>
         <translation>Blanc</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="46"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="50"/>
         <source>Gold</source>
         <translation>Or</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="54"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="58"/>
         <source>Stroke thickness (1 to 4 px):</source>
         <translation>Épaisseur du trait (1 à 4 px) :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="71"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="75"/>
         <source>Connectivity:</source>
         <translation>Connectivité :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="75"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="79"/>
         <source>4-connected (Orthogonal crisp - Retro pixel art)</source>
         <translation>4-connecté (Orthogonal net - Pixel Art rétro)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="76"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="80"/>
         <source>8-connected (Diagonal included - Smooth outline)</source>
         <translation>8-connecté (Avec diagonales - Contour continu)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="81"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="85"/>
         <source>Solid silhouette / Hit-flash (Fill sprite interior)</source>
         <translation>Silhouette pleine / Hit-flash (Remplit l&apos;intérieur du sprite)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="85"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="89"/>
         <source>Apply to selected frames only</source>
         <translation>Appliquer uniquement aux frames sélectionnées</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="90"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="94"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>Aucune frame sélectionnée : s&apos;applique à tout l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="119"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="123"/>
         <source>Select Outline Color</source>
         <translation>Choisir la couleur de contour</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="270"/>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="272"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="274"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="276"/>
         <source>Outline %1 px applied</source>
         <translation>Contour %1 px appliqué</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="270"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="274"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 frame(s) détectée(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="282"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="286"/>
         <source>Filter: Outline &amp; Silhouette</source>
         <translation>Filtre : Contour &amp; Silhouette</translation>
     </message>
@@ -2895,7 +2969,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>PixelRescaleFilter</name>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="11"/>
         <location filename="../../tests/test_controllers.cpp" line="1558"/>
         <location filename="../../tests/test_controllers.cpp" line="1615"/>
         <location filename="../../tests/test_controllers.cpp" line="1672"/>
@@ -2903,7 +2977,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Redimensionnement Pixel Art...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="16"/>
         <source>Rescales the atlas cleanly using Nearest-Neighbor (pixel-perfect) or Scale2x (smooth contours).</source>
         <translation>Redimensionne proprement l&apos;atlas via Plus Proche Voisin (pixel-perfect) ou Scale2x (contours lissés).</translation>
     </message>
@@ -2911,72 +2985,72 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>PixelRescaleFilterDialog</name>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="16"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="20"/>
         <source>Pixel Art Rescale</source>
         <translation>Redimensionnement Pixel Art</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="25"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="29"/>
         <source>Rescale Parameters</source>
         <translation>Paramètres de redimensionnement</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="31"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="35"/>
         <source>Scale Factor:</source>
         <translation>Facteur d&apos;échelle :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="33"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="37"/>
         <source>0.5x (Downscale 50%)</source>
         <translation>0.5x (Réduction 50%)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="34"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="38"/>
         <source>2x (Double 200%)</source>
         <translation>2x (Doubler 200%)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="35"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="39"/>
         <source>3x (Triple 300%)</source>
         <translation>3x (Tripler 300%)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="36"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="40"/>
         <source>4x (Quadruple 400%)</source>
         <translation>4x (Quadrupler 400%)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="43"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="47"/>
         <source>Resampling Engine:</source>
         <translation>Moteur de rééchantillonnage :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="45"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="49"/>
         <source>Nearest-Neighbor (Sharp / Pixel-Perfect)</source>
         <translation>Plus Proche Voisin (Net / Pixel-Perfect)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="46"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="50"/>
         <source>Scale2x / AdvMAME2x (Smooth Contours)</source>
         <translation>Scale2x / AdvMAME2x (Contours lissés)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="84"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="88"/>
         <source>Atlas Dimensions: %1x%2 -&gt; %3x%4 px</source>
         <translation>Dimensions de l&apos;atlas : %1x%2 -&gt; %3x%4 px</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="280"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="284"/>
         <source>Rescaled %1x (%2)</source>
         <translation>Redimensionné %1x (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="281"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="285"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 frame(s) détectée(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="290"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="294"/>
         <source>Filter: Pixel Art Rescale</source>
         <translation>Filtre : Redimensionnement Pixel Art</translation>
     </message>
@@ -3570,47 +3644,47 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Échec de la découpe des frames après suppression du fond.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="51"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="61"/>
         <source>Cannot open JSON file: %1</source>
         <translation>Impossible d&apos;ouvrir le fichier JSON : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="66"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="76"/>
         <source>JSON parse error: %1 at offset %2</source>
         <translation>Erreur d&apos;analyse JSON : %1 à l&apos;offset %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="75"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="85"/>
         <source>JSON root must be an object.</source>
         <translation>La racine JSON doit être un objet.</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="170"/>
+        <location filename="../src/filters/filterregistry.cpp" line="191"/>
         <source>Cleanup</source>
         <translation>Nettoyage</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="171"/>
+        <location filename="../src/filters/filterregistry.cpp" line="192"/>
         <source>Colors</source>
         <translation>Couleurs</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="172"/>
+        <location filename="../src/filters/filterregistry.cpp" line="193"/>
         <source>Effects</source>
         <translation>Effets</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="173"/>
+        <location filename="../src/filters/filterregistry.cpp" line="194"/>
         <source>Geometry</source>
         <translation>Géométrie</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="195"/>
+        <location filename="../src/filters/filterregistry.cpp" line="216"/>
         <source>No Atlas Loaded</source>
         <translation>Aucun atlas chargé</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="196"/>
+        <location filename="../src/filters/filterregistry.cpp" line="217"/>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Veuillez d&apos;abord ouvrir ou importer une planche de sprites avant d&apos;appliquer un filtre.</translation>
     </message>
@@ -3645,6 +3719,11 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="262"/>
         <source>Failed to open file for reading: %1</source>
         <translation>Échec de l&apos;ouverture du fichier en lecture : %1</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.cpp" line="480"/>
+        <source>No suitable exporter found for format: %1</source>
+        <translation type="unfinished">Aucun exportateur trouvé pour le format : %1</translation>
     </message>
 </context>
 <context>
@@ -3752,7 +3831,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>RetroPaletteFilter</name>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="11"/>
         <location filename="../../tests/test_controllers.cpp" line="1559"/>
         <location filename="../../tests/test_controllers.cpp" line="1616"/>
         <location filename="../../tests/test_controllers.cpp" line="1673"/>
@@ -3760,7 +3839,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Palette Rétro &amp; Tramage (Dithering)...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="16"/>
         <source>Quantizes colors to authentic retro hardware palettes with optional ordered Bayer dithering.</source>
         <translation>Quantifie les couleurs selon d&apos;authentiques palettes rétro avec tramage ordonné de Bayer optionnel.</translation>
     </message>
@@ -3768,163 +3847,163 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>RetroPaletteFilterDialog</name>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="56"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="60"/>
         <source>Retro Palette &amp; Dithering</source>
         <translation>Palette Rétro &amp; Tramage (Dithering)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="68"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="72"/>
         <source>Retro Hardware Palette</source>
         <translation>Palette Matérielle Rétro</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="72"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="76"/>
         <source>Palette Preset:</source>
         <translation>Préréglage de palette :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="74"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="78"/>
         <source>Game Boy DMG (4 Greens)</source>
         <translation>Game Boy DMG (4 Verts)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="75"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="79"/>
         <source>Game Boy Pocket (4 Grays)</source>
         <translation>Game Boy Pocket (4 Gris)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="76"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="80"/>
         <source>PICO-8 (16 Colors)</source>
         <translation>PICO-8 (16 Couleurs)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="77"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="81"/>
         <source>NES / Famicom (54 Colors)</source>
         <translation>NES / Famicom (54 Couleurs)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="78"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="82"/>
         <source>Commodore 64 (16 Colors)</source>
         <translation>Commodore 64 (16 Couleurs)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="79"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="83"/>
         <source>CGA Mode 1 (Cyan/Magenta/White)</source>
         <translation>CGA Mode 1 (Cyan/Magenta/Blanc)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="80"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="84"/>
         <source>CGA Mode 2 (Red/Green/Yellow)</source>
         <translation>CGA Mode 2 (Rouge/Vert/Jaune)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="81"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="85"/>
         <source>Endesga 32 (32 Pixel Art Colors)</source>
         <translation>Endesga 32 (32 Couleurs Pixel Art)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="82"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="86"/>
         <source>Custom / Imported Palette</source>
         <translation>Palette personnalisée / importée</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="86"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="90"/>
         <source>Import...</source>
         <translation>Importer...</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="87"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="91"/>
         <source>Import palette from .hex, .gpl, .pal or .png image</source>
         <translation>Importer une palette depuis un fichier .hex, .gpl, .pal ou une image .png</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="103"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="107"/>
         <source>Ordered Dithering (Bayer Matrix)</source>
         <translation>Tramage ordonné (Matrice de Bayer)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="106"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="110"/>
         <source>Dither Pattern:</source>
         <translation>Motif de tramage :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="108"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="112"/>
         <source>None (Exact Nearest Match)</source>
         <translation>Aucun (Couleur la plus proche)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="109"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="113"/>
         <source>Bayer 2x2 Matrix</source>
         <translation>Matrice Bayer 2x2</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="110"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="114"/>
         <source>Bayer 4x4 Matrix (Classic Retro)</source>
         <translation>Matrice Bayer 4x4 (Rétro classique)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="111"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="115"/>
         <source>Bayer 8x8 Matrix (Smooth Gradients)</source>
         <translation>Matrice Bayer 8x8 (Dégradés subtils)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="117"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="121"/>
         <source>Dither Strength:</source>
         <translation>Intensité du tramage :</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="134"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="138"/>
         <source>Target Scope</source>
         <translation>Portée de l&apos;effet</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="137"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="141"/>
         <source>Apply to selected frames only</source>
         <translation>Appliquer uniquement aux frames sélectionnées</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="142"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="146"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>Aucune frame sélectionnée : s&apos;applique à tout l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="206"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="210"/>
         <source>Import Color Palette</source>
         <translation>Importer une palette de couleurs</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="208"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="212"/>
         <source>Palette Files (*.hex *.gpl *.pal *.png *.bmp);;All Files (*)</source>
         <translation>Fichiers de palette (*.hex *.gpl *.pal *.png *.bmp);;Tous les fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="215"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="219"/>
         <source>Import Failed</source>
         <translation>Échec de l&apos;importation</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="216"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="220"/>
         <source>No valid colors found in file.</source>
         <translation>Aucune couleur valide trouvée dans le fichier.</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="256"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="260"/>
         <source>%1 active color(s)</source>
         <translation>%1 couleur(s) active(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="554"/>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="557"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="558"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="561"/>
         <source>Quantized (%1 colors, %2)</source>
         <translation>Quantifié (%1 couleurs, %2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="555"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="559"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 frame(s) détectée(s)</translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="567"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="571"/>
         <source>Filter: Retro Palette &amp; Dithering</source>
         <translation>Filtre : Palette Rétro &amp; Tramage</translation>
     </message>
@@ -4035,8 +4114,8 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="22"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="459"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="34"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1001"/>
         <location filename="../../tests/test_controllers.cpp" line="1548"/>
         <location filename="../../tests/test_controllers.cpp" line="1605"/>
         <location filename="../../tests/test_controllers.cpp" line="1662"/>
@@ -4044,98 +4123,118 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="63"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="460"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="92"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1002"/>
         <source>KEY_SETTINGS_SEARCH_PLACEHOLDER</source>
         <translation>Rechercher dans les réglages...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="73"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="461"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="102"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1003"/>
         <source>KEY_SETTINGS_CAT_GENERAL</source>
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="77"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="462"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="118"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1007"/>
         <source>KEY_SETTINGS_CAT_GIT</source>
         <translation>Contrôle de Version (Git)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="81"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="463"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="106"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1004"/>
         <source>KEY_SETTINGS_CAT_ATLAS</source>
         <translation>Affichage &amp; Atlas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="135"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="466"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="110"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1005"/>
+        <source>Export &amp; VRAM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="114"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="451"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1006"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1066"/>
+        <source>Plugins &amp; Extensions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="122"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1008"/>
+        <source>Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="179"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1011"/>
         <source>KEY_SETTINGS_HDR_GENERAL</source>
         <translation>Réglages Généraux</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="140"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="467"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="184"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1012"/>
         <source>KEY_SETTINGS_GRP_HISTORY</source>
         <translation>Historique &amp; Projet</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="145"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="189"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1015"/>
         <source>KEY_SETTINGS_SUFFIX_ACTIONS</source>
         <translation> actions</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="146"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="468"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="190"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1013"/>
         <source>KEY_SETTINGS_UNDO_LIMIT</source>
         <translation>Limite d&apos;annulation (Undo/Redo) :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="151"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="469"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="195"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1014"/>
         <source>KEY_SETTINGS_MAX_RECENT_FILES</source>
         <translation>Nombre maximal de fichiers récents :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="156"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="472"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="200"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1017"/>
         <source>KEY_SETTINGS_GRP_EXTRACTION</source>
         <translation>Extraction &amp; Arrière-plan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="161"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="473"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="205"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1018"/>
         <source>KEY_SETTINGS_ALPHA_THRESHOLD</source>
         <translation>Seuil d&apos;opacité alpha par défaut :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="166"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="474"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="210"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1019"/>
         <source>KEY_SETTINGS_BG_REMOVAL_TOL</source>
         <translation>Tolérance de suppression du fond :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="171"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="476"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="215"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1021"/>
         <source>KEY_SETTINGS_GRP_LANGUAGE</source>
         <translation>Langue de l&apos;interface</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="175"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="478"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="219"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1023"/>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
         <translation>Système (par défaut)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="179"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="477"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="223"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1022"/>
         <source>KEY_SETTINGS_LANG_APP</source>
         <translation>Langue de l&apos;application :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="183"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="479"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="227"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1024"/>
         <location filename="../../tests/test_controllers.cpp" line="1552"/>
         <location filename="../../tests/test_controllers.cpp" line="1609"/>
         <location filename="../../tests/test_controllers.cpp" line="1666"/>
@@ -4143,142 +4242,387 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Les modifications de langue s&apos;appliquent immédiatement.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="201"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="482"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="236"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1026"/>
+        <source>Startup &amp; Behavior</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="239"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1027"/>
+        <source>Check automatically for updates on startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="242"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1028"/>
+        <source>Reopen last project on startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="257"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1031"/>
         <source>KEY_SETTINGS_HDR_GIT</source>
         <translation>Contrôle de Version (Git)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="206"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="483"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="262"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1032"/>
         <source>KEY_SETTINGS_GRP_AUTHOR</source>
         <translation>Identité de l&apos;auteur (Commits Git)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="210"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="484"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="266"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1033"/>
         <source>KEY_SETTINGS_AUTHOR_INFO</source>
         <translation>Cette identité est inscrite comme signature d&apos;auteur sur chaque commit de l&apos;historique du projet .ssp.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="218"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="487"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="274"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1036"/>
         <source>KEY_SETTINGS_AUTHOR_NAME_PLACEHOLDER</source>
         <translation>ex: John Doe</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="219"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="485"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="275"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1034"/>
         <source>KEY_SETTINGS_AUTHOR_NAME</source>
         <translation>Nom de l&apos;auteur :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="223"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="488"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="279"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1037"/>
         <source>KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER</source>
         <translation>ex: john.doe@example.com</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="224"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="486"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="280"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1035"/>
         <source>KEY_SETTINGS_AUTHOR_EMAIL</source>
         <translation>Email de l&apos;auteur :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="229"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="285"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1038"/>
         <source>KEY_SETTINGS_DETECT_GIT</source>
         <translation>Détecter depuis la configuration Git système</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="238"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="490"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="294"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1039"/>
         <source>KEY_SETTINGS_GRP_GIT_ENGINE</source>
         <translation>Moteur Git Intégré</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="243"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="493"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="299"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1042"/>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
         <translation>Statut : &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 actif&lt;/b&gt; (gestion d&apos;historique et branches opérationnelle)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="244"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="493"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="300"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1042"/>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
         <translation>Statut : &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 non compilé&lt;/b&gt; (historique git désactivé)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="251"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="495"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="307"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1044"/>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
         <translation>Chaque action d&apos;édition (découpe, renommage, fusion de sprite, création d&apos;animation) génère un commit incrémental et atomique dans le dépôt Git transparent du projet .ssp.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="268"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="498"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="324"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1047"/>
         <source>KEY_SETTINGS_HDR_ATLAS</source>
         <translation>Affichage &amp; Atlas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="273"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="499"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="329"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1048"/>
         <source>KEY_SETTINGS_GRP_ZOOM</source>
         <translation>Navigation &amp; Zoom</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="279"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="335"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1049"/>
         <source>KEY_SETTINGS_ZOOM_STEP</source>
         <translation>Facteur de zoom (molette) :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="285"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="341"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1050"/>
         <source>KEY_SETTINGS_ZOOM_MIN</source>
         <translation>Niveau de dézoom minimal :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="291"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="502"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="347"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1051"/>
         <source>KEY_SETTINGS_ZOOM_MAX</source>
         <translation>Niveau de zoom maximal :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="297"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="503"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="353"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1052"/>
         <source>KEY_SETTINGS_FIT_PADDING</source>
         <translation>Marge de cadrage automatique :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="303"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="504"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="359"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1053"/>
         <source>KEY_SETTINGS_GRP_SLICING</source>
         <translation>Découpage interactif</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="309"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="505"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="365"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1054"/>
         <source>KEY_SETTINGS_MIN_SLICE_SIZE</source>
         <translation>Taille minimale de boîte de découpe :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="436"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="379"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1057"/>
+        <source>Export &amp; VRAM Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="383"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1058"/>
+        <source>Default Export Configurations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="395"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="635"/>
+        <source>(No export plugins loaded)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="434"/>
+        <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="398"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1059"/>
+        <source>Default Target Format:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="403"/>
+        <source>PNG (Standard, Lossless)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="404"/>
+        <source>WebP (Modern Web, High Compression)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="405"/>
+        <source>KTX2 / Basis Universal (GPU Compressed VRAM)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="406"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1060"/>
+        <source>Default Texture Format:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="411"/>
+        <source>MaxRects (Best Fit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="412"/>
+        <source>Shelf / Next-Fit (Fast)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="413"/>
+        <source>Skyline (Efficient)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="414"/>
+        <source>Polygonal Concave (Tightest Packing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="415"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1061"/>
+        <source>Default Packing Algorithm:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="419"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1063"/>
+        <source>Enable Zstandard (Zstd) compression by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="425"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1062"/>
+        <source>Zstd Compression Level:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="456"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1067"/>
+        <source>Open Plugins Folder...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="460"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1068"/>
+        <source>Reload Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
+        <source>Filter Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="481"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="477"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1070"/>
+        <source>Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="481"/>
+        <source>Extractor / Codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="481"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="481"/>
+        <source>Extensions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1071"/>
+        <source>Extractors &amp; Codecs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="493"/>
+        <source>Select a plugin above to view its details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="498"/>
+        <source>Plugin Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="514"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1075"/>
+        <source>Software Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="519"/>
+        <source>Current installed version: &lt;b&gt;v%1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="522"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1076"/>
+        <source>Check for Updates Now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="528"/>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="533"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1077"/>
+        <source>Release Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="547"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1078"/>
+        <source>Open Release Page on GitHub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="645"/>
+        <source>Plugins reloaded successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="714"/>
+        <source>Checking for updates from GitHub...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="732"/>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="742"/>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="766"/>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="772"/>
+        <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="775"/>
+        <source>Released: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="785"/>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="978"/>
         <source>KEY_SETTINGS_RESET_TITLE</source>
         <translation>Rétablir les valeurs par défaut</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="437"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="979"/>
         <source>KEY_SETTINGS_RESET_CONFIRM</source>
         <translation>Voulez-vous vraiment réinitialiser tous les paramètres à leurs valeurs par défaut ?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="509"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1082"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="512"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1085"/>
         <location filename="../../tests/test_controllers.cpp" line="1582"/>
         <location filename="../../tests/test_controllers.cpp" line="1639"/>
         <location filename="../../tests/test_controllers.cpp" line="1697"/>
@@ -4286,7 +4630,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="515"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1088"/>
         <location filename="../../tests/test_controllers.cpp" line="1583"/>
         <location filename="../../tests/test_controllers.cpp" line="1640"/>
         <location filename="../../tests/test_controllers.cpp" line="1698"/>
@@ -4294,7 +4638,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="518"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1091"/>
         <source>Restore Defaults</source>
         <translation>Restaurer les valeurs par défaut</translation>
     </message>
@@ -4302,47 +4646,47 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>SpriteExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="21"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="25"/>
         <source>Loading image %1...</source>
         <translation>Chargement de l&apos;image %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="28"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="32"/>
         <source>File not found: %1</source>
         <translation>Fichier non trouvé : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="39"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="43"/>
         <source>Failed to decode image from: %1</source>
         <translation>Impossible de décoder l&apos;image : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="61"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="65"/>
         <source>Cannot export: Document atlas image is null.</source>
         <translation>Export impossible : L&apos;image d&apos;atlas du document est nulle.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="71"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="75"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="82"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="86"/>
         <source>Failed to save image to: %1</source>
         <translation>Échec de l&apos;enregistrement de l&apos;image vers : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="88"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="92"/>
         <source>Exported atlas image to: %1</source>
         <translation>Image d&apos;atlas exportée vers : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="108"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="112"/>
         <source>Segmenting sprite frames...</source>
         <translation>Découpe des sprites en cours...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="123"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="127"/>
         <source>Extracted %1 frames</source>
         <translation>%1 frames extraites</translation>
     </message>
@@ -4453,17 +4797,17 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>TightPolygonPackingFilter</name>
     <message>
-        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="11"/>
         <source>Tight Polygon Packing (Nesting)...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="16"/>
         <source>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="26"/>
+        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="30"/>
         <source>Tight Polygon Packing (Nesting)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4536,82 +4880,82 @@ Glisser-déposer pour réordonner</translation>
 <context>
     <name>UnityExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="34"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="38"/>
         <source>Reading Unity 2D Sprite Mesh %1...</source>
         <translation>Lecture du maillage de sprite Unity 2D %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="41"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="45"/>
         <source>Failed to open file: %1</source>
         <translation>Échec de l&apos;ouverture du fichier : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="54"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="58"/>
         <source>Failed to parse Unity JSON: %1</source>
         <translation>Échec de l&apos;analyse du JSON Unity : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="88"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="92"/>
         <source>Associated texture atlas image not found for: %1</source>
         <translation>Image d&apos;atlas de texture associée non trouvée pour : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="101"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="105"/>
         <source>Failed to load texture atlas image: %1 (%2)</source>
         <translation>Échec du chargement de l&apos;image de texture d&apos;atlas : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="190"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="194"/>
         <source>Imported %1 frames from Unity 2D Sprite Mesh</source>
         <translation>%1 frames importées depuis le maillage Unity 2D</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="200"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="204"/>
         <source>No frames in document to export.</source>
         <translation>Aucune frame dans le document à exporter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="206"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="210"/>
         <source>Packing atlas for Unity...</source>
         <translation>Empaquetage de l&apos;atlas pour Unity...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="218"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="222"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="260"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="264"/>
         <source>Failed to pack frames for Unity export.</source>
         <translation>Échec de l&apos;empaquetage des frames pour l&apos;export Unity.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="278"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="282"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>Échec de l&apos;enregistrement de la texture VRAM associée : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="286"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="290"/>
         <source>Failed to save companion image: %1</source>
         <translation>Échec de l&apos;enregistrement de l&apos;image associée : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="407"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="411"/>
         <source>Cannot write to Unity JSON file: %1</source>
         <translation>Impossible d&apos;écrire dans le fichier JSON Unity : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="418"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="422"/>
         <source>Exported Unity Sprite Mesh: %1 and image %2</source>
         <translation>Maillage de sprite Unity exporté : %1 et image %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.h" line="24"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.h" line="28"/>
         <source>Unity 2D Sprite Mesh (*.unity.json)</source>
         <translation>Maillage de sprite Unity 2D (*.unity.json)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.h" line="25"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.h" line="29"/>
         <source>Exports Unity 2D Sprite Mesh with vertex &amp; triangle buffers.</source>
         <translation>Exporte le maillage de sprite Unity 2D avec les tampons de sommets et triangles.</translation>
     </message>
@@ -4619,82 +4963,82 @@ Glisser-déposer pour réordonner</translation>
 <context>
     <name>UnrealExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="34"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="38"/>
         <source>Reading Unreal Engine Paper2D atlas %1...</source>
         <translation>Lecture de l&apos;atlas Unreal Engine Paper2D %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="41"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="45"/>
         <source>Failed to open file: %1</source>
         <translation>Échec de l&apos;ouverture du fichier : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="54"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="58"/>
         <source>Failed to parse Unreal JSON: %1</source>
         <translation>Échec de l&apos;analyse du JSON Unreal : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="88"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="92"/>
         <source>Associated texture atlas image not found for: %1</source>
         <translation>Image d&apos;atlas de texture associée non trouvée pour : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="101"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="105"/>
         <source>Failed to load texture atlas image: %1 (%2)</source>
         <translation>Échec du chargement de l&apos;image de texture d&apos;atlas : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="197"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="201"/>
         <source>Imported %1 frames from Unreal Paper2D</source>
         <translation>%1 frames importées depuis Unreal Paper2D</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="207"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="211"/>
         <source>No frames in document to export.</source>
         <translation>Aucune frame dans le document à exporter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="213"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="217"/>
         <source>Packing atlas for Unreal Engine Paper2D...</source>
         <translation>Empaquetage de l&apos;atlas pour Unreal Engine Paper2D...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="225"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="229"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="267"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="271"/>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
         <translation>Échec de l&apos;empaquetage des frames pour l&apos;export Unreal Paper2D.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="285"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="289"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>Échec de l&apos;enregistrement de la texture VRAM associée : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="293"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="297"/>
         <source>Failed to save companion image: %1</source>
         <translation>Échec de l&apos;enregistrement de l&apos;image associée : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="420"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="424"/>
         <source>Cannot write to Unreal Paper2D JSON file: %1</source>
         <translation>Impossible d&apos;écrire dans le fichier JSON Unreal Paper2D : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="431"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="435"/>
         <source>Exported Unreal Paper2D Sprite: %1 and image %2</source>
         <translation>Sprite Unreal Paper2D exporté : %1 et image %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.h" line="24"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.h" line="28"/>
         <source>Unreal Engine Paper2D (*.paper2d.json)</source>
         <translation>Unreal Engine Paper2D (*.paper2d.json)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.h" line="25"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.h" line="29"/>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>Exporte les sprites Unreal Engine Paper2D avec géométrie de rendu ajustée.</translation>
     </message>
@@ -4752,27 +5096,27 @@ Glisser-déposer pour réordonner</translation>
         <translation>Aperçu de l&apos;atlas</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="95"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="99"/>
         <source>Use original Atlas</source>
         <translation>Utiliser l&apos;atlas d&apos;origine</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="96"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="100"/>
         <source>Generate same minimal Atlas for all animations</source>
         <translation>Générer le même atlas minimal pour toutes les animations</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="97"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="101"/>
         <source>Generate one Atlas per animation</source>
         <translation>Générer un atlas par animation</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="107"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="111"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="110"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="114"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>

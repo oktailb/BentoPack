@@ -63,6 +63,8 @@ struct SPRITESTUDIO_CORE_EXPORT SpriteSheetOptions {
     CropStrategy cropStrategy = SeparateStrategy;
 };
 
+class QWidget;
+
 /**
  * @brief Pure I/O Codec Plugin Interface for all sprite formats.
  *
@@ -102,6 +104,16 @@ public:
     // Primary I/O contract
     virtual bool read(const QString &filePath, SpriteDocument &outDoc, ExtractorError *error = nullptr) = 0;
     virtual bool write(const QString &filePath, const SpriteDocument &inDoc, const ExportOptions &options, ExtractorError *error = nullptr);
+
+    /**
+     * @brief Creates an optional settings/configuration widget for this extractor.
+     * Allows the plugin to expose its runtime settings dynamically in the host UI.
+     * The caller takes ownership of the created widget.
+     */
+    virtual QWidget* createSettingsWidget(QWidget *parent = nullptr) {
+        Q_UNUSED(parent);
+        return nullptr;
+    }
 
     // Compatibility wrappers
     bool extract(const QString &filePath, SpriteDocument &doc, QString *errorMsg = nullptr);

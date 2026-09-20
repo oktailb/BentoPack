@@ -70,6 +70,16 @@ public:
         Q_UNUSED(params);
         return image;
     }
+
+    /**
+     * @brief Creates an optional settings/configuration widget for this filter plugin.
+     * Allows the plugin to expose its runtime settings dynamically in the host UI.
+     * The caller takes ownership of the created widget.
+     */
+    virtual QWidget* createSettingsWidget(QWidget *parent = nullptr) {
+        Q_UNUSED(parent);
+        return nullptr;
+    }
 };
 
 #define FilterPlugin_iid "com.spritestudio.FilterPlugin/1.0"

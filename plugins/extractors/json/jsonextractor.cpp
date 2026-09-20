@@ -1,3 +1,7 @@
+// This file is part of the SpriteStudio Plugins.
+// It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
+// Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
+
 #include "jsonextractor.h"
 #include "jsonExtractordialog.h"
 #include "packer/atlaspacker.h"
@@ -12,6 +16,12 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QRegularExpression>
+#include <QWidget>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
+#include <QSettings>
+#include <QLabel>
 #include <cmath>
 
 JsonExtractor::JsonExtractor(QObject *parent)
@@ -511,6 +521,12 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         imageExt = QStringLiteral(".basis");
     }
     QString pngFileName = baseName + imageExt;
+    if (options.extraParams.contains(QStringLiteral("sheet_path"))) {
+        QString sp = options.extraParams.value(QStringLiteral("sheet_path")).toString();
+        if (!sp.isEmpty()) {
+            pngFileName = QFileInfo(sp).fileName();
+        }
+    }
     QString pngFilePath = dir.filePath(pngFileName);
 
     setStatusMessage(tr("Packing atlas for JSON export..."));
@@ -578,8 +594,23 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
     setProgress(75);
 
     // Build TexturePacker compatible JSON
+    QSettings pluginSettings;
+    pluginSettings.beginGroup(QStringLiteral("Plugins/JsonExtractor"));
+    QString defaultLayout = pluginSettings.value(QStringLiteral("format_layout"), QStringLiteral("hash")).toString();
+    pluginSettings.endGroup();
+
+    QString requestedLayout = options.extraParams.value(QStringLiteral("json_format")).toString();
+    if (requestedLayout.isEmpty()) {
+        QString fmt = options.extraParams.value(QStringLiteral("format")).toString();
+        if (fmt == QStringLiteral("json-array")) requestedLayout = QStringLiteral("array");
+        else if (fmt == QStringLiteral("json-hash")) requestedLayout = QStringLiteral("hash");
+        else requestedLayout = defaultLayout;
+    }
+    bool isArray = (requestedLayout.compare(QStringLiteral("array"), Qt::CaseInsensitive) == 0);
+
     QJsonObject rootObj;
     QJsonObject framesObj;
+    QJsonArray framesArray;
 
     for (int i = 0; i < packResult.frameRects.size(); ++i) {
         const QRect &r = packResult.frameRects[i];
@@ -654,9 +685,19 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         }
 
         QString frameKey = QStringLiteral("%1_%2").arg(baseName).arg(i, 4, 10, QLatin1Char('0'));
-        framesObj[frameKey] = frameData;
+        if (isArray) {
+            frameData[QStringLiteral("filename")] = frameKey + QStringLiteral(".png");
+            framesArray.append(frameData);
+        } else {
+            framesObj[frameKey] = frameData;
+        }
     }
-    rootObj["frames"] = framesObj;
+
+    if (isArray) {
+        rootObj["frames"] = framesArray;
+    } else {
+        rootObj["frames"] = framesObj;
+    }
 
     // Meta object
     QJsonObject metaObj;
@@ -708,4 +749,51 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
     setProgress(100);
     setStatusMessage(tr("Exported JSON descriptor %1 and image %2").arg(QFileInfo(filePath).fileName(), pngFileName));
     return true;
+}
+
+QWidget* JsonExtractor::createSettingsWidget(QWidget *parent)
+{
+    QWidget *w = new QWidget(parent);
+    QVBoxLayout *layout = new QVBoxLayout(w);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    QSettings settings;
+    settings.beginGroup(QStringLiteral("Plugins/JsonExtractor"));
+    QString currentLayout = settings.value(QStringLiteral("format_layout"), QStringLiteral("hash")).toString();
+    bool incTags = settings.value(QStringLiteral("include_tags"), true).toBool();
+    settings.endGroup();
+
+    QHBoxLayout *hLayout = new QHBoxLayout();
+    QLabel *lblFormat = new QLabel(tr("Default JSON Structure:"), w);
+    QComboBox *comboFormat = new QComboBox(w);
+    comboFormat->addItem(tr("Hash Object (TexturePacker Hash)"), QStringLiteral("hash"));
+    comboFormat->addItem(tr("Array List (TexturePacker Array / Aseprite)"), QStringLiteral("array"));
+    int idx = comboFormat->findData(currentLayout);
+    comboFormat->setCurrentIndex(idx >= 0 ? idx : 0);
+    QObject::connect(comboFormat, &QComboBox::currentIndexChanged, [comboFormat]() {
+        QSettings s;
+        s.beginGroup(QStringLiteral("Plugins/JsonExtractor"));
+        s.setValue(QStringLiteral("format_layout"), comboFormat->currentData().toString());
+        s.endGroup();
+    });
+    hLayout->addWidget(lblFormat);
+    hLayout->addWidget(comboFormat);
+    layout->addLayout(hLayout);
+
+    QCheckBox *chkTags = new QCheckBox(tr("Include animation frameTags in metadata"), w);
+    chkTags->setChecked(incTags);
+    QObject::connect(chkTags, &QCheckBox::toggled, [](bool checked) {
+        QSettings s;
+        s.beginGroup(QStringLiteral("Plugins/JsonExtractor"));
+        s.setValue(QStringLiteral("include_tags"), checked);
+        s.endGroup();
+    });
+    layout->addWidget(chkTags);
+
+    QLabel *info = new QLabel(tr("JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS."), w);
+    info->setWordWrap(true);
+    info->setStyleSheet(QStringLiteral("color: #7f8c8d; font-size: 11px;"));
+    layout->addWidget(info);
+
+    return w;
 }

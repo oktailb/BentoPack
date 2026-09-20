@@ -15,6 +15,13 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QActionGroup>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QVersionNumber>
+#include "generated/version.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -79,6 +86,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Check for crash recovery / orphan sessions
     QTimer::singleShot(100, this, &MainWindow::checkCrashRecovery);
+    QTimer::singleShot(250, this, &MainWindow::checkStartupPreferences);
 }
 
 MainWindow::~MainWindow()
@@ -701,6 +709,55 @@ void MainWindow::checkCrashRecovery()
     } else {
         SessionManager::discardOrphanSession(orphan.sessionDir);
     }
+}
+
+void MainWindow::checkStartupPreferences()
+{
+    const AppConfig &cfg = AppConfig::instance();
+    if (cfg.general().reopenLastProject && m_projectController && m_document && m_document->isEmpty()) {
+        QStringList recents = m_projectController->recentProjects();
+        if (!recents.isEmpty() && QFile::exists(recents.first())) {
+            QString err;
+            m_projectController->openProject(recents.first(), &err);
+        }
+    }
+    if (cfg.general().checkUpdatesOnStartup) {
+        checkForUpdatesSilently();
+    }
+}
+
+void MainWindow::checkForUpdatesSilently()
+{
+    auto *nam = new QNetworkAccessManager(this);
+    connect(nam, &QNetworkAccessManager::finished, this, [this, nam](QNetworkReply *reply) {
+        nam->deleteLater();
+        if (!reply || reply->error() != QNetworkReply::NoError) {
+            if (reply) reply->deleteLater();
+            return;
+        }
+        QByteArray data = reply->readAll();
+        reply->deleteLater();
+
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (!doc.isObject()) return;
+        QJsonObject obj = doc.object();
+        QString tagName = obj.value(QStringLiteral("tag_name")).toString();
+        QString cleanTag = tagName;
+        if (cleanTag.startsWith('v') || cleanTag.startsWith('V')) {
+            cleanTag = cleanTag.mid(1);
+        }
+        QVersionNumber latest = QVersionNumber::fromString(cleanTag);
+        QVersionNumber current = QVersionNumber::fromString(QStringLiteral(PROJECT_VERSION));
+        if (latest > current && statusLabel) {
+            statusLabel->setText(tr("💡 Update available: %1 (Check Settings -> Updates)").arg(tagName));
+        }
+    });
+
+    QUrl url(QStringLiteral("https://api.github.com/repos/oktailb/SpriteStudio/releases/latest"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::UserAgentHeader, QStringLiteral("SpriteStudio/%1").arg(QStringLiteral(PROJECT_VERSION)));
+    request.setRawHeader("Accept", "application/vnd.github.v3+json");
+    nam->get(request);
 }
 
 bool MainWindow::maybeSave()

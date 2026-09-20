@@ -61,9 +61,7 @@ set(SpriteStudioCore_SRC
     src/haiku.PackageInfo.in
     ${CMAKE_CURRENT_BINARY_DIR}/generated/version.h
     src/cli/cliparser.cpp
-    src/cli/tp_adapter.cpp
-    src/cli/aseprite_adapter.cpp
-    src/cli/godot_pipeline.cpp
+    src/cli/clipackpipeline.cpp
     src/cli/native_commands.cpp
     src/cli/watch_daemon.cpp
     src/geometry/contourtracer.cpp
@@ -116,9 +114,7 @@ set(SpriteStudioCore_INCLUDE
     include/aboutdialog.h
     include/zip/miniz.h
     include/cli/cliparser.h
-    include/cli/tp_adapter.h
-    include/cli/aseprite_adapter.h
-    include/cli/godot_pipeline.h
+    include/cli/clipackpipeline.h
     include/cli/native_commands.h
     include/cli/watch_daemon.h
     include/geometry/contourtracer.h
@@ -137,6 +133,10 @@ add_library(SpriteStudioCore SHARED
     ${SpriteStudioCore_INCLUDE}
 )
 add_library(SpriteStudio::SpriteStudioCore ALIAS SpriteStudioCore)
+
+set_target_properties(SpriteStudioCore PROPERTIES
+    WINDOWS_EXPORT_ALL_SYMBOLS ON
+)
 
 target_compile_definitions(SpriteStudioCore PRIVATE SPRITESTUDIO_CORE_LIBRARY)
 
@@ -204,6 +204,7 @@ target_link_libraries(SpriteStudioCore PUBLIC
     Qt6::Gui
     Qt6::Widgets
     Qt6::Concurrent
+    Qt6::Network
 )
 
 if(LibGit2_FOUND)

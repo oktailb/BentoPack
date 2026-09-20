@@ -36,6 +36,7 @@ public:
     QString saveFilterString() const;
 
     void initDefaultExtractors();
+    void rescanPlugins();
 
 private:
     ExtractorRegistry() = default;

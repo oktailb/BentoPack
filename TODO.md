@@ -24,6 +24,7 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M10** | [Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)](#m10--intégration-aux-écosystèmes--marchés-moteurs-de-jeu-godot-assetlib-unity-upm-unreal-fab) | **Moyenne** | Moyenne | 💡 Spécifié & Planifié (Plugins moteurs, Importateurs automatiques, Hot-Reload, Stores) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
 | **AUDIT** | [Dette de Thread-Safety & Modèle Pur (Audit Étape 2)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Clôturé & Validé (Modèle pur QImage, Cache Vignettes, 0 conversion I/O, Miniz ZIP, 116 tests CTest 100%) |
+| **POLISH** | [Export Asynchrone Non Bloquant & Centre de Préférences Enrichi](#-polish--export-asynchrone-non-bloquant--centre-de-préférences-enrichi-settingsdialog) | **Moyenne** | Faible | 🟢 Clôturé & Validé (Export non-bloquant QtConcurrent, Barre de progression animée, SettingsDialog 6 pages, Détection updates GitHub, Hot-reload plugins) |
 
 ---
 
@@ -1587,8 +1588,25 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 
 ---
 
-### 🌐 Phase E — Écosystème Développeurs, Plugins Moteurs & Marchés (Long Terme / Rayonnement)
-10. **Étape 13 — Intégration aux Écosystèmes & Marchés Moteurs de Jeu (M10 - Godot AssetLib, Unity UPM, Unreal Fab) :**
+### ⚡ POLISH — Export Asynchrone Non-Bloquant & Centre de Préférences Enrichi (SettingsDialog) — 🟢 100% CLÔTURÉE
+10. **Étape 13 — Fluidité de l'Export & Refonte Complète des Préférences — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
+    - *Export Asynchrone Non-Bloquant (`ExportDialog`) :*
+      - Déportation de la compression de textures (`KTX2`, `UASTC`, `ETC1S`, `Zstd`) sur un thread d'arrière-plan via `QtConcurrent::run` couplé à un `QFutureWatcher`.
+      - Intégration d'une barre de progression animée indéterminée et d'un label d'état textuel dynamique dans `ExportDialog`.
+      - Désactivation propre de tous les contrôles pendant l'export pour prévenir toute mutation concurrente.
+      - Safeguards RAII (`closeEvent`, `reject`) interdisant la fermeture accidentelle en cours d'écriture ou d'encodage.
+    - *Centre de Préférences Enrichi (`SettingsDialog`) :*
+      - Refonte en interface modulaire à 6 pages avec filtrage instantané par mot-clé :
+        - **Général :** Historique undo/redo, nombre max de fichiers récents, seuils de découpe alpha et tolérance fond, sélecteur de langue.
+        - **Démarrage & Comportement :** Réouverture automatique du dernier projet `.ssp` au lancement (`reopenLastProject`), vérification automatique discrète des mises à jour au démarrage (`checkUpdatesOnStartup`).
+        - **Atlas :** Pas de zoom, bornes min/max, marges de cadrage (*fit padding*), dimension minimale des découpes (*min slice size*).
+        - **Export & VRAM :** Configurations par défaut pour les formats cibles (Godot 4, TexturePacker JSON, Unity, Unreal, CSS), formats de texture (PNG, WebP, KTX2), algorithmes de packing (MaxRects, Polygonal, etc.), activation et niveau Zstandard (1–22).
+        - **Gestionnaire de Plugins :** Arborescence dédiée pour inspecter tous les filtres (`FilterPlugin`) et extracteurs/codecs (`Extractor`) chargés, détails complets (nom, version, extensions, capacités, raccourcis), ouverture en un clic du dossier plugins et rechargement à chaud (*Hot-Reload* sans redémarrer via `FilterRegistry::rescanPlugins` et `ExtractorRegistry::rescanPlugins`).
+        - **Identité Git :** Configuration persistante du nom d'auteur et de l'e-mail de commit, détection en 1 clic de l'identité Git système, diagnostic d'état du moteur LibGit2.
+        - **Mises à Jour Logicielles :** Requête asynchrone non-bloquante vers l'API GitHub Releases (`/repos/oktailb/SpriteStudio/releases/latest`), comparaison de version sémantique via `QVersionNumber`, affichage des notes de version au format Markdown avec liens cliquables, et bouton de redirection directe vers la page de téléchargement GitHub.
+
+---
+11. **Étape 14 — Intégration aux Écosystèmes & Marchés Moteurs de Jeu (M10 - Godot AssetLib, Unity UPM, Unreal Fab) :**
    - *Objectif :* Éliminer toute friction pour les développeurs en intégrant SpriteStudio directement dans leur environnement de développement quotidien et sur les magasins officiels d'assets.
    - *Livrables :* Addon officiel Godot 4 (Asset Library) avec importateur direct `.ssp` et synchronisation live `--watch`, package Unity UPM (`com.spritestudio.importer`) avec `ScriptedImporter` et génération automatique de `SpriteMeshType.Tight`, plugin Unreal Engine 5 pour le store Fab avec `UFactory` pour Paper2D/PaperZD, et scripts d'intégration CI/CD pour pipelines studio.
 

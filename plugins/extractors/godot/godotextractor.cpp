@@ -1,4 +1,9 @@
+// This file is part of the SpriteStudio Plugins.
+// It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
+// Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
+
 #include "godotextractor.h"
+#include "godot_pipeline.h"
 #include "packer/atlaspacker.h"
 #include <QFile>
 #include <QFileInfo>
@@ -6,6 +11,11 @@
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QWidget>
+#include <QCheckBox>
+#include <QVBoxLayout>
+#include <QSettings>
+#include <QLabel>
 #include <algorithm>
 
 GodotExtractor::GodotExtractor(QObject *parent)
@@ -390,6 +400,12 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         imageExt = QStringLiteral(".basis");
     }
     QString imageFilename = baseName + imageExt;
+    if (options.extraParams.contains(QStringLiteral("sheet_path"))) {
+        const QString customSheet = options.extraParams.value(QStringLiteral("sheet_path")).toString();
+        if (!customSheet.isEmpty()) {
+            imageFilename = QFileInfo(customSheet).fileName();
+        }
+    }
     QString imagePath = dir.filePath(imageFilename);
     QString tresPath = dir.filePath(baseName + ".tres");
 
@@ -466,8 +482,23 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     QTextStream out(&outFile);
 
+    // Resolve Godot 4 UID
+    QString uid = options.extraParams.value(QStringLiteral("godot_uid")).toString();
+    bool preserveUid = options.extraParams.value(QStringLiteral("preserve_uid"), true).toBool();
+    if (uid.isEmpty() && preserveUid && QFile::exists(tresPath)) {
+        uid = GodotPipeline::extractExistingUid(tresPath);
+    }
+    if (uid.isEmpty()) {
+        uid = GodotPipeline::generateDeterministicUid(fileInfo.fileName());
+    }
+
     // Write Godot 4.x SpriteFrames header
-    out << "[gd_resource type=\"SpriteFrames\" load_steps=" << (packResult.frameRects.size() + 2) << " format=3]\n\n";
+    int loadSteps = packResult.frameRects.size() + 2;
+    out << "[gd_resource type=\"SpriteFrames\" load_steps=" << loadSteps << " format=3";
+    if (!uid.isEmpty()) {
+        out << " uid=\"" << uid << "\"";
+    }
+    out << "]\n\n";
     out << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_atlas\"]\n\n";
 
     for (int i = 0; i < packResult.frameRects.size(); ++i) {
@@ -598,7 +629,55 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         }
     }
 
+    // If requested, generate companion Godot AnimatedSprite2D scene (.tscn)
+    QString scenePath = options.extraParams.value(QStringLiteral("godot_scene")).toString();
+    if (!scenePath.isEmpty()) {
+        QString sErr;
+        QString defaultAnim = doc.animations().isEmpty() ? QStringLiteral("default") : doc.animations().firstKey();
+        GodotPipeline::generateScene(scenePath, tresPath, defaultAnim, &sErr);
+    }
+
     setProgress(100);
     setStatusMessage(tr("Exported Godot resource: %1 and image %2").arg(QFileInfo(tresPath).fileName(), imageFilename));
     return true;
+}
+
+QWidget* GodotExtractor::createSettingsWidget(QWidget *parent)
+{
+    QWidget *w = new QWidget(parent);
+    QVBoxLayout *layout = new QVBoxLayout(w);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    QSettings settings;
+    settings.beginGroup(QStringLiteral("Plugins/GodotExtractor"));
+    bool preserveUid = settings.value(QStringLiteral("preserve_uid"), true).toBool();
+    bool genScene = settings.value(QStringLiteral("generate_scene"), false).toBool();
+    settings.endGroup();
+
+    QCheckBox *chkUid = new QCheckBox(tr("Preserve existing Godot 4 UID (uid://...) on re-export"), w);
+    chkUid->setChecked(preserveUid);
+    QObject::connect(chkUid, &QCheckBox::toggled, [](bool checked) {
+        QSettings s;
+        s.beginGroup(QStringLiteral("Plugins/GodotExtractor"));
+        s.setValue(QStringLiteral("preserve_uid"), checked);
+        s.endGroup();
+    });
+    layout->addWidget(chkUid);
+
+    QCheckBox *chkScene = new QCheckBox(tr("Auto-generate AnimatedSprite2D scene (.tscn) companion file"), w);
+    chkScene->setChecked(genScene);
+    QObject::connect(chkScene, &QCheckBox::toggled, [](bool checked) {
+        QSettings s;
+        s.beginGroup(QStringLiteral("Plugins/GodotExtractor"));
+        s.setValue(QStringLiteral("generate_scene"), checked);
+        s.endGroup();
+    });
+    layout->addWidget(chkScene);
+
+    QLabel *info = new QLabel(tr("Godot Engine 4.x SpriteFrames exporter with AtlasTexture regions and collision mesh generation."), w);
+    info->setWordWrap(true);
+    info->setStyleSheet(QStringLiteral("color: #7f8c8d; font-size: 11px;"));
+    layout->addWidget(info);
+
+    return w;
 }

@@ -1,3 +1,7 @@
+// This file is part of the SpriteStudio Plugins.
+// It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
+// Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
+
 #ifndef GODOTEXTRACTOR_H
 #define GODOTEXTRACTOR_H
 
@@ -36,6 +40,7 @@ public:
     bool canDecode(const QString &filePath) const override;
     bool read(const QString &filePath, SpriteDocument &outDoc, ExtractorError *error = nullptr) override;
     bool write(const QString &filePath, const SpriteDocument &inDoc, const ExportOptions &options, ExtractorError *error = nullptr) override;
+    QWidget* createSettingsWidget(QWidget *parent = nullptr) override;
 };
 
 #endif // GODOTEXTRACTOR_H

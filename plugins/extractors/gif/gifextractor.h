@@ -1,3 +1,7 @@
+// This file is part of the SpriteStudio Plugins.
+// It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
+// Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
+
 #ifndef GIFEXTRACTOR_H
 #define GIFEXTRACTOR_H
 

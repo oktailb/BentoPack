@@ -25,6 +25,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     Gui
     Widgets
     Concurrent
+    Network
     LinguistTools
     Test
 )

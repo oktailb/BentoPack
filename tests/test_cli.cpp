@@ -4,11 +4,23 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QRegularExpression>
 #include "cli/cliparser.h"
-#include "cli/godot_pipeline.h"
 #include "cli/watch_daemon.h"
+#include "extractor/extractorregistry.h"
+#include "filters/filterregistry.h"
 
 using namespace SpriteStudioCli;
+
+static QString extractUidFromTres(const QString &tresPath)
+{
+    QFile file(tresPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return QString();
+    QString content = QString::fromUtf8(file.read(1024));
+    QRegularExpression uidRegex(QStringLiteral("uid=\"([^\"]+)\""));
+    QRegularExpressionMatch match = uidRegex.match(content);
+    return match.hasMatch() ? match.captured(1) : QString();
+}
 
 class TestCli : public QObject
 {
@@ -37,6 +49,9 @@ private:
 void TestCli::initTestCase()
 {
     QVERIFY(m_tempDir.isValid());
+    QString binPlugins = QDir(QCoreApplication::applicationDirPath()).filePath(QStringLiteral("plugins"));
+    ExtractorRegistry::instance().loadPlugins(binPlugins);
+    FilterRegistry::instance().loadPlugins(binPlugins);
 }
 
 void TestCli::cleanupTestCase()
@@ -180,13 +195,13 @@ void TestCli::testGodot4ExportAndUid()
     QVERIFY(content.contains(QStringLiteral("uid=\"uid://")));
     QVERIFY(content.contains(QStringLiteral("[sub_resource type=\"AtlasTexture\"")));
 
-    QString originalUid = GodotPipeline::extractExistingUid(outTres);
+    QString originalUid = extractUidFromTres(outTres);
     QVERIFY(!originalUid.isEmpty());
 
     // Re-run export and verify UID preservation
     CliResult res2 = parser.parseAndExecute(args);
     QCOMPARE(res2.exitCode, ExitSuccess);
-    QString preservedUid = GodotPipeline::extractExistingUid(outTres);
+    QString preservedUid = extractUidFromTres(outTres);
     QCOMPARE(preservedUid, originalUid);
 }
 

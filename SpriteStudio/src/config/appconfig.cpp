@@ -111,6 +111,7 @@ void AppConfig::resetToDefaults()
     m_animation = AnimationConfig();
     m_project = ProjectConfig();
     m_git = GitConfig();
+    m_export = ExportConfig();
     emit configChanged();
 }
 
@@ -146,6 +147,8 @@ bool AppConfig::load(const QString &filePath)
     if (root.contains(QStringLiteral("general")) && root.value(QStringLiteral("general")).isObject()) {
         QJsonObject genObj = root.value(QStringLiteral("general")).toObject();
         m_general.language = genObj.value(QStringLiteral("language")).toString(m_general.language);
+        m_general.checkUpdatesOnStartup = genObj.value(QStringLiteral("check_updates_on_startup")).toBool(m_general.checkUpdatesOnStartup);
+        m_general.reopenLastProject = genObj.value(QStringLiteral("reopen_last_project")).toBool(m_general.reopenLastProject);
     }
 
     // 1. Atlas section
@@ -213,6 +216,16 @@ bool AppConfig::load(const QString &filePath)
         m_git.authorEmail = gitObj.value(QStringLiteral("author_email")).toString(m_git.authorEmail);
     }
 
+    // 6. Export section
+    if (root.contains(QStringLiteral("export")) && root.value(QStringLiteral("export")).isObject()) {
+        QJsonObject expObj = root.value(QStringLiteral("export")).toObject();
+        m_export.defaultFormatId = expObj.value(QStringLiteral("default_format_id")).toString(m_export.defaultFormatId);
+        m_export.defaultTextureFormatIndex = expObj.value(QStringLiteral("default_texture_format_index")).toInt(m_export.defaultTextureFormatIndex);
+        m_export.defaultAlgorithmIndex = expObj.value(QStringLiteral("default_algorithm_index")).toInt(m_export.defaultAlgorithmIndex);
+        m_export.defaultZstd = expObj.value(QStringLiteral("default_zstd")).toBool(m_export.defaultZstd);
+        m_export.defaultZstdLevel = expObj.value(QStringLiteral("default_zstd_level")).toInt(m_export.defaultZstdLevel);
+    }
+
     emit configChanged();
     return true;
 }
@@ -233,6 +246,8 @@ bool AppConfig::save(const QString &filePath) const
     // 0. General
     QJsonObject genObj;
     genObj[QStringLiteral("language")] = m_general.language;
+    genObj[QStringLiteral("check_updates_on_startup")] = m_general.checkUpdatesOnStartup;
+    genObj[QStringLiteral("reopen_last_project")] = m_general.reopenLastProject;
     root[QStringLiteral("general")] = genObj;
 
     // 1. Atlas
@@ -281,6 +296,15 @@ bool AppConfig::save(const QString &filePath) const
     gitObj[QStringLiteral("author_name")] = m_git.authorName;
     gitObj[QStringLiteral("author_email")] = m_git.authorEmail;
     root[QStringLiteral("git")] = gitObj;
+
+    // 6. Export
+    QJsonObject expObj;
+    expObj[QStringLiteral("default_format_id")] = m_export.defaultFormatId;
+    expObj[QStringLiteral("default_texture_format_index")] = m_export.defaultTextureFormatIndex;
+    expObj[QStringLiteral("default_algorithm_index")] = m_export.defaultAlgorithmIndex;
+    expObj[QStringLiteral("default_zstd")] = m_export.defaultZstd;
+    expObj[QStringLiteral("default_zstd_level")] = m_export.defaultZstdLevel;
+    root[QStringLiteral("export")] = expObj;
 
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {

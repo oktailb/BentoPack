@@ -4,6 +4,7 @@
 #include <QString>
 #include <QStringList>
 #include <QJsonObject>
+#include "spritestudiocore_export.h"
 
 namespace SpriteStudioCli {
 
@@ -16,7 +17,8 @@ enum ExitCode {
     ExitFileNotFound        = 2, ///< Input files, directories, or assets not found
     ExitConstraintFailed    = 3, ///< Packing constraints unsatisfied (e.g. sprites exceed max-size)
     ExitIoError             = 4, ///< Disk read/write permissions or file creation error
-    ExitLockConflict        = 5  ///< Another watch daemon instance is already active for this directory
+    ExitLockConflict        = 5, ///< Another watch daemon instance is already active for this directory
+    ExitPluginNotFound      = 6  ///< Requested plugin or encoder format not found
 };
 
 /**
@@ -33,7 +35,7 @@ enum class CliFlavor {
 /**
  * @brief Structured result of a CLI operation.
  */
-struct CliResult {
+struct SPRITESTUDIO_CORE_EXPORT CliResult {
     int exitCode = ExitSuccess;
     QString message;
     QJsonObject json;
@@ -64,7 +66,7 @@ struct CliResult {
 /**
  * @brief Multi-flavor CLI argument parser and command dispatcher.
  */
-class CliParser
+class SPRITESTUDIO_CORE_EXPORT CliParser
 {
 public:
     CliParser() = default;

@@ -1,5 +1,4 @@
-#include "cli/tp_adapter.h"
-#include "cli/godot_pipeline.h"
+#include "cli/clipackpipeline.h"
 #include "controller/projectcontroller.h"
 #include "extractor/extractorregistry.h"
 #include "packer/vramtexturecompressor.h"
@@ -40,13 +39,13 @@ static QRect computeTrimmedRect(const QImage &img, int alphaThreshold)
     return QRect(minX, minY, (maxX - minX) + 1, (maxY - minY) + 1);
 }
 
-bool TexturePackerAdapter::collectInputImages(const QStringList &inputPaths,
-                                             QList<QImage> &outFrames,
-                                             QList<QString> &outNames,
-                                             QList<QPoint> &outPivots,
-                                             QMap<QString, SpriteAnimation> &outAnimations,
-                                             bool prependFolderName,
-                                             QString *outError)
+bool CliPackPipeline::collectInputImages(const QStringList &inputPaths,
+                                         QList<QImage> &outFrames,
+                                         QList<QString> &outNames,
+                                         QList<QPoint> &outPivots,
+                                         QMap<QString, SpriteAnimation> &outAnimations,
+                                         bool prependFolderName,
+                                         QString *outError)
 {
     for (const QString &pathStr : inputPaths) {
         QFileInfo fi(pathStr);
@@ -98,125 +97,24 @@ bool TexturePackerAdapter::collectInputImages(const QStringList &inputPaths,
                     outFrames.append(img.convertToFormat(QImage::Format_ARGB32_Premultiplied));
                     outNames.append(fi.completeBaseName());
                     outPivots.append(QPoint(img.width() / 2, img.height() / 2));
-                } else {
-                    if (outError) *outError = QStringLiteral("Failed to read image file: ") + fi.absoluteFilePath();
-                    return false;
                 }
             }
         }
     }
 
-    return true;
-}
-
-bool TexturePackerAdapter::writeTexturePackerJson(const QString &jsonPath,
-                                                 const QString &relImagePath,
-                                                 const QList<QRect> &packedRects,
-                                                 const QList<QString> &frameNames,
-                                                 const QList<QImage> &originalFrames,
-                                                 const QList<QPoint> &pivots,
-                                                 const QSize &atlasSize,
-                                                 bool jsonArrayFormat,
-                                                 QString *outError)
-{
-    QFileInfo fi(jsonPath);
-    QDir().mkpath(fi.dir().absolutePath());
-
-    QJsonObject rootObj;
-    QJsonArray framesArray;
-    QJsonObject framesHash;
-
-    for (int i = 0; i < packedRects.size(); ++i) {
-        const QRect &r = packedRects[i];
-        const QImage &orig = (i < originalFrames.size()) ? originalFrames[i] : QImage();
-        QPoint piv = (i < pivots.size()) ? pivots[i] : QPoint(r.width() / 2, r.height() / 2);
-        QString name = (i < frameNames.size()) ? frameNames[i] : QStringLiteral("frame_%1").arg(i);
-        if (!name.endsWith(QStringLiteral(".png"))) {
-            name += QStringLiteral(".png");
-        }
-
-        QJsonObject fObj;
-        if (jsonArrayFormat) {
-            fObj[QStringLiteral("filename")] = name;
-        }
-
-        // Frame in atlas
-        QJsonObject frameRect;
-        frameRect[QStringLiteral("x")] = r.x();
-        frameRect[QStringLiteral("y")] = r.y();
-        frameRect[QStringLiteral("w")] = r.width();
-        frameRect[QStringLiteral("h")] = r.height();
-        fObj[QStringLiteral("frame")] = frameRect;
-
-        fObj[QStringLiteral("rotated")] = false;
-        bool isTrimmed = (orig.width() > r.width() || orig.height() > r.height());
-        fObj[QStringLiteral("trimmed")] = isTrimmed;
-
-        // Sprite Source Size
-        QJsonObject sss;
-        sss[QStringLiteral("x")] = 0;
-        sss[QStringLiteral("y")] = 0;
-        sss[QStringLiteral("w")] = r.width();
-        sss[QStringLiteral("h")] = r.height();
-        fObj[QStringLiteral("spriteSourceSize")] = sss;
-
-        // Source Size
-        QJsonObject srcSize;
-        srcSize[QStringLiteral("w")] = orig.isNull() ? r.width() : orig.width();
-        srcSize[QStringLiteral("h")] = orig.isNull() ? r.height() : orig.height();
-        fObj[QStringLiteral("sourceSize")] = srcSize;
-
-        // Pivot normalized [0.0, 1.0]
-        QJsonObject pivotObj;
-        double origW = orig.isNull() ? r.width() : orig.width();
-        double origH = orig.isNull() ? r.height() : orig.height();
-        pivotObj[QStringLiteral("x")] = (origW > 0) ? (static_cast<double>(piv.x()) / origW) : 0.5;
-        pivotObj[QStringLiteral("y")] = (origH > 0) ? (static_cast<double>(piv.y()) / origH) : 0.5;
-        fObj[QStringLiteral("pivot")] = pivotObj;
-
-        if (jsonArrayFormat) {
-            framesArray.append(fObj);
-        } else {
-            framesHash[name] = fObj;
-        }
-    }
-
-    if (jsonArrayFormat) {
-        rootObj[QStringLiteral("frames")] = framesArray;
-    } else {
-        rootObj[QStringLiteral("frames")] = framesHash;
-    }
-
-    // Meta object
-    QJsonObject meta;
-    meta[QStringLiteral("app")] = QStringLiteral("SpriteStudio");
-    meta[QStringLiteral("version")] = QStringLiteral("1.0.0");
-    meta[QStringLiteral("image")] = relImagePath;
-    meta[QStringLiteral("format")] = QStringLiteral("RGBA8888");
-    QJsonObject sizeObj;
-    sizeObj[QStringLiteral("w")] = atlasSize.width();
-    sizeObj[QStringLiteral("h")] = atlasSize.height();
-    meta[QStringLiteral("size")] = sizeObj;
-    meta[QStringLiteral("scale")] = QStringLiteral("1");
-    rootObj[QStringLiteral("meta")] = meta;
-
-    QFile file(jsonPath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        if (outError) *outError = QStringLiteral("Cannot write JSON file: ") + jsonPath;
+    if (outFrames.isEmpty()) {
+        if (outError) *outError = QStringLiteral("No valid image files found in specified paths.");
         return false;
     }
 
-    QJsonDocument doc(rootObj);
-    file.write(doc.toJson(QJsonDocument::Indented));
-    file.close();
     return true;
 }
 
-CliResult TexturePackerAdapter::execute(const QStringList &args)
+CliResult CliPackPipeline::execute(const QStringList &args)
 {
     QString sheetPath;
     QString dataPath;
-    QString format = QStringLiteral("json-array");
+    QString format;
     QString algorithm = QStringLiteral("MaxRects");
     QString heuristic = QStringLiteral("BestShortSideFit");
     bool sizePot = false;
@@ -225,81 +123,68 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
     int padding = 2;
     int borderPadding = 0;
     int extrude = 0;
-    QString trimMode = QStringLiteral("None");
+    QString trimMode = QStringLiteral("Trim");
     int trimThreshold = 1;
     bool autoAlias = true;
+    double pivotX = 0.5;
+    double pivotY = 0.5;
     bool hasCustomPivot = false;
-    double pivotX = 0.5, pivotY = 0.5;
     bool prependFolder = false;
     QString godotUid;
     QString godotScene;
-    QStringList inputPaths;
+    bool listTags = false;
 
-    // VRAM texture options
+    // VRAM options
     QString textureFormat = QStringLiteral("png");
     QString vramFormatStr = QStringLiteral("uastc");
-    int vramQuality = 2;
+    int vramQuality = 128;
     bool zstd = true;
     int zstdLevel = 9;
 
+    QStringList inputPaths;
+
     for (int i = 0; i < args.size(); ++i) {
         const QString &arg = args[i];
+
         if (arg == QStringLiteral("--sheet") && i + 1 < args.size()) {
             sheetPath = args[++i];
         } else if (arg == QStringLiteral("--data") && i + 1 < args.size()) {
             dataPath = args[++i];
         } else if (arg == QStringLiteral("--format") && i + 1 < args.size()) {
-            format = args[++i].toLower();
+            format = args[++i];
         } else if (arg == QStringLiteral("--texture-format") && i + 1 < args.size()) {
             textureFormat = args[++i].toLower();
-        } else if (arg == QStringLiteral("--opt") && i + 1 < args.size()) {
-            QString optVal = args[++i].toUpper();
-            if (optVal.contains(QStringLiteral("ASTC")) || optVal.contains(QStringLiteral("BC7")) || optVal == QStringLiteral("UASTC")) {
-                textureFormat = QStringLiteral("ktx2");
-                vramFormatStr = QStringLiteral("uastc");
-            } else if (optVal.contains(QStringLiteral("ETC1")) || optVal == QStringLiteral("ETC1S")) {
-                textureFormat = QStringLiteral("ktx2");
-                vramFormatStr = QStringLiteral("etc1s");
-            } else if (optVal.contains(QStringLiteral("RGBA"))) {
-                textureFormat = QStringLiteral("png");
-            }
         } else if (arg == QStringLiteral("--vram-format") && i + 1 < args.size()) {
             vramFormatStr = args[++i].toLower();
-            if (textureFormat == QStringLiteral("png")) textureFormat = QStringLiteral("ktx2");
         } else if (arg == QStringLiteral("--vram-quality") && i + 1 < args.size()) {
-            QString qStr = args[++i].toLower();
-            if (qStr == QStringLiteral("fast") || qStr == QStringLiteral("1")) vramQuality = 1;
-            else if (qStr == QStringLiteral("normal") || qStr == QStringLiteral("2")) vramQuality = 2;
-            else if (qStr == QStringLiteral("high") || qStr == QStringLiteral("3")) vramQuality = 3;
-            else if (qStr == QStringLiteral("best") || qStr == QStringLiteral("4")) vramQuality = 4;
+            vramQuality = args[++i].toInt();
+        } else if (arg == QStringLiteral("--opt") && i + 1 < args.size()) {
+            ++i; // consume --opt value
+        } else if (arg == QStringLiteral("--enable-zstd")) {
+            zstd = true;
+        } else if (arg == QStringLiteral("--disable-zstd")) {
+            zstd = false;
         } else if (arg == QStringLiteral("--zstd-level") && i + 1 < args.size()) {
             zstdLevel = args[++i].toInt();
-        } else if (arg == QStringLiteral("--no-zstd")) {
-            zstd = false;
         } else if (arg == QStringLiteral("--algorithm") && i + 1 < args.size()) {
             algorithm = args[++i];
         } else if (arg == QStringLiteral("--maxrects-heuristics") && i + 1 < args.size()) {
             heuristic = args[++i];
         } else if (arg == QStringLiteral("--size-constraints") && i + 1 < args.size()) {
-            QString c = args[++i].toUpper();
-            if (c == QStringLiteral("POT")) sizePot = true;
-        } else if (arg == QStringLiteral("--max-size") && i + 1 < args.size()) {
+            sizePot = (args[++i].compare(QStringLiteral("POT"), Qt::CaseInsensitive) == 0);
+        } else if (arg == QStringLiteral("--max-size") && i + 2 < args.size()) {
             maxWidth = args[++i].toInt();
-            if (i + 1 < args.size() && !args[i + 1].startsWith(QStringLiteral("-"))) {
-                maxHeight = args[++i].toInt();
-            } else {
-                maxHeight = maxWidth;
-            }
+            maxHeight = args[++i].toInt();
         } else if (arg == QStringLiteral("--max-width") && i + 1 < args.size()) {
             maxWidth = args[++i].toInt();
         } else if (arg == QStringLiteral("--max-height") && i + 1 < args.size()) {
             maxHeight = args[++i].toInt();
-        } else if (arg == QStringLiteral("--padding") && i + 1 < args.size()) {
-            padding = args[++i].toInt();
-        } else if (arg == QStringLiteral("--shape-padding") && i + 1 < args.size()) {
+        } else if ((arg == QStringLiteral("--padding") || arg == QStringLiteral("--inner-padding") || arg == QStringLiteral("--shape-padding")) && i + 1 < args.size()) {
             padding = args[++i].toInt();
         } else if (arg == QStringLiteral("--border-padding") && i + 1 < args.size()) {
             borderPadding = args[++i].toInt();
+        } else if (arg == QStringLiteral("--sheet-type") && i + 1 < args.size()) {
+            ++i; // consume --sheet-type value
         } else if (arg == QStringLiteral("--extrude") && i + 1 < args.size()) {
             extrude = args[++i].toInt();
         } else if (arg == QStringLiteral("--trim-mode") && i + 1 < args.size()) {
@@ -310,6 +195,8 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
             autoAlias = true;
         } else if (arg == QStringLiteral("--disable-auto-alias")) {
             autoAlias = false;
+        } else if (arg == QStringLiteral("--ignore-empty")) {
+            // flag
         } else if (arg == QStringLiteral("--pivot-point") && i + 2 < args.size()) {
             pivotX = args[++i].toDouble();
             pivotY = args[++i].toDouble();
@@ -320,6 +207,10 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
             godotUid = args[++i];
         } else if (arg == QStringLiteral("--godot-scene") && i + 1 < args.size()) {
             godotScene = args[++i];
+        } else if (arg == QStringLiteral("--list-tags")) {
+            listTags = true;
+        } else if (arg == QStringLiteral("-b") || arg == QStringLiteral("--batch")) {
+            // aseprite batch flag, consume
         } else if (!arg.startsWith(QStringLiteral("-"))) {
             inputPaths.append(arg);
         }
@@ -446,50 +337,87 @@ CliResult TexturePackerAdapter::execute(const QStringList &args)
     vOpts.zstdLevel = zstdLevel;
     VramCompressionStats vStats;
 
-    // 6. Export metadata
-    bool isGodot = (format == QStringLiteral("godot") || format == QStringLiteral("godot4") ||
-                    dataPath.endsWith(QStringLiteral(".tres"), Qt::CaseInsensitive));
-
-    if (isGodot) {
-        GodotPipeline::ExportArgs gArgs;
-        gArgs.sheetPath = sheetPath;
-        gArgs.tresPath = dataPath.isEmpty() ? (QFileInfo(sheetPath).path() + "/" + QFileInfo(sheetPath).completeBaseName() + ".tres") : dataPath;
-        gArgs.scenePath = godotScene;
-        gArgs.explicitUid = godotUid;
-        gArgs.preserveExistingUid = true;
-        gArgs.frames = packFrames;
-        gArgs.frameRects = packRes.frameRects;
-        gArgs.pivots = pivots;
-        gArgs.animations = animations;
-        gArgs.atlas = packRes.atlas;
-
-        CliResult gRes = GodotPipeline::exportGodot(gArgs);
-        if (gRes.exitCode != ExitSuccess) {
-            return gRes;
+    // 6. Save sheet image
+    QFileInfo sfi(sheetPath);
+    QDir().mkpath(sfi.dir().absolutePath());
+    if (isVram) {
+        QString vErr;
+        if (!VramTextureCompressor::compressToFile(packRes.atlas, sheetPath, vOpts, &vStats, &vErr)) {
+            return CliResult::error(ExitIoError, QStringLiteral("Failed to compress VRAM atlas: ") + sheetPath + QStringLiteral(" (") + vErr + QStringLiteral(")"));
         }
     } else {
-        // Save Sheet image
-        QFileInfo sfi(sheetPath);
-        QDir().mkpath(sfi.dir().absolutePath());
-        if (isVram) {
-            QString vErr;
-            if (!VramTextureCompressor::compressToFile(packRes.atlas, sheetPath, vOpts, &vStats, &vErr)) {
-                return CliResult::error(ExitIoError, QStringLiteral("Failed to compress VRAM atlas: ") + sheetPath + QStringLiteral(" (") + vErr + QStringLiteral(")"));
+        if (!packRes.atlas.save(sheetPath, "PNG")) {
+            return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas sheet image: ") + sheetPath);
+        }
+    }
+
+    // 7. Save metadata via ExtractorRegistry plugin lookup
+    if (!dataPath.isEmpty()) {
+        SpriteDocument doc;
+        doc.setAtlas(packRes.atlas);
+        QList<SpriteBox> boxes;
+        boxes.reserve(packFrames.size());
+        for (int i = 0; i < packFrames.size(); ++i) {
+            SpriteBox b;
+            if (i < packRes.frameRects.size()) {
+                b.rect = packRes.frameRects[i];
+            } else {
+                b.rect = QRect(0, 0, packFrames[i].width(), packFrames[i].height());
             }
-        } else {
-            if (!packRes.atlas.save(sheetPath, "PNG")) {
-                return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas sheet image: ") + sheetPath);
-            }
+            b.pivot = (i < pivots.size()) ? pivots[i] : QPoint(b.rect.width() / 2, b.rect.height() / 2);
+            boxes.append(b);
+        }
+        doc.setFrames(packFrames, boxes);
+        for (auto it = animations.begin(); it != animations.end(); ++it) {
+            doc.setAnimation(it.key(), it.value().frameIndices, it.value().fps, it.value().loop);
         }
 
-        // Save JSON data
-        if (!dataPath.isEmpty()) {
-            QString jsonErr;
-            QString relImg = QFileInfo(sheetPath).fileName();
-            bool isArray = (format != QStringLiteral("json-hash"));
-            if (!writeTexturePackerJson(dataPath, relImg, packRes.frameRects, frameNames, rawFrames, pivots, packRes.dimensions, isArray, &jsonErr)) {
-                return CliResult::error(ExitIoError, jsonErr);
+        ExportOptions expOpts;
+        expOpts.packOptions = packOpts;
+        expOpts.vramOptions = vOpts;
+        if (isVram) {
+            if (sheetPath.endsWith(QStringLiteral(".basis"), Qt::CaseInsensitive)) {
+                expOpts.textureFormat = TEXTURE_FORMAT_BASIS;
+            } else {
+                expOpts.textureFormat = (vOpts.format == VramFormat::KTX2_ETC1S) ? TEXTURE_FORMAT_KTX2_ETC1S : TEXTURE_FORMAT_KTX2_UASTC;
             }
+        } else {
+            expOpts.textureFormat = TEXTURE_FORMAT_PNG;
+        }
+
+        expOpts.extraParams[QStringLiteral("sheet_path")] = sheetPath;
+        expOpts.extraParams[QStringLiteral("godot_uid")] = godotUid;
+        expOpts.extraParams[QStringLiteral("godot_scene")] = godotScene;
+        expOpts.extraParams[QStringLiteral("format")] = format;
+        expOpts.extraParams[QStringLiteral("list_tags")] = listTags;
+        if (format == QStringLiteral("json-array")) {
+            expOpts.extraParams[QStringLiteral("json_format")] = QStringLiteral("array");
+        } else if (format == QStringLiteral("json-hash")) {
+            expOpts.extraParams[QStringLiteral("json_format")] = QStringLiteral("hash");
+        }
+
+        Extractor *encoder = nullptr;
+        if (!format.isEmpty()) {
+            encoder = ExtractorRegistry::instance().findExtractorById(format);
+            if (!encoder) {
+                encoder = ExtractorRegistry::instance().findEncoderByFilter(format);
+            }
+        }
+        if (!encoder) {
+            encoder = ExtractorRegistry::instance().findEncoder(dataPath);
+        }
+
+        if (!encoder) {
+            return CliResult::error(ExitPluginNotFound,
+                QStringLiteral("No extractor plugin found to export metadata to '%1'. Ensure appropriate plugin is installed and loaded.")
+                .arg(dataPath));
+        }
+
+        ExtractorError expErr;
+        if (!encoder->write(dataPath, doc, expOpts, &expErr)) {
+            return CliResult::error(ExitIoError,
+                QStringLiteral("Failed to export metadata (%1): %2")
+                .arg(encoder->displayName(), expErr.toString()));
         }
     }
 

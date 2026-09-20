@@ -18,6 +18,7 @@
 #include "controller/animationcontroller.h"
 #include "controller/atlasviewcontroller.h"
 #include "widgets/timelinefilmstripwidget.h"
+#include "spritestudiocore_export.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -87,7 +88,7 @@ private:
  * - AtlasViewController: Atlas QGraphicsView, zoom/pan, slicing tools, and interactive boxes.
  * - AnimationController: Animation playback, tree widget, preview rendering, and animation CRUD.
  */
-class MainWindow : public QMainWindow
+class SPRITESTUDIO_CORE_EXPORT MainWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -197,6 +198,8 @@ private:
     void updateRecentProjectsMenu();
     void updateWindowTitle();
     void checkCrashRecovery();
+    void checkStartupPreferences();
+    void checkForUpdatesSilently();
     bool maybeSave();
     void saveLayoutState();
     void syncFromDocument();

@@ -71,11 +71,25 @@ struct SPRITESTUDIO_CORE_EXPORT GitConfig
 };
 
 /**
- * @brief General application settings (language, locale).
+ * @brief General application settings (language, locale, startup).
  */
 struct SPRITESTUDIO_CORE_EXPORT GeneralConfig
 {
     QString language = QStringLiteral("system"); // "system", "fr_FR", "en_US", "ja_JA"
+    bool checkUpdatesOnStartup = true;
+    bool reopenLastProject = false;
+};
+
+/**
+ * @brief Default settings for export and VRAM texture compression.
+ */
+struct SPRITESTUDIO_CORE_EXPORT ExportConfig
+{
+    QString defaultFormatId;            // Dynamic Extractor plugin ID (e.g. "godot_extractor", "json_extractor")
+    int defaultTextureFormatIndex = 0;   // 0 = PNG, 1 = KTX2 UASTC, 2 = KTX2 ETC1S
+    int defaultAlgorithmIndex = 0;       // 0 = Keep layout, 1 = MaxRects BSSF, etc.
+    bool defaultZstd = true;
+    int defaultZstdLevel = 9;
 };
 
 /**
@@ -112,6 +126,9 @@ public:
     const GitConfig& git() const { return m_git; }
     GitConfig& git() { return m_git; }
 
+    const ExportConfig& exportSettings() const { return m_export; }
+    ExportConfig& exportSettings() { return m_export; }
+
     // File operations
     bool load(const QString &filePath = QString());
     bool save(const QString &filePath = QString()) const;
@@ -136,6 +153,7 @@ private:
     AnimationConfig m_animation;
     ProjectConfig   m_project;
     GitConfig       m_git;
+    ExportConfig    m_export;
 
     mutable QString m_customConfigPath;
 };

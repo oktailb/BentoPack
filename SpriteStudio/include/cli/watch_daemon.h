@@ -10,6 +10,7 @@
 #include <memory>
 #include <functional>
 #include "cli/cliparser.h"
+#include "spritestudiocore_export.h"
 
 namespace SpriteStudioCli {
 
@@ -17,7 +18,7 @@ namespace SpriteStudioCli {
  * @brief Manages background directory surveillance, debouncing,
  *        self-trigger protection, and per-directory lock isolation for spritestudio-cli.
  */
-class WatchDaemon : public QObject
+class SPRITESTUDIO_CORE_EXPORT WatchDaemon : public QObject
 {
     Q_OBJECT
 

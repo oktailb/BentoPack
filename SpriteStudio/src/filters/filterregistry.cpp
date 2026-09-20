@@ -109,6 +109,27 @@ void FilterRegistry::initDefaultFilters()
     }
 }
 
+void FilterRegistry::rescanPlugins()
+{
+    m_scannedDirs.clear();
+
+    QStringList searchDirs;
+    const QString envPath = QString::fromUtf8(qgetenv("SPRITESTUDIO_PLUGIN_PATH"));
+    if (!envPath.isEmpty()) {
+        searchDirs << envPath.split(QDir::listSeparator(), Qt::SkipEmptyParts);
+    }
+    QString appDir = QCoreApplication::applicationDirPath();
+    searchDirs << QDir(appDir).filePath(QStringLiteral("plugins"));
+    searchDirs << QDir(appDir).filePath(QStringLiteral("../bin/plugins"));
+    searchDirs << QDir(appDir).filePath(QStringLiteral("../lib/spritestudio/plugins"));
+    searchDirs << QStringLiteral("/usr/lib/spritestudio/plugins");
+    searchDirs << QStringLiteral("/usr/local/lib/spritestudio/plugins");
+
+    for (const QString &dir : searchDirs) {
+        loadPlugins(dir);
+    }
+}
+
 void FilterRegistry::loadPlugins(const QString &dirPath)
 {
     QDir pluginsDir(dirPath);

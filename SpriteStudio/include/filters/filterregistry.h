@@ -39,6 +39,7 @@ public:
     QList<FilterPlugin*> filtersByCategory(const QString &category) const;
 
     void initDefaultFilters();
+    void rescanPlugins();
 
     /**
      * @brief Populates a QMenu with actions for all registered filters grouped by category.

@@ -1,5 +1,5 @@
 #include "cli/native_commands.h"
-#include "cli/tp_adapter.h"
+#include "cli/clipackpipeline.h"
 #include "image/spritedetector.h"
 #include "project/sessionmanager.h"
 #include "controller/projectcontroller.h"
@@ -17,8 +17,7 @@ namespace SpriteStudioCli {
 
 CliResult NativeCommands::executePack(const QStringList &args)
 {
-    // Native 'pack' subcommand delegates directly to TexturePackerAdapter with all capabilities
-    return TexturePackerAdapter::execute(args);
+    return CliPackPipeline::execute(args);
 }
 
 CliResult NativeCommands::executeSlice(const QStringList &args)

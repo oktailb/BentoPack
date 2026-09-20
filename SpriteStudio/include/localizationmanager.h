@@ -5,6 +5,7 @@
 #include <QString>
 #include <QTranslator>
 #include <QStringList>
+#include "spritestudiocore_export.h"
 
 /**
  * @brief Manages application localization dynamically at runtime.
@@ -14,7 +15,7 @@
  * widgets in the application, allowing real-time UI language switching without
  * restarting the application or discarding project states.
  */
-class LocalizationManager : public QObject
+class SPRITESTUDIO_CORE_EXPORT LocalizationManager : public QObject
 {
     Q_OBJECT
 

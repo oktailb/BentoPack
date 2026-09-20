@@ -73,6 +73,7 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 
 ### 📤 Multi-Engine Export
 * **PNG Sprite Atlas:** Optimized packing of extracted frames into a consolidated texture sheet.
+* **Non-Blocking Background Export:** Heavy compression tasks (KTX2 UASTC, high Zstd levels) run asynchronously via `QtConcurrent` with animated progress status, keeping the GUI perfectly responsive.
 * **Godot 4 Engine Exporter:** Generates ready-to-use Godot 4 `SpriteFrames` (`.tres`) resources with embedded `AtlasTexture` definitions, animations, and companion `_mesh.tres` 2D `ArrayMesh` resources.
 * **Unity 2D SpriteSheet Exporter:** Generates `.unity.json` metadata compatible with Unity's `SpriteMeshType.Tight`, including normalized UVs, inverted Y-axis coordinates, and face indices.
 * **Unreal Engine Paper2D Exporter:** Generates `.paper2d.json` descriptors containing both render and collision polygon geometries.
@@ -87,12 +88,19 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 * **Live VRAM Telemetry in ExportDialog:** Real-time feedback comparing raw RGBA8888 vs UASTC/ETC1S memory footprint with instant percentage savings.
 * **Integrated Game Engine Companions:** Emits `.ktx2` companion atlas files natively referenced by Godot 4 (`res://atlas.ktx2`), Unity (`KtxUnity`), Unreal Engine, and WebGL/WebGPU.
 
+### ⚙️ Comprehensive Settings & Preferences Center
+* **Modular 6-Category Configuration:** Clean searchable preferences interface with responsive filtering.
+* **Startup & Automation:** Auto-reopen last active `.ssp` project and optional background check for newer GitHub releases.
+* **Export & VRAM Defaults:** Pre-configure favorite target engines, texture format, packing algorithm, and Zstd level.
+* **Plugin Management:** Real-time inspection of loaded filter and extractor plugins with metadata, supported extensions, and hot-reload.
+* **Integrated Update Engine:** Direct GitHub releases API query, markdown release notes preview, and instant version comparison.
+
 ---
 
 ## 🛠️ Tech Stack & Architecture
 
 * **Language:** C++17
-* **Framework:** Qt 6 (Core, Gui, Widgets, Multimedia, Concurrent, Test, LinguistTools)
+* **Framework:** Qt 6 (Core, Gui, Widgets, Multimedia, Concurrent, Network, Test, LinguistTools)
 * **Core Engine:** `libSpriteStudioCore` shared library with clean exported API symbols (`SPRITESTUDIOCORE_EXPORT`)
 * **Dynamic Plugin System:** Hot-loadable Qt 6 plugins (`QPluginLoader`) for both **Filters** (`plugins/filters/`) and **Codecs / Extractors** (`plugins/extractors/`)
 * **Plugin Developer SDK:** Installed public headers, CMake package configuration (`SpriteStudioConfig.cmake`), and reference examples (`examples/sample_filter_plugin`, `examples/sample_extractor_plugin`)

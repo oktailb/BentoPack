@@ -1,6 +1,8 @@
 add_library(extractor_godot SHARED
     godotextractor.cpp
     godotextractor.h
+    godot_pipeline.cpp
+    godot_pipeline.h
 )
 
 target_include_directories(extractor_godot PUBLIC

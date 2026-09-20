@@ -1,6 +1,5 @@
 #include "cli/cliparser.h"
-#include "cli/tp_adapter.h"
-#include "cli/aseprite_adapter.h"
+#include "cli/clipackpipeline.h"
 #include "cli/native_commands.h"
 #include "cli/watch_daemon.h"
 #include <QFileInfo>
@@ -114,10 +113,15 @@ CliFlavor CliParser::detectFlavor(const QString &programName, const QStringList 
 CliResult CliParser::dispatchCommand(const QStringList &cleanArgs)
 {
     if (m_flavor == CliFlavor::TexturePacker) {
-        return TexturePackerAdapter::execute(cleanArgs);
+        return CliPackPipeline::execute(cleanArgs);
     }
     if (m_flavor == CliFlavor::Aseprite) {
-        return AsepriteAdapter::execute(cleanArgs);
+        QStringList aspArgs = cleanArgs;
+        if (!aspArgs.contains(QStringLiteral("--format"))) {
+            aspArgs.append(QStringLiteral("--format"));
+            aspArgs.append(QStringLiteral("json-array"));
+        }
+        return CliPackPipeline::execute(aspArgs);
     }
     if (m_flavor == CliFlavor::Godot) {
         QStringList godotArgs = cleanArgs;
@@ -125,7 +129,7 @@ CliResult CliParser::dispatchCommand(const QStringList &cleanArgs)
             godotArgs.append(QStringLiteral("--format"));
             godotArgs.append(QStringLiteral("godot4"));
         }
-        return TexturePackerAdapter::execute(godotArgs);
+        return CliPackPipeline::execute(godotArgs);
     }
 
     // Native subcommands or auto fallback
@@ -144,9 +148,9 @@ CliResult CliParser::dispatchCommand(const QStringList &cleanArgs)
             return NativeCommands::executeSsp(cleanArgs.mid(1));
         }
 
-        // If options contain --sheet or --data, fallback to TexturePacker adapter
+        // If options contain --sheet or --data, fallback to generic pack pipeline
         if (cleanArgs.contains(QStringLiteral("--sheet")) || cleanArgs.contains(QStringLiteral("--data"))) {
-            return TexturePackerAdapter::execute(cleanArgs);
+            return CliPackPipeline::execute(cleanArgs);
         }
 
         // If unknown option or command

@@ -32,6 +32,8 @@ enum AtlasStrategy {
     ATLASSTRATEGY_ONE_ATLAS_PER_ANIMATION
 };
 
+#include <QVariantMap>
+
 struct SPRITESTUDIO_CORE_EXPORT ExportOptions {
     Format format = FORMAT_GODOT;
     QString formatId; // Dynamic format ID (e.g. "godot", "unity", "unreal", "json")
@@ -46,6 +48,7 @@ struct SPRITESTUDIO_CORE_EXPORT ExportOptions {
     QString namingConvention;
 
     AtlasPacker::PackOptions packOptions;
+    QVariantMap extraParams; // Extensible parameters passed directly to dynamic plugins
 };
 
 class ExportManager {
