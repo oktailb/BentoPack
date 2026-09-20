@@ -4,13 +4,14 @@
 #include <QString>
 #include <QByteArray>
 #include <QPointF>
+#include "spritestudiocore_export.h"
 #include "model/spritedocument.h"
 
 /**
  * @brief Handles JSON serialization, deserialization, and workspace file storage
  * for native SpriteStudio projects (.ssp).
  */
-class ProjectManager
+class SPRITESTUDIO_CORE_EXPORT ProjectManager
 {
 public:
     /**

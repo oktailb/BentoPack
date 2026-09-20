@@ -15,6 +15,7 @@
 #include <QGroupBox>
 #include <QTabWidget>
 #include <QTextBrowser>
+#include "spritestudiocore_export.h"
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -28,7 +29,7 @@ class QVBoxLayout;
  * Supports configuring General options, Atlas visuals, Export defaults, Plugin management,
  * Git commit author identity, and GitHub update detection.
  */
-class SettingsDialog : public QDialog
+class SPRITESTUDIO_CORE_EXPORT SettingsDialog : public QDialog
 {
     Q_OBJECT
 

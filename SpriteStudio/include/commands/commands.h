@@ -11,7 +11,7 @@
 /**
  * @brief Command to delete a set of frames from the document with full undo capability.
  */
-class DeleteFramesCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT DeleteFramesCommand : public QUndoCommand
 {
 public:
     DeleteFramesCommand(SpriteDocument *doc, const QList<int> &indices, QUndoCommand *parent = nullptr);
@@ -35,7 +35,7 @@ private:
 /**
  * @brief Command to erase pixel data from the atlas inside selected bounding boxes and delete the frames.
  */
-class EraseAtlasPixelsCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT EraseAtlasPixelsCommand : public QUndoCommand
 {
 public:
     EraseAtlasPixelsCommand(SpriteDocument *doc, const QList<int> &indices, QUndoCommand *parent = nullptr);
@@ -60,7 +60,7 @@ private:
 /**
  * @brief Command to merge one frame onto another with full undo capability.
  */
-class MergeFramesCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT MergeFramesCommand : public QUndoCommand
 {
 public:
     MergeFramesCommand(SpriteDocument *doc, int sourceIndex, int targetIndex, QUndoCommand *parent = nullptr);
@@ -82,7 +82,7 @@ private:
 /**
  * @brief Command to create a new animation sequence.
  */
-class CreateAnimationCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT CreateAnimationCommand : public QUndoCommand
 {
 public:
     CreateAnimationCommand(SpriteDocument *doc, const QString &name, const QList<int> &frameIndices, int fps, QUndoCommand *parent = nullptr);
@@ -100,7 +100,7 @@ private:
 /**
  * @brief Command to delete an animation sequence with undo support.
  */
-class DeleteAnimationCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT DeleteAnimationCommand : public QUndoCommand
 {
 public:
     DeleteAnimationCommand(SpriteDocument *doc, const QString &name, QUndoCommand *parent = nullptr);
@@ -117,7 +117,7 @@ private:
 /**
  * @brief Command to reverse the order of frames in an animation.
  */
-class ReverseAnimationCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT ReverseAnimationCommand : public QUndoCommand
 {
 public:
     ReverseAnimationCommand(SpriteDocument *doc, const QString &animName, QUndoCommand *parent = nullptr);
@@ -133,7 +133,7 @@ private:
 /**
  * @brief Command to rename an animation sequence.
  */
-class RenameAnimationCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT RenameAnimationCommand : public QUndoCommand
 {
 public:
     RenameAnimationCommand(SpriteDocument *doc, const QString &oldName, const QString &newName, QUndoCommand *parent = nullptr);
@@ -150,7 +150,7 @@ private:
 /**
  * @brief Command to duplicate an animation sequence.
  */
-class DuplicateAnimationCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT DuplicateAnimationCommand : public QUndoCommand
 {
 public:
     DuplicateAnimationCommand(SpriteDocument *doc, const QString &sourceName, const QString &newName, QUndoCommand *parent = nullptr);
@@ -167,7 +167,7 @@ private:
 /**
  * @brief Command to reorder or update frame indices within an animation sequence.
  */
-class ReorderAnimationFramesCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT ReorderAnimationFramesCommand : public QUndoCommand
 {
 public:
     ReorderAnimationFramesCommand(SpriteDocument *doc, const QString &animName, const QList<int> &newSequence, QUndoCommand *parent = nullptr);
@@ -185,7 +185,7 @@ private:
 /**
  * @brief Command to change animation playback properties (fps and loop mode).
  */
-class ChangeAnimationPropertiesCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT ChangeAnimationPropertiesCommand : public QUndoCommand
 {
 public:
     ChangeAnimationPropertiesCommand(SpriteDocument *doc, const QString &animName, int newFps, SpriteAnimation::LoopMode newLoopMode, QUndoCommand *parent = nullptr);
@@ -205,7 +205,7 @@ private:
 /**
  * @brief Command to change a bounding box rectangle (resize or move) with undo/redo.
  */
-class ChangeBoxRectCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT ChangeBoxRectCommand : public QUndoCommand
 {
 public:
     ChangeBoxRectCommand(SpriteDocument *doc, int boxIndex, const QRect &oldRect, const QRect &newRect, QUndoCommand *parent = nullptr);
@@ -223,7 +223,7 @@ private:
 /**
  * @brief Command to manually add a new slice with undo/redo.
  */
-class AddSliceCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT AddSliceCommand : public QUndoCommand
 {
 public:
     AddSliceCommand(SpriteDocument *doc, const QRect &rect, QUndoCommand *parent = nullptr);
@@ -269,7 +269,7 @@ private:
 /**
  * @brief Command to change pivot point(s) of one or multiple boxes with undo/redo.
  */
-class ChangePivotCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT ChangePivotCommand : public QUndoCommand
 {
 public:
     struct PivotInfo {
@@ -304,7 +304,7 @@ private:
 /**
  * @brief Command to edit pixels of one or multiple frames and synchronize the atlas with undo/redo.
  */
-class EditSpritePixelsCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT EditSpritePixelsCommand : public QUndoCommand
 {
 public:
     EditSpritePixelsCommand(SpriteDocument *doc,

@@ -97,6 +97,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+if(MINGW)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols")
+endif()
+
 add_subdirectory(SpriteStudio)
 add_subdirectory(plugins)
 

@@ -7,11 +7,12 @@
 #include <QList>
 #include <QDir>
 #include <QFileInfo>
+#include "spritestudiocore_export.h"
 
 /**
  * @brief Metadata stored in the .session_lock JSON file within each session workspace.
  */
-struct SessionLockInfo {
+struct SPRITESTUDIO_CORE_EXPORT SessionLockInfo {
     qint64    pid = 0;
     QString   sessionUuid;
     QString   originalFilePath;
@@ -24,7 +25,7 @@ struct SessionLockInfo {
 /**
  * @brief Information about an interrupted / crashed session detected at startup.
  */
-struct OrphanSessionInfo {
+struct SPRITESTUDIO_CORE_EXPORT OrphanSessionInfo {
     QString         sessionDir;
     SessionLockInfo lockInfo;
     QString         projectName;
@@ -34,7 +35,7 @@ struct OrphanSessionInfo {
 /**
  * @brief Represents a Git commit record in the session repository.
  */
-struct GitCommitInfo {
+struct SPRITESTUDIO_CORE_EXPORT GitCommitInfo {
     QString     hash;
     QString     shortHash;
     QString     author;
@@ -48,7 +49,7 @@ struct GitCommitInfo {
  * @brief Manages the on-disk scratch workspace (%TEMP%/SpriteStudio/sessions/<session_uuid>/),
  * session locking, crash recovery, atomic ZIP (.ssp) packing/unpacking, and Git tracking.
  */
-class SessionManager : public QObject
+class SPRITESTUDIO_CORE_EXPORT SessionManager : public QObject
 {
     Q_OBJECT
 

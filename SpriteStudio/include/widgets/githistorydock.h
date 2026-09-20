@@ -65,7 +65,7 @@ protected:
 /**
  * @brief Dockable widget displaying the Git commit tree, revision metadata, and time-travel controls.
  */
-class GitHistoryDock : public QDockWidget
+class SPRITESTUDIO_CORE_EXPORT GitHistoryDock : public QDockWidget
 {
     Q_OBJECT
 
