@@ -7,6 +7,7 @@
 [![CMake](https://img.shields.io/badge/CMake-3.20+-064F8C.svg?logo=cmake)](https://cmake.org/)
 
 > **SpriteStudio** is a fast, modular, and modern desktop application tailored for game developers, pixel artists, and 2D animators to extract, clean, arrange, and export 2D sprite sheets and animated textures.
+The UI and CLI are licensed under Apache 2.0. Specific engine integration plugins (Godot, Unity, Unreal) and advanced filters are located in the /plugins directory and are provided under a Source-Available License (free to compile for entities under $1M revenue). Pre-compiled binaries are available for purchase on Stores.
 
 ---
 
@@ -308,6 +309,7 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 
 ## 📄 License
 
-This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
+This project GUI and CLI are licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
+The plugins are licensed under defined [EULA](plugins/LICENSE-PLUGINS.md). Precompiled binaries are available for purchase on Stores.
 
 **Developer:** Vincent LECOQ
