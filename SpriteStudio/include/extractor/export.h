@@ -4,6 +4,7 @@
 #include <QString>
 #include "packer/atlaspacker.h"
 #include "packer/vramtexturecompressor.h"
+#include "spritestudiocore_export.h"
 
 class Extractor;
 
@@ -31,8 +32,9 @@ enum AtlasStrategy {
     ATLASSTRATEGY_ONE_ATLAS_PER_ANIMATION
 };
 
-struct ExportOptions {
+struct SPRITESTUDIO_CORE_EXPORT ExportOptions {
     Format format = FORMAT_GODOT;
+    QString formatId; // Dynamic format ID (e.g. "godot", "unity", "unreal", "json")
     TextureFormat textureFormat = TEXTURE_FORMAT_PNG;
     VramCompressionOptions vramOptions;
 

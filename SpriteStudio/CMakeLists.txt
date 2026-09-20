@@ -41,13 +41,6 @@ set(SpriteStudioCore_SRC
     src/commands/commands.cpp
     src/extractor.cpp
     src/extractor/extractorregistry.cpp
-    src/extractor/spriteextractor.cpp
-    src/extractor/gifextractor.cpp
-    src/extractor/jsonextractor.cpp
-    src/extractor/godotextractor.cpp
-    src/extractor/unityextractor.cpp
-    src/extractor/unrealextractor.cpp
-    src/extractor/jsonExtractordialog.cpp
     src/arrangementmodel.cpp
     src/aboutdialog.cpp
     src/atlasboxitem.cpp
@@ -60,23 +53,7 @@ set(SpriteStudioCore_SRC
     src/widgets/timelinefilmstripwidget.cpp
     src/widgets/exportdialog.cpp
     src/widgets/filterdialogbase.cpp
-    src/widgets/backgroundremovaldialog.cpp
-    src/widgets/despillfilterdialog.cpp
-    src/widgets/outlinefilterdialog.cpp
-    src/widgets/colorswapfilterdialog.cpp
-    src/widgets/coloradjustfilterdialog.cpp
-    src/widgets/pixelrescalefilterdialog.cpp
-    src/widgets/retropalettefilterdialog.cpp
-    src/widgets/atlaspackingdialog.cpp
     src/filters/filterregistry.cpp
-    src/filters/backgroundremovalfilter.cpp
-    src/filters/despillfilter.cpp
-    src/filters/outlinefilter.cpp
-    src/filters/colorswapfilter.cpp
-    src/filters/coloradjustfilter.cpp
-    src/filters/pixelrescalefilter.cpp
-    src/filters/retropalettefilter.cpp
-    src/filters/atlaspackingfilter.cpp
     src/commands/filtercommands.cpp
     src/localizationmanager.cpp
     src/zip/miniz.c
@@ -101,11 +78,11 @@ set(SpriteStudioCore_SRC
 
 set(SpriteStudioCore_UI
     src/mainwindow.ui
-    src/extractor/jsonExtractordialog.ui
     src/widgets/exportdialog.ui
 )
 
 set(SpriteStudioCore_INCLUDE
+    include/spritestudiocore_export.h
     include/mainwindow.h
     include/config/appconfig.h
     include/controller/projectcontroller.h
@@ -127,36 +104,13 @@ set(SpriteStudioCore_INCLUDE
     include/widgets/settingsdialog.h
     include/widgets/timelinefilmstripwidget.h
     include/widgets/exportdialog.h
-    include/widgets/atlaspackingdialog.h
     include/widgets/filterdialogbase.h
-    include/widgets/backgroundremovaldialog.h
-    include/widgets/despillfilterdialog.h
-    include/widgets/outlinefilterdialog.h
-    include/widgets/colorswapfilterdialog.h
-    include/widgets/coloradjustfilterdialog.h
-    include/widgets/pixelrescalefilterdialog.h
-    include/widgets/retropalettefilterdialog.h
     include/widgets/branchselectiondialog.h
     include/filters/filterplugin.h
     include/filters/filterregistry.h
-    include/filters/backgroundremovalfilter.h
-    include/filters/despillfilter.h
-    include/filters/outlinefilter.h
-    include/filters/colorswapfilter.h
-    include/filters/coloradjustfilter.h
-    include/filters/pixelrescalefilter.h
-    include/filters/retropalettefilter.h
-    include/filters/atlaspackingfilter.h
     include/localizationmanager.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h
-    include/extractor/spriteextractor.h
-    include/extractor/gifextractor.h
-    include/extractor/jsonextractor.h
-    include/extractor/godotextractor.h
-    include/extractor/unityextractor.h
-    include/extractor/unrealextractor.h
-    include/extractor/jsonExtractordialog.h
     include/extractor/export.h
     include/arrangementmodel.h
     include/aboutdialog.h
@@ -176,12 +130,15 @@ set(SpriteStudioCore_INCLUDE
     include/widgets/pixeleditordialog.h
 )
 
-# Bibliothèque statique commune pour l'application et la suite de tests
-add_library(SpriteStudioCore STATIC
+# Bibliothèque partagée commune pour le Core, l'application et les plugins
+add_library(SpriteStudioCore SHARED
     ${SpriteStudioCore_SRC}
     ${SpriteStudioCore_UI}
     ${SpriteStudioCore_INCLUDE}
 )
+add_library(SpriteStudio::SpriteStudioCore ALIAS SpriteStudioCore)
+
+target_compile_definitions(SpriteStudioCore PRIVATE SPRITESTUDIO_CORE_LIBRARY)
 
 qt_add_translations(SpriteStudioCore
     TS_FILES
@@ -221,10 +178,25 @@ qt6_add_resources(SpriteStudioCore "text"
 )
 
 target_include_directories(SpriteStudioCore PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/zip
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/zip>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/spritestudio>
+)
+
+install(TARGETS SpriteStudioCore
+    EXPORT SpriteStudioTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spritestudio
+)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/spritestudio
+    COMPONENT spritestudio-dev
+    FILES_MATCHING PATTERN "*.h"
 )
 
 target_link_libraries(SpriteStudioCore PUBLIC
@@ -235,16 +207,16 @@ target_link_libraries(SpriteStudioCore PUBLIC
 )
 
 if(LibGit2_FOUND)
-    target_link_libraries(SpriteStudioCore PUBLIC LibGit2::LibGit2)
+    target_link_libraries(SpriteStudioCore PRIVATE LibGit2::LibGit2)
 endif()
 
 if(TARGET basisu_encoder)
-    target_include_directories(SpriteStudioCore PUBLIC
-        ${basis_universal_SOURCE_DIR}
-        ${basis_universal_SOURCE_DIR}/encoder
-        ${basis_universal_SOURCE_DIR}/transcoder
+    target_include_directories(SpriteStudioCore PRIVATE
+        $<BUILD_INTERFACE:${basis_universal_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${basis_universal_SOURCE_DIR}/encoder>
+        $<BUILD_INTERFACE:${basis_universal_SOURCE_DIR}/transcoder>
     )
-    target_link_libraries(SpriteStudioCore PUBLIC basisu_encoder)
+    target_link_libraries(SpriteStudioCore PRIVATE basisu_encoder)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(SpriteStudioCore PRIVATE -fno-strict-aliasing)
     endif()

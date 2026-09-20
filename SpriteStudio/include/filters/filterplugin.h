@@ -4,6 +4,10 @@
 #include <QString>
 #include <QKeySequence>
 #include <QIcon>
+#include <QObject>
+#include <QImage>
+#include <QVariantMap>
+#include "spritestudiocore_export.h"
 
 class SpriteDocument;
 class QUndoStack;
@@ -13,7 +17,7 @@ class FilterDialogBase;
 /**
  * @brief Abstract interface for all image and sprite filter plugins in SpriteStudio.
  */
-class FilterPlugin
+class SPRITESTUDIO_CORE_EXPORT FilterPlugin
 {
 public:
     virtual ~FilterPlugin() = default;
@@ -58,6 +62,17 @@ public:
     virtual FilterDialogBase* createDialog(SpriteDocument *doc,
                                            QUndoStack *undoStack = nullptr,
                                            QWidget *parent = nullptr) = 0;
+
+    /**
+     * @brief Direct headless execution of the filter on an image (used by CLI and batch tools).
+     */
+    virtual QImage applyImage(const QImage &image, const QVariantMap &params = QVariantMap()) {
+        Q_UNUSED(params);
+        return image;
+    }
 };
+
+#define FilterPlugin_iid "com.spritestudio.FilterPlugin/1.0"
+Q_DECLARE_INTERFACE(FilterPlugin, FilterPlugin_iid)
 
 #endif // FILTERPLUGIN_H

@@ -4,11 +4,12 @@
 #include <QObject>
 #include <QString>
 #include <QColor>
+#include "spritestudiocore_export.h"
 
 /**
  * @brief Configuration settings for the atlas view, zooming, slicing, and nudging.
  */
-struct AtlasConfig
+struct SPRITESTUDIO_CORE_EXPORT AtlasConfig
 {
     double zoomMin = 0.1;
     double zoomMax = 10.0;
@@ -50,7 +51,7 @@ struct AnimationConfig
 /**
  * @brief Configuration settings for project management, recent files, and image filters.
  */
-struct ProjectConfig
+struct SPRITESTUDIO_CORE_EXPORT ProjectConfig
 {
     int maxRecentFiles = 10;
     int backgroundRemovalTolerance = 10;
@@ -61,7 +62,7 @@ struct ProjectConfig
 /**
  * @brief Configuration settings for Git version control and author identity.
  */
-struct GitConfig
+struct SPRITESTUDIO_CORE_EXPORT GitConfig
 {
     QString authorName;
     QString authorEmail;
@@ -72,7 +73,7 @@ struct GitConfig
 /**
  * @brief General application settings (language, locale).
  */
-struct GeneralConfig
+struct SPRITESTUDIO_CORE_EXPORT GeneralConfig
 {
     QString language = QStringLiteral("system"); // "system", "fr_FR", "en_US", "ja_JA"
 };
@@ -85,7 +86,7 @@ struct GeneralConfig
  * if the JSON file is missing, corrupt, or contains invalid keys, safe defaults
  * are automatically preserved without throwing exceptions or crashing.
  */
-class AppConfig : public QObject
+class SPRITESTUDIO_CORE_EXPORT AppConfig : public QObject
 {
     Q_OBJECT
 

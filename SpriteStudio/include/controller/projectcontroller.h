@@ -10,11 +10,13 @@
 #include "model/spritedocument.h"
 #include "project/sessionmanager.h"
 
+#include "spritestudiocore_export.h"
+
 class SpriteDocument;
 class QUndoStack;
 class QWidget;
 
-struct AsyncExtractionResult {
+struct SPRITESTUDIO_CORE_EXPORT AsyncExtractionResult {
     enum JobType { JobOpen, JobRemoveBackground };
     JobType type = JobOpen;
     QImage atlas;
@@ -28,7 +30,7 @@ struct AsyncExtractionResult {
 /**
  * @brief Controller managing project lifecycle, I/O operations, recent files, and image processing.
  */
-class ProjectController : public QObject
+class SPRITESTUDIO_CORE_EXPORT ProjectController : public QObject
 {
     Q_OBJECT
 

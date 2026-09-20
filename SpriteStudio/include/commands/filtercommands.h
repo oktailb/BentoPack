@@ -7,10 +7,12 @@
 #include <QMap>
 #include "model/spritedocument.h"
 
+#include "spritestudiocore_export.h"
+
 /**
  * @brief Generic, reversible QUndoCommand for applying image and sprite filters.
  */
-class ApplyFilterCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT ApplyFilterCommand : public QUndoCommand
 {
 public:
     ApplyFilterCommand(SpriteDocument *doc,

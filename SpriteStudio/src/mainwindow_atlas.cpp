@@ -1,8 +1,8 @@
 #include "include/mainwindow.h"
 #include "ui_mainwindow.h"
 #include "config/appconfig.h"
-#include "widgets/backgroundremovaldialog.h"
-#include "widgets/atlaspackingdialog.h"
+#include "filters/filterregistry.h"
+#include "widgets/filterdialogbase.h"
 #include <QMenu>
 #include <QAction>
 #include <QMessageBox>
@@ -57,8 +57,18 @@ void MainWindow::on_actionPackAtlas_triggered()
         return;
     }
 
-    AtlasPackingDialog dlg(m_document, m_undoStack, this);
-    dlg.exec();
+    FilterPlugin *plugin = FilterRegistry::instance().findFilter(QStringLiteral("atlas_packing"));
+    if (!plugin) {
+        QMessageBox::warning(this, tr("Atlas Bin-Packing"),
+                             tr("Atlas packing plugin not found."));
+        return;
+    }
+
+    FilterDialogBase *dlg = plugin->createDialog(m_document, m_undoStack, this);
+    if (dlg) {
+        dlg->exec();
+        dlg->deleteLater();
+    }
 }
 
 void MainWindow::onBoxContextMenuRequested(int index, const QPoint &screenPos)
@@ -229,7 +239,13 @@ void MainWindow::onAtlasContextMenuRequested(const QPoint &pos)
 void MainWindow::removeAtlasBackgroundAndRefresh()
 {
     if (m_document && !m_document->atlas().isNull()) {
-        BackgroundRemovalDialog dlg(m_document, m_undoStack, this);
-        dlg.exec();
+        FilterPlugin *plugin = FilterRegistry::instance().findFilter(QStringLiteral("background_removal"));
+        if (plugin) {
+            FilterDialogBase *dlg = plugin->createDialog(m_document, m_undoStack, this);
+            if (dlg) {
+                dlg->exec();
+                dlg->deleteLater();
+            }
+        }
     }
 }

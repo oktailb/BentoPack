@@ -3,6 +3,7 @@
 
 #include <QPolygonF>
 #include <QSize>
+#include "spritestudiocore_export.h"
 
 namespace SpriteStudioGeometry {
 
@@ -10,7 +11,7 @@ namespace SpriteStudioGeometry {
  * @brief Simplifies 2D boundary polygons using the Ramer-Douglas-Peucker (RDP) algorithm,
  *        with outward normal dilation to guarantee that no opaque pixel is cropped.
  */
-class PolygonSimplifier
+class SPRITESTUDIO_CORE_EXPORT PolygonSimplifier
 {
 public:
     /**

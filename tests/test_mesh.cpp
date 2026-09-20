@@ -14,11 +14,11 @@
 #include "atlasboxitem.h"
 #include "packer/tightpolygonpacker.h"
 #include "packer/atlaspacker.h"
-#include "extractor/jsonextractor.h"
-#include "extractor/unityextractor.h"
-#include "extractor/unrealextractor.h"
-#include "extractor/godotextractor.h"
-#include "widgets/atlaspackingdialog.h"
+#include "jsonextractor.h"
+#include "unityextractor.h"
+#include "unrealextractor.h"
+#include "godotextractor.h"
+#include "atlaspackingdialog.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>

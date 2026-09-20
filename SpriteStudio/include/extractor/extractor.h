@@ -18,7 +18,7 @@
 /**
  * @brief Structured error reporting for extractor operations.
  */
-struct ExtractorError {
+struct SPRITESTUDIO_CORE_EXPORT ExtractorError {
     enum Code {
         NoError = 0,
         FileNotFound,
@@ -48,7 +48,7 @@ struct ExtractorError {
 /**
  * @brief Parameters for static sprite sheet edge detection and segmentation.
  */
-struct SpriteSheetOptions {
+struct SPRITESTUDIO_CORE_EXPORT SpriteSheetOptions {
     enum CropStrategy {
         MergeStrategy,
         SeparateStrategy,
@@ -69,7 +69,7 @@ struct SpriteSheetOptions {
  * Each Extractor translates external file representations (PNG, GIF, JSON, Godot tres, etc.)
  * directly into or from a central SpriteDocument. It holds NO internal document state.
  */
-class Extractor : public QObject
+class SPRITESTUDIO_CORE_EXPORT Extractor : public QObject
 {
     Q_OBJECT
 

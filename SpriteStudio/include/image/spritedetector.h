@@ -7,10 +7,12 @@
 #include <functional>
 #include "model/spritedocument.h"
 
+#include "spritestudiocore_export.h"
+
 /**
  * @brief Configuration parameters for sprite detection and automatic bounding box slicing.
  */
-struct SpriteDetectionOptions
+struct SPRITESTUDIO_CORE_EXPORT SpriteDetectionOptions
 {
     int alphaThreshold = 1;
     int verticalTolerance = 0;
@@ -25,7 +27,7 @@ struct SpriteDetectionOptions
  * Uses direct scanline memory access, 1D flat indexing, and connected components flood-fill.
  * Separated from codecs to adhere to the Single Responsibility Principle.
  */
-class SpriteDetector
+class SPRITESTUDIO_CORE_EXPORT SpriteDetector
 {
 public:
     /**

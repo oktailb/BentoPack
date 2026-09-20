@@ -1,7 +1,6 @@
 #include "include/controller/projectcontroller.h"
 #include "include/model/spritedocument.h"
 #include "include/extractor/extractorregistry.h"
-#include "include/extractor/spriteextractor.h"
 #include "include/image/spritedetector.h"
 #include "include/config/appconfig.h"
 #include "include/project/sessionmanager.h"

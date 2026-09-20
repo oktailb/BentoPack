@@ -23,15 +23,15 @@
 #include "project/projectmanager.h"
 #include "project/sessionmanager.h"
 #include "filters/filterregistry.h"
-#include "widgets/backgroundremovaldialog.h"
-#include "widgets/despillfilterdialog.h"
-#include "widgets/outlinefilterdialog.h"
-#include "widgets/colorswapfilterdialog.h"
-#include "widgets/coloradjustfilterdialog.h"
-#include "widgets/pixelrescalefilterdialog.h"
-#include "widgets/retropalettefilterdialog.h"
-#include "widgets/atlaspackingdialog.h"
-#include "filters/atlaspackingfilter.h"
+#include "backgroundremovaldialog.h"
+#include "despillfilterdialog.h"
+#include "outlinefilterdialog.h"
+#include "colorswapfilterdialog.h"
+#include "coloradjustfilterdialog.h"
+#include "pixelrescalefilterdialog.h"
+#include "retropalettefilterdialog.h"
+#include "atlaspackingdialog.h"
+#include "atlaspackingfilter.h"
 #include "commands/filtercommands.h"
 
 class TestControllers : public QObject
@@ -1982,8 +1982,11 @@ void TestControllers::testFilterRegistry()
 {
     FilterRegistry &reg = FilterRegistry::instance();
     reg.initDefaultFilters();
+    reg.loadPlugins(QDir(QCoreApplication::applicationDirPath()).filePath(QStringLiteral("plugins")));
 
-    QVERIFY(reg.filters().size() >= 8);
+    // Multiple calls to init/load should never create duplicates
+    reg.initDefaultFilters();
+    QCOMPARE(reg.filters().size(), 9);
     QVERIFY(reg.findFilter(QStringLiteral("background_removal")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("despill")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("outline")) != nullptr);
@@ -1992,6 +1995,7 @@ void TestControllers::testFilterRegistry()
     QVERIFY(reg.findFilter(QStringLiteral("pixel_rescale")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("retro_palette")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("atlas_packing")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("tight_polygon_packing")) != nullptr);
 
     QStringList cats = reg.categories();
     QVERIFY(!cats.isEmpty());
@@ -2000,7 +2004,16 @@ void TestControllers::testFilterRegistry()
     SpriteDocument doc;
     QUndoStack undoStack;
     reg.populateMenu(&testMenu, &doc, &undoStack, nullptr);
-    QVERIFY(testMenu.actions().size() >= 8);
+    
+    // Count non-separator, non-section menu actions (the actual filter items)
+    int filterActionCount = 0;
+    for (QAction *act : testMenu.actions()) {
+        if (!act->isSeparator() && act->menuRole() != QAction::ApplicationSpecificRole) {
+            filterActionCount++;
+        }
+    }
+    // Exactly 9 filter actions without any duplicates
+    QCOMPARE(filterActionCount, 9);
 }
 
 void TestControllers::testDespillFilterAlgorithm()

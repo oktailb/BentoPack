@@ -3,11 +3,14 @@
 
 #include <QObject>
 #include <QList>
+#include <QSet>
 #include <QString>
 #include <QStringList>
 #include <memory>
 #include <vector>
 #include "filters/filterplugin.h"
+
+#include "spritestudiocore_export.h"
 
 class QMenu;
 class SpriteDocument;
@@ -17,7 +20,7 @@ class QWidget;
 /**
  * @brief Central registry managing built-in and dynamic filter plugins.
  */
-class FilterRegistry : public QObject
+class SPRITESTUDIO_CORE_EXPORT FilterRegistry : public QObject
 {
     Q_OBJECT
 
@@ -27,6 +30,7 @@ public:
 
     void registerFilter(std::unique_ptr<FilterPlugin> filter);
     void registerFilter(FilterPlugin *filter, bool takeOwnership = true);
+    void loadPlugins(const QString &dirPath);
 
     const QList<FilterPlugin*>& filters() const { return m_filters; }
     FilterPlugin* findFilter(const QString &id) const;
@@ -50,6 +54,8 @@ private:
 
     QList<FilterPlugin*>                        m_filters;
     std::vector<std::unique_ptr<FilterPlugin>>  m_ownedFilters;
+    QSet<QString>                               m_loadedLibraries;
+    QSet<QString>                               m_scannedDirs;
     bool                                        m_initialized = false;
 };
 

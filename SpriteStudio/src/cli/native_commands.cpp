@@ -3,13 +3,8 @@
 #include "image/spritedetector.h"
 #include "project/sessionmanager.h"
 #include "controller/projectcontroller.h"
-#include "widgets/backgroundremovaldialog.h"
-#include "widgets/despillfilterdialog.h"
-#include "widgets/outlinefilterdialog.h"
-#include "widgets/colorswapfilterdialog.h"
-#include "widgets/coloradjustfilterdialog.h"
-#include "widgets/pixelrescalefilterdialog.h"
-#include "widgets/retropalettefilterdialog.h"
+#include "filters/filterplugin.h"
+#include "filters/filterregistry.h"
 #include "extractor/extractorregistry.h"
 #include <QFileInfo>
 #include <QDir>
@@ -141,7 +136,7 @@ CliResult NativeCommands::executeFilter(const QStringList &args)
     bool isDespill = false;
     QRgb fringeColor = 0;
     int despillTol = 20;
-    DespillFilterDialog::DespillMode despillMode = DespillFilterDialog::ColorClamping;
+    QString despillModeStr = QStringLiteral("clamp");
 
     // Outline parameters
     bool isOutline = false;
@@ -178,7 +173,7 @@ CliResult NativeCommands::executeFilter(const QStringList &args)
             }
         } else if (arg == QStringLiteral("--despill-mode") && i + 1 < args.size()) {
             QString m = args[++i].toLower();
-            if (m == QStringLiteral("strict")) despillMode = DespillFilterDialog::StrictAlpha;
+            if (m == QStringLiteral("strict")) despillModeStr = QStringLiteral("strict");
         } else if (arg == QStringLiteral("--tolerance") && i + 1 < args.size()) {
             despillTol = args[++i].toInt();
             swapTol = despillTol;
@@ -217,6 +212,8 @@ CliResult NativeCommands::executeFilter(const QStringList &args)
             QString factorStr = args[++i];
             factorStr.remove(QLatin1Char('x'));
             rescaleFactor = factorStr.toInt();
+        } else if (arg == QStringLiteral("--filter") && i + 1 < args.size()) {
+            filterName = args[++i];
         } else if (!arg.startsWith(QStringLiteral("-"))) {
             inputPath = arg;
         }
@@ -224,6 +221,10 @@ CliResult NativeCommands::executeFilter(const QStringList &args)
 
     if (inputPath.isEmpty()) {
         return CliResult::error(ExitSyntaxError, QStringLiteral("No input file specified for filter command."));
+    }
+
+    if (filterName.isEmpty()) {
+        return CliResult::error(ExitSyntaxError, QStringLiteral("No filter operation specified. Use --outline, --despill, --color-swap, --color-adjust, or --pixel-rescale."));
     }
 
     QFileInfo fi(inputPath);
@@ -241,22 +242,38 @@ CliResult NativeCommands::executeFilter(const QStringList &args)
     }
     img = img.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 
+    FilterPlugin *plugin = FilterRegistry::instance().findFilter(filterName);
+    if (!plugin) {
+        return CliResult::error(ExitSyntaxError, QStringLiteral("Unknown or unavailable filter plugin: ") + filterName);
+    }
+
+    QVariantMap params;
+    if (isDespill) {
+        if (fringeColor == 0) fringeColor = ProjectController::detectDominantBackgroundColor(img);
+        params[QStringLiteral("fringeColor")] = static_cast<uint>(fringeColor);
+        params[QStringLiteral("tolerance")] = despillTol;
+        params[QStringLiteral("mode")] = despillModeStr;
+    } else if (isOutline) {
+        params[QStringLiteral("thickness")] = outlineThick;
+        params[QStringLiteral("color")] = static_cast<uint>(outlineColor);
+        params[QStringLiteral("silhouette")] = silhouette;
+    } else if (isColorSwap) {
+        params[QStringLiteral("srcColor")] = static_cast<uint>(srcColor);
+        params[QStringLiteral("dstColor")] = static_cast<uint>(dstColor);
+        params[QStringLiteral("tolerance")] = swapTol;
+        params[QStringLiteral("preserveShading")] = true;
+    } else if (isColorAdjust) {
+        params[QStringLiteral("hue")] = hueShift;
+        params[QStringLiteral("saturation")] = satMult;
+        params[QStringLiteral("contrast")] = conMult;
+    } else if (isPixelRescale) {
+        params[QStringLiteral("factor")] = rescaleFactor;
+    }
+
     QElapsedTimer timer;
     timer.start();
 
-    QImage resultImg = img;
-    if (isDespill) {
-        if (fringeColor == 0) fringeColor = ProjectController::detectDominantBackgroundColor(img);
-        resultImg = DespillFilterDialog::applyDespill(img, fringeColor, despillTol, despillMode);
-    } else if (isOutline) {
-        resultImg = OutlineFilterDialog::applyOutline(img, outlineThick, outlineColor, OutlineFilterDialog::EightConnected, silhouette);
-    } else if (isColorSwap) {
-        resultImg = ColorSwapFilterDialog::applyColorSwap(img, srcColor, dstColor, swapTol, true);
-    } else if (isColorAdjust) {
-        resultImg = ColorAdjustFilterDialog::applyColorAdjust(img, hueShift, satMult, conMult, 0);
-    } else if (isPixelRescale) {
-        resultImg = PixelRescaleFilterDialog::applyRescale(img, rescaleFactor, PixelRescaleFilterDialog::Scale2x);
-    }
+    QImage resultImg = plugin->applyImage(img, params);
 
     qint64 elapsedMs = timer.elapsed();
 

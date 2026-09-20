@@ -9,10 +9,12 @@
 
 #include <QPolygonF>
 
+#include "spritestudiocore_export.h"
+
 /**
  * @brief Represents the result of an atlas packing operation.
  */
-struct AtlasPackResult {
+struct SPRITESTUDIO_CORE_EXPORT AtlasPackResult {
     QImage          atlas;
     QList<QRect>    frameRects;         ///< 1:1 mapping corresponding to input frames
     QList<int>      duplicateMapping;   ///< Canonical index for each frame (for deduplication)
@@ -28,7 +30,7 @@ struct AtlasPackResult {
  * Supports MaxRects (BSSF, BAF, BLSF, BottomLeft, ContactPoint), uniform grids,
  * row/shelf packing, power-of-two constraints, border extrusion, and visual deduplication.
  */
-class AtlasPacker
+class SPRITESTUDIO_CORE_EXPORT AtlasPacker
 {
 public:
     enum Algorithm {

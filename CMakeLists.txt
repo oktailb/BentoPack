@@ -29,6 +29,10 @@ find_package(Qt6 REQUIRED COMPONENTS
     Test
 )
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
 if(NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif()
@@ -93,6 +97,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(SpriteStudio)
+add_subdirectory(plugins)
 
 enable_testing()
 add_subdirectory(tests)
@@ -103,6 +108,38 @@ install(TARGETS
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+include(CMakePackageConfigHelpers)
+
+# Generate SpriteStudioConfigVersion.cmake
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/SpriteStudioConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+# Generate SpriteStudioConfig.cmake
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SpriteStudioConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/SpriteStudioConfig.cmake"
+    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SpriteStudio"
+    PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
+)
+
+# Install CMake SDK export for spritestudio-dev
+install(EXPORT SpriteStudioTargets
+    FILE SpriteStudioTargets.cmake
+    NAMESPACE SpriteStudio::
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SpriteStudio"
+    COMPONENT spritestudio-dev
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/SpriteStudioConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/SpriteStudioConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SpriteStudio"
+    COMPONENT spritestudio-dev
 )
 
 if (WIN32)
@@ -198,5 +235,12 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 else()
     set(CPACK_GENERATOR "TGZ")
 endif()
+
+# CPack Component packaging for spritestudio & spritestudio-dev
+set(CPACK_COMPONENTS_ALL spritestudio spritestudio-dev)
+set(CPACK_COMPONENT_SPRITESTUDIO_DISPLAY_NAME "SpriteStudio Application and Plugins")
+set(CPACK_COMPONENT_SPRITESTUDIO-DEV_DISPLAY_NAME "SpriteStudio Development SDK (Headers & CMake)")
+set(CPACK_DEB_COMPONENT_INSTALL ON)
+set(CPACK_RPM_COMPONENT_INSTALL ON)
 
 include(CPack)

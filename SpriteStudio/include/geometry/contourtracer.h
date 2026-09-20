@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QPolygonF>
 #include <QList>
+#include "spritestudiocore_export.h"
 
 namespace SpriteStudioGeometry {
 
@@ -11,7 +12,7 @@ namespace SpriteStudioGeometry {
  * @brief Utility for extracting 2D boundary contours from sprite images
  *        based on the alpha channel.
  */
-class ContourTracer
+class SPRITESTUDIO_CORE_EXPORT ContourTracer
 {
 public:
     /**

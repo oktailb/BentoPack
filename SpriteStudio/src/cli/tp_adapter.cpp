@@ -2,7 +2,6 @@
 #include "cli/godot_pipeline.h"
 #include "controller/projectcontroller.h"
 #include "extractor/extractorregistry.h"
-#include "extractor/gifextractor.h"
 #include "packer/vramtexturecompressor.h"
 #include "project/sessionmanager.h"
 #include <QDir>

@@ -189,8 +189,8 @@
 <context>
     <name>AtlasPackingDialog</name>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="21"/>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="545"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="21"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="545"/>
         <location filename="../../tests/test_controllers.cpp" line="1562"/>
         <location filename="../../tests/test_controllers.cpp" line="1619"/>
         <location filename="../../tests/test_controllers.cpp" line="1676"/>
@@ -198,203 +198,203 @@
         <translation>アトラスビンパッキング (MaxRects)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="89"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="89"/>
         <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
         <translation>準備完了 — 設定を調整して「パッキング計算」をクリックしてください</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="106"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="106"/>
         <source>Packing Algorithm</source>
         <translation>パッキングアルゴリズム</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="110"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="110"/>
         <source>MaxRects — Best Short Side Fit (Default, Recommended)</source>
         <translation>MaxRects — Best Short Side Fit (デフォルト、推奨)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="111"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="111"/>
         <source>MaxRects — Best Area Fit (Maximum Compaction)</source>
         <translation>MaxRects — Best Area Fit (最大圧縮)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="112"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="112"/>
         <source>MaxRects — Best Long Side Fit</source>
         <translation>MaxRects — Best Long Side Fit</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="113"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="113"/>
         <source>MaxRects — Bottom Left Rule</source>
         <translation>MaxRects — ボトムレフト則</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="114"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="114"/>
         <source>MaxRects — Contact Point Rule</source>
         <translation>MaxRects — コンタクトポイント則</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="115"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="115"/>
         <source>Tight Polygon Packing (Nesting — Overlapping Rects)</source>
         <translation>タイトポリゴンパッキング（ネスト — 矩形のオーバーラップ）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="116"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="116"/>
         <source>Power of Two Shelf Packer (2^n Dimensions)</source>
         <translation>2の累乗シェルフパッカー (2^n 寸法)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="117"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="117"/>
         <source>Basic Row / Shelf Packer</source>
         <translation>基本行 / シェルフパッカー</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="118"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="118"/>
         <source>Uniform Grid Packer</source>
         <translation>均等グリッドパッカー</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="123"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="123"/>
         <source>Spacing &amp; Texture Bleeding Protection</source>
         <translation>間隔とテクスチャブリード防止</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="130"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="130"/>
         <source>Inner margin between adjacent sprites</source>
         <translation>隣接スプライト間の内部余白</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="131"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="131"/>
         <source>Inner Padding:</source>
         <translation>内部余白 (パディング)：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="137"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="137"/>
         <source>Outer margin around the edges of the atlas</source>
         <translation>アトラス外枠の余白</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="138"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="138"/>
         <source>Border Padding:</source>
         <translation>外枠パディング：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="144"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="144"/>
         <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
         <translation>ゲームエンジンでのバイリニア補間アーティファクトを防ぐため、境界ピクセルを外側に複製 (1-2px) します</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="145"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="145"/>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>押し出し (ブリード防止)：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="150"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="150"/>
         <source>GPU Constraints &amp; Optimizations</source>
         <translation>GPU制約と最適化</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="153"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="153"/>
         <source>Force Power of Two Dimensions (2^n: 512, 1024, 2048...)</source>
         <translation>2の累乗寸法に強制 (2^n: 512, 1024, 2048...)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="154"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="154"/>
         <source>Force Square Atlas (Width == Height)</source>
         <translation>正方形アトラスに強制 (幅 == 高さ)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="155"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="155"/>
         <source>Auto-Aliasing (Merge identical frames without breaking animations)</source>
         <translation>オートエイリアシング (アニメーションを壊さずに同一フレームを統合)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="156"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="156"/>
         <source>Trim Transparent Borders before packing</source>
         <translation>パッキング前に透明な境界線をトリミング</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="157"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="157"/>
         <source>Crops transparent margins around frames while preserving animation pivots. Highly recommended for animation spritesheets to eliminate empty spaces and maximize packing density.</source>
         <translation>アニメーションのピボットを保持しながらフレーム周囲の透明余白をトリミングします。空きスペースを排除しパッキング密度を最大化するため、アニメーションスプライトシートに強く推奨されます。</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="166"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="166"/>
         <source>Performance &amp; Multithreading</source>
         <translation>パフォーマンスとマルチスレッド</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="174"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="174"/>
         <source>Number of CPU threads to use for parallel processing (1 to %1 cores)</source>
         <translation>並列処理に使用するCPUスレッド数（1〜%1 コア）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="175"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="175"/>
         <source>Worker Threads:</source>
         <translation>ワーカースレッド：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="179"/>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="231"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="179"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="231"/>
         <source>Compute Packing</source>
         <translation>パッキング計算</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="231"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="231"/>
         <source>Computing...</source>
         <translation>計算中...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="243"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="243"/>
         <source>Computing packing...</source>
         <translation>パッキング計算中...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="192"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="192"/>
         <source>Live Packing Metrics</source>
         <translation>リアルタイムパッキング指標</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="197"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="197"/>
         <source>Atlas Dimensions:</source>
         <translation>アトラス寸法：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="201"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="201"/>
         <source>Packing Efficiency:</source>
         <translation>充填効率：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="204"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="204"/>
         <source>Frames Count:</source>
         <translation>フレーム数：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="336"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="336"/>
         <source>Packing Failed (Exceeded max dimensions)</source>
         <translation>パッキング失敗 (最大寸法を超過)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="339"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="339"/>
         <source>Error: Cannot fit sprites in atlas</source>
         <translation>エラー：スプライトをアトラスに収めることができません</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="343"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="343"/>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="351"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="351"/>
         <source>%1 unique / %2 total (%3 frame(s) saved)</source>
         <translation>%1 固有 / 合計 %2 (%3 フレーム節約)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="353"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="353"/>
         <source>%1 frame(s)</source>
         <translation>%1 フレーム</translation>
     </message>
     <message>
-        <location filename="../src/widgets/atlaspackingdialog.cpp" line="356"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="356"/>
         <source>Packed in %1x%2 (%3%)</source>
         <translation>%1x%2 にパッキング (%3%)</translation>
     </message>
@@ -406,7 +406,7 @@
 <context>
     <name>AtlasPackingFilter</name>
     <message>
-        <location filename="../src/filters/atlaspackingfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="7"/>
         <location filename="../../tests/test_controllers.cpp" line="1561"/>
         <location filename="../../tests/test_controllers.cpp" line="1618"/>
         <location filename="../../tests/test_controllers.cpp" line="1675"/>
@@ -414,7 +414,7 @@
         <translation>アトラスビンパッキング (MaxRects)...</translation>
     </message>
     <message>
-        <location filename="../src/filters/atlaspackingfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="12"/>
         <source>Repacks sprites into a compact atlas using MaxRects, Power of Two, and animation-safe deduplication.</source>
         <translation>MaxRects、2の累乗、アニメーション安全な重複排除を使用してスプライトをコンパクトなアトラスに再配置します。</translation>
     </message>
@@ -440,7 +440,7 @@
 <context>
     <name>BackgroundRemovalDialog</name>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="21"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="21"/>
         <location filename="../../tests/test_controllers.cpp" line="1554"/>
         <location filename="../../tests/test_controllers.cpp" line="1611"/>
         <location filename="../../tests/test_controllers.cpp" line="1668"/>
@@ -448,52 +448,52 @@
         <translation>背景の削除</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="68"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="68"/>
         <source>Detected Background Color</source>
         <translation>検出された背景色</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="92"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="92"/>
         <source>Removal Parameters</source>
         <translation>切り抜き設定</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="97"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="97"/>
         <source>Color tolerance:</source>
         <translation>色の許容値：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="115"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="115"/>
         <source>Alpha threshold:</source>
         <translation>アルファしきい値：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="133"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="133"/>
         <source>Vertical tolerance:</source>
         <translation>垂直方向の許容値：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="152"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="152"/>
         <source>Smart Crop</source>
         <translation>スマートクロップ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="154"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="154"/>
         <source>Automatically shrink-wrap bounding boxes around opaque sprite pixels</source>
         <translation>不透明なスプライトピクセルの周囲に自動的に境界ボックスを合わせます</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="156"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="156"/>
         <source>Overlap threshold:</source>
         <translation>重複しきい値：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="242"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="242"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 フレーム検出</translation>
     </message>
     <message>
-        <location filename="../src/widgets/backgroundremovaldialog.cpp" line="244"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="244"/>
         <source>%1 initial frame(s)</source>
         <translation>%1 元のフレーム</translation>
     </message>
@@ -501,12 +501,12 @@
 <context>
     <name>BackgroundRemovalFilter</name>
     <message>
-        <location filename="../src/filters/backgroundremovalfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="7"/>
         <source>Background Removal...</source>
         <translation>背景の削除...</translation>
     </message>
     <message>
-        <location filename="../src/filters/backgroundremovalfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="12"/>
         <source>Detects dominant background color and makes pixels transparent with automatic bounding box recalculation.</source>
         <translation>主要な背景色を検出して透明化し、境界ボックスを自動再計算します。</translation>
     </message>
@@ -549,7 +549,7 @@ Choose which branch to restore:</source>
 <context>
     <name>ColorAdjustFilter</name>
     <message>
-        <location filename="../src/filters/coloradjustfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="7"/>
         <location filename="../../tests/test_controllers.cpp" line="1557"/>
         <location filename="../../tests/test_controllers.cpp" line="1614"/>
         <location filename="../../tests/test_controllers.cpp" line="1671"/>
@@ -557,7 +557,7 @@ Choose which branch to restore:</source>
         <translation>カラー調整 (HSV・コントラスト)...</translation>
     </message>
     <message>
-        <location filename="../src/filters/coloradjustfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="12"/>
         <source>Adjusts hue rotation, saturation, brightness, and contrast globally or on selected frames.</source>
         <translation>色相の回転、彩度、明度、コントラストを全体または選択したフレームに対して調整します。</translation>
     </message>
@@ -565,63 +565,63 @@ Choose which branch to restore:</source>
 <context>
     <name>ColorAdjustFilterDialog</name>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="18"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="18"/>
         <source>Color Adjustment (HSV &amp; Contrast)</source>
         <translation>カラー調整 (HSV・コントラスト)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="27"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="27"/>
         <source>Adjustment Parameters</source>
         <translation>調整パラメーター</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="33"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="33"/>
         <source>Hue Shift:</source>
         <translation>色相シフト：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="48"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="48"/>
         <source>Saturation:</source>
         <translation>彩度：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="63"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="63"/>
         <source>Brightness:</source>
         <translation>明度：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="78"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="78"/>
         <source>Contrast:</source>
         <translation>コントラスト：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="95"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="95"/>
         <source>Target Scope</source>
         <translation>適用範囲</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="98"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="98"/>
         <source>Apply to selected frames only</source>
         <translation>選択したフレームにのみ適用</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="103"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="103"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>フレームが選択されていません：アトラス全体に適用されます</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="291"/>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="294"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="291"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="294"/>
         <source>Adjusted (H:%1° S:%2% V:%3% C:%4%)</source>
         <translation>調整完了 (H:%1° S:%2% V:%3% C:%4%)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="292"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="292"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 フレーム検出</translation>
     </message>
     <message>
-        <location filename="../src/widgets/coloradjustfilterdialog.cpp" line="304"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilterdialog.cpp" line="304"/>
         <source>Filter: Color Adjustment</source>
         <translation>フィルター：カラー調整</translation>
     </message>
@@ -629,12 +629,12 @@ Choose which branch to restore:</source>
 <context>
     <name>ColorSwapFilter</name>
     <message>
-        <location filename="../src/filters/colorswapfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="7"/>
         <source>Color Swap (Alt-Skins)...</source>
         <translation>カラー置換（Altスキン）...</translation>
     </message>
     <message>
-        <location filename="../src/filters/colorswapfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="12"/>
         <source>Generates character/monster variants (Player 2, elemental skins) by swapping colors while preserving shading.</source>
         <translation>陰影を保持したまま配色を置換し、キャラクターやモンスターのカラーバリエーション（2Pカラー、属性バリエーション等）を生成します。</translation>
     </message>
@@ -642,74 +642,74 @@ Choose which branch to restore:</source>
 <context>
     <name>ColorSwapFilterDialog</name>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="19"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="19"/>
         <source>Color Swap &amp; Alt-Skins</source>
         <translation>カラー置換・パレットバリエーション</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="31"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="31"/>
         <source>Source color to replace:</source>
         <translation>置換元の色：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="36"/>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="45"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="36"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="45"/>
         <source>Pick...</source>
         <translation>選択...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="40"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="40"/>
         <source>Target new color:</source>
         <translation>置換先の新しい色：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="52"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="52"/>
         <source>Hue / Color tolerance (0 - 100):</source>
         <translation>色相・色の許容値 (0 - 100)：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="68"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="68"/>
         <source>Preserve shading (Original shadows, gradients and highlights)</source>
         <translation>シェーディングを保持（元の影・グラデーション・ハイライト）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="70"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="70"/>
         <source>Swaps the hue while adapting relative lightness to keep pixel art depth and shading.</source>
         <translation>ピクセルアートの立体感と陰影を維持しながら色相を置換します。</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="74"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="74"/>
         <source>Apply to selected frames only</source>
         <translation>選択したフレームにのみ適用</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="79"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="79"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>フレームが選択されていません：アトラス全体に適用されます</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="108"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="108"/>
         <source>Select source color to replace</source>
         <translation>置換元の色を選択</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="118"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="118"/>
         <source>Select new target color</source>
         <translation>置換先の新しい色を選択</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="269"/>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="271"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="269"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="271"/>
         <source>%1 pixel(s) modified</source>
         <translation>%1 個のピクセルを変更しました</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="269"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="269"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 フレーム検出</translation>
     </message>
     <message>
-        <location filename="../src/widgets/colorswapfilterdialog.cpp" line="281"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilterdialog.cpp" line="281"/>
         <source>Filter: Color Swap</source>
         <translation>フィルター：カラー置換</translation>
     </message>
@@ -717,12 +717,12 @@ Choose which branch to restore:</source>
 <context>
     <name>DespillFilter</name>
     <message>
-        <location filename="../src/filters/despillfilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="7"/>
         <source>Despill &amp; Edge Cleanup...</source>
         <translation>エッジクリーンアップ・アンチハロー...</translation>
     </message>
     <message>
-        <location filename="../src/filters/despillfilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="12"/>
         <source>Eliminates 1px colored fringe (green, white, magenta) along sprite borders after background extraction.</source>
         <translation>背景切り抜き後にスプライトの輪郭に残る1pxのカラーフリンジ（緑、白、マゼンタ等）を除去します。</translation>
     </message>
@@ -730,80 +730,80 @@ Choose which branch to restore:</source>
 <context>
     <name>DespillFilterDialog</name>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="21"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="21"/>
         <source>Despill &amp; Edge Cleanup</source>
         <translation>エッジクリーンアップ・アンチハロー</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="40"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="40"/>
         <source>Fringe color (Halo):</source>
         <translation>フリンジカラー（ハロー）：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="49"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="49"/>
         <source>Pick...</source>
         <translation>選択...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="50"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="50"/>
         <source>Select the peripheral fringe color to eliminate</source>
         <translation>除去する周辺のハロー色を選択します</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="57"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="57"/>
         <source>Action mode:</source>
         <translation>処理モード：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="61"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="61"/>
         <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
         <translation>ソフトカラークランプ（推奨 - 輪郭を保持）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="62"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="62"/>
         <source>Strict removal (Alpha = 0)</source>
         <translation>厳密な削除（アルファ = 0）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="63"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="63"/>
         <source>Soft clamping replaces fringe hue with interior neighbor color.
 Strict removal clears the pixel.</source>
         <translation>ソフトクランプはフリンジ色を隣接する内部色で置換します。
 厳密な削除はピクセルを透明化します。</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="68"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="68"/>
         <source>Detection tolerance (0 - 100):</source>
         <translation>検出許容値 (0 - 100)：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="84"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="84"/>
         <source>Apply to selected frames only</source>
         <translation>選択したフレームにのみ適用</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="89"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="89"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>フレームが選択されていません：アトラス全体に適用されます</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="113"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="113"/>
         <source>Select Fringe Color</source>
         <translation>フリンジ色の選択</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="284"/>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="286"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="284"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="286"/>
         <source>%1 fringe pixel(s) processed</source>
         <translation>%1 個のフリンジピクセルを処理しました</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="284"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="284"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 フレーム検出</translation>
     </message>
     <message>
-        <location filename="../src/widgets/despillfilterdialog.cpp" line="296"/>
+        <location filename="../../plugins/filters/despill/despillfilterdialog.cpp" line="296"/>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>フィルター：エッジクリーンアップ・アンチハロー</translation>
     </message>
@@ -1044,10 +1044,10 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="389"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="239"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="247"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="284"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="322"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="257"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="265"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="302"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="340"/>
         <source>GPU VRAM: --</source>
         <translation>GPU VRAM: --</translation>
     </message>
@@ -1057,14 +1057,14 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="363"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="236"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="254"/>
         <source>Dimensions: --</source>
         <translation>寸法：--</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="375"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="237"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="282"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="255"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="300"/>
         <source>Packing Efficiency: --</source>
         <translation>充填効率：--</translation>
     </message>
@@ -1075,58 +1075,64 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="21"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="331"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="361"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="349"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="379"/>
         <source>Export</source>
         <translation>エクスポート</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="175"/>
         <source>Godot 4 Resource (*.tres);;All Files (*.*)</source>
-        <translation>Godot 4 リソース (*.tres);;すべてのファイル (*.*)</translation>
+        <translation type="vanished">Godot 4 リソース (*.tres);;すべてのファイル (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="177"/>
         <source>Unity 2D Sprite Mesh (*.unity.json);;JSON (*.json);;All Files (*.*)</source>
-        <translation>Unity 2D スプライトメッシュ (*.unity.json);;JSON (*.json);;すべてのファイル (*.*)</translation>
+        <translation type="vanished">Unity 2D スプライトメッシュ (*.unity.json);;JSON (*.json);;すべてのファイル (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="179"/>
         <source>Unreal Paper2D (*.paper2d.json);;JSON (*.json);;All Files (*.*)</source>
-        <translation>Unreal Paper2D (*.paper2d.json);;JSON (*.json);;すべてのファイル (*.*)</translation>
+        <translation type="vanished">Unreal Paper2D (*.paper2d.json);;JSON (*.json);;すべてのファイル (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="181"/>
         <source>JSON SpriteSheet (*.json);;All Files (*.*)</source>
-        <translation>JSON スプライトシート (*.json);;すべてのファイル (*.*)</translation>
+        <translation type="vanished">JSON スプライトシート (*.json);;すべてのファイル (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="189"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="198"/>
+        <source>All Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.cpp" line="200"/>
+        <source>All Files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/exportdialog.cpp" line="208"/>
         <source>Select Export Destination</source>
         <translation>エクスポート先の選択</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="238"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="256"/>
         <source>Frames: 0</source>
         <translation>フレーム：0</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="255"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="273"/>
         <source>GPU VRAM: %1 MB (Standard RGBA8888, uncompressed on GPU)</source>
         <translation>GPU VRAM: %1 MB (標準 RGBA8888、GPU 上で非圧縮)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="263"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="281"/>
         <source>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</source>
         <translation>GPU VRAM: %1 MB (%2) — 削減率: -%3% (対 RGBA)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="274"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="292"/>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>寸法：%1 x %2 px (現在のアトラス)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="277"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="295"/>
         <location filename="../../tests/test_controllers.cpp" line="1567"/>
         <location filename="../../tests/test_controllers.cpp" line="1624"/>
         <location filename="../../tests/test_controllers.cpp" line="1681"/>
@@ -1134,59 +1140,59 @@ Strict removal clears the pixel.</source>
         <translation>充填効率：そのまま維持 (WYSIWYG)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="278"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="283"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="296"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="301"/>
         <source>Frames: %1 total</source>
         <translation>フレーム：合計 %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="281"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="299"/>
         <source>Dimensions: No current atlas</source>
         <translation>寸法：現在のアトラスがありません</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="300"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="318"/>
         <source>Dimensions: %1 x %2 px</source>
         <translation>寸法：%1 x %2 px</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="304"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="322"/>
         <source>Packing Efficiency: %1%</source>
         <translation>充填効率：%1%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="309"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="327"/>
         <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
         <translation>フレーム：合計 %1 (固有 %2、節約重複 %3)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="314"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="332"/>
         <source>Frames: %1 total (all unique)</source>
         <translation>フレーム：合計 %1 (すべて固有)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="319"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="337"/>
         <source>Dimensions: Does not fit in maximum bounds!</source>
         <translation>寸法：最大境界に収まりません！</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="320"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="338"/>
         <source>Packing Efficiency: 0%</source>
         <translation>充填効率：0%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="321"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="339"/>
         <source>Frames: %1</source>
         <translation>フレーム：%1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="361"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="379"/>
         <source>Please specify a valid file name before exporting.</source>
         <translation>エクスポートする前に有効なファイル名を指定してください。</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="24"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="334"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="352"/>
         <location filename="../../tests/test_controllers.cpp" line="1568"/>
         <location filename="../../tests/test_controllers.cpp" line="1625"/>
         <location filename="../../tests/test_controllers.cpp" line="1682"/>
@@ -1268,26 +1274,27 @@ Strict removal clears the pixel.</source>
 <context>
     <name>FilterRegistry</name>
     <message>
-        <location filename="../src/filters/backgroundremovalfilter.cpp" line="18"/>
-        <location filename="../src/filters/despillfilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/despill/despillfilter.cpp" line="18"/>
         <source>Cleanup &amp; Extraction</source>
         <translation>クリーンアップと抽出</translation>
     </message>
     <message>
-        <location filename="../src/filters/outlinefilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="18"/>
         <source>Effects &amp; Outlines</source>
         <translation>エフェクトと輪郭</translation>
     </message>
     <message>
-        <location filename="../src/filters/colorswapfilter.cpp" line="18"/>
-        <location filename="../src/filters/coloradjustfilter.cpp" line="18"/>
-        <location filename="../src/filters/retropalettefilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/colorswap/colorswapfilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="18"/>
         <source>Colors &amp; Palettes</source>
         <translation>カラーとパレット</translation>
     </message>
     <message>
-        <location filename="../src/filters/pixelrescalefilter.cpp" line="18"/>
-        <location filename="../src/filters/atlaspackingfilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="18"/>
+        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="18"/>
         <location filename="../../tests/test_controllers.cpp" line="1560"/>
         <location filename="../../tests/test_controllers.cpp" line="1617"/>
         <location filename="../../tests/test_controllers.cpp" line="1674"/>
@@ -1298,37 +1305,37 @@ Strict removal clears the pixel.</source>
 <context>
     <name>GifExtractor</name>
     <message>
-        <location filename="../src/extractor/gifextractor.cpp" line="21"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="21"/>
         <source>Reading GIF frames from %1...</source>
         <translation>%1 からGIFフレームを読み込んでいます...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/gifextractor.cpp" line="28"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="28"/>
         <source>File not found: %1</source>
         <translation>ファイルが見つかりません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/gifextractor.cpp" line="38"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="38"/>
         <source>Unable to read GIF format: %1</source>
         <translation>GIFフォーマットを読み込めません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/gifextractor.cpp" line="68"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="68"/>
         <source>No valid frames could be decoded from GIF: %1</source>
         <translation>GIFから有効なフレームをデコードできませんでした: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/gifextractor.cpp" line="74"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="74"/>
         <source>Assembling GIF atlas...</source>
         <translation>GIFアトラスを構築中...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/gifextractor.cpp" line="82"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="82"/>
         <source>Failed to pack GIF frames into texture atlas.</source>
         <translation>GIFフレームのアトラスパッキングに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/gifextractor.cpp" line="115"/>
+        <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="115"/>
         <source>Extracted %1 GIF frames</source>
         <translation>%1 個のGIFフレームを抽出しました</translation>
     </message>
@@ -1448,72 +1455,72 @@ Strict removal clears the pixel.</source>
 <context>
     <name>GodotExtractor</name>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="34"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="34"/>
         <source>Reading Godot SpriteFrames resource...</source>
         <translation>Godot SpriteFrames リソースを読み込んでいます...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="41"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="41"/>
         <source>Cannot open Godot resource file: %1</source>
         <translation>Godotリソースファイルを開けません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="53"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="53"/>
         <source>File is not a valid Godot SpriteFrames resource: %1</source>
         <translation>有効な Godot SpriteFrames リソースではありません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="102"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="102"/>
         <source>Referenced texture atlas image not found for: %1</source>
         <translation>参照されているテクスチャアトラス画像が見つかりません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="115"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="115"/>
         <source>Failed to load texture atlas image: %1</source>
         <translation>テクスチャアトラス画像の読み込みに失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="354"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="354"/>
         <source>Extracted %1 frames and %2 animations from Godot resource.</source>
         <translation>Godotリソースから %1 フレームと %2 アニメーションを抽出しました。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="366"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="366"/>
         <source>No frames in document to export.</source>
         <translation>エクスポートするフレームがありません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="372"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="372"/>
         <source>Packing atlas for Godot...</source>
         <translation>Godot用アトラスをパッキング中...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="381"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="381"/>
         <source>Export file name cannot be empty.</source>
         <translation>エクスポートファイル名を空にすることはできません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="423"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="423"/>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Godotエクスポート用フレームパッキングに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="441"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="441"/>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
         <translation>Godot VRAMアトラステクスチャの書き込みに失敗しました：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="449"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="449"/>
         <source>Failed to write Godot atlas image: %1</source>
         <translation>Godotアトラス画像の書き込みに失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="461"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="461"/>
         <source>Cannot write to Godot resource file: %1</source>
         <translation>Godotリソースファイルに書き込めません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/godotextractor.cpp" line="602"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="602"/>
         <source>Exported Godot resource: %1 and image %2</source>
         <translation>Godotリソース %1 および画像 %2 をエクスポートしました</translation>
     </message>
@@ -1521,67 +1528,67 @@ Strict removal clears the pixel.</source>
 <context>
     <name>JsonExtractor</name>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="101"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="100"/>
         <source>Reading JSON sprite atlas %1...</source>
         <translation>JSONスプライトアトラス %1 を読み込んでいます...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="143"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="142"/>
         <source>Associated atlas image not found: %1</source>
         <translation>関連付けられたアトラス画像が見つかりません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="154"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="153"/>
         <source>Failed to decode atlas image: %1</source>
         <translation>アトラス画像のデコードに失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="206"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="205"/>
         <source>No frames could be extracted from JSON: %1</source>
         <translation>JSONからフレームを抽出できませんでした: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="243"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="242"/>
         <source>Imported %1 frames, %2 animations from JSON</source>
         <translation>JSONから %1 フレーム、%2 アニメーションをインポートしました</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="491"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="490"/>
         <source>No frames in document to export.</source>
         <translation>エクスポートするフレームがありません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="503"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="502"/>
         <source>Export file name cannot be empty.</source>
         <translation>エクスポートファイル名を空にすることはできません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="517"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="516"/>
         <source>Packing atlas for JSON export...</source>
         <translation>JSONエクスポート用アトラスをパッキング中...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="547"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="546"/>
         <source>Failed to pack frames for JSON export.</source>
         <translation>JSONエクスポート用フレームパッキングに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="565"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="564"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>関連するVRAMテクスチャの保存に失敗しました：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="573"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="572"/>
         <source>Failed to save companion image: %1</source>
         <translation>関連画像の保存に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="699"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="698"/>
         <source>Cannot write to JSON file: %1</source>
         <translation>JSONファイルに書き込めません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="710"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="709"/>
         <source>Exported JSON descriptor %1 and image %2</source>
         <translation>JSONディスクリプタ %1 および画像 %2 をエクスポートしました</translation>
     </message>
@@ -1840,8 +1847,8 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="206"/>
         <location filename="../src/mainwindow_animation.cpp" line="94"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="76"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="167"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="86"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="177"/>
         <location filename="../../tests/test_controllers.cpp" line="1546"/>
         <location filename="../../tests/test_controllers.cpp" line="1603"/>
         <location filename="../../tests/test_controllers.cpp" line="1660"/>
@@ -1859,40 +1866,40 @@ Strict removal clears the pixel.</source>
         <translation>アニメーションを削除</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="86"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="175"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="96"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="185"/>
         <source>KEY_CTX_TRIM_SLICE</source>
         <translation>余白トリミング</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="101"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="193"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="111"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="203"/>
         <source>KEY_CTX_MERGE_SLICES</source>
         <translation>スライスの結合</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="216"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="109"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="201"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="119"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="211"/>
         <source>KEY_CTX_DELETE_FRAMES</source>
         <translation>選択したフレームを削除</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="220"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="114"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="207"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="124"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="217"/>
         <source>KEY_CTX_ERASE_PIXELS</source>
         <translation>ピクセル消去とフレーム削除 (Shift+Del)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="121"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="219"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="131"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="229"/>
         <source>KEY_CTX_REMOVE_BG</source>
         <translation>背景を自動で削除</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="230"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="213"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="223"/>
         <source>KEY_CTX_INVERT_SEL</source>
         <translation>選択を反転</translation>
     </message>
@@ -2208,7 +2215,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="666"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="82"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="81"/>
         <location filename="../../tests/test_controllers.cpp" line="1551"/>
         <location filename="../../tests/test_controllers.cpp" line="1608"/>
         <location filename="../../tests/test_controllers.cpp" line="1665"/>
@@ -2288,7 +2295,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="438"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="136"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="146"/>
         <source>KEY_PIVOT_TOPLEFT</source>
         <translation>左上</translation>
     </message>
@@ -2309,7 +2316,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="458"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="132"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="142"/>
         <source>KEY_PIVOT_CENTER</source>
         <translation>中央</translation>
     </message>
@@ -2325,7 +2332,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="473"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="128"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="138"/>
         <source>KEY_PIVOT_BOTTOMCENTER</source>
         <translation>中央下</translation>
     </message>
@@ -2361,6 +2368,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow_atlas.cpp" line="55"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="62"/>
         <source>Atlas Bin-Packing</source>
         <translation>アトラスビンパッキング</translation>
     </message>
@@ -2370,22 +2378,27 @@ Strict removal clears the pixel.</source>
         <translation>最初にフレームを含むスプライトシートを開くかインポートしてください。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="127"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="63"/>
+        <source>Atlas packing plugin not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_atlas.cpp" line="137"/>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
         <translation>原点・ピボット</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="128"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="138"/>
         <source>KEY_PIVOT_GROUND_HINT</source>
         <translation>地面</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="136"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="146"/>
         <source>KEY_PIVOT_UI_HINT</source>
         <translation>UI</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="142"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="152"/>
         <source>KEY_CTX_MORE_PRESETS</source>
         <translation>その他のプリセット...</translation>
     </message>
@@ -2437,8 +2450,8 @@ Strict removal clears the pixel.</source>
         <translation>ポリゴンメッシュを表示（ワイヤーフレーム）</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="96"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="187"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="106"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="197"/>
         <source>KEY_CTX_POLYGON_MESH</source>
         <translation>2Dポリゴンメッシュ（タイトパッキング）...</translation>
     </message>
@@ -2449,8 +2462,8 @@ Strict removal clears the pixel.</source>
         <translation>ピクセルエディタ（スプライト）...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="91"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="181"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="101"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="191"/>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>ピクセルを編集...</translation>
     </message>
@@ -2458,12 +2471,12 @@ Strict removal clears the pixel.</source>
 <context>
     <name>OutlineFilter</name>
     <message>
-        <location filename="../src/filters/outlinefilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="7"/>
         <source>Outline &amp; Silhouette Generator...</source>
         <translation>輪郭・シルエットジェネレーター...</translation>
     </message>
     <message>
-        <location filename="../src/filters/outlinefilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="12"/>
         <source>Adds a distinct outline (1-4 px) around sprites (sticker effect, visibility) or creates solid silhouettes (hit-flash).</source>
         <translation>スプライトの周囲に輪郭線（1〜4px）を追加したり、被弾フラッシュ用の塗りつぶしシルエットを生成します。</translation>
     </message>
@@ -2471,88 +2484,88 @@ Strict removal clears the pixel.</source>
 <context>
     <name>OutlineFilterDialog</name>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="19"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="19"/>
         <source>Outline &amp; Silhouette Generator</source>
         <translation>輪郭・シルエットジェネレーター</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="31"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="31"/>
         <source>Outline color:</source>
         <translation>輪郭の色：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="40"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="40"/>
         <source>Pick...</source>
         <translation>選択...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="44"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="44"/>
         <source>Black</source>
         <translation>黒</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="45"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="45"/>
         <source>White</source>
         <translation>白</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="46"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="46"/>
         <source>Gold</source>
         <translation>ゴールド</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="54"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="54"/>
         <source>Stroke thickness (1 to 4 px):</source>
         <translation>線の太さ (1 〜 4 px)：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="71"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="71"/>
         <source>Connectivity:</source>
         <translation>接続性：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="75"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="75"/>
         <source>4-connected (Orthogonal crisp - Retro pixel art)</source>
         <translation>4近傍（直交シャープ - レトロピクセルアート）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="76"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="76"/>
         <source>8-connected (Diagonal included - Smooth outline)</source>
         <translation>8近傍（対角線含む - 滑らかな輪郭）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="81"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="81"/>
         <source>Solid silhouette / Hit-flash (Fill sprite interior)</source>
         <translation>塗りつぶしシルエット / 被弾フラッシュ（内部を塗りつぶす）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="85"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="85"/>
         <source>Apply to selected frames only</source>
         <translation>選択したフレームにのみ適用</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="90"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="90"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>フレームが選択されていません：アトラス全体に適用されます</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="119"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="119"/>
         <source>Select Outline Color</source>
         <translation>輪郭色の選択</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="270"/>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="272"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="270"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="272"/>
         <source>Outline %1 px applied</source>
         <translation>輪郭線 %1 px を適用しました</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="270"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="270"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 フレーム検出</translation>
     </message>
     <message>
-        <location filename="../src/widgets/outlinefilterdialog.cpp" line="282"/>
+        <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="282"/>
         <source>Filter: Outline &amp; Silhouette</source>
         <translation>フィルター：輪郭・シルエット</translation>
     </message>
@@ -2882,7 +2895,7 @@ Strict removal clears the pixel.</source>
 <context>
     <name>PixelRescaleFilter</name>
     <message>
-        <location filename="../src/filters/pixelrescalefilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="7"/>
         <location filename="../../tests/test_controllers.cpp" line="1558"/>
         <location filename="../../tests/test_controllers.cpp" line="1615"/>
         <location filename="../../tests/test_controllers.cpp" line="1672"/>
@@ -2890,7 +2903,7 @@ Strict removal clears the pixel.</source>
         <translation>ピクセルアートリサイズ...</translation>
     </message>
     <message>
-        <location filename="../src/filters/pixelrescalefilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="12"/>
         <source>Rescales the atlas cleanly using Nearest-Neighbor (pixel-perfect) or Scale2x (smooth contours).</source>
         <translation>最近傍補間（ピクセルパーフェクト）またはScale2x（輪郭補間）を使用してアトラスを綺麗に拡大・縮小します。</translation>
     </message>
@@ -2898,72 +2911,72 @@ Strict removal clears the pixel.</source>
 <context>
     <name>PixelRescaleFilterDialog</name>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="16"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="16"/>
         <source>Pixel Art Rescale</source>
         <translation>ピクセルアートリサイズ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="25"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="25"/>
         <source>Rescale Parameters</source>
         <translation>リサイズ設定</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="31"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="31"/>
         <source>Scale Factor:</source>
         <translation>スケール倍率：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="33"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="33"/>
         <source>0.5x (Downscale 50%)</source>
         <translation>0.5倍 (50% 縮小)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="34"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="34"/>
         <source>2x (Double 200%)</source>
         <translation>2倍 (200% 拡大)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="35"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="35"/>
         <source>3x (Triple 300%)</source>
         <translation>3倍 (300% 拡大)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="36"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="36"/>
         <source>4x (Quadruple 400%)</source>
         <translation>4倍 (400% 拡大)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="43"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="43"/>
         <source>Resampling Engine:</source>
         <translation>リサンプリングエンジン：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="45"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="45"/>
         <source>Nearest-Neighbor (Sharp / Pixel-Perfect)</source>
         <translation>最近傍補間 (シャープ / ピクセルパーフェクト)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="46"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="46"/>
         <source>Scale2x / AdvMAME2x (Smooth Contours)</source>
         <translation>Scale2x / AdvMAME2x (滑らかな輪郭)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="84"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="84"/>
         <source>Atlas Dimensions: %1x%2 -&gt; %3x%4 px</source>
         <translation>アトラス解像度：%1x%2 -&gt; %3x%4 px</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="280"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="280"/>
         <source>Rescaled %1x (%2)</source>
         <translation>リサイズ完了 %1倍 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="281"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="281"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 フレーム検出</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelrescalefilterdialog.cpp" line="290"/>
+        <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="290"/>
         <source>Filter: Pixel Art Rescale</source>
         <translation>フィルター：ピクセルアートリサイズ</translation>
     </message>
@@ -3105,108 +3118,108 @@ Strict removal clears the pixel.</source>
 <context>
     <name>ProjectController</name>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="313"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="381"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="312"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="380"/>
         <source>File does not exist: %1</source>
         <translation>ファイルが存在しません: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="325"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="405"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="324"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="404"/>
         <source>No suitable codec found for file: %1</source>
         <translation>ファイルに対応するコーデックが見つかりません: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="134"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="193"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="237"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="332"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="133"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="192"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="236"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="331"/>
         <source>No active SpriteDocument.</source>
         <translation>アクティブな SpriteDocument がありません。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="111"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="110"/>
         <source>New project</source>
         <translation>新規プロジェクト</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="117"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="116"/>
         <source>New project created.</source>
         <translation>新規プロジェクトを作成しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="126"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="125"/>
         <source>Project file does not exist: %1</source>
         <translation>プロジェクトファイルが存在しません: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="141"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="140"/>
         <source>Opening project %1...</source>
         <translation>プロジェクト %1 を開いています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="144"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="143"/>
         <source>Failed to open project.</source>
         <translation>プロジェクトの読み込みに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="152"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="151"/>
         <source>Failed to deserialize project.</source>
         <translation>プロジェクトの復元に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="173"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="172"/>
         <source>Project loaded successfully: %1</source>
         <translation>プロジェクトが正常に読み込まれました: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="183"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="182"/>
         <source>Project file path is empty. Use Save As.</source>
         <translation>プロジェクトのパスが空です。「名前を付けて保存」を使用してください。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="198"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="197"/>
         <source>Saving project %1...</source>
         <translation>プロジェクト %1 を保存しています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="223"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="222"/>
         <source>Project saved successfully: %1</source>
         <translation>プロジェクトが正常に保存されました: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="242"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="241"/>
         <source>Restoring session from %1...</source>
         <translation>%1 からセッションを復元しています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="267"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="266"/>
         <source>Session recovered successfully.</source>
         <translation>セッションが正常に復元されました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="339"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="338"/>
         <source>Loading %1...</source>
         <translation>%1 を読み込んでいます...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="356"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="355"/>
         <source>Import %1</source>
         <translation>%1 のインポート</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="371"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="736"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="370"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="735"/>
         <source>Loaded %1 successfully.</source>
         <translation>%1 が正常に読み込まれました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="412"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="411"/>
         <source>Loading %1 in background...</source>
         <translation>%1 をバックグラウンドで読み込んでいます...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="455"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="454"/>
         <source>Export file path must have a valid file name: %1</source>
         <translation>エクスポートファイルパスには有効なファイル名が必要です：%1</translation>
     </message>
@@ -3215,57 +3228,57 @@ Strict removal clears the pixel.</source>
         <translation type="vanished">ファイルパスが空です。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="461"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="460"/>
         <source>Document is empty.</source>
         <translation>ドキュメントが空です。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="468"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="467"/>
         <source>No suitable exporter found for format: %1</source>
         <translation>フォーマット %1 に対応するエクスポーターが見つかりません</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="474"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="473"/>
         <source>Saving %1...</source>
         <translation>%1 を保存しています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="484"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="483"/>
         <source>Saved %1 successfully.</source>
         <translation>%1 が正常に保存されました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="620"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="619"/>
         <source>Removing background...</source>
         <translation>背景を削除しています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="644"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="643"/>
         <source>Background removed.</source>
         <translation>背景を削除しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="657"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="656"/>
         <source>Removing background in background...</source>
         <translation>バックグラウンドで背景を削除しています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="724"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="723"/>
         <source>Open %1</source>
         <translation>%1 を開く</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="740"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="739"/>
         <source>Background removed successfully.</source>
         <translation>背景の削除が正常に完了しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="809"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="808"/>
         <source>Action executed</source>
         <translation>アクションを実行しました</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="811"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="810"/>
         <source>Project modified</source>
         <translation>プロジェクトが変更されました</translation>
     </message>
@@ -3278,12 +3291,12 @@ Strict removal clears the pixel.</source>
         <translation type="vanished">アクション</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="827"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="826"/>
         <source>No active session workspace.</source>
         <translation>アクティブなセッションワークスペースがありません。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="854"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="853"/>
         <source>Checked out revision %1.</source>
         <translation>リビジョン %1 にチェックアウトしました。</translation>
     </message>
@@ -3534,68 +3547,68 @@ Strict removal clears the pixel.</source>
         <translation>背景の削除</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="424"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="423"/>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="284"/>
         <source>Failed to decode image from: %1</source>
         <translation>画像 %1 のデコードに失敗しました</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="434"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="433"/>
         <source>Failed to segment sprite frames.</source>
         <translation>スプライトフレームの検出に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="671"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="670"/>
         <source>Failed to remove background from atlas.</source>
         <translation>アトラスからの背景削除に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="683"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="682"/>
         <source>Failed to segment frames after background removal.</source>
         <translation>背景削除後のフレーム検出に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="52"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="51"/>
         <source>Cannot open JSON file: %1</source>
         <translation>JSONファイル %1 を開けません</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="67"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="66"/>
         <source>JSON parse error: %1 at offset %2</source>
         <translation>JSON解析エラー: %1 (位置: %2)</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonextractor.cpp" line="76"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="75"/>
         <source>JSON root must be an object.</source>
         <translation>JSONルートはオブジェクトである必要があります。</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="111"/>
+        <location filename="../src/filters/filterregistry.cpp" line="170"/>
         <source>Cleanup</source>
         <translation>クリーンアップ</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="112"/>
+        <location filename="../src/filters/filterregistry.cpp" line="171"/>
         <source>Colors</source>
         <translation>カラー</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="113"/>
+        <location filename="../src/filters/filterregistry.cpp" line="172"/>
         <source>Effects</source>
         <translation>エフェクト</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="114"/>
+        <location filename="../src/filters/filterregistry.cpp" line="173"/>
         <source>Geometry</source>
         <translation>ジオメトリ</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="136"/>
+        <location filename="../src/filters/filterregistry.cpp" line="195"/>
         <source>No Atlas Loaded</source>
         <translation>アトラスが読み込まれていません</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="137"/>
+        <location filename="../src/filters/filterregistry.cpp" line="196"/>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>フィルターを適用する前に、まずスプライトシートを開くかインポートしてください。</translation>
     </message>
@@ -3737,7 +3750,7 @@ Strict removal clears the pixel.</source>
 <context>
     <name>RetroPaletteFilter</name>
     <message>
-        <location filename="../src/filters/retropalettefilter.cpp" line="7"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="7"/>
         <location filename="../../tests/test_controllers.cpp" line="1559"/>
         <location filename="../../tests/test_controllers.cpp" line="1616"/>
         <location filename="../../tests/test_controllers.cpp" line="1673"/>
@@ -3745,7 +3758,7 @@ Strict removal clears the pixel.</source>
         <translation>レトロパレット＆ディザリング...</translation>
     </message>
     <message>
-        <location filename="../src/filters/retropalettefilter.cpp" line="12"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="12"/>
         <source>Quantizes colors to authentic retro hardware palettes with optional ordered Bayer dithering.</source>
         <translation>本格的なレトロハードウェアパレットに色を減色し、Bayerディザリング（規則的階調表現）を適用します。</translation>
     </message>
@@ -3753,163 +3766,163 @@ Strict removal clears the pixel.</source>
 <context>
     <name>RetroPaletteFilterDialog</name>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="56"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="56"/>
         <source>Retro Palette &amp; Dithering</source>
         <translation>レトロパレット＆ディザリング</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="68"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="68"/>
         <source>Retro Hardware Palette</source>
         <translation>レトロハードウェアパレット</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="72"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="72"/>
         <source>Palette Preset:</source>
         <translation>パレットプリセット：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="74"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="74"/>
         <source>Game Boy DMG (4 Greens)</source>
         <translation>ゲームボーイ DMG (緑4階調)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="75"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="75"/>
         <source>Game Boy Pocket (4 Grays)</source>
         <translation>ゲームボーイポケット (モノクロ4階調)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="76"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="76"/>
         <source>PICO-8 (16 Colors)</source>
         <translation>PICO-8 (16色)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="77"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="77"/>
         <source>NES / Famicom (54 Colors)</source>
         <translation>ファミコン / NES (54色)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="78"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="78"/>
         <source>Commodore 64 (16 Colors)</source>
         <translation>コモドール64 (16色)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="79"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="79"/>
         <source>CGA Mode 1 (Cyan/Magenta/White)</source>
         <translation>CGA モード1 (シアン/マゼンタ/白)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="80"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="80"/>
         <source>CGA Mode 2 (Red/Green/Yellow)</source>
         <translation>CGA モード2 (赤/緑/黄)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="81"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="81"/>
         <source>Endesga 32 (32 Pixel Art Colors)</source>
         <translation>Endesga 32 (32色 ピクセルアート)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="82"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="82"/>
         <source>Custom / Imported Palette</source>
         <translation>カスタム / インポートパレット</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="86"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="86"/>
         <source>Import...</source>
         <translation>インポート...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="87"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="87"/>
         <source>Import palette from .hex, .gpl, .pal or .png image</source>
         <translation>.hex, .gpl, .pal ファイルまたは .png 画像からパレットをインポート</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="103"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="103"/>
         <source>Ordered Dithering (Bayer Matrix)</source>
         <translation>組織的ディザリング (Bayerマトリクス)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="106"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="106"/>
         <source>Dither Pattern:</source>
         <translation>ディザーパターン：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="108"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="108"/>
         <source>None (Exact Nearest Match)</source>
         <translation>なし (最も近い色に単純減色)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="109"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="109"/>
         <source>Bayer 2x2 Matrix</source>
         <translation>Bayer 2x2 マトリクス</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="110"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="110"/>
         <source>Bayer 4x4 Matrix (Classic Retro)</source>
         <translation>Bayer 4x4 マトリクス (クラシックレトロ)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="111"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="111"/>
         <source>Bayer 8x8 Matrix (Smooth Gradients)</source>
         <translation>Bayer 8x8 マトリクス (滑らかな階調)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="117"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="117"/>
         <source>Dither Strength:</source>
         <translation>ディザー強度：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="134"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="134"/>
         <source>Target Scope</source>
         <translation>適用範囲</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="137"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="137"/>
         <source>Apply to selected frames only</source>
         <translation>選択したフレームにのみ適用</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="142"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="142"/>
         <source>No frames selected: applies to entire atlas</source>
         <translation>フレームが選択されていません：アトラス全体に適用されます</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="206"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="206"/>
         <source>Import Color Palette</source>
         <translation>カラーパレットのインポート</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="208"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="208"/>
         <source>Palette Files (*.hex *.gpl *.pal *.png *.bmp);;All Files (*)</source>
         <translation>パレットファイル (*.hex *.gpl *.pal *.png *.bmp);;すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="215"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="215"/>
         <source>Import Failed</source>
         <translation>インポート失敗</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="216"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="216"/>
         <source>No valid colors found in file.</source>
         <translation>ファイル内に有効な色情報が見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="256"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="256"/>
         <source>%1 active color(s)</source>
         <translation>%1 色のアクティブカラー</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="554"/>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="557"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="554"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="557"/>
         <source>Quantized (%1 colors, %2)</source>
         <translation>減色完了 (%1色, %2)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="555"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="555"/>
         <source>%1 frame(s) detected</source>
         <translation>%1 フレーム検出</translation>
     </message>
     <message>
-        <location filename="../src/widgets/retropalettefilterdialog.cpp" line="567"/>
+        <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="567"/>
         <source>Filter: Retro Palette &amp; Dithering</source>
         <translation>フィルター：レトロパレット＆ディザリング</translation>
     </message>
@@ -4287,47 +4300,47 @@ Strict removal clears the pixel.</source>
 <context>
     <name>SpriteExtractor</name>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="21"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="21"/>
         <source>Loading image %1...</source>
         <translation>画像 %1 を読み込んでいます...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="28"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="28"/>
         <source>File not found: %1</source>
         <translation>ファイルが見つかりません: %1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="39"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="39"/>
         <source>Failed to decode image from: %1</source>
         <translation>画像 %1 のデコードに失敗しました</translation>
     </message>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="61"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="61"/>
         <source>Cannot export: Document atlas image is null.</source>
         <translation>エクスポート不可: アトラス画像が空です。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="71"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="71"/>
         <source>Export file name cannot be empty.</source>
         <translation>エクスポートファイル名を空にすることはできません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="82"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="82"/>
         <source>Failed to save image to: %1</source>
         <translation>画像 %1 の保存に失敗しました</translation>
     </message>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="88"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="88"/>
         <source>Exported atlas image to: %1</source>
         <translation>アトラス画像を %1 にエクスポートしました</translation>
     </message>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="108"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="108"/>
         <source>Segmenting sprite frames...</source>
         <translation>スプライトフレームを検出中...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/spriteextractor.cpp" line="123"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="123"/>
         <source>Extracted %1 frames</source>
         <translation>%1 フレームを抽出しました</translation>
     </message>
@@ -4436,6 +4449,24 @@ Strict removal clears the pixel.</source>
     </message>
 </context>
 <context>
+    <name>TightPolygonPackingFilter</name>
+    <message>
+        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="7"/>
+        <source>Tight Polygon Packing (Nesting)...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="12"/>
+        <source>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="26"/>
+        <source>Tight Polygon Packing (Nesting)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TimelineFilmstripWidget</name>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="24"/>
@@ -4503,82 +4534,82 @@ Strict removal clears the pixel.</source>
 <context>
     <name>UnityExtractor</name>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="34"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="34"/>
         <source>Reading Unity 2D Sprite Mesh %1...</source>
         <translation>Unity 2Dスプライトメッシュ %1 を読み込み中...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="41"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="41"/>
         <source>Failed to open file: %1</source>
         <translation>ファイルのオープンに失敗しました：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="54"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="54"/>
         <source>Failed to parse Unity JSON: %1</source>
         <translation>Unity JSONの解析に失敗しました：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="88"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="88"/>
         <source>Associated texture atlas image not found for: %1</source>
         <translation>関連付けられたテクスチャアトラス画像が見つかりません：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="101"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="101"/>
         <source>Failed to load texture atlas image: %1 (%2)</source>
         <translation>テクスチャアトラス画像の読み込みに失敗しました：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="190"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="190"/>
         <source>Imported %1 frames from Unity 2D Sprite Mesh</source>
         <translation>Unity 2Dスプライトメッシュから %1 フレームをインポートしました</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="200"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="200"/>
         <source>No frames in document to export.</source>
         <translation>エクスポートするフレームがドキュメントにありません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="206"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="206"/>
         <source>Packing atlas for Unity...</source>
         <translation>Unity用アトラスをパッキング中...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="218"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="218"/>
         <source>Export file name cannot be empty.</source>
         <translation>エクスポートファイル名を空にすることはできません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="260"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="260"/>
         <source>Failed to pack frames for Unity export.</source>
         <translation>Unityエクスポート用のフレームパッキングに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="278"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="278"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>関連するVRAMテクスチャの保存に失敗しました：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="286"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="286"/>
         <source>Failed to save companion image: %1</source>
         <translation>関連する画像の保存に失敗しました：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="407"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="407"/>
         <source>Cannot write to Unity JSON file: %1</source>
         <translation>Unity JSONファイルに書き込めません：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unityextractor.cpp" line="418"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="418"/>
         <source>Exported Unity Sprite Mesh: %1 and image %2</source>
         <translation>Unityスプライトメッシュをエクスポートしました：%1 および画像 %2</translation>
     </message>
     <message>
-        <location filename="../include/extractor/unityextractor.h" line="20"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.h" line="24"/>
         <source>Unity 2D Sprite Mesh (*.unity.json)</source>
         <translation>Unity 2Dスプライトメッシュ (*.unity.json)</translation>
     </message>
     <message>
-        <location filename="../include/extractor/unityextractor.h" line="21"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.h" line="25"/>
         <source>Exports Unity 2D Sprite Mesh with vertex &amp; triangle buffers.</source>
         <translation>頂点および三角形バッファを含むUnity 2Dスプライトメッシュをエクスポートします。</translation>
     </message>
@@ -4586,82 +4617,82 @@ Strict removal clears the pixel.</source>
 <context>
     <name>UnrealExtractor</name>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="34"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="34"/>
         <source>Reading Unreal Engine Paper2D atlas %1...</source>
         <translation>Unreal Engine Paper2Dアトラス %1 を読み込み中...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="41"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="41"/>
         <source>Failed to open file: %1</source>
         <translation>ファイルのオープンに失敗しました：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="54"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="54"/>
         <source>Failed to parse Unreal JSON: %1</source>
         <translation>Unreal JSONの解析に失敗しました：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="88"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="88"/>
         <source>Associated texture atlas image not found for: %1</source>
         <translation>関連付けられたテクスチャアトラス画像が見つかりません：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="101"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="101"/>
         <source>Failed to load texture atlas image: %1 (%2)</source>
         <translation>テクスチャアトラス画像の読み込みに失敗しました：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="197"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="197"/>
         <source>Imported %1 frames from Unreal Paper2D</source>
         <translation>Unreal Paper2Dから %1 フレームをインポートしました</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="207"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="207"/>
         <source>No frames in document to export.</source>
         <translation>エクスポートするフレームがドキュメントにありません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="213"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="213"/>
         <source>Packing atlas for Unreal Engine Paper2D...</source>
         <translation>Unreal Engine Paper2D用アトラスをパッキング中...</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="225"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="225"/>
         <source>Export file name cannot be empty.</source>
         <translation>エクスポートファイル名を空にすることはできません。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="267"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="267"/>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
         <translation>Unreal Paper2Dエクスポート用のフレームパッキングに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="285"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="285"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>関連するVRAMテクスチャの保存に失敗しました：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="293"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="293"/>
         <source>Failed to save companion image: %1</source>
         <translation>関連する画像の保存に失敗しました：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="420"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="420"/>
         <source>Cannot write to Unreal Paper2D JSON file: %1</source>
         <translation>Unreal Paper2D JSONファイルに書き込めません：%1</translation>
     </message>
     <message>
-        <location filename="../src/extractor/unrealextractor.cpp" line="431"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="431"/>
         <source>Exported Unreal Paper2D Sprite: %1 and image %2</source>
         <translation>Unreal Paper2Dスプライトをエクスポートしました：%1 および画像 %2</translation>
     </message>
     <message>
-        <location filename="../include/extractor/unrealextractor.h" line="20"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.h" line="24"/>
         <source>Unreal Engine Paper2D (*.paper2d.json)</source>
         <translation>Unreal Engine Paper2D (*.paper2d.json)</translation>
     </message>
     <message>
-        <location filename="../include/extractor/unrealextractor.h" line="21"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.h" line="25"/>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>タイトなRenderGeometryを含むUnreal Engine Paper2Dスプライトをエクスポートします。</translation>
     </message>
@@ -4669,77 +4700,77 @@ Strict removal clears the pixel.</source>
 <context>
     <name>jsonExtractorDialog</name>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="20"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="20"/>
         <source>Dialog</source>
         <translation>JSON エクスポート設定</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="86"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="86"/>
         <source>Replace existing atlas</source>
         <translation>既存のアトラスを置換</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="103"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="103"/>
         <source>Content</source>
         <translation>内容</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="72"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="72"/>
         <source>Target application</source>
         <translation>ターゲットアプリケーション</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="39"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="39"/>
         <source>Base name</source>
         <translation>ベース名</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="46"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="46"/>
         <source>Image Format</source>
         <translation>画像形式</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="79"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="79"/>
         <source>Atlas file</source>
         <translation>アトラスファイル</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="96"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="96"/>
         <source>Atlas save strategy</source>
         <translation>アトラス保存方法</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="113"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="113"/>
         <source>TextLabel</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.ui" line="127"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="127"/>
         <source>Atlas preview</source>
         <translation>アトラスプレビュー</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.cpp" line="95"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="95"/>
         <source>Use original Atlas</source>
         <translation>元のアトラスを使用</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.cpp" line="96"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="96"/>
         <source>Generate same minimal Atlas for all animations</source>
         <translation>すべてのアニメーションで共通の最小アトラスを生成</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.cpp" line="97"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="97"/>
         <source>Generate one Atlas per animation</source>
         <translation>アニメーションごとに個別のアトラスを生成</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.cpp" line="107"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="107"/>
         <source>Export</source>
         <translation>エクスポート</translation>
     </message>
     <message>
-        <location filename="../src/extractor/jsonExtractordialog.cpp" line="110"/>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="110"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>

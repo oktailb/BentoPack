@@ -1,10 +1,4 @@
 #include "extractor/extractorregistry.h"
-#include "extractor/spriteextractor.h"
-#include "extractor/gifextractor.h"
-#include "extractor/jsonextractor.h"
-#include "extractor/godotextractor.h"
-#include "extractor/unityextractor.h"
-#include "extractor/unrealextractor.h"
 #include <QDir>
 #include <QFileInfo>
 #include <QPluginLoader>
@@ -29,7 +23,11 @@ void ExtractorRegistry::registerExtractor(std::unique_ptr<Extractor> extractor)
 {
     if (!extractor) return;
     Extractor *raw = extractor.get();
-    if (m_extractors.contains(raw)) return;
+    for (Extractor *e : m_extractors) {
+        if (e == raw || (!e->id().isEmpty() && e->id() == raw->id())) {
+            return;
+        }
+    }
 
     m_extractors.append(raw);
     m_ownedExtractors.push_back(std::move(extractor));
@@ -37,8 +35,11 @@ void ExtractorRegistry::registerExtractor(std::unique_ptr<Extractor> extractor)
 
 void ExtractorRegistry::registerExtractor(Extractor *extractor, bool takeOwnership)
 {
-    if (!extractor || m_extractors.contains(extractor)) {
-        return;
+    if (!extractor) return;
+    for (Extractor *e : m_extractors) {
+        if (e == extractor || (!e->id().isEmpty() && e->id() == extractor->id())) {
+            return;
+        }
     }
 
     if (takeOwnership) {
@@ -50,29 +51,30 @@ void ExtractorRegistry::registerExtractor(Extractor *extractor, bool takeOwnersh
 
 void ExtractorRegistry::initDefaultExtractors()
 {
+    if (m_initialized) return;
     m_initialized = true;
 
-    // 1. Static sprite sheets (PNG, JPG, BMP)
-    registerExtractor(std::make_unique<SpriteExtractor>());
+    QStringList searchDirs;
 
-    // 2. Animated GIF
-    registerExtractor(std::make_unique<GifExtractor>());
+    // 1. Environment variable SPRITESTUDIO_PLUGIN_PATH
+    const QString envPath = QString::fromUtf8(qgetenv("SPRITESTUDIO_PLUGIN_PATH"));
+    if (!envPath.isEmpty()) {
+        searchDirs << envPath.split(QDir::listSeparator(), Qt::SkipEmptyParts);
+    }
 
-    // 3. TexturePacker & Aseprite JSON
-    registerExtractor(std::make_unique<JsonExtractor>());
+    // 2. Application directory plugins
+    QString appDir = QCoreApplication::applicationDirPath();
+    searchDirs << QDir(appDir).filePath(QStringLiteral("plugins"));
+    searchDirs << QDir(appDir).filePath(QStringLiteral("../bin/plugins"));
 
-    // 4. Godot Engine 4.x SpriteFrames (.tres)
-    registerExtractor(std::make_unique<GodotExtractor>());
+    // 3. System installed library paths (e.g. /usr/lib/spritestudio/plugins)
+    searchDirs << QDir(appDir).filePath(QStringLiteral("../lib/spritestudio/plugins"));
+    searchDirs << QStringLiteral("/usr/lib/spritestudio/plugins");
+    searchDirs << QStringLiteral("/usr/local/lib/spritestudio/plugins");
 
-    // 5. Unity 2D Sprite Mesh (.unity.json)
-    registerExtractor(std::make_unique<UnityExtractor>());
-
-    // 6. Unreal Engine Paper2D (.paper2d.json)
-    registerExtractor(std::make_unique<UnrealExtractor>());
-
-    // 7. Look for external dynamic plugins in plugins/ directory
-    QString pluginsPath = QDir(QCoreApplication::applicationDirPath()).filePath("plugins");
-    loadPlugins(pluginsPath);
+    for (const QString &dir : searchDirs) {
+        loadPlugins(dir);
+    }
 }
 
 void ExtractorRegistry::loadPlugins(const QString &dirPath)
@@ -80,14 +82,33 @@ void ExtractorRegistry::loadPlugins(const QString &dirPath)
     QDir pluginsDir(dirPath);
     if (!pluginsDir.exists()) return;
 
-    for (const QString &fileName : pluginsDir.entryList(QDir::Files)) {
-        QString fullPath = pluginsDir.absoluteFilePath(fileName);
-        QPluginLoader loader(fullPath);
-        QObject *plugin = loader.instance();
-        if (plugin) {
-            Extractor *ext = qobject_cast<Extractor*>(plugin);
-            if (ext) {
-                registerExtractor(ext, false);
+    const QString canonicalDir = pluginsDir.canonicalPath();
+    if (canonicalDir.isEmpty() || m_scannedDirs.contains(canonicalDir)) {
+        return;
+    }
+    m_scannedDirs.insert(canonicalDir);
+
+    const auto entries = pluginsDir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QFileInfo &info : entries) {
+        if (info.isDir()) {
+            loadPlugins(info.absoluteFilePath());
+        } else if (info.isFile()) {
+            const QString ext = info.suffix().toLower();
+            if (ext == QStringLiteral("so") || ext == QStringLiteral("dll") || ext == QStringLiteral("dylib")) {
+                const QString canonicalFile = info.canonicalFilePath();
+                if (canonicalFile.isEmpty() || m_loadedLibraries.contains(canonicalFile)) {
+                    continue;
+                }
+                m_loadedLibraries.insert(canonicalFile);
+
+                QPluginLoader loader(canonicalFile);
+                QObject *plugin = loader.instance();
+                if (plugin) {
+                    Extractor *extractor = qobject_cast<Extractor*>(plugin);
+                    if (extractor) {
+                        registerExtractor(extractor, false);
+                    }
+                }
             }
         }
     }

@@ -10,6 +10,7 @@
 #include <QStringList>
 #include <QPolygonF>
 #include <QPointF>
+#include "spritestudiocore_export.h"
 
 enum class PivotPreset {
     TopLeft,
@@ -27,7 +28,7 @@ enum class PivotPreset {
 /**
  * @brief Structure representing the bounding box of a sprite frame in the atlas.
  */
-struct SpriteBox {
+struct SPRITESTUDIO_CORE_EXPORT SpriteBox {
     QRect       rect;
     bool        selected = false;
     int         index = 0;
@@ -69,7 +70,7 @@ struct SpriteBox {
 /**
  * @brief Structure representing an animation sequence.
  */
-struct SpriteAnimation {
+struct SPRITESTUDIO_CORE_EXPORT SpriteAnimation {
     enum LoopMode {
         Loop = 0,
         Once = 1,
@@ -83,7 +84,17 @@ struct SpriteAnimation {
     LoopMode    loopMode = Loop;
 
     int durationMs() const {
-        return fps > 0 ? (frameIndices.size() * 1000) / fps : 0;
+        if (fps <= 0 || frameIndices.isEmpty()) return 0;
+        return (frameIndices.size() * 1000) / fps;
+    }
+
+    bool operator==(const SpriteAnimation &other) const {
+        return name == other.name && frameIndices == other.frameIndices
+               && fps == other.fps && loopMode == other.loopMode;
+    }
+
+    bool operator!=(const SpriteAnimation &other) const {
+        return !(*this == other);
     }
 };
 
@@ -93,7 +104,7 @@ struct SpriteAnimation {
  * It manages the raw atlas image, individual sliced frames, bounding boxes,
  * and named animations. It emits signals whenever the document content changes.
  */
-class SpriteDocument : public QObject
+class SPRITESTUDIO_CORE_EXPORT SpriteDocument : public QObject
 {
     Q_OBJECT
 

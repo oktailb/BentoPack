@@ -24,17 +24,35 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
         cancelBtn->setText(tr("Cancel"));
     }
 
+    // Populate formats dynamically from registered Extractor plugins
+    ui->comboFormat->clear();
+    const auto &extractors = ExtractorRegistry::instance().extractors();
+    for (Extractor *ext : extractors) {
+        if (ext && ext->capabilities().testFlag(Extractor::CanExport)) {
+            ui->comboFormat->addItem(ext->displayName(), ext->id());
+        }
+    }
+
     // Initialize default path
+    QString defaultExt = QStringLiteral(".tres");
+    if (ui->comboFormat->count() > 0) {
+        QString firstId = ui->comboFormat->itemData(0).toString();
+        Extractor *firstExt = ExtractorRegistry::instance().findExtractorById(firstId);
+        if (firstExt && !firstExt->supportedExtensions().isEmpty()) {
+            defaultExt = QStringLiteral(".") + firstExt->supportedExtensions().first();
+        }
+    }
+
     if (!defaultPath.isEmpty()) {
         ui->txtFilePath->setText(defaultPath);
     } else if (m_document && !m_document->filePath().isEmpty()) {
         QFileInfo fi(m_document->filePath());
         QString baseName = fi.completeBaseName();
         if (baseName.isEmpty()) baseName = QStringLiteral("atlas");
-        QString defExport = fi.dir().filePath(baseName + ".tres");
+        QString defExport = fi.dir().filePath(baseName + defaultExt);
         ui->txtFilePath->setText(defExport);
     } else {
-        QString defExport = QDir::current().filePath(QStringLiteral("atlas.tres"));
+        QString defExport = QDir::current().filePath(QStringLiteral("atlas") + defaultExt);
         ui->txtFilePath->setText(defExport);
     }
 
@@ -83,16 +101,15 @@ ExportOptions ExportDialog::exportOptions() const
     ExportOptions opts;
 
     // Format
-    int fmtIdx = ui->comboFormat->currentIndex();
-    if (fmtIdx == 0) {
+    QString extId = ui->comboFormat->currentData().toString();
+    opts.formatId = extId;
+    if (extId == QStringLiteral("godot_extractor")) {
         opts.format = FORMAT_GODOT;
-    } else if (fmtIdx == 1) {
+    } else if (extId == QStringLiteral("json_extractor")) {
         opts.format = FORMAT_TEXTUREPACKER_JSON;
-    } else if (fmtIdx == 2) {
-        opts.format = FORMAT_ASEPRITE_JSON;
-    } else if (fmtIdx == 3) {
+    } else if (extId == QStringLiteral("unity")) {
         opts.format = FORMAT_UNITY;
-    } else if (fmtIdx == 4) {
+    } else if (extId == QStringLiteral("unreal")) {
         opts.format = FORMAT_UNREAL;
     }
 
@@ -170,15 +187,17 @@ ExportOptions ExportDialog::exportOptions() const
 void ExportDialog::onBrowseClicked()
 {
     QString filter;
-    int fmtIdx = ui->comboFormat->currentIndex();
-    if (fmtIdx == 0) {
-        filter = tr("Godot 4 Resource (*.tres);;All Files (*.*)");
-    } else if (fmtIdx == 3) {
-        filter = tr("Unity 2D Sprite Mesh (*.unity.json);;JSON (*.json);;All Files (*.*)");
-    } else if (fmtIdx == 4) {
-        filter = tr("Unreal Paper2D (*.paper2d.json);;JSON (*.json);;All Files (*.*)");
+    QString extId = ui->comboFormat->currentData().toString();
+    Extractor *ext = ExtractorRegistry::instance().findExtractorById(extId);
+    if (ext) {
+        QStringList patterns;
+        for (const QString &s : ext->supportedExtensions()) {
+            patterns << QStringLiteral("*.%1").arg(s);
+        }
+        filter = QStringLiteral("%1 (%2);;%3 (*.*)")
+                    .arg(ext->displayName(), patterns.join(QStringLiteral(" ")), tr("All Files"));
     } else {
-        filter = tr("JSON SpriteSheet (*.json);;All Files (*.*)");
+        filter = tr("All Files (*.*)");
     }
 
     QString initialPath = ui->txtFilePath->text();
@@ -190,8 +209,8 @@ void ExportDialog::onBrowseClicked()
     if (!chosen.isEmpty()) {
         QFileInfo fi(chosen);
         if (fi.completeBaseName().trimmed().isEmpty()) {
-            QString ext = fi.suffix().isEmpty() ? QStringLiteral("tres") : fi.suffix();
-            chosen = fi.dir().filePath(QStringLiteral("atlas.") + ext);
+            QString defaultExt = (ext && !ext->supportedExtensions().isEmpty()) ? ext->supportedExtensions().first() : QStringLiteral("tres");
+            chosen = fi.dir().filePath(QStringLiteral("atlas.") + defaultExt);
         }
         ui->txtFilePath->setText(chosen);
     }
@@ -207,13 +226,12 @@ void ExportDialog::onFormatChanged(int index)
         if (base.endsWith(QStringLiteral(".unity"), Qt::CaseInsensitive)) base.chop(6);
         if (base.endsWith(QStringLiteral(".paper2d"), Qt::CaseInsensitive)) base.chop(8);
 
-        QString ext;
-        if (index == 0) ext = ".tres";
-        else if (index == 3) ext = ".unity.json";
-        else if (index == 4) ext = ".paper2d.json";
-        else ext = ".json";
+        QString extId = ui->comboFormat->itemData(index).toString();
+        Extractor *ext = ExtractorRegistry::instance().findExtractorById(extId);
+        QString extension = (ext && !ext->supportedExtensions().isEmpty()) ? ext->supportedExtensions().first() : QStringLiteral("tres");
+        if (!extension.startsWith('.')) extension.prepend('.');
 
-        ui->txtFilePath->setText(fi.dir().filePath(base + ext));
+        ui->txtFilePath->setText(fi.dir().filePath(base + extension));
     }
     m_debounceTimer->start();
 }

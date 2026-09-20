@@ -6,10 +6,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "packer/vramtexturecompressor.h"
-#include "extractor/godotextractor.h"
-#include "extractor/jsonextractor.h"
-#include "extractor/unityextractor.h"
-#include "extractor/unrealextractor.h"
+#include "godotextractor.h"
+#include "jsonextractor.h"
+#include "unityextractor.h"
+#include "unrealextractor.h"
 #include "model/spritedocument.h"
 #include "cli/cliparser.h"
 

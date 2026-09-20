@@ -4,6 +4,7 @@
 #include <QPolygonF>
 #include <QList>
 #include <QSize>
+#include "spritestudiocore_export.h"
 
 namespace SpriteStudioGeometry {
 
@@ -11,7 +12,7 @@ namespace SpriteStudioGeometry {
  * @brief Decomposes simple 2D polygons into triangles using Ear-Clipping,
  *        and computes GPU overdraw reduction metrics.
  */
-class Triangulator
+class SPRITESTUDIO_CORE_EXPORT Triangulator
 {
 public:
     /**

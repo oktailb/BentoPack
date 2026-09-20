@@ -10,10 +10,10 @@
 #include "model/spritedocument.h"
 #include "extractor/extractor.h"
 #include "extractor/extractorregistry.h"
-#include "extractor/spriteextractor.h"
-#include "extractor/gifextractor.h"
-#include "extractor/jsonextractor.h"
-#include "extractor/godotextractor.h"
+#include "spriteextractor.h"
+#include "gifextractor.h"
+#include "jsonextractor.h"
+#include "godotextractor.h"
 #include "image/spritedetector.h"
 
 class TestExtractors : public QObject
@@ -60,6 +60,9 @@ void TestExtractors::initTestCase()
     if (m_sampleDir.isEmpty()) {
         m_sampleDir = QStringLiteral(SAMPLE_DIR);
     }
+
+    QString binPlugins = QDir(QCoreApplication::applicationDirPath()).filePath(QStringLiteral("plugins"));
+    ExtractorRegistry::instance().loadPlugins(binPlugins);
 }
 
 void TestExtractors::testExtractorRegistryBasics()

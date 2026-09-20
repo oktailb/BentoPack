@@ -6,6 +6,7 @@
 #include <QList>
 #include <QMap>
 #include "model/spritedocument.h"
+#include "spritestudiocore_export.h"
 
 /**
  * @brief Command to delete a set of frames from the document with full undo capability.
@@ -239,7 +240,7 @@ private:
 /**
  * @brief Command to apply background removal on the atlas and update extracted frames with undo/redo.
  */
-class RemoveBackgroundCommand : public QUndoCommand
+class SPRITESTUDIO_CORE_EXPORT RemoveBackgroundCommand : public QUndoCommand
 {
 public:
     RemoveBackgroundCommand(SpriteDocument *doc,
