@@ -86,7 +86,7 @@ AtlasPackingDialog::AtlasPackingDialog(SpriteDocument *doc, QUndoStack *undoStac
     if (m_livePreviewCheck) {
         m_livePreviewCheck->setChecked(false);
     }
-    setStatusText(tr("Prêt — Ajustez vos paramètres et cliquez sur 'Calculer le packing'"));
+    setStatusText(tr("Ready — Adjust parameters and click 'Compute Packing'"));
 }
 
 AtlasPackingDialog::~AtlasPackingDialog()
@@ -176,7 +176,7 @@ void AtlasPackingDialog::setupUI()
     layout->addWidget(grpPerf);
 
     // 5. Action Button to manually run packing
-    m_btnPackNow = new QPushButton(tr("Calculer le packing"), this);
+    m_btnPackNow = new QPushButton(tr("Compute Packing"), this);
     m_btnPackNow->setStyleSheet(QStringLiteral(
         "QPushButton { font-weight: bold; padding: 7px 16px; background-color: #2980b9; color: white; border-radius: 4px; font-size: 13px; }"
         "QPushButton:hover { background-color: #3498db; }"
@@ -228,7 +228,7 @@ void AtlasPackingDialog::setProcessingState(bool processing)
     }
     if (m_btnPackNow) {
         m_btnPackNow->setEnabled(!processing);
-        m_btnPackNow->setText(processing ? tr("Calcul en cours...") : tr("Calculer le packing"));
+        m_btnPackNow->setText(processing ? tr("Computing...") : tr("Compute Packing"));
     }
     if (m_progressBar) {
         m_progressBar->setVisible(processing);
@@ -240,7 +240,7 @@ void AtlasPackingDialog::setProcessingState(bool processing)
         }
     }
     if (processing) {
-        setStatusText(tr("Calcul du packing en cours..."));
+        setStatusText(tr("Computing packing..."));
     }
 }
 

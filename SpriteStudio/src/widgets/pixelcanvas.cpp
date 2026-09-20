@@ -11,20 +11,81 @@
 QImage PixelCanvas::s_clipboardImage;
 
 namespace {
+
+static QRect computeDirtyRect(const QImage &img1, const QImage &img2)
+{
+    if (img1.isNull() || img2.isNull() || img1.size() != img2.size() || img1.format() != img2.format()) {
+        int w = std::max(img1.width(), img2.width());
+        int h = std::max(img1.height(), img2.height());
+        return (w > 0 && h > 0) ? QRect(0, 0, w, h) : QRect();
+    }
+
+    const int w = img1.width();
+    const int h = img1.height();
+    int minX = w, maxX = -1;
+    int minY = h, maxY = -1;
+
+    for (int y = 0; y < h; ++y) {
+        const QRgb *line1 = reinterpret_cast<const QRgb*>(img1.constScanLine(y));
+        const QRgb *line2 = reinterpret_cast<const QRgb*>(img2.constScanLine(y));
+        if (std::memcmp(line1, line2, w * sizeof(QRgb)) == 0) {
+            continue;
+        }
+        for (int x = 0; x < w; ++x) {
+            if (line1[x] != line2[x]) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+            }
+        }
+    }
+
+    if (maxX < minX || maxY < minY) {
+        return QRect(); // Identical images
+    }
+
+    return QRect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+}
+
 class PixelCanvasUndoCommand : public QUndoCommand
 {
 public:
     PixelCanvasUndoCommand(PixelCanvas *canvas, const QImage &oldImg, const QImage &newImg, const QString &text, QUndoCommand *parent = nullptr)
         : QUndoCommand(text, parent)
         , m_canvas(canvas)
-        , m_oldImage(oldImg)
-        , m_newImage(newImg)
         , m_firstExecution(true)
-    {}
+    {
+        m_dirtyRect = computeDirtyRect(oldImg, newImg);
+        if (m_dirtyRect.isEmpty()) {
+            m_isEmpty = true;
+            return;
+        }
+
+        bool dimensionsMatch = (!oldImg.isNull() && !newImg.isNull() && oldImg.size() == newImg.size());
+        int totalPixels = dimensionsMatch ? (oldImg.width() * oldImg.height()) : 0;
+        int dirtyPixels = m_dirtyRect.width() * m_dirtyRect.height();
+
+        if (!dimensionsMatch || totalPixels <= 256 || dirtyPixels >= totalPixels * 0.85) {
+            m_isFullImage = true;
+            m_oldImage = oldImg;
+            m_newImage = newImg;
+        } else {
+            m_isFullImage = false;
+            // Store only the sub-image patches (lightweight copy, COW on rest)
+            m_oldPatch = oldImg.copy(m_dirtyRect);
+            m_newPatch = newImg.copy(m_dirtyRect);
+        }
+    }
+
+    bool isEmpty() const { return m_isEmpty; }
 
     void undo() override {
-        if (m_canvas) {
+        if (!m_canvas || m_isEmpty) return;
+        if (m_isFullImage) {
             m_canvas->setImage(m_oldImage);
+        } else {
+            m_canvas->applyPatch(m_dirtyRect, m_oldPatch);
         }
     }
 
@@ -33,16 +94,24 @@ public:
             m_firstExecution = false;
             return;
         }
-        if (m_canvas) {
+        if (!m_canvas || m_isEmpty) return;
+        if (m_isFullImage) {
             m_canvas->setImage(m_newImage);
+        } else {
+            m_canvas->applyPatch(m_dirtyRect, m_newPatch);
         }
     }
 
 private:
-    PixelCanvas *m_canvas;
+    PixelCanvas *m_canvas = nullptr;
+    QRect        m_dirtyRect;
+    QImage       m_oldPatch;
+    QImage       m_newPatch;
     QImage       m_oldImage;
     QImage       m_newImage;
-    bool         m_firstExecution;
+    bool         m_isFullImage = false;
+    bool         m_isEmpty = false;
+    bool         m_firstExecution = true;
 };
 }
 
@@ -348,7 +417,28 @@ void PixelCanvas::rotate90CW()
 
 void PixelCanvas::pushSnapshot(const QImage &oldImage, const QString &text)
 {
-    m_undoStack.push(new PixelCanvasUndoCommand(this, oldImage, m_image, text));
+    auto *cmd = new PixelCanvasUndoCommand(this, oldImage, m_image, text);
+    if (cmd->isEmpty()) {
+        delete cmd;
+        return;
+    }
+    m_undoStack.push(cmd);
+}
+
+void PixelCanvas::applyPatch(const QRect &rect, const QImage &patch)
+{
+    if (m_image.isNull() || rect.isEmpty() || patch.isNull()) return;
+
+    QPainter p(&m_image);
+    p.setCompositionMode(QPainter::CompositionMode_Source);
+    p.drawImage(rect.topLeft(), patch);
+    p.end();
+
+    emit imageChanged();
+
+    QRect widgetDirty = pixelToWidget(rect);
+    widgetDirty.adjust(-2, -2, 2, 2);
+    update(widgetDirty);
 }
 
 void PixelCanvas::updateCanvasSize()
@@ -374,6 +464,16 @@ QPoint PixelCanvas::pixelToWidget(const QPoint &pixelPos) const
 {
     return QPoint(static_cast<int>(std::floor(pixelPos.x() * m_zoom)),
                   static_cast<int>(std::floor(pixelPos.y() * m_zoom)));
+}
+
+QRect PixelCanvas::pixelToWidget(const QRect &pixelRect) const
+{
+    if (m_zoom <= 0.0 || pixelRect.isEmpty()) return QRect();
+    int x1 = static_cast<int>(std::floor(pixelRect.left() * m_zoom));
+    int y1 = static_cast<int>(std::floor(pixelRect.top() * m_zoom));
+    int x2 = static_cast<int>(std::ceil((pixelRect.right() + 1) * m_zoom));
+    int y2 = static_cast<int>(std::ceil((pixelRect.bottom() + 1) * m_zoom));
+    return QRect(x1, y1, x2 - x1, y2 - y1);
 }
 
 bool PixelCanvas::isPixelInside(int x, int y) const

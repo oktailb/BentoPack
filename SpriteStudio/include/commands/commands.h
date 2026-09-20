@@ -47,14 +47,13 @@ private:
         int       originalIndex;
         QImage    image;
         SpriteBox box;
+        QImage    atlasPatch;
     };
 
     SpriteDocument*                 m_doc;
     QList<int>                      m_indicesToDelete;
     QList<FrameBackup>              m_deletedFrames;
     QMap<QString, SpriteAnimation>  m_animationsBackup;
-    QImage                          m_atlasBefore;
-    QImage                          m_atlasAfter;
 };
 
 /**
@@ -328,9 +327,16 @@ public:
     void redo() override;
 
 private:
+    struct FramePatch {
+        QRect  rect;
+        QImage oldPatch;
+        QImage newPatch;
+    };
+
     SpriteDocument*        m_doc;
     QMap<int, QImage>      m_oldFrames;
     QMap<int, QImage>      m_newFrames;
+    QList<FramePatch>      m_framePatches;
     QImage                 m_oldAtlas;
     QImage                 m_newAtlas;
 };

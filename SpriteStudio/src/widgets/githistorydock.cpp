@@ -22,11 +22,12 @@
 // GitCommitNodeItem Implementation
 // ============================================================================
 
-GitCommitNodeItem::GitCommitNodeItem(const GitCommitInfo &info, bool isHead, QGraphicsItem *parent)
+GitCommitNodeItem::GitCommitNodeItem(const GitCommitInfo &info, bool isHead, const QColor &branchColor, QGraphicsItem *parent)
     : QObject()
     , QGraphicsEllipseItem(parent)
     , m_info(info)
     , m_isHead(isHead)
+    , m_branchColor(branchColor)
 {
     setAcceptHoverEvents(true);
     setCursor(Qt::PointingHandCursor);
@@ -70,6 +71,9 @@ void GitCommitNodeItem::updateVisualState()
     if (m_isHead) {
         fillColor = QColor(QStringLiteral("#2ecc71"));    // Emerald green
         strokeColor = QColor(QStringLiteral("#27ae60"));
+    } else if (m_branchColor.isValid()) {
+        fillColor = m_branchColor;
+        strokeColor = m_branchColor.darker(120);
     } else {
         fillColor = QColor(QStringLiteral("#3498db"));    // Slate blue
         strokeColor = QColor(QStringLiteral("#2980b9"));
@@ -307,39 +311,120 @@ void GitHistoryDock::refreshHistory()
 
 void GitHistoryDock::buildCommitTree(const QList<GitCommitInfo> &log, const QString &headHash)
 {
-    const qreal nodeX = 24.0;
-    const qreal rowSpacing = 44.0;
+    const qreal startX = 24.0;
+    const qreal laneWidth = 20.0;
     const qreal startY = 24.0;
+    const qreal rowSpacing = 44.0;
 
-    QMap<QString, QPointF> commitPositions;
-    for (int i = 0; i < log.size(); ++i) {
-        qreal y = startY + i * rowSpacing;
-        commitPositions.insert(log.at(i).hash, QPointF(nodeX, y));
-    }
+    static const QColor laneColors[] = {
+        QColor(QStringLiteral("#3498db")), // Blue
+        QColor(QStringLiteral("#e74c3c")), // Red
+        QColor(QStringLiteral("#9b59b6")), // Purple
+        QColor(QStringLiteral("#f39c12")), // Orange
+        QColor(QStringLiteral("#1abc9c")), // Turquoise
+        QColor(QStringLiteral("#e67e22")), // Dark Orange
+        QColor(QStringLiteral("#34495e"))  // Navy
+    };
+    const int numColors = sizeof(laneColors) / sizeof(laneColors[0]);
 
-    // 1. Draw connecting lines between commits and parents
-    QPen linePen(QColor(QStringLiteral("#7f8c8d")), 2.0);
+    // 1. Assign topological lanes
+    QMap<QString, int> commitLanes;
+    QList<QString> activeLanes;
+    int maxLane = 0;
+
     for (int i = 0; i < log.size(); ++i) {
         const GitCommitInfo &commit = log.at(i);
-        QPointF fromPos = commitPositions.value(commit.hash);
+        int lane = -1;
 
-        for (const QString &parentHash : commit.parentHashes) {
-            if (commitPositions.contains(parentHash)) {
-                QPointF toPos = commitPositions.value(parentHash);
-                m_scene->addLine(fromPos.x(), fromPos.y(), toPos.x(), toPos.y(), linePen);
+        int existingIdx = activeLanes.indexOf(commit.hash);
+        if (existingIdx != -1) {
+            lane = existingIdx;
+        } else {
+            int emptySlot = activeLanes.indexOf(QString());
+            if (emptySlot != -1) {
+                lane = emptySlot;
+                activeLanes[emptySlot] = commit.hash;
+            } else {
+                lane = activeLanes.size();
+                activeLanes.append(commit.hash);
+            }
+        }
+
+        commitLanes.insert(commit.hash, lane);
+        if (lane > maxLane) maxLane = lane;
+
+        if (commit.parentHashes.isEmpty()) {
+            activeLanes[lane] = QString();
+        } else {
+            const QString firstParent = commit.parentHashes.first();
+            if (!activeLanes.contains(firstParent)) {
+                activeLanes[lane] = firstParent;
+            } else {
+                activeLanes[lane] = QString();
+            }
+
+            for (int p = 1; p < commit.parentHashes.size(); ++p) {
+                const QString otherParent = commit.parentHashes.at(p);
+                if (!activeLanes.contains(otherParent)) {
+                    int slot = activeLanes.indexOf(QString());
+                    if (slot != -1) {
+                        activeLanes[slot] = otherParent;
+                    } else {
+                        activeLanes.append(otherParent);
+                    }
+                }
             }
         }
     }
 
-    // 2. Draw nodes and label rows
+    QMap<QString, QPointF> commitPositions;
+    for (int i = 0; i < log.size(); ++i) {
+        const QString &hash = log.at(i).hash;
+        int lane = commitLanes.value(hash, 0);
+        qreal x = startX + lane * laneWidth;
+        qreal y = startY + i * rowSpacing;
+        commitPositions.insert(hash, QPointF(x, y));
+    }
+
+    // 2. Draw connecting lines with smooth cubic bezier curves
+    for (int i = 0; i < log.size(); ++i) {
+        const GitCommitInfo &commit = log.at(i);
+        QPointF fromPos = commitPositions.value(commit.hash);
+        int fromLane = commitLanes.value(commit.hash, 0);
+        QColor branchColor = laneColors[fromLane % numColors];
+        QPen linePen(branchColor, 2.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+
+        for (const QString &parentHash : commit.parentHashes) {
+            if (commitPositions.contains(parentHash)) {
+                QPointF toPos = commitPositions.value(parentHash);
+                if (qFuzzyCompare(fromPos.x(), toPos.x())) {
+                    QGraphicsLineItem *lineItem = m_scene->addLine(fromPos.x(), fromPos.y(), toPos.x(), toPos.y(), linePen);
+                    lineItem->setZValue(-1);
+                } else {
+                    QPainterPath path;
+                    path.moveTo(fromPos);
+                    qreal midY = (fromPos.y() + toPos.y()) / 2.0;
+                    path.cubicTo(fromPos.x(), midY, toPos.x(), midY, toPos.x(), toPos.y());
+                    QGraphicsPathItem *pathItem = m_scene->addPath(path, linePen);
+                    pathItem->setZValue(-1);
+                }
+            }
+        }
+    }
+
+    // 3. Draw nodes and label rows
+    const qreal textStartX = startX + (maxLane + 1) * laneWidth + 14.0;
     for (int i = 0; i < log.size(); ++i) {
         const GitCommitInfo &commit = log.at(i);
         QPointF pos = commitPositions.value(commit.hash);
+        int lane = commitLanes.value(commit.hash, 0);
+        QColor branchColor = laneColors[lane % numColors];
         bool isHead = (!headHash.isEmpty() && commit.hash == headHash);
 
         // Commit Node Item
-        GitCommitNodeItem *nodeItem = new GitCommitNodeItem(commit, isHead);
+        GitCommitNodeItem *nodeItem = new GitCommitNodeItem(commit, isHead, branchColor);
         nodeItem->setPos(pos);
+        nodeItem->setZValue(1);
         m_scene->addItem(nodeItem);
         m_nodeItems.append(nodeItem);
 
@@ -351,8 +436,8 @@ void GitHistoryDock::buildCommitTree(const QList<GitCommitInfo> &log, const QStr
         QFont monoFont(QStringLiteral("Monospace"), 8);
         monoFont.setStyleHint(QFont::Monospace);
         hashItem->setFont(monoFont);
-        hashItem->setDefaultTextColor(QColor(QStringLiteral("#95a5a6")));
-        hashItem->setPos(pos.x() + 16, pos.y() - 14);
+        hashItem->setDefaultTextColor(branchColor);
+        hashItem->setPos(textStartX, pos.y() - 14);
 
         // Date & Time
         QString timeStr = commit.timestamp.toLocalTime().toString(QStringLiteral("HH:mm:ss"));
@@ -361,10 +446,10 @@ void GitHistoryDock::buildCommitTree(const QList<GitCommitInfo> &log, const QStr
         timeFont.setPointSize(8);
         timeItem->setFont(timeFont);
         timeItem->setDefaultTextColor(QColor(QStringLiteral("#7f8c8d")));
-        timeItem->setPos(pos.x() + 74, pos.y() - 14);
+        timeItem->setPos(textStartX + 60, pos.y() - 14);
 
-        // HEAD Badge
-        qreal textStartX = pos.x() + 130;
+        // HEAD Badge & Commit message
+        qreal msgStartX = textStartX + 120;
         if (isHead) {
             QGraphicsTextItem *headBadge = m_scene->addText(QStringLiteral("[HEAD]"));
             QFont headFont = headBadge->font();
@@ -372,8 +457,8 @@ void GitHistoryDock::buildCommitTree(const QList<GitCommitInfo> &log, const QStr
             headFont.setPointSize(8);
             headBadge->setFont(headFont);
             headBadge->setDefaultTextColor(QColor(QStringLiteral("#2ecc71")));
-            headBadge->setPos(textStartX, pos.y() - 14);
-            textStartX += 48;
+            headBadge->setPos(msgStartX, pos.y() - 14);
+            msgStartX += 48;
         }
 
         // Commit message
@@ -384,7 +469,7 @@ void GitHistoryDock::buildCommitTree(const QList<GitCommitInfo> &log, const QStr
         }
         msgItem->setFont(msgFont);
         msgItem->setDefaultTextColor(isHead ? QColor(QStringLiteral("#2ecc71")) : palette().text().color());
-        msgItem->setPos(textStartX, pos.y() - 14);
+        msgItem->setPos(msgStartX, pos.y() - 14);
 
         // If this commit was selected previously, restore selection
         if (m_hasSelection && m_selectedCommit.hash == commit.hash) {
@@ -394,7 +479,11 @@ void GitHistoryDock::buildCommitTree(const QList<GitCommitInfo> &log, const QStr
 
     // Set scene rect with generous margin
     qreal totalHeight = startY + log.size() * rowSpacing + 20;
-    m_scene->setSceneRect(0, 0, m_graphicsView->width() > 300 ? m_graphicsView->width() : 300, totalHeight);
+    qreal totalWidth = textStartX + 400;
+    if (m_graphicsView && m_graphicsView->width() > totalWidth) {
+        totalWidth = m_graphicsView->width();
+    }
+    m_scene->setSceneRect(0, 0, totalWidth, totalHeight);
 }
 
 void GitHistoryDock::updateDetailsPane(const GitCommitInfo *info)

@@ -181,6 +181,10 @@ private slots:
     void on_btnApplyPivotAnim_clicked();
     void on_btnApplyPivotAll_clicked();
 
+    void onUndoTriggered();
+    void onRedoTriggered();
+    void updateUndoRedoActions();
+
 private:
     void updatePivotUiFromSelection();
     void applyPivotPresetToSelection(PivotPreset preset);

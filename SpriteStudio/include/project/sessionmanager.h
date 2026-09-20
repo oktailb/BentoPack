@@ -97,6 +97,8 @@ public:
     QList<GitCommitInfo> gitLog() const;
     QString gitHeadCommitHash() const;
     bool gitCheckout(const QString &commitHash, QString *errorMsg = nullptr);
+    QList<GitCommitInfo> gitChildrenOf(const QString &parentHash) const;
+    QString gitParentCommitHash(const QString &commitHash) const;
     static bool isGitAvailable();
 
     // Git author identity

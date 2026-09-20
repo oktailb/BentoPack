@@ -22,7 +22,7 @@ class GitCommitNodeItem : public QObject, public QGraphicsEllipseItem
     Q_OBJECT
 
 public:
-    GitCommitNodeItem(const GitCommitInfo &info, bool isHead, QGraphicsItem *parent = nullptr);
+    GitCommitNodeItem(const GitCommitInfo &info, bool isHead, const QColor &branchColor = QColor(), QGraphicsItem *parent = nullptr);
 
     const GitCommitInfo& commitInfo() const { return m_info; }
     bool isHead() const { return m_isHead; }
@@ -45,6 +45,7 @@ private:
     GitCommitInfo m_info;
     bool m_isHead = false;
     bool m_isSelected = false;
+    QColor m_branchColor;
 };
 
 /**

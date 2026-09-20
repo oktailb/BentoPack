@@ -605,6 +605,16 @@ bool SessionManager::gitCommit(const QString &message)
     git_oid_tostr(oidStr, sizeof(oidStr), &commit_id);
     QString commitHashStr = QString::fromLatin1(oidStr);
 
+    if (commitResult == 0) {
+        // Create persistent branch reference for this commit to ensure branched tips remain reachable
+        QString refName = QStringLiteral("refs/heads/rev_%1").arg(commitHashStr.left(12));
+        git_reference *branchRef = nullptr;
+        git_reference_create(&branchRef, repo, refName.toUtf8().constData(), &commit_id, 1, "Session commit tracking");
+        if (branchRef) {
+            git_reference_free(branchRef);
+        }
+    }
+
     if (parent_commit) git_commit_free(parent_commit);
     git_signature_free(sig);
     git_tree_free(tree);
@@ -774,6 +784,33 @@ bool SessionManager::gitCheckout(const QString &commitHash, QString *errorMsg)
     if (errorMsg) *errorMsg = tr("Git integration is not compiled in.");
     return false;
 #endif
+}
+
+QList<GitCommitInfo> SessionManager::gitChildrenOf(const QString &parentHash) const
+{
+    QList<GitCommitInfo> children;
+    if (parentHash.isEmpty()) return children;
+
+    const QList<GitCommitInfo> log = gitLog();
+    for (const GitCommitInfo &info : log) {
+        if (info.parentHashes.contains(parentHash)) {
+            children.append(info);
+        }
+    }
+    return children;
+}
+
+QString SessionManager::gitParentCommitHash(const QString &commitHash) const
+{
+    if (commitHash.isEmpty()) return QString();
+
+    const QList<GitCommitInfo> log = gitLog();
+    for (const GitCommitInfo &info : log) {
+        if (info.hash == commitHash && !info.parentHashes.isEmpty()) {
+            return info.parentHashes.first();
+        }
+    }
+    return QString();
 }
 
 void SessionManager::setAuthorIdentity(const QString &name, const QString &email)

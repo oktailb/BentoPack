@@ -53,6 +53,7 @@ public:
 
     // Scene & Atlas Image
     void setAtlasImage(const QImage &image);
+    void patchAtlasRegion(const QRect &rect, const QImage &patch);
     void clearAtlas();
     QGraphicsScene* scene() const { return m_scene; }
     QGraphicsPixmapItem* atlasPixmapItem() const { return m_atlasPixmapItem; }
@@ -141,6 +142,7 @@ private:
     Qt::KeyboardModifiers m_selectionModifiers = Qt::NoModifier;
 
     bool                 m_showPolygonMeshes = true;
+    QRect                m_lastPatchedRegion;
 };
 
 #endif // ATLASVIEWCONTROLLER_H

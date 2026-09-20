@@ -6,6 +6,7 @@
 #include "include/config/appconfig.h"
 #include "include/project/sessionmanager.h"
 #include "include/project/projectmanager.h"
+#include "include/widgets/branchselectiondialog.h"
 #include "packer/vramtexturecompressor.h"
 #include <QUndoStack>
 #include <QSettings>
@@ -35,6 +36,9 @@ ProjectController::ProjectController(SpriteDocument *document, QUndoStack *undoS
             setProjectModified(true);
         });
         connect(m_document, &SpriteDocument::atlasChanged, this, [this]() {
+            setProjectModified(true);
+        });
+        connect(m_document, &SpriteDocument::atlasRegionChanged, this, [this](const QRect &) {
             setProjectModified(true);
         });
         connect(m_document, &SpriteDocument::animationsChanged, this, [this]() {
@@ -96,11 +100,16 @@ bool ProjectController::newProject()
         m_undoStack->clear();
     }
     m_lastUndoIndex = 0;
+    m_undoCommitHistory.clear();
+    m_undoCommands.clear();
     m_currentProjectPath.clear();
     m_currentFilePath.clear();
 
     if (m_sessionManager) {
         m_sessionManager->startNewSession();
+        ProjectManager::saveProjectToSessionDir(*m_document, m_sessionManager->currentSessionDir());
+        m_sessionManager->gitCommit(tr("New project"));
+        m_undoCommitHistory.insert(0, m_sessionManager->gitHeadCommitHash());
     }
 
     setProjectModified(false);
@@ -153,6 +162,11 @@ bool ProjectController::openProject(const QString &sspPath, QString *errorMsg)
         m_undoStack->clear();
     }
     m_lastUndoIndex = 0;
+    m_undoCommitHistory.clear();
+    m_undoCommands.clear();
+    if (m_sessionManager) {
+        m_undoCommitHistory.insert(0, m_sessionManager->gitHeadCommitHash());
+    }
 
     setProjectModified(false);
     m_isProjectLoading = false;
@@ -346,6 +360,11 @@ bool ProjectController::openFile(const QString &filePath, QString *errorMsg)
         m_undoStack->clear();
     }
     m_lastUndoIndex = 0;
+    m_undoCommitHistory.clear();
+    m_undoCommands.clear();
+    if (m_sessionManager) {
+        m_undoCommitHistory.insert(0, m_sessionManager->gitHeadCommitHash());
+    }
 
     setProjectModified(false);
     m_isProjectLoading = false;
@@ -702,9 +721,16 @@ void ProjectController::onAsyncJobFinished()
         if (m_sessionManager) {
             m_sessionManager->startNewSession();
             ProjectManager::saveProjectToSessionDir(*m_document, m_sessionManager->currentSessionDir());
+            m_sessionManager->gitCommit(tr("Open %1").arg(QFileInfo(res.filePath).fileName()));
         }
         if (m_undoStack) {
             m_undoStack->clear();
+        }
+        m_lastUndoIndex = 0;
+        m_undoCommitHistory.clear();
+        m_undoCommands.clear();
+        if (m_sessionManager) {
+            m_undoCommitHistory.insert(0, m_sessionManager->gitHeadCommitHash());
         }
         setProjectModified(false);
         emit statusMessage(tr("Loaded %1 successfully.").arg(QFileInfo(res.filePath).fileName()));
@@ -723,28 +749,75 @@ void ProjectController::onUndoStackIndexChanged(int idx)
     if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return;
     if (!m_document || m_document->isEmpty()) return;
 
-    // Save project JSON to scratch session directory
-    ProjectManager::saveProjectToSessionDir(*m_document, m_sessionManager->currentSessionDir());
-
-    // Determine descriptive action message
-    QString commitMsg;
-    if (idx > m_lastUndoIndex) {
-        const QUndoCommand *cmd = m_undoStack ? m_undoStack->command(idx - 1) : nullptr;
-        commitMsg = cmd ? cmd->text() : tr("Action executed");
-        if (commitMsg.trimmed().isEmpty()) {
-            commitMsg = tr("Project modified");
-        }
-    } else if (idx < m_lastUndoIndex) {
-        const QUndoCommand *cmd = m_undoStack ? m_undoStack->command(idx) : nullptr;
-        QString undone = cmd ? cmd->text() : QString();
-        commitMsg = tr("Undo: %1").arg(undone.isEmpty() ? tr("Action") : undone);
-    } else {
+    if (m_undoStack && m_undoStack->count() == 0) {
+        m_lastUndoIndex = 0;
+        m_undoCommands.clear();
         return;
     }
 
-    m_lastUndoIndex = idx;
-    m_sessionManager->gitCommit(commitMsg);
-    emit projectHistoryChanged();
+    if (idx < m_lastUndoIndex) {
+        // User performed an UNDO: step back in git history without creating a new commit
+        m_lastUndoIndex = idx;
+        if (m_undoCommitHistory.contains(idx)) {
+            const QString targetHash = m_undoCommitHistory.value(idx);
+            if (!targetHash.isEmpty()) {
+                m_sessionManager->gitCheckout(targetHash);
+            }
+        }
+        emit projectHistoryChanged();
+        return;
+    }
+
+    if (idx > m_lastUndoIndex) {
+        const QUndoCommand *currentCmd = m_undoStack ? m_undoStack->command(idx - 1) : nullptr;
+        bool isRedoOfSameCommand = (currentCmd != nullptr) && (m_undoCommands.value(idx, nullptr) == currentCmd);
+
+        // Check if this is a true REDO of an already known command & commit
+        if (isRedoOfSameCommand && m_undoCommitHistory.contains(idx)) {
+            m_lastUndoIndex = idx;
+            const QString targetHash = m_undoCommitHistory.value(idx);
+            if (!targetHash.isEmpty()) {
+                m_sessionManager->gitCheckout(targetHash);
+            }
+            emit projectHistoryChanged();
+            return;
+        }
+
+        // Otherwise, this is a brand new command!
+        // Prune stale in-memory undo mapping after current index
+        auto it = m_undoCommitHistory.begin();
+        while (it != m_undoCommitHistory.end()) {
+            if (it.key() >= idx) {
+                it = m_undoCommitHistory.erase(it);
+            } else {
+                ++it;
+            }
+        }
+
+        auto itCmd = m_undoCommands.begin();
+        while (itCmd != m_undoCommands.end()) {
+            if (itCmd.key() >= idx) {
+                itCmd = m_undoCommands.erase(itCmd);
+            } else {
+                ++itCmd;
+            }
+        }
+
+        // Save project JSON to scratch session directory
+        ProjectManager::saveProjectToSessionDir(*m_document, m_sessionManager->currentSessionDir());
+
+        QString commitMsg = currentCmd ? currentCmd->text() : tr("Action executed");
+        if (commitMsg.trimmed().isEmpty()) {
+            commitMsg = tr("Project modified");
+        }
+
+        m_lastUndoIndex = idx;
+        m_sessionManager->gitCommit(commitMsg);
+        m_undoCommitHistory.insert(idx, m_sessionManager->gitHeadCommitHash());
+        m_undoCommands.insert(idx, currentCmd);
+        emit projectHistoryChanged();
+        return;
+    }
 }
 
 bool ProjectController::checkoutRevision(const QString &commitHash, QString *errorMsg)
@@ -771,6 +844,9 @@ bool ProjectController::checkoutRevision(const QString &commitHash, QString *err
         m_undoStack->clear();
         m_lastUndoIndex = 0;
     }
+    m_undoCommitHistory.clear();
+    m_undoCommands.clear();
+    m_undoCommitHistory.insert(0, targetHash);
     m_isProjectLoading = false;
 
     emit m_document->documentReset();
@@ -778,4 +854,87 @@ bool ProjectController::checkoutRevision(const QString &commitHash, QString *err
     emit statusMessage(tr("Checked out revision %1.").arg(targetHash.left(7)));
     return true;
 }
+
+bool ProjectController::canUndoGit() const
+{
+    if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return false;
+    QString headHash = m_sessionManager->gitHeadCommitHash();
+    if (headHash.isEmpty()) return false;
+    return !m_sessionManager->gitParentCommitHash(headHash).isEmpty();
+}
+
+bool ProjectController::canRedoGit() const
+{
+    if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return false;
+    QString headHash = m_sessionManager->gitHeadCommitHash();
+    if (headHash.isEmpty()) return false;
+    return !m_sessionManager->gitChildrenOf(headHash).isEmpty();
+}
+
+bool ProjectController::hasMultipleRedoBranches() const
+{
+    if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return false;
+    QString headHash = m_sessionManager->gitHeadCommitHash();
+    if (headHash.isEmpty()) return false;
+    return m_sessionManager->gitChildrenOf(headHash).size() > 1;
+}
+
+QList<GitCommitInfo> ProjectController::redoBranches() const
+{
+    if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return {};
+    QString headHash = m_sessionManager->gitHeadCommitHash();
+    if (headHash.isEmpty()) return {};
+    return m_sessionManager->gitChildrenOf(headHash);
+}
+
+bool ProjectController::undoGit()
+{
+    if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return false;
+    QString headHash = m_sessionManager->gitHeadCommitHash();
+    if (headHash.isEmpty()) return false;
+
+    QString parentHash = m_sessionManager->gitParentCommitHash(headHash);
+    if (parentHash.isEmpty()) return false;
+
+    QString err;
+    return checkoutRevision(parentHash, &err);
+}
+
+bool ProjectController::redoGit(const QString &targetCommitHash)
+{
+    if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return false;
+    QString headHash = m_sessionManager->gitHeadCommitHash();
+    if (headHash.isEmpty()) return false;
+
+    QString commitToCheckout = targetCommitHash;
+    if (commitToCheckout.isEmpty()) {
+        QList<GitCommitInfo> children = m_sessionManager->gitChildrenOf(headHash);
+        if (children.isEmpty()) return false;
+        commitToCheckout = children.first().hash;
+    }
+
+    QString err;
+    return checkoutRevision(commitToCheckout, &err);
+}
+
+bool ProjectController::promptAndRedoGit(QWidget *parent)
+{
+    if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return false;
+    QString headHash = m_sessionManager->gitHeadCommitHash();
+    if (headHash.isEmpty()) return false;
+
+    QList<GitCommitInfo> children = m_sessionManager->gitChildrenOf(headHash);
+    if (children.isEmpty()) return false;
+
+    if (children.size() == 1) {
+        return redoGit(children.first().hash);
+    }
+
+    QString selected = BranchSelectionDialog::selectBranch(children, parent);
+    if (!selected.isEmpty()) {
+        return redoGit(selected);
+    }
+    return false;
+}
+
 

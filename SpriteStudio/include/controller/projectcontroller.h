@@ -8,9 +8,11 @@
 #include <QFutureWatcher>
 #include "extractor/export.h"
 #include "model/spritedocument.h"
+#include "project/sessionmanager.h"
 
 class SpriteDocument;
 class QUndoStack;
+class QWidget;
 
 struct AsyncExtractionResult {
     enum JobType { JobOpen, JobRemoveBackground };
@@ -44,6 +46,14 @@ public:
     bool saveProjectAs(const QString &sspPath, QString *errorMsg = nullptr);
     bool restoreSession(const QString &sessionDir, QString *errorMsg = nullptr);
     bool checkoutRevision(const QString &commitHash, QString *errorMsg = nullptr);
+
+    bool canUndoGit() const;
+    bool canRedoGit() const;
+    bool hasMultipleRedoBranches() const;
+    QList<GitCommitInfo> redoBranches() const;
+    bool undoGit();
+    bool redoGit(const QString &targetCommitHash = QString());
+    bool promptAndRedoGit(QWidget *parent = nullptr);
 
     bool isProjectModified() const { return m_isModified; }
     void setProjectModified(bool modified);
@@ -92,6 +102,8 @@ public:
                                              bool smartCrop = false,
                                              double overlapThreshold = 0.5);
 
+    QMap<int, QString> undoCommitHistory() const { return m_undoCommitHistory; }
+
 signals:
     void fileLoaded(const QString &filePath);
     void fileLoadError(const QString &filePath, const QString &errorMessage);
@@ -121,6 +133,8 @@ private:
     bool m_isModified = false;
     bool m_isProjectLoading = false;
     int  m_lastUndoIndex = 0;
+    QMap<int, QString> m_undoCommitHistory;
+    QMap<int, const class QUndoCommand*> m_undoCommands;
     QFutureWatcher<AsyncExtractionResult> m_watcher;
     bool m_isProcessing = false;
 };

@@ -45,6 +45,9 @@ private slots:
     // 6. Palettes Tests
     void testRetroPalettesAuthenticity();
     void testDynamicSpriteColorExtraction();
+
+    // 7. Dirty Rects & COW Tests
+    void testPixelCanvasDirtyRectUndoRedo();
 };
 
 void TestPixelEditor::initTestCase()
@@ -495,6 +498,55 @@ void TestPixelEditor::testDynamicSpriteColorExtraction()
     QVERIFY(colors.contains(qRgb(255, 0, 0)));
     QVERIFY(colors.contains(qRgb(0, 255, 0)));
     QVERIFY(colors.contains(qRgb(0, 0, 255)));
+}
+
+void TestPixelEditor::testPixelCanvasDirtyRectUndoRedo()
+{
+    PixelCanvas canvas;
+    QImage initialImg(64, 64, QImage::Format_ARGB32);
+    initialImg.fill(Qt::white);
+    canvas.setImage(initialImg);
+
+    QCOMPARE(canvas.undoStack()->count(), 0);
+
+    // 1. Simulate localized brush stroke at (10, 10) to (12, 12)
+    QImage beforeStroke = canvas.image();
+    QImage modified = beforeStroke.copy();
+    for (int y = 10; y <= 12; ++y) {
+        for (int x = 10; x <= 12; ++x) {
+            modified.setPixelColor(x, y, Qt::red);
+        }
+    }
+    // Set modified image directly on canvas to mimic finished stroke
+    canvas.setImage(modified);
+    canvas.undoStack()->clear(); // reset
+
+    // Now test pushSnapshot with dirty rect
+    canvas.pushSnapshot(beforeStroke, QStringLiteral("Pencil Red Dot"));
+    QCOMPARE(canvas.undoStack()->count(), 1);
+
+    // Verify current state is modified
+    QCOMPARE(canvas.image().pixelColor(10, 10), QColor(Qt::red));
+    QCOMPARE(canvas.image().pixelColor(12, 12), QColor(Qt::red));
+    QCOMPARE(canvas.image().pixelColor(0, 0), QColor(Qt::white));
+    QCOMPARE(canvas.image().pixelColor(50, 50), QColor(Qt::white));
+
+    // 2. Undo: should restore only dirty rect to white without destroying the rest
+    canvas.undo();
+    QCOMPARE(canvas.image().pixelColor(10, 10), QColor(Qt::white));
+    QCOMPARE(canvas.image().pixelColor(12, 12), QColor(Qt::white));
+    QCOMPARE(canvas.image().pixelColor(0, 0), QColor(Qt::white));
+
+    // 3. Redo: should re-apply dirty rect
+    canvas.redo();
+    QCOMPARE(canvas.image().pixelColor(10, 10), QColor(Qt::red));
+    QCOMPARE(canvas.image().pixelColor(12, 12), QColor(Qt::red));
+    QCOMPARE(canvas.image().pixelColor(0, 0), QColor(Qt::white));
+
+    // 4. Test pushSnapshot with NO change (identical image)
+    int countBefore = canvas.undoStack()->count();
+    canvas.pushSnapshot(canvas.image(), QStringLiteral("No-op"));
+    QCOMPARE(canvas.undoStack()->count(), countBefore); // Should not push command!
 }
 
 int main(int argc, char *argv[])

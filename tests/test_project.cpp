@@ -496,7 +496,8 @@ void TestProject::testGitHistoryDockUI()
     QVERIFY(log.size() >= 2);
 
     // Test checkout to the oldest action commit through dock
-    QString targetHash = log.last().hash;
+    GitCommitInfo oldestActionCommit = (log.size() >= 2) ? log[log.size() - 2] : log.last();
+    QString targetHash = oldestActionCommit.hash;
     dock.checkoutRevision(targetHash);
 
     // Verify document was updated through dock's checkout
@@ -507,7 +508,7 @@ void TestProject::testGitHistoryDockUI()
     QCOMPARE(doc.boxes().size(), 2);
 
     // Test double click simulation on a commit
-    QMetaObject::invokeMethod(&dock, "onCommitDoubleClicked", Q_ARG(GitCommitInfo, log.last()));
+    QMetaObject::invokeMethod(&dock, "onCommitDoubleClicked", Q_ARG(GitCommitInfo, oldestActionCommit));
     QCoreApplication::processEvents();
     QCOMPARE(doc.boxes().size(), 1);
 }

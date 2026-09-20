@@ -442,13 +442,27 @@ void MainWindow::setupShortcuts()
     // Create Edit Menu for Undo/Redo
     m_editMenu = new QMenu(tr("KEY_MENU_EDIT"), this);
     menuBar()->insertMenu(ui->menuHelp->menuAction(), m_editMenu);
-    m_undoAction = m_undoStack->createUndoAction(this, tr("KEY_ACTION_UNDO"));
+    m_undoAction = new QAction(tr("KEY_ACTION_UNDO"), this);
     m_undoAction->setShortcut(QKeySequence::Undo);
+    connect(m_undoAction, &QAction::triggered, this, &MainWindow::onUndoTriggered);
     m_editMenu->addAction(m_undoAction);
 
-    m_redoAction = m_undoStack->createRedoAction(this, tr("KEY_ACTION_REDO"));
+    m_redoAction = new QAction(tr("KEY_ACTION_REDO"), this);
     m_redoAction->setShortcut(QKeySequence::Redo);
+    connect(m_redoAction, &QAction::triggered, this, &MainWindow::onRedoTriggered);
     m_editMenu->addAction(m_redoAction);
+
+    if (m_undoStack) {
+        connect(m_undoStack, &QUndoStack::canUndoChanged, this, &MainWindow::updateUndoRedoActions);
+        connect(m_undoStack, &QUndoStack::canRedoChanged, this, &MainWindow::updateUndoRedoActions);
+        connect(m_undoStack, &QUndoStack::indexChanged, this, &MainWindow::updateUndoRedoActions);
+    }
+    if (m_projectController) {
+        connect(m_projectController.get(), &ProjectController::projectHistoryChanged, this, &MainWindow::updateUndoRedoActions);
+        connect(m_projectController.get(), &ProjectController::fileLoaded, this, &MainWindow::updateUndoRedoActions);
+        connect(m_projectController.get(), &ProjectController::projectLoaded, this, &MainWindow::updateUndoRedoActions);
+    }
+    updateUndoRedoActions();
 
     m_editMenu->addSeparator();
     m_actionPixelEditorDialog = m_editMenu->addAction(tr("KEY_ACTION_PIXEL_EDITOR"));
@@ -1062,5 +1076,47 @@ void MainWindow::on_btnApplyPivotAll_clicked()
         m_document->setBoxesPivot(allIndices, targetPivot, true);
     }
 }
+
+void MainWindow::onUndoTriggered()
+{
+    if (m_undoStack && m_undoStack->canUndo()) {
+        m_undoStack->undo();
+    } else if (m_projectController && m_projectController->canUndoGit()) {
+        m_projectController->undoGit();
+    }
+    updateUndoRedoActions();
+}
+
+void MainWindow::onRedoTriggered()
+{
+    if (m_projectController && m_projectController->hasMultipleRedoBranches()) {
+        m_projectController->promptAndRedoGit(this);
+        updateUndoRedoActions();
+        return;
+    }
+
+    if (m_undoStack && m_undoStack->canRedo()) {
+        m_undoStack->redo();
+    } else if (m_projectController && m_projectController->canRedoGit()) {
+        m_projectController->redoGit();
+    }
+    updateUndoRedoActions();
+}
+
+void MainWindow::updateUndoRedoActions()
+{
+    bool canUndo = (m_undoStack && m_undoStack->canUndo()) ||
+                   (m_projectController && m_projectController->canUndoGit());
+    if (m_undoAction) {
+        m_undoAction->setEnabled(canUndo);
+    }
+
+    bool canRedo = (m_undoStack && m_undoStack->canRedo()) ||
+                   (m_projectController && m_projectController->canRedoGit());
+    if (m_redoAction) {
+        m_redoAction->setEnabled(canRedo);
+    }
+}
+
 
 

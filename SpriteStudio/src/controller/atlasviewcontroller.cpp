@@ -33,7 +33,17 @@ AtlasViewController::AtlasViewController(QGraphicsView *view,
         if (!m_document->atlas().isNull()) {
             setAtlasImage(m_document->atlas());
         }
+        connect(m_document, &SpriteDocument::atlasRegionChanged, this, [this](const QRect &rect) {
+            if (m_atlasPixmapItem && m_scene->sceneRect() == m_document->atlas().rect()) {
+                patchAtlasRegion(rect, m_document->atlas().copy(rect));
+                m_lastPatchedRegion = rect;
+            }
+        });
         connect(m_document, &SpriteDocument::atlasChanged, this, [this]() {
+            if (!m_lastPatchedRegion.isEmpty()) {
+                m_lastPatchedRegion = QRect();
+                return;
+            }
             setAtlasImage(m_document->atlas());
         });
         connect(m_document, &SpriteDocument::framesChanged, this, &AtlasViewController::syncAtlasBoxes);
@@ -153,6 +163,20 @@ void AtlasViewController::setAtlasImage(const QImage &image)
 
     syncAtlasBoxes();
     fitInView();
+}
+
+void AtlasViewController::patchAtlasRegion(const QRect &rect, const QImage &patch)
+{
+    if (!m_atlasPixmapItem || rect.isEmpty() || patch.isNull()) return;
+
+    QPixmap currentPix = m_atlasPixmapItem->pixmap();
+    QPainter p(&currentPix);
+    p.setCompositionMode(QPainter::CompositionMode_Source);
+    p.drawImage(rect.topLeft(), patch);
+    p.end();
+
+    m_atlasPixmapItem->setPixmap(currentPix);
+    m_scene->update(rect);
 }
 
 void AtlasViewController::clearAtlas()

@@ -79,6 +79,8 @@ public:
     void undo() { commitFloatingSelection(); m_undoStack.undo(); }
     void redo() { commitFloatingSelection(); m_undoStack.redo(); }
     QUndoStack* undoStack() { return &m_undoStack; }
+    void applyPatch(const QRect &rect, const QImage &patch);
+    void pushSnapshot(const QImage &oldImage, const QString &text);
 
 signals:
     void imageChanged();
@@ -102,10 +104,10 @@ private:
     // Helpers
     QPoint widgetToPixel(const QPoint &widgetPos) const;
     QPoint pixelToWidget(const QPoint &pixelPos) const;
+    QRect pixelToWidget(const QRect &pixelRect) const;
     bool isPixelInside(int x, int y) const;
     bool isPixelSelected(int x, int y) const;
 
-    void pushSnapshot(const QImage &oldImage, const QString &text);
     void drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor &color);
     void applyFloodFill(int startX, int startY, const QColor &replacementColor);
     void applyColorSelection(int targetX, int targetY);

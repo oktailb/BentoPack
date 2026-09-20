@@ -64,41 +64,43 @@ EraseAtlasPixelsCommand::EraseAtlasPixelsCommand(SpriteDocument *doc, const QLis
             fb.originalIndex = idx;
             fb.image = m_doc->frame(idx);
             fb.box = m_doc->box(idx);
+            if (m_doc && !m_doc->atlas().isNull() && !fb.box.rect.isEmpty()) {
+                QRect clamped = fb.box.rect.intersected(m_doc->atlas().rect());
+                if (!clamped.isEmpty()) {
+                    fb.atlasPatch = m_doc->atlas().copy(clamped);
+                }
+            }
             m_deletedFrames.append(fb);
         }
     }
 
-    m_animationsBackup = m_doc->animations();
-    m_atlasBefore = m_doc->atlas();
-    m_atlasAfter = (m_atlasBefore.format() == QImage::Format_ARGB32)
-        ? m_atlasBefore.copy()
-        : m_atlasBefore.convertToFormat(QImage::Format_ARGB32);
-
-    for (const FrameBackup &fb : m_deletedFrames) {
-        QRect r = fb.box.rect.intersected(m_atlasAfter.rect());
-        for (int y = r.top(); y <= r.bottom(); ++y) {
-            QRgb *line = reinterpret_cast<QRgb*>(m_atlasAfter.scanLine(y));
-            for (int x = r.left(); x <= r.right(); ++x) {
-                line[x] = qRgba(0, 0, 0, 0);
-            }
-        }
-    }
+    m_animationsBackup = m_doc ? m_doc->animations() : QMap<QString, SpriteAnimation>();
 }
 
 void EraseAtlasPixelsCommand::redo()
 {
-    m_doc->setAtlas(m_atlasAfter);
-    m_doc->removeFrames(m_indicesToDelete);
+    if (m_doc) {
+        for (const FrameBackup &fb : m_deletedFrames) {
+            if (!fb.box.rect.isEmpty()) {
+                m_doc->clearAtlasRegion(fb.box.rect);
+            }
+        }
+        m_doc->removeFrames(m_indicesToDelete);
+    }
 }
 
 void EraseAtlasPixelsCommand::undo()
 {
-    m_doc->setAtlas(m_atlasBefore);
-    for (const FrameBackup &fb : m_deletedFrames) {
-        m_doc->insertFrame(fb.originalIndex, fb.image, fb.box);
-    }
-    for (auto it = m_animationsBackup.begin(); it != m_animationsBackup.end(); ++it) {
-        m_doc->setAnimation(it.key(), it.value().frameIndices, it.value().fps, it.value().loop);
+    if (m_doc) {
+        for (const FrameBackup &fb : m_deletedFrames) {
+            if (!fb.box.rect.isEmpty() && !fb.atlasPatch.isNull()) {
+                m_doc->patchAtlas(fb.box.rect, fb.atlasPatch);
+            }
+            m_doc->insertFrame(fb.originalIndex, fb.image, fb.box);
+        }
+        for (auto it = m_animationsBackup.begin(); it != m_animationsBackup.end(); ++it) {
+            m_doc->setAnimation(it.key(), it.value().frameIndices, it.value().fps, it.value().loop);
+        }
     }
 }
 
@@ -498,23 +500,24 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
     , m_newFrames(modifiedFrames)
 {
     if (m_doc) {
-        m_oldAtlas = m_doc->atlas();
-        m_newAtlas = m_oldAtlas.copy();
-        QPainter p(&m_newAtlas);
-        p.setCompositionMode(QPainter::CompositionMode_Source);
-
         for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
             int idx = it.key();
-            const QImage &newImg = it.value();
             m_oldFrames[idx] = m_doc->frame(idx);
-            if (idx >= 0 && idx < m_doc->boxes().size()) {
+
+            if (!m_doc->atlas().isNull() && idx >= 0 && idx < m_doc->boxes().size()) {
                 const SpriteBox &b = m_doc->box(idx);
-                if (!b.rect.isNull() && !m_newAtlas.isNull()) {
-                    p.drawImage(b.rect.topLeft(), newImg);
+                if (!b.rect.isNull()) {
+                    QRect r = b.rect.intersected(m_doc->atlas().rect());
+                    if (!r.isEmpty()) {
+                        FramePatch fp;
+                        fp.rect = r;
+                        fp.oldPatch = m_doc->atlas().copy(r);
+                        fp.newPatch = it.value();
+                        m_framePatches.append(fp);
+                    }
                 }
             }
         }
-        p.end();
     }
 
     if (m_newFrames.size() == 1) {
@@ -544,7 +547,10 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
 void EditSpritePixelsCommand::redo()
 {
     if (!m_doc) return;
-    if (!m_newAtlas.isNull()) {
+    for (const FramePatch &fp : m_framePatches) {
+        m_doc->patchAtlas(fp.rect, fp.newPatch);
+    }
+    if (m_framePatches.isEmpty() && !m_newAtlas.isNull()) {
         m_doc->setAtlas(m_newAtlas);
     }
     for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
@@ -555,7 +561,10 @@ void EditSpritePixelsCommand::redo()
 void EditSpritePixelsCommand::undo()
 {
     if (!m_doc) return;
-    if (!m_oldAtlas.isNull()) {
+    for (const FramePatch &fp : m_framePatches) {
+        m_doc->patchAtlas(fp.rect, fp.oldPatch);
+    }
+    if (m_framePatches.isEmpty() && !m_oldAtlas.isNull()) {
         m_doc->setAtlas(m_oldAtlas);
     }
     for (auto it = m_oldFrames.constBegin(); it != m_oldFrames.constEnd(); ++it) {

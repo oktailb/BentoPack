@@ -116,6 +116,8 @@ public:
     // Atlas
     const QImage& atlas() const { return m_atlas; }
     void setAtlas(const QImage &image);
+    void patchAtlas(const QRect &rect, const QImage &patch);
+    void clearAtlasRegion(const QRect &rect);
 
     // Frames
     int frameCount() const { return m_frames.size(); }
@@ -181,6 +183,7 @@ public:
 
 signals:
     void atlasChanged();
+    void atlasRegionChanged(const QRect &rect);
     void framesChanged();
     void frameUpdated(int index);
     void boxPivotChanged(int index, const QPoint &pivot);

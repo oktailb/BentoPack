@@ -21,6 +21,7 @@
 #include "commands/commands.h"
 #include "atlasboxitem.h"
 #include "project/projectmanager.h"
+#include "project/sessionmanager.h"
 #include "filters/filterregistry.h"
 #include "widgets/backgroundremovaldialog.h"
 #include "widgets/despillfilterdialog.h"
@@ -56,6 +57,9 @@ private slots:
     void testProjectControllerOpenAsync();
     void testProjectControllerRemoveBgAsync();
     void testUndoStackLimitAndImageStorage();
+    void testUndoRedoGitHeadSync();
+    void testUndoGitWhenUndoStackEmpty();
+    void testGitBranchingAndRedoSelection();
 
     // AnimationController tests
     void testAnimationControllerPlayback();
@@ -529,6 +533,155 @@ void TestControllers::testUndoStackLimitAndImageStorage()
     QCOMPARE(undoStack.count(), 50);
     undoStack.redo();
     QCOMPARE(undoStack.count(), 50);
+}
+
+void TestControllers::testUndoRedoGitHeadSync()
+{
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    ProjectController pc(&doc, &undoStack);
+
+    // Real-world initial state: open atlas
+    QVERIFY(pc.openFile(QStringLiteral(SAMPLE_DIR "/hero.png")));
+    QString hash0 = pc.sessionManager()->gitHeadCommitHash();
+    QVERIFY(!hash0.isEmpty());
+    QCOMPARE(pc.undoCommitHistory().value(0), hash0);
+
+    // 1. Perform first action via undoStack
+    undoStack.push(new AddSliceCommand(&doc, QRect(0, 0, 16, 16)));
+    QCOMPARE(undoStack.index(), 1);
+    QString hash1 = pc.sessionManager()->gitHeadCommitHash();
+    QVERIFY(!hash1.isEmpty());
+    QVERIFY(hash1 != hash0);
+    QCOMPARE(pc.undoCommitHistory().value(1), hash1);
+
+    // 2. Perform second action via undoStack
+    undoStack.push(new AddSliceCommand(&doc, QRect(16, 16, 16, 16)));
+    QCOMPARE(undoStack.index(), 2);
+    QString hash2 = pc.sessionManager()->gitHeadCommitHash();
+    QVERIFY(!hash2.isEmpty());
+    QVERIFY(hash2 != hash1);
+    QCOMPARE(pc.undoCommitHistory().value(2), hash2);
+
+    int commitCountBeforeUndo = pc.sessionManager()->gitLog().size();
+
+    // 3. UNDO: Should step back HEAD to hash1 WITHOUT creating any new commit!
+    undoStack.undo();
+    QCOMPARE(undoStack.index(), 1);
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), hash1);
+    // Number of commits in gitLog must NOT increase!
+    QCOMPARE(pc.sessionManager()->gitLog().size(), commitCountBeforeUndo);
+
+    // 4. UNDO again: Should step back HEAD to hash0
+    undoStack.undo();
+    QCOMPARE(undoStack.index(), 0);
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), hash0);
+    QCOMPARE(pc.sessionManager()->gitLog().size(), commitCountBeforeUndo);
+
+    // 5. REDO: Should advance HEAD to hash1 without creating a new commit
+    undoStack.redo();
+    QCOMPARE(undoStack.index(), 1);
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), hash1);
+    QCOMPARE(pc.sessionManager()->gitLog().size(), commitCountBeforeUndo);
+
+    // 6. REDO again: Should advance HEAD to hash2
+    undoStack.redo();
+    QCOMPARE(undoStack.index(), 2);
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), hash2);
+    QCOMPARE(pc.sessionManager()->gitLog().size(), commitCountBeforeUndo);
+}
+
+void TestControllers::testUndoGitWhenUndoStackEmpty()
+{
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    ProjectController pc(&doc, &undoStack);
+
+    QVERIFY(pc.openFile(QStringLiteral(SAMPLE_DIR "/hero.png")));
+    QString initialHash = pc.sessionManager()->gitHeadCommitHash();
+    int initialCount = doc.frameCount();
+
+    // Perform two actions
+    undoStack.push(new AddSliceCommand(&doc, QRect(0, 0, 16, 16)));
+    QString hash1 = pc.sessionManager()->gitHeadCommitHash();
+    undoStack.push(new AddSliceCommand(&doc, QRect(16, 16, 16, 16)));
+    QString hash2 = pc.sessionManager()->gitHeadCommitHash();
+
+    // Now simulate closing/reopening or stack clearing
+    undoStack.clear();
+    QCOMPARE(undoStack.count(), 0);
+    QCOMPARE(undoStack.canUndo(), false);
+
+    // HEAD is at hash2. Does HEAD have a parent in Git? YES (hash1)
+    QVERIFY(pc.canUndoGit());
+    QCOMPARE(pc.sessionManager()->gitParentCommitHash(hash2), hash1);
+
+    // Executing undoGit() steps back to hash1 and reloads document
+    QVERIFY(pc.undoGit());
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), hash1);
+    QCOMPARE(doc.frameCount(), initialCount + 1); // 1 extra slice in hash1
+
+    // At hash1, can we redo back to hash2?
+    QVERIFY(pc.canRedoGit());
+    QVERIFY(pc.redoGit(hash2));
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), hash2);
+    QCOMPARE(doc.frameCount(), initialCount + 2); // 2 extra slices in hash2
+}
+
+void TestControllers::testGitBranchingAndRedoSelection()
+{
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    ProjectController pc(&doc, &undoStack);
+
+    QVERIFY(pc.openFile(QStringLiteral(SAMPLE_DIR "/hero.png")));
+    QString baseHash = pc.sessionManager()->gitHeadCommitHash();
+    int initialCount = doc.frameCount();
+
+    // Branch 1: Add slice at (0, 0, 16, 16)
+    undoStack.push(new AddSliceCommand(&doc, QRect(0, 0, 16, 16)));
+    QString branch1Hash = pc.sessionManager()->gitHeadCommitHash();
+    QVERIFY(!branch1Hash.isEmpty());
+
+    // Step back to baseHash using undo
+    undoStack.undo();
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), baseHash);
+
+    // Branch 2: Add different slice at (50, 50, 20, 20) -> should bifurcate
+    undoStack.push(new AddSliceCommand(&doc, QRect(50, 50, 20, 20)));
+    QString branch2Hash = pc.sessionManager()->gitHeadCommitHash();
+    QVERIFY(!branch2Hash.isEmpty());
+    QVERIFY(branch2Hash != branch1Hash);
+
+    // Step back to baseHash
+    undoStack.undo();
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), baseHash);
+
+    // At baseHash, it now has 2 direct children in Git: branch1Hash and branch2Hash!
+    QVERIFY(pc.hasMultipleRedoBranches());
+    QList<GitCommitInfo> branches = pc.redoBranches();
+    QCOMPARE(branches.size(), 2);
+
+    QStringList childHashes;
+    for (const GitCommitInfo &b : branches) {
+        childHashes.append(b.hash);
+    }
+    QVERIFY(childHashes.contains(branch1Hash));
+    QVERIFY(childHashes.contains(branch2Hash));
+
+    // Restore branch 1 explicitly
+    QVERIFY(pc.redoGit(branch1Hash));
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), branch1Hash);
+    QCOMPARE(doc.frameCount(), initialCount + 1);
+    QCOMPARE(doc.box(initialCount).rect, QRect(0, 0, 16, 16));
+
+    // Step back to baseHash, then restore branch 2 explicitly
+    QVERIFY(pc.undoGit());
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), baseHash);
+    QVERIFY(pc.redoGit(branch2Hash));
+    QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), branch2Hash);
+    QCOMPARE(doc.frameCount(), initialCount + 1);
+    QCOMPARE(doc.box(initialCount).rect, QRect(50, 50, 20, 20));
 }
 
 // -----------------------------------------------------------------------------

@@ -96,6 +96,7 @@ set(SpriteStudioCore_SRC
     src/widgets/polygonmeshdialog.cpp
     src/widgets/pixelcanvas.cpp
     src/widgets/pixeleditordialog.cpp
+    src/widgets/branchselectiondialog.cpp
 )
 
 set(SpriteStudioCore_UI
@@ -135,6 +136,7 @@ set(SpriteStudioCore_INCLUDE
     include/widgets/coloradjustfilterdialog.h
     include/widgets/pixelrescalefilterdialog.h
     include/widgets/retropalettefilterdialog.h
+    include/widgets/branchselectiondialog.h
     include/filters/filterplugin.h
     include/filters/filterregistry.h
     include/filters/backgroundremovalfilter.h

@@ -38,6 +38,40 @@ void SpriteDocument::setAtlas(const QImage &image)
     emit atlasChanged();
 }
 
+void SpriteDocument::patchAtlas(const QRect &rect, const QImage &patch)
+{
+    if (m_atlas.isNull() || rect.isEmpty() || patch.isNull()) return;
+
+    if (m_atlas.format() != QImage::Format_ARGB32) {
+        m_atlas = m_atlas.convertToFormat(QImage::Format_ARGB32);
+    }
+
+    QPainter p(&m_atlas);
+    p.setCompositionMode(QPainter::CompositionMode_Source);
+    p.drawImage(rect.topLeft(), patch);
+    p.end();
+
+    emit atlasRegionChanged(rect);
+    emit atlasChanged();
+}
+
+void SpriteDocument::clearAtlasRegion(const QRect &rect)
+{
+    if (m_atlas.isNull() || rect.isEmpty()) return;
+
+    if (m_atlas.format() != QImage::Format_ARGB32) {
+        m_atlas = m_atlas.convertToFormat(QImage::Format_ARGB32);
+    }
+
+    QPainter p(&m_atlas);
+    p.setCompositionMode(QPainter::CompositionMode_Clear);
+    p.fillRect(rect.intersected(m_atlas.rect()), Qt::transparent);
+    p.end();
+
+    emit atlasRegionChanged(rect);
+    emit atlasChanged();
+}
+
 QImage SpriteDocument::frame(int index) const
 {
     if (index >= 0 && index < m_frames.size()) {
