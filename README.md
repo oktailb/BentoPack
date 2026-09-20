@@ -20,11 +20,16 @@
 * **Smart Sprite Sheet Slicing:** Automatic sprite detection and extraction with configurable alpha and color tolerance.
 * **Animated GIF Decompilation:** Instant extraction of multi-frame animated GIFs into ordered frame sequences.
 * **Format Parsers:** Import existing sprite atlases with associated **JSON** (TexturePacker / Aseprite) or **Godot 4 `.tres`** metadata.
-* **Non-Destructive Filter & Cleanup Suite:** Extensible filter plugin system featuring real-time debounced live preview, non-destructive rollback, and full `QUndoStack` integration:
-  * **Chroma Background Removal:** Dominant color auto-detection, alpha thresholding, and smart crop.
+* **Non-Destructive Filter & Cleanup Suite:** Extensible filter plugin system featuring real-time debounced live preview, non-destructive rollback, and full `QUndoStack` integration across 9 specialized filters:
+  * **Chroma Background Removal (`Ctrl+Shift+B`):** Dominant color auto-detection, alpha thresholding, and smart crop.
   * **Despill / Anti-Halo:** Clean up 1-pixel colored fringes left by antialiased edges using *Color Clamping* or strict removal.
   * **Outline & Silhouette Generator:** 1-4px customizable stroke (4-connected or 8-connected) and solid hit-flash silhouette masks.
   * **Color Swap (Alt-Skins):** Instant palette replacement preserving pixel art shading gradients (HSV).
+  * **Color Adjustment:** Real-time Hue, Saturation, Value, Brightness, and Contrast grading.
+  * **Retro Palette & Dithering:** Color quantization and Floyd-Steinberg dithering to authentic retro systems (NES, SNES, Game Boy, Amiga, Pico-8, C64).
+  * **Pixel Art Rescale:** Pixel-perfect integer rescaling without bilinear blurring.
+  * **Atlas Bin-Packing (MaxRects) (`Ctrl+Shift+P`):** Multi-heuristic 2D box packing (Best Short Side Fit, Best Area Fit, Best Long Side Fit, Bottom Left, Contact Point).
+  * **Tight Polygon Packing (Nesting) (`Ctrl+Shift+T`):** Multi-threaded high-density concave/convex polygon packing allowing bounding boxes to overlap.
 
 ![Background Removal Demo](RemoveBackground.gif)
 
@@ -87,7 +92,11 @@
 
 * **Language:** C++17
 * **Framework:** Qt 6 (Core, Gui, Widgets, Multimedia, Concurrent, Test, LinguistTools)
-* **Build System:** CMake 3.20+ with modular architecture (`SpriteStudioCore` static engine + `SpriteStudio` app + automated CTest test suite)
+* **Core Engine:** `libSpriteStudioCore` shared library with clean exported API symbols (`SPRITESTUDIOCORE_EXPORT`)
+* **Dynamic Plugin System:** Hot-loadable Qt 6 plugins (`QPluginLoader`) for both **Filters** (`plugins/filters/`) and **Codecs / Extractors** (`plugins/extractors/`)
+* **Plugin Developer SDK:** Installed public headers, CMake package configuration (`SpriteStudioConfig.cmake`), and reference examples (`examples/sample_filter_plugin`, `examples/sample_extractor_plugin`)
+* **Hardware Texture Compression:** Khronos `basis_universal` (v2.50) integration for direct GPU memory upload (KTX2, UASTC, ETC1S, Zstd)
+* **Build System:** CMake 3.20+ with modular architecture (`SpriteStudioCore` + `SpriteStudio` GUI + `spritestudio-cli` + 8 automated CTest suites)
 * **Versioning Engine:** LibGit2 (optional, enabled when detected)
 
 ---
@@ -291,6 +300,7 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 - [x] **M8 — Polygon & Tight Mesh Packing:** Watertight Marching Squares, Ramer-Douglas-Peucker boundary reduction with outward dilation, Ear-Clipping triangulation, interactive canvas vertex editor (drag, multi-select, insert, delete), multithreaded tight polygon nesting (configurable CPU threads), and multi-engine exports (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON)
 - [x] **M9 — VRAM Texture Compression & GPU Formats:** Universal Khronos KTX2 & Basis Universal (v2.50) integration, UASTC 4x4 (75.0% VRAM reduction) & ETC1S (87.5% VRAM reduction), lossless Zstandard supercompression, live VRAM telemetry in ExportDialog, CLI automation flags, 12 automated unit tests (100% CTest).
 - [x] **M4 — Surgical Pixel Art Cleanup Editor:** Continuous 1px Bresenham pencil, 1px eraser (alpha 0), eyedropper, flood fill, rectangular/color wand selection, floating stamp clipboard, retro palettes (NES, SNES, Amiga, NEC, GB, Pico-8, C64) & dynamic sprite colors, pixel grid (≥400%), inter-frame navigation, reversible atlas synchronization
+- [x] **M11 — Dynamic Plugin Architecture & Third-Party SDK:** Fully modular Qt6 dynamic plugin ecosystem (`QPluginLoader`), shared core library (`libSpriteStudioCore`), standalone external filter (`plugins/filters/`) and extractor (`plugins/extractors/`) modules, exported CMake package config (`SpriteStudioConfig.cmake`), and developer SDK templates (`examples/`).
 
 ---
 
