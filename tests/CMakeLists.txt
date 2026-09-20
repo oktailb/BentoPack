@@ -130,6 +130,23 @@ set_tests_properties(test_extractors test_controllers test_project test_core tes
     PROPERTIES ENVIRONMENT "SPRITESTUDIO_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin/plugins"
 )
 
+if(WIN32)
+    # Copy plugin DLLs next to test executables in bin/ so Windows loader resolves them
+    foreach(plugin ${ALL_EXTRACTOR_PLUGINS} ${ALL_FILTER_PLUGINS})
+        add_custom_command(
+            TARGET ${plugin} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${plugin}>" "${CMAKE_BINARY_DIR}/bin"
+            COMMENT "Copying $<TARGET_FILE_NAME:${plugin}> to bin directory for tests"
+        )
+    endforeach()
 
-
-
+    # Also prepend paths in CTest environment
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.22")
+        set_tests_properties(test_extractors test_controllers test_project test_core test_cli test_mesh test_pixel_editor test_vram_compression
+            PROPERTIES ENVIRONMENT_MODIFICATION
+                "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin"
+                "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin/plugins/extractors"
+                "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin/plugins/filters"
+        )
+    endif()
+endif()
