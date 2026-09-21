@@ -132,13 +132,34 @@ set_tests_properties(test_extractors test_controllers test_project test_core tes
 
 if(WIN32)
     # Copy plugin DLLs next to test executables in bin/ so Windows loader resolves them
-    foreach(plugin ${ALL_EXTRACTOR_PLUGINS} ${ALL_FILTER_PLUGINS})
-        add_custom_command(
-            TARGET ${plugin} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${plugin}>" "${CMAKE_BINARY_DIR}/bin"
-            COMMENT "Copying $<TARGET_FILE_NAME:${plugin}> to bin directory for tests"
-        )
-    endforeach()
+    add_custom_command(
+        TARGET test_extractors POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:extractor_godot>
+            $<TARGET_FILE:extractor_unity>
+            $<TARGET_FILE:extractor_unreal>
+            $<TARGET_FILE:extractor_json>
+            $<TARGET_FILE:extractor_gif>
+            $<TARGET_FILE:extractor_spritesheet>
+            "${CMAKE_BINARY_DIR}/bin"
+        COMMENT "Copying extractor plugin DLLs to bin directory for tests"
+    )
+
+    add_custom_command(
+        TARGET test_controllers POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:filter_backgroundremoval>
+            $<TARGET_FILE:filter_despill>
+            $<TARGET_FILE:filter_outline>
+            $<TARGET_FILE:filter_colorswap>
+            $<TARGET_FILE:filter_coloradjust>
+            $<TARGET_FILE:filter_pixelrescale>
+            $<TARGET_FILE:filter_retropalette>
+            $<TARGET_FILE:filter_atlaspacking>
+            $<TARGET_FILE:filter_tightpolygonpacking>
+            "${CMAKE_BINARY_DIR}/bin"
+        COMMENT "Copying filter plugin DLLs to bin directory for tests"
+    )
 
     # Also prepend paths in CTest environment
     if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.22")
@@ -150,3 +171,4 @@ if(WIN32)
         )
     endif()
 endif()
+
