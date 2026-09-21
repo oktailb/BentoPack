@@ -6,9 +6,9 @@
     <message>
         <location filename="../src/aboutdialog.cpp" line="20"/>
         <location filename="../src/aboutdialog.cpp" line="78"/>
-        <location filename="../../tests/test_controllers.cpp" line="1547"/>
-        <location filename="../../tests/test_controllers.cpp" line="1604"/>
-        <location filename="../../tests/test_controllers.cpp" line="1661"/>
+        <location filename="../../tests/test_controllers.cpp" line="1612"/>
+        <location filename="../../tests/test_controllers.cpp" line="1671"/>
+        <location filename="../../tests/test_controllers.cpp" line="1730"/>
         <source>KEY_DIALOG_ABOUT_TITLE</source>
         <translation>About</translation>
     </message>
@@ -191,9 +191,9 @@
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="25"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="549"/>
-        <location filename="../../tests/test_controllers.cpp" line="1562"/>
-        <location filename="../../tests/test_controllers.cpp" line="1619"/>
-        <location filename="../../tests/test_controllers.cpp" line="1676"/>
+        <location filename="../../tests/test_controllers.cpp" line="1627"/>
+        <location filename="../../tests/test_controllers.cpp" line="1686"/>
+        <location filename="../../tests/test_controllers.cpp" line="1745"/>
         <source>Atlas Bin-Packing (MaxRects)</source>
         <translation>Atlas Bin-Packing (MaxRects)</translation>
     </message>
@@ -407,9 +407,9 @@
     <name>AtlasPackingFilter</name>
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1561"/>
-        <location filename="../../tests/test_controllers.cpp" line="1618"/>
-        <location filename="../../tests/test_controllers.cpp" line="1675"/>
+        <location filename="../../tests/test_controllers.cpp" line="1626"/>
+        <location filename="../../tests/test_controllers.cpp" line="1685"/>
+        <location filename="../../tests/test_controllers.cpp" line="1744"/>
         <source>Atlas Bin-Packing (MaxRects)...</source>
         <translation>Atlas Bin-Packing (MaxRects)...</translation>
     </message>
@@ -441,9 +441,9 @@
     <name>BackgroundRemovalDialog</name>
     <message>
         <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="25"/>
-        <location filename="../../tests/test_controllers.cpp" line="1554"/>
-        <location filename="../../tests/test_controllers.cpp" line="1611"/>
-        <location filename="../../tests/test_controllers.cpp" line="1668"/>
+        <location filename="../../tests/test_controllers.cpp" line="1619"/>
+        <location filename="../../tests/test_controllers.cpp" line="1678"/>
+        <location filename="../../tests/test_controllers.cpp" line="1737"/>
         <source>Background Removal</source>
         <translation>Background Removal</translation>
     </message>
@@ -550,9 +550,9 @@ Choose which branch to restore:</translation>
     <name>ColorAdjustFilter</name>
     <message>
         <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1557"/>
-        <location filename="../../tests/test_controllers.cpp" line="1614"/>
-        <location filename="../../tests/test_controllers.cpp" line="1671"/>
+        <location filename="../../tests/test_controllers.cpp" line="1622"/>
+        <location filename="../../tests/test_controllers.cpp" line="1681"/>
+        <location filename="../../tests/test_controllers.cpp" line="1740"/>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
         <translation>Color Adjustment (HSV &amp; Contrast)...</translation>
     </message>
@@ -812,9 +812,9 @@ Strict removal clears the pixel.</translation>
     <name>ExportDialog</name>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="14"/>
-        <location filename="../../tests/test_controllers.cpp" line="1563"/>
-        <location filename="../../tests/test_controllers.cpp" line="1620"/>
-        <location filename="../../tests/test_controllers.cpp" line="1677"/>
+        <location filename="../../tests/test_controllers.cpp" line="1628"/>
+        <location filename="../../tests/test_controllers.cpp" line="1687"/>
+        <location filename="../../tests/test_controllers.cpp" line="1746"/>
         <source>Export Atlas &amp; Animations</source>
         <translation>Export Atlas &amp; Animations</translation>
     </message>
@@ -875,17 +875,17 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="99"/>
-        <location filename="../../tests/test_controllers.cpp" line="1564"/>
-        <location filename="../../tests/test_controllers.cpp" line="1621"/>
-        <location filename="../../tests/test_controllers.cpp" line="1678"/>
+        <location filename="../../tests/test_controllers.cpp" line="1629"/>
+        <location filename="../../tests/test_controllers.cpp" line="1688"/>
+        <location filename="../../tests/test_controllers.cpp" line="1747"/>
         <source>Keep Current Layout (WYSIWYG — As Displayed)</source>
         <translation>Keep Current Layout (WYSIWYG — As Displayed)</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="104"/>
-        <location filename="../../tests/test_controllers.cpp" line="1565"/>
-        <location filename="../../tests/test_controllers.cpp" line="1622"/>
-        <location filename="../../tests/test_controllers.cpp" line="1679"/>
+        <location filename="../../tests/test_controllers.cpp" line="1630"/>
+        <location filename="../../tests/test_controllers.cpp" line="1689"/>
+        <location filename="../../tests/test_controllers.cpp" line="1748"/>
         <source>MaxRects (Best Short Side Fit — Recommended)</source>
         <translation>MaxRects (Best Short Side Fit — Recommended)</translation>
     </message>
@@ -946,9 +946,9 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="216"/>
-        <location filename="../../tests/test_controllers.cpp" line="1566"/>
-        <location filename="../../tests/test_controllers.cpp" line="1623"/>
-        <location filename="../../tests/test_controllers.cpp" line="1680"/>
+        <location filename="../../tests/test_controllers.cpp" line="1631"/>
+        <location filename="../../tests/test_controllers.cpp" line="1690"/>
+        <location filename="../../tests/test_controllers.cpp" line="1749"/>
         <source>Force Power of Two (2^n)</source>
         <translation>Force Power of Two (2^n)</translation>
     </message>
@@ -1138,9 +1138,9 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="315"/>
-        <location filename="../../tests/test_controllers.cpp" line="1567"/>
-        <location filename="../../tests/test_controllers.cpp" line="1624"/>
-        <location filename="../../tests/test_controllers.cpp" line="1681"/>
+        <location filename="../../tests/test_controllers.cpp" line="1632"/>
+        <location filename="../../tests/test_controllers.cpp" line="1691"/>
+        <location filename="../../tests/test_controllers.cpp" line="1750"/>
         <source>Packing Efficiency: Preserved as-is (WYSIWYG)</source>
         <translation>Packing Efficiency: Preserved as-is (WYSIWYG)</translation>
     </message>
@@ -1223,9 +1223,9 @@ Strict removal clears the pixel.</translation>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="30"/>
         <location filename="../src/widgets/exportdialog.cpp" line="372"/>
-        <location filename="../../tests/test_controllers.cpp" line="1568"/>
-        <location filename="../../tests/test_controllers.cpp" line="1625"/>
-        <location filename="../../tests/test_controllers.cpp" line="1682"/>
+        <location filename="../../tests/test_controllers.cpp" line="1633"/>
+        <location filename="../../tests/test_controllers.cpp" line="1692"/>
+        <location filename="../../tests/test_controllers.cpp" line="1751"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -1243,9 +1243,9 @@ Strict removal clears the pixel.</translation>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="62"/>
         <location filename="../src/widgets/filterdialogbase.cpp" line="240"/>
-        <location filename="../../tests/test_controllers.cpp" line="1555"/>
-        <location filename="../../tests/test_controllers.cpp" line="1612"/>
-        <location filename="../../tests/test_controllers.cpp" line="1669"/>
+        <location filename="../../tests/test_controllers.cpp" line="1620"/>
+        <location filename="../../tests/test_controllers.cpp" line="1679"/>
+        <location filename="../../tests/test_controllers.cpp" line="1738"/>
         <source>Live Preview</source>
         <translation>Live Preview</translation>
     </message>
@@ -1258,9 +1258,9 @@ Strict removal clears the pixel.</translation>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="67"/>
         <location filename="../src/widgets/filterdialogbase.cpp" line="244"/>
-        <location filename="../../tests/test_controllers.cpp" line="1556"/>
-        <location filename="../../tests/test_controllers.cpp" line="1613"/>
-        <location filename="../../tests/test_controllers.cpp" line="1670"/>
+        <location filename="../../tests/test_controllers.cpp" line="1621"/>
+        <location filename="../../tests/test_controllers.cpp" line="1680"/>
+        <location filename="../../tests/test_controllers.cpp" line="1739"/>
         <source>Auto-detect Sprite Boxes</source>
         <translation>Auto-detect Sprite Boxes</translation>
     </message>
@@ -1294,9 +1294,9 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="256"/>
-        <location filename="../../tests/test_controllers.cpp" line="1581"/>
-        <location filename="../../tests/test_controllers.cpp" line="1638"/>
-        <location filename="../../tests/test_controllers.cpp" line="1696"/>
+        <location filename="../../tests/test_controllers.cpp" line="1646"/>
+        <location filename="../../tests/test_controllers.cpp" line="1705"/>
+        <location filename="../../tests/test_controllers.cpp" line="1765"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -1325,9 +1325,9 @@ Strict removal clears the pixel.</translation>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="22"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="22"/>
         <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="22"/>
-        <location filename="../../tests/test_controllers.cpp" line="1560"/>
-        <location filename="../../tests/test_controllers.cpp" line="1617"/>
-        <location filename="../../tests/test_controllers.cpp" line="1674"/>
+        <location filename="../../tests/test_controllers.cpp" line="1625"/>
+        <location filename="../../tests/test_controllers.cpp" line="1684"/>
+        <location filename="../../tests/test_controllers.cpp" line="1743"/>
         <source>Geometry &amp; Transform</source>
         <translation>Geometry &amp; Transform</translation>
     </message>
@@ -1453,9 +1453,9 @@ Strict removal clears the pixel.</translation>
     <message>
         <location filename="../src/widgets/githistorydock.cpp" line="250"/>
         <location filename="../src/widgets/githistorydock.cpp" line="581"/>
-        <location filename="../../tests/test_controllers.cpp" line="1550"/>
-        <location filename="../../tests/test_controllers.cpp" line="1607"/>
-        <location filename="../../tests/test_controllers.cpp" line="1664"/>
+        <location filename="../../tests/test_controllers.cpp" line="1615"/>
+        <location filename="../../tests/test_controllers.cpp" line="1674"/>
+        <location filename="../../tests/test_controllers.cpp" line="1733"/>
         <source>KEY_GIT_BTN_RESTORE</source>
         <translation>Restore this revision</translation>
     </message>
@@ -1672,9 +1672,9 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="983"/>
-        <location filename="../../tests/test_controllers.cpp" line="1545"/>
-        <location filename="../../tests/test_controllers.cpp" line="1602"/>
-        <location filename="../../tests/test_controllers.cpp" line="1659"/>
+        <location filename="../../tests/test_controllers.cpp" line="1610"/>
+        <location filename="../../tests/test_controllers.cpp" line="1669"/>
+        <location filename="../../tests/test_controllers.cpp" line="1728"/>
         <source>KEY_TOOL_SELECT</source>
         <translation>Select &amp; Edit</translation>
     </message>
@@ -1736,9 +1736,9 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="879"/>
-        <location filename="../../tests/test_controllers.cpp" line="1539"/>
-        <location filename="../../tests/test_controllers.cpp" line="1596"/>
-        <location filename="../../tests/test_controllers.cpp" line="1653"/>
+        <location filename="../../tests/test_controllers.cpp" line="1604"/>
+        <location filename="../../tests/test_controllers.cpp" line="1663"/>
+        <location filename="../../tests/test_controllers.cpp" line="1722"/>
         <source>KEY_MENU_FILE</source>
         <translation>File</translation>
     </message>
@@ -1780,18 +1780,18 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="942"/>
-        <location filename="../../tests/test_controllers.cpp" line="1543"/>
-        <location filename="../../tests/test_controllers.cpp" line="1600"/>
-        <location filename="../../tests/test_controllers.cpp" line="1657"/>
+        <location filename="../../tests/test_controllers.cpp" line="1608"/>
+        <location filename="../../tests/test_controllers.cpp" line="1667"/>
+        <location filename="../../tests/test_controllers.cpp" line="1726"/>
         <source>KEY_ACTION_OPEN</source>
         <translation>&amp;Open</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="947"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="133"/>
-        <location filename="../../tests/test_controllers.cpp" line="1544"/>
-        <location filename="../../tests/test_controllers.cpp" line="1601"/>
-        <location filename="../../tests/test_controllers.cpp" line="1658"/>
+        <location filename="../../tests/test_controllers.cpp" line="1609"/>
+        <location filename="../../tests/test_controllers.cpp" line="1668"/>
+        <location filename="../../tests/test_controllers.cpp" line="1727"/>
         <source>KEY_ACTION_SAVE</source>
         <translation>&amp;Save</translation>
     </message>
@@ -1870,9 +1870,9 @@ Click a node to view its details.</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="494"/>
         <location filename="../src/mainwindow.cpp" line="895"/>
-        <location filename="../../tests/test_controllers.cpp" line="1553"/>
-        <location filename="../../tests/test_controllers.cpp" line="1610"/>
-        <location filename="../../tests/test_controllers.cpp" line="1667"/>
+        <location filename="../../tests/test_controllers.cpp" line="1618"/>
+        <location filename="../../tests/test_controllers.cpp" line="1677"/>
+        <location filename="../../tests/test_controllers.cpp" line="1736"/>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Filters</translation>
     </message>
@@ -1919,9 +1919,9 @@ Click a node to view its details.</translation>
         <location filename="../src/mainwindow_animation.cpp" line="94"/>
         <location filename="../src/mainwindow_atlas.cpp" line="86"/>
         <location filename="../src/mainwindow_atlas.cpp" line="177"/>
-        <location filename="../../tests/test_controllers.cpp" line="1546"/>
-        <location filename="../../tests/test_controllers.cpp" line="1603"/>
-        <location filename="../../tests/test_controllers.cpp" line="1660"/>
+        <location filename="../../tests/test_controllers.cpp" line="1611"/>
+        <location filename="../../tests/test_controllers.cpp" line="1670"/>
+        <location filename="../../tests/test_controllers.cpp" line="1729"/>
         <source>KEY_CTX_CREATE_ANIM</source>
         <translation>Create animation from selection</translation>
     </message>
@@ -2039,9 +2039,9 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="895"/>
-        <location filename="../../tests/test_controllers.cpp" line="1540"/>
-        <location filename="../../tests/test_controllers.cpp" line="1597"/>
-        <location filename="../../tests/test_controllers.cpp" line="1654"/>
+        <location filename="../../tests/test_controllers.cpp" line="1605"/>
+        <location filename="../../tests/test_controllers.cpp" line="1664"/>
+        <location filename="../../tests/test_controllers.cpp" line="1723"/>
         <source>KEY_MENU_VIEW</source>
         <translation>View</translation>
     </message>
@@ -2095,9 +2095,9 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
-        <location filename="../../tests/test_controllers.cpp" line="1542"/>
-        <location filename="../../tests/test_controllers.cpp" line="1599"/>
-        <location filename="../../tests/test_controllers.cpp" line="1656"/>
+        <location filename="../../tests/test_controllers.cpp" line="1607"/>
+        <location filename="../../tests/test_controllers.cpp" line="1666"/>
+        <location filename="../../tests/test_controllers.cpp" line="1725"/>
         <source>KEY_DOCK_PREVIEW</source>
         <translation>Animation Preview</translation>
     </message>
@@ -2285,9 +2285,9 @@ Click a node to view its details.</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="674"/>
         <location filename="../src/controller/projectcontroller.cpp" line="81"/>
-        <location filename="../../tests/test_controllers.cpp" line="1551"/>
-        <location filename="../../tests/test_controllers.cpp" line="1608"/>
-        <location filename="../../tests/test_controllers.cpp" line="1665"/>
+        <location filename="../../tests/test_controllers.cpp" line="1616"/>
+        <location filename="../../tests/test_controllers.cpp" line="1675"/>
+        <location filename="../../tests/test_controllers.cpp" line="1734"/>
         <source>KEY_UNTITLED_PROJECT</source>
         <translation>Untitled Project</translation>
     </message>
@@ -2336,9 +2336,9 @@ Do you want to save them before proceeding?</translation>
         <location filename="../src/mainwindow.ui" line="841"/>
         <location filename="../src/mainwindow.cpp" line="303"/>
         <location filename="../src/mainwindow.cpp" line="865"/>
-        <location filename="../../tests/test_controllers.cpp" line="1541"/>
-        <location filename="../../tests/test_controllers.cpp" line="1598"/>
-        <location filename="../../tests/test_controllers.cpp" line="1655"/>
+        <location filename="../../tests/test_controllers.cpp" line="1606"/>
+        <location filename="../../tests/test_controllers.cpp" line="1665"/>
+        <location filename="../../tests/test_controllers.cpp" line="1724"/>
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>Main Toolbar</translation>
     </message>
@@ -2507,7 +2507,7 @@ Do you want to save them before proceeding?</translation>
         <translation>Actual size 100%</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1730"/>
+        <location filename="../../tests/test_controllers.cpp" line="1799"/>
         <source>KEY_UNKNOWN_FEATURE</source>
         <translation>Unknown feature</translation>
     </message>
@@ -2692,9 +2692,9 @@ Do you want to save them before proceeding?</translation>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="26"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="669"/>
-        <location filename="../../tests/test_controllers.cpp" line="1572"/>
-        <location filename="../../tests/test_controllers.cpp" line="1629"/>
-        <location filename="../../tests/test_controllers.cpp" line="1687"/>
+        <location filename="../../tests/test_controllers.cpp" line="1637"/>
+        <location filename="../../tests/test_controllers.cpp" line="1696"/>
+        <location filename="../../tests/test_controllers.cpp" line="1756"/>
         <source>Pixel Editor — SpriteStudio</source>
         <translation>Pixel Editor — SpriteStudio</translation>
     </message>
@@ -2736,9 +2736,9 @@ Do you want to save them before proceeding?</translation>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="148"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="689"/>
-        <location filename="../../tests/test_controllers.cpp" line="1573"/>
-        <location filename="../../tests/test_controllers.cpp" line="1630"/>
-        <location filename="../../tests/test_controllers.cpp" line="1688"/>
+        <location filename="../../tests/test_controllers.cpp" line="1638"/>
+        <location filename="../../tests/test_controllers.cpp" line="1697"/>
+        <location filename="../../tests/test_controllers.cpp" line="1757"/>
         <source>Pencil (1px continuous Bresenham) [P]</source>
         <translation>Pencil (1px continuous Bresenham) [P]</translation>
     </message>
@@ -2970,9 +2970,9 @@ Do you want to save them before proceeding?</translation>
     <name>PixelRescaleFilter</name>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1558"/>
-        <location filename="../../tests/test_controllers.cpp" line="1615"/>
-        <location filename="../../tests/test_controllers.cpp" line="1672"/>
+        <location filename="../../tests/test_controllers.cpp" line="1623"/>
+        <location filename="../../tests/test_controllers.cpp" line="1682"/>
+        <location filename="../../tests/test_controllers.cpp" line="1741"/>
         <source>Pixel Art Rescale...</source>
         <translation>Pixel Art Rescale...</translation>
     </message>
@@ -3059,9 +3059,9 @@ Do you want to save them before proceeding?</translation>
     <name>PolygonMeshDialog</name>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="232"/>
-        <location filename="../../tests/test_controllers.cpp" line="1569"/>
-        <location filename="../../tests/test_controllers.cpp" line="1626"/>
-        <location filename="../../tests/test_controllers.cpp" line="1683"/>
+        <location filename="../../tests/test_controllers.cpp" line="1634"/>
+        <location filename="../../tests/test_controllers.cpp" line="1693"/>
+        <location filename="../../tests/test_controllers.cpp" line="1752"/>
         <source>Tight Mesh &amp; 2D Polygon Packing</source>
         <translation>Tight Mesh &amp; 2D Polygon Packing</translation>
     </message>
@@ -3077,9 +3077,9 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="235"/>
-        <location filename="../../tests/test_controllers.cpp" line="1570"/>
-        <location filename="../../tests/test_controllers.cpp" line="1627"/>
-        <location filename="../../tests/test_controllers.cpp" line="1684"/>
+        <location filename="../../tests/test_controllers.cpp" line="1635"/>
+        <location filename="../../tests/test_controllers.cpp" line="1694"/>
+        <location filename="../../tests/test_controllers.cpp" line="1753"/>
         <source>Approximation Tolerance (ε):</source>
         <translation>Approximation Tolerance (ε):</translation>
     </message>
@@ -3141,9 +3141,9 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="240"/>
-        <location filename="../../tests/test_controllers.cpp" line="1571"/>
-        <location filename="../../tests/test_controllers.cpp" line="1628"/>
-        <location filename="../../tests/test_controllers.cpp" line="1685"/>
+        <location filename="../../tests/test_controllers.cpp" line="1636"/>
+        <location filename="../../tests/test_controllers.cpp" line="1695"/>
+        <location filename="../../tests/test_controllers.cpp" line="1754"/>
         <source>Apply to Selection</source>
         <translation>Apply to Selection</translation>
     </message>
@@ -3169,7 +3169,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="412"/>
-        <location filename="../../tests/test_controllers.cpp" line="1686"/>
+        <location filename="../../tests/test_controllers.cpp" line="1755"/>
         <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
         <translation>Target Frame %1: Rectangle mode (no mesh applied)</translation>
     </message>
@@ -3729,16 +3729,16 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>QPlatformTheme</name>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1576"/>
-        <location filename="../../tests/test_controllers.cpp" line="1633"/>
-        <location filename="../../tests/test_controllers.cpp" line="1691"/>
+        <location filename="../../tests/test_controllers.cpp" line="1641"/>
+        <location filename="../../tests/test_controllers.cpp" line="1700"/>
+        <location filename="../../tests/test_controllers.cpp" line="1760"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1577"/>
-        <location filename="../../tests/test_controllers.cpp" line="1634"/>
-        <location filename="../../tests/test_controllers.cpp" line="1692"/>
+        <location filename="../../tests/test_controllers.cpp" line="1642"/>
+        <location filename="../../tests/test_controllers.cpp" line="1701"/>
+        <location filename="../../tests/test_controllers.cpp" line="1761"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -3747,9 +3747,9 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">&amp;Cancel</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1578"/>
-        <location filename="../../tests/test_controllers.cpp" line="1635"/>
-        <location filename="../../tests/test_controllers.cpp" line="1693"/>
+        <location filename="../../tests/test_controllers.cpp" line="1643"/>
+        <location filename="../../tests/test_controllers.cpp" line="1702"/>
+        <location filename="../../tests/test_controllers.cpp" line="1762"/>
         <source>Discard</source>
         <translation>Discard</translation>
     </message>
@@ -3758,9 +3758,9 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">&amp;Discard</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1579"/>
-        <location filename="../../tests/test_controllers.cpp" line="1636"/>
-        <location filename="../../tests/test_controllers.cpp" line="1694"/>
+        <location filename="../../tests/test_controllers.cpp" line="1644"/>
+        <location filename="../../tests/test_controllers.cpp" line="1703"/>
+        <location filename="../../tests/test_controllers.cpp" line="1763"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
@@ -3773,9 +3773,9 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">Don&apos;t Save</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1580"/>
-        <location filename="../../tests/test_controllers.cpp" line="1637"/>
-        <location filename="../../tests/test_controllers.cpp" line="1695"/>
+        <location filename="../../tests/test_controllers.cpp" line="1645"/>
+        <location filename="../../tests/test_controllers.cpp" line="1704"/>
+        <location filename="../../tests/test_controllers.cpp" line="1764"/>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
@@ -3832,9 +3832,9 @@ Do you want to save them before proceeding?</translation>
     <name>RetroPaletteFilter</name>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1559"/>
-        <location filename="../../tests/test_controllers.cpp" line="1616"/>
-        <location filename="../../tests/test_controllers.cpp" line="1673"/>
+        <location filename="../../tests/test_controllers.cpp" line="1624"/>
+        <location filename="../../tests/test_controllers.cpp" line="1683"/>
+        <location filename="../../tests/test_controllers.cpp" line="1742"/>
         <source>Retro Palette &amp; Dithering...</source>
         <translation>Retro Palette &amp; Dithering...</translation>
     </message>
@@ -4116,9 +4116,9 @@ Do you want to save them before proceeding?</translation>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="34"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1001"/>
-        <location filename="../../tests/test_controllers.cpp" line="1548"/>
-        <location filename="../../tests/test_controllers.cpp" line="1605"/>
-        <location filename="../../tests/test_controllers.cpp" line="1662"/>
+        <location filename="../../tests/test_controllers.cpp" line="1613"/>
+        <location filename="../../tests/test_controllers.cpp" line="1672"/>
+        <location filename="../../tests/test_controllers.cpp" line="1731"/>
         <source>KEY_SETTINGS_TITLE</source>
         <translation>Preferences</translation>
     </message>
@@ -4235,9 +4235,9 @@ Do you want to save them before proceeding?</translation>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="227"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1024"/>
-        <location filename="../../tests/test_controllers.cpp" line="1552"/>
-        <location filename="../../tests/test_controllers.cpp" line="1609"/>
-        <location filename="../../tests/test_controllers.cpp" line="1666"/>
+        <location filename="../../tests/test_controllers.cpp" line="1617"/>
+        <location filename="../../tests/test_controllers.cpp" line="1676"/>
+        <location filename="../../tests/test_controllers.cpp" line="1735"/>
         <source>KEY_SETTINGS_LANG_HINT</source>
         <translation>Language changes are applied immediately.</translation>
     </message>
@@ -4623,17 +4623,17 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1085"/>
-        <location filename="../../tests/test_controllers.cpp" line="1582"/>
-        <location filename="../../tests/test_controllers.cpp" line="1639"/>
-        <location filename="../../tests/test_controllers.cpp" line="1697"/>
+        <location filename="../../tests/test_controllers.cpp" line="1647"/>
+        <location filename="../../tests/test_controllers.cpp" line="1706"/>
+        <location filename="../../tests/test_controllers.cpp" line="1766"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1088"/>
-        <location filename="../../tests/test_controllers.cpp" line="1583"/>
-        <location filename="../../tests/test_controllers.cpp" line="1640"/>
-        <location filename="../../tests/test_controllers.cpp" line="1698"/>
+        <location filename="../../tests/test_controllers.cpp" line="1648"/>
+        <location filename="../../tests/test_controllers.cpp" line="1707"/>
+        <location filename="../../tests/test_controllers.cpp" line="1767"/>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
@@ -4822,9 +4822,9 @@ Do you want to save them before proceeding?</translation>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="34"/>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="246"/>
-        <location filename="../../tests/test_controllers.cpp" line="1549"/>
-        <location filename="../../tests/test_controllers.cpp" line="1606"/>
-        <location filename="../../tests/test_controllers.cpp" line="1663"/>
+        <location filename="../../tests/test_controllers.cpp" line="1614"/>
+        <location filename="../../tests/test_controllers.cpp" line="1673"/>
+        <location filename="../../tests/test_controllers.cpp" line="1732"/>
         <source>KEY_TIMELINE_ADD_SELECTION</source>
         <translation>+ Add Selection</translation>
     </message>

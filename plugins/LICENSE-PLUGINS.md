@@ -10,7 +10,7 @@ This license adopts a revenue-based threshold for free usage. You are granted a 
 
 2. Commercial License Requirement
 
-If your gross revenue exceeds the $1,000,000 USD threshold, your rights under this free license automatically terminate. To continue using the Software legally, you must purchase a Commercial Studio License.
+If your gross revenue exceeds the $1,000,000 USD threshold, your rights under this free license automatically terminate. To continue using the Software legally, you must purchase a Commercial SpriteStudio License.
 
 3. Pre-compiled Binaries & Convenience Purchases
 
