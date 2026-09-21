@@ -13,6 +13,7 @@
 #include <QWheelEvent>
 #include <QKeyEvent>
 #include <QGuiApplication>
+#include "spritestudiocore_export.h"
 
 class SpriteDocument;
 class QUndoStack;
@@ -21,7 +22,7 @@ class AtlasBoxItem;
 /**
  * @brief Controller managing the Atlas QGraphicsView, zoom/pan, tools, and AtlasBoxItem interactions.
  */
-class AtlasViewController : public QObject
+class SPRITESTUDIO_CORE_EXPORT AtlasViewController : public QObject
 {
     Q_OBJECT
 

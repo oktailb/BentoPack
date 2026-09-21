@@ -13,6 +13,8 @@
 #include <QComboBox>
 #include "model/spritedocument.h"
 
+#include "spritestudiocore_export.h"
+
 class AnimationPlayer;
 class TimelineFilmstripWidget;
 class QUndoStack;
@@ -20,7 +22,7 @@ class QUndoStack;
 /**
  * @brief Controller managing animation playback, preview rendering, timeline, and animation list CRUD.
  */
-class AnimationController : public QObject
+class SPRITESTUDIO_CORE_EXPORT AnimationController : public QObject
 {
     Q_OBJECT
 
