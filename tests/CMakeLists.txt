@@ -57,7 +57,7 @@ target_compile_definitions(test_controllers PRIVATE
     SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample"
     QM_DIR="${CMAKE_BINARY_DIR}/SpriteStudio"
 )
-target_link_libraries(test_controllers PRIVATE SpriteStudioCore ${ALL_FILTER_PLUGINS} Qt6::Test)
+target_link_libraries(test_controllers PRIVATE SpriteStudioCore ${ALL_EXTRACTOR_PLUGINS} ${ALL_FILTER_PLUGINS} Qt6::Test)
 set_target_properties(test_controllers PROPERTIES WIN32_EXECUTABLE FALSE)
 if (MINGW)
     target_link_options(test_controllers PRIVATE -mconsole)
@@ -148,6 +148,12 @@ if(WIN32)
     add_custom_command(
         TARGET test_controllers POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:extractor_godot>
+            $<TARGET_FILE:extractor_unity>
+            $<TARGET_FILE:extractor_unreal>
+            $<TARGET_FILE:extractor_json>
+            $<TARGET_FILE:extractor_gif>
+            $<TARGET_FILE:extractor_spritesheet>
             $<TARGET_FILE:filter_backgroundremoval>
             $<TARGET_FILE:filter_despill>
             $<TARGET_FILE:filter_outline>
@@ -158,7 +164,7 @@ if(WIN32)
             $<TARGET_FILE:filter_atlaspacking>
             $<TARGET_FILE:filter_tightpolygonpacking>
             "${CMAKE_BINARY_DIR}/bin"
-        COMMENT "Copying filter plugin DLLs to bin directory for tests"
+        COMMENT "Copying extractor and filter plugin DLLs to bin directory for test_controllers"
     )
 
     # Also prepend paths in CTest environment

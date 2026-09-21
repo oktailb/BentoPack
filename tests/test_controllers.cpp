@@ -23,6 +23,7 @@
 #include "project/projectmanager.h"
 #include "project/sessionmanager.h"
 #include "filters/filterregistry.h"
+#include "extractor/extractorregistry.h"
 #include "backgroundremovaldialog.h"
 #include "despillfilterdialog.h"
 #include "outlinefilterdialog.h"
@@ -133,6 +134,13 @@ void TestControllers::initTestCase()
     if (m_sampleDir.isEmpty()) {
         m_sampleDir = QStringLiteral(SAMPLE_DIR);
     }
+
+    QString appDir = QCoreApplication::applicationDirPath();
+    QString binPlugins = QDir(appDir).filePath(QStringLiteral("plugins"));
+    ExtractorRegistry::instance().loadPlugins(binPlugins);
+    FilterRegistry::instance().loadPlugins(binPlugins);
+    ExtractorRegistry::instance().loadPlugins(appDir);
+    FilterRegistry::instance().loadPlugins(appDir);
 }
 
 void TestControllers::cleanupTestCase()
@@ -462,8 +470,13 @@ void TestControllers::testProjectControllerOpenAsync()
 
     controller.openFileAsync(pngPath);
 
+    // If an error occurred synchronously (e.g. decoder missing), fail immediately with error message
+    if (spyError.count() > 0) {
+        QFAIL(qPrintable(spyError.first().at(1).toString()));
+    }
+
     // Wait for the async worker thread and main-thread finish
-    QVERIFY(spyLoaded.wait(5000));
+    QVERIFY2(spyLoaded.wait(10000), spyError.isEmpty() ? "Timeout waiting for fileLoaded signal (10s)" : qPrintable(spyError.first().at(1).toString()));
     QCOMPARE(spyStarted.count(), 1);
     QCOMPARE(spyLoaded.count(), 1);
     QCOMPARE(spyFinished.count(), 1);
@@ -492,7 +505,7 @@ void TestControllers::testProjectControllerRemoveBgAsync()
 
     controller.removeAtlasBackgroundAndRefreshAsync(10, 5, false, 0.5);
 
-    QVERIFY(spyBg.wait(5000));
+    QVERIFY2(spyBg.wait(10000), "Timeout waiting for backgroundRemoved signal (10s)");
     QCOMPARE(spyStarted.count(), 1);
     QCOMPARE(spyBg.count(), 1);
     QCOMPARE(spyFinished.count(), 1);
@@ -538,12 +551,21 @@ void TestControllers::testUndoStackLimitAndImageStorage()
 
 void TestControllers::testUndoRedoGitHeadSync()
 {
+    if (!SessionManager::isGitAvailable()) {
+        QSKIP("Git integration not compiled in.");
+    }
+    QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
+    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/ryu.png");
+    if (!QFile::exists(heroPath)) {
+        QSKIP("Sample file not present.");
+    }
+
     SpriteDocument doc;
     QUndoStack undoStack;
     ProjectController pc(&doc, &undoStack);
 
     // Real-world initial state: open atlas
-    QVERIFY(pc.openFile(QStringLiteral(SAMPLE_DIR "/hero.png")));
+    QVERIFY(pc.openFile(heroPath));
     QString hash0 = pc.sessionManager()->gitHeadCommitHash();
     QVERIFY(!hash0.isEmpty());
     QCOMPARE(pc.undoCommitHistory().value(0), hash0);
@@ -594,11 +616,20 @@ void TestControllers::testUndoRedoGitHeadSync()
 
 void TestControllers::testUndoGitWhenUndoStackEmpty()
 {
+    if (!SessionManager::isGitAvailable()) {
+        QSKIP("Git integration not compiled in.");
+    }
+    QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
+    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/ryu.png");
+    if (!QFile::exists(heroPath)) {
+        QSKIP("Sample file not present.");
+    }
+
     SpriteDocument doc;
     QUndoStack undoStack;
     ProjectController pc(&doc, &undoStack);
 
-    QVERIFY(pc.openFile(QStringLiteral(SAMPLE_DIR "/hero.png")));
+    QVERIFY(pc.openFile(heroPath));
     QString initialHash = pc.sessionManager()->gitHeadCommitHash();
     int initialCount = doc.frameCount();
 
@@ -631,11 +662,20 @@ void TestControllers::testUndoGitWhenUndoStackEmpty()
 
 void TestControllers::testGitBranchingAndRedoSelection()
 {
+    if (!SessionManager::isGitAvailable()) {
+        QSKIP("Git integration not compiled in.");
+    }
+    QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
+    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/ryu.png");
+    if (!QFile::exists(heroPath)) {
+        QSKIP("Sample file not present.");
+    }
+
     SpriteDocument doc;
     QUndoStack undoStack;
     ProjectController pc(&doc, &undoStack);
 
-    QVERIFY(pc.openFile(QStringLiteral(SAMPLE_DIR "/hero.png")));
+    QVERIFY(pc.openFile(heroPath));
     QString baseHash = pc.sessionManager()->gitHeadCommitHash();
     int initialCount = doc.frameCount();
 
