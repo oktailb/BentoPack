@@ -83,6 +83,7 @@ public:
     void clearAtlasBoxes();
     const QList<AtlasBoxItem*>& boxItems() const { return m_boxItems; }
     int boxCount() const { return m_boxItems.size(); }
+    void ensureBoxVisible(int index);
 
     // M8: Polygon Mesh Display
     bool showPolygonMeshes() const { return m_showPolygonMeshes; }

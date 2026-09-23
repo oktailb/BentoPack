@@ -21,6 +21,7 @@
 #define ANIMATIONCONTROLLER_H
 
 #include <QObject>
+#include <QPointer>
 #include <QString>
 #include <QList>
 #include <QTreeWidget>
@@ -92,6 +93,7 @@ public:
     // Sequence manipulation
     void reorderAnimationFrames(const QString &name, const QList<int> &newSequence);
     void addFrameToAnimation(const QString &name, int globalIndex);
+    void addFramesToAnimation(const QString &name, const QList<int> &globalIndices);
     void removeFrameFromAnimation(const QString &name, int seqIndex);
     void duplicateFrameInAnimation(const QString &name, int seqIndex);
 
@@ -165,7 +167,7 @@ private:
     QGraphicsPixmapItem     *m_previewPixmapItem = nullptr;
     QGraphicsItemGroup      *m_reticleGroup = nullptr;
     bool                     m_showPivotReticle = false;
-    TimelineFilmstripWidget *m_timelineWidget = nullptr;
+    QPointer<TimelineFilmstripWidget> m_timelineWidget;
     QSlider                 *m_scrubberSlider = nullptr;
     QLabel                  *m_frameIndicator = nullptr;
     QComboBox               *m_loopModeCombo = nullptr;

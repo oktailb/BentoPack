@@ -50,6 +50,7 @@ set(SpriteStudioCore_SRC
     src/project/projectmanager.cpp
     src/widgets/githistorydock.cpp
     src/widgets/settingsdialog.cpp
+    src/widgets/filmstriplistwidget.cpp
     src/widgets/timelinefilmstripwidget.cpp
     src/widgets/exportdialog.cpp
     src/widgets/filterdialogbase.cpp
@@ -67,6 +68,7 @@ set(SpriteStudioCore_SRC
     src/geometry/contourtracer.cpp
     src/geometry/polygonsimplifier.cpp
     src/geometry/triangulator.cpp
+    src/geometry/polygonmerger.cpp
     src/commands/meshcommands.cpp
     src/widgets/polygonmeshdialog.cpp
     src/widgets/pixelcanvas.cpp
@@ -100,6 +102,7 @@ set(SpriteStudioCore_INCLUDE
     include/project/projectmanager.h
     include/widgets/githistorydock.h
     include/widgets/settingsdialog.h
+    include/widgets/filmstriplistwidget.h
     include/widgets/timelinefilmstripwidget.h
     include/widgets/exportdialog.h
     include/widgets/filterdialogbase.h
@@ -120,6 +123,7 @@ set(SpriteStudioCore_INCLUDE
     include/geometry/contourtracer.h
     include/geometry/polygonsimplifier.h
     include/geometry/triangulator.h
+    include/geometry/polygonmerger.h
     include/commands/meshcommands.h
     include/widgets/polygonmeshdialog.h
     include/widgets/pixelcanvas.h

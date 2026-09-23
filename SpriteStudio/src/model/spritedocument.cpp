@@ -18,6 +18,7 @@
 */
 
 #include "model/spritedocument.h"
+#include "geometry/polygonmerger.h"
 #include <QFileInfo>
 #include <QPainter>
 #include <algorithm>
@@ -365,21 +366,31 @@ void SpriteDocument::mergeFrames(int sourceIndex, int targetIndex)
     if (!m_atlas.isNull() && unitedRect.isValid()) {
         mergedImage = m_atlas.copy(unitedRect);
     } else {
-        // Fallback: draw both images side by side or overlay
-        QSize combinedSize = m_frames[targetIndex].size().expandedTo(m_frames[sourceIndex].size());
-        QImage composite(combinedSize, QImage::Format_ARGB32_Premultiplied);
-        composite.fill(Qt::transparent);
-        QPainter p(&composite);
-        p.drawImage(0, 0, m_frames[targetIndex]);
-        p.drawImage(0, 0, m_frames[sourceIndex]);
-        p.end();
-        mergedImage = composite;
+        // Fallback: composite both frames at their relative positions in unitedRect
+        if (unitedRect.isValid()) {
+            QImage composite(unitedRect.size(), QImage::Format_ARGB32_Premultiplied);
+            composite.fill(Qt::transparent);
+            QPainter p(&composite);
+            QPoint tgtPos = tgtBox.rect.topLeft() - unitedRect.topLeft();
+            QPoint srcPos = srcBox.rect.topLeft() - unitedRect.topLeft();
+            p.drawImage(tgtPos, m_frames[targetIndex]);
+            p.drawImage(srcPos, m_frames[sourceIndex]);
+            p.end();
+            mergedImage = composite;
+        } else {
+            QSize combinedSize = m_frames[targetIndex].size().expandedTo(m_frames[sourceIndex].size());
+            QImage composite(combinedSize, QImage::Format_ARGB32_Premultiplied);
+            composite.fill(Qt::transparent);
+            QPainter p(&composite);
+            p.drawImage(0, 0, m_frames[targetIndex]);
+            p.drawImage(0, 0, m_frames[sourceIndex]);
+            p.end();
+            mergedImage = composite;
+        }
     }
 
-    SpriteBox newBox;
-    newBox.rect = unitedRect;
-    newBox.selected = srcBox.selected || tgtBox.selected;
-    newBox.index = tgtBox.index;
+    SpriteBox newBox = SpriteStudioGeometry::PolygonMerger::mergeSpriteBoxes(
+        srcBox, tgtBox, m_frames[sourceIndex], m_frames[targetIndex]);
 
     m_boxes[targetIndex] = newBox;
     m_frames[targetIndex] = mergedImage;

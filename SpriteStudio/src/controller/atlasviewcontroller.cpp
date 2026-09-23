@@ -302,6 +302,15 @@ void AtlasViewController::clearAtlasBoxes()
     m_boxItems.clear();
 }
 
+void AtlasViewController::ensureBoxVisible(int index)
+{
+    if (!m_view || index < 0 || index >= m_boxItems.size()) return;
+    AtlasBoxItem *item = m_boxItems.at(index);
+    if (item) {
+        m_view->ensureVisible(item, 50, 50);
+    }
+}
+
 QList<int> AtlasViewController::selectedBoxIndices() const
 {
     return m_document ? m_document->selectedFrameIndices() : QList<int>();

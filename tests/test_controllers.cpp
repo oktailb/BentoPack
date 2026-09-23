@@ -34,6 +34,8 @@
 #include "atlaspackingdialog.h"
 #include "atlaspackingfilter.h"
 #include "commands/filtercommands.h"
+#include "widgets/timelinefilmstripwidget.h"
+#include "widgets/filmstriplistwidget.h"
 
 class TestControllers : public QObject
 {
@@ -72,6 +74,7 @@ private slots:
     void testAnimationPlayerPingPongAndOnce();
     void testAnimationDuplicationAndRename();
     void testTimelineReorderFrames();
+    void testTimelineFilmstripWidgetDragAndDrop();
     void testAnimationLoopModePersistence();
     void testTransportSpeedTimingStability();
     void testAnimationControllerPivotAlignment();
@@ -1025,6 +1028,90 @@ void TestControllers::testTimelineReorderFrames()
 
     animCtrl.removeFrameFromAnimation(QStringLiteral("combo"), 4);
     QCOMPARE(doc.animation(QStringLiteral("combo")).frameIndices, (QList<int>{3, 0, 2, 1}));
+
+    // Batch add frames to animation
+    animCtrl.addFramesToAnimation(QStringLiteral("combo"), {0, 2});
+    QCOMPARE(doc.animation(QStringLiteral("combo")).frameIndices, (QList<int>{3, 0, 2, 1, 0, 2}));
+}
+
+void TestControllers::testTimelineFilmstripWidgetDragAndDrop()
+{
+    SpriteDocument doc;
+    QImage img(64, 64, QImage::Format_ARGB32);
+    img.fill(Qt::blue);
+    doc.setAtlas(img);
+    for (int i = 0; i < 4; ++i) {
+        doc.addSlice(QRect(i * 16, 0, 16, 16));
+    }
+
+    QUndoStack undoStack;
+    TimelineFilmstripWidget timeline;
+    AnimationController animCtrl(&doc, &undoStack);
+    animCtrl.attachTimelineWidget(&timeline);
+
+    animCtrl.createAnimation(QStringLiteral("walk"), {0, 1, 2, 3}, 12);
+    animCtrl.selectAnimation(QStringLiteral("walk"));
+
+    FilmstripListWidget *list = timeline.listWidget();
+    QVERIFY(list != nullptr);
+    QCOMPARE(list->count(), 4);
+
+    // Verify initial sequential items
+    for (int i = 0; i < 4; ++i) {
+        QListWidgetItem *it = list->item(i);
+        QVERIFY(it != nullptr);
+        QCOMPARE(it->data(Qt::UserRole).toInt(), i);
+    }
+
+    // Test calculateDropIndex bounds
+    QCOMPARE(list->calculateDropIndex(QPoint(-100, 20)), 0);
+    QCOMPARE(list->calculateDropIndex(QPoint(10000, 20)), 4);
+
+    // Simulate drag-and-drop: move item from row 0 to drop after row 2 (insertion index 3 -> targetRow 2)
+    // Resulting list should be [1, 2, 0, 3]
+    QSignalSpy spyReordered(&timeline, &TimelineFilmstripWidget::sequenceReordered);
+    QSignalSpy spyMoved(list, &FilmstripListWidget::itemMoved);
+
+    list->executeItemMove(0, 3);
+
+    QCOMPARE(spyMoved.count(), 1);
+    QCOMPARE(spyReordered.count(), 1);
+    QCOMPARE(list->count(), 4);
+
+    // Verify order in Filmstrip widget
+    QCOMPARE(list->item(0)->data(Qt::UserRole).toInt(), 1);
+    QCOMPARE(list->item(1)->data(Qt::UserRole).toInt(), 2);
+    QCOMPARE(list->item(2)->data(Qt::UserRole).toInt(), 0);
+    QCOMPARE(list->item(3)->data(Qt::UserRole).toInt(), 3);
+
+    // Verify order in document animation model
+    QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{1, 2, 0, 3}));
+
+    // Test Undo: list items and model should revert to [0, 1, 2, 3] without frame loss
+    undoStack.undo();
+    QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{0, 1, 2, 3}));
+    QCOMPARE(list->count(), 4);
+    QCOMPARE(list->item(0)->data(Qt::UserRole).toInt(), 0);
+    QCOMPARE(list->item(1)->data(Qt::UserRole).toInt(), 1);
+    QCOMPARE(list->item(2)->data(Qt::UserRole).toInt(), 2);
+    QCOMPARE(list->item(3)->data(Qt::UserRole).toInt(), 3);
+
+    // Test Redo: list items and model should revert to [1, 2, 0, 3]
+    undoStack.redo();
+    QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{1, 2, 0, 3}));
+    QCOMPARE(list->count(), 4);
+    QCOMPARE(list->item(0)->data(Qt::UserRole).toInt(), 1);
+    QCOMPARE(list->item(1)->data(Qt::UserRole).toInt(), 2);
+    QCOMPARE(list->item(2)->data(Qt::UserRole).toInt(), 0);
+    QCOMPARE(list->item(3)->data(Qt::UserRole).toInt(), 3);
+
+    // Test moving backward: move item at row 3 to index 0 -> [3, 1, 2, 0]
+    list->executeItemMove(3, 0);
+    QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{3, 1, 2, 0}));
+    QCOMPARE(list->item(0)->data(Qt::UserRole).toInt(), 3);
+    QCOMPARE(list->item(1)->data(Qt::UserRole).toInt(), 1);
+    QCOMPARE(list->item(2)->data(Qt::UserRole).toInt(), 2);
+    QCOMPARE(list->item(3)->data(Qt::UserRole).toInt(), 0);
 }
 
 void TestControllers::testAnimationLoopModePersistence()
@@ -1609,6 +1696,8 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_ACTION_SAVE"), QStringLiteral("&Enregistrer"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_TOOL_SELECT"), QStringLiteral("Sélectionner"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_CREATE_ANIM"), QStringLiteral("Créer une animation depuis la sélection"));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_ADD_TO_ANIM"), QStringLiteral("Ajouter à l'animation"));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_SELECT_ALL"), QStringLiteral("Tout sélectionner"));
         QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_TITLE"), QStringLiteral("À propos"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_TITLE"), QStringLiteral("Préférences"));
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ Ajouter la sélection"));
@@ -1668,6 +1757,8 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_ACTION_SAVE"), QStringLiteral("&Save"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_TOOL_SELECT"), QStringLiteral("Select & Edit"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_CREATE_ANIM"), QStringLiteral("Create animation from selection"));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_ADD_TO_ANIM"), QStringLiteral("Add to Animation"));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_SELECT_ALL"), QStringLiteral("Select All"));
         QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_TITLE"), QStringLiteral("About"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_TITLE"), QStringLiteral("Preferences"));
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ Add Selection"));
@@ -1727,6 +1818,8 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_ACTION_SAVE"), QStringLiteral("保存(&S)"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_TOOL_SELECT"), QStringLiteral("選択・編集"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_CREATE_ANIM"), QStringLiteral("選択範囲からアニメーションを作成する"));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_ADD_TO_ANIM"), QStringLiteral("アニメーションに追加"));
+        QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_SELECT_ALL"), QStringLiteral("すべて選択"));
         QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_TITLE"), QStringLiteral("情報"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_TITLE"), QStringLiteral("設定"));
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ 選択を追加"));

@@ -204,8 +204,10 @@ void MainWindow::setupControllers()
         refreshFrameListDisplay();
         m_isSyncingSelection = false;
 
-        // Update transient current animation
-        m_animationController->updateCurrentAnimation(indices);
+        // Only update transient current animation if NO real animation is selected
+        if (m_animationController && (m_animationController->currentAnimationName().isEmpty() || m_animationController->currentAnimationName() == QLatin1String("current"))) {
+            m_animationController->updateCurrentAnimation(indices);
+        }
 
         updatePivotUiFromSelection();
     });
@@ -281,7 +283,7 @@ void MainWindow::setupControllers()
     // Connect Document frame updates to UI model
     connect(m_document, &SpriteDocument::framesChanged, this, [this]() {
         populateFrameList(m_document->frames(), m_document->boxes());
-        if (m_animationController) {
+        if (m_animationController && (m_animationController->currentAnimationName().isEmpty() || m_animationController->currentAnimationName() == QLatin1String("current"))) {
             m_animationController->updateCurrentAnimation(m_document->selectedFrameIndices());
         }
     });
@@ -352,9 +354,9 @@ void MainWindow::setupErgonomicLayout()
     setupViewMenuActions();
     connect(ui->actionResetLayout, &QAction::triggered, this, &MainWindow::resetDefaultLayout);
 
-    // Connect animation selection to automatically show and raise the Timeline dock
+    // Connect animation selection to automatically show and raise the Timeline dock (except for transient 'current' preview)
     connect(m_animationController.get(), &AnimationController::currentAnimationChanged, this, [this](const QString &name) {
-        if (!name.isEmpty() && ui->dockTimeline) {
+        if (!name.isEmpty() && name != QLatin1String("current") && ui->dockTimeline) {
             ui->dockTimeline->setVisible(true);
             ui->dockTimeline->raise();
         }
@@ -400,35 +402,31 @@ void MainWindow::setupUIConnections()
 
     connect(ui->framesList->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, [this](const QItemSelection &selected, const QItemSelection &deselected) {
+        Q_UNUSED(deselected);
         if (m_isSyncingSelection || !m_atlasController || !m_document) return;
         m_isSyncingSelection = true;
 
-        QList<int> indices = m_atlasController->selectedBoxIndices();
-
-        for (const QModelIndex &idx : deselected.indexes()) {
-            indices.removeAll(idx.row());
-        }
-        for (const QModelIndex &idx : selected.indexes()) {
-            int r = idx.row();
-            if (!indices.contains(r)) {
-                indices.append(r);
-            }
-        }
-
-        if (indices.isEmpty()) {
-            for (const QModelIndex &idx : ui->framesList->selectionModel()->selectedRows()) {
-                indices.append(idx.row());
-            }
+        QList<int> indices;
+        for (const QModelIndex &idx : ui->framesList->selectionModel()->selectedRows()) {
+            indices.append(idx.row());
         }
 
         if (m_atlasController->selectedBoxIndices() != indices) {
             m_atlasController->setSelectedBoxIndices(indices);
         }
         refreshFrameListDisplay();
-        if (m_animationController) {
-            m_animationController->updateCurrentAnimation(indices);
-        }
         m_isSyncingSelection = false;
+
+        // Ensure the last-clicked frame is visible on the atlas view
+        if (!selected.indexes().isEmpty()) {
+            m_atlasController->ensureBoxVisible(selected.indexes().first().row());
+        }
+        updatePivotUiFromSelection();
+    });
+    connect(ui->framesList, &QListView::doubleClicked, this, [this](const QModelIndex &index) {
+        if (index.isValid()) {
+            openPixelEditorDialog(index.row());
+        }
     });
     connect(frameModel, &ArrangementModel::mergeRequested, this, &MainWindow::onMergeFrames);
     connect(ui->framesList, &QListView::customContextMenuRequested,
@@ -502,6 +500,14 @@ void MainWindow::setupShortcuts()
     m_actionPolygonMeshDialog->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
     connect(m_actionPolygonMeshDialog, &QAction::triggered, this, [this]() {
         openPolygonMeshDialog();
+    });
+
+    m_actionMergeSlices = m_editMenu->addAction(tr("KEY_CTX_MERGE_SLICES"));
+    m_actionMergeSlices->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M));
+    connect(m_actionMergeSlices, &QAction::triggered, this, [this]() {
+        if (m_atlasController) {
+            m_atlasController->mergeSelectedSlices();
+        }
     });
 
     m_editMenu->addSeparator();
@@ -928,6 +934,9 @@ void MainWindow::retranslateUi()
     }
     if (m_actionTogglePolygonMesh) {
         m_actionTogglePolygonMesh->setText(tr("KEY_ACTION_TOGGLE_POLYGON_MESH"));
+    }
+    if (m_actionMergeSlices) {
+        m_actionMergeSlices->setText(tr("KEY_CTX_MERGE_SLICES"));
     }
 
     // Refresh view menu dock titles

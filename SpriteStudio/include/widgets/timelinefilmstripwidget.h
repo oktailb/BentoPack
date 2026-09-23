@@ -20,8 +20,9 @@
 #ifndef TIMELINEFILMSTRIPWIDGET_H
 #define TIMELINEFILMSTRIPWIDGET_H
 
+#include "spritestudiocore_export.h"
+#include "widgets/filmstriplistwidget.h"
 #include <QWidget>
-#include <QListWidget>
 #include <QLabel>
 #include <QToolButton>
 #include <QHBoxLayout>
@@ -33,7 +34,7 @@ class AnimationController;
 /**
  * @brief Interactive horizontal filmstrip timeline widget displaying and reordering the active animation's frames.
  */
-class TimelineFilmstripWidget : public QWidget
+class SPRITESTUDIO_CORE_EXPORT TimelineFilmstripWidget : public QWidget
 {
     Q_OBJECT
 
@@ -45,6 +46,8 @@ public:
     void setAnimation(const QString &animationName);
     void setActiveSequenceIndex(int seqIndex);
     void retranslateUi();
+
+    FilmstripListWidget *listWidget() const { return m_listWidget; }
 
 protected:
     void changeEvent(QEvent *event) override;
@@ -59,8 +62,7 @@ signals:
 private slots:
     void onItemClicked(QListWidgetItem *item);
     void onCustomContextMenuRequested(const QPoint &pos);
-    void onRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
-                     const QModelIndex &destinationParent, int destinationRow);
+    void onItemMoved(int fromIndex, int toIndex);
 
 public slots:
     void refresh();
@@ -73,10 +75,11 @@ private:
     QString              m_animationName;
     int                  m_activeSeqIndex = -1;
     bool                 m_isRebuilding = false;
+    bool                 m_isInternalReordering = false;
 
     QLabel              *m_lblTitle = nullptr;
     QLabel              *m_lblDuration = nullptr;
-    QListWidget         *m_listWidget = nullptr;
+    FilmstripListWidget *m_listWidget = nullptr;
     QToolButton         *m_btnAddSelection = nullptr;
 };
 

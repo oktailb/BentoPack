@@ -62,46 +62,12 @@ void TimelineFilmstripWidget::setupUi()
 
     mainLayout->addLayout(headerLayout);
 
-    // List widget in IconMode
-    m_listWidget = new QListWidget(this);
-    m_listWidget->setViewMode(QListView::IconMode);
-    m_listWidget->setFlow(QListView::LeftToRight);
-    m_listWidget->setWrapping(false);
-    m_listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_listWidget->setIconSize(QSize(64, 64));
-    m_listWidget->setSpacing(4);
-    m_listWidget->setDragEnabled(true);
-    m_listWidget->setAcceptDrops(true);
-    m_listWidget->setDropIndicatorShown(true);
-    m_listWidget->setDragDropMode(QAbstractItemView::InternalMove);
-    m_listWidget->setDefaultDropAction(Qt::MoveAction);
-    m_listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_listWidget->setMinimumHeight(100);
+    // List widget with deterministic drag-and-drop
+    m_listWidget = new FilmstripListWidget(this);
 
-    m_listWidget->setStyleSheet(QStringLiteral(
-        "QListWidget::item {"
-        "  border: 1px solid #c0c0c0;"
-        "  border-radius: 4px;"
-        "  padding: 2px;"
-        "  background: #fafafa;"
-        "}"
-        "QListWidget::item:selected {"
-        "  border: 2px solid #2980b9;"
-        "  background: #e8f4fc;"
-        "  color: #2980b9;"
-        "  font-weight: bold;"
-        "}"
-    ));
-
-    connect(m_listWidget, &QListWidget::itemClicked, this, &TimelineFilmstripWidget::onItemClicked);
-    connect(m_listWidget, &QListWidget::customContextMenuRequested, this, &TimelineFilmstripWidget::onCustomContextMenuRequested);
-
-    if (m_listWidget->model()) {
-        connect(m_listWidget->model(), &QAbstractItemModel::rowsMoved,
-                this, &TimelineFilmstripWidget::onRowsMoved);
-    }
+    connect(m_listWidget, &FilmstripListWidget::itemClicked, this, &TimelineFilmstripWidget::onItemClicked);
+    connect(m_listWidget, &FilmstripListWidget::customContextMenuRequested, this, &TimelineFilmstripWidget::onCustomContextMenuRequested);
+    connect(m_listWidget, &FilmstripListWidget::itemMoved, this, &TimelineFilmstripWidget::onItemMoved);
 
     mainLayout->addWidget(m_listWidget);
 }
@@ -112,17 +78,20 @@ void TimelineFilmstripWidget::setDocument(SpriteDocument *document)
     if (m_document) {
         disconnect(m_document, &SpriteDocument::framesChanged, this, &TimelineFilmstripWidget::refresh);
         disconnect(m_document, &SpriteDocument::frameUpdated, this, &TimelineFilmstripWidget::refresh);
+        disconnect(m_document, &SpriteDocument::animationsChanged, this, &TimelineFilmstripWidget::refresh);
     }
     m_document = document;
     if (m_document) {
         connect(m_document, &SpriteDocument::framesChanged, this, &TimelineFilmstripWidget::refresh);
         connect(m_document, &SpriteDocument::frameUpdated, this, &TimelineFilmstripWidget::refresh);
+        connect(m_document, &SpriteDocument::animationsChanged, this, &TimelineFilmstripWidget::refresh);
     }
     refresh();
 }
 
 void TimelineFilmstripWidget::setAnimation(const QString &animationName)
 {
+    if (m_isInternalReordering) return;
     m_animationName = animationName;
     m_activeSeqIndex = -1;
     refresh();
@@ -143,17 +112,17 @@ void TimelineFilmstripWidget::setActiveSequenceIndex(int seqIndex)
 
 void TimelineFilmstripWidget::refresh()
 {
+    if (m_isInternalReordering) return;
     rebuildItems();
 }
 
 void TimelineFilmstripWidget::rebuildItems()
 {
-    if (!m_listWidget) return;
-
-    m_isRebuilding = true;
-    m_listWidget->clear();
+    if (!m_listWidget || m_isInternalReordering) return;
 
     if (!m_document || m_animationName.isEmpty() || !m_document->hasAnimation(m_animationName)) {
+        m_isRebuilding = true;
+        m_listWidget->clear();
         m_lblTitle->setText(tr("KEY_TIMELINE_NO_ANIM"));
         m_lblDuration->clear();
         m_btnAddSelection->setEnabled(false);
@@ -163,12 +132,47 @@ void TimelineFilmstripWidget::rebuildItems()
 
     m_btnAddSelection->setEnabled(true);
     const SpriteAnimation &anim = m_document->animation(m_animationName);
+    QString titlePattern = tr("KEY_TIMELINE_ANIM_INFO");
+    if (!titlePattern.contains(QLatin1String("%1"))) {
+        titlePattern = QStringLiteral("<b>Timeline: %1</b> (%2 frames)");
+    }
+    m_lblTitle->setText(titlePattern.arg(anim.name).arg(anim.frameIndices.size()));
 
-    m_lblTitle->setText(tr("KEY_TIMELINE_ANIM_INFO").arg(anim.name).arg(anim.frameIndices.size()));
     int ms = anim.durationMs();
-    m_lblDuration->setText(tr("KEY_TIMELINE_DURATION_FPS").arg(ms).arg(anim.fps));
+    QString durPattern = tr("KEY_TIMELINE_DURATION_FPS");
+    if (!durPattern.contains(QLatin1String("%1"))) {
+        durPattern = QStringLiteral("%1 ms @ %2 FPS");
+    }
+    m_lblDuration->setText(durPattern.arg(ms).arg(anim.fps));
 
     int frameDuration = anim.fps > 0 ? (1000 / anim.fps) : 100;
+
+    // Fast-path: if sequence already matches (e.g. from internal drag-and-drop or unchanged list)
+    bool matches = (m_listWidget->count() == anim.frameIndices.size());
+    if (matches) {
+        for (int i = 0; i < anim.frameIndices.size(); ++i) {
+            QListWidgetItem *it = m_listWidget->item(i);
+            if (!it || it->data(Qt::UserRole).toInt() != anim.frameIndices.at(i)) {
+                matches = false;
+                break;
+            }
+        }
+    }
+
+    if (matches) {
+        if (m_activeSeqIndex >= 0 && m_activeSeqIndex < m_listWidget->count()) {
+            m_listWidget->setCurrentRow(m_activeSeqIndex);
+        }
+        return;
+    }
+
+    m_isRebuilding = true;
+    m_listWidget->clear();
+
+    QString tipPattern = tr("KEY_TIMELINE_FRAME_TOOLTIP");
+    if (!tipPattern.contains(QLatin1String("%1"))) {
+        tipPattern = QStringLiteral("Step #%1: Global Frame %2 (%3 ms)\nDrag and drop to reorder");
+    }
 
     for (int seqIdx = 0; seqIdx < anim.frameIndices.size(); ++seqIdx) {
         int globalIdx = anim.frameIndices.at(seqIdx);
@@ -184,11 +188,10 @@ void TimelineFilmstripWidget::rebuildItems()
         }
 
         item->setText(tr("#%1 (F%2)").arg(seqIdx + 1).arg(globalIdx + 1));
-        item->setToolTip(tr("KEY_TIMELINE_FRAME_TOOLTIP")
-                             .arg(seqIdx + 1).arg(globalIdx + 1).arg(frameDuration));
+        item->setToolTip(tipPattern.arg(seqIdx + 1).arg(globalIdx + 1).arg(frameDuration));
         item->setData(Qt::UserRole, globalIdx);
         item->setData(Qt::UserRole + 1, seqIdx);
-        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 
         m_listWidget->addItem(item);
     }
@@ -207,21 +210,36 @@ void TimelineFilmstripWidget::onItemClicked(QListWidgetItem *item)
     emit frameSeekRequested(seqIdx);
 }
 
-void TimelineFilmstripWidget::onRowsMoved(const QModelIndex &/*sourceParent*/, int /*sourceStart*/, int /*sourceEnd*/,
-                                          const QModelIndex &/*destinationParent*/, int /*destinationRow*/)
+void TimelineFilmstripWidget::onItemMoved(int fromIndex, int toIndex)
 {
-    if (m_isRebuilding || m_animationName.isEmpty()) return;
+    Q_UNUSED(fromIndex);
+    if (m_isRebuilding || m_animationName.isEmpty() || !m_document) return;
+
+    for (int i = 0; i < m_listWidget->count(); ++i) {
+        QListWidgetItem *item = m_listWidget->item(i);
+        if (item) {
+            int globalIdx = item->data(Qt::UserRole).toInt();
+            item->setText(tr("#%1 (F%2)").arg(i + 1).arg(globalIdx + 1));
+            item->setData(Qt::UserRole + 1, i);
+        }
+    }
 
     QList<int> newSeq;
+    newSeq.reserve(m_listWidget->count());
     for (int i = 0; i < m_listWidget->count(); ++i) {
         QListWidgetItem *item = m_listWidget->item(i);
         if (item) {
             newSeq.append(item->data(Qt::UserRole).toInt());
-            item->setText(tr("#%1 (F%2)").arg(i + 1).arg(item->data(Qt::UserRole).toInt() + 1));
         }
     }
 
+    m_activeSeqIndex = toIndex;
+
+    m_isInternalReordering = true;
     emit sequenceReordered(m_animationName, newSeq);
+    m_isInternalReordering = false;
+
+    emit frameSeekRequested(toIndex);
 }
 
 void TimelineFilmstripWidget::onCustomContextMenuRequested(const QPoint &pos)

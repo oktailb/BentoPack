@@ -18,6 +18,7 @@
 */
 
 #include "geometry/contourtracer.h"
+#include "geometry/polygonmerger.h"
 #include <QVector>
 #include <QPointF>
 #include <QMultiHash>
@@ -48,17 +49,6 @@ struct Segment {
     bool used = false;
 };
 
-double calculatePolygonArea(const QPolygonF &poly) {
-    if (poly.size() < 3) return 0.0;
-    double area = 0.0;
-    int n = poly.size();
-    for (int i = 0; i < n; ++i) {
-        int next = (i + 1) % n;
-        area += poly[i].x() * poly[next].y() - poly[next].x() * poly[i].y();
-    }
-    return std::abs(area) * 0.5;
-}
-
 } // namespace
 
 QPolygonF ContourTracer::traceContour(const QImage &image, int alphaThreshold)
@@ -68,18 +58,12 @@ QPolygonF ContourTracer::traceContour(const QImage &image, int alphaThreshold)
         return QPolygonF();
     }
 
-    // Return the contour enclosing the maximum area (primary outer boundary)
-    int bestIdx = 0;
-    double maxArea = 0.0;
-    for (int i = 0; i < all.size(); ++i) {
-        double a = calculatePolygonArea(all[i]);
-        if (a > maxArea) {
-            maxArea = a;
-            bestIdx = i;
-        }
+    if (all.size() == 1) {
+        return all.first();
     }
 
-    return all[bestIdx];
+    // Modernized: fuse all disjoint parts into a tight non-convex polygon
+    return PolygonMerger::mergeMultiplePolygons(all);
 }
 
 QList<QPolygonF> ContourTracer::traceAllContours(const QImage &image, int alphaThreshold)

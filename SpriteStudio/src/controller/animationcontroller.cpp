@@ -538,16 +538,33 @@ void AnimationController::reorderAnimationFrames(const QString &name, const QLis
     }
 
     if (m_currentAnimationName == name) {
-        selectAnimation(name);
+        SpriteAnimation anim = m_document->animation(name);
+        if (m_player) {
+            int currentSeq = m_player->currentSequenceIndex();
+            m_player->setSequence(anim.frameIndices, anim.fps, static_cast<AnimationPlayer::LoopMode>(anim.loopMode));
+            if (currentSeq >= 0 && currentSeq < anim.frameIndices.size()) {
+                m_player->seek(currentSeq);
+            }
+        }
+        if (m_timelineWidget) {
+            m_timelineWidget->refresh();
+        }
+        updateScrubberState();
+        updatePreview();
     }
+}
+
+void AnimationController::addFramesToAnimation(const QString &name, const QList<int> &globalIndices)
+{
+    if (!m_document || !m_document->hasAnimation(name) || globalIndices.isEmpty()) return;
+    QList<int> seq = m_document->animation(name).frameIndices;
+    seq.append(globalIndices);
+    reorderAnimationFrames(name, seq);
 }
 
 void AnimationController::addFrameToAnimation(const QString &name, int globalIndex)
 {
-    if (!m_document || !m_document->hasAnimation(name)) return;
-    QList<int> seq = m_document->animation(name).frameIndices;
-    seq.append(globalIndex);
-    reorderAnimationFrames(name, seq);
+    addFramesToAnimation(name, {globalIndex});
 }
 
 void AnimationController::removeFrameFromAnimation(const QString &name, int seqIndex)

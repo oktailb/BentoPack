@@ -209,35 +209,138 @@ void MainWindow::on_framesList_customContextMenuRequested(const QPoint &pos)
         }
     }
 
+    QList<int> selectedIndices;
+    if (ui->framesList->selectionModel()) {
+        for (const QModelIndex &idx : ui->framesList->selectionModel()->selectedRows()) {
+            selectedIndices.append(idx.row());
+        }
+    }
+    if (selectedIndices.isEmpty() && clickedIdx.isValid()) {
+        selectedIndices.append(clickedIdx.row());
+    }
+
     QMenu menu(this);
 
+    // 1. Create animation from selection
     QAction *createAnimAction = menu.addAction(tr("KEY_CTX_CREATE_ANIM"));
-    createAnimAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
-    connect(createAnimAction, &QAction::triggered, this, [this]() {
-        if (m_animationController && m_document) {
-            m_animationController->createAnimationFromSelection(m_document->selectedFrameIndices());
+    createAnimAction->setEnabled(m_document && !selectedIndices.isEmpty());
+    connect(createAnimAction, &QAction::triggered, this, [this, selectedIndices]() {
+        if (m_animationController) {
+            m_animationController->createAnimationFromSelection(selectedIndices);
+        }
+    });
+
+    // 2. Add to existing animation submenu
+    QString addToAnimTitle = tr("KEY_CTX_ADD_TO_ANIM");
+    if (addToAnimTitle == QLatin1String("KEY_CTX_ADD_TO_ANIM")) {
+        addToAnimTitle = QStringLiteral("Add to Animation");
+    }
+    QMenu *addToAnimMenu = menu.addMenu(addToAnimTitle);
+    addToAnimMenu->setEnabled(m_document && !selectedIndices.isEmpty());
+
+    QString activeAnim = m_animationController ? m_animationController->currentAnimationName() : QString();
+    bool hasActive = !activeAnim.isEmpty() && activeAnim != QLatin1String("current") && m_document && m_document->hasAnimation(activeAnim);
+
+    if (hasActive) {
+        QString activeLabel = tr("KEY_CTX_ADD_TO_ACTIVE_ANIM");
+        if (!activeLabel.contains(QLatin1String("%1"))) {
+            activeLabel = QStringLiteral("Add to Active Animation '%1'");
+        }
+        QAction *actAddActive = addToAnimMenu->addAction(activeLabel.arg(activeAnim));
+        connect(actAddActive, &QAction::triggered, this, [this, activeAnim, selectedIndices]() {
+            if (m_animationController) {
+                m_animationController->addFramesToAnimation(activeAnim, selectedIndices);
+            }
+        });
+        addToAnimMenu->addSeparator();
+    }
+
+    QStringList animNames;
+    if (m_document) {
+        for (const QString &name : m_document->animations().keys()) {
+            if (name != QLatin1String("current")) {
+                animNames.append(name);
+            }
+        }
+    }
+
+    if (animNames.isEmpty()) {
+        QString noAnimLabel = tr("KEY_CTX_NO_EXISTING_ANIMS");
+        if (noAnimLabel == QLatin1String("KEY_CTX_NO_EXISTING_ANIMS")) {
+            noAnimLabel = QStringLiteral("(No animations created yet)");
+        }
+        QAction *noAnimAct = addToAnimMenu->addAction(noAnimLabel);
+        noAnimAct->setEnabled(false);
+    } else {
+        for (const QString &name : animNames) {
+            if (hasActive && name == activeAnim) {
+                continue; // Already added as active action above
+            }
+            const SpriteAnimation &anim = m_document->animation(name);
+            QString label = QStringLiteral("%1 (%2 frames)").arg(name).arg(anim.frameIndices.size());
+            QAction *act = addToAnimMenu->addAction(label);
+            connect(act, &QAction::triggered, this, [this, name, selectedIndices]() {
+                if (m_animationController) {
+                    m_animationController->addFramesToAnimation(name, selectedIndices);
+                }
+            });
+        }
+    }
+
+    if (selectedIndices.size() >= 2) {
+        QAction *mergeAction = menu.addAction(tr("KEY_CTX_MERGE_SLICES") + "\tCtrl+Shift+M");
+        connect(mergeAction, &QAction::triggered, this, [this]() {
+            if (m_atlasController) {
+                m_atlasController->mergeSelectedSlices();
+            }
+        });
+    }
+
+    menu.addSeparator();
+
+    // 3. Edit in Pixel Editor
+    QAction *editPixelsAction = menu.addAction(tr("KEY_ACTION_PIXEL_EDITOR") + "\tCtrl+E");
+    editPixelsAction->setEnabled(clickedIdx.isValid());
+    connect(editPixelsAction, &QAction::triggered, this, [this, clickedIdx]() {
+        if (clickedIdx.isValid()) {
+            openPixelEditorDialog(clickedIdx.row());
         }
     });
 
     menu.addSeparator();
 
-    QAction *deleteFramesAction = menu.addAction(tr("KEY_CTX_DELETE_FRAMES") + "\tDel");
-    deleteFramesAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
-    connect(deleteFramesAction, &QAction::triggered, this, &MainWindow::deleteSelectedFrame);
+    // 4. Select All & Invert
+    QString selectAllLabel = tr("KEY_CTX_SELECT_ALL");
+    if (selectAllLabel == QLatin1String("KEY_CTX_SELECT_ALL")) {
+        selectAllLabel = QStringLiteral("Select All");
+    }
+    QAction *selectAllAction = menu.addAction(selectAllLabel + "\tCtrl+A");
+    selectAllAction->setEnabled(m_document && m_document->frameCount() > 0);
+    connect(selectAllAction, &QAction::triggered, this, [this]() {
+        if (m_atlasController) {
+            m_atlasController->selectAll();
+        }
+    });
 
+    QAction *invertAction = menu.addAction(tr("KEY_CTX_INVERT_SEL"));
+    invertAction->setEnabled(m_document && m_document->frameCount() > 0);
+    connect(invertAction, &QAction::triggered, this, &MainWindow::invertSelection);
+
+    menu.addSeparator();
+
+    // 5. Erase Pixels
     QAction *eraseFramesAction = menu.addAction(tr("KEY_CTX_ERASE_PIXELS") + "\tShift+Del");
-    eraseFramesAction->setEnabled(m_document && !m_document->selectedFrameIndices().isEmpty());
+    eraseFramesAction->setEnabled(!selectedIndices.isEmpty());
     connect(eraseFramesAction, &QAction::triggered, this, [this]() {
         if (m_atlasController) {
             m_atlasController->eraseSelectedSlicesPixels();
         }
     });
 
-    menu.addSeparator();
-
-    QAction *invertAction = menu.addAction(tr("KEY_CTX_INVERT_SEL"));
-    invertAction->setEnabled(m_document && m_document->frameCount() > 0);
-    connect(invertAction, &QAction::triggered, this, &MainWindow::invertSelection);
+    // 6. Delete Frames
+    QAction *deleteFramesAction = menu.addAction(tr("KEY_CTX_DELETE_FRAMES") + "\tDel");
+    deleteFramesAction->setEnabled(!selectedIndices.isEmpty());
+    connect(deleteFramesAction, &QAction::triggered, this, &MainWindow::deleteSelectedFrame);
 
     menu.exec(ui->framesList->mapToGlobal(pos));
 }

@@ -19,6 +19,8 @@
 #include "unrealextractor.h"
 #include "godotextractor.h"
 #include "atlaspackingdialog.h"
+#include "geometry/polygonmerger.h"
+#include "commands/commands.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -70,6 +72,13 @@ private slots:
     void testGodotExtractorCompanionTres();
     void testAtlasPackingDialogPreservesPolygons();
     void testPolygonClippedFrame();
+
+    // 9. Modernized Polygon Merger Tests
+    void testPolygonMergerTouching();
+    void testPolygonMergerDisjoint();
+    void testPolygonMergerMultiIslandContourTracer();
+    void testPolygonMergerSpriteBoxes();
+    void testSpriteDocumentMergeFramesPreservesPolygonsAndUndo();
 };
 
 void TestMesh::initTestCase()
@@ -758,6 +767,173 @@ void TestMesh::testPolygonClippedFrame()
     QCOMPARE(clipped.pixelColor(35, 35).alpha(), 0);
     // Green pixels inside the polygon are fully preserved
     QCOMPARE(clipped.pixelColor(5, 5), QColor(0, 255, 0, 255));
+}
+
+void TestMesh::testPolygonMergerTouching()
+{
+    // Two squares touching along x=20
+    QPolygonF polyA;
+    polyA << QPointF(0, 0) << QPointF(20, 0) << QPointF(20, 20) << QPointF(0, 20);
+
+    QPolygonF polyB;
+    polyB << QPointF(20, 0) << QPointF(40, 0) << QPointF(40, 20) << QPointF(20, 20);
+
+    QPolygonF merged = PolygonMerger::mergePolygons(polyA, polyB);
+    QVERIFY(!merged.isEmpty());
+    QVERIFY(merged.size() >= 4);
+
+    QRectF b = merged.boundingRect();
+    QCOMPARE(b.left(), 0.0);
+    QCOMPARE(b.right(), 40.0);
+    QCOMPARE(b.top(), 0.0);
+    QCOMPARE(b.bottom(), 20.0);
+
+    double area = Triangulator::calculateArea(merged);
+    QVERIFY(std::abs(area - 800.0) < 5.0);
+
+    QList<int> tris = Triangulator::triangulate(merged);
+    QVERIFY(!tris.isEmpty());
+    QCOMPARE(tris.size() % 3, 0);
+}
+
+void TestMesh::testPolygonMergerDisjoint()
+{
+    // Two disjoint squares separated by a 10px gap: [0,0]->[20,20] and [30,0]->[50,20]
+    QPolygonF polyA;
+    polyA << QPointF(0, 0) << QPointF(20, 0) << QPointF(20, 20) << QPointF(0, 20);
+
+    QPolygonF polyB;
+    polyB << QPointF(30, 0) << QPointF(50, 0) << QPointF(50, 20) << QPointF(30, 20);
+
+    QPolygonF merged = PolygonMerger::mergePolygons(polyA, polyB, 2.0);
+    QVERIFY(!merged.isEmpty());
+    QVERIFY(merged.size() >= 4);
+
+    QRectF b = merged.boundingRect();
+    QVERIFY(b.left() <= 0.5);
+    QVERIFY(b.right() >= 49.5);
+
+    double area = Triangulator::calculateArea(merged);
+    // Area should be sum of both squares (~800) + bridge corridor (~10*2 = 20) => ~820
+    // Convex hull area would be 50 * 20 = 1000.
+    // By keeping it strictly non-convex, area is significantly less than 950!
+    QVERIFY(area > 750.0);
+    QVERIFY(area < 900.0);
+
+    QList<int> tris = Triangulator::triangulate(merged);
+    QVERIFY(!tris.isEmpty());
+    QCOMPARE(tris.size() % 3, 0);
+}
+
+void TestMesh::testPolygonMergerMultiIslandContourTracer()
+{
+    // 60x30 image with two disconnected 10x10 squares
+    QImage img(60, 30, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    {
+        QPainter p(&img);
+        p.fillRect(5, 10, 10, 10, Qt::red);
+        p.fillRect(45, 10, 10, 10, Qt::blue);
+    }
+
+    QPolygonF contour = ContourTracer::traceContour(img, 128);
+    QVERIFY(!contour.isEmpty());
+
+    // Both islands must be covered
+    QRectF b = contour.boundingRect();
+    QVERIFY(b.left() <= 6.0);
+    QVERIFY(b.right() >= 54.0);
+
+    // Should minimize empty space and not fill the entire 60x30 bounding box
+    double area = Triangulator::calculateArea(contour);
+    QVERIFY(area < 600.0); // 60x30 would be 1800
+
+    QList<int> tris = Triangulator::triangulate(contour);
+    QVERIFY(!tris.isEmpty());
+    QCOMPARE(tris.size() % 3, 0);
+}
+
+void TestMesh::testPolygonMergerSpriteBoxes()
+{
+    SpriteBox src;
+    src.rect = QRect(10, 10, 20, 20);
+    src.hasPolygonMesh = true;
+    src.polygon << QPointF(0, 0) << QPointF(20, 0) << QPointF(20, 20) << QPointF(0, 20);
+    src.vertices = src.polygon.toList();
+    src.triangles = Triangulator::triangulate(src.polygon);
+    src.hasCustomPivot = true;
+    src.pivot = QPoint(5, 5);
+
+    SpriteBox tgt;
+    tgt.rect = QRect(40, 10, 20, 20);
+    tgt.hasPolygonMesh = true;
+    tgt.polygon << QPointF(0, 0) << QPointF(20, 0) << QPointF(20, 20) << QPointF(0, 20);
+    tgt.vertices = tgt.polygon.toList();
+    tgt.triangles = Triangulator::triangulate(tgt.polygon);
+
+    QImage dummyImg(20, 20, QImage::Format_ARGB32_Premultiplied);
+    dummyImg.fill(Qt::transparent);
+
+    SpriteBox res = PolygonMerger::mergeSpriteBoxes(src, tgt, dummyImg, dummyImg);
+
+    QCOMPARE(res.rect, QRect(10, 10, 50, 20));
+    QVERIFY(res.hasPolygonMesh);
+    QVERIFY(!res.polygon.isEmpty());
+    QVERIFY(!res.triangles.isEmpty());
+    QVERIFY(res.hasCustomPivot);
+    // Custom pivot from src translated to unitedRect origin:
+    // src.rect.topLeft() (10, 10) + pivot(5, 5) - unitedRect.topLeft() (10, 10) = (5, 5)
+    QCOMPARE(res.pivot, QPoint(5, 5));
+}
+
+void TestMesh::testSpriteDocumentMergeFramesPreservesPolygonsAndUndo()
+{
+    SpriteDocument doc;
+
+    QImage atlas(100, 50, QImage::Format_ARGB32_Premultiplied);
+    atlas.fill(Qt::transparent);
+    {
+        QPainter p(&atlas);
+        p.fillRect(10, 10, 20, 20, Qt::red);
+        p.fillRect(40, 10, 20, 20, Qt::blue);
+    }
+    doc.setAtlas(atlas);
+
+    SpriteBox b0(QRect(10, 10, 20, 20));
+    b0.hasPolygonMesh = true;
+    b0.polygon << QPointF(0, 0) << QPointF(20, 0) << QPointF(20, 20) << QPointF(0, 20);
+    b0.triangles = Triangulator::triangulate(b0.polygon);
+
+    SpriteBox b1(QRect(40, 10, 20, 20));
+    b1.hasPolygonMesh = true;
+    b1.polygon << QPointF(0, 0) << QPointF(20, 0) << QPointF(20, 20) << QPointF(0, 20);
+    b1.triangles = Triangulator::triangulate(b1.polygon);
+
+    doc.addFrame(atlas.copy(b0.rect), b0);
+    doc.addFrame(atlas.copy(b1.rect), b1);
+    QCOMPARE(doc.frameCount(), 2);
+
+    // Merge frame 1 into frame 0 using MergeFramesCommand
+    MergeFramesCommand cmd(&doc, 1, 0);
+    cmd.redo();
+
+    QCOMPARE(doc.frameCount(), 1);
+    SpriteBox merged = doc.box(0);
+    QCOMPARE(merged.rect, QRect(10, 10, 50, 20));
+    QVERIFY(merged.hasPolygonMesh);
+    QVERIFY(merged.polygon.size() >= 4);
+    QVERIFY(!merged.triangles.isEmpty());
+
+    // Undo should restore both original frames with their exact polygon meshes
+    cmd.undo();
+    QCOMPARE(doc.frameCount(), 2);
+    QVERIFY(doc.box(0).hasPolygonMesh);
+    QCOMPARE(doc.box(0).rect, QRect(10, 10, 20, 20));
+    QCOMPARE(doc.box(0).polygon.size(), 4);
+
+    QVERIFY(doc.box(1).hasPolygonMesh);
+    QCOMPARE(doc.box(1).rect, QRect(40, 10, 20, 20));
+    QCOMPARE(doc.box(1).polygon.size(), 4);
 }
 
 #include <QApplication>

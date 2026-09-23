@@ -252,6 +252,7 @@ private:
     QAction *m_actionTogglePolygonMesh = nullptr;
     QAction *m_actionPolygonMeshDialog = nullptr;
     QAction *m_actionPixelEditorDialog = nullptr;
+    QAction *m_actionMergeSlices = nullptr;
     QLabel *statusLabel = nullptr;
     QLabel *zoomLabel = nullptr;
     QSlider *zoomSlider = nullptr;

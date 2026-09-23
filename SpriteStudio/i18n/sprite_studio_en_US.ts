@@ -4,111 +4,111 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="20"/>
-        <location filename="../src/aboutdialog.cpp" line="78"/>
-        <location filename="../../tests/test_controllers.cpp" line="1612"/>
-        <location filename="../../tests/test_controllers.cpp" line="1671"/>
-        <location filename="../../tests/test_controllers.cpp" line="1730"/>
+        <location filename="../src/aboutdialog.cpp" line="39"/>
+        <location filename="../src/aboutdialog.cpp" line="97"/>
+        <location filename="../../tests/test_controllers.cpp" line="1701"/>
+        <location filename="../../tests/test_controllers.cpp" line="1762"/>
+        <location filename="../../tests/test_controllers.cpp" line="1823"/>
         <source>KEY_DIALOG_ABOUT_TITLE</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="84"/>
+        <location filename="../src/aboutdialog.cpp" line="103"/>
         <source>KEY_DIALOG_ABOUT_CREDITS</source>
         <translation>Credits</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="90"/>
+        <location filename="../src/aboutdialog.cpp" line="109"/>
         <source>KEY_DIALOG_LICENCE_TITLE</source>
         <translation>Licence</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="95"/>
+        <location filename="../src/aboutdialog.cpp" line="114"/>
         <source>KEY_DIALOG_ABOUT_CLOSE</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="178"/>
+        <location filename="../src/aboutdialog.cpp" line="197"/>
         <source>KEY_ABOUT_PURPOSE</source>
         <translation>A powerful tool for sprite extraction and animation</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="189"/>
+        <location filename="../src/aboutdialog.cpp" line="208"/>
         <source>KEY_ABOUT_BUILD_WITH</source>
         <translation>Built with</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="190"/>
+        <location filename="../src/aboutdialog.cpp" line="209"/>
         <source>KEY_ABOUT_PLATFORM</source>
         <translation>Platform</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="193"/>
+        <location filename="../src/aboutdialog.cpp" line="212"/>
         <source>KEY_ABOUT_GIT_INFO</source>
         <translation>GIT Information</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="194"/>
+        <location filename="../src/aboutdialog.cpp" line="213"/>
         <source>KEY_ABOUT_BRANCH</source>
         <translation>Branch</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="195"/>
+        <location filename="../src/aboutdialog.cpp" line="214"/>
         <source>KEY_ABOUT_COMMIT</source>
         <translation>Commit Hash</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="196"/>
+        <location filename="../src/aboutdialog.cpp" line="215"/>
         <source>KEY_ABOUT_LAST_COMMIT_DATE</source>
         <translation>Last Commit Date</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="197"/>
+        <location filename="../src/aboutdialog.cpp" line="216"/>
         <source>KEY_ABOUT_LAST_AUTHOR</source>
         <translation>Last Author</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="220"/>
+        <location filename="../src/aboutdialog.cpp" line="239"/>
         <source>KEY_ABOUT_CREDITS_AND_GREETINGS</source>
         <translation>Credits &amp; Acknowledgements</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="228"/>
+        <location filename="../src/aboutdialog.cpp" line="247"/>
         <source>_contributors</source>
         <translation>Contributors</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="232"/>
+        <location filename="../src/aboutdialog.cpp" line="251"/>
         <source>_used_techno</source>
         <translation>Technologies used</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="235"/>
+        <location filename="../src/aboutdialog.cpp" line="254"/>
         <source>_compiler</source>
         <translation>Compiler</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="238"/>
+        <location filename="../src/aboutdialog.cpp" line="257"/>
         <source>_greetings_title</source>
         <translation>Special greetings</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="239"/>
+        <location filename="../src/aboutdialog.cpp" line="258"/>
         <source>_greetings</source>
         <translation>Thanks to all contributors and supporters on Tipeee</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="275"/>
+        <location filename="../src/aboutdialog.cpp" line="294"/>
         <source>_licence_agreement</source>
         <translation>Licence agreement</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="115"/>
+        <location filename="../src/aboutdialog.cpp" line="134"/>
         <source>KEY_ACTION_SETTINGS</source>
         <translation>Preferences...</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="259"/>
+        <location filename="../src/aboutdialog.cpp" line="278"/>
         <source>KEY_LICENCE_FILE_NOT_FOUND</source>
         <translation>Error: License file not found in resources: %1</translation>
     </message>
@@ -116,72 +116,72 @@
 <context>
     <name>AnimationController</name>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="81"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="100"/>
         <source>KEY_ANIM_COL_NAME</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="81"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="100"/>
         <source>KEY_ANIM_COL_FPS</source>
         <translation>FPS</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="81"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="100"/>
         <source>KEY_ANIM_COL_MODE</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="81"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="100"/>
         <source>KEY_ANIM_COL_FRAMES</source>
         <translation>Frames</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="81"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="100"/>
         <source>KEY_ANIM_COL_DURATION</source>
         <translation>Duration</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="152"/>
-        <location filename="../src/controller/animationcontroller.cpp" line="618"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="171"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="654"/>
         <source>KEY_LOOP_MODE_LOOP</source>
         <translation>Loop 🔁</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="153"/>
-        <location filename="../src/controller/animationcontroller.cpp" line="620"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="172"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="656"/>
         <source>KEY_LOOP_MODE_ONCE</source>
         <translation>Once ➡|</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="154"/>
-        <location filename="../src/controller/animationcontroller.cpp" line="622"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="173"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="658"/>
         <source>KEY_LOOP_MODE_PINGPONG</source>
         <translation>Ping-Pong 🔀</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="372"/>
-        <location filename="../src/controller/animationcontroller.cpp" line="385"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="391"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="404"/>
         <source>KEY_DIALOG_NEW_ANIM_TITLE</source>
         <translation>New Animation</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="373"/>
-        <location filename="../src/controller/animationcontroller.cpp" line="386"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="392"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="405"/>
         <source>KEY_DIALOG_NEW_ANIM_PROMPT</source>
         <translation>Animation name:</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="626"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="662"/>
         <source>KEY_DURATION_MS_FORMAT</source>
         <translation>%1 ms</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="727"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="763"/>
         <source>KEY_FRAME_INDICATOR_FORMAT</source>
         <translation>Frame %1 / %2</translation>
     </message>
     <message>
-        <location filename="../src/controller/animationcontroller.cpp" line="731"/>
+        <location filename="../src/controller/animationcontroller.cpp" line="767"/>
         <source>KEY_NO_FRAMES</source>
         <translation>0 / 0</translation>
     </message>
@@ -191,9 +191,9 @@
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="25"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="549"/>
-        <location filename="../../tests/test_controllers.cpp" line="1627"/>
-        <location filename="../../tests/test_controllers.cpp" line="1686"/>
-        <location filename="../../tests/test_controllers.cpp" line="1745"/>
+        <location filename="../../tests/test_controllers.cpp" line="1716"/>
+        <location filename="../../tests/test_controllers.cpp" line="1777"/>
+        <location filename="../../tests/test_controllers.cpp" line="1838"/>
         <source>Atlas Bin-Packing (MaxRects)</source>
         <translation>Atlas Bin-Packing (MaxRects)</translation>
     </message>
@@ -407,9 +407,9 @@
     <name>AtlasPackingFilter</name>
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1626"/>
-        <location filename="../../tests/test_controllers.cpp" line="1685"/>
-        <location filename="../../tests/test_controllers.cpp" line="1744"/>
+        <location filename="../../tests/test_controllers.cpp" line="1715"/>
+        <location filename="../../tests/test_controllers.cpp" line="1776"/>
+        <location filename="../../tests/test_controllers.cpp" line="1837"/>
         <source>Atlas Bin-Packing (MaxRects)...</source>
         <translation>Atlas Bin-Packing (MaxRects)...</translation>
     </message>
@@ -422,17 +422,17 @@
 <context>
     <name>AtlasViewController</name>
     <message>
-        <location filename="../src/controller/atlasviewcontroller.cpp" line="363"/>
+        <location filename="../src/controller/atlasviewcontroller.cpp" line="391"/>
         <source>KEY_CMD_TRIM_SLICES</source>
         <translation>Trim %1 Slice(s)</translation>
     </message>
     <message>
-        <location filename="../src/controller/atlasviewcontroller.cpp" line="391"/>
+        <location filename="../src/controller/atlasviewcontroller.cpp" line="419"/>
         <source>KEY_CMD_MERGE_SLICES</source>
         <translation>Merge %1 Slice(s)</translation>
     </message>
     <message>
-        <location filename="../src/controller/atlasviewcontroller.cpp" line="476"/>
+        <location filename="../src/controller/atlasviewcontroller.cpp" line="504"/>
         <source>KEY_CMD_MOVE_SLICES</source>
         <translation>Move %1 Slice(s)</translation>
     </message>
@@ -441,9 +441,9 @@
     <name>BackgroundRemovalDialog</name>
     <message>
         <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="25"/>
-        <location filename="../../tests/test_controllers.cpp" line="1619"/>
-        <location filename="../../tests/test_controllers.cpp" line="1678"/>
-        <location filename="../../tests/test_controllers.cpp" line="1737"/>
+        <location filename="../../tests/test_controllers.cpp" line="1708"/>
+        <location filename="../../tests/test_controllers.cpp" line="1769"/>
+        <location filename="../../tests/test_controllers.cpp" line="1830"/>
         <source>Background Removal</source>
         <translation>Background Removal</translation>
     </message>
@@ -514,34 +514,34 @@
 <context>
     <name>BranchSelectionDialog</name>
     <message>
-        <location filename="../src/widgets/branchselectiondialog.cpp" line="14"/>
+        <location filename="../src/widgets/branchselectiondialog.cpp" line="33"/>
         <source>Redo — Select Branch</source>
         <translation>Redo — Select Branch</translation>
     </message>
     <message>
-        <location filename="../src/widgets/branchselectiondialog.cpp" line="28"/>
+        <location filename="../src/widgets/branchselectiondialog.cpp" line="47"/>
         <source>Multiple branches diverge from the current revision.
 Choose which branch to restore:</source>
         <translation>Multiple branches diverge from the current revision.
 Choose which branch to restore:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/branchselectiondialog.cpp" line="59"/>
+        <location filename="../src/widgets/branchselectiondialog.cpp" line="78"/>
         <source>(No message)</source>
         <translation>(No message)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/branchselectiondialog.cpp" line="69"/>
+        <location filename="../src/widgets/branchselectiondialog.cpp" line="88"/>
         <source>Unknown</source>
         <translation>Unknown</translation>
     </message>
     <message>
-        <location filename="../src/widgets/branchselectiondialog.cpp" line="93"/>
+        <location filename="../src/widgets/branchselectiondialog.cpp" line="112"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/widgets/branchselectiondialog.cpp" line="97"/>
+        <location filename="../src/widgets/branchselectiondialog.cpp" line="116"/>
         <source>Restore Branch</source>
         <translation>Restore Branch</translation>
     </message>
@@ -550,9 +550,9 @@ Choose which branch to restore:</translation>
     <name>ColorAdjustFilter</name>
     <message>
         <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1622"/>
-        <location filename="../../tests/test_controllers.cpp" line="1681"/>
-        <location filename="../../tests/test_controllers.cpp" line="1740"/>
+        <location filename="../../tests/test_controllers.cpp" line="1711"/>
+        <location filename="../../tests/test_controllers.cpp" line="1772"/>
+        <location filename="../../tests/test_controllers.cpp" line="1833"/>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
         <translation>Color Adjustment (HSV &amp; Contrast)...</translation>
     </message>
@@ -812,9 +812,9 @@ Strict removal clears the pixel.</translation>
     <name>ExportDialog</name>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="14"/>
-        <location filename="../../tests/test_controllers.cpp" line="1628"/>
-        <location filename="../../tests/test_controllers.cpp" line="1687"/>
-        <location filename="../../tests/test_controllers.cpp" line="1746"/>
+        <location filename="../../tests/test_controllers.cpp" line="1717"/>
+        <location filename="../../tests/test_controllers.cpp" line="1778"/>
+        <location filename="../../tests/test_controllers.cpp" line="1839"/>
         <source>Export Atlas &amp; Animations</source>
         <translation>Export Atlas &amp; Animations</translation>
     </message>
@@ -875,17 +875,17 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="99"/>
-        <location filename="../../tests/test_controllers.cpp" line="1629"/>
-        <location filename="../../tests/test_controllers.cpp" line="1688"/>
-        <location filename="../../tests/test_controllers.cpp" line="1747"/>
+        <location filename="../../tests/test_controllers.cpp" line="1718"/>
+        <location filename="../../tests/test_controllers.cpp" line="1779"/>
+        <location filename="../../tests/test_controllers.cpp" line="1840"/>
         <source>Keep Current Layout (WYSIWYG — As Displayed)</source>
         <translation>Keep Current Layout (WYSIWYG — As Displayed)</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="104"/>
-        <location filename="../../tests/test_controllers.cpp" line="1630"/>
-        <location filename="../../tests/test_controllers.cpp" line="1689"/>
-        <location filename="../../tests/test_controllers.cpp" line="1748"/>
+        <location filename="../../tests/test_controllers.cpp" line="1719"/>
+        <location filename="../../tests/test_controllers.cpp" line="1780"/>
+        <location filename="../../tests/test_controllers.cpp" line="1841"/>
         <source>MaxRects (Best Short Side Fit — Recommended)</source>
         <translation>MaxRects (Best Short Side Fit — Recommended)</translation>
     </message>
@@ -946,9 +946,9 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="216"/>
-        <location filename="../../tests/test_controllers.cpp" line="1631"/>
-        <location filename="../../tests/test_controllers.cpp" line="1690"/>
-        <location filename="../../tests/test_controllers.cpp" line="1749"/>
+        <location filename="../../tests/test_controllers.cpp" line="1720"/>
+        <location filename="../../tests/test_controllers.cpp" line="1781"/>
+        <location filename="../../tests/test_controllers.cpp" line="1842"/>
         <source>Force Power of Two (2^n)</source>
         <translation>Force Power of Two (2^n)</translation>
     </message>
@@ -1044,10 +1044,10 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="389"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="277"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="285"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="322"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="360"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="296"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="304"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="341"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="379"/>
         <source>GPU VRAM: --</source>
         <translation>GPU VRAM: --</translation>
     </message>
@@ -1062,14 +1062,14 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="363"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="274"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="293"/>
         <source>Dimensions: --</source>
         <translation>Dimensions: --</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="375"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="275"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="320"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="294"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="339"/>
         <source>Packing Efficiency: --</source>
         <translation>Packing Efficiency: --</translation>
     </message>
@@ -1079,9 +1079,9 @@ Strict removal clears the pixel.</translation>
         <translation>Frames: --</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="27"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="369"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="432"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="46"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="388"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="451"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
@@ -1102,130 +1102,130 @@ Strict removal clears the pixel.</translation>
         <translation type="vanished">JSON SpriteSheet (*.json);;All Files (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="218"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="237"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="220"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="239"/>
         <source>All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="228"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="247"/>
         <source>Select Export Destination</source>
         <translation>Select Export Destination</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="276"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="295"/>
         <source>Frames: 0</source>
         <translation>Frames: 0</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="293"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="312"/>
         <source>GPU VRAM: %1 MB (Standard RGBA8888, uncompressed on GPU)</source>
         <translation>GPU VRAM: %1 MB (Standard RGBA8888, uncompressed on GPU)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="301"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="320"/>
         <source>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</source>
         <translation>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="312"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="331"/>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Dimensions: %1 x %2 px (Current Atlas)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="315"/>
-        <location filename="../../tests/test_controllers.cpp" line="1632"/>
-        <location filename="../../tests/test_controllers.cpp" line="1691"/>
-        <location filename="../../tests/test_controllers.cpp" line="1750"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="334"/>
+        <location filename="../../tests/test_controllers.cpp" line="1721"/>
+        <location filename="../../tests/test_controllers.cpp" line="1782"/>
+        <location filename="../../tests/test_controllers.cpp" line="1843"/>
         <source>Packing Efficiency: Preserved as-is (WYSIWYG)</source>
         <translation>Packing Efficiency: Preserved as-is (WYSIWYG)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="316"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="321"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="335"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="340"/>
         <source>Frames: %1 total</source>
         <translation>Frames: %1 total</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="319"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="338"/>
         <source>Dimensions: No current atlas</source>
         <translation>Dimensions: No current atlas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="338"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="357"/>
         <source>Dimensions: %1 x %2 px</source>
         <translation>Dimensions: %1 x %2 px</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="342"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="361"/>
         <source>Packing Efficiency: %1%</source>
         <translation>Packing Efficiency: %1%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="347"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="366"/>
         <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
         <translation>Frames: %1 total (%2 unique, %3 duplicates saved)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="352"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="371"/>
         <source>Frames: %1 total (all unique)</source>
         <translation>Frames: %1 total (all unique)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="357"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="376"/>
         <source>Dimensions: Does not fit in maximum bounds!</source>
         <translation>Dimensions: Does not fit in maximum bounds!</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="358"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="377"/>
         <source>Packing Efficiency: 0%</source>
         <translation>Packing Efficiency: 0%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="359"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="378"/>
         <source>Frames: %1</source>
         <translation>Frames: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="432"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="451"/>
         <source>Please specify a valid file name before exporting.</source>
         <translation>Please specify a valid file name before exporting.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="440"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="459"/>
         <source>Exporting and compressing textures (GPU VRAM / KTX2)...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="456"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="475"/>
         <source>Export completed successfully!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="459"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="478"/>
         <source>Saved %1 successfully.</source>
         <translation type="unfinished">Saved %1 successfully.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="468"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="487"/>
         <source>Export Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="468"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="487"/>
         <source>An error occurred during export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="30"/>
-        <location filename="../src/widgets/exportdialog.cpp" line="372"/>
-        <location filename="../../tests/test_controllers.cpp" line="1633"/>
-        <location filename="../../tests/test_controllers.cpp" line="1692"/>
-        <location filename="../../tests/test_controllers.cpp" line="1751"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="49"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="391"/>
+        <location filename="../../tests/test_controllers.cpp" line="1722"/>
+        <location filename="../../tests/test_controllers.cpp" line="1783"/>
+        <location filename="../../tests/test_controllers.cpp" line="1844"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -1233,7 +1233,7 @@ Strict removal clears the pixel.</translation>
 <context>
     <name>Extractor</name>
     <message>
-        <location filename="../src/extractor.cpp" line="33"/>
+        <location filename="../src/extractor.cpp" line="52"/>
         <source>Export is not supported by this format (%1)</source>
         <translation>Export is not supported by this format (%1)</translation>
     </message>
@@ -1241,62 +1241,62 @@ Strict removal clears the pixel.</translation>
 <context>
     <name>FilterDialogBase</name>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="62"/>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="240"/>
-        <location filename="../../tests/test_controllers.cpp" line="1620"/>
-        <location filename="../../tests/test_controllers.cpp" line="1679"/>
-        <location filename="../../tests/test_controllers.cpp" line="1738"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="81"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="259"/>
+        <location filename="../../tests/test_controllers.cpp" line="1709"/>
+        <location filename="../../tests/test_controllers.cpp" line="1770"/>
+        <location filename="../../tests/test_controllers.cpp" line="1831"/>
         <source>Live Preview</source>
         <translation>Live Preview</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="64"/>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="241"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="83"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="260"/>
         <source>Update atlas and frames in real-time while adjusting parameters</source>
         <translation>Update atlas and frames in real-time while adjusting parameters</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="67"/>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="244"/>
-        <location filename="../../tests/test_controllers.cpp" line="1621"/>
-        <location filename="../../tests/test_controllers.cpp" line="1680"/>
-        <location filename="../../tests/test_controllers.cpp" line="1739"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="86"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="263"/>
+        <location filename="../../tests/test_controllers.cpp" line="1710"/>
+        <location filename="../../tests/test_controllers.cpp" line="1771"/>
+        <location filename="../../tests/test_controllers.cpp" line="1832"/>
         <source>Auto-detect Sprite Boxes</source>
         <translation>Auto-detect Sprite Boxes</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="69"/>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="245"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="88"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="264"/>
         <source>Automatically recalculate sprite bounding boxes after filtering</source>
         <translation>Automatically recalculate sprite bounding boxes after filtering</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="78"/>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="248"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="97"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="267"/>
         <source>Reset Defaults</source>
         <translation>Reset Defaults</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="79"/>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="249"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="98"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="268"/>
         <source>Restore recommended default values for this filter</source>
         <translation>Restore recommended default values for this filter</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="200"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="219"/>
         <source>%1 initial frame(s)</source>
         <translation>%1 initial frame(s)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="253"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="272"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filterdialogbase.cpp" line="256"/>
-        <location filename="../../tests/test_controllers.cpp" line="1646"/>
-        <location filename="../../tests/test_controllers.cpp" line="1705"/>
-        <location filename="../../tests/test_controllers.cpp" line="1765"/>
+        <location filename="../src/widgets/filterdialogbase.cpp" line="275"/>
+        <location filename="../../tests/test_controllers.cpp" line="1735"/>
+        <location filename="../../tests/test_controllers.cpp" line="1796"/>
+        <location filename="../../tests/test_controllers.cpp" line="1858"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -1325,9 +1325,9 @@ Strict removal clears the pixel.</translation>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="22"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="22"/>
         <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="22"/>
-        <location filename="../../tests/test_controllers.cpp" line="1625"/>
-        <location filename="../../tests/test_controllers.cpp" line="1684"/>
-        <location filename="../../tests/test_controllers.cpp" line="1743"/>
+        <location filename="../../tests/test_controllers.cpp" line="1714"/>
+        <location filename="../../tests/test_controllers.cpp" line="1775"/>
+        <location filename="../../tests/test_controllers.cpp" line="1836"/>
         <source>Geometry &amp; Transform</source>
         <translation>Geometry &amp; Transform</translation>
     </message>
@@ -1373,22 +1373,22 @@ Strict removal clears the pixel.</translation>
 <context>
     <name>GitCommitNodeItem</name>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="45"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="64"/>
         <source>KEY_GIT_TIP_MSG</source>
         <translation>Message:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="46"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="65"/>
         <source>KEY_GIT_TIP_AUTHOR</source>
         <translation>Author:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="47"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="66"/>
         <source>KEY_GIT_TIP_DATE</source>
         <translation>Date:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="48"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="67"/>
         <source>KEY_GIT_TIP_RESTORE_HINT</source>
         <translation>Double-click to restore this revision</translation>
     </message>
@@ -1396,87 +1396,87 @@ Strict removal clears the pixel.</translation>
 <context>
     <name>GitHistoryDock</name>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="151"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="566"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="170"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="585"/>
         <source>KEY_DOCK_GIT_HISTORY</source>
         <translation>Git History</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="172"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="568"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="191"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="587"/>
         <source>KEY_GIT_REFRESH_TOOLTIP</source>
         <translation>Refresh revision history</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="178"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="571"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="197"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="590"/>
         <source>KEY_GIT_RETURN_PRESENT</source>
         <translation>Return to Present</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="180"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="572"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="199"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="591"/>
         <source>KEY_GIT_RETURN_PRESENT_TOOLTIP</source>
         <translation>Restore the latest version (branch HEAD)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="195"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="575"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="214"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="594"/>
         <source>KEY_GIT_DISABLED_BANNER</source>
         <translation>Git integration is not enabled on this system.
 (libgit2 not detected at compile time)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="223"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="577"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="242"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="596"/>
         <source>KEY_GIT_HDR_COMMIT</source>
         <translation>Commit:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="231"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="578"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="250"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="597"/>
         <source>KEY_GIT_HDR_DATE</source>
         <translation>Date:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="237"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="579"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="256"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="598"/>
         <source>KEY_GIT_HDR_AUTHOR</source>
         <translation>Author:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="243"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="580"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="262"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="599"/>
         <source>KEY_GIT_HDR_ACTION</source>
         <translation>Action:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="250"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="581"/>
-        <location filename="../../tests/test_controllers.cpp" line="1615"/>
-        <location filename="../../tests/test_controllers.cpp" line="1674"/>
-        <location filename="../../tests/test_controllers.cpp" line="1733"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="269"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="600"/>
+        <location filename="../../tests/test_controllers.cpp" line="1704"/>
+        <location filename="../../tests/test_controllers.cpp" line="1765"/>
+        <location filename="../../tests/test_controllers.cpp" line="1826"/>
         <source>KEY_GIT_BTN_RESTORE</source>
         <translation>Restore this revision</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="290"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="309"/>
         <source>KEY_GIT_NO_ACTIVE_PROJECT</source>
         <translation>No active project</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="299"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="318"/>
         <source>KEY_GIT_COMMITS_COUNT</source>
         <translation>%1 commit(s)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="302"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="321"/>
         <source>KEY_GIT_EMPTY_HISTORY</source>
         <translation>Git history is empty for this project.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/githistorydock.cpp" line="496"/>
-        <location filename="../src/widgets/githistorydock.cpp" line="583"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="515"/>
+        <location filename="../src/widgets/githistorydock.cpp" line="602"/>
         <source>KEY_GIT_NO_SELECTION</source>
         <translation>No commit selected.
 Click a node to view its details.</translation>
@@ -1672,9 +1672,9 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="983"/>
-        <location filename="../../tests/test_controllers.cpp" line="1610"/>
-        <location filename="../../tests/test_controllers.cpp" line="1669"/>
-        <location filename="../../tests/test_controllers.cpp" line="1728"/>
+        <location filename="../../tests/test_controllers.cpp" line="1697"/>
+        <location filename="../../tests/test_controllers.cpp" line="1758"/>
+        <location filename="../../tests/test_controllers.cpp" line="1819"/>
         <source>KEY_TOOL_SELECT</source>
         <translation>Select &amp; Edit</translation>
     </message>
@@ -1715,30 +1715,30 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="685"/>
-        <location filename="../src/mainwindow.cpp" line="295"/>
-        <location filename="../src/mainwindow.cpp" line="871"/>
+        <location filename="../src/mainwindow.cpp" line="316"/>
+        <location filename="../src/mainwindow.cpp" line="896"/>
         <source>KEY_ANIM_COL_NAME</source>
         <translation>Name</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="690"/>
-        <location filename="../src/mainwindow.cpp" line="295"/>
-        <location filename="../src/mainwindow.cpp" line="873"/>
+        <location filename="../src/mainwindow.cpp" line="316"/>
+        <location filename="../src/mainwindow.cpp" line="898"/>
         <source>KEY_ANIM_COL_FPS</source>
         <translation>FPS</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="700"/>
-        <location filename="../src/mainwindow.cpp" line="295"/>
-        <location filename="../src/mainwindow.cpp" line="872"/>
+        <location filename="../src/mainwindow.cpp" line="316"/>
+        <location filename="../src/mainwindow.cpp" line="897"/>
         <source>KEY_ANIM_COL_FRAMES</source>
         <translation>Frames</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="879"/>
-        <location filename="../../tests/test_controllers.cpp" line="1604"/>
-        <location filename="../../tests/test_controllers.cpp" line="1663"/>
-        <location filename="../../tests/test_controllers.cpp" line="1722"/>
+        <location filename="../../tests/test_controllers.cpp" line="1691"/>
+        <location filename="../../tests/test_controllers.cpp" line="1752"/>
+        <location filename="../../tests/test_controllers.cpp" line="1813"/>
         <source>KEY_MENU_FILE</source>
         <translation>File</translation>
     </message>
@@ -1754,7 +1754,7 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="917"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="65"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="84"/>
         <source>KEY_ACTION_OPEN_PROJECT</source>
         <translation>&amp;Open Project...</translation>
     </message>
@@ -1780,37 +1780,37 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="942"/>
-        <location filename="../../tests/test_controllers.cpp" line="1608"/>
-        <location filename="../../tests/test_controllers.cpp" line="1667"/>
-        <location filename="../../tests/test_controllers.cpp" line="1726"/>
+        <location filename="../../tests/test_controllers.cpp" line="1695"/>
+        <location filename="../../tests/test_controllers.cpp" line="1756"/>
+        <location filename="../../tests/test_controllers.cpp" line="1817"/>
         <source>KEY_ACTION_OPEN</source>
         <translation>&amp;Open</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="947"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="133"/>
-        <location filename="../../tests/test_controllers.cpp" line="1609"/>
-        <location filename="../../tests/test_controllers.cpp" line="1668"/>
-        <location filename="../../tests/test_controllers.cpp" line="1727"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="152"/>
+        <location filename="../../tests/test_controllers.cpp" line="1696"/>
+        <location filename="../../tests/test_controllers.cpp" line="1757"/>
+        <location filename="../../tests/test_controllers.cpp" line="1818"/>
         <source>KEY_ACTION_SAVE</source>
         <translation>&amp;Save</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="952"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="77"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="96"/>
         <source>KEY_ACTION_SAVE_PROJECT</source>
         <translation>&amp;Save Project</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="957"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="95"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="104"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="114"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="123"/>
         <source>KEY_ACTION_SAVE_PROJECT_AS</source>
         <translation>Save Project &amp;As...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="962"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="154"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="173"/>
         <source>KEY_ACTION_EXPORT</source>
         <translation>&amp;Export</translation>
     </message>
@@ -1825,191 +1825,220 @@ Click a node to view its details.</translation>
         <translation>&amp;Exit</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="143"/>
-        <location filename="../src/mainwindow.cpp" line="659"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="69"/>
+        <location filename="../src/mainwindow.cpp" line="162"/>
+        <location filename="../src/mainwindow.cpp" line="684"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="88"/>
         <source>KEY_MSG_LOAD_ERROR</source>
         <translation>Load Error</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="349"/>
+        <location filename="../src/mainwindow.cpp" line="370"/>
         <source>KEY_STATUS_READY_TO_START</source>
         <translation>Ready to start</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="367"/>
-        <location filename="../src/mainwindow.cpp" line="919"/>
+        <location filename="../src/mainwindow.cpp" line="388"/>
+        <location filename="../src/mainwindow.cpp" line="947"/>
         <source>KEY_STATUS_PROGRESS</source>
         <translation>Progress</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="230"/>
-        <location filename="../src/mainwindow.cpp" line="444"/>
-        <location filename="../src/mainwindow.cpp" line="922"/>
+        <location filename="../src/mainwindow.cpp" line="251"/>
+        <location filename="../src/mainwindow.cpp" line="461"/>
+        <location filename="../src/mainwindow.cpp" line="950"/>
         <source>KEY_LABEL_TIMING</source>
         <translation>Timing</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="451"/>
-        <location filename="../src/mainwindow.cpp" line="886"/>
+        <location filename="../src/mainwindow.cpp" line="468"/>
+        <location filename="../src/mainwindow.cpp" line="911"/>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Edit</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="453"/>
-        <location filename="../src/mainwindow.cpp" line="889"/>
+        <location filename="../src/mainwindow.cpp" line="470"/>
+        <location filename="../src/mainwindow.cpp" line="914"/>
         <source>KEY_ACTION_UNDO</source>
         <translation>&amp;Undo</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="458"/>
-        <location filename="../src/mainwindow.cpp" line="892"/>
+        <location filename="../src/mainwindow.cpp" line="475"/>
+        <location filename="../src/mainwindow.cpp" line="917"/>
         <source>KEY_ACTION_REDO</source>
         <translation>&amp;Redo</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="494"/>
-        <location filename="../src/mainwindow.cpp" line="895"/>
-        <location filename="../../tests/test_controllers.cpp" line="1618"/>
-        <location filename="../../tests/test_controllers.cpp" line="1677"/>
-        <location filename="../../tests/test_controllers.cpp" line="1736"/>
+        <location filename="../src/mainwindow.cpp" line="519"/>
+        <location filename="../src/mainwindow.cpp" line="920"/>
+        <location filename="../../tests/test_controllers.cpp" line="1707"/>
+        <location filename="../../tests/test_controllers.cpp" line="1768"/>
+        <location filename="../../tests/test_controllers.cpp" line="1829"/>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Filters</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="513"/>
-        <location filename="../src/mainwindow.cpp" line="883"/>
+        <location filename="../src/mainwindow.cpp" line="538"/>
+        <location filename="../src/mainwindow.cpp" line="908"/>
         <source>KEY_MENU_RECENT_PROJECTS</source>
         <translation>Recent Projects</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="517"/>
-        <location filename="../src/mainwindow.cpp" line="880"/>
+        <location filename="../src/mainwindow.cpp" line="542"/>
+        <location filename="../src/mainwindow.cpp" line="905"/>
         <source>KEY_MENU_RECENT_FILES</source>
         <translation>Recent Files</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="620"/>
+        <location filename="../src/mainwindow.cpp" line="645"/>
         <source>KEY_ACTION_NO_RECENT_FILES</source>
         <translation>No Recent Files</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="625"/>
-        <location filename="../src/mainwindow.cpp" line="652"/>
+        <location filename="../src/mainwindow.cpp" line="650"/>
+        <location filename="../src/mainwindow.cpp" line="677"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="633"/>
+        <location filename="../src/mainwindow.cpp" line="658"/>
         <source>KEY_ACTION_CLEAR_RECENT_FILES</source>
         <translation>Clear Recent Files</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="647"/>
+        <location filename="../src/mainwindow.cpp" line="672"/>
         <source>KEY_ACTION_NO_RECENT_PROJECTS</source>
         <translation>No recent projects</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="665"/>
+        <location filename="../src/mainwindow.cpp" line="690"/>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Clear recent projects</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="195"/>
-        <location filename="../src/mainwindow_animation.cpp" line="94"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="86"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="177"/>
-        <location filename="../../tests/test_controllers.cpp" line="1611"/>
-        <location filename="../../tests/test_controllers.cpp" line="1670"/>
-        <location filename="../../tests/test_controllers.cpp" line="1729"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="225"/>
+        <location filename="../src/mainwindow_animation.cpp" line="113"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="105"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="196"/>
+        <location filename="../../tests/test_controllers.cpp" line="1698"/>
+        <location filename="../../tests/test_controllers.cpp" line="1759"/>
+        <location filename="../../tests/test_controllers.cpp" line="1820"/>
         <source>KEY_CTX_CREATE_ANIM</source>
         <translation>Create animation from selection</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_animation.cpp" line="98"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="234"/>
+        <location filename="../../tests/test_controllers.cpp" line="1699"/>
+        <location filename="../../tests/test_controllers.cpp" line="1760"/>
+        <location filename="../../tests/test_controllers.cpp" line="1821"/>
+        <source>KEY_CTX_ADD_TO_ANIM</source>
+        <translation>Add to Animation</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="245"/>
+        <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
+        <translation>Add to Active Animation &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="268"/>
+        <source>KEY_CTX_NO_EXISTING_ANIMS</source>
+        <translation>(No animations created yet)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="313"/>
+        <location filename="../../tests/test_controllers.cpp" line="1700"/>
+        <location filename="../../tests/test_controllers.cpp" line="1761"/>
+        <location filename="../../tests/test_controllers.cpp" line="1822"/>
+        <source>KEY_CTX_SELECT_ALL</source>
+        <translation>Select All</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_animation.cpp" line="117"/>
         <source>KEY_CTX_REVERSE_ANIM</source>
         <translation>Reverse Animation</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_animation.cpp" line="99"/>
+        <location filename="../src/mainwindow_animation.cpp" line="118"/>
         <source>KEY_CTX_DELETE_ANIM</source>
         <translation>Delete Animation</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="96"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="185"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="115"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="204"/>
         <source>KEY_CTX_TRIM_SLICE</source>
         <translation>Trim to Pixels</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="111"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="203"/>
+        <location filename="../src/mainwindow.cpp" line="505"/>
+        <location filename="../src/mainwindow.cpp" line="939"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="291"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="130"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="222"/>
         <source>KEY_CTX_MERGE_SLICES</source>
         <translation>Merge Slices</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="205"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="119"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="211"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="341"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="138"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="230"/>
         <source>KEY_CTX_DELETE_FRAMES</source>
         <translation>Delete Selected Frames</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="209"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="124"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="217"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="332"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="143"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="236"/>
         <source>KEY_CTX_ERASE_PIXELS</source>
         <translation>Erase Pixels &amp; Delete Frames</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="131"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="229"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="150"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="248"/>
         <source>KEY_CTX_REMOVE_BG</source>
         <translation>Auto Remove Background</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="219"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="223"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="325"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="242"/>
         <source>KEY_CTX_INVERT_SEL</source>
         <translation>Invert Selection</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="29"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="48"/>
         <source>KEY_DIALOG_LICENCE_TITLE</source>
         <translation>Licence</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="34"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="53"/>
         <source>KEY_DIALOG_ABOUT_CLOSE</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="122"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="141"/>
         <source>KEY_DIALOG_OPEN_TITLE</source>
         <translation>Open File</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="77"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="95"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="133"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="96"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="114"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="152"/>
         <source>KEY_MSG_NOTHING_TO_SAVE</source>
         <translation>Nothing to save.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="64"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="103"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="83"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="122"/>
         <source>SpriteStudio Project (*.ssp);;All Files (*.*)</source>
         <translation>SpriteStudio Project (*.ssp);;All Files (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="88"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="108"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="145"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="107"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="127"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="164"/>
         <source>KEY_MSG_SAVE_ERROR</source>
         <translation>Save Error</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="154"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="173"/>
         <source>KEY_MSG_NOTHING_TO_EXPORT</source>
         <translation>Nothing to export.</translation>
     </message>
@@ -2022,26 +2051,26 @@ Click a node to view its details.</translation>
         <translation type="vanished">Export Error</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_frames.cpp" line="14"/>
+        <location filename="../src/mainwindow_frames.cpp" line="33"/>
         <source>KEY_STATUS_POPULATING</source>
         <translation>Populating frame list...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_frames.cpp" line="20"/>
-        <location filename="../src/mainwindow_frames.cpp" line="57"/>
+        <location filename="../src/mainwindow_frames.cpp" line="39"/>
+        <location filename="../src/mainwindow_frames.cpp" line="76"/>
         <source>KEY_FRAME_LABEL</source>
         <translation>Frame %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_frames.cpp" line="46"/>
+        <location filename="../src/mainwindow_frames.cpp" line="65"/>
         <source>KEY_STATUS_READY</source>
         <translation>Ready</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="895"/>
-        <location filename="../../tests/test_controllers.cpp" line="1605"/>
-        <location filename="../../tests/test_controllers.cpp" line="1664"/>
-        <location filename="../../tests/test_controllers.cpp" line="1723"/>
+        <location filename="../../tests/test_controllers.cpp" line="1692"/>
+        <location filename="../../tests/test_controllers.cpp" line="1753"/>
+        <location filename="../../tests/test_controllers.cpp" line="1814"/>
         <source>KEY_MENU_VIEW</source>
         <translation>View</translation>
     </message>
@@ -2056,10 +2085,10 @@ Click a node to view its details.</translation>
         <translation>Restore default docking panels layout</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="489"/>
-        <location filename="../src/mainwindow.cpp" line="499"/>
-        <location filename="../src/mainwindow.cpp" line="899"/>
-        <location filename="../src/mainwindow.cpp" line="902"/>
+        <location filename="../src/mainwindow.cpp" line="514"/>
+        <location filename="../src/mainwindow.cpp" line="524"/>
+        <location filename="../src/mainwindow.cpp" line="924"/>
+        <location filename="../src/mainwindow.cpp" line="927"/>
         <source>KEY_ACTION_SETTINGS</source>
         <translation>Preferences...</translation>
     </message>
@@ -2095,9 +2124,9 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
-        <location filename="../../tests/test_controllers.cpp" line="1607"/>
-        <location filename="../../tests/test_controllers.cpp" line="1666"/>
-        <location filename="../../tests/test_controllers.cpp" line="1725"/>
+        <location filename="../../tests/test_controllers.cpp" line="1694"/>
+        <location filename="../../tests/test_controllers.cpp" line="1755"/>
+        <location filename="../../tests/test_controllers.cpp" line="1816"/>
         <source>KEY_DOCK_PREVIEW</source>
         <translation>Animation Preview</translation>
     </message>
@@ -2118,8 +2147,8 @@ Click a node to view its details.</translation>
         <translation>Atlas Frames</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="560"/>
-        <location filename="../src/mainwindow.cpp" line="565"/>
+        <location filename="../src/mainwindow.cpp" line="585"/>
+        <location filename="../src/mainwindow.cpp" line="590"/>
         <source>KEY_DOCK_GIT_HISTORY</source>
         <translation>Git History</translation>
     </message>
@@ -2266,38 +2295,38 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="695"/>
-        <location filename="../src/mainwindow.cpp" line="295"/>
+        <location filename="../src/mainwindow.cpp" line="316"/>
         <source>KEY_ANIM_COL_MODE</source>
         <translation>Mode</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="705"/>
-        <location filename="../src/mainwindow.cpp" line="295"/>
-        <location filename="../src/mainwindow.cpp" line="874"/>
+        <location filename="../src/mainwindow.cpp" line="316"/>
+        <location filename="../src/mainwindow.cpp" line="899"/>
         <source>KEY_ANIM_COL_DURATION</source>
         <translation>Duration</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_animation.cpp" line="97"/>
+        <location filename="../src/mainwindow_animation.cpp" line="116"/>
         <source>KEY_CTX_DUPLICATE_ANIM</source>
         <translation>Duplicate this animation</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="674"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="81"/>
-        <location filename="../../tests/test_controllers.cpp" line="1616"/>
-        <location filename="../../tests/test_controllers.cpp" line="1675"/>
-        <location filename="../../tests/test_controllers.cpp" line="1734"/>
+        <location filename="../src/mainwindow.cpp" line="699"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="100"/>
+        <location filename="../../tests/test_controllers.cpp" line="1705"/>
+        <location filename="../../tests/test_controllers.cpp" line="1766"/>
+        <location filename="../../tests/test_controllers.cpp" line="1827"/>
         <source>KEY_UNTITLED_PROJECT</source>
         <translation>Untitled Project</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="693"/>
+        <location filename="../src/mainwindow.cpp" line="718"/>
         <source>KEY_UNKNOWN_DATE</source>
         <translation>Unknown date</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="694"/>
+        <location filename="../src/mainwindow.cpp" line="719"/>
         <source>KEY_RECOVERY_PROMPT</source>
         <translation>An interrupted work session was detected:
 
@@ -2307,38 +2336,38 @@ Date: %2
 Do you want to restore this session?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="699"/>
+        <location filename="../src/mainwindow.cpp" line="724"/>
         <source>KEY_RECOVERY_TITLE</source>
         <translation>Crash Recovery</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="707"/>
+        <location filename="../src/mainwindow.cpp" line="732"/>
         <source>KEY_RECOVERY_ERROR</source>
         <translation>Recovery Error</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="752"/>
+        <location filename="../src/mainwindow.cpp" line="777"/>
         <source>💡 Update available: %1 (Check Settings -&gt; Updates)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="775"/>
+        <location filename="../src/mainwindow.cpp" line="800"/>
         <source>KEY_UNSAVED_CHANGES_TITLE</source>
         <translation>Unsaved Changes</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="776"/>
+        <location filename="../src/mainwindow.cpp" line="801"/>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
         <translation>The current project &apos;%1&apos; has unsaved changes.
 Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="841"/>
-        <location filename="../src/mainwindow.cpp" line="303"/>
-        <location filename="../src/mainwindow.cpp" line="865"/>
-        <location filename="../../tests/test_controllers.cpp" line="1606"/>
-        <location filename="../../tests/test_controllers.cpp" line="1665"/>
-        <location filename="../../tests/test_controllers.cpp" line="1724"/>
+        <location filename="../src/mainwindow.cpp" line="324"/>
+        <location filename="../src/mainwindow.cpp" line="890"/>
+        <location filename="../../tests/test_controllers.cpp" line="1693"/>
+        <location filename="../../tests/test_controllers.cpp" line="1754"/>
+        <location filename="../../tests/test_controllers.cpp" line="1815"/>
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>Main Toolbar</translation>
     </message>
@@ -2369,7 +2398,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="438"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="146"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="165"/>
         <source>KEY_PIVOT_TOPLEFT</source>
         <translation>Top-Left</translation>
     </message>
@@ -2390,7 +2419,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="458"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="142"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="161"/>
         <source>KEY_PIVOT_CENTER</source>
         <translation>Center</translation>
     </message>
@@ -2406,7 +2435,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="473"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="138"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="157"/>
         <source>KEY_PIVOT_BOTTOMCENTER</source>
         <translation>Bottom-Center</translation>
     </message>
@@ -2441,38 +2470,38 @@ Do you want to save them before proceeding?</translation>
         <translation>Apply this pivot point to all frames in the project</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="55"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="62"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="74"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="81"/>
         <source>Atlas Bin-Packing</source>
         <translation>Atlas Bin-Packing</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="56"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="75"/>
         <source>Please open or import a sprite sheet with frames first.</source>
         <translation>Please open or import a sprite sheet with frames first.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="63"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="82"/>
         <source>Atlas packing plugin not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="137"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="156"/>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
         <translation>Anchor &amp; Pivot</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="138"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="157"/>
         <source>KEY_PIVOT_GROUND_HINT</source>
         <translation>Ground</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="146"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="165"/>
         <source>KEY_PIVOT_UI_HINT</source>
         <translation>UI</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="152"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="171"/>
         <source>KEY_CTX_MORE_PRESETS</source>
         <translation>More presets...</translation>
     </message>
@@ -2507,37 +2536,38 @@ Do you want to save them before proceeding?</translation>
         <translation>Actual size 100%</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1799"/>
+        <location filename="../../tests/test_controllers.cpp" line="1892"/>
         <source>KEY_UNKNOWN_FEATURE</source>
         <translation>Unknown feature</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="482"/>
-        <location filename="../src/mainwindow.cpp" line="905"/>
+        <location filename="../src/mainwindow.cpp" line="499"/>
+        <location filename="../src/mainwindow.cpp" line="930"/>
         <source>KEY_ACTION_POLYGON_MESH</source>
         <translation>2D Tight Mesh (Polygon Packing)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="844"/>
-        <location filename="../src/mainwindow.cpp" line="911"/>
+        <location filename="../src/mainwindow.cpp" line="869"/>
+        <location filename="../src/mainwindow.cpp" line="936"/>
         <source>KEY_ACTION_TOGGLE_POLYGON_MESH</source>
         <translation>Show Polygon Meshes (Wireframe)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="106"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="197"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="125"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="216"/>
         <source>KEY_CTX_POLYGON_MESH</source>
         <translation>2D Tight Mesh (Polygon Packing)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="476"/>
-        <location filename="../src/mainwindow.cpp" line="908"/>
+        <location filename="../src/mainwindow.cpp" line="493"/>
+        <location filename="../src/mainwindow.cpp" line="933"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="302"/>
         <source>KEY_ACTION_PIXEL_EDITOR</source>
         <translation>Pixel Editor (Sprite)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="101"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="191"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="120"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="210"/>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>Edit Pixels...</translation>
     </message>
@@ -2647,42 +2677,42 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>PixelCanvas</name>
     <message>
-        <location filename="../src/widgets/pixelcanvas.cpp" line="272"/>
+        <location filename="../src/widgets/pixelcanvas.cpp" line="291"/>
         <source>Clear Pixels</source>
         <translation>Clear Pixels</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelcanvas.cpp" line="336"/>
+        <location filename="../src/widgets/pixelcanvas.cpp" line="355"/>
         <source>Paste</source>
         <translation>Paste</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelcanvas.cpp" line="366"/>
+        <location filename="../src/widgets/pixelcanvas.cpp" line="385"/>
         <source>Flip Horizontal</source>
         <translation>Flip Horizontal</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelcanvas.cpp" line="396"/>
+        <location filename="../src/widgets/pixelcanvas.cpp" line="415"/>
         <source>Flip Vertical</source>
         <translation>Flip Vertical</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelcanvas.cpp" line="413"/>
+        <location filename="../src/widgets/pixelcanvas.cpp" line="432"/>
         <source>Rotate 90°</source>
         <translation>Rotate 90°</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelcanvas.cpp" line="557"/>
+        <location filename="../src/widgets/pixelcanvas.cpp" line="576"/>
         <source>Flood Fill</source>
         <translation>Flood Fill</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelcanvas.cpp" line="811"/>
+        <location filename="../src/widgets/pixelcanvas.cpp" line="830"/>
         <source>Eraser</source>
         <translation>Eraser</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixelcanvas.cpp" line="811"/>
+        <location filename="../src/widgets/pixelcanvas.cpp" line="830"/>
         <source>Pencil</source>
         <translation>Pencil</translation>
     </message>
@@ -2690,278 +2720,278 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>PixelEditorDialog</name>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="26"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="669"/>
-        <location filename="../../tests/test_controllers.cpp" line="1637"/>
-        <location filename="../../tests/test_controllers.cpp" line="1696"/>
-        <location filename="../../tests/test_controllers.cpp" line="1756"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="45"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="688"/>
+        <location filename="../../tests/test_controllers.cpp" line="1726"/>
+        <location filename="../../tests/test_controllers.cpp" line="1787"/>
+        <location filename="../../tests/test_controllers.cpp" line="1849"/>
         <source>Pixel Editor — SpriteStudio</source>
         <translation>Pixel Editor — SpriteStudio</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="107"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="672"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="126"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="691"/>
         <source>◀ Previous Frame</source>
         <translation>◀ Previous Frame</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="108"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="673"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="127"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="692"/>
         <source>Navigate to previous frame (Page Up)</source>
         <translation>Navigate to previous frame (Page Up)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="117"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="676"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="136"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="695"/>
         <source>Next Frame ▶</source>
         <translation>Next Frame ▶</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="118"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="677"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="137"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="696"/>
         <source>Navigate to next frame (Page Down)</source>
         <translation>Navigate to next frame (Page Down)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="112"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="131"/>
         <source>Frame 1 / 1 (32x32 px)</source>
         <translation>Frame 1 / 1 (32x32 px)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="417"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="681"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="436"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="700"/>
         <source>Frame %1 / %2  (%3x%4 px)</source>
         <translation>Frame %1 / %2  (%3x%4 px)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="148"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="689"/>
-        <location filename="../../tests/test_controllers.cpp" line="1638"/>
-        <location filename="../../tests/test_controllers.cpp" line="1697"/>
-        <location filename="../../tests/test_controllers.cpp" line="1757"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="167"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="708"/>
+        <location filename="../../tests/test_controllers.cpp" line="1727"/>
+        <location filename="../../tests/test_controllers.cpp" line="1788"/>
+        <location filename="../../tests/test_controllers.cpp" line="1850"/>
         <source>Pencil (1px continuous Bresenham) [P]</source>
         <translation>Pencil (1px continuous Bresenham) [P]</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="149"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="690"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="168"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="709"/>
         <source>Eraser (1px clear to alpha 0) [E]</source>
         <translation>Eraser (1px clear to alpha 0) [E]</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="150"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="691"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="169"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="710"/>
         <source>Eyedropper / Pipette (Alt+Click or [I])</source>
         <translation>Eyedropper / Pipette (Alt+Click or [I])</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="151"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="692"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="170"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="711"/>
         <source>Bucket Fill (Flood Fill 4-way) [G]</source>
         <translation>Bucket Fill (Flood Fill 4-way) [G]</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="152"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="693"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="171"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="712"/>
         <source>Rectangular Marquee Selection [M]</source>
         <translation>Rectangular Marquee Selection [M]</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="153"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="694"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="172"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="713"/>
         <source>Magic Wand (Color Selection) [W]</source>
         <translation>Magic Wand (Color Selection) [W]</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="173"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="696"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="192"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="715"/>
         <source>Flip Horizontal</source>
         <translation>Flip Horizontal</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="174"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="697"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="193"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="716"/>
         <source>Flip Vertical</source>
         <translation>Flip Vertical</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="175"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="698"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="194"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="717"/>
         <source>Rotate 90° Clockwise</source>
         <translation>Rotate 90° Clockwise</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="185"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="699"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="204"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="718"/>
         <source>Toggle Pixel Grid</source>
         <translation>Toggle Pixel Grid</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="194"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="700"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="213"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="719"/>
         <source>Zoom In</source>
         <translation>Zoom In</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="195"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="701"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="214"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="720"/>
         <source>Zoom Out</source>
         <translation>Zoom Out</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="196"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="702"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="215"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="721"/>
         <source>Fit to View</source>
         <translation>Fit to View</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="201"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="703"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="220"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="722"/>
         <source>Undo (Ctrl+Z)</source>
         <translation>Undo (Ctrl+Z)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="202"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="704"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="221"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="723"/>
         <source>Redo (Ctrl+Y)</source>
         <translation>Redo (Ctrl+Y)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="216"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="707"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="235"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="726"/>
         <source>Active Colors</source>
         <translation>Active Colors</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="222"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="708"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="241"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="727"/>
         <source>Primary Color (Left Click to change)</source>
         <translation>Primary Color (Left Click to change)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="235"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="709"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="254"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="728"/>
         <source>Secondary Color (Left Click to change)</source>
         <translation>Secondary Color (Left Click to change)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="229"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="710"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="248"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="729"/>
         <source>Swap Colors (X)</source>
         <translation>Swap Colors (X)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="244"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="711"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="263"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="730"/>
         <source>Palette:</source>
         <translation>Palette:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="248"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="716"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="267"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="735"/>
         <source>Sprite Colors (Auto)</source>
         <translation>Sprite Colors (Auto)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="249"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="717"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="268"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="736"/>
         <source>NES / Famicom (54)</source>
         <translation>NES / Famicom (54)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="250"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="718"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="269"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="737"/>
         <source>SNES / Super Famicom (32)</source>
         <translation>SNES / Super Famicom (32)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="251"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="719"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="270"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="738"/>
         <source>Amiga OCS (32)</source>
         <translation>Amiga OCS (32)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="252"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="720"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="271"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="739"/>
         <source>NEC PC-Engine (32)</source>
         <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="253"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="721"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="272"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="740"/>
         <source>Game Boy DMG (4)</source>
         <translation>Game Boy DMG (4)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="254"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="722"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="273"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="741"/>
         <source>PICO-8 (16)</source>
         <translation>PICO-8 (16)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="255"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="723"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="274"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="742"/>
         <source>Commodore 64 (16)</source>
         <translation>Commodore 64 (16)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="273"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="728"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="292"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="747"/>
         <source>1:1 Scale Preview</source>
         <translation>1:1 Scale Preview</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="294"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="367"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="313"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="386"/>
         <source>X: -- , Y: --</source>
         <translation>X: -- , Y: --</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="352"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="371"/>
         <source>X: %1 , Y: %2</source>
         <translation>X: %1 , Y: %2</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="354"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="373"/>
         <source>Transparent [alpha: 0]</source>
         <translation>Transparent [alpha: 0]</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="301"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="320"/>
         <source>Zoom: 1600%</source>
         <translation>Zoom: 1600%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="373"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="731"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="392"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="750"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="305"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="735"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="324"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="754"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="309"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="736"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="328"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="755"/>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="313"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="737"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="332"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="756"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="328"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="347"/>
         <source>Select Primary Color</source>
         <translation>Select Primary Color</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="336"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="355"/>
         <source>Select Secondary Color</source>
         <translation>Select Secondary Color</translation>
     </message>
@@ -2970,9 +3000,9 @@ Do you want to save them before proceeding?</translation>
     <name>PixelRescaleFilter</name>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1623"/>
-        <location filename="../../tests/test_controllers.cpp" line="1682"/>
-        <location filename="../../tests/test_controllers.cpp" line="1741"/>
+        <location filename="../../tests/test_controllers.cpp" line="1712"/>
+        <location filename="../../tests/test_controllers.cpp" line="1773"/>
+        <location filename="../../tests/test_controllers.cpp" line="1834"/>
         <source>Pixel Art Rescale...</source>
         <translation>Pixel Art Rescale...</translation>
     </message>
@@ -3058,48 +3088,48 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>PolygonMeshDialog</name>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="232"/>
-        <location filename="../../tests/test_controllers.cpp" line="1634"/>
-        <location filename="../../tests/test_controllers.cpp" line="1693"/>
-        <location filename="../../tests/test_controllers.cpp" line="1752"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="251"/>
+        <location filename="../../tests/test_controllers.cpp" line="1723"/>
+        <location filename="../../tests/test_controllers.cpp" line="1784"/>
+        <location filename="../../tests/test_controllers.cpp" line="1845"/>
         <source>Tight Mesh &amp; 2D Polygon Packing</source>
         <translation>Tight Mesh &amp; 2D Polygon Packing</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="233"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="252"/>
         <source>Live Preview &amp; Wireframe</source>
         <translation>Live Preview &amp; Wireframe</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="234"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="253"/>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>Polygon &amp; Mesh Simplification</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="235"/>
-        <location filename="../../tests/test_controllers.cpp" line="1635"/>
-        <location filename="../../tests/test_controllers.cpp" line="1694"/>
-        <location filename="../../tests/test_controllers.cpp" line="1753"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="254"/>
+        <location filename="../../tests/test_controllers.cpp" line="1724"/>
+        <location filename="../../tests/test_controllers.cpp" line="1785"/>
+        <location filename="../../tests/test_controllers.cpp" line="1846"/>
         <source>Approximation Tolerance (ε):</source>
         <translation>Approximation Tolerance (ε):</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="236"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="255"/>
         <source>Alpha Threshold:</source>
         <translation>Alpha Threshold:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="237"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="256"/>
         <source>Outward Padding:</source>
         <translation>Outward Padding:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="238"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="257"/>
         <source>Max Vertices:</source>
         <translation>Max Vertices:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="239"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="258"/>
         <source>Overdraw &amp; Performance Dashboard</source>
         <translation>Overdraw &amp; Performance Dashboard</translation>
     </message>
@@ -3120,71 +3150,71 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">GPU Overdraw Saved: --</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="398"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="417"/>
         <source>Vertices: %1</source>
         <translation>Vertices: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="399"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="418"/>
         <source>Triangles: %1</source>
         <translation>Triangles: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="400"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="419"/>
         <source>Polygon Area: %1 px² (vs %2 px² box)</source>
         <translation>Polygon Area: %1 px² (vs %2 px² box)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="401"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="420"/>
         <source>GPU Overdraw Eliminated: %1%</source>
         <translation>GPU Overdraw Eliminated: %1%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="240"/>
-        <location filename="../../tests/test_controllers.cpp" line="1636"/>
-        <location filename="../../tests/test_controllers.cpp" line="1695"/>
-        <location filename="../../tests/test_controllers.cpp" line="1754"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="259"/>
+        <location filename="../../tests/test_controllers.cpp" line="1725"/>
+        <location filename="../../tests/test_controllers.cpp" line="1786"/>
+        <location filename="../../tests/test_controllers.cpp" line="1847"/>
         <source>Apply to Selection</source>
         <translation>Apply to Selection</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="241"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="260"/>
         <source>Apply to All Frames</source>
         <translation>Apply to All Frames</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="242"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="261"/>
         <source>Remove Mesh (Reset to Rect)</source>
         <translation>Remove Mesh (Reset to Rect)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="245"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="264"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="406"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="425"/>
         <source>Target Frame %1: Mesh already applied (%2 vertices, %3 tris)</source>
         <translation>Target Frame %1: Mesh already applied (%2 vertices, %3 tris)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="412"/>
-        <location filename="../../tests/test_controllers.cpp" line="1755"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="431"/>
+        <location filename="../../tests/test_controllers.cpp" line="1848"/>
         <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
         <translation>Target Frame %1: Rectangle mode (no mesh applied)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="468"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="487"/>
         <source>✓ Mesh applied to %1 frame(s)!</source>
         <translation>✓ Mesh applied to %1 frame(s)!</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="509"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="528"/>
         <source>✓ Mesh applied to all %1 frames!</source>
         <translation>✓ Mesh applied to all %1 frames!</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="546"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="565"/>
         <source>✓ Tight mesh removed. Reverted to rectangle.</source>
         <translation>✓ Tight mesh removed. Reverted to rectangle.</translation>
     </message>
@@ -3192,108 +3222,108 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>ProjectController</name>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="312"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="380"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="331"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="399"/>
         <source>File does not exist: %1</source>
         <translation>File does not exist: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="324"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="404"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="343"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="423"/>
         <source>No suitable codec found for file: %1</source>
         <translation>No suitable codec found for file: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="133"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="192"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="236"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="331"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="152"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="211"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="255"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="350"/>
         <source>No active SpriteDocument.</source>
         <translation>No active SpriteDocument.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="110"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="129"/>
         <source>New project</source>
         <translation>New project</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="116"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="135"/>
         <source>New project created.</source>
         <translation>New project created.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="125"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="144"/>
         <source>Project file does not exist: %1</source>
         <translation>Project file does not exist: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="140"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="159"/>
         <source>Opening project %1...</source>
         <translation>Opening project %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="143"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="162"/>
         <source>Failed to open project.</source>
         <translation>Failed to open project.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="151"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="170"/>
         <source>Failed to deserialize project.</source>
         <translation>Failed to deserialize project.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="172"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="191"/>
         <source>Project loaded successfully: %1</source>
         <translation>Project loaded successfully: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="182"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="201"/>
         <source>Project file path is empty. Use Save As.</source>
         <translation>Project file path is empty. Use Save As.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="197"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="216"/>
         <source>Saving project %1...</source>
         <translation>Saving project %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="222"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="241"/>
         <source>Project saved successfully: %1</source>
         <translation>Project saved successfully: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="241"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="260"/>
         <source>Restoring session from %1...</source>
         <translation>Restoring session from %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="266"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="285"/>
         <source>Session recovered successfully.</source>
         <translation>Session recovered successfully.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="338"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="357"/>
         <source>Loading %1...</source>
         <translation>Loading %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="355"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="374"/>
         <source>Import %1</source>
         <translation>Import %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="370"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="735"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="389"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="754"/>
         <source>Loaded %1 successfully.</source>
         <translation>Loaded %1 successfully.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="411"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="430"/>
         <source>Loading %1 in background...</source>
         <translation>Loading %1 in background...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="454"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="473"/>
         <source>Export file path must have a valid file name: %1</source>
         <translation>Export file path must have a valid file name: %1</translation>
     </message>
@@ -3302,57 +3332,57 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">File path is empty.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="460"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="479"/>
         <source>Document is empty.</source>
         <translation>Document is empty.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="467"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="486"/>
         <source>No suitable exporter found for format: %1</source>
         <translation>No suitable exporter found for format: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="473"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="492"/>
         <source>Saving %1...</source>
         <translation>Saving %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="483"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="502"/>
         <source>Saved %1 successfully.</source>
         <translation>Saved %1 successfully.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="619"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="638"/>
         <source>Removing background...</source>
         <translation>Removing background...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="643"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="662"/>
         <source>Background removed.</source>
         <translation>Background removed.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="656"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="675"/>
         <source>Removing background in background...</source>
         <translation>Removing background in background...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="723"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="742"/>
         <source>Open %1</source>
         <translation>Open %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="739"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="758"/>
         <source>Background removed successfully.</source>
         <translation>Background removed successfully.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="808"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="827"/>
         <source>Action executed</source>
         <translation>Action executed</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="810"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="829"/>
         <source>Project modified</source>
         <translation>Project modified</translation>
     </message>
@@ -3365,12 +3395,12 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">Action</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="826"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="845"/>
         <source>No active session workspace.</source>
         <translation>No active session workspace.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="853"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="872"/>
         <source>Checked out revision %1.</source>
         <translation>Checked out revision %1.</translation>
     </message>
@@ -3552,7 +3582,7 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/commands/commands.cpp" line="12"/>
+        <location filename="../src/commands/commands.cpp" line="31"/>
         <source>Delete %n frame(s)</source>
         <translation>
             <numerusform>Delete %n frame</numerusform>
@@ -3560,7 +3590,7 @@ Do you want to save them before proceeding?</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/commands/commands.cpp" line="56"/>
+        <location filename="../src/commands/commands.cpp" line="75"/>
         <source>Erase Atlas Pixels for %n frame(s)</source>
         <translation>
             <numerusform>Erase Atlas Pixels for %n frame</numerusform>
@@ -3568,78 +3598,78 @@ Do you want to save them before proceeding?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="115"/>
+        <location filename="../src/commands/commands.cpp" line="134"/>
         <source>Merge Frame %1 into %2</source>
         <translation>Merge Frame %1 into %2</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="161"/>
+        <location filename="../src/commands/commands.cpp" line="180"/>
         <source>Create Animation &apos;%1&apos;</source>
         <translation>Create Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="181"/>
+        <location filename="../src/commands/commands.cpp" line="200"/>
         <source>Delete Animation &apos;%1&apos;</source>
         <translation>Delete Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="202"/>
+        <location filename="../src/commands/commands.cpp" line="221"/>
         <source>Reverse Animation &apos;%1&apos;</source>
         <translation>Reverse Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="223"/>
+        <location filename="../src/commands/commands.cpp" line="242"/>
         <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
         <translation>Rename Animation &apos;%1&apos; to &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="244"/>
+        <location filename="../src/commands/commands.cpp" line="263"/>
         <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
         <translation>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="265"/>
+        <location filename="../src/commands/commands.cpp" line="284"/>
         <source>Reorder Frames in Animation &apos;%1&apos;</source>
         <translation>Reorder Frames in Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="290"/>
+        <location filename="../src/commands/commands.cpp" line="309"/>
         <source>Change Properties for Animation &apos;%1&apos;</source>
         <translation>Change Properties for Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="330"/>
+        <location filename="../src/commands/commands.cpp" line="349"/>
         <source>Resize/Move Slice %1</source>
         <translation>Resize/Move Slice %1</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="352"/>
+        <location filename="../src/commands/commands.cpp" line="371"/>
         <source>Add Slice</source>
         <translation>Add Slice</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="392"/>
+        <location filename="../src/commands/commands.cpp" line="411"/>
         <source>Remove Background</source>
         <translation>Remove Background</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="423"/>
-        <location filename="../src/packer/vramtexturecompressor.cpp" line="284"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="442"/>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="303"/>
         <source>Failed to decode image from: %1</source>
         <translation>Failed to decode image from: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="433"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="452"/>
         <source>Failed to segment sprite frames.</source>
         <translation>Failed to segment sprite frames.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="670"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="689"/>
         <source>Failed to remove background from atlas.</source>
         <translation>Failed to remove background from atlas.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="682"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="701"/>
         <source>Failed to segment frames after background removal.</source>
         <translation>Failed to segment frames after background removal.</translation>
     </message>
@@ -3659,69 +3689,69 @@ Do you want to save them before proceeding?</translation>
         <translation>JSON root must be an object.</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="191"/>
+        <location filename="../src/filters/filterregistry.cpp" line="210"/>
         <source>Cleanup</source>
         <translation>Cleanup</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="192"/>
+        <location filename="../src/filters/filterregistry.cpp" line="211"/>
         <source>Colors</source>
         <translation>Colors</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="193"/>
+        <location filename="../src/filters/filterregistry.cpp" line="212"/>
         <source>Effects</source>
         <translation>Effects</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="194"/>
+        <location filename="../src/filters/filterregistry.cpp" line="213"/>
         <source>Geometry</source>
         <translation>Geometry</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="216"/>
+        <location filename="../src/filters/filterregistry.cpp" line="235"/>
         <source>No Atlas Loaded</source>
         <translation>No Atlas Loaded</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="217"/>
+        <location filename="../src/filters/filterregistry.cpp" line="236"/>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Please open or import a sprite sheet first before applying a filter.</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="433"/>
-        <location filename="../src/commands/commands.cpp" line="457"/>
+        <location filename="../src/commands/commands.cpp" line="452"/>
+        <location filename="../src/commands/commands.cpp" line="476"/>
         <source>KEY_CMD_CHANGE_PIVOT</source>
         <translation>Change Anchor Pivot</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="524"/>
-        <location filename="../src/commands/commands.cpp" line="544"/>
+        <location filename="../src/commands/commands.cpp" line="543"/>
+        <location filename="../src/commands/commands.cpp" line="563"/>
         <source>Edit Frame %1 Pixels</source>
         <translation>Edit Frame %1 Pixels</translation>
     </message>
     <message>
-        <location filename="../src/commands/commands.cpp" line="526"/>
+        <location filename="../src/commands/commands.cpp" line="545"/>
         <source>Edit Pixels (%1 Frames)</source>
         <translation>Edit Pixels (%1 Frames)</translation>
     </message>
     <message>
-        <location filename="../src/commands/meshcommands.cpp" line="12"/>
+        <location filename="../src/commands/meshcommands.cpp" line="31"/>
         <source>Set Polygon Mesh</source>
         <translation>Set Polygon Mesh</translation>
     </message>
     <message>
-        <location filename="../src/packer/vramtexturecompressor.cpp" line="252"/>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="271"/>
         <source>Image file does not exist: %1</source>
         <translation>Image file does not exist: %1</translation>
     </message>
     <message>
-        <location filename="../src/packer/vramtexturecompressor.cpp" line="262"/>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="281"/>
         <source>Failed to open file for reading: %1</source>
         <translation>Failed to open file for reading: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/exportdialog.cpp" line="480"/>
+        <location filename="../src/widgets/exportdialog.cpp" line="499"/>
         <source>No suitable exporter found for format: %1</source>
         <translation type="unfinished">No suitable exporter found for format: %1</translation>
     </message>
@@ -3729,16 +3759,16 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>QPlatformTheme</name>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1641"/>
-        <location filename="../../tests/test_controllers.cpp" line="1700"/>
-        <location filename="../../tests/test_controllers.cpp" line="1760"/>
+        <location filename="../../tests/test_controllers.cpp" line="1730"/>
+        <location filename="../../tests/test_controllers.cpp" line="1791"/>
+        <location filename="../../tests/test_controllers.cpp" line="1853"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1642"/>
-        <location filename="../../tests/test_controllers.cpp" line="1701"/>
-        <location filename="../../tests/test_controllers.cpp" line="1761"/>
+        <location filename="../../tests/test_controllers.cpp" line="1731"/>
+        <location filename="../../tests/test_controllers.cpp" line="1792"/>
+        <location filename="../../tests/test_controllers.cpp" line="1854"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -3747,9 +3777,9 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">&amp;Cancel</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1643"/>
-        <location filename="../../tests/test_controllers.cpp" line="1702"/>
-        <location filename="../../tests/test_controllers.cpp" line="1762"/>
+        <location filename="../../tests/test_controllers.cpp" line="1732"/>
+        <location filename="../../tests/test_controllers.cpp" line="1793"/>
+        <location filename="../../tests/test_controllers.cpp" line="1855"/>
         <source>Discard</source>
         <translation>Discard</translation>
     </message>
@@ -3758,9 +3788,9 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">&amp;Discard</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1644"/>
-        <location filename="../../tests/test_controllers.cpp" line="1703"/>
-        <location filename="../../tests/test_controllers.cpp" line="1763"/>
+        <location filename="../../tests/test_controllers.cpp" line="1733"/>
+        <location filename="../../tests/test_controllers.cpp" line="1794"/>
+        <location filename="../../tests/test_controllers.cpp" line="1856"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
@@ -3773,9 +3803,9 @@ Do you want to save them before proceeding?</translation>
         <translation type="vanished">Don&apos;t Save</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1645"/>
-        <location filename="../../tests/test_controllers.cpp" line="1704"/>
-        <location filename="../../tests/test_controllers.cpp" line="1764"/>
+        <location filename="../../tests/test_controllers.cpp" line="1734"/>
+        <location filename="../../tests/test_controllers.cpp" line="1795"/>
+        <location filename="../../tests/test_controllers.cpp" line="1857"/>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
@@ -3832,9 +3862,9 @@ Do you want to save them before proceeding?</translation>
     <name>RetroPaletteFilter</name>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1624"/>
-        <location filename="../../tests/test_controllers.cpp" line="1683"/>
-        <location filename="../../tests/test_controllers.cpp" line="1742"/>
+        <location filename="../../tests/test_controllers.cpp" line="1713"/>
+        <location filename="../../tests/test_controllers.cpp" line="1774"/>
+        <location filename="../../tests/test_controllers.cpp" line="1835"/>
         <source>Retro Palette &amp; Dithering...</source>
         <translation>Retro Palette &amp; Dithering...</translation>
     </message>
@@ -4011,102 +4041,102 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>SessionManager</name>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="103"/>
+        <location filename="../src/project/sessionmanager.cpp" line="122"/>
         <source>Project file does not exist: %1</source>
         <translation>Project file does not exist: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="108"/>
+        <location filename="../src/project/sessionmanager.cpp" line="127"/>
         <source>Failed to initialize session directory.</source>
         <translation>Failed to initialize session directory.</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="134"/>
+        <location filename="../src/project/sessionmanager.cpp" line="153"/>
         <source>Session directory does not exist: %1</source>
         <translation>Session directory does not exist: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="274"/>
+        <location filename="../src/project/sessionmanager.cpp" line="293"/>
         <source>Unsaved Project</source>
         <translation>Unsaved Project</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="337"/>
+        <location filename="../src/project/sessionmanager.cpp" line="356"/>
         <source>Source directory does not exist: %1</source>
         <translation>Source directory does not exist: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="346"/>
+        <location filename="../src/project/sessionmanager.cpp" line="365"/>
         <source>Cannot create ZIP file: %1</source>
         <translation>Cannot create ZIP file: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="352"/>
+        <location filename="../src/project/sessionmanager.cpp" line="371"/>
         <source>Error occurred while adding files to ZIP archive: %1</source>
         <translation>Error occurred while adding files to ZIP archive: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="358"/>
+        <location filename="../src/project/sessionmanager.cpp" line="377"/>
         <source>Error occurred while writing ZIP file: %1</source>
         <translation>Error occurred while writing ZIP file: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="373"/>
+        <location filename="../src/project/sessionmanager.cpp" line="392"/>
         <source>Failed to open ZIP archive: %1</source>
         <translation>Failed to open ZIP archive: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="425"/>
+        <location filename="../src/project/sessionmanager.cpp" line="444"/>
         <source>No active session workspace to save.</source>
         <translation>No active session workspace to save.</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="430"/>
+        <location filename="../src/project/sessionmanager.cpp" line="449"/>
         <source>Target path cannot be empty.</source>
         <translation>Target path cannot be empty.</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="460"/>
+        <location filename="../src/project/sessionmanager.cpp" line="479"/>
         <source>Failed to overwrite existing file: %1</source>
         <translation>Failed to overwrite existing file: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="467"/>
+        <location filename="../src/project/sessionmanager.cpp" line="486"/>
         <source>Failed to atomically rename %1 to %2</source>
         <translation>Failed to atomically rename %1 to %2</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="737"/>
+        <location filename="../src/project/sessionmanager.cpp" line="756"/>
         <source>No active session workspace.</source>
         <translation>No active session workspace.</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="744"/>
+        <location filename="../src/project/sessionmanager.cpp" line="763"/>
         <source>Failed to open repository.</source>
         <translation>Failed to open repository.</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="750"/>
+        <location filename="../src/project/sessionmanager.cpp" line="769"/>
         <source>Invalid commit hash: %1</source>
         <translation>Invalid commit hash: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="757"/>
+        <location filename="../src/project/sessionmanager.cpp" line="776"/>
         <source>Commit not found: %1</source>
         <translation>Commit not found: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="763"/>
+        <location filename="../src/project/sessionmanager.cpp" line="782"/>
         <source>Failed to set detached HEAD to %1</source>
         <translation>Failed to set detached HEAD to %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="777"/>
+        <location filename="../src/project/sessionmanager.cpp" line="796"/>
         <source>Checkout tree failed with error code: %1</source>
         <translation>Checkout tree failed with error code: %1</translation>
     </message>
     <message>
-        <location filename="../src/project/sessionmanager.cpp" line="784"/>
+        <location filename="../src/project/sessionmanager.cpp" line="803"/>
         <source>Git integration is not compiled in.</source>
         <translation>Git integration is not compiled in.</translation>
     </message>
@@ -4114,531 +4144,531 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="34"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1001"/>
-        <location filename="../../tests/test_controllers.cpp" line="1613"/>
-        <location filename="../../tests/test_controllers.cpp" line="1672"/>
-        <location filename="../../tests/test_controllers.cpp" line="1731"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="53"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1020"/>
+        <location filename="../../tests/test_controllers.cpp" line="1702"/>
+        <location filename="../../tests/test_controllers.cpp" line="1763"/>
+        <location filename="../../tests/test_controllers.cpp" line="1824"/>
         <source>KEY_SETTINGS_TITLE</source>
         <translation>Preferences</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="92"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1002"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="111"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1021"/>
         <source>KEY_SETTINGS_SEARCH_PLACEHOLDER</source>
         <translation>Search settings...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="102"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1003"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="121"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1022"/>
         <source>KEY_SETTINGS_CAT_GENERAL</source>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="118"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1007"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="137"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1026"/>
         <source>KEY_SETTINGS_CAT_GIT</source>
         <translation>Version Control (Git)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="106"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1004"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="125"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1023"/>
         <source>KEY_SETTINGS_CAT_ATLAS</source>
         <translation>Display &amp; Atlas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="110"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1005"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="129"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1024"/>
         <source>Export &amp; VRAM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="114"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="451"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1006"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1066"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="133"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1025"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1085"/>
         <source>Plugins &amp; Extensions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="122"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1008"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="141"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1027"/>
         <source>Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="179"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1011"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="198"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1030"/>
         <source>KEY_SETTINGS_HDR_GENERAL</source>
         <translation>General Settings</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="184"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1012"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="203"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1031"/>
         <source>KEY_SETTINGS_GRP_HISTORY</source>
         <translation>History &amp; Project</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="189"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1015"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="208"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1034"/>
         <source>KEY_SETTINGS_SUFFIX_ACTIONS</source>
         <translation> actions</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="190"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1013"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="209"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1032"/>
         <source>KEY_SETTINGS_UNDO_LIMIT</source>
         <translation>Undo/Redo limit:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="195"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1014"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="214"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1033"/>
         <source>KEY_SETTINGS_MAX_RECENT_FILES</source>
         <translation>Maximum recent files:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="200"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1017"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="219"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1036"/>
         <source>KEY_SETTINGS_GRP_EXTRACTION</source>
         <translation>Extraction &amp; Background</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="205"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1018"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="224"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1037"/>
         <source>KEY_SETTINGS_ALPHA_THRESHOLD</source>
         <translation>Default alpha threshold:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="210"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1019"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="229"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1038"/>
         <source>KEY_SETTINGS_BG_REMOVAL_TOL</source>
         <translation>Background removal tolerance:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="215"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1021"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="234"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1040"/>
         <source>KEY_SETTINGS_GRP_LANGUAGE</source>
         <translation>Interface Language</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="219"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1023"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="238"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1042"/>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
         <translation>System (Default)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="223"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1022"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="242"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1041"/>
         <source>KEY_SETTINGS_LANG_APP</source>
         <translation>Application language:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="227"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1024"/>
-        <location filename="../../tests/test_controllers.cpp" line="1617"/>
-        <location filename="../../tests/test_controllers.cpp" line="1676"/>
-        <location filename="../../tests/test_controllers.cpp" line="1735"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="246"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1043"/>
+        <location filename="../../tests/test_controllers.cpp" line="1706"/>
+        <location filename="../../tests/test_controllers.cpp" line="1767"/>
+        <location filename="../../tests/test_controllers.cpp" line="1828"/>
         <source>KEY_SETTINGS_LANG_HINT</source>
         <translation>Language changes are applied immediately.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="236"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1026"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="255"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1045"/>
         <source>Startup &amp; Behavior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="239"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1027"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="258"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1046"/>
         <source>Check automatically for updates on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="242"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1028"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="261"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1047"/>
         <source>Reopen last project on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="257"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1031"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="276"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1050"/>
         <source>KEY_SETTINGS_HDR_GIT</source>
         <translation>Version Control (Git)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="262"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1032"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="281"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1051"/>
         <source>KEY_SETTINGS_GRP_AUTHOR</source>
         <translation>Author Identity (Git Commits)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="266"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1033"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="285"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1052"/>
         <source>KEY_SETTINGS_AUTHOR_INFO</source>
         <translation>This identity is recorded as author signature on each commit in the .ssp project history.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="274"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1036"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="293"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1055"/>
         <source>KEY_SETTINGS_AUTHOR_NAME_PLACEHOLDER</source>
         <translation>e.g. John Doe</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="275"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1034"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="294"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1053"/>
         <source>KEY_SETTINGS_AUTHOR_NAME</source>
         <translation>Author name:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="279"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1037"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="298"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1056"/>
         <source>KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER</source>
         <translation>e.g. john.doe@example.com</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="280"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1035"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="299"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1054"/>
         <source>KEY_SETTINGS_AUTHOR_EMAIL</source>
         <translation>Author email:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="285"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1038"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="304"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1057"/>
         <source>KEY_SETTINGS_DETECT_GIT</source>
         <translation>Detect from system Git configuration</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="294"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1039"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="313"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1058"/>
         <source>KEY_SETTINGS_GRP_GIT_ENGINE</source>
         <translation>Integrated Git Engine</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="299"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1042"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="318"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1061"/>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
         <translation>Status: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 active&lt;/b&gt; (history and branch management operational)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="300"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1042"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="319"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1061"/>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
         <translation>Status: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 not compiled&lt;/b&gt; (git history disabled)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="307"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1044"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="326"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1063"/>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
         <translation>Each editing action (slicing, renaming, sprite merging, animation creation) generates an incremental and atomic commit in the transparent Git repository of the .ssp project.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="324"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1047"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="343"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1066"/>
         <source>KEY_SETTINGS_HDR_ATLAS</source>
         <translation>Display &amp; Atlas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="329"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1048"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="348"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1067"/>
         <source>KEY_SETTINGS_GRP_ZOOM</source>
         <translation>Navigation &amp; Zoom</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="335"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1049"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="354"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1068"/>
         <source>KEY_SETTINGS_ZOOM_STEP</source>
         <translation>Zoom factor (wheel):</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="341"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1050"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="360"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1069"/>
         <source>KEY_SETTINGS_ZOOM_MIN</source>
         <translation>Minimum zoom level:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="347"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1051"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="366"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1070"/>
         <source>KEY_SETTINGS_ZOOM_MAX</source>
         <translation>Maximum zoom level:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="353"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1052"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="372"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1071"/>
         <source>KEY_SETTINGS_FIT_PADDING</source>
         <translation>Fit view padding:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="359"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1053"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="378"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1072"/>
         <source>KEY_SETTINGS_GRP_SLICING</source>
         <translation>Interactive Slicing</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="365"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1054"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="384"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1073"/>
         <source>KEY_SETTINGS_MIN_SLICE_SIZE</source>
         <translation>Minimum slice box size:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="379"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1057"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="398"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1076"/>
         <source>Export &amp; VRAM Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="383"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1058"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="402"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1077"/>
         <source>Default Export Configurations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="395"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="635"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="414"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="654"/>
         <source>(No export plugins loaded)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="434"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="453"/>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="398"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1059"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="417"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1078"/>
         <source>Default Target Format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="403"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="422"/>
         <source>PNG (Standard, Lossless)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="404"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="423"/>
         <source>WebP (Modern Web, High Compression)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="405"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="424"/>
         <source>KTX2 / Basis Universal (GPU Compressed VRAM)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="406"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1060"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="425"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1079"/>
         <source>Default Texture Format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="411"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="430"/>
         <source>MaxRects (Best Fit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="412"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="431"/>
         <source>Shelf / Next-Fit (Fast)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="413"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="432"/>
         <source>Skyline (Efficient)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="414"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="433"/>
         <source>Polygonal Concave (Tightest Packing)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="415"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1061"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="434"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1080"/>
         <source>Default Packing Algorithm:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="419"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1063"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="438"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1082"/>
         <source>Enable Zstandard (Zstd) compression by default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="425"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1062"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="444"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1081"/>
         <source>Zstd Compression Level:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="456"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1067"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="475"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1086"/>
         <source>Open Plugins Folder...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="460"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1068"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="479"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1087"/>
         <source>Reload Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
         <source>Filter Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="481"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
         <source>Identifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="477"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1070"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="496"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1089"/>
         <source>Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="481"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
         <source>Extractor / Codec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="481"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="481"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
         <source>Extensions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1071"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="508"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1090"/>
         <source>Extractors &amp; Codecs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="493"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="512"/>
         <source>Select a plugin above to view its details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="498"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="517"/>
         <source>Plugin Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="514"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1075"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="533"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1094"/>
         <source>Software Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="519"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="538"/>
         <source>Current installed version: &lt;b&gt;v%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="522"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1076"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="541"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1095"/>
         <source>Check for Updates Now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="528"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="547"/>
         <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="533"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1077"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="552"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1096"/>
         <source>Release Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="547"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1078"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="566"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1097"/>
         <source>Open Release Page on GitHub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="645"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="664"/>
         <source>Plugins reloaded successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="714"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="733"/>
         <source>Checking for updates from GitHub...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="732"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="751"/>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="742"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="761"/>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="766"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="785"/>
         <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="772"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="791"/>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="775"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="794"/>
         <source>Released: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="785"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="804"/>
         <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="978"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="997"/>
         <source>KEY_SETTINGS_RESET_TITLE</source>
         <translation>Restore Defaults</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="979"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="998"/>
         <source>KEY_SETTINGS_RESET_CONFIRM</source>
         <translation>Do you really want to reset all settings to their default values?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1082"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1101"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1085"/>
-        <location filename="../../tests/test_controllers.cpp" line="1647"/>
-        <location filename="../../tests/test_controllers.cpp" line="1706"/>
-        <location filename="../../tests/test_controllers.cpp" line="1766"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1104"/>
+        <location filename="../../tests/test_controllers.cpp" line="1736"/>
+        <location filename="../../tests/test_controllers.cpp" line="1797"/>
+        <location filename="../../tests/test_controllers.cpp" line="1859"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1088"/>
-        <location filename="../../tests/test_controllers.cpp" line="1648"/>
-        <location filename="../../tests/test_controllers.cpp" line="1707"/>
-        <location filename="../../tests/test_controllers.cpp" line="1767"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1107"/>
+        <location filename="../../tests/test_controllers.cpp" line="1737"/>
+        <location filename="../../tests/test_controllers.cpp" line="1798"/>
+        <location filename="../../tests/test_controllers.cpp" line="1860"/>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1091"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1110"/>
         <source>Restore Defaults</source>
         <translation>Restore Defaults</translation>
     </message>
@@ -4815,64 +4845,64 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>TimelineFilmstripWidget</name>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="24"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="43"/>
         <source>KEY_TIMELINE_TITLE</source>
         <translation>&lt;b&gt;Timeline&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="34"/>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="246"/>
-        <location filename="../../tests/test_controllers.cpp" line="1614"/>
-        <location filename="../../tests/test_controllers.cpp" line="1673"/>
-        <location filename="../../tests/test_controllers.cpp" line="1732"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="53"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="283"/>
+        <location filename="../../tests/test_controllers.cpp" line="1703"/>
+        <location filename="../../tests/test_controllers.cpp" line="1764"/>
+        <location filename="../../tests/test_controllers.cpp" line="1825"/>
         <source>KEY_TIMELINE_ADD_SELECTION</source>
         <translation>+ Add Selection</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="35"/>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="247"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="54"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="284"/>
         <source>KEY_TIMELINE_ADD_SELECTION_TOOLTIP</source>
         <translation>Add selected atlas frames to this animation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="138"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="126"/>
         <source>KEY_TIMELINE_NO_ANIM</source>
         <translation>&lt;b&gt;Timeline&lt;/b&gt; (no animation selected)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="148"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="135"/>
         <source>KEY_TIMELINE_ANIM_INFO</source>
         <translation>&lt;b&gt;Timeline: %1&lt;/b&gt; (%2 frames)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="150"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="142"/>
         <source>KEY_TIMELINE_DURATION_FPS</source>
         <translation>%1 ms @ %2 FPS</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="167"/>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="201"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="190"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="222"/>
         <source>#%1 (F%2)</source>
         <translation>#%1 (F%2)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="168"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="172"/>
         <source>KEY_TIMELINE_FRAME_TOOLTIP</source>
         <translation>Step #%1: Global Frame %2 (%3 ms)
 Drag and drop to reorder</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="217"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="254"/>
         <source>KEY_TIMELINE_DUPLICATE_FRAME</source>
         <translation>Duplicate this frame (extend hold)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="218"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="255"/>
         <source>KEY_TIMELINE_REMOVE_FRAME</source>
         <translation>Remove this frame from sequence</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="220"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="257"/>
         <source>KEY_TIMELINE_SELECT_IN_ATLAS</source>
         <translation>Select in Atlas</translation>
     </message>
