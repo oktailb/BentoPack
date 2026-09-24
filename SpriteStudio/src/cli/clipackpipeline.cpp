@@ -302,6 +302,9 @@ CliResult CliPackPipeline::execute(const QStringList &args)
         packOpts.algorithm = AtlasPacker::RowPacker;
     } else if (algorithm.compare(QStringLiteral("Grid"), Qt::CaseInsensitive) == 0) {
         packOpts.algorithm = AtlasPacker::GridPacker;
+    } else if (algorithm.compare(QStringLiteral("TightPolygon"), Qt::CaseInsensitive) == 0 ||
+               algorithm.compare(QStringLiteral("Polygon"), Qt::CaseInsensitive) == 0) {
+        packOpts.algorithm = AtlasPacker::TightPolygon;
     } else {
         packOpts.algorithm = AtlasPacker::MaxRects;
     }
