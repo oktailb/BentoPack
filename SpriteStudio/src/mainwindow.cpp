@@ -175,9 +175,11 @@ void MainWindow::setupControllers()
     });
 
     connect(m_projectController.get(), &ProjectController::backgroundRemoved, this, [this]() {
+        if (frameModel) frameModel->clearThumbnailCache();
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+        if (m_timelineWidget) m_timelineWidget->refresh();
     });
 
     connect(m_projectController.get(), &ProjectController::processingStarted, this, [this]() {
@@ -204,8 +206,8 @@ void MainWindow::setupControllers()
         refreshFrameListDisplay();
         m_isSyncingSelection = false;
 
-        // Only update transient current animation if NO real animation is selected
-        if (m_animationController && (m_animationController->currentAnimationName().isEmpty() || m_animationController->currentAnimationName() == QLatin1String("current"))) {
+        // User interactive selection on the atlas automatically creates and previews animation
+        if (m_animationController) {
             m_animationController->updateCurrentAnimation(indices);
         }
 
@@ -255,7 +257,19 @@ void MainWindow::setupControllers()
     connect(m_animationController.get(), &AnimationController::framesSelectedInAnimation,
             this, [this](const QList<int> &indices) {
         if (m_atlasController && m_atlasController->selectedBoxIndices() != indices) {
+            bool wasSyncing = m_isSyncingSelection;
+            m_isSyncingSelection = true;
             m_atlasController->setSelectedBoxIndices(indices);
+            if (frameModel && ui->framesList && ui->framesList->selectionModel()) {
+                QItemSelection selection;
+                for (int row : indices) {
+                    QModelIndex mIndex = frameModel->index(row, 0);
+                    if (mIndex.isValid()) selection.select(mIndex, mIndex);
+                }
+                ui->framesList->selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
+                refreshFrameListDisplay();
+            }
+            m_isSyncingSelection = wasSyncing;
         }
     });
 
@@ -354,9 +368,9 @@ void MainWindow::setupErgonomicLayout()
     setupViewMenuActions();
     connect(ui->actionResetLayout, &QAction::triggered, this, &MainWindow::resetDefaultLayout);
 
-    // Connect animation selection to automatically show and raise the Timeline dock (except for transient 'current' preview)
+    // Connect animation selection to automatically show and raise the Timeline dock
     connect(m_animationController.get(), &AnimationController::currentAnimationChanged, this, [this](const QString &name) {
-        if (!name.isEmpty() && name != QLatin1String("current") && ui->dockTimeline) {
+        if (!name.isEmpty() && ui->dockTimeline) {
             ui->dockTimeline->setVisible(true);
             ui->dockTimeline->raise();
         }
@@ -416,6 +430,11 @@ void MainWindow::setupUIConnections()
         }
         refreshFrameListDisplay();
         m_isSyncingSelection = false;
+
+        // Updating selection in frames list also updates the current animation preview
+        if (m_animationController) {
+            m_animationController->updateCurrentAnimation(indices);
+        }
 
         // Ensure the last-clicked frame is visible on the atlas view
         if (!selected.indexes().isEmpty()) {

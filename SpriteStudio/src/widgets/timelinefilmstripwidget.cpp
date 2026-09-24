@@ -147,7 +147,7 @@ void TimelineFilmstripWidget::rebuildItems()
 
     int frameDuration = anim.fps > 0 ? (1000 / anim.fps) : 100;
 
-    // Fast-path: if sequence already matches (e.g. from internal drag-and-drop or unchanged list)
+    // Fast-path check: verify if items match current animation sequence
     bool matches = (m_listWidget->count() == anim.frameIndices.size());
     if (matches) {
         for (int i = 0; i < anim.frameIndices.size(); ++i) {
@@ -160,6 +160,17 @@ void TimelineFilmstripWidget::rebuildItems()
     }
 
     if (matches) {
+        // Update thumbnail icons to reflect latest frame modifications (e.g. background removal, pixel edits)
+        for (int seqIdx = 0; seqIdx < anim.frameIndices.size(); ++seqIdx) {
+            int globalIdx = anim.frameIndices.at(seqIdx);
+            QListWidgetItem *item = m_listWidget->item(seqIdx);
+            if (item && m_document && globalIdx >= 0 && globalIdx < m_document->frameCount()) {
+                QImage img = m_document->polygonClippedFrame(globalIdx);
+                if (!img.isNull()) {
+                    item->setIcon(QIcon(QPixmap::fromImage(img.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation))));
+                }
+            }
+        }
         if (m_activeSeqIndex >= 0 && m_activeSeqIndex < m_listWidget->count()) {
             m_listWidget->setCurrentRow(m_activeSeqIndex);
         }

@@ -1865,22 +1865,22 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="685"/>
-        <location filename="../src/mainwindow.cpp" line="316"/>
-        <location filename="../src/mainwindow.cpp" line="896"/>
+        <location filename="../src/mainwindow.cpp" line="330"/>
+        <location filename="../src/mainwindow.cpp" line="915"/>
         <source>KEY_ANIM_COL_NAME</source>
         <translation>Name</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="690"/>
-        <location filename="../src/mainwindow.cpp" line="316"/>
-        <location filename="../src/mainwindow.cpp" line="898"/>
+        <location filename="../src/mainwindow.cpp" line="330"/>
+        <location filename="../src/mainwindow.cpp" line="917"/>
         <source>KEY_ANIM_COL_FPS</source>
         <translation>FPS</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="700"/>
-        <location filename="../src/mainwindow.cpp" line="316"/>
-        <location filename="../src/mainwindow.cpp" line="897"/>
+        <location filename="../src/mainwindow.cpp" line="330"/>
+        <location filename="../src/mainwindow.cpp" line="916"/>
         <source>KEY_ANIM_COL_FRAMES</source>
         <translation>Frames</translation>
     </message>
@@ -1976,50 +1976,50 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="162"/>
-        <location filename="../src/mainwindow.cpp" line="684"/>
+        <location filename="../src/mainwindow.cpp" line="703"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="88"/>
         <source>KEY_MSG_LOAD_ERROR</source>
         <translation>Load Error</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="370"/>
+        <location filename="../src/mainwindow.cpp" line="384"/>
         <source>KEY_STATUS_READY_TO_START</source>
         <translation>Ready to start</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="388"/>
-        <location filename="../src/mainwindow.cpp" line="947"/>
+        <location filename="../src/mainwindow.cpp" line="402"/>
+        <location filename="../src/mainwindow.cpp" line="966"/>
         <source>KEY_STATUS_PROGRESS</source>
         <translation>Progress</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="251"/>
-        <location filename="../src/mainwindow.cpp" line="461"/>
-        <location filename="../src/mainwindow.cpp" line="950"/>
+        <location filename="../src/mainwindow.cpp" line="253"/>
+        <location filename="../src/mainwindow.cpp" line="480"/>
+        <location filename="../src/mainwindow.cpp" line="969"/>
         <source>KEY_LABEL_TIMING</source>
         <translation>Timing</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="468"/>
-        <location filename="../src/mainwindow.cpp" line="911"/>
+        <location filename="../src/mainwindow.cpp" line="487"/>
+        <location filename="../src/mainwindow.cpp" line="930"/>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Edit</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="470"/>
-        <location filename="../src/mainwindow.cpp" line="914"/>
+        <location filename="../src/mainwindow.cpp" line="489"/>
+        <location filename="../src/mainwindow.cpp" line="933"/>
         <source>KEY_ACTION_UNDO</source>
         <translation>&amp;Undo</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="475"/>
-        <location filename="../src/mainwindow.cpp" line="917"/>
+        <location filename="../src/mainwindow.cpp" line="494"/>
+        <location filename="../src/mainwindow.cpp" line="936"/>
         <source>KEY_ACTION_REDO</source>
         <translation>&amp;Redo</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="519"/>
-        <location filename="../src/mainwindow.cpp" line="920"/>
+        <location filename="../src/mainwindow.cpp" line="538"/>
+        <location filename="../src/mainwindow.cpp" line="939"/>
         <location filename="../../tests/test_controllers.cpp" line="1715"/>
         <location filename="../../tests/test_controllers.cpp" line="1780"/>
         <location filename="../../tests/test_controllers.cpp" line="1845"/>
@@ -2027,40 +2027,40 @@ Click a node to view its details.</translation>
         <translation>&amp;Filters</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="538"/>
-        <location filename="../src/mainwindow.cpp" line="908"/>
+        <location filename="../src/mainwindow.cpp" line="557"/>
+        <location filename="../src/mainwindow.cpp" line="927"/>
         <source>KEY_MENU_RECENT_PROJECTS</source>
         <translation>Recent Projects</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="542"/>
-        <location filename="../src/mainwindow.cpp" line="905"/>
+        <location filename="../src/mainwindow.cpp" line="561"/>
+        <location filename="../src/mainwindow.cpp" line="924"/>
         <source>KEY_MENU_RECENT_FILES</source>
         <translation>Recent Files</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="645"/>
+        <location filename="../src/mainwindow.cpp" line="664"/>
         <source>KEY_ACTION_NO_RECENT_FILES</source>
         <translation>No Recent Files</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="650"/>
-        <location filename="../src/mainwindow.cpp" line="677"/>
+        <location filename="../src/mainwindow.cpp" line="669"/>
+        <location filename="../src/mainwindow.cpp" line="696"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="658"/>
+        <location filename="../src/mainwindow.cpp" line="677"/>
         <source>KEY_ACTION_CLEAR_RECENT_FILES</source>
         <translation>Clear Recent Files</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="672"/>
+        <location filename="../src/mainwindow.cpp" line="691"/>
         <source>KEY_ACTION_NO_RECENT_PROJECTS</source>
         <translation>No recent projects</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="690"/>
+        <location filename="../src/mainwindow.cpp" line="709"/>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Clear recent projects</translation>
     </message>
@@ -2118,8 +2118,8 @@ Click a node to view its details.</translation>
         <translation>Trim to Pixels</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="505"/>
-        <location filename="../src/mainwindow.cpp" line="939"/>
+        <location filename="../src/mainwindow.cpp" line="524"/>
+        <location filename="../src/mainwindow.cpp" line="958"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="291"/>
         <location filename="../src/mainwindow_atlas.cpp" line="130"/>
         <location filename="../src/mainwindow_atlas.cpp" line="222"/>
@@ -2235,10 +2235,10 @@ Click a node to view its details.</translation>
         <translation>Restore default docking panels layout</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="514"/>
-        <location filename="../src/mainwindow.cpp" line="524"/>
-        <location filename="../src/mainwindow.cpp" line="924"/>
-        <location filename="../src/mainwindow.cpp" line="927"/>
+        <location filename="../src/mainwindow.cpp" line="533"/>
+        <location filename="../src/mainwindow.cpp" line="543"/>
+        <location filename="../src/mainwindow.cpp" line="943"/>
+        <location filename="../src/mainwindow.cpp" line="946"/>
         <source>KEY_ACTION_SETTINGS</source>
         <translation>Preferences...</translation>
     </message>
@@ -2297,8 +2297,8 @@ Click a node to view its details.</translation>
         <translation>Atlas Frames</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="585"/>
-        <location filename="../src/mainwindow.cpp" line="590"/>
+        <location filename="../src/mainwindow.cpp" line="604"/>
+        <location filename="../src/mainwindow.cpp" line="609"/>
         <source>KEY_DOCK_GIT_HISTORY</source>
         <translation>Git History</translation>
     </message>
@@ -2445,14 +2445,14 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="695"/>
-        <location filename="../src/mainwindow.cpp" line="316"/>
+        <location filename="../src/mainwindow.cpp" line="330"/>
         <source>KEY_ANIM_COL_MODE</source>
         <translation>Mode</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="705"/>
-        <location filename="../src/mainwindow.cpp" line="316"/>
-        <location filename="../src/mainwindow.cpp" line="899"/>
+        <location filename="../src/mainwindow.cpp" line="330"/>
+        <location filename="../src/mainwindow.cpp" line="918"/>
         <source>KEY_ANIM_COL_DURATION</source>
         <translation>Duration</translation>
     </message>
@@ -2462,7 +2462,7 @@ Click a node to view its details.</translation>
         <translation>Duplicate this animation</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="699"/>
+        <location filename="../src/mainwindow.cpp" line="718"/>
         <location filename="../src/controller/projectcontroller.cpp" line="100"/>
         <location filename="../../tests/test_controllers.cpp" line="1713"/>
         <location filename="../../tests/test_controllers.cpp" line="1778"/>
@@ -2471,12 +2471,12 @@ Click a node to view its details.</translation>
         <translation>Untitled Project</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="718"/>
+        <location filename="../src/mainwindow.cpp" line="737"/>
         <source>KEY_UNKNOWN_DATE</source>
         <translation>Unknown date</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="719"/>
+        <location filename="../src/mainwindow.cpp" line="738"/>
         <source>KEY_RECOVERY_PROMPT</source>
         <translation>An interrupted work session was detected:
 
@@ -2486,35 +2486,35 @@ Date: %2
 Do you want to restore this session?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="724"/>
+        <location filename="../src/mainwindow.cpp" line="743"/>
         <source>KEY_RECOVERY_TITLE</source>
         <translation>Crash Recovery</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="732"/>
+        <location filename="../src/mainwindow.cpp" line="751"/>
         <source>KEY_RECOVERY_ERROR</source>
         <translation>Recovery Error</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="777"/>
+        <location filename="../src/mainwindow.cpp" line="796"/>
         <source>💡 Update available: %1 (Check Settings -&gt; Updates)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="800"/>
+        <location filename="../src/mainwindow.cpp" line="819"/>
         <source>KEY_UNSAVED_CHANGES_TITLE</source>
         <translation>Unsaved Changes</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="801"/>
+        <location filename="../src/mainwindow.cpp" line="820"/>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
         <translation>The current project &apos;%1&apos; has unsaved changes.
 Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="841"/>
-        <location filename="../src/mainwindow.cpp" line="324"/>
-        <location filename="../src/mainwindow.cpp" line="890"/>
+        <location filename="../src/mainwindow.cpp" line="338"/>
+        <location filename="../src/mainwindow.cpp" line="909"/>
         <location filename="../../tests/test_controllers.cpp" line="1697"/>
         <location filename="../../tests/test_controllers.cpp" line="1762"/>
         <location filename="../../tests/test_controllers.cpp" line="1827"/>
@@ -2691,14 +2691,14 @@ Do you want to save them before proceeding?</translation>
         <translation>Unknown feature</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="499"/>
-        <location filename="../src/mainwindow.cpp" line="930"/>
+        <location filename="../src/mainwindow.cpp" line="518"/>
+        <location filename="../src/mainwindow.cpp" line="949"/>
         <source>KEY_ACTION_POLYGON_MESH</source>
         <translation>2D Tight Mesh (Polygon Packing)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="869"/>
-        <location filename="../src/mainwindow.cpp" line="936"/>
+        <location filename="../src/mainwindow.cpp" line="888"/>
+        <location filename="../src/mainwindow.cpp" line="955"/>
         <source>KEY_ACTION_TOGGLE_POLYGON_MESH</source>
         <translation>Show Polygon Meshes (Wireframe)</translation>
     </message>
@@ -2709,8 +2709,8 @@ Do you want to save them before proceeding?</translation>
         <translation>2D Tight Mesh (Polygon Packing)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="493"/>
-        <location filename="../src/mainwindow.cpp" line="933"/>
+        <location filename="../src/mainwindow.cpp" line="512"/>
+        <location filename="../src/mainwindow.cpp" line="952"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="302"/>
         <source>KEY_ACTION_PIXEL_EDITOR</source>
         <translation>Pixel Editor (Sprite)...</translation>
@@ -5001,7 +5001,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="53"/>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="283"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="294"/>
         <location filename="../../tests/test_controllers.cpp" line="1711"/>
         <location filename="../../tests/test_controllers.cpp" line="1776"/>
         <location filename="../../tests/test_controllers.cpp" line="1841"/>
@@ -5010,7 +5010,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="54"/>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="284"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="295"/>
         <source>KEY_TIMELINE_ADD_SELECTION_TOOLTIP</source>
         <translation>Add selected atlas frames to this animation</translation>
     </message>
@@ -5030,29 +5030,29 @@ Do you want to save them before proceeding?</translation>
         <translation>%1 ms @ %2 FPS</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="190"/>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="222"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="201"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="233"/>
         <source>#%1 (F%2)</source>
         <translation>#%1 (F%2)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="172"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="183"/>
         <source>KEY_TIMELINE_FRAME_TOOLTIP</source>
         <translation>Step #%1: Global Frame %2 (%3 ms)
 Drag and drop to reorder</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="254"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="265"/>
         <source>KEY_TIMELINE_DUPLICATE_FRAME</source>
         <translation>Duplicate this frame (extend hold)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="255"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="266"/>
         <source>KEY_TIMELINE_REMOVE_FRAME</source>
         <translation>Remove this frame from sequence</translation>
     </message>
     <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="257"/>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="268"/>
         <source>KEY_TIMELINE_SELECT_IN_ATLAS</source>
         <translation>Select in Atlas</translation>
     </message>
