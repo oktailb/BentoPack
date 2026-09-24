@@ -419,28 +419,39 @@ CliResult CliPackPipeline::execute(const QStringList &args)
             expOpts.extraParams[QStringLiteral("json_format")] = QStringLiteral("hash");
         }
 
-        Extractor *encoder = nullptr;
-        if (!format.isEmpty()) {
-            encoder = ExtractorRegistry::instance().findExtractorById(format);
-            if (!encoder) {
-                encoder = ExtractorRegistry::instance().findEncoderByFilter(format);
+        bool isSsp = dataPath.endsWith(QStringLiteral(".ssp"), Qt::CaseInsensitive) || format == QStringLiteral("ssp");
+        if (isSsp) {
+            doc.setFilePath(dataPath);
+            ProjectController controller(&doc);
+            QString err;
+            if (!controller.saveProject(dataPath, &err)) {
+                return CliResult::error(ExitIoError,
+                    QStringLiteral("Failed to export project archive to '%1': %2").arg(dataPath, err));
             }
-        }
-        if (!encoder) {
-            encoder = ExtractorRegistry::instance().findEncoder(dataPath);
-        }
+        } else {
+            Extractor *encoder = nullptr;
+            if (!format.isEmpty()) {
+                encoder = ExtractorRegistry::instance().findExtractorById(format);
+                if (!encoder) {
+                    encoder = ExtractorRegistry::instance().findEncoderByFilter(format);
+                }
+            }
+            if (!encoder) {
+                encoder = ExtractorRegistry::instance().findEncoder(dataPath);
+            }
 
-        if (!encoder) {
-            return CliResult::error(ExitPluginNotFound,
-                QStringLiteral("No extractor plugin found to export metadata to '%1'. Ensure appropriate plugin is installed and loaded.")
-                .arg(dataPath));
-        }
+            if (!encoder) {
+                return CliResult::error(ExitPluginNotFound,
+                    QStringLiteral("No extractor plugin found to export metadata to '%1'. Ensure appropriate plugin is installed and loaded.")
+                    .arg(dataPath));
+            }
 
-        ExtractorError expErr;
-        if (!encoder->write(dataPath, doc, expOpts, &expErr)) {
-            return CliResult::error(ExitIoError,
-                QStringLiteral("Failed to export metadata (%1): %2")
-                .arg(encoder->displayName(), expErr.toString()));
+            ExtractorError expErr;
+            if (!encoder->write(dataPath, doc, expOpts, &expErr)) {
+                return CliResult::error(ExitIoError,
+                    QStringLiteral("Failed to export metadata (%1): %2")
+                    .arg(encoder->displayName(), expErr.toString()));
+            }
         }
     }
 

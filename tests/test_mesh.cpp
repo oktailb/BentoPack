@@ -444,10 +444,21 @@ void TestMesh::testTightPolygonPackingAlgorithm()
 
     AtlasPacker::PackOptions options;
     options.algorithm = AtlasPacker::TightPolygon;
-    options.padding = 1;
-    options.borderPadding = 1;
+    options.padding = 2;
+    options.borderPadding = 2;
+    options.extrude = 2; // Test with extrusion enabled!
     options.powerOfTwo = false;
     options.forceSquare = false;
+
+    // Count original non-transparent pixels
+    int expectedRed = 0;
+    int expectedBlue = 0;
+    for (int y = 0; y < 50; ++y) {
+        for (int x = 0; x < 50; ++x) {
+            if (qAlpha(imgA.pixel(x, y)) > 0) expectedRed++;
+            if (qAlpha(imgB.pixel(x, y)) > 0) expectedBlue++;
+        }
+    }
 
     AtlasPackResult res = AtlasPacker::pack(frames, options, polys);
     QVERIFY(res.success);
@@ -458,18 +469,20 @@ void TestMesh::testTightPolygonPackingAlgorithm()
     bool boxesOverlap = res.frameRects[0].intersects(res.frameRects[1]);
     QVERIFY(boxesOverlap || res.dimensions.width() < 100 || res.dimensions.height() < 100);
 
-    // Verify non-transparent pixels in the generated atlas do not corrupt each other
+    // Verify that extrusion never overwrites or cuts sprite pixels:
+    // Every original red and blue pixel must be preserved without loss!
     int redCount = 0;
     int blueCount = 0;
     for (int y = 0; y < res.atlas.height(); ++y) {
         for (int x = 0; x < res.atlas.width(); ++x) {
             QRgb p = res.atlas.pixel(x, y);
-            if (qRed(p) > 200 && qBlue(p) < 50) redCount++;
-            if (qBlue(p) > 200 && qRed(p) < 50) blueCount++;
+            if (qRed(p) > 200 && qBlue(p) < 50 && qAlpha(p) > 0) redCount++;
+            if (qBlue(p) > 200 && qRed(p) < 50 && qAlpha(p) > 0) blueCount++;
         }
     }
-    QVERIFY(redCount > 0);
-    QVERIFY(blueCount > 0);
+    // Extrusion may add edge pixels, but redCount and blueCount must be at least expected
+    QVERIFY(redCount >= expectedRed);
+    QVERIFY(blueCount >= expectedBlue);
 }
 
 void TestMesh::testAtlasBoxItemPolygonShapeHitTest()
