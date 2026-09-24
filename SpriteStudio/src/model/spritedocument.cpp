@@ -123,7 +123,7 @@ QImage SpriteDocument::polygonClippedFrame(int index) const
         QPainter mp(&mask);
         mp.setRenderHint(QPainter::Antialiasing, false);
         mp.setBrush(Qt::white);
-        mp.setPen(Qt::NoPen);
+        mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
         mp.drawPolygon(b.polygon);
     }
 

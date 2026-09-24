@@ -71,17 +71,20 @@ void AtlasPacker::applyExtrusion(QImage &atlas, const QRect &targetRect, const Q
     int tx = targetRect.x();
     int ty = targetRect.y();
 
+    auto setExtrudePixel = [&](int ax, int ay, QRgb px) {
+        if (ax < 0 || ax >= atlas.width() || ay < 0 || ay >= atlas.height()) return;
+        if (qAlpha(px) == 0) return;
+        if (qAlpha(atlas.pixel(ax, ay)) != 0) return;
+        atlas.setPixel(ax, ay, px);
+    };
+
     // Top and Bottom rows
     for (int x = 0; x < w; ++x) {
         QRgb topPixel = sprite.pixel(x, 0);
         QRgb bottomPixel = sprite.pixel(x, h - 1);
         for (int dy = 1; dy <= extrudeAmount; ++dy) {
-            if (ty - dy >= 0 && tx + x < atlas.width()) {
-                atlas.setPixel(tx + x, ty - dy, topPixel);
-            }
-            if (ty + h - 1 + dy < atlas.height() && tx + x < atlas.width()) {
-                atlas.setPixel(tx + x, ty + h - 1 + dy, bottomPixel);
-            }
+            setExtrudePixel(tx + x, ty - dy, topPixel);
+            setExtrudePixel(tx + x, ty + h - 1 + dy, bottomPixel);
         }
     }
 
@@ -90,12 +93,8 @@ void AtlasPacker::applyExtrusion(QImage &atlas, const QRect &targetRect, const Q
         QRgb leftPixel = sprite.pixel(0, y);
         QRgb rightPixel = sprite.pixel(w - 1, y);
         for (int dx = 1; dx <= extrudeAmount; ++dx) {
-            if (tx - dx >= 0 && ty + y < atlas.height()) {
-                atlas.setPixel(tx - dx, ty + y, leftPixel);
-            }
-            if (tx + w - 1 + dx < atlas.width() && ty + y < atlas.height()) {
-                atlas.setPixel(tx + w - 1 + dx, ty + y, rightPixel);
-            }
+            setExtrudePixel(tx - dx, ty + y, leftPixel);
+            setExtrudePixel(tx + w - 1 + dx, ty + y, rightPixel);
         }
     }
 
@@ -107,18 +106,10 @@ void AtlasPacker::applyExtrusion(QImage &atlas, const QRect &targetRect, const Q
 
     for (int dx = 1; dx <= extrudeAmount; ++dx) {
         for (int dy = 1; dy <= extrudeAmount; ++dy) {
-            if (tx - dx >= 0 && ty - dy >= 0) {
-                atlas.setPixel(tx - dx, ty - dy, topLeft);
-            }
-            if (tx + w - 1 + dx < atlas.width() && ty - dy >= 0) {
-                atlas.setPixel(tx + w - 1 + dx, ty - dy, topRight);
-            }
-            if (tx - dx >= 0 && ty + h - 1 + dy < atlas.height()) {
-                atlas.setPixel(tx - dx, ty + h - 1 + dy, bottomLeft);
-            }
-            if (tx + w - 1 + dx < atlas.width() && ty + h - 1 + dy < atlas.height()) {
-                atlas.setPixel(tx + w - 1 + dx, ty + h - 1 + dy, bottomRight);
-            }
+            setExtrudePixel(tx - dx, ty - dy, topLeft);
+            setExtrudePixel(tx + w - 1 + dx, ty - dy, topRight);
+            setExtrudePixel(tx - dx, ty + h - 1 + dy, bottomLeft);
+            setExtrudePixel(tx + w - 1 + dx, ty + h - 1 + dy, bottomRight);
         }
     }
 }

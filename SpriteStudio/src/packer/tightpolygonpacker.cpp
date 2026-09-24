@@ -64,30 +64,31 @@ std::vector<uint8_t> createDilatedMask(const QImage &img, const QPolygonF &poly,
     const int h = img.height();
     std::vector<uint8_t> rawMask(w * h, 0);
 
-    // 1. Mark pixels inside polygon or alpha > 5
+    // 1. Mark all pixels that have non-zero alpha in the image so no sprite content is ever missed
+    for (int y = 0; y < h; ++y) {
+        const QRgb *line = reinterpret_cast<const QRgb *>(img.constScanLine(y));
+        for (int x = 0; x < w; ++x) {
+            if (qAlpha(line[x]) > 0) {
+                rawMask[y * w + x] = 1;
+            }
+        }
+    }
+
+    // 2. Also mark pixels inside polygon envelope (if defined) including 1px border stroke
     if (!poly.isEmpty() && poly.size() >= 3) {
         QImage pImg(w, h, QImage::Format_ARGB32_Premultiplied);
         pImg.fill(Qt::transparent);
         QPainter painter(&pImg);
         painter.setRenderHint(QPainter::Antialiasing, false);
         painter.setBrush(Qt::white);
-        painter.setPen(Qt::NoPen);
+        painter.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
         painter.drawPolygon(poly);
         painter.end();
 
         for (int y = 0; y < h; ++y) {
             const QRgb *line = reinterpret_cast<const QRgb *>(pImg.constScanLine(y));
             for (int x = 0; x < w; ++x) {
-                if (qAlpha(line[x]) > 127) {
-                    rawMask[y * w + x] = 1;
-                }
-            }
-        }
-    } else {
-        // Fallback to alpha mask of image
-        for (int y = 0; y < h; ++y) {
-            for (int x = 0; x < w; ++x) {
-                if (qAlpha(img.pixel(x, y)) > 5) {
+                if (qAlpha(line[x]) > 0) {
                     rawMask[y * w + x] = 1;
                 }
             }
@@ -249,7 +250,7 @@ AtlasPackResult TightPolygonPacker::pack(const QList<QImage> &uniqueFrames,
     result.uniqueFramesCount = uniqueFrames.size();
     result.duplicateMapping = mapping;
 
-    const int pad = std::max(0, options.padding);
+    const int pad = std::max(1, options.padding);
     const int border = std::max(0, options.borderPadding);
     const int extrude = std::max(0, options.extrude);
     const int effectivePad = pad + extrude * 2;
@@ -576,6 +577,7 @@ AtlasPackResult TightPolygonPacker::pack(const QList<QImage> &uniqueFrames,
     for (size_t sIdx = 0; sIdx < sprites.size(); ++sIdx) {
         const SpriteToPack &s = sprites[sIdx];
         const QPoint &pos = placements[sIdx];
+
         painter.drawImage(pos, s.image);
 
         if (extrude > 0) {
