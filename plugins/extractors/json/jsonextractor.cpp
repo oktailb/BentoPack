@@ -3,6 +3,7 @@
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
 #include "jsonextractor.h"
+#include "license/licensemanager.h"
 #include "jsonExtractordialog.h"
 #include "packer/atlaspacker.h"
 #include "geometry/triangulator.h"
@@ -567,6 +568,9 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
 
     setProgress(50);
 
+    // Apply compliance watermarking metadata to exported atlas
+    SpriteStudio::LicenseManager::applyWatermark(packResult.atlas);
+
     bool saveOk = false;
     if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
         VramCompressionOptions vOpts = options.vramOptions;
@@ -729,6 +733,8 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         frameTagsArray.append(tagObj);
     }
     metaObj["frameTags"] = frameTagsArray;
+
+    SpriteStudio::LicenseManager::applyWatermark(metaObj);
 
     rootObj["meta"] = metaObj;
 

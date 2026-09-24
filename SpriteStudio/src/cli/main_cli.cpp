@@ -23,6 +23,7 @@
 #include "config/appconfig.h"
 #include "localizationmanager.h"
 #include "cli/cliparser.h"
+#include "license/licensemanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -32,6 +33,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QCoreApplication::setOrganizationName(QStringLiteral("SpriteStudio"));
     QCoreApplication::setApplicationName(QStringLiteral("SpriteStudioCli"));
+
+    SpriteStudio::LicenseManager::setToolType(SpriteStudio::ToolType::CLI);
 
     // Initialize core configuration and localization
     AppConfig::instance().load();

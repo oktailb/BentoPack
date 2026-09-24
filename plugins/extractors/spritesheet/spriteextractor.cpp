@@ -3,6 +3,7 @@
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
 #include "spriteextractor.h"
+#include "license/licensemanager.h"
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
@@ -80,7 +81,10 @@ bool SpriteExtractor::write(const QString &filePath, const SpriteDocument &inDoc
     QString format = fi.suffix().toUpper();
     if (format.isEmpty()) format = QStringLiteral("PNG");
 
-    if (!inDoc.atlas().save(filePath, format.toLatin1().constData())) {
+    QImage atlasToSave = inDoc.atlas();
+    SpriteStudio::LicenseManager::applyWatermark(atlasToSave);
+
+    if (!atlasToSave.save(filePath, format.toLatin1().constData())) {
         if (error) {
             error->code = ExtractorError::WriteFailed;
             error->message = tr("Failed to save image to: %1").arg(filePath);

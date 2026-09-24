@@ -36,6 +36,9 @@
 #include "commands/filtercommands.h"
 #include "widgets/timelinefilmstripwidget.h"
 #include "widgets/filmstriplistwidget.h"
+#include "aboutdialog.h"
+#include "localizationmanager.h"
+#include <QTabWidget>
 
 class TestControllers : public QObject
 {
@@ -115,6 +118,7 @@ private slots:
     void testApplyFilterCommandUndoRedo();
     void testFilterAutoDetectBoxes();
     void testAtlasPackingFilterInteractive();
+    void testAboutDialogDarkModeAndPricing();
 
 private:
     QString m_sampleDir;
@@ -1699,6 +1703,10 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_ADD_TO_ANIM"), QStringLiteral("Ajouter à l'animation"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_SELECT_ALL"), QStringLiteral("Tout sélectionner"));
         QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_TITLE"), QStringLiteral("À propos"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_PRICING"), QStringLiteral("Tarifs & Licences"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_PLUGINS"), QStringLiteral("Plugins & Statut"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_PRICING_ACTIVE_EDITION"), QStringLiteral("[ÉDITION ACTIVE]"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_PRICING_TARGET_LABEL"), QStringLiteral("Pour qui :"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_TITLE"), QStringLiteral("Préférences"));
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ Ajouter la sélection"));
         QCOMPARE(QCoreApplication::translate("GitHistoryDock", "KEY_GIT_BTN_RESTORE"), QStringLiteral("Restaurer cette révision"));
@@ -1760,6 +1768,10 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_ADD_TO_ANIM"), QStringLiteral("Add to Animation"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_SELECT_ALL"), QStringLiteral("Select All"));
         QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_TITLE"), QStringLiteral("About"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_PRICING"), QStringLiteral("Pricing & Licensing"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_PLUGINS"), QStringLiteral("Plugins & Status"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_PRICING_ACTIVE_EDITION"), QStringLiteral("[ACTIVE EDITION]"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_PRICING_TARGET_LABEL"), QStringLiteral("Target:"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_TITLE"), QStringLiteral("Preferences"));
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ Add Selection"));
         QCOMPARE(QCoreApplication::translate("GitHistoryDock", "KEY_GIT_BTN_RESTORE"), QStringLiteral("Restore this revision"));
@@ -1821,6 +1833,10 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_ADD_TO_ANIM"), QStringLiteral("アニメーションに追加"));
         QCOMPARE(QCoreApplication::translate("MainWindow", "KEY_CTX_SELECT_ALL"), QStringLiteral("すべて選択"));
         QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_TITLE"), QStringLiteral("情報"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_PRICING"), QStringLiteral("価格とライセンス"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_DIALOG_ABOUT_PLUGINS"), QStringLiteral("プラグインと状態"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_PRICING_ACTIVE_EDITION"), QStringLiteral("[有効なエディション]"));
+        QCOMPARE(QCoreApplication::translate("AboutDialog", "KEY_PRICING_TARGET_LABEL"), QStringLiteral("対象:"));
         QCOMPARE(QCoreApplication::translate("SettingsDialog", "KEY_SETTINGS_TITLE"), QStringLiteral("設定"));
         QCOMPARE(QCoreApplication::translate("TimelineFilmstripWidget", "KEY_TIMELINE_ADD_SELECTION"), QStringLiteral("+ 選択を追加"));
         QCOMPARE(QCoreApplication::translate("GitHistoryDock", "KEY_GIT_BTN_RESTORE"), QStringLiteral("このリビジョンを復元"));
@@ -2865,6 +2881,138 @@ void TestControllers::testAnimationPolygonMasking()
     QCOMPARE(rendered.pixelColor(5, 5), QColor(0, 255, 0, 255));
     // Neighbor trace outside polygon is transparent (alpha == 0)
     QCOMPARE(rendered.pixelColor(35, 35).alpha(), 0);
+}
+
+void TestControllers::testAboutDialogDarkModeAndPricing()
+{
+    // Test instantiation with a dark palette (simulating dark theme)
+    QPalette origPalette = qApp->palette();
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor("#181920"));
+    darkPalette.setColor(QPalette::WindowText, QColor("#e2e8f0"));
+    darkPalette.setColor(QPalette::Base, QColor("#1f222d"));
+    darkPalette.setColor(QPalette::Text, QColor("#e2e8f0"));
+    darkPalette.setColor(QPalette::Button, QColor("#262936"));
+    darkPalette.setColor(QPalette::ButtonText, QColor("#e2e8f0"));
+    qApp->setPalette(darkPalette);
+
+    LocalizationManager::instance().setLanguage(QStringLiteral("fr_FR"));
+
+    AboutDialog dlg;
+
+    QTabWidget *tabs = dlg.findChild<QTabWidget*>();
+    QVERIFY(tabs != nullptr);
+    QCOMPARE(tabs->count(), 5);
+
+    // Verify Tab names
+    QStringList tabNames;
+    for (int i = 0; i < tabs->count(); ++i) {
+        tabNames << tabs->tabText(i);
+    }
+    QVERIFY(tabNames.contains(QStringLiteral("KEY_DIALOG_ABOUT_PRICING")) || tabNames.contains(QStringLiteral("Tarifs && Licences")));
+    QVERIFY(tabNames.contains(QStringLiteral("KEY_DIALOG_ABOUT_PLUGINS")) || tabNames.contains(QStringLiteral("Plugins && Statut")));
+
+    // Verify pricing content
+    tabs->setCurrentIndex(1); // Tarifs & Licences
+    QTextEdit *pricingEditor = qobject_cast<QTextEdit*>(tabs->currentWidget());
+    QVERIFY(pricingEditor != nullptr);
+    QString pricingHtml = pricingEditor->toHtml();
+    QVERIFY(pricingHtml.contains("Community"));
+    QVERIFY(pricingHtml.contains("0"));
+    QVERIFY(pricingHtml.contains("29"));
+    QVERIFY(pricingHtml.contains("149"));
+    QVERIFY(pricingHtml.contains("499"));
+
+    // Verify plugins info
+    tabs->setCurrentIndex(2); // Plugins & Statut
+    QTextEdit *pluginsEditor = qobject_cast<QTextEdit*>(tabs->currentWidget());
+    QVERIFY(pluginsEditor != nullptr);
+    QString pluginsHtml = pluginsEditor->toHtml();
+    QVERIFY(pluginsHtml.contains("SpriteStudioCore"));
+    QVERIFY(pluginsHtml.contains("Apache 2.0") || pluginsHtml.contains("KEY_PLUGINS_CORE_DESC"));
+
+    // Verify dark palette doesn't crash and produces screenshot artifacts
+    dlg.resize(700, 580);
+    dlg.adjustSize();
+    QImage imgDark(dlg.size(), QImage::Format_ARGB32_Premultiplied);
+    imgDark.fill(Qt::transparent);
+    dlg.render(&imgDark);
+    QVERIFY(imgDark.save(QStringLiteral("/home/oktail/.gemini/antigravity-ide/brain/f72d605e-13fd-441c-9f09-6c492f59ec5c/about_dialog_dark.png")));
+
+    // Grab pricing tab
+    tabs->setCurrentIndex(1);
+    QImage imgPricing(dlg.size(), QImage::Format_ARGB32_Premultiplied);
+    imgPricing.fill(Qt::transparent);
+    dlg.render(&imgPricing);
+    QVERIFY(imgPricing.save(QStringLiteral("/home/oktail/.gemini/antigravity-ide/brain/f72d605e-13fd-441c-9f09-6c492f59ec5c/about_dialog_pricing.png")));
+
+    // Grab plugins tab
+    tabs->setCurrentIndex(2);
+    QImage imgPlugins(dlg.size(), QImage::Format_ARGB32_Premultiplied);
+    imgPlugins.fill(Qt::transparent);
+    dlg.render(&imgPlugins);
+    QVERIFY(imgPlugins.save(QStringLiteral("/home/oktail/.gemini/antigravity-ide/brain/f72d605e-13fd-441c-9f09-6c492f59ec5c/about_dialog_plugins.png")));
+
+    // Verify Licence tab contains both Plugin EULA and Apache 2.0
+    tabs->setCurrentIndex(4); // Licence
+    QTextEdit *licenseEditor = qobject_cast<QTextEdit*>(tabs->currentWidget());
+    QVERIFY(licenseEditor != nullptr);
+    QString licenseHtml = licenseEditor->toHtml();
+    QVERIFY(licenseHtml.contains("1,000,000") || licenseHtml.contains("1 000 000") || licenseHtml.contains("Revenue Threshold"));
+    QVERIFY(licenseHtml.contains("Apache License") || licenseHtml.contains("Apache 2.0") || licenseHtml.contains("KEY_LICENSE_CORE_TITLE"));
+
+    // Grab license tab
+    QImage imgLicense(dlg.size(), QImage::Format_ARGB32_Premultiplied);
+    imgLicense.fill(Qt::transparent);
+    dlg.render(&imgLicense);
+    QVERIFY(imgLicense.save(QStringLiteral("/home/oktail/.gemini/antigravity-ide/brain/f72d605e-13fd-441c-9f09-6c492f59ec5c/about_dialog_license.png")));
+
+    // Test dynamic multilingual pricing loading in French
+    LocalizationManager::instance().setLanguage(QStringLiteral("fr_FR"));
+    AboutDialog dlgFr;
+    QTabWidget *tabsFr = dlgFr.findChild<QTabWidget*>();
+    QVERIFY(tabsFr != nullptr);
+    tabsFr->setCurrentIndex(1);
+    QTextEdit *pricingFr = qobject_cast<QTextEdit*>(tabsFr->currentWidget());
+    QVERIFY(pricingFr != nullptr);
+    QString htmlFr = pricingFr->toHtml();
+    QVERIFY(htmlFr.contains("29 €"));
+    QVERIFY(htmlFr.contains("149 €"));
+    QVERIFY(htmlFr.contains("499 €"));
+    QVERIFY(htmlFr.contains("Gratuit"));
+    QVERIFY(htmlFr.contains("Pour qui :"));
+
+    // Test dynamic multilingual pricing loading in English
+    LocalizationManager::instance().setLanguage(QStringLiteral("en_US"));
+    AboutDialog dlgEn;
+    QTabWidget *tabsEn = dlgEn.findChild<QTabWidget*>();
+    QVERIFY(tabsEn != nullptr);
+    tabsEn->setCurrentIndex(1);
+    QTextEdit *pricingEn = qobject_cast<QTextEdit*>(tabsEn->currentWidget());
+    QVERIFY(pricingEn != nullptr);
+    QString htmlEn = pricingEn->toHtml();
+    QVERIFY(htmlEn.contains("$29"));
+    QVERIFY(htmlEn.contains("$149"));
+    QVERIFY(htmlEn.contains("$499"));
+    QVERIFY(htmlEn.contains("Free"));
+    QVERIFY(htmlEn.contains("Target:"));
+
+    // Test dynamic multilingual pricing loading in Japanese
+    LocalizationManager::instance().setLanguage(QStringLiteral("ja_JA"));
+    AboutDialog dlgJa;
+    QTabWidget *tabsJa = dlgJa.findChild<QTabWidget*>();
+    QVERIFY(tabsJa != nullptr);
+    tabsJa->setCurrentIndex(1);
+    QTextEdit *pricingJa = qobject_cast<QTextEdit*>(tabsJa->currentWidget());
+    QVERIFY(pricingJa != nullptr);
+    QString htmlJa = pricingJa->toHtml();
+    QVERIFY(htmlJa.contains("3 400 円") || htmlJa.contains("3,400 円"));
+    QVERIFY(htmlJa.contains("18 000 円") || htmlJa.contains("18,000 円"));
+    QVERIFY(htmlJa.contains("59 000 円") || htmlJa.contains("59,000 円"));
+    QVERIFY(htmlJa.contains("無料"));
+    QVERIFY(htmlJa.contains("対象:"));
+
+    qApp->setPalette(origPalette);
 }
 
 #include <QApplication>

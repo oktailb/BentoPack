@@ -20,6 +20,7 @@
 #include "include/mainwindow.h"
 #include "include/config/appconfig.h"
 #include "include/localizationmanager.h"
+#include "include/license/licensemanager.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -28,6 +29,8 @@ int main(int argc, char *argv[])
   a.setWindowIcon(QIcon(QStringLiteral(":/drawer/icons/spritestudio.png")));
   QCoreApplication::setOrganizationName(QStringLiteral("SpriteStudio"));
   QCoreApplication::setApplicationName(QStringLiteral("SpriteStudio"));
+
+  SpriteStudio::LicenseManager::setToolType(SpriteStudio::ToolType::GUI);
 
   // Load configuration and initialize localization dynamically
   AppConfig::instance().load();

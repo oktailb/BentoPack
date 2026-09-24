@@ -4,113 +4,263 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="39"/>
-        <location filename="../src/aboutdialog.cpp" line="97"/>
-        <location filename="../../tests/test_controllers.cpp" line="1701"/>
-        <location filename="../../tests/test_controllers.cpp" line="1762"/>
-        <location filename="../../tests/test_controllers.cpp" line="1823"/>
+        <location filename="../src/aboutdialog.cpp" line="51"/>
+        <location filename="../src/aboutdialog.cpp" line="65"/>
+        <location filename="../src/aboutdialog.cpp" line="73"/>
+        <location filename="../src/aboutdialog.cpp" line="227"/>
+        <location filename="../../tests/test_controllers.cpp" line="1705"/>
+        <location filename="../../tests/test_controllers.cpp" line="1770"/>
+        <location filename="../../tests/test_controllers.cpp" line="1835"/>
         <source>KEY_DIALOG_ABOUT_TITLE</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="103"/>
+        <location filename="../src/aboutdialog.cpp" line="74"/>
+        <location filename="../src/aboutdialog.cpp" line="228"/>
+        <location filename="../../tests/test_controllers.cpp" line="1706"/>
+        <location filename="../../tests/test_controllers.cpp" line="1771"/>
+        <location filename="../../tests/test_controllers.cpp" line="1836"/>
+        <source>KEY_DIALOG_ABOUT_PRICING</source>
+        <translation>Tarifs &amp; Licences</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="75"/>
+        <location filename="../src/aboutdialog.cpp" line="229"/>
+        <location filename="../../tests/test_controllers.cpp" line="1707"/>
+        <location filename="../../tests/test_controllers.cpp" line="1772"/>
+        <location filename="../../tests/test_controllers.cpp" line="1837"/>
+        <source>KEY_DIALOG_ABOUT_PLUGINS</source>
+        <translation>Plugins &amp; Statut</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="475"/>
+        <location filename="../../tests/test_controllers.cpp" line="1708"/>
+        <location filename="../../tests/test_controllers.cpp" line="1773"/>
+        <location filename="../../tests/test_controllers.cpp" line="1838"/>
+        <source>KEY_PRICING_ACTIVE_EDITION</source>
+        <translation>[ÉDITION ACTIVE]</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="490"/>
+        <location filename="../../tests/test_controllers.cpp" line="1709"/>
+        <location filename="../../tests/test_controllers.cpp" line="1774"/>
+        <location filename="../../tests/test_controllers.cpp" line="1839"/>
+        <source>KEY_PRICING_TARGET_LABEL</source>
+        <translation>Pour qui :</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="86"/>
+        <location filename="../src/aboutdialog.cpp" line="180"/>
+        <source>KEY_EDITION_NOTICE_COMMUNITY</source>
+        <translation>Gratuit pour créateurs indies &amp; équipes &lt; 1,000,000$ ARR</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="84"/>
+        <location filename="../src/aboutdialog.cpp" line="173"/>
+        <source>KEY_EDITION_NOTICE_COMMERCIAL</source>
+        <translation>Licence commerciale active - Exports propres sans watermark</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="82"/>
+        <location filename="../src/aboutdialog.cpp" line="166"/>
+        <source>KEY_EDITION_NOTICE_TAMPERED</source>
+        <translation>Alerte contrefaçon : Binaire modifié non officiel</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="521"/>
+        <source>KEY_PLUGINS_SECTION_TITLE</source>
+        <translation>Architecture &amp; Statut des Plugins</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="522"/>
+        <source>KEY_PLUGINS_SECTION_DESC</source>
+        <translation>SpriteStudio repose sur un noyau modulaire en C++17 avec chargement dynamique (QPluginLoader).</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="523"/>
+        <source>KEY_PLUGINS_CORE_TITLE</source>
+        <translation>Noyau Core :</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="523"/>
+        <source>KEY_PLUGINS_CORE_DESC</source>
+        <translation>Licence : &lt;b&gt;Apache 2.0 Open-Source&lt;/b&gt; — Modèle pur sans état, bin-packing, mathématiques &amp; géométrie.</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="546"/>
+        <source>KEY_PLUGINS_CODECS_TITLE</source>
+        <translation>Codecs d&apos;Export &amp; Intégration Moteurs</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="572"/>
+        <source>KEY_PLUGINS_FILTERS_TITLE</source>
+        <translation>Filtres &amp; Traitements d&apos;Images</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="547"/>
+        <source>KEY_PLUGINS_COL_FORMAT</source>
+        <translation>Format</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="547"/>
+        <source>KEY_PLUGINS_COL_ID</source>
+        <translation>Identifiant</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="573"/>
+        <source>KEY_PLUGINS_COL_FILTER</source>
+        <translation>Filtre</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="573"/>
+        <source>KEY_PLUGINS_COL_CATEGORY</source>
+        <translation>Catégorie</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="547"/>
+        <location filename="../src/aboutdialog.cpp" line="573"/>
+        <source>KEY_PLUGINS_COL_LICENSE</source>
+        <translation>Mode de Licence</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="524"/>
+        <source>KEY_PLUGINS_EXT_TITLE</source>
+        <translation>Plugins &amp; Extensions :</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="524"/>
+        <source>KEY_PLUGINS_EXT_DESC</source>
+        <translation>Licence : &lt;b&gt;Plugin Source-Available License (EULA)&lt;/b&gt; — Seuil de 1 000 000 $ USD de CA annuel. Gratuit pour indies et hobbyistes sous le seuil ; licence commerciale obligatoire au-delà.</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="688"/>
+        <source>KEY_LICENSE_PLUGINS_TITLE</source>
+        <translation>Plugins &amp; Extensions : Plugin Source-Available License Agreement (EULA)</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="690"/>
+        <source>KEY_LICENSE_PLUGINS_NOTICE</source>
+        <translation>Cette licence régit le code source des plugins d&apos;exportation et des filtres (répertoire &lt;code&gt;plugins/&lt;/code&gt;). Seuil de gratuité fixé à 1 000 000 $ USD de chiffre d&apos;affaires annuel.</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="693"/>
+        <source>KEY_LICENSE_CORE_TITLE</source>
+        <translation>Noyau Moteur : Apache License, Version 2.0 (Socle Open-Source)</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="694"/>
+        <source>KEY_LICENSE_CORE_NOTICE</source>
+        <translation>Cette licence libre régit la bibliothèque centrale &lt;code&gt;SpriteStudioCore&lt;/code&gt; (bin-packing, modèle de document, géométrie).</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="529"/>
+        <source>KEY_PLUGINS_LIC_TAMPERED</source>
+        <translation>&lt;span style=&apos;color: #ef4444; font-weight: bold;&apos;&gt;⚠️ Falsifié (Violation EULA § 4.3)&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="531"/>
+        <source>KEY_PLUGINS_LIC_COMMERCIAL</source>
+        <translation>&lt;span style=&apos;color: #10b981; font-weight: bold;&apos;&gt;✓ Licence Commerciale Complète (Exports dé-tagués)&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="533"/>
+        <source>KEY_PLUGINS_LIC_COMMUNITY</source>
+        <translation>&lt;span style=&apos;color: #3b82f6; font-weight: bold;&apos;&gt;Source-Available (&lt;1M$ USD - Filigrane actif)&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/aboutdialog.cpp" line="76"/>
+        <location filename="../src/aboutdialog.cpp" line="230"/>
         <source>KEY_DIALOG_ABOUT_CREDITS</source>
         <translation>Crédits</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="109"/>
+        <location filename="../src/aboutdialog.cpp" line="77"/>
+        <location filename="../src/aboutdialog.cpp" line="231"/>
         <source>KEY_DIALOG_LICENCE_TITLE</source>
         <translation>Licence</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="114"/>
+        <location filename="../src/aboutdialog.cpp" line="79"/>
+        <location filename="../src/aboutdialog.cpp" line="256"/>
         <source>KEY_DIALOG_ABOUT_CLOSE</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="197"/>
+        <location filename="../src/aboutdialog.cpp" line="353"/>
         <source>KEY_ABOUT_PURPOSE</source>
         <translation>Un outil puissant pour l&apos;extraction et l&apos;animation de sprites</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="208"/>
         <source>KEY_ABOUT_BUILD_WITH</source>
-        <translation>Compilé avec</translation>
+        <translation type="vanished">Compilé avec</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="209"/>
         <source>KEY_ABOUT_PLATFORM</source>
-        <translation>Plateforme</translation>
+        <translation type="vanished">Plateforme</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="212"/>
+        <location filename="../src/aboutdialog.cpp" line="363"/>
         <source>KEY_ABOUT_GIT_INFO</source>
         <translation>Informations GIT</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="213"/>
         <source>KEY_ABOUT_BRANCH</source>
-        <translation>Branche</translation>
+        <translation type="vanished">Branche</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="214"/>
         <source>KEY_ABOUT_COMMIT</source>
-        <translation>ID du dernier commit</translation>
+        <translation type="vanished">ID du dernier commit</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="215"/>
         <source>KEY_ABOUT_LAST_COMMIT_DATE</source>
-        <translation>Date du dernier commit</translation>
+        <translation type="vanished">Date du dernier commit</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="216"/>
         <source>KEY_ABOUT_LAST_AUTHOR</source>
-        <translation>Dernier auteur</translation>
+        <translation type="vanished">Dernier auteur</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="239"/>
+        <location filename="../src/aboutdialog.cpp" line="624"/>
         <source>KEY_ABOUT_CREDITS_AND_GREETINGS</source>
         <translation>Crédits et remerciements</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="247"/>
+        <location filename="../src/aboutdialog.cpp" line="627"/>
         <source>_contributors</source>
         <translation>Contributeurs</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="251"/>
+        <location filename="../src/aboutdialog.cpp" line="629"/>
         <source>_used_techno</source>
         <translation>Technologies utilisées</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="254"/>
         <source>_compiler</source>
-        <translation>Compilateur</translation>
+        <translation type="vanished">Compilateur</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="257"/>
+        <location filename="../src/aboutdialog.cpp" line="635"/>
         <source>_greetings_title</source>
         <translation>Remerciement spéciaux</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="258"/>
+        <location filename="../src/aboutdialog.cpp" line="637"/>
         <source>_greetings</source>
         <translation>Merci à tout les contributeurs et aux donnateurs Tipeee</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="294"/>
         <source>_licence_agreement</source>
-        <translation>Contrat de licence</translation>
+        <translation type="vanished">Contrat de licence</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="134"/>
+        <location filename="../src/aboutdialog.cpp" line="78"/>
+        <location filename="../src/aboutdialog.cpp" line="238"/>
         <source>KEY_ACTION_SETTINGS</source>
         <translation>Préférences...</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="278"/>
         <source>KEY_LICENCE_FILE_NOT_FOUND</source>
-        <translation>Erreur : Fichier de licence non trouvé dans les ressources : %1</translation>
+        <translation type="vanished">Erreur : Fichier de licence non trouvé dans les ressources : %1</translation>
     </message>
 </context>
 <context>
@@ -191,9 +341,9 @@
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="25"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="549"/>
-        <location filename="../../tests/test_controllers.cpp" line="1716"/>
-        <location filename="../../tests/test_controllers.cpp" line="1777"/>
-        <location filename="../../tests/test_controllers.cpp" line="1838"/>
+        <location filename="../../tests/test_controllers.cpp" line="1724"/>
+        <location filename="../../tests/test_controllers.cpp" line="1789"/>
+        <location filename="../../tests/test_controllers.cpp" line="1854"/>
         <source>Atlas Bin-Packing (MaxRects)</source>
         <translation>Empaquetage d&apos;Atlas (MaxRects)</translation>
     </message>
@@ -407,9 +557,9 @@
     <name>AtlasPackingFilter</name>
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1715"/>
-        <location filename="../../tests/test_controllers.cpp" line="1776"/>
-        <location filename="../../tests/test_controllers.cpp" line="1837"/>
+        <location filename="../../tests/test_controllers.cpp" line="1723"/>
+        <location filename="../../tests/test_controllers.cpp" line="1788"/>
+        <location filename="../../tests/test_controllers.cpp" line="1853"/>
         <source>Atlas Bin-Packing (MaxRects)...</source>
         <translation>Empaquetage d&apos;Atlas (MaxRects)...</translation>
     </message>
@@ -441,9 +591,9 @@
     <name>BackgroundRemovalDialog</name>
     <message>
         <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="25"/>
-        <location filename="../../tests/test_controllers.cpp" line="1708"/>
-        <location filename="../../tests/test_controllers.cpp" line="1769"/>
-        <location filename="../../tests/test_controllers.cpp" line="1830"/>
+        <location filename="../../tests/test_controllers.cpp" line="1716"/>
+        <location filename="../../tests/test_controllers.cpp" line="1781"/>
+        <location filename="../../tests/test_controllers.cpp" line="1846"/>
         <source>Background Removal</source>
         <translation>Suppression d&apos;arrière-plan</translation>
     </message>
@@ -550,9 +700,9 @@ Choisissez la branche à restaurer :</translation>
     <name>ColorAdjustFilter</name>
     <message>
         <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1711"/>
-        <location filename="../../tests/test_controllers.cpp" line="1772"/>
-        <location filename="../../tests/test_controllers.cpp" line="1833"/>
+        <location filename="../../tests/test_controllers.cpp" line="1719"/>
+        <location filename="../../tests/test_controllers.cpp" line="1784"/>
+        <location filename="../../tests/test_controllers.cpp" line="1849"/>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
         <translation>Ajustement des Couleurs (HSV &amp; Contraste)...</translation>
     </message>
@@ -812,9 +962,9 @@ La suppression stricte efface le pixel.</translation>
     <name>ExportDialog</name>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="14"/>
-        <location filename="../../tests/test_controllers.cpp" line="1717"/>
-        <location filename="../../tests/test_controllers.cpp" line="1778"/>
-        <location filename="../../tests/test_controllers.cpp" line="1839"/>
+        <location filename="../../tests/test_controllers.cpp" line="1725"/>
+        <location filename="../../tests/test_controllers.cpp" line="1790"/>
+        <location filename="../../tests/test_controllers.cpp" line="1855"/>
         <source>Export Atlas &amp; Animations</source>
         <translation>Exporter l&apos;Atlas &amp; les Animations</translation>
     </message>
@@ -875,17 +1025,17 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="99"/>
-        <location filename="../../tests/test_controllers.cpp" line="1718"/>
-        <location filename="../../tests/test_controllers.cpp" line="1779"/>
-        <location filename="../../tests/test_controllers.cpp" line="1840"/>
+        <location filename="../../tests/test_controllers.cpp" line="1726"/>
+        <location filename="../../tests/test_controllers.cpp" line="1791"/>
+        <location filename="../../tests/test_controllers.cpp" line="1856"/>
         <source>Keep Current Layout (WYSIWYG — As Displayed)</source>
         <translation>Conserver l&apos;agencement actuel (WYSIWYG — Tel quel)</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="104"/>
-        <location filename="../../tests/test_controllers.cpp" line="1719"/>
-        <location filename="../../tests/test_controllers.cpp" line="1780"/>
-        <location filename="../../tests/test_controllers.cpp" line="1841"/>
+        <location filename="../../tests/test_controllers.cpp" line="1727"/>
+        <location filename="../../tests/test_controllers.cpp" line="1792"/>
+        <location filename="../../tests/test_controllers.cpp" line="1857"/>
         <source>MaxRects (Best Short Side Fit — Recommended)</source>
         <translation>MaxRects (Best Short Side Fit — Recommandé)</translation>
     </message>
@@ -946,9 +1096,9 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="216"/>
-        <location filename="../../tests/test_controllers.cpp" line="1720"/>
-        <location filename="../../tests/test_controllers.cpp" line="1781"/>
-        <location filename="../../tests/test_controllers.cpp" line="1842"/>
+        <location filename="../../tests/test_controllers.cpp" line="1728"/>
+        <location filename="../../tests/test_controllers.cpp" line="1793"/>
+        <location filename="../../tests/test_controllers.cpp" line="1858"/>
         <source>Force Power of Two (2^n)</source>
         <translation>Forcer la Puissance de Deux (2^n)</translation>
     </message>
@@ -1138,9 +1288,9 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="334"/>
-        <location filename="../../tests/test_controllers.cpp" line="1721"/>
-        <location filename="../../tests/test_controllers.cpp" line="1782"/>
-        <location filename="../../tests/test_controllers.cpp" line="1843"/>
+        <location filename="../../tests/test_controllers.cpp" line="1729"/>
+        <location filename="../../tests/test_controllers.cpp" line="1794"/>
+        <location filename="../../tests/test_controllers.cpp" line="1859"/>
         <source>Packing Efficiency: Preserved as-is (WYSIWYG)</source>
         <translation>Efficacité d&apos;empaquetage : Conservée telle quelle (WYSIWYG)</translation>
     </message>
@@ -1223,9 +1373,9 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="49"/>
         <location filename="../src/widgets/exportdialog.cpp" line="391"/>
-        <location filename="../../tests/test_controllers.cpp" line="1722"/>
-        <location filename="../../tests/test_controllers.cpp" line="1783"/>
-        <location filename="../../tests/test_controllers.cpp" line="1844"/>
+        <location filename="../../tests/test_controllers.cpp" line="1730"/>
+        <location filename="../../tests/test_controllers.cpp" line="1795"/>
+        <location filename="../../tests/test_controllers.cpp" line="1860"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -1243,9 +1393,9 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="81"/>
         <location filename="../src/widgets/filterdialogbase.cpp" line="259"/>
-        <location filename="../../tests/test_controllers.cpp" line="1709"/>
-        <location filename="../../tests/test_controllers.cpp" line="1770"/>
-        <location filename="../../tests/test_controllers.cpp" line="1831"/>
+        <location filename="../../tests/test_controllers.cpp" line="1717"/>
+        <location filename="../../tests/test_controllers.cpp" line="1782"/>
+        <location filename="../../tests/test_controllers.cpp" line="1847"/>
         <source>Live Preview</source>
         <translation>Aperçu en direct</translation>
     </message>
@@ -1258,9 +1408,9 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="86"/>
         <location filename="../src/widgets/filterdialogbase.cpp" line="263"/>
-        <location filename="../../tests/test_controllers.cpp" line="1710"/>
-        <location filename="../../tests/test_controllers.cpp" line="1771"/>
-        <location filename="../../tests/test_controllers.cpp" line="1832"/>
+        <location filename="../../tests/test_controllers.cpp" line="1718"/>
+        <location filename="../../tests/test_controllers.cpp" line="1783"/>
+        <location filename="../../tests/test_controllers.cpp" line="1848"/>
         <source>Auto-detect Sprite Boxes</source>
         <translation>Détection auto des boîtes</translation>
     </message>
@@ -1294,9 +1444,9 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="275"/>
-        <location filename="../../tests/test_controllers.cpp" line="1735"/>
-        <location filename="../../tests/test_controllers.cpp" line="1796"/>
-        <location filename="../../tests/test_controllers.cpp" line="1858"/>
+        <location filename="../../tests/test_controllers.cpp" line="1743"/>
+        <location filename="../../tests/test_controllers.cpp" line="1808"/>
+        <location filename="../../tests/test_controllers.cpp" line="1874"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -1325,9 +1475,9 @@ La suppression stricte efface le pixel.</translation>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="22"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="22"/>
         <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="22"/>
-        <location filename="../../tests/test_controllers.cpp" line="1714"/>
-        <location filename="../../tests/test_controllers.cpp" line="1775"/>
-        <location filename="../../tests/test_controllers.cpp" line="1836"/>
+        <location filename="../../tests/test_controllers.cpp" line="1722"/>
+        <location filename="../../tests/test_controllers.cpp" line="1787"/>
+        <location filename="../../tests/test_controllers.cpp" line="1852"/>
         <source>Geometry &amp; Transform</source>
         <translation>Géométrie &amp; Transformations</translation>
     </message>
@@ -1453,9 +1603,9 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/githistorydock.cpp" line="269"/>
         <location filename="../src/widgets/githistorydock.cpp" line="600"/>
-        <location filename="../../tests/test_controllers.cpp" line="1704"/>
-        <location filename="../../tests/test_controllers.cpp" line="1765"/>
-        <location filename="../../tests/test_controllers.cpp" line="1826"/>
+        <location filename="../../tests/test_controllers.cpp" line="1712"/>
+        <location filename="../../tests/test_controllers.cpp" line="1777"/>
+        <location filename="../../tests/test_controllers.cpp" line="1842"/>
         <source>KEY_GIT_BTN_RESTORE</source>
         <translation>Restaurer cette révision</translation>
     </message>
@@ -1485,87 +1635,87 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
 <context>
     <name>GodotExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="44"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="45"/>
         <source>Reading Godot SpriteFrames resource...</source>
         <translation>Lecture de la ressource Godot SpriteFrames...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="51"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="52"/>
         <source>Cannot open Godot resource file: %1</source>
         <translation>Impossible d&apos;ouvrir le fichier de ressource Godot : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="63"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="64"/>
         <source>File is not a valid Godot SpriteFrames resource: %1</source>
         <translation>Le fichier n&apos;est pas une ressource Godot SpriteFrames valide : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="112"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="113"/>
         <source>Referenced texture atlas image not found for: %1</source>
         <translation>Image d&apos;atlas de texture référencée non trouvée pour : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="125"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="126"/>
         <source>Failed to load texture atlas image: %1</source>
         <translation>Impossible de charger l&apos;image d&apos;atlas de texture : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="364"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="365"/>
         <source>Extracted %1 frames and %2 animations from Godot resource.</source>
         <translation>%1 frames et %2 animations extraites de la ressource Godot.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="376"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="377"/>
         <source>No frames in document to export.</source>
         <translation>Aucune frame dans le document à exporter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="382"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="383"/>
         <source>Packing atlas for Godot...</source>
         <translation>Assemblage de l&apos;atlas pour Godot...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="391"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="392"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="439"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="440"/>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Échec de l&apos;assemblage des frames d&apos;atlas pour l&apos;export Godot.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="457"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="460"/>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
         <translation>Échec de l&apos;écriture de la texture d&apos;atlas VRAM Godot : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="465"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="468"/>
         <source>Failed to write Godot atlas image: %1</source>
         <translation>Impossible d&apos;écrire l&apos;image d&apos;atlas Godot : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="477"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="480"/>
         <source>Cannot write to Godot resource file: %1</source>
         <translation>Impossible d&apos;écrire dans le fichier de ressource Godot : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="641"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="645"/>
         <source>Exported Godot resource: %1 and image %2</source>
         <translation>Ressource Godot exportée : %1 et image %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="657"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="661"/>
         <source>Preserve existing Godot 4 UID (uid://...) on re-export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="667"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="671"/>
         <source>Auto-generate AnimatedSprite2D scene (.tscn) companion file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="677"/>
+        <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="681"/>
         <source>Godot Engine 4.x SpriteFrames exporter with AtlasTexture regions and collision mesh generation.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1573,92 +1723,92 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
 <context>
     <name>JsonExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="110"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="111"/>
         <source>Reading JSON sprite atlas %1...</source>
         <translation>Lecture de l&apos;atlas de sprites JSON %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="152"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="153"/>
         <source>Associated atlas image not found: %1</source>
         <translation>Image d&apos;atlas associée non trouvée : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="163"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="164"/>
         <source>Failed to decode atlas image: %1</source>
         <translation>Impossible de décoder l&apos;image d&apos;atlas : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="215"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="216"/>
         <source>No frames could be extracted from JSON: %1</source>
         <translation>Aucune frame n&apos;a pu être extraite du JSON : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="252"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="253"/>
         <source>Imported %1 frames, %2 animations from JSON</source>
         <translation>%1 frames et %2 animations importées depuis le JSON</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="500"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="501"/>
         <source>No frames in document to export.</source>
         <translation>Aucune frame dans le document à exporter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="512"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="513"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="532"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="533"/>
         <source>Packing atlas for JSON export...</source>
         <translation>Assemblage de l&apos;atlas pour l&apos;export JSON...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="562"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="563"/>
         <source>Failed to pack frames for JSON export.</source>
         <translation>Échec de l&apos;assemblage des frames pour l&apos;export JSON.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="580"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="584"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>Échec de l&apos;enregistrement de la texture VRAM associée : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="588"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="592"/>
         <source>Failed to save companion image: %1</source>
         <translation>Impossible d&apos;enregistrer l&apos;image associée : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="739"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="745"/>
         <source>Cannot write to JSON file: %1</source>
         <translation>Impossible d&apos;écrire dans le fichier JSON : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="750"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="756"/>
         <source>Exported JSON descriptor %1 and image %2</source>
         <translation>Descripteur JSON exporté : %1 et image %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="767"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="773"/>
         <source>Default JSON Structure:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="769"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="775"/>
         <source>Hash Object (TexturePacker Hash)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="770"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="776"/>
         <source>Array List (TexturePacker Array / Aseprite)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="783"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="789"/>
         <source>Include animation frameTags in metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="793"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="799"/>
         <source>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1672,9 +1822,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="983"/>
-        <location filename="../../tests/test_controllers.cpp" line="1697"/>
-        <location filename="../../tests/test_controllers.cpp" line="1758"/>
-        <location filename="../../tests/test_controllers.cpp" line="1819"/>
+        <location filename="../../tests/test_controllers.cpp" line="1701"/>
+        <location filename="../../tests/test_controllers.cpp" line="1766"/>
+        <location filename="../../tests/test_controllers.cpp" line="1831"/>
         <source>KEY_TOOL_SELECT</source>
         <translation>Sélectionner</translation>
     </message>
@@ -1736,9 +1886,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="879"/>
-        <location filename="../../tests/test_controllers.cpp" line="1691"/>
-        <location filename="../../tests/test_controllers.cpp" line="1752"/>
-        <location filename="../../tests/test_controllers.cpp" line="1813"/>
+        <location filename="../../tests/test_controllers.cpp" line="1695"/>
+        <location filename="../../tests/test_controllers.cpp" line="1760"/>
+        <location filename="../../tests/test_controllers.cpp" line="1825"/>
         <source>KEY_MENU_FILE</source>
         <translation>Fichier</translation>
     </message>
@@ -1780,18 +1930,18 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="942"/>
-        <location filename="../../tests/test_controllers.cpp" line="1695"/>
-        <location filename="../../tests/test_controllers.cpp" line="1756"/>
-        <location filename="../../tests/test_controllers.cpp" line="1817"/>
+        <location filename="../../tests/test_controllers.cpp" line="1699"/>
+        <location filename="../../tests/test_controllers.cpp" line="1764"/>
+        <location filename="../../tests/test_controllers.cpp" line="1829"/>
         <source>KEY_ACTION_OPEN</source>
         <translation>&amp;Ouvrir</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="947"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="152"/>
-        <location filename="../../tests/test_controllers.cpp" line="1696"/>
-        <location filename="../../tests/test_controllers.cpp" line="1757"/>
-        <location filename="../../tests/test_controllers.cpp" line="1818"/>
+        <location filename="../../tests/test_controllers.cpp" line="1700"/>
+        <location filename="../../tests/test_controllers.cpp" line="1765"/>
+        <location filename="../../tests/test_controllers.cpp" line="1830"/>
         <source>KEY_ACTION_SAVE</source>
         <translation>&amp;Enregistrer</translation>
     </message>
@@ -1870,9 +2020,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="519"/>
         <location filename="../src/mainwindow.cpp" line="920"/>
-        <location filename="../../tests/test_controllers.cpp" line="1707"/>
-        <location filename="../../tests/test_controllers.cpp" line="1768"/>
-        <location filename="../../tests/test_controllers.cpp" line="1829"/>
+        <location filename="../../tests/test_controllers.cpp" line="1715"/>
+        <location filename="../../tests/test_controllers.cpp" line="1780"/>
+        <location filename="../../tests/test_controllers.cpp" line="1845"/>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Filtres</translation>
     </message>
@@ -1919,17 +2069,17 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <location filename="../src/mainwindow_animation.cpp" line="113"/>
         <location filename="../src/mainwindow_atlas.cpp" line="105"/>
         <location filename="../src/mainwindow_atlas.cpp" line="196"/>
-        <location filename="../../tests/test_controllers.cpp" line="1698"/>
-        <location filename="../../tests/test_controllers.cpp" line="1759"/>
-        <location filename="../../tests/test_controllers.cpp" line="1820"/>
+        <location filename="../../tests/test_controllers.cpp" line="1702"/>
+        <location filename="../../tests/test_controllers.cpp" line="1767"/>
+        <location filename="../../tests/test_controllers.cpp" line="1832"/>
         <source>KEY_CTX_CREATE_ANIM</source>
         <translation>Créer une animation depuis la sélection</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="234"/>
-        <location filename="../../tests/test_controllers.cpp" line="1699"/>
-        <location filename="../../tests/test_controllers.cpp" line="1760"/>
-        <location filename="../../tests/test_controllers.cpp" line="1821"/>
+        <location filename="../../tests/test_controllers.cpp" line="1703"/>
+        <location filename="../../tests/test_controllers.cpp" line="1768"/>
+        <location filename="../../tests/test_controllers.cpp" line="1833"/>
         <source>KEY_CTX_ADD_TO_ANIM</source>
         <translation>Ajouter à l&apos;animation</translation>
     </message>
@@ -1945,9 +2095,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="313"/>
-        <location filename="../../tests/test_controllers.cpp" line="1700"/>
-        <location filename="../../tests/test_controllers.cpp" line="1761"/>
-        <location filename="../../tests/test_controllers.cpp" line="1822"/>
+        <location filename="../../tests/test_controllers.cpp" line="1704"/>
+        <location filename="../../tests/test_controllers.cpp" line="1769"/>
+        <location filename="../../tests/test_controllers.cpp" line="1834"/>
         <source>KEY_CTX_SELECT_ALL</source>
         <translation>Tout sélectionner</translation>
     </message>
@@ -2068,9 +2218,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="895"/>
-        <location filename="../../tests/test_controllers.cpp" line="1692"/>
-        <location filename="../../tests/test_controllers.cpp" line="1753"/>
-        <location filename="../../tests/test_controllers.cpp" line="1814"/>
+        <location filename="../../tests/test_controllers.cpp" line="1696"/>
+        <location filename="../../tests/test_controllers.cpp" line="1761"/>
+        <location filename="../../tests/test_controllers.cpp" line="1826"/>
         <source>KEY_MENU_VIEW</source>
         <translation>Affichage</translation>
     </message>
@@ -2124,9 +2274,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
-        <location filename="../../tests/test_controllers.cpp" line="1694"/>
-        <location filename="../../tests/test_controllers.cpp" line="1755"/>
-        <location filename="../../tests/test_controllers.cpp" line="1816"/>
+        <location filename="../../tests/test_controllers.cpp" line="1698"/>
+        <location filename="../../tests/test_controllers.cpp" line="1763"/>
+        <location filename="../../tests/test_controllers.cpp" line="1828"/>
         <source>KEY_DOCK_PREVIEW</source>
         <translation>Aperçu de l&apos;animation</translation>
     </message>
@@ -2314,9 +2464,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="699"/>
         <location filename="../src/controller/projectcontroller.cpp" line="100"/>
-        <location filename="../../tests/test_controllers.cpp" line="1705"/>
-        <location filename="../../tests/test_controllers.cpp" line="1766"/>
-        <location filename="../../tests/test_controllers.cpp" line="1827"/>
+        <location filename="../../tests/test_controllers.cpp" line="1713"/>
+        <location filename="../../tests/test_controllers.cpp" line="1778"/>
+        <location filename="../../tests/test_controllers.cpp" line="1843"/>
         <source>KEY_UNTITLED_PROJECT</source>
         <translation>Projet sans titre</translation>
     </message>
@@ -2365,9 +2515,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <location filename="../src/mainwindow.ui" line="841"/>
         <location filename="../src/mainwindow.cpp" line="324"/>
         <location filename="../src/mainwindow.cpp" line="890"/>
-        <location filename="../../tests/test_controllers.cpp" line="1693"/>
-        <location filename="../../tests/test_controllers.cpp" line="1754"/>
-        <location filename="../../tests/test_controllers.cpp" line="1815"/>
+        <location filename="../../tests/test_controllers.cpp" line="1697"/>
+        <location filename="../../tests/test_controllers.cpp" line="1762"/>
+        <location filename="../../tests/test_controllers.cpp" line="1827"/>
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>Barre d&apos;outils principale</translation>
     </message>
@@ -2536,7 +2686,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Échelle réelle 100%</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1892"/>
+        <location filename="../../tests/test_controllers.cpp" line="1908"/>
         <source>KEY_UNKNOWN_FEATURE</source>
         <translation>Fonctionnalité inconnue</translation>
     </message>
@@ -2722,9 +2872,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="45"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="688"/>
-        <location filename="../../tests/test_controllers.cpp" line="1726"/>
-        <location filename="../../tests/test_controllers.cpp" line="1787"/>
-        <location filename="../../tests/test_controllers.cpp" line="1849"/>
+        <location filename="../../tests/test_controllers.cpp" line="1734"/>
+        <location filename="../../tests/test_controllers.cpp" line="1799"/>
+        <location filename="../../tests/test_controllers.cpp" line="1865"/>
         <source>Pixel Editor — SpriteStudio</source>
         <translation>Éditeur de pixels — SpriteStudio</translation>
     </message>
@@ -2766,9 +2916,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="167"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="708"/>
-        <location filename="../../tests/test_controllers.cpp" line="1727"/>
-        <location filename="../../tests/test_controllers.cpp" line="1788"/>
-        <location filename="../../tests/test_controllers.cpp" line="1850"/>
+        <location filename="../../tests/test_controllers.cpp" line="1735"/>
+        <location filename="../../tests/test_controllers.cpp" line="1800"/>
+        <location filename="../../tests/test_controllers.cpp" line="1866"/>
         <source>Pencil (1px continuous Bresenham) [P]</source>
         <translation>Crayon (Bresenham 1px continu) [P]</translation>
     </message>
@@ -3000,9 +3150,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <name>PixelRescaleFilter</name>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1712"/>
-        <location filename="../../tests/test_controllers.cpp" line="1773"/>
-        <location filename="../../tests/test_controllers.cpp" line="1834"/>
+        <location filename="../../tests/test_controllers.cpp" line="1720"/>
+        <location filename="../../tests/test_controllers.cpp" line="1785"/>
+        <location filename="../../tests/test_controllers.cpp" line="1850"/>
         <source>Pixel Art Rescale...</source>
         <translation>Redimensionnement Pixel Art...</translation>
     </message>
@@ -3089,9 +3239,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <name>PolygonMeshDialog</name>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="251"/>
-        <location filename="../../tests/test_controllers.cpp" line="1723"/>
-        <location filename="../../tests/test_controllers.cpp" line="1784"/>
-        <location filename="../../tests/test_controllers.cpp" line="1845"/>
+        <location filename="../../tests/test_controllers.cpp" line="1731"/>
+        <location filename="../../tests/test_controllers.cpp" line="1796"/>
+        <location filename="../../tests/test_controllers.cpp" line="1861"/>
         <source>Tight Mesh &amp; 2D Polygon Packing</source>
         <translation>Maillage polygonal 2D &amp; Découpage serré</translation>
     </message>
@@ -3107,9 +3257,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="254"/>
-        <location filename="../../tests/test_controllers.cpp" line="1724"/>
-        <location filename="../../tests/test_controllers.cpp" line="1785"/>
-        <location filename="../../tests/test_controllers.cpp" line="1846"/>
+        <location filename="../../tests/test_controllers.cpp" line="1732"/>
+        <location filename="../../tests/test_controllers.cpp" line="1797"/>
+        <location filename="../../tests/test_controllers.cpp" line="1862"/>
         <source>Approximation Tolerance (ε):</source>
         <translation>Tolérance d&apos;approximation (ε) :</translation>
     </message>
@@ -3171,9 +3321,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="259"/>
-        <location filename="../../tests/test_controllers.cpp" line="1725"/>
-        <location filename="../../tests/test_controllers.cpp" line="1786"/>
-        <location filename="../../tests/test_controllers.cpp" line="1847"/>
+        <location filename="../../tests/test_controllers.cpp" line="1733"/>
+        <location filename="../../tests/test_controllers.cpp" line="1798"/>
+        <location filename="../../tests/test_controllers.cpp" line="1863"/>
         <source>Apply to Selection</source>
         <translation>Appliquer à la sélection</translation>
     </message>
@@ -3199,7 +3349,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="431"/>
-        <location filename="../../tests/test_controllers.cpp" line="1848"/>
+        <location filename="../../tests/test_controllers.cpp" line="1864"/>
         <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
         <translation>Frame cible %1 : Mode rectangle (aucun maillage)</translation>
     </message>
@@ -3674,17 +3824,17 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Échec de la découpe des frames après suppression du fond.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="61"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="62"/>
         <source>Cannot open JSON file: %1</source>
         <translation>Impossible d&apos;ouvrir le fichier JSON : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="76"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="77"/>
         <source>JSON parse error: %1 at offset %2</source>
         <translation>Erreur d&apos;analyse JSON : %1 à l&apos;offset %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="85"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="86"/>
         <source>JSON root must be an object.</source>
         <translation>La racine JSON doit être un objet.</translation>
     </message>
@@ -3759,16 +3909,16 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>QPlatformTheme</name>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1730"/>
-        <location filename="../../tests/test_controllers.cpp" line="1791"/>
-        <location filename="../../tests/test_controllers.cpp" line="1853"/>
+        <location filename="../../tests/test_controllers.cpp" line="1738"/>
+        <location filename="../../tests/test_controllers.cpp" line="1803"/>
+        <location filename="../../tests/test_controllers.cpp" line="1869"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1731"/>
-        <location filename="../../tests/test_controllers.cpp" line="1792"/>
-        <location filename="../../tests/test_controllers.cpp" line="1854"/>
+        <location filename="../../tests/test_controllers.cpp" line="1739"/>
+        <location filename="../../tests/test_controllers.cpp" line="1804"/>
+        <location filename="../../tests/test_controllers.cpp" line="1870"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -3777,9 +3927,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">&amp;Annuler</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1732"/>
-        <location filename="../../tests/test_controllers.cpp" line="1793"/>
-        <location filename="../../tests/test_controllers.cpp" line="1855"/>
+        <location filename="../../tests/test_controllers.cpp" line="1740"/>
+        <location filename="../../tests/test_controllers.cpp" line="1805"/>
+        <location filename="../../tests/test_controllers.cpp" line="1871"/>
         <source>Discard</source>
         <translation>Ne pas enregistrer</translation>
     </message>
@@ -3788,9 +3938,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">&amp;Ne pas enregistrer</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1733"/>
-        <location filename="../../tests/test_controllers.cpp" line="1794"/>
-        <location filename="../../tests/test_controllers.cpp" line="1856"/>
+        <location filename="../../tests/test_controllers.cpp" line="1741"/>
+        <location filename="../../tests/test_controllers.cpp" line="1806"/>
+        <location filename="../../tests/test_controllers.cpp" line="1872"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
@@ -3803,9 +3953,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">Ne pas enregistrer</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1734"/>
-        <location filename="../../tests/test_controllers.cpp" line="1795"/>
-        <location filename="../../tests/test_controllers.cpp" line="1857"/>
+        <location filename="../../tests/test_controllers.cpp" line="1742"/>
+        <location filename="../../tests/test_controllers.cpp" line="1807"/>
+        <location filename="../../tests/test_controllers.cpp" line="1873"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -3862,9 +4012,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <name>RetroPaletteFilter</name>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1713"/>
-        <location filename="../../tests/test_controllers.cpp" line="1774"/>
-        <location filename="../../tests/test_controllers.cpp" line="1835"/>
+        <location filename="../../tests/test_controllers.cpp" line="1721"/>
+        <location filename="../../tests/test_controllers.cpp" line="1786"/>
+        <location filename="../../tests/test_controllers.cpp" line="1851"/>
         <source>Retro Palette &amp; Dithering...</source>
         <translation>Palette Rétro &amp; Tramage (Dithering)...</translation>
     </message>
@@ -4146,9 +4296,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="53"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1020"/>
-        <location filename="../../tests/test_controllers.cpp" line="1702"/>
-        <location filename="../../tests/test_controllers.cpp" line="1763"/>
-        <location filename="../../tests/test_controllers.cpp" line="1824"/>
+        <location filename="../../tests/test_controllers.cpp" line="1710"/>
+        <location filename="../../tests/test_controllers.cpp" line="1775"/>
+        <location filename="../../tests/test_controllers.cpp" line="1840"/>
         <source>KEY_SETTINGS_TITLE</source>
         <translation>Préférences</translation>
     </message>
@@ -4265,9 +4415,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="246"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1043"/>
-        <location filename="../../tests/test_controllers.cpp" line="1706"/>
-        <location filename="../../tests/test_controllers.cpp" line="1767"/>
-        <location filename="../../tests/test_controllers.cpp" line="1828"/>
+        <location filename="../../tests/test_controllers.cpp" line="1714"/>
+        <location filename="../../tests/test_controllers.cpp" line="1779"/>
+        <location filename="../../tests/test_controllers.cpp" line="1844"/>
         <source>KEY_SETTINGS_LANG_HINT</source>
         <translation>Les modifications de langue s&apos;appliquent immédiatement.</translation>
     </message>
@@ -4653,17 +4803,17 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1104"/>
-        <location filename="../../tests/test_controllers.cpp" line="1736"/>
-        <location filename="../../tests/test_controllers.cpp" line="1797"/>
-        <location filename="../../tests/test_controllers.cpp" line="1859"/>
+        <location filename="../../tests/test_controllers.cpp" line="1744"/>
+        <location filename="../../tests/test_controllers.cpp" line="1809"/>
+        <location filename="../../tests/test_controllers.cpp" line="1875"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1107"/>
-        <location filename="../../tests/test_controllers.cpp" line="1737"/>
-        <location filename="../../tests/test_controllers.cpp" line="1798"/>
-        <location filename="../../tests/test_controllers.cpp" line="1860"/>
+        <location filename="../../tests/test_controllers.cpp" line="1745"/>
+        <location filename="../../tests/test_controllers.cpp" line="1810"/>
+        <location filename="../../tests/test_controllers.cpp" line="1876"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -4676,47 +4826,47 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>SpriteExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="25"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="26"/>
         <source>Loading image %1...</source>
         <translation>Chargement de l&apos;image %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="32"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="33"/>
         <source>File not found: %1</source>
         <translation>Fichier non trouvé : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="43"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="44"/>
         <source>Failed to decode image from: %1</source>
         <translation>Impossible de décoder l&apos;image : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="65"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="66"/>
         <source>Cannot export: Document atlas image is null.</source>
         <translation>Export impossible : L&apos;image d&apos;atlas du document est nulle.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="75"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="76"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="86"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="90"/>
         <source>Failed to save image to: %1</source>
         <translation>Échec de l&apos;enregistrement de l&apos;image vers : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="92"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="96"/>
         <source>Exported atlas image to: %1</source>
         <translation>Image d&apos;atlas exportée vers : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="112"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="116"/>
         <source>Segmenting sprite frames...</source>
         <translation>Découpe des sprites en cours...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="127"/>
+        <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="131"/>
         <source>Extracted %1 frames</source>
         <translation>%1 frames extraites</translation>
     </message>
@@ -4852,9 +5002,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="53"/>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="283"/>
-        <location filename="../../tests/test_controllers.cpp" line="1703"/>
-        <location filename="../../tests/test_controllers.cpp" line="1764"/>
-        <location filename="../../tests/test_controllers.cpp" line="1825"/>
+        <location filename="../../tests/test_controllers.cpp" line="1711"/>
+        <location filename="../../tests/test_controllers.cpp" line="1776"/>
+        <location filename="../../tests/test_controllers.cpp" line="1841"/>
         <source>KEY_TIMELINE_ADD_SELECTION</source>
         <translation>+ Ajouter la sélection</translation>
     </message>
@@ -4910,72 +5060,72 @@ Glisser-déposer pour réordonner</translation>
 <context>
     <name>UnityExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="38"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="39"/>
         <source>Reading Unity 2D Sprite Mesh %1...</source>
         <translation>Lecture du maillage de sprite Unity 2D %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="45"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="46"/>
         <source>Failed to open file: %1</source>
         <translation>Échec de l&apos;ouverture du fichier : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="58"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="59"/>
         <source>Failed to parse Unity JSON: %1</source>
         <translation>Échec de l&apos;analyse du JSON Unity : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="92"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="93"/>
         <source>Associated texture atlas image not found for: %1</source>
         <translation>Image d&apos;atlas de texture associée non trouvée pour : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="105"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="106"/>
         <source>Failed to load texture atlas image: %1 (%2)</source>
         <translation>Échec du chargement de l&apos;image de texture d&apos;atlas : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="194"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="195"/>
         <source>Imported %1 frames from Unity 2D Sprite Mesh</source>
         <translation>%1 frames importées depuis le maillage Unity 2D</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="204"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="205"/>
         <source>No frames in document to export.</source>
         <translation>Aucune frame dans le document à exporter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="210"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="211"/>
         <source>Packing atlas for Unity...</source>
         <translation>Empaquetage de l&apos;atlas pour Unity...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="222"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="223"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="264"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="265"/>
         <source>Failed to pack frames for Unity export.</source>
         <translation>Échec de l&apos;empaquetage des frames pour l&apos;export Unity.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="282"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="285"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>Échec de l&apos;enregistrement de la texture VRAM associée : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="290"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="293"/>
         <source>Failed to save companion image: %1</source>
         <translation>Échec de l&apos;enregistrement de l&apos;image associée : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="411"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="415"/>
         <source>Cannot write to Unity JSON file: %1</source>
         <translation>Impossible d&apos;écrire dans le fichier JSON Unity : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="422"/>
+        <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="426"/>
         <source>Exported Unity Sprite Mesh: %1 and image %2</source>
         <translation>Maillage de sprite Unity exporté : %1 et image %2</translation>
     </message>
@@ -4993,72 +5143,72 @@ Glisser-déposer pour réordonner</translation>
 <context>
     <name>UnrealExtractor</name>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="38"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="39"/>
         <source>Reading Unreal Engine Paper2D atlas %1...</source>
         <translation>Lecture de l&apos;atlas Unreal Engine Paper2D %1...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="45"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="46"/>
         <source>Failed to open file: %1</source>
         <translation>Échec de l&apos;ouverture du fichier : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="58"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="59"/>
         <source>Failed to parse Unreal JSON: %1</source>
         <translation>Échec de l&apos;analyse du JSON Unreal : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="92"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="93"/>
         <source>Associated texture atlas image not found for: %1</source>
         <translation>Image d&apos;atlas de texture associée non trouvée pour : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="105"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="106"/>
         <source>Failed to load texture atlas image: %1 (%2)</source>
         <translation>Échec du chargement de l&apos;image de texture d&apos;atlas : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="201"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="202"/>
         <source>Imported %1 frames from Unreal Paper2D</source>
         <translation>%1 frames importées depuis Unreal Paper2D</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="211"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="212"/>
         <source>No frames in document to export.</source>
         <translation>Aucune frame dans le document à exporter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="217"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="218"/>
         <source>Packing atlas for Unreal Engine Paper2D...</source>
         <translation>Empaquetage de l&apos;atlas pour Unreal Engine Paper2D...</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="229"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="230"/>
         <source>Export file name cannot be empty.</source>
         <translation>Le nom du fichier d&apos;export ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="271"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="272"/>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
         <translation>Échec de l&apos;empaquetage des frames pour l&apos;export Unreal Paper2D.</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="289"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="292"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
         <translation>Échec de l&apos;enregistrement de la texture VRAM associée : %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="297"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="300"/>
         <source>Failed to save companion image: %1</source>
         <translation>Échec de l&apos;enregistrement de l&apos;image associée : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="424"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="428"/>
         <source>Cannot write to Unreal Paper2D JSON file: %1</source>
         <translation>Impossible d&apos;écrire dans le fichier JSON Unreal Paper2D : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="435"/>
+        <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="439"/>
         <source>Exported Unreal Paper2D Sprite: %1 and image %2</source>
         <translation>Sprite Unreal Paper2D exporté : %1 et image %2</translation>
     </message>

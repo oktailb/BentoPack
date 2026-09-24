@@ -38,20 +38,43 @@ class AboutDialog : public QDialog
 public:
   explicit AboutDialog(QWidget *parent = nullptr);
 
+protected:
+  void changeEvent(QEvent *event) override;
+
 private:
   void setupUI();
   void loadApplicationInfo();
+  void loadPricing();
+  void loadPluginsInfo();
   void loadCredits();
   void loadLicense();
   QString readTextFile(const QString &filePath);
 
+  struct ThemeColors {
+      bool isDark;
+      QString bgDialog;
+      QString paneBg;
+      QString cardBg;
+      QString cardBorder;
+      QString textColor;
+      QString textMuted;
+      QString headingColor;
+      QString tabBg;
+      QString tabText;
+  };
+  ThemeColors getThemeColors() const;
+
   QTabWidget *tabWidget;
   QTextEdit *aboutText;
+  QTextEdit *pricingText;
+  QTextEdit *pluginsText;
   QTextEdit *creditsText;
   QTextEdit *licenseText;
   QLabel *iconLabel;
   QLabel *titleLabel;
   QLabel *versionLabel;
+  QLabel *editionBadgeLabel;
+  QLabel *editionNoticeLabel;
   QPushButton *closeButton;
   QPushButton *settingsButton;
 };

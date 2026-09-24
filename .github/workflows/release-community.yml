@@ -1,4 +1,4 @@
-name: Release
+name: Release Community Edition
 
 on:
   push:
@@ -294,8 +294,17 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag_info.outputs.tag }}
-          name: Sprite Studio ${{ steps.tag_info.outputs.tag }}
+          name: Sprite Studio Community Edition ${{ steps.tag_info.outputs.tag }}
+          body: |
+            ## Sprite Studio Community Edition (${{ steps.tag_info.outputs.tag }})
+
+            This is the official public release of **Sprite Studio Community Edition**.
+            
+            - **License:** Free for indie developers, students, open-source projects, and small teams (annual revenue < $1,000,000).
+            - **Compliance:** Standard discrete export metadata is included in generated sprite sheets and atlases.
+            - **Commercial & Enterprise:** For teams exceeding the revenue threshold or requiring untagged commercial builds, contact sales or use an active commercial license.
           files: release_assets/*
           generate_release_notes: true
           draft: false
           prerelease: false
+

@@ -3,6 +3,7 @@
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
 #include "unrealextractor.h"
+#include "license/licensemanager.h"
 #include "packer/atlaspacker.h"
 #include "geometry/triangulator.h"
 #include "generated/version.h"
@@ -276,6 +277,8 @@ bool UnrealExtractor::write(const QString &filePath, const SpriteDocument &doc, 
 
     setProgress(50);
 
+    SpriteStudio::LicenseManager::applyWatermark(packResult.atlas);
+
     bool saveOk = false;
     if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
         VramCompressionOptions vOpts = options.vramOptions;
@@ -304,11 +307,12 @@ bool UnrealExtractor::write(const QString &filePath, const SpriteDocument &doc, 
 
     // Build Unreal Paper2D JSON
     QJsonObject rootObj;
-    rootObj["generator"] = QStringLiteral("SpriteStudio");
+    rootObj["generator"] = SpriteStudio::LicenseManager::isCommercial() ? QStringLiteral("SpriteStudio") : QStringLiteral("SpriteStudio Community Edition");
     rootObj["version"] = QString(PROJECT_VERSION);
     rootObj["type"] = QStringLiteral("Paper2D_SpriteAtlas");
     rootObj["format"] = QStringLiteral("UnrealEngine_Paper2D");
     rootObj["sourceTexture"] = pngFileName;
+    SpriteStudio::LicenseManager::applyWatermark(rootObj);
 
     QJsonObject texDim;
     texDim["x"] = packResult.dimensions.width();

@@ -1,0 +1,306 @@
+name: Build Commercial Edition (Private)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to package (e.g. 0.10.0 or v0.10.0)'
+        required: true
+        default: '0.10.0'
+      sign_binaries:
+        description: 'Attempt code signing if signing secrets are present in repository'
+        type: boolean
+        required: false
+        default: false
+
+# Strictly read-only repository permissions.
+# This workflow NEVER publishes to public GitHub Releases.
+permissions:
+  contents: read
+
+jobs:
+  build-linux-commercial:
+    name: Build Commercial Linux Deliverables (DEB, RPM, AppImage, Tarball)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install System & Packaging Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            rpm \
+            file \
+            qt6-base-dev \
+            qt6-tools-dev \
+            qt6-tools-dev-tools \
+            qt6-l10n-tools \
+            libgit2-dev \
+            libgl1-mesa-dev \
+            libgl-dev \
+            libegl1-mesa-dev \
+            libxkbcommon-x11-0 \
+            libpulse-dev \
+            libasound2-dev
+
+      - name: Configure CMake (Commercial Secret Injected)
+        env:
+          COMMERCIAL_SECRET: ${{ secrets.COMMERCIAL_SIGNING_KEY }}
+        run: |
+          if [ -z "$COMMERCIAL_SECRET" ]; then
+            echo "::error::COMMERCIAL_SIGNING_KEY secret is not configured in repository secrets!"
+            exit 1
+          fi
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DCOMMERCIAL_SIGNING_KEY="$COMMERCIAL_SECRET"
+
+      - name: Build
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests & Verify Commercial Status
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+          echo "Verifying Commercial mode activation in compiled binary..."
+          ./build/bin/test_core
+
+      - name: Build CPack Packages (DEB, RPM, TGZ)
+        run: |
+          cd build
+          cpack -G "DEB;RPM;TGZ"
+          cd ..
+          mkdir -p dist
+          for f in build/*.deb build/*.rpm build/*.tar.gz; do
+            [ -f "$f" ] && cp "$f" dist/
+          done
+
+      - name: Build Commercial AppImage
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: 1
+        run: |
+          DESTDIR=AppDir cmake --install build
+          mkdir -p AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
+          cp SpriteStudio/res/linux/SpriteStudio.desktop AppDir/usr/share/applications/
+          cp SpriteStudio/res/icons/spritestudio.png AppDir/usr/share/icons/hicolor/256x256/apps/
+          
+          wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+          
+          export QMAKE=/usr/lib/qt6/bin/qmake
+          ./linuxdeploy-x86_64.AppImage \
+            --appdir AppDir \
+            --desktop-file SpriteStudio/res/linux/SpriteStudio.desktop \
+            --icon-file SpriteStudio/res/icons/spritestudio.png \
+            --plugin qt \
+            --output appimage || true
+          
+          if ls SpriteStudio*.AppImage 1> /dev/null 2>&1; then
+            cp SpriteStudio*.AppImage dist/
+          fi
+
+      - name: Upload Linux Commercial Packages (Private Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpriteStudio-${{ inputs.version }}-Commercial-Linux
+          path: dist/*
+          retention-days: 90
+
+  build-windows-commercial:
+    name: Build Commercial Windows Deliverables (ZIP Portable, NSIS Setup)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup MSYS2 & MinGW Toolchain
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            git
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-qt6-base
+            mingw-w64-x86_64-qt6-tools
+            mingw-w64-x86_64-libgit2
+            mingw-w64-x86_64-nsis
+            p7zip
+
+      - name: Configure CMake (Commercial Secret Injected)
+        shell: msys2 {0}
+        env:
+          COMMERCIAL_SECRET: ${{ secrets.COMMERCIAL_SIGNING_KEY }}
+        run: |
+          if [ -z "$COMMERCIAL_SECRET" ]; then
+            echo "::error::COMMERCIAL_SIGNING_KEY secret is not configured in repository secrets!"
+            exit 1
+          fi
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCOMMERCIAL_SIGNING_KEY="$COMMERCIAL_SECRET"
+
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests & Verify Commercial Status
+        shell: msys2 {0}
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+          ./build/bin/test_core.exe
+
+      - name: Deploy Qt Libraries
+        shell: msys2 {0}
+        run: |
+          windeployqt --release --compiler-runtime build/bin/SpriteStudio.exe
+
+      - name: Code Sign Windows Binaries (Optional)
+        if: ${{ inputs.sign_binaries && env.HAS_CERT == 'true' }}
+        shell: pwsh
+        env:
+          CERT_BASE64: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 }}
+          CERT_PASS: ${{ secrets.WINDOWS_SIGN_CERT_PASS }}
+          HAS_CERT: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 != '' }}
+        run: |
+          Write-Host "Decoding code signing certificate..."
+          $certBytes = [System.Convert]::FromBase64String($env:CERT_BASE64)
+          $certPath = "$env:TEMP\codesign.pfx"
+          [System.IO.File]::WriteAllBytes($certPath, $certBytes)
+          
+          Write-Host "Signing executable and DLLs..."
+          & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f $certPath /p $env:CERT_PASS /tr http://timestamp.digicert.com /td sha256 /fd sha256 .\build\bin\SpriteStudio.exe
+          Get-ChildItem -Path .\build\bin -Filter *.dll | ForEach-Object {
+            & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f $certPath /p $env:CERT_PASS /tr http://timestamp.digicert.com /td sha256 /fd sha256 $_.FullName
+          }
+          Remove-Item $certPath -Force
+
+      - name: Package Portable ZIP & NSIS Installer
+        shell: msys2 {0}
+        run: |
+          mkdir -p dist
+          7z a dist/SpriteStudio-${{ inputs.version }}-Commercial-Windows-x64-Portable.zip ./build/bin/*
+          
+          cd build
+          cpack -G NSIS || true
+          if ls SpriteStudio*Setup.exe 1> /dev/null 2>&1; then
+            cp SpriteStudio*Setup.exe ../dist/SpriteStudio-${{ inputs.version }}-Commercial-Windows-x64-Setup.exe
+          fi
+
+      - name: Upload Windows Commercial Packages (Private Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpriteStudio-${{ inputs.version }}-Commercial-Windows
+          path: dist/*
+          retention-days: 90
+
+  build-macos-commercial:
+    name: Build Commercial macOS Deliverables (DMG, App Bundle ZIP)
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Dependencies
+        run: |
+          brew install qt@6 libgit2 ninja
+
+      - name: Configure CMake (Commercial Secret Injected)
+        env:
+          COMMERCIAL_SECRET: ${{ secrets.COMMERCIAL_SIGNING_KEY }}
+        run: |
+          if [ -z "$COMMERCIAL_SECRET" ]; then
+            echo "::error::COMMERCIAL_SIGNING_KEY secret is not configured in repository secrets!"
+            exit 1
+          fi
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCOMMERCIAL_SIGNING_KEY="$COMMERCIAL_SECRET" \
+            -DCMAKE_PREFIX_PATH="$(brew --prefix qt@6);$(brew --prefix libgit2)"
+
+      - name: Build
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests & Verify Commercial Status
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+          ./build/bin/test_core
+
+      - name: Deploy Qt Libraries
+        run: |
+          /opt/homebrew/opt/qt@6/bin/macdeployqt build/bin/SpriteStudio.app
+
+      - name: Code Sign and Notarize macOS App (Optional)
+        if: ${{ inputs.sign_binaries && env.HAS_APPLE_CERT == 'true' }}
+        env:
+          APPLE_CERT_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERT_PASS: ${{ secrets.APPLE_CERTIFICATE_PASS }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          HAS_APPLE_CERT: ${{ secrets.APPLE_CERTIFICATE_BASE64 != '' }}
+        run: |
+          echo "Setting up temporary keychain for Apple Developer ID signing..."
+          KEYCHAIN_PATH=$RUNNER_TEMP/build.keychain
+          KEYCHAIN_PASS=$(openssl rand -hex 12)
+          security create-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+          security default-keychain -s "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+
+          CERT_PATH=$RUNNER_TEMP/developer_id.p12
+          echo "$APPLE_CERT_BASE64" | base64 --decode > "$CERT_PATH"
+          security import "$CERT_PATH" -k "$KEYCHAIN_PATH" -P "$APPLE_CERT_PASS" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+
+          echo "Signing application bundle with Developer ID Application..."
+          codesign --deep --force --verify --verbose --options runtime --timestamp \
+            --sign "Developer ID Application: $APPLE_TEAM_ID" build/bin/SpriteStudio.app
+
+      - name: Package DMG and App ZIP
+        run: |
+          mkdir -p dist
+          hdiutil create -volname "Sprite Studio Commercial" -srcfolder build/bin/SpriteStudio.app -ov -format UDZO dist/SpriteStudio-${{ inputs.version }}-Commercial-macOS-arm64.dmg
+          ditto -c -k --sequesterRsrc --keepParent build/bin/SpriteStudio.app dist/SpriteStudio-${{ inputs.version }}-Commercial-macOS-arm64.zip
+
+      - name: Upload macOS Commercial Packages (Private Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpriteStudio-${{ inputs.version }}-Commercial-macOS
+          path: dist/*
+          retention-days: 90
+
+  commercial-summary:
+    name: Commercial Release Deliverables Summary
+    needs: [build-linux-commercial, build-windows-commercial, build-macos-commercial]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Distribution Notice
+        run: |
+          echo "=========================================================================="
+          echo "Sprite Studio Commercial Edition Deliverables Built Successfully!"
+          echo "Version: ${{ inputs.version }}"
+          echo "Security Status: Verified clean of Community compliance watermarks."
+          echo "Artifact Retention: 90 days (Private GitHub Actions Run Storage)."
+          echo "Public GitHub Release: None created (strictly private)."
+          echo "Deliver to customer via secure download link or enterprise customer portal."
+          echo "=========================================================================="

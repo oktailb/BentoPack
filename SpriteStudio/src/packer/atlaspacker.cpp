@@ -19,6 +19,7 @@
 
 #include "packer/atlaspacker.h"
 #include "packer/tightpolygonpacker.h"
+#include "license/integrityguard.h"
 #include <QPainter>
 #include <cmath>
 #include <cstring>
@@ -170,23 +171,33 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
     result.uniqueFramesCount = uniqueFrames.size();
     result.duplicateMapping = mapping;
 
+    AtlasPackResult res;
     switch (options.algorithm) {
     case TightPolygon:
-        return TightPolygonPacker::pack(uniqueFrames, mapping, options, uniquePolygons);
+        res = TightPolygonPacker::pack(uniqueFrames, mapping, options, uniquePolygons);
+        break;
     case GridPacker:
-        return packGrid(uniqueFrames, mapping, options);
+        res = packGrid(uniqueFrames, mapping, options);
+        break;
     case RowPacker:
     case PowerOfTwoPacker: {
         PackOptions rowOpts = options;
         if (options.algorithm == PowerOfTwoPacker) {
             rowOpts.powerOfTwo = true;
         }
-        return packRow(uniqueFrames, mapping, rowOpts);
+        res = packRow(uniqueFrames, mapping, rowOpts);
+        break;
     }
     case MaxRects:
     default:
-        return packMaxRects(uniqueFrames, mapping, options);
+        res = packMaxRects(uniqueFrames, mapping, options);
+        break;
     }
+
+    if (res.success && !res.atlas.isNull()) {
+        SpriteStudio::IntegrityGuard::applySteganographicWatermark(res.atlas);
+    }
+    return res;
 }
 
 AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, int padding, Algorithm algo)
@@ -367,7 +378,7 @@ AtlasPackResult AtlasPacker::packMaxRects(const QList<QImage> &uniqueFrames, con
 
     // Render composite atlas
     QImage atlasImage(binW, binH, QImage::Format_ARGB32_Premultiplied);
-    atlasImage.fill(Qt::transparent);
+    atlasImage.fill(SpriteStudio::IntegrityGuard::transparentBackgroundColor());
 
     QPainter painter(&atlasImage);
     QList<QRect> uniqueSpriteRects;
@@ -489,7 +500,7 @@ AtlasPackResult AtlasPacker::packRow(const QList<QImage> &uniqueFrames, const QL
     }
 
     QImage atlasImage(finalWidth, finalHeight, QImage::Format_ARGB32_Premultiplied);
-    atlasImage.fill(Qt::transparent);
+    atlasImage.fill(SpriteStudio::IntegrityGuard::transparentBackgroundColor());
 
     QPainter painter(&atlasImage);
     for (int i = 0; i < uniqueFrames.size(); ++i) {
@@ -564,7 +575,7 @@ AtlasPackResult AtlasPacker::packGrid(const QList<QImage> &uniqueFrames, const Q
     }
 
     QImage atlasImage(finalWidth, finalHeight, QImage::Format_ARGB32_Premultiplied);
-    atlasImage.fill(Qt::transparent);
+    atlasImage.fill(SpriteStudio::IntegrityGuard::transparentBackgroundColor());
 
     QPainter painter(&atlasImage);
     QList<QRect> uniqueSpriteRects;

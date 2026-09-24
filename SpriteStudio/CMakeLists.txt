@@ -6,6 +6,23 @@ configure_file(
     generated/version.h
 )
 
+# Configuration de la licence & signature cryptographique commerciale
+set(COMMERCIAL_SIGNING_KEY "" CACHE STRING "Secret key for building official commercial releases")
+if(COMMERCIAL_SIGNING_KEY STREQUAL "")
+    set(SPRITESTUDIO_COMMERCIAL_BUILD 0)
+    set(SPRITESTUDIO_LICENSE_TOKEN "")
+    message(STATUS "Build target: SpriteStudio Community Edition")
+else()
+    set(SPRITESTUDIO_COMMERCIAL_BUILD 1)
+    set(SPRITESTUDIO_LICENSE_TOKEN "${COMMERCIAL_SIGNING_KEY}")
+    message(STATUS "Build target: SpriteStudio Commercial Edition (Token provided)")
+endif()
+
+configure_file(
+    src/license_config.h.in
+    generated/license_config.h
+)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOMOC ON)
@@ -69,6 +86,8 @@ set(SpriteStudioCore_SRC
     src/geometry/polygonsimplifier.cpp
     src/geometry/triangulator.cpp
     src/geometry/polygonmerger.cpp
+    src/license/licensemanager.cpp
+    src/license/integrityguard.cpp
     src/commands/meshcommands.cpp
     src/widgets/polygonmeshdialog.cpp
     src/widgets/pixelcanvas.cpp
@@ -124,6 +143,8 @@ set(SpriteStudioCore_INCLUDE
     include/geometry/polygonsimplifier.h
     include/geometry/triangulator.h
     include/geometry/polygonmerger.h
+    include/license/licensemanager.h
+    include/license/integrityguard.h
     include/commands/meshcommands.h
     include/widgets/polygonmeshdialog.h
     include/widgets/pixelcanvas.h
@@ -173,12 +194,20 @@ qt6_add_resources(SpriteStudioCore "images"
 set_source_files_properties(${CMAKE_SOURCE_DIR}/LICENSE PROPERTIES
     QT_RESOURCE_ALIAS "LICENSE"
 )
+set_source_files_properties(${CMAKE_SOURCE_DIR}/plugins/LICENSE-PLUGINS.md PROPERTIES
+    QT_RESOURCE_ALIAS "LICENSE-PLUGINS.md"
+)
+set_source_files_properties(res/pricing.json PROPERTIES
+    QT_RESOURCE_ALIAS "pricing.json"
+)
 
 qt6_add_resources(SpriteStudioCore "text"
     PREFIX "text"
     FILES
     ${CMAKE_SOURCE_DIR}/LICENSE
+    ${CMAKE_SOURCE_DIR}/plugins/LICENSE-PLUGINS.md
     about.txt
+    res/pricing.json
 )
 
 target_include_directories(SpriteStudioCore PUBLIC

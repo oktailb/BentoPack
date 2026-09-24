@@ -3,6 +3,7 @@
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
 #include "godotextractor.h"
+#include "license/licensemanager.h"
 #include "godot_pipeline.h"
 #include "packer/atlaspacker.h"
 #include <QFile>
@@ -444,6 +445,8 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     setProgress(60);
 
+    SpriteStudio::LicenseManager::applyWatermark(packResult.atlas);
+
     bool saveOk = false;
     if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
         VramCompressionOptions vOpts = options.vramOptions;
@@ -481,6 +484,7 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     }
 
     QTextStream out(&outFile);
+    out << SpriteStudio::LicenseManager::watermarkHeaderComment();
 
     // Resolve Godot 4 UID
     QString uid = options.extraParams.value(QStringLiteral("godot_uid")).toString();
