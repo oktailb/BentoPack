@@ -103,8 +103,8 @@ void FilterRegistry::initDefaultFilters()
 
     QStringList searchDirs;
 
-    // 1. Environment variable SPRITESTUDIO_PLUGIN_PATH
-    const QString envPath = QString::fromUtf8(qgetenv("SPRITESTUDIO_PLUGIN_PATH"));
+    // 1. Environment variable BENTOPACK_PLUGIN_PATH
+    const QString envPath = QString::fromUtf8(qgetenv("BENTOPACK_PLUGIN_PATH"));
     if (!envPath.isEmpty()) {
         searchDirs << envPath.split(QDir::listSeparator(), Qt::SkipEmptyParts);
     }
@@ -129,7 +129,7 @@ void FilterRegistry::rescanPlugins()
     m_scannedDirs.clear();
 
     QStringList searchDirs;
-    const QString envPath = QString::fromUtf8(qgetenv("SPRITESTUDIO_PLUGIN_PATH"));
+    const QString envPath = QString::fromUtf8(qgetenv("BENTOPACK_PLUGIN_PATH"));
     if (!envPath.isEmpty()) {
         searchDirs << envPath.split(QDir::listSeparator(), Qt::SkipEmptyParts);
     }

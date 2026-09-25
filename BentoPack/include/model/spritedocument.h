@@ -47,7 +47,7 @@ enum class PivotPreset {
 /**
  * @brief Structure representing the bounding box of a sprite frame in the atlas.
  */
-struct SPRITESTUDIO_CORE_EXPORT SpriteBox {
+struct BENTOPACK_CORE_EXPORT SpriteBox {
     QRect       rect;
     bool        selected = false;
     int         index = 0;
@@ -89,7 +89,7 @@ struct SPRITESTUDIO_CORE_EXPORT SpriteBox {
 /**
  * @brief Structure representing an animation sequence.
  */
-struct SPRITESTUDIO_CORE_EXPORT SpriteAnimation {
+struct BENTOPACK_CORE_EXPORT SpriteAnimation {
     enum LoopMode {
         Loop = 0,
         Once = 1,
@@ -123,7 +123,7 @@ struct SPRITESTUDIO_CORE_EXPORT SpriteAnimation {
  * It manages the raw atlas image, individual sliced frames, bounding boxes,
  * and named animations. It emits signals whenever the document content changes.
  */
-class SPRITESTUDIO_CORE_EXPORT SpriteDocument : public QObject
+class BENTOPACK_CORE_EXPORT SpriteDocument : public QObject
 {
     Q_OBJECT
 

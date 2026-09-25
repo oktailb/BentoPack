@@ -38,8 +38,8 @@ static ToolType s_toolTypeOverride = ToolType::GUI;
 
 bool verifyLicense()
 {
-#if defined(SPRITESTUDIO_COMMERCIAL_BUILD) && (SPRITESTUDIO_COMMERCIAL_BUILD == 1)
-    const char *rawToken = SPRITESTUDIO_LICENSE_TOKEN;
+#if defined(BENTOPACK_COMMERCIAL_BUILD) && (BENTOPACK_COMMERCIAL_BUILD == 1)
+    const char *rawToken = BENTOPACK_LICENSE_TOKEN;
     if (!rawToken || rawToken[0] == '\0') {
         return false;
     }
@@ -103,33 +103,22 @@ QMap<QString, QString> LicenseManager::complianceMetadata()
 
     if (IntegrityGuard::isTampered()) {
         meta.insert(QStringLiteral("Generator"), QStringLiteral("BentoPack %1 (Tampered Build)").arg(toolStr));
-        meta.insert(QStringLiteral("X-SS-Integrity"), QStringLiteral("Tampered-%1-Binary-Circumvention").arg(toolStr));
+        meta.insert(QStringLiteral("X-BentoPack-Integrity"), QStringLiteral("Tampered-%1-Binary-Circumvention").arg(toolStr));
         meta.insert(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        meta.insert(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        meta.insert(QStringLiteral("X-BentoPack-Notice"),
-                    QStringLiteral("UNAUTHORIZED CIRCUMVENTED BUILD - Copyright & DMCA Violation"));
         meta.insert(QStringLiteral("X-BentoPack-Notice"),
                     QStringLiteral("UNAUTHORIZED CIRCUMVENTED BUILD - Copyright & DMCA Violation"));
     } else if (isCommercial()) {
         meta.insert(QStringLiteral("Generator"), QStringLiteral("BentoPack %1").arg(toolStr));
         meta.insert(QStringLiteral("X-BentoPack-Edition"), QStringLiteral("Commercial"));
-        meta.insert(QStringLiteral("X-BentoPack-Edition"), QStringLiteral("Commercial"));
-        meta.insert(QStringLiteral("X-BentoPack-Tool"), toolStr);
         meta.insert(QStringLiteral("X-BentoPack-Tool"), toolStr);
     } else {
         meta.insert(QStringLiteral("Generator"), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
         meta.insert(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        meta.insert(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        meta.insert(QStringLiteral("X-BentoPack-License"), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
         meta.insert(QStringLiteral("X-BentoPack-License"), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
         if (isCli) {
             meta.insert(QStringLiteral("X-BentoPack-Notice"),
                         QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial CLI Automation / CI pipeline license required for automated build pipelines or above threshold."));
-            meta.insert(QStringLiteral("X-BentoPack-Notice"),
-                        QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial CLI Automation / CI pipeline license required for automated build pipelines or above threshold."));
         } else {
-            meta.insert(QStringLiteral("X-BentoPack-Notice"),
-                        QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial seat license required above threshold."));
             meta.insert(QStringLiteral("X-BentoPack-Notice"),
                         QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial seat license required above threshold."));
         }
@@ -149,31 +138,21 @@ void LicenseManager::applyWatermark(QImage &image)
 
     if (IntegrityGuard::isTampered()) {
         image.setText(QStringLiteral("Generator"), QStringLiteral("BentoPack %1 (Tampered Build)").arg(toolStr));
-        image.setText(QStringLiteral("X-SS-Integrity"), QStringLiteral("Tampered-%1-Binary-Circumvention").arg(toolStr));
+        image.setText(QStringLiteral("X-BentoPack-Integrity"), QStringLiteral("Tampered-%1-Binary-Circumvention").arg(toolStr));
         image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        image.setText(QStringLiteral("X-BentoPack-Notice"),
-                      QStringLiteral("UNAUTHORIZED CIRCUMVENTED BUILD - Copyright Violation"));
         image.setText(QStringLiteral("X-BentoPack-Notice"),
                       QStringLiteral("UNAUTHORIZED CIRCUMVENTED BUILD - Copyright Violation"));
     } else if (isCommercial()) {
         image.setText(QStringLiteral("Generator"), QStringLiteral("BentoPack %1").arg(toolStr));
         image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
     } else {
         image.setText(QStringLiteral("Generator"), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
         image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
-        image.setText(QStringLiteral("X-BentoPack-License"), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
         image.setText(QStringLiteral("X-BentoPack-License"), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
         if (isCli) {
             image.setText(QStringLiteral("X-BentoPack-Notice"),
                           QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial CLI Automation / CI pipeline license required for automated build pipelines or above threshold."));
-            image.setText(QStringLiteral("X-BentoPack-Notice"),
-                          QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial CLI Automation / CI pipeline license required for automated build pipelines or above threshold."));
         } else {
-            image.setText(QStringLiteral("X-BentoPack-Notice"),
-                          QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial seat license required above threshold."));
             image.setText(QStringLiteral("X-BentoPack-Notice"),
                           QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial seat license required above threshold."));
         }
@@ -212,7 +191,7 @@ QString LicenseManager::watermarkHeaderComment()
 
     if (IntegrityGuard::isTampered()) {
         return QStringLiteral("; WARNING: Generated by Tampered / Circumvented BentoPack %1 binary (Unlicensed / Copyright Violation)\n"
-                              "; X-SS-Integrity: Tampered-%1-Binary-Circumvention\n\n").arg(toolStr);
+                              "; X-BentoPack-Integrity: Tampered-%1-Binary-Circumvention\n\n").arg(toolStr);
     } else if (isCommercial()) {
         return QStringLiteral("; Generated by BentoPack %1\n\n").arg(toolStr);
     } else {

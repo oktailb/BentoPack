@@ -31,7 +31,7 @@ namespace BentoPackGeometry {
  * @brief Utility for extracting 2D boundary contours from sprite images
  *        based on the alpha channel.
  */
-class SPRITESTUDIO_CORE_EXPORT ContourTracer
+class BENTOPACK_CORE_EXPORT ContourTracer
 {
 public:
     /**

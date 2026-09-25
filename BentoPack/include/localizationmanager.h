@@ -34,7 +34,7 @@
  * widgets in the application, allowing real-time UI language switching without
  * restarting the application or discarding project states.
  */
-class SPRITESTUDIO_CORE_EXPORT LocalizationManager : public QObject
+class BENTOPACK_CORE_EXPORT LocalizationManager : public QObject
 {
     Q_OBJECT
 

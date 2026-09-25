@@ -34,7 +34,7 @@ namespace BentoPackGeometry {
  * @brief Fuses two or more 2D sprite polygons or bounding boxes into a unified
  *        boundary polygon that minimizes empty space without degenerating into a convex hull.
  */
-class SPRITESTUDIO_CORE_EXPORT PolygonMerger
+class BENTOPACK_CORE_EXPORT PolygonMerger
 {
 public:
     /**

@@ -32,7 +32,7 @@
 /**
  * @brief Central registry managing built-in and dynamic Extractor plugins.
  */
-class SPRITESTUDIO_CORE_EXPORT ExtractorRegistry : public QObject
+class BENTOPACK_CORE_EXPORT ExtractorRegistry : public QObject
 {
     Q_OBJECT
 

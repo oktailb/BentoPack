@@ -39,7 +39,7 @@ class QWidget;
 /**
  * @brief Structured error reporting for extractor operations.
  */
-struct SPRITESTUDIO_CORE_EXPORT ExtractorError {
+struct BENTOPACK_CORE_EXPORT ExtractorError {
     enum Code {
         NoError = 0,
         FileNotFound,
@@ -69,7 +69,7 @@ struct SPRITESTUDIO_CORE_EXPORT ExtractorError {
 /**
  * @brief Parameters for static sprite sheet edge detection and segmentation.
  */
-struct SPRITESTUDIO_CORE_EXPORT SpriteSheetOptions {
+struct BENTOPACK_CORE_EXPORT SpriteSheetOptions {
     enum CropStrategy {
         MergeStrategy,
         SeparateStrategy,
@@ -92,7 +92,7 @@ class QWidget;
  * Each Extractor translates external file representations (PNG, GIF, JSON, Godot tres, etc.)
  * directly into or from a central SpriteDocument. It holds NO internal document state.
  */
-class SPRITESTUDIO_CORE_EXPORT Extractor : public QObject
+class BENTOPACK_CORE_EXPORT Extractor : public QObject
 {
     Q_OBJECT
 

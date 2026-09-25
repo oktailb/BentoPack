@@ -31,7 +31,7 @@
 /**
  * @brief Metadata stored in the .session_lock JSON file within each session workspace.
  */
-struct SPRITESTUDIO_CORE_EXPORT SessionLockInfo {
+struct BENTOPACK_CORE_EXPORT SessionLockInfo {
     qint64    pid = 0;
     QString   sessionUuid;
     QString   originalFilePath;
@@ -44,7 +44,7 @@ struct SPRITESTUDIO_CORE_EXPORT SessionLockInfo {
 /**
  * @brief Information about an interrupted / crashed session detected at startup.
  */
-struct SPRITESTUDIO_CORE_EXPORT OrphanSessionInfo {
+struct BENTOPACK_CORE_EXPORT OrphanSessionInfo {
     QString         sessionDir;
     SessionLockInfo lockInfo;
     QString         projectName;
@@ -54,7 +54,7 @@ struct SPRITESTUDIO_CORE_EXPORT OrphanSessionInfo {
 /**
  * @brief Represents a Git commit record in the session repository.
  */
-struct SPRITESTUDIO_CORE_EXPORT GitCommitInfo {
+struct BENTOPACK_CORE_EXPORT GitCommitInfo {
     QString     hash;
     QString     shortHash;
     QString     author;
@@ -68,7 +68,7 @@ struct SPRITESTUDIO_CORE_EXPORT GitCommitInfo {
  * @brief Manages the on-disk scratch workspace (%TEMP%/BentoPack/sessions/<session_uuid>/),
  * session locking, crash recovery, atomic ZIP (.bento) packing/unpacking, and Git tracking.
  */
-class SPRITESTUDIO_CORE_EXPORT SessionManager : public QObject
+class BENTOPACK_CORE_EXPORT SessionManager : public QObject
 {
     Q_OBJECT
 

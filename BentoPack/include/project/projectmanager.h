@@ -30,7 +30,7 @@
  * @brief Handles JSON serialization, deserialization, and workspace file storage
  * for native BentoPack projects (.bento).
  */
-class SPRITESTUDIO_CORE_EXPORT ProjectManager
+class BENTOPACK_CORE_EXPORT ProjectManager
 {
 public:
     /**

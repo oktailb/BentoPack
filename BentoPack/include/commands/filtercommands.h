@@ -31,7 +31,7 @@
 /**
  * @brief Generic, reversible QUndoCommand for applying image and sprite filters.
  */
-class SPRITESTUDIO_CORE_EXPORT ApplyFilterCommand : public QUndoCommand
+class BENTOPACK_CORE_EXPORT ApplyFilterCommand : public QUndoCommand
 {
 public:
     ApplyFilterCommand(SpriteDocument *doc,

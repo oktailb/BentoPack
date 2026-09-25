@@ -33,7 +33,7 @@
 
 namespace BentoPackCli {
 
-class SPRITESTUDIO_CORE_EXPORT CliPackPipeline
+class BENTOPACK_CORE_EXPORT CliPackPipeline
 {
 public:
     /**

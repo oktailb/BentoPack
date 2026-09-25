@@ -28,7 +28,7 @@
 /**
  * @brief Configuration settings for the atlas view, zooming, slicing, and nudging.
  */
-struct SPRITESTUDIO_CORE_EXPORT AtlasConfig
+struct BENTOPACK_CORE_EXPORT AtlasConfig
 {
     double zoomMin = 0.1;
     double zoomMax = 10.0;
@@ -70,7 +70,7 @@ struct AnimationConfig
 /**
  * @brief Configuration settings for project management, recent files, and image filters.
  */
-struct SPRITESTUDIO_CORE_EXPORT ProjectConfig
+struct BENTOPACK_CORE_EXPORT ProjectConfig
 {
     int maxRecentFiles = 10;
     int backgroundRemovalTolerance = 10;
@@ -81,7 +81,7 @@ struct SPRITESTUDIO_CORE_EXPORT ProjectConfig
 /**
  * @brief Configuration settings for Git version control and author identity.
  */
-struct SPRITESTUDIO_CORE_EXPORT GitConfig
+struct BENTOPACK_CORE_EXPORT GitConfig
 {
     QString authorName;
     QString authorEmail;
@@ -92,7 +92,7 @@ struct SPRITESTUDIO_CORE_EXPORT GitConfig
 /**
  * @brief General application settings (language, locale, startup).
  */
-struct SPRITESTUDIO_CORE_EXPORT GeneralConfig
+struct BENTOPACK_CORE_EXPORT GeneralConfig
 {
     QString language = QStringLiteral("system"); // "system", "fr_FR", "en_US", "ja_JA"
     bool checkUpdatesOnStartup = true;
@@ -102,7 +102,7 @@ struct SPRITESTUDIO_CORE_EXPORT GeneralConfig
 /**
  * @brief Default settings for export and VRAM texture compression.
  */
-struct SPRITESTUDIO_CORE_EXPORT ExportConfig
+struct BENTOPACK_CORE_EXPORT ExportConfig
 {
     QString defaultFormatId;            // Dynamic Extractor plugin ID (e.g. "godot_extractor", "json_extractor")
     int defaultTextureFormatIndex = 0;   // 0 = PNG, 1 = KTX2 UASTC, 2 = KTX2 ETC1S
@@ -119,7 +119,7 @@ struct SPRITESTUDIO_CORE_EXPORT ExportConfig
  * if the JSON file is missing, corrupt, or contains invalid keys, safe defaults
  * are automatically preserved without throwing exceptions or crashing.
  */
-class SPRITESTUDIO_CORE_EXPORT AppConfig : public QObject
+class BENTOPACK_CORE_EXPORT AppConfig : public QObject
 {
     Q_OBJECT
 

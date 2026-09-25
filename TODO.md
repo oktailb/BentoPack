@@ -66,16 +66,25 @@
   4. **Validation des tests :**
      - 8/8 suites de tests CTest validées et passant à 100% (`test_extractors`, `test_controllers`, `test_project`, `test_core`, `test_cli`, `test_mesh`, `test_pixel_editor`, `test_vram_compression`).
 
-### CH-TECH-2 : Finalisation du Rebranding & Élimination des Reliques `SpriteStudio`
-- **Constat d'Audit :** Le renommage de `SpriteStudio` en `BentoPack` est incomplet au niveau du code source C++ et des scripts :
-  - La macro d'exportation d'API s'appelle toujours `SPRITESTUDIO_CORE_EXPORT` dans `BentoPack/include/bentopackcore_export.h`.
-  - La variable d'environnement de recherche des plugins est `SPRITESTUDIO_PLUGIN_PATH`.
-  - Les macros de build commercial s'appellent `SPRITESTUDIO_COMMERCIAL_BUILD` et `SPRITESTUDIO_LICENSE_TOKEN`.
-  - Les tags d'intégrité utilisent le préfixe `X-SS-Integrity`.
-- **Plan d'Action :**
-  1. Remplacer `SPRITESTUDIO_CORE_EXPORT` par `BENTOPACK_CORE_EXPORT` dans tous les en-têtes publics.
-  2. Prendre en compte `BENTOPACK_PLUGIN_PATH` en priorité dans `ExtractorRegistry` et `FilterRegistry` (avec fallback transparent sur `SPRITESTUDIO_PLUGIN_PATH` pour rétrocompatibilité).
-  3. Renommer les variables CMake et macros de configuration en `BENTOPACK_COMMERCIAL_BUILD` et `BENTOPACK_LICENSE_TOKEN`.
+### CH-TECH-2 : Finalisation du Rebranding & Élimination des Reliques `SpriteStudio` — ✅ **TERMINÉ**
+- **Constat d'Audit :** Des reliques du nom `SpriteStudio` subsistaient dans les macros d'exportation, les variables d'environnement, les macros de configuration de licence et les en-têtes d'intégrité.
+- **Réalisations Effectuées :**
+  1. **Purge intégrale des macros d'export :**
+     - Remplacement de `SPRITESTUDIO_CORE_EXPORT` par `BENTOPACK_CORE_EXPORT` sur l'ensemble des 26 en-têtes publics.
+     - Remplacement de `SPRITESTUDIO_WIDGETS_EXPORT` par `BENTOPACK_WIDGETS_EXPORT`.
+     - Nettoyage des bibliothèques CMake (`BENTOPACK_CORE_LIBRARY`, `BENTOPACK_WIDGETS_LIBRARY`).
+  2. **Renommage de l'infrastructure de licence commerciale :**
+     - Variables CMake et macros C++ renommées en `BENTOPACK_COMMERCIAL_BUILD` et `BENTOPACK_LICENSE_TOKEN`.
+     - Fichier de template mis à jour : [`license_config.h.in`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/src/license_config.h.in).
+     - Tags d'intégrité stéganographique et métadonnées mis à jour : `X-SS-Integrity` remplacé par `X-BentoPack-Integrity`.
+  3. **Variables d'environnement unifiées :**
+     - `BENTOPACK_PLUGIN_PATH` pris en compte dans `ExtractorRegistry` et `FilterRegistry`.
+     - Scripts et configuration CTest alignés sur `BENTOPACK_PLUGIN_PATH`.
+     - Bridge Godot [`addons/godot/cli_bridge.gd`](file:///home/oktail/Documents/GitHub/BentoPack/addons/godot/cli_bridge.gd) nettoyé avec `BENTOPACK_CLI` et `BENTOPACK_GUI`.
+  4. **Documentation & Validation globale :**
+     - Documentation mise à jour (`README.md`).
+     - Vérification `git grep -i "spritestudio"` : **0 occurrence restante** sur l'ensemble du dépôt.
+     - 8/8 suites de tests CTest validées avec 100% de réussite.
 
 ### CH-TECH-3 : Correction des Doublons de Code & Scories
 - **Constat d'Audit :**
@@ -210,7 +219,7 @@ Concevoir un **micro-démonstrateur web vitrine ultra-léger** (mini-module WebA
 | Horizon | Chantier | Actions Clés | Livrables |
 |---|---|---|---|
 | **Semaine 1 (Immédiat)** | **CH-TECH-3 & CH-TECH-5** | • Supprimer les doublons dans `licensemanager.cpp`<br>• Nettoyer le wrapper TexturePacker<br>• Corriger la licence RPM vers Apache-2.0<br>• Mettre à jour `.gitignore` et purger les 86 `.tres` d'exemples | Code source propre, git status immaculé. |
-| **Semaine 2** | **CH-TECH-2 & CH-TECH-6** | • Remplacer `SPRITESTUDIO_CORE_EXPORT` par `BENTOPACK_CORE_EXPORT`<br>• Aligner la documentation (`USER_GUIDE.md`, `DEVELOPER_GUIDE.md`, `README.md`)<br>• Purger les chemins absolus locaux dans `benchmarks/REPORT.md` | Rebranding 100% cohérent, documentation irréprochable. |
+| **Semaine 2** | **CH-TECH-2 (✅ TERMINÉ) & CH-TECH-6** | • Remplacer `SPRITESTUDIO_CORE_EXPORT` par `BENTOPACK_CORE_EXPORT` (Fait)<br>• Aligner la documentation (`USER_GUIDE.md`, `DEVELOPER_GUIDE.md`, `README.md`)<br>• Purger les chemins absolus locaux dans `benchmarks/REPORT.md` | Rebranding 100% cohérent, documentation irréprochable. |
 | **Semaine 3-4** | **CH-TECH-1 & CH-TECH-4** | • Scinder `BentoPackCore` (pur headless) et `BentoPackGUI`<br>• Alléger `bentopack-cli` (dépendance `Qt6Widgets` éliminée)<br>• Découper `test_controllers.cpp` en 4 fichiers de tests ciblés | Architecture saine, CLI prêt pour la CI cloud minimale. |
 | **Mois 2** | **M10 (Godot & Stores)** | • Finaliser et publier l'addon Godot 4 sur AssetLib<br>• Lancer la page Steam et la boutique Itch.io pour la version Store Convenience | Premier flux de revenus et visibilité communauté. |
 | **Mois 3** | **M10 (Unity & Unreal)** | • Développer le package Unity UPM avec support `SpriteMeshType.Tight`<br>• Développer le plugin UE5 PaperZD pour Fab | Couverture complète des trois moteurs majeurs du marché. |

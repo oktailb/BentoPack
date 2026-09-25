@@ -30,7 +30,7 @@ namespace BentoPackGeometry {
  * @brief Simplifies 2D boundary polygons using the Ramer-Douglas-Peucker (RDP) algorithm,
  *        with outward normal dilation to guarantee that no opaque pixel is cropped.
  */
-class SPRITESTUDIO_CORE_EXPORT PolygonSimplifier
+class BENTOPACK_CORE_EXPORT PolygonSimplifier
 {
 public:
     /**

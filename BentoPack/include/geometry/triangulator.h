@@ -31,7 +31,7 @@ namespace BentoPackGeometry {
  * @brief Decomposes simple 2D polygons into triangles using Ear-Clipping,
  *        and computes GPU overdraw reduction metrics.
  */
-class SPRITESTUDIO_CORE_EXPORT Triangulator
+class BENTOPACK_CORE_EXPORT Triangulator
 {
 public:
     /**

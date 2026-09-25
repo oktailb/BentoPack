@@ -37,7 +37,7 @@ namespace BentoPackCli {
  * @brief Manages background directory surveillance, debouncing,
  *        self-trigger protection, and per-directory lock isolation for bentopack-cli.
  */
-class SPRITESTUDIO_CORE_EXPORT WatchDaemon : public QObject
+class BENTOPACK_CORE_EXPORT WatchDaemon : public QObject
 {
     Q_OBJECT
 

@@ -34,7 +34,7 @@
 class SpriteDocument;
 class QUndoStack;
 
-struct SPRITESTUDIO_CORE_EXPORT AsyncExtractionResult {
+struct BENTOPACK_CORE_EXPORT AsyncExtractionResult {
     enum JobType { JobOpen, JobRemoveBackground };
     JobType type = JobOpen;
     QImage atlas;
@@ -48,7 +48,7 @@ struct SPRITESTUDIO_CORE_EXPORT AsyncExtractionResult {
 /**
  * @brief Controller managing project lifecycle, I/O operations, recent files, and image processing.
  */
-class SPRITESTUDIO_CORE_EXPORT ProjectController : public QObject
+class BENTOPACK_CORE_EXPORT ProjectController : public QObject
 {
     Q_OBJECT
 

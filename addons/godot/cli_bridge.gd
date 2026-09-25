@@ -25,10 +25,9 @@ static func find_cli_path() -> String:
 				return custom_path
 
 	# 2. Environment variable
-	for env_var in ["BENTOPACK_CLI", "SPRITESTUDIO_CLI"]:
-		var env_cli := OS.get_environment(env_var)
-		if not env_cli.is_empty() and FileAccess.file_exists(env_cli):
-			return env_cli
+	var env_cli := OS.get_environment("BENTOPACK_CLI")
+	if not env_cli.is_empty() and FileAccess.file_exists(env_cli):
+		return env_cli
 
 	# 3. Known relative build paths (development environments)
 	var possible_relative_paths := [
@@ -78,10 +77,9 @@ static func find_gui_path() -> String:
 			if not custom_path.is_empty() and FileAccess.file_exists(custom_path):
 				return custom_path
 
-	for env_var in ["BENTOPACK_GUI", "SPRITESTUDIO_GUI"]:
-		var env_gui := OS.get_environment(env_var)
-		if not env_gui.is_empty() and FileAccess.file_exists(env_gui):
-			return env_gui
+	var env_gui := OS.get_environment("BENTOPACK_GUI")
+	if not env_gui.is_empty() and FileAccess.file_exists(env_gui):
+		return env_gui
 
 	var possible_relative_paths := [
 		"../../build/bin/bentopack",

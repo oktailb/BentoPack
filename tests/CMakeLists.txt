@@ -127,7 +127,7 @@ endif()
 add_test(NAME test_vram_compression COMMAND test_vram_compression)
 
 set_tests_properties(test_extractors test_controllers test_project test_core test_cli test_mesh test_pixel_editor test_vram_compression
-    PROPERTIES ENVIRONMENT "SPRITESTUDIO_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin/plugins"
+    PROPERTIES ENVIRONMENT "BENTOPACK_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin/plugins"
 )
 
 if(WIN32)

@@ -31,7 +31,7 @@
 /**
  * @brief Configuration parameters for sprite detection and automatic bounding box slicing.
  */
-struct SPRITESTUDIO_CORE_EXPORT SpriteDetectionOptions
+struct BENTOPACK_CORE_EXPORT SpriteDetectionOptions
 {
     int alphaThreshold = 1;
     int verticalTolerance = 0;
@@ -46,7 +46,7 @@ struct SPRITESTUDIO_CORE_EXPORT SpriteDetectionOptions
  * Uses direct scanline memory access, 1D flat indexing, and connected components flood-fill.
  * Separated from codecs to adhere to the Single Responsibility Principle.
  */
-class SPRITESTUDIO_CORE_EXPORT SpriteDetector
+class BENTOPACK_CORE_EXPORT SpriteDetector
 {
 public:
     /**

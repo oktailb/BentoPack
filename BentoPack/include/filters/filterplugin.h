@@ -36,7 +36,7 @@ class FilterDialogBase;
 /**
  * @brief Abstract interface for all image and sprite filter plugins in BentoPack.
  */
-class SPRITESTUDIO_CORE_EXPORT FilterPlugin
+class BENTOPACK_CORE_EXPORT FilterPlugin
 {
 public:
     virtual ~FilterPlugin() = default;

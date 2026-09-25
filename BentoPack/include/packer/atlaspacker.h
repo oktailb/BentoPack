@@ -33,7 +33,7 @@
 /**
  * @brief Represents the result of an atlas packing operation.
  */
-struct SPRITESTUDIO_CORE_EXPORT AtlasPackResult {
+struct BENTOPACK_CORE_EXPORT AtlasPackResult {
     QImage          atlas;
     QList<QRect>    frameRects;         ///< 1:1 mapping corresponding to input frames
     QList<int>      duplicateMapping;   ///< Canonical index for each frame (for deduplication)
@@ -49,7 +49,7 @@ struct SPRITESTUDIO_CORE_EXPORT AtlasPackResult {
  * Supports MaxRects (BSSF, BAF, BLSF, BottomLeft, ContactPoint), uniform grids,
  * row/shelf packing, power-of-two constraints, border extrusion, and visual deduplication.
  */
-class SPRITESTUDIO_CORE_EXPORT AtlasPacker
+class BENTOPACK_CORE_EXPORT AtlasPacker
 {
 public:
     enum Algorithm {

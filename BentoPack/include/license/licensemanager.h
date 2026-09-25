@@ -42,7 +42,7 @@ enum class ToolType {
  * @brief Manages compliance, deterministic licensing verification, and
  *        discrete non-destructive metadata watermarking for technical exports.
  */
-class SPRITESTUDIO_CORE_EXPORT LicenseManager
+class BENTOPACK_CORE_EXPORT LicenseManager
 {
 public:
     /**

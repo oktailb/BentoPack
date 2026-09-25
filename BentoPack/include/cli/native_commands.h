@@ -26,7 +26,7 @@
 
 namespace BentoPackCli {
 
-class SPRITESTUDIO_CORE_EXPORT NativeCommands
+class BENTOPACK_CORE_EXPORT NativeCommands
 {
 public:
     static CliResult executePack(const QStringList &args);

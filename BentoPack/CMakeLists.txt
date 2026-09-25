@@ -9,12 +9,12 @@ configure_file(
 # Configuration de la licence & signature cryptographique commerciale
 set(COMMERCIAL_SIGNING_KEY "" CACHE STRING "Secret key for building official commercial releases")
 if(COMMERCIAL_SIGNING_KEY STREQUAL "")
-    set(SPRITESTUDIO_COMMERCIAL_BUILD 0)
-    set(SPRITESTUDIO_LICENSE_TOKEN "")
+    set(BENTOPACK_COMMERCIAL_BUILD 0)
+    set(BENTOPACK_LICENSE_TOKEN "")
     message(STATUS "Build target: BentoPack Community Edition")
 else()
-    set(SPRITESTUDIO_COMMERCIAL_BUILD 1)
-    set(SPRITESTUDIO_LICENSE_TOKEN "${COMMERCIAL_SIGNING_KEY}")
+    set(BENTOPACK_COMMERCIAL_BUILD 1)
+    set(BENTOPACK_LICENSE_TOKEN "${COMMERCIAL_SIGNING_KEY}")
     message(STATUS "Build target: BentoPack Commercial Edition (Token provided)")
 endif()
 
@@ -172,7 +172,6 @@ set_target_properties(BentoPackCore PROPERTIES
 
 target_compile_definitions(BentoPackCore PRIVATE
     BENTOPACK_CORE_LIBRARY
-    SPRITESTUDIO_CORE_LIBRARY
 )
 
 qt_add_translations(BentoPackCore
@@ -248,7 +247,6 @@ set_target_properties(BentoPackWidgets PROPERTIES
 
 target_compile_definitions(BentoPackWidgets PRIVATE
     BENTOPACK_WIDGETS_LIBRARY
-    SPRITESTUDIO_WIDGETS_LIBRARY
 )
 
 qt6_add_resources(BentoPackWidgets "images"

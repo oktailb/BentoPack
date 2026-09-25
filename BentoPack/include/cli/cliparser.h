@@ -54,7 +54,7 @@ enum class CliFlavor {
 /**
  * @brief Structured result of a CLI operation.
  */
-struct SPRITESTUDIO_CORE_EXPORT CliResult {
+struct BENTOPACK_CORE_EXPORT CliResult {
     int exitCode = ExitSuccess;
     QString message;
     QJsonObject json;
@@ -85,7 +85,7 @@ struct SPRITESTUDIO_CORE_EXPORT CliResult {
 /**
  * @brief Multi-flavor CLI argument parser and command dispatcher.
  */
-class SPRITESTUDIO_CORE_EXPORT CliParser
+class BENTOPACK_CORE_EXPORT CliParser
 {
 public:
     CliParser() = default;

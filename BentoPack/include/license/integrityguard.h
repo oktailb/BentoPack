@@ -34,7 +34,7 @@ namespace BentoPack {
  * and commercial status spoofing. Injects steganographic alpha-zero watermarks
  * and verifies layout HMAC signatures.
  */
-class SPRITESTUDIO_CORE_EXPORT IntegrityGuard
+class BENTOPACK_CORE_EXPORT IntegrityGuard
 {
 public:
     // Steganographic magic 32-bit pixel patterns for Alpha == 0 pixels:

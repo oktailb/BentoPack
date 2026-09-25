@@ -53,7 +53,7 @@ enum AtlasStrategy {
 
 #include <QVariantMap>
 
-struct SPRITESTUDIO_CORE_EXPORT ExportOptions {
+struct BENTOPACK_CORE_EXPORT ExportOptions {
     Format format = FORMAT_GODOT;
     QString formatId; // Dynamic format ID (e.g. "godot", "unity", "unreal", "json")
     TextureFormat textureFormat = TEXTURE_FORMAT_PNG;

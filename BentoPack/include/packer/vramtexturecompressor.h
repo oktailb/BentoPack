@@ -33,7 +33,7 @@ enum class VramFormat {
     Basis_ETC1S      // Native .basis file (ETC1S)
 };
 
-struct SPRITESTUDIO_CORE_EXPORT VramCompressionOptions {
+struct BENTOPACK_CORE_EXPORT VramCompressionOptions {
     VramFormat format = VramFormat::KTX2_UASTC;
     int qualityLevel = 2;               // UASTC: 0 (fastest) to 3 (slower, better RDO); ETC1S: 1 to 255
     bool zstdSupercompression = true;   // Supercompress KTX2 container with Zstandard
@@ -43,7 +43,7 @@ struct SPRITESTUDIO_CORE_EXPORT VramCompressionOptions {
     bool sRGB = true;                   // Treat color channels as perceptual sRGB
 };
 
-struct SPRITESTUDIO_CORE_EXPORT VramCompressionStats {
+struct BENTOPACK_CORE_EXPORT VramCompressionStats {
     int originalBytes = 0;
     int compressedBytes = 0;
     double compressionRatio = 0.0;
@@ -54,7 +54,7 @@ struct SPRITESTUDIO_CORE_EXPORT VramCompressionStats {
 /**
  * @brief High-performance hardware texture compression engine supporting KTX2, UASTC, ETC1S, and Zstd.
  */
-class SPRITESTUDIO_CORE_EXPORT VramTextureCompressor {
+class BENTOPACK_CORE_EXPORT VramTextureCompressor {
 public:
     // Availability
     static bool isAvailable();

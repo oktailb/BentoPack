@@ -34,8 +34,8 @@ constexpr const char *EXPECTED_COMMERCIAL_HASH =
 
 bool verifyCompiledSecretDirect()
 {
-#if defined(SPRITESTUDIO_COMMERCIAL_BUILD) && (SPRITESTUDIO_COMMERCIAL_BUILD == 1)
-    const char *rawToken = SPRITESTUDIO_LICENSE_TOKEN;
+#if defined(BENTOPACK_COMMERCIAL_BUILD) && (BENTOPACK_COMMERCIAL_BUILD == 1)
+    const char *rawToken = BENTOPACK_LICENSE_TOKEN;
     if (!rawToken || rawToken[0] == '\0') {
         return false;
     }
@@ -126,8 +126,8 @@ QString IntegrityGuard::computeLayoutSignature(const QString &payload)
     }
 
     if (isCommercialAuthentic()) {
-#if defined(SPRITESTUDIO_COMMERCIAL_BUILD) && (SPRITESTUDIO_COMMERCIAL_BUILD == 1)
-        QByteArray key = QByteArray(SPRITESTUDIO_LICENSE_TOKEN);
+#if defined(BENTOPACK_COMMERCIAL_BUILD) && (BENTOPACK_COMMERCIAL_BUILD == 1)
+        QByteArray key = QByteArray(BENTOPACK_LICENSE_TOKEN);
         QByteArray hmac = QMessageAuthenticationCode::hash(
             payload.toUtf8(), key, QCryptographicHash::Sha256).toHex();
         return QStringLiteral("comm-") + QString::fromLatin1(hmac.left(24));
@@ -153,8 +153,8 @@ bool IntegrityGuard::verifyLayoutSignature(const QString &payload, const QString
     }
 
     if (signature.startsWith(QStringLiteral("comm-"))) {
-#if defined(SPRITESTUDIO_COMMERCIAL_BUILD) && (SPRITESTUDIO_COMMERCIAL_BUILD == 1)
-        QByteArray key = QByteArray(SPRITESTUDIO_LICENSE_TOKEN);
+#if defined(BENTOPACK_COMMERCIAL_BUILD) && (BENTOPACK_COMMERCIAL_BUILD == 1)
+        QByteArray key = QByteArray(BENTOPACK_LICENSE_TOKEN);
         QByteArray expectedHmac = QMessageAuthenticationCode::hash(
             payload.toUtf8(), key, QCryptographicHash::Sha256).toHex();
         QString expectedSig = QStringLiteral("comm-") + QString::fromLatin1(expectedHmac.left(24));

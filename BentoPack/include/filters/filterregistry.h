@@ -37,7 +37,7 @@ class QUndoStack;
 /**
  * @brief Central registry managing built-in and dynamic filter plugins.
  */
-class SPRITESTUDIO_CORE_EXPORT FilterRegistry : public QObject
+class BENTOPACK_CORE_EXPORT FilterRegistry : public QObject
 {
     Q_OBJECT
 
