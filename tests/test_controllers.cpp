@@ -2931,27 +2931,28 @@ void TestControllers::testAboutDialogDarkModeAndPricing()
     QVERIFY(pluginsHtml.contains("BentoPackCore"));
     QVERIFY(pluginsHtml.contains("Apache 2.0") || pluginsHtml.contains("KEY_PLUGINS_CORE_DESC"));
 
-    // Verify dark palette doesn't crash and produces screenshot artifacts
+    // Verify dark palette doesn't crash and renders properly
     dlg.resize(700, 580);
     dlg.adjustSize();
     QImage imgDark(dlg.size(), QImage::Format_ARGB32_Premultiplied);
     imgDark.fill(Qt::transparent);
     dlg.render(&imgDark);
-    QVERIFY(imgDark.save(QStringLiteral("/home/oktail/.gemini/antigravity-ide/brain/f72d605e-13fd-441c-9f09-6c492f59ec5c/about_dialog_dark.png")));
+    QVERIFY(!imgDark.isNull());
+    QVERIFY(imgDark.width() > 0 && imgDark.height() > 0);
 
     // Grab pricing tab
     tabs->setCurrentIndex(1);
     QImage imgPricing(dlg.size(), QImage::Format_ARGB32_Premultiplied);
     imgPricing.fill(Qt::transparent);
     dlg.render(&imgPricing);
-    QVERIFY(imgPricing.save(QStringLiteral("/home/oktail/.gemini/antigravity-ide/brain/f72d605e-13fd-441c-9f09-6c492f59ec5c/about_dialog_pricing.png")));
+    QVERIFY(!imgPricing.isNull());
 
     // Grab plugins tab
     tabs->setCurrentIndex(2);
     QImage imgPlugins(dlg.size(), QImage::Format_ARGB32_Premultiplied);
     imgPlugins.fill(Qt::transparent);
     dlg.render(&imgPlugins);
-    QVERIFY(imgPlugins.save(QStringLiteral("/home/oktail/.gemini/antigravity-ide/brain/f72d605e-13fd-441c-9f09-6c492f59ec5c/about_dialog_plugins.png")));
+    QVERIFY(!imgPlugins.isNull());
 
     // Verify Licence tab contains both Plugin EULA and Apache 2.0
     tabs->setCurrentIndex(4); // Licence
@@ -2965,7 +2966,7 @@ void TestControllers::testAboutDialogDarkModeAndPricing()
     QImage imgLicense(dlg.size(), QImage::Format_ARGB32_Premultiplied);
     imgLicense.fill(Qt::transparent);
     dlg.render(&imgLicense);
-    QVERIFY(imgLicense.save(QStringLiteral("/home/oktail/.gemini/antigravity-ide/brain/f72d605e-13fd-441c-9f09-6c492f59ec5c/about_dialog_license.png")));
+    QVERIFY(!imgLicense.isNull());
 
     // Test dynamic multilingual pricing loading in French
     LocalizationManager::instance().setLanguage(QStringLiteral("fr_FR"));
