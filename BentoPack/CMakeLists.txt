@@ -335,6 +335,8 @@ target_include_directories(bentopack-cli PUBLIC
 
 install(TARGETS ${PROJECT_NAME} bentopack-cli
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     COMPONENT bentopack
 )
 

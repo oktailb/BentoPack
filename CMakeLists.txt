@@ -118,14 +118,6 @@ add_subdirectory(plugins)
 enable_testing()
 add_subdirectory(tests)
 
-install(TARGETS
-    ${PROJECT_NAME}
-    bentopack-cli
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
 include(CMakePackageConfigHelpers)
 
 # Generate BentoPackConfigVersion.cmake
