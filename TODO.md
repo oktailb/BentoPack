@@ -86,15 +86,16 @@
      - Vérification `git grep -i "spritestudio"` : **0 occurrence restante** sur l'ensemble du dépôt.
      - 8/8 suites de tests CTest validées avec 100% de réussite.
 
-### CH-TECH-3 : Correction des Doublons de Code & Scories
+### CH-TECH-3 : Correction des Doublons de Code & Scories — ✅ **TERMINÉ**
 - **Constat d'Audit :**
-  - Dans `BentoPack/src/license/licensemanager.cpp`, les méthodes `complianceMetadata()` et `applyWatermark()` contiennent des insertions dupliquées consécutives à l'identique (lignes 107-135 et 153-180).
-  - Dans `wrappers/TexturePacker`, la structure `if command -v bentopack-cli; then ... else ... fi` exécute la même commande dans les deux branches.
-  - Dans `CMakeLists.txt`, la directive CPack RPM déclare `set(CPACK_RPM_PACKAGE_LICENSE "MIT")` alors que la licence du projet est Apache 2.0.
-- **Plan d'Action :**
-  1. Supprimer les lignes d'insertion dupliquées dans `licensemanager.cpp`.
-  2. Nettoyer et fiabiliser les scripts de wrapper dans `wrappers/`.
-  3. Corriger la licence du paquet RPM dans `CMakeLists.txt` vers `"Apache-2.0"`.
+  - Dans `BentoPack/src/license/licensemanager.cpp`, les méthodes `complianceMetadata()` et `applyWatermark()` contenaient des insertions dupliquées consécutives à l'identique (lignes 107-135 et 153-180).
+  - Dans `wrappers/TexturePacker` et `wrappers/aseprite`, les scripts bash exécutaient la même commande dans les deux branches du `if/else`.
+  - Dans `CMakeLists.txt`, la directive CPack RPM déclarait `set(CPACK_RPM_PACKAGE_LICENSE "MIT")` alors que la licence du projet est Apache 2.0.
+- **Réalisations Effectuées :**
+  1. **Nettoyage de `licensemanager.cpp` :** Suppression des blocs redondants dans `complianceMetadata()` et `applyWatermark()`.
+  2. **Fiabilisation des scripts wrappers (`wrappers/TexturePacker` et `wrappers/aseprite`) :** Recherche ordonnée du binaire `bentopack-cli` (`$PATH`, répertoire courant, chemin relatif du build `../build/bin`), message d'erreur clair et code de sortie 127 si l'exécutable est introuvable.
+  3. **Alignement CPack RPM :** `CPACK_RPM_PACKAGE_LICENSE` mis à jour en `"Apache-2.0"`.
+  4. **Validation :** Compilation complète et validation de l'ensemble des 8 suites de tests CTest (100% Passed).
 
 ### CH-TECH-4 : Découpage de la Suite de Test Monolithique (`test_controllers.cpp`)
 - **Constat d'Audit :** Le fichier `tests/test_controllers.cpp` compte plus de 3 048 lignes regroupant 32 tests hétérogènes (AppConfig, ProjectController, AnimationController, AtlasViewController, filtres, i18n, Git time-travel).

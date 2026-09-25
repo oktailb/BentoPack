@@ -18,45 +18,83 @@
 */
 
 #include "license/licensemanager.h"
+#include "license/igatekeeper.h"
 #include "license/integrityguard.h"
+#include "commercialgatekeeper.h"
 #include "generated/license_config.h"
 #include <QCryptographicHash>
-
+#include <QRandomGenerator>
 #include <QCoreApplication>
 
 namespace BentoPack {
 
 namespace {
 
-// SHA-256 hash of the authentic commercial release master token.
-// Kept in public open-source code; cannot be reversed mathematically.
-constexpr const char *EXPECTED_COMMERCIAL_TOKEN_HASH =
-    "2b573bbc2ad164c4a295b293fd31d296334f38fa35b4b0184dcc9ad861b88ad3";
+class DefaultCommunityGatekeeper : public ILicenseGatekeeper
+{
+public:
+    bool isCommercial() const override { return false; }
+    QString editionName() const override { return QStringLiteral("Community Edition"); }
+    QByteArray signChallenge(const QByteArray &) const override { return QByteArray(); }
+    bool verifyChallenge(const QByteArray &, const QByteArray &) const override { return false; }
+    bool isFeatureUnlocked(quint32) const override { return false; }
+};
 
+static std::shared_ptr<ILicenseGatekeeper> s_activeGatekeeper = nullptr;
 static bool s_hasToolTypeOverride = false;
 static ToolType s_toolTypeOverride = ToolType::GUI;
 
-bool verifyLicense()
+} // namespace
+
+void LicenseManager::setGatekeeper(std::shared_ptr<ILicenseGatekeeper> gk)
 {
-#if defined(BENTOPACK_COMMERCIAL_BUILD) && (BENTOPACK_COMMERCIAL_BUILD == 1)
-    const char *rawToken = BENTOPACK_LICENSE_TOKEN;
-    if (!rawToken || rawToken[0] == '\0') {
-        return false;
+    if (!gk) {
+        s_activeGatekeeper = std::make_shared<DefaultCommunityGatekeeper>();
+        return;
     }
-    QByteArray tokenBytes(rawToken);
-    QByteArray hashHex = QCryptographicHash::hash(tokenBytes, QCryptographicHash::Sha256).toHex();
-    return (hashHex == QByteArray(EXPECTED_COMMERCIAL_TOKEN_HASH));
-#else
-    return false;
-#endif
+
+    if (gk->isCommercial()) {
+        const quint64 randVal = QRandomGenerator::system()->generate64();
+        const QByteArray nonce = QByteArray::number(randVal, 16);
+        const QByteArray sig = gk->signChallenge(nonce);
+        if (sig.isEmpty() || !gk->verifyChallenge(nonce, sig)) {
+            // Handshake failed: fallback to default community gatekeeper
+            s_activeGatekeeper = std::make_shared<DefaultCommunityGatekeeper>();
+            return;
+        }
+    }
+
+    s_activeGatekeeper = std::move(gk);
 }
 
-} // namespace
+std::shared_ptr<ILicenseGatekeeper> LicenseManager::gatekeeper()
+{
+    if (!s_activeGatekeeper) {
+#if defined(BENTOPACK_COMMERCIAL_BUILD) && (BENTOPACK_COMMERCIAL_BUILD == 1)
+        auto commGk = createCommercialGatekeeper();
+        if (commGk && commGk->isCommercial()) {
+            const quint64 randVal = QRandomGenerator::system()->generate64();
+            const QByteArray nonce = QByteArray::number(randVal, 16);
+            const QByteArray sig = commGk->signChallenge(nonce);
+            if (!sig.isEmpty() && commGk->verifyChallenge(nonce, sig)) {
+                s_activeGatekeeper = commGk;
+                return s_activeGatekeeper;
+            }
+        }
+#endif
+        s_activeGatekeeper = std::make_shared<DefaultCommunityGatekeeper>();
+    }
+    return s_activeGatekeeper;
+}
+
+bool LicenseManager::isFeatureUnlocked(quint32 featureId)
+{
+    return gatekeeper()->isFeatureUnlocked(featureId);
+}
 
 bool LicenseManager::isCommercial()
 {
-    static const bool s_isCommercial = verifyLicense();
-    return s_isCommercial;
+    return gatekeeper()->isCommercial();
 }
 
 Edition LicenseManager::edition()
@@ -66,8 +104,7 @@ Edition LicenseManager::edition()
 
 QString LicenseManager::editionName()
 {
-    return isCommercial() ? QStringLiteral("Commercial Edition")
-                          : QStringLiteral("Community Edition");
+    return gatekeeper()->editionName();
 }
 
 ToolType LicenseManager::toolType()

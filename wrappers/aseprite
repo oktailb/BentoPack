@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 # Transparent batch wrapper for Aseprite using BentoPack CLI
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 if command -v bentopack-cli >/dev/null 2>&1; then
   exec bentopack-cli --flavor aseprite "$@"
+elif [ -x "${SCRIPT_DIR}/bentopack-cli" ]; then
+  exec "${SCRIPT_DIR}/bentopack-cli" --flavor aseprite "$@"
+elif [ -x "${SCRIPT_DIR}/../bin/bentopack-cli" ]; then
+  exec "${SCRIPT_DIR}/../bin/bentopack-cli" --flavor aseprite "$@"
 else
-  exec bentopack-cli --flavor aseprite "$@"
+  echo "Error: bentopack-cli executable not found in PATH or nearby directories." >&2
+  exit 127
 fi

@@ -21,10 +21,12 @@
 #define LICENSEMANAGER_H
 
 #include "bentopackcore_export.h"
+#include "license/igatekeeper.h"
 #include <QString>
 #include <QMap>
 #include <QImage>
 #include <QJsonObject>
+#include <memory>
 
 namespace BentoPack {
 
@@ -75,6 +77,22 @@ public:
      * @brief Human-readable tool name ("GUI" or "CLI").
      */
     static QString toolName();
+
+    /**
+     * @brief Sets or registers the active gatekeeper.
+     * Conducts a mutual challenge-response verification before acceptance.
+     */
+    static void setGatekeeper(std::shared_ptr<ILicenseGatekeeper> gatekeeper);
+
+    /**
+     * @brief Returns active gatekeeper instance.
+     */
+    static std::shared_ptr<ILicenseGatekeeper> gatekeeper();
+
+    /**
+     * @brief Checks if a commercial feature is unlocked via the active gatekeeper.
+     */
+    static bool isFeatureUnlocked(quint32 featureId);
 
     /**
      * @brief Returns standardized compliance metadata for technical exports.

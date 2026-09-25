@@ -1025,6 +1025,26 @@ void TestCore::testLicenseComplianceAndWatermarking()
             }
         }
     }
+
+    // 6. Test Gatekeeper Architecture & Challenge Handshake
+    class RogueGatekeeper : public BentoPack::ILicenseGatekeeper
+    {
+    public:
+        bool isCommercial() const override { return true; } // Spoofed!
+        QString editionName() const override { return QStringLiteral("Hacked Edition"); }
+        QByteArray signChallenge(const QByteArray &) const override { return QByteArray("garbage"); }
+        bool verifyChallenge(const QByteArray &, const QByteArray &) const override { return false; }
+        bool isFeatureUnlocked(quint32) const override { return true; }
+    };
+
+    // Rogue gatekeeper must be rejected due to challenge failure
+    BentoPack::LicenseManager::setGatekeeper(std::make_shared<RogueGatekeeper>());
+    QCOMPARE(BentoPack::LicenseManager::isCommercial(), false);
+    QCOMPARE(BentoPack::LicenseManager::editionName(), QStringLiteral("Community Edition"));
+
+    // Reset gatekeeper
+    BentoPack::LicenseManager::setGatekeeper(nullptr);
+    QCOMPARE(BentoPack::LicenseManager::isCommercial(), false);
 }
 
 void TestCore::testIntegrityGuardAndForensicWatermarking()

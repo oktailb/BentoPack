@@ -71,6 +71,7 @@ set(BentoPackCore_SRC
     src/geometry/polygonmerger.cpp
     src/license/licensemanager.cpp
     src/license/integrityguard.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/gatekeeper/commercialgatekeeper.cpp
     src/commands/meshcommands.cpp
 )
 
@@ -104,8 +105,10 @@ set(BentoPackCore_INCLUDE
     include/geometry/polygonsimplifier.h
     include/geometry/triangulator.h
     include/geometry/polygonmerger.h
+    include/license/igatekeeper.h
     include/license/licensemanager.h
     include/license/integrityguard.h
+    ${CMAKE_SOURCE_DIR}/plugins/gatekeeper/commercialgatekeeper.h
     include/commands/meshcommands.h
 )
 
@@ -208,6 +211,7 @@ target_include_directories(BentoPackCore PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/zip>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/plugins/gatekeeper>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/bentopack>
 )
 
