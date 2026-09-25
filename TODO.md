@@ -21,7 +21,12 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Marching Squares, RDP, Ear-Clipping, Wireframe HMI, Édition Sommets, Tight Packing Multithreadé & Configurable, Export Unity/Unreal/Godot, 22 tests CTest) |
 | **M9** | [Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC)](#m9--compression-de-textures-vram--formats-gpu-ktx2--basis-universal--astc) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — KTX2, UASTC, ETC1S, Zstd, Décompression CPU 0, Transcodage RGBA, ExportDialog IHM & Télémétrie Live VRAM, CLI CI/CD, 12 tests CTest) |
 | **M11** | [Architecture Dynamique de Plugins Qt6 & SDK Tiers](#m11--architecture-dynamique-de-plugins-qt6--sdk-tiers) | **Haute** | Haute | 🟢 Clôturé & Validé (100% CTest — libSpriteStudioCore.so, QPluginLoader, 9 filtres & 6 extracteurs externalisés, SDK d'extension, SpriteStudioConfig.cmake) |
-| **M10** | [Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)](#m10--intégration-aux-écosystèmes--marchés-moteurs-de-jeu-godot-assetlib-unity-upm-unreal-fab) | **Moyenne** | Moyenne | 💡 Spécifié & Planifié (Plugins moteurs, Importateurs automatiques, Hot-Reload, Stores) |
+| **M10** | [Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)](#m10--intégration-aux-écosystèmes--marchés-moteurs-de-jeu-godot-assetlib-unity-upm-unreal-fab) | **Haute (À faire)** | Moyenne | 💡 **À faire** (Plugins moteurs, Importateurs automatiques, Hot-Reload, Stores) |
+| **M15** | [Refonte & Stabilisation du Studio d'Animation (Bug Drag & Drop Filmstrip)](#m15--refonte--stabilisation-du-studio-danimation-correction-critique-du-drag--drop-de-la-timeline-filmstrip) | **Haute (Critique)** | Moyenne | 🟢 **Clôturé & Validé** (100% CTest — FilmstripListWidget dédié, calcul linéaire du drop, indicateur visuel bleu contrasté, découplage transactionnel sans récursion destructrice, synchronisation Undo/Redo sans perte de frames, tests unitaires) |
+| **M-DEVOPS** | [Stratégie de Release CI Duale (Community vs Commerciale), Watermarking Discret & Signature du Code](#m-devops--stratégie-de-release-ci-duale-community-vs-commerciale-watermarking-discret--signature-du-code) | **Haute** | Moyenne | 🟢 **Clôturé & Validé** (100% CTest — Approche B cryptographique déterministe, LicenseManager, secret build-time, watermarking PNG tEXt/JSON/Godot/Unity/Unreal, workflows `release-community.yml` & `release-commercial.yml` privés 90j, support signature) |
+| **M14** | [Optimisations Hautes Performances (Vectorisation SIMD AVX2/NEON & Mémoire Grands Atlas)](#m14--optimisations-hautes-performances-vectorisation-simd-avx2neon--gestion-mémoire-grands-atlas) | **Moyenne** | Moyenne | 💡 Planifié (Accélération filtres scanline x4-x8, Plafonnement QUndoStack & compression mémoire 8K/16K) |
+| **M12** | [Animation Squelettique & Découpe de Membres (Rigging 2D, Bones, Spine/DragonBones/Godot/Unity)](#m12--animation-squelettique--découpe-de-membres-rigging-2d-bones-spinedragonbonesgodotunity) | **Moyenne** | Haute | 💡 Spécifié & Planifié (Découpe membres, squelette hiérarchique, skinning/poids de sommets, formats Spine/Godot/Unity) |
+| **M13** | [Version Web (WASM / Qt for WebAssembly) — Analyse de Faisabilité & Limites](#m13--version-web-wasm--qt-for-webassembly--analyse-de-faisabilité--limites) | **Basse** | Moyenne | 💡 Spécifié & Planifié (Poids runtime 25-40Mo, sandbox filesystem, multithreading COOP/COEP, micro-démo vitrine) |
 | **ASSETS** | [Remplacement des Échantillons (`sample/`) par des Assets Libres de Droits](#-assets--remplacement-des-échantillons-sample-par-des-assets-originaux-libres-de-droits---terminé--validé-100) | **Haute** | Faible | 🟢 Clôturé & Validé (100% Assets originaux générés, 0 risque copyright, tests autonomes) |
 | **AUDIT** | [Dette de Thread-Safety & Modèle Pur (Audit Étape 2)](#️-audit--points-de-vigilance--dette-technique-résiduelle-recommandations-damélioration) | **Haute** | Moyenne | 🟢 Clôturé & Validé (Modèle pur QImage, Cache Vignettes, 0 conversion I/O, Miniz ZIP, 116 tests CTest 100%) |
 | **POLISH** | [Export Asynchrone Non Bloquant & Centre de Préférences Enrichi](#-polish--export-asynchrone-non-bloquant--centre-de-préférences-enrichi-settingsdialog) | **Moyenne** | Faible | 🟢 Clôturé & Validé (Export non-bloquant QtConcurrent, Barre de progression animée, SettingsDialog 6 pages, Détection updates GitHub, Hot-reload plugins) |
@@ -1606,9 +1611,150 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
         - **Mises à Jour Logicielles :** Requête asynchrone non-bloquante vers l'API GitHub Releases (`/repos/oktailb/SpriteStudio/releases/latest`), comparaison de version sémantique via `QVersionNumber`, affichage des notes de version au format Markdown avec liens cliquables, et bouton de redirection directe vers la page de téléchargement GitHub.
 
 ---
-11. **Étape 14 — Intégration aux Écosystèmes & Marchés Moteurs de Jeu (M10 - Godot AssetLib, Unity UPM, Unreal Fab) :**
-   - *Objectif :* Éliminer toute friction pour les développeurs en intégrant SpriteStudio directement dans leur environnement de développement quotidien et sur les magasins officiels d'assets.
-   - *Livrables :* Addon officiel Godot 4 (Asset Library) avec importateur direct `.ssp` et synchronisation live `--watch`, package Unity UPM (`com.spritestudio.importer`) avec `ScriptedImporter` et génération automatique de `SpriteMeshType.Tight`, plugin Unreal Engine 5 pour le store Fab avec `UFactory` pour Paper2D/PaperZD, et scripts d'intégration CI/CD pour pipelines studio.
+11. **Étape 14 — Intégration aux Écosystèmes & Marchés Moteurs de Jeu (M10 - Godot AssetLib, Unity UPM, Unreal Fab) — 💡 À FAIRE :**
+    - *Objectif :* Éliminer toute friction pour les développeurs en intégrant SpriteStudio directement dans leur environnement de développement quotidien et sur les magasins officiels d'assets.
+    - *Plan d'Action Détaillé :*
+      - **1. Addon Officiel Godot 4 (`godot-spritestudio-addon`) :**
+        - Plugin GDScript pur (zéro dépendance compilée) à soumettre sur la **Godot Asset Library**.
+        - `EditorFileSystemImportPlugin` interceptant automatiquement les projets `.ssp` et fichiers d'atlas dans `res://`.
+        - Génération automatique des `SpriteFrames` (`.tres`), `AtlasTexture`, et maillages 2D `ArrayMesh` M8.
+        - Synchronisation à chaud (*Live Hot-Reload*) avec le démon `spritestudio-cli --watch`.
+        - Bouton d'accès rapide *"Ouvrir dans SpriteStudio"* dans l'inspecteur Godot 4.
+      - **2. Package Unity UPM (`com.spritestudio.importer`) :**
+        - Déploiement sur le registre standard communautaire **OpenUPM** et soumission **Unity Asset Store** (catégorie *2D Tools*).
+        - `ScriptedImporter` C# prenant en charge `.ssp` et les JSON d'atlas.
+        - Injection directe de la géométrie de maillage serré M8 via `Sprite.OverrideGeometry()` (économie de 60-80% de fillrate GPU sans retouche manuelle).
+        - Génération automatique des `AnimationClip` cadencés au framerate d'origine.
+      - **3. Plugin Unreal Engine 5 (`SpriteStudio UE5`) :**
+        - Module C++ avec `UFactory` pour la nouvelle marketplace unifiée d'Epic Games (**Fab**).
+        - Création transparente d'assets `UPaperSprite` et `UPaperFlipbook`, interfaçage avec le plugin de référence **PaperZD**.
+        - Application des polygones de rendu personnalisés (`RenderGeometry`) pour éliminer l'overdraw de translucidité sous UE5.
+      - **4. Commande CLI Dédiée :**
+        - Implémentation de `spritestudio-cli export-engine --target=<godot|unity|unreal>` produisant des bundles clé-en-main.
+
+---
+
+### 🎬 Phase E — Ergonomie de Studio, DevOps Industriel & Animation Avancée
+
+12. **Étape 15 — Refonte & Stabilisation du Studio d'Animation (M15 - Correction Critique du Drag & Drop de la Timeline Filmstrip) — 🟢 TERMINÉ & VALIDÉ (100% CTest) :**
+    - *Diagnostic Précis du Bug :*
+      - Le bandeau inférieur de timeline (`TimelineFilmstripWidget`) permettant de ré-ordonner les frames par glisser-déposer est actuellement instable et source de bugs fonctionnels majeurs :
+        1. **Instabilité de `QListWidget::IconMode` avec `InternalMove` :** En `IconMode`, Qt calcule les déplacements selon des coordonnées cartésiennes libres $(x, y)$ et non selon un ordre séquentiel linéaire strict de lignes. L'indicateur de drop (`dropIndicator`) est souvent décalé ou ne s'affiche pas correctement.
+        2. **Récursion destructrice lors du Drop :** Le signal `rowsMoved` appelle `TimelineFilmstripWidget::onRowsMoved`, qui émet `sequenceReordered`, qui invoque `AnimationController::reorderAnimationFrames`. Ce dernier appelle `selectAnimation()` qui rappelle `m_timelineWidget->setAnimation()`, exécutant `rebuildItems()` et vidant la liste avec `clear()` **pendant que Qt est encore en train de finaliser la transaction interne de drop**. Cela provoque la disparition aléatoire de frames, la duplication d'items orphelins et des désynchronisations avec `SpriteDocument`.
+        3. **Conflit Fonctionnel Réordonnancement vs Fusion :** Conflit d'intention utilisateur non géré entre "glisser entre deux frames pour réordonner la séquence" et "glisser sur une frame existante pour la fusionner en calque".
+    - *Plan de Résolution Technique :*
+      - **Refonte du widget de filmstrip :** Dérivation d'une classe dédiée `TimelineFilmstripListView` (héritant de `QListView` avec un modèle de liste strict `QAbstractListModel` ou gestion propre des événements drag/drop sur `QListWidget`).
+      - **Gestion Manuelle des Événements Drag & Drop :**
+        - Réimplémentation explicite de `dragEnterEvent()`, `dragMoveEvent()`, `dragLeaveEvent()` et `dropEvent()`.
+        - Rendu visuel soigné d'une **ligne indicatrice d'insertion verticale contrastée** entre deux frames lors du survol de l'interstice.
+        - Dessin d'un **halo de surbrillance spécifique** sur la vignette cible uniquement lorsque l'utilisateur survole le centre d'une frame (intention de fusion de calques).
+      - **Protection Anti-Récursion & Transaction Différée :**
+        - Verrouillage transactionnel (`m_isReordering = true`) interdisant tout rechargement destructif de la liste pendant le déplacement.
+        - Déportation de la création de la commande `ReorderAnimationFramesCommand` en fin de transaction via `QTimer::singleShot(0, ...)`.
+      - **Couverture de Tests Automatisée :**
+        - Ajout d'une suite de tests dédiée dans `tests/test_controllers.cpp` simulant les séquences de drag-and-drop de frames, l'annulation `Undo` (`Ctrl+Z`), et vérifiant la persistance absolue de l'ordre des frames dans `SpriteDocument`.
+
+    - *Amélioration Ergonomique du Catalogue "Atlas Frames" (Découplage & Multi-Sélection) — 🟢 TERMINÉ :*
+      - Découplage de la sélection dans l'onglet "Atlas Frames" pour ne plus forcer impulsivement le basculement vers l'onglet Timeline.
+      - Support complet des modificateurs `Ctrl` et `Shift` pour multi-sélectionner et mettre en valeur (highlight) simultanément les frames correspondantes sur la vue principale de l'Atlas.
+      - Menu contextuel enrichi : "Créer une animation", "Ajouter à une animation existante", "Éditer dans l'éditeur de pixels", "Tout sélectionner / Inverser", "Fusionner les tranches".
+      - Double-clic sur une vignette ouvrant directement l'Éditeur de Pixels.
+
+    - *Modernisation de la Fusion de Sprites (Bitmaps, Boîtes & Polygones Non-Convexes) — 🟢 TERMINÉ & VALIDÉ (100% CTest) :*
+      - Découpage spatial bitmap selon les coordonnées d'origine de l'atlas (`m_atlas.copy(unitedRect)`), avec fallback de composite relatif.
+      - Fusion des boîtes englobantes et recalcul des points d'ancrage / pivots personnalisés dans le nouveau repère unifié.
+      - Nouveau module géométrique `PolygonMerger` (`polygonmerger.h`, `polygonmerger.cpp`) :
+        - Fusion de contours touchants ou disjoints par corridor de pontage minimal (2px) reliant la paire de points à distance géométrique minimale (projection point-segment).
+        - **Minimisation du vide sans dégénérescence en enveloppe convexe** : préservation intégrale de toutes les concavités et silhouettes d'origine.
+        - Triangulation automatique Ear-Clipping et simplification Ramer-Douglas-Peucker des sommets intermédiaires collinéaires.
+      - Mise à jour de `ContourTracer::traceContour` pour englober automatiquement les sprites détectés en plusieurs îlots disjoints.
+      - Accessibilité UI : Menu contextuel catalogue "Atlas Frames" (`KEY_CTX_MERGE_SLICES`), Menu principal Édition (`Ctrl+Shift+M`), et vue Atlas.
+      - Couverture de tests unitaires complète dans `tests/test_mesh.cpp` (touchant, disjoint, îlots multiples, boîtes & pivots, cycle Undo/Redo).
+
+---
+
+13. **Étape 16 — Infrastructure CI/CD Release Duale, Watermarking Discret & Signature de Code (M-DEVOPS) :**
+    - *État :* 🟢 **Clôturé & Validé (Approche B Déterministe — 100% CTest)**
+    - *Objectif :* Permettre une distribution automatisée, sécurisée et professionnelle du logiciel avec distinction étanche et cryptographiquement infalsifiable entre la version communautaire publique et la version commerciale payante.
+    - *Architecture Déterministe par Approche B (Cryptographique Build-Time) :*
+      - Le code source public compile **inconditionnellement en Community Edition** par défaut sans secret.
+      - La désactivation du watermarking requiert l'injection d'un jeton secret (`COMMERCIAL_SIGNING_KEY`), dont le digest SHA-256 doit correspondre exactement au hash à sens unique (`EXPECTED_COMMERCIAL_TOKEN_HASH`) compilé en C++ dans `LicenseManager`.
+      - Utilitaire de rotation et de génération de clés : `scripts/generate_commercial_key.py`.
+    - *Pipelines CI GitHub Actions Implémentés :*
+      - **1. Release CI "Community" (`release-community.yml`) :**
+        - Déclenchée sur tags publics (`v*`) ou `workflow_dispatch`.
+        - Ne dispose pas du secret commercial $\implies$ build Community déterministe certifié.
+        - Publication automatique sur GitHub Releases publiques (DEB, RPM, TGZ, AppImage, ZIP portable, NSIS Setup, DMG, Haiku HPKG).
+        - Intègre le watermarking discret de conformité dans tous les formats d'export.
+      - **2. Release CI "Commerciale" (`release-commercial.yml`) :**
+        - Workflow privé déclenché exclusivement manuellement (`workflow_dispatch`).
+        - Injection sécurisée du secret via `${{ secrets.COMMERCIAL_SIGNING_KEY }}`.
+        - Assertion automatique en CI via `test_core` validant l'activation du mode commercial.
+        - ZÉRO publication sur GitHub Releases (permissions `contents: read`).
+        - Stockage des livrables en artefacts privés avec rétention de 90 jours pour distribution aux clients payants et déploiement stores.
+        - Étapes de signature de code multiplateforme (Windows Signtool, Apple Developer ID & Notarization).
+    - *Watermarking Discret Non Destructif Implémenté :*
+      - **Atlas PNG :** Chunks standards `tEXt` (`Generator: SpriteStudio Community Edition`, `X-SpriteStudio-License: Community-Exemption-Under-1M`, `X-SpriteStudio-Notice: Free for indie/personal use (<1M$ ARR)`). Zéro impact sur les pixels.
+      - **JSON (TexturePacker / Aseprite / Unity / Unreal) :** Blocs `"meta": { "app": "SpriteStudio Community Edition", "license": "Community-Exemption-Under-1M" }`.
+      - **Godot 4 :** Commentaire d'en-tête discret `; Generated by SpriteStudio Community Edition (Free for personal/indie use < 1,000,000$ ARR)`.
+      - **CLI :** Affichage de l'édition courante dans `spritestudio-cli --version`.
+
+
+---
+
+14. **Étape 17 — Optimisations Hautes Performances SIMD (AVX2/NEON) & Gestion Mémoire Grands Atlas (M14) :**
+    - *Objectif :* Garantir une fluidité absolue sur les très grandes planches de sprites (4K / 8K / 16K) et minimiser l'empreinte mémoire vive.
+    - *Vectorisation SIMD (AVX2 / NEON) :*
+      - Vectorisation des boucles de traitement scanline contiguës dans les filtres graphiques les plus coûteux :
+        - `DespillFilter` (calculs de distances chromatiques et clamping de composantes).
+        - `OutlineFilter` (dilatation morphologique 4-connectée et 8-connectée).
+        - `ColorSwapFilter` (conversion RGB <-> HSV et remplacement de teinte vectorisé).
+      - Utilisation d'intrinsèques C++ ou de bibliothèques portables d'en-tête (ex. xsimd / Highway) pour traiter 8 pixels 32 bits simultanément par registre 256 bits AVX2 et 4 pixels par registre NEON 128 bits sur Apple Silicon.
+      - Gain attendu : Accélération d'un facteur 4x à 8x, ramenant le temps de filtrage d'une planche 8K sous les 15 ms.
+    - *Gestion Mémoire & Plafonnement `QUndoStack` :*
+      - Plafonnement configurable de la taille maximale de l'historique d'annulation dans `AppConfig` (ex. 20 états par défaut).
+      - Mise en place d'un mécanisme de *Snapshotting différentiel* (*dirty rects*) : mémorisation uniquement du sous-rectangle modifié de l'atlas plutôt que de dupliquer une image complète de 256 Mo à chaque trait de crayon.
+      - Compression transparente en arrière-plan des états d'annulation anciens via `qCompress` / LZ4.
+
+---
+
+15. **Étape 18 — Animation Squelettique & Découpe de Membres 2D (M12 - Rigging, Bones, Spine / DragonBones / Godot / Unity) :**
+    - *Contexte & Valeur Ajoutée Majeure :*
+      - L'animation trame par trame (frame-by-frame) traditionnelle impose de dessiner chaque posture, ce qui est extrêmement chronophage et pèse lourd en VRAM. L'animation squelettique 2D découpe un personnage en éléments anatomiques distincts (tête, buste, bras, avant-bras, cuisses, jambes), les rattache à un squelette hiérarchique d'os (*Bones*), et anime les transformations (rotation, translation, échelle) pour produire des animations fluides à 60 ou 120 FPS avec un nombre restreint d'assets.
+    - *Complexité Technique :* **Haute** (matrices de transformation hiérarchique, cinématique directe FK, cinématique inverse IK 2D analytique 2 os, déformation de maillages polygonaux par pondération de sommets *Skinning*, gestion de timeline à courbes d'interpolation).
+    - *Plan d'Action par Modules :*
+      - **Module 1 : Outil de Découpe de Membres (Limb Slicing) :**
+        - Détection semi-automatique des parties anatomiques d'un personnage avec génération de marges d'occlusion aux jointures (pour éviter les trous lors des rotations de coudes/genoux).
+      - **Module 2 : Éditeur d'Armature 2D (Bone Rigging) :**
+        - Création interactive d'os sur le canevas avec liaison parent-enfant hiérarchique.
+        - Définition des pivots d'articulation et contraintes angulaires.
+        - Solveur basique de cinématique inverse (IK) pour positionner pieds et mains naturellement.
+      - **Module 3 : Pondération de Sommets (Skinning & Weight Painting) :**
+        - Connexion directe avec le moteur de maillages serrés M8 : attribution des influences d'os aux sommets du maillage polygonal avec dégradés doux aux articulations.
+      - **Module 4 : Codecs d'Export Standards :**
+        - **Spine JSON (Standard Industriel Mondial) :** Export du format universel Spine Skeleton Data (v3.8 / v4.x), immédiatement compatible avec tous les runtimes officiels Spine (Godot, Unity, Unreal, Raylib, Phaser, Defold).
+        - **DragonBones JSON :** Format alternatif libre et ouvert.
+        - **Godot 4 Skeleton2D / Bone2D :** Génération native d'une scène `.tscn` intégrant les nœuds `Skeleton2D`, `Bone2D` et `Polygon2D` pondérés.
+        - **Unity 2D Animation :** Export prêt pour le package Unity `2D Animation` (`SpriteSkin` et structure d'os).
+
+---
+
+16. **Étape 19 — Analyse de Faisabilité & Limites d'une Version WebAssembly (M13 - WASM) :**
+    - *Contexte :* Évaluer la viabilité technique d'un portage de SpriteStudio dans le navigateur via WebAssembly (Qt 6 for WebAssembly / Emscripten).
+    - *Limites Techniques & Contraintes Majeures :*
+      1. **Poids du Binaire & Temps de Chargement Initial :**
+         - Le runtime Qt 6 WebAssembly avec les modules Core, Gui, Widgets et Network pèse entre **25 et 40 Mo non compressé** (~12 à 18 Mo compressé gzip/brotli). Ce temps de téléchargement initial dégrade l'expérience utilisateur par rapport à une page web classique.
+      2. **Système de Fichiers Sandboxé (Virtual FS) :**
+         - WebAssembly s'exécute dans une sandbox stricte sans accès direct au système de fichiers local du système d'exploitation. Les opérations d'ouverture/sauvegarde doivent passer par l'API HTML5 `File System Access` (`showOpenFilePicker()`) ou des transferts ponctuels en mémoire IndexedDB, ce qui rend impossible le verrouillage atomique de session et le crash recovery du format natif `.ssp`.
+      3. **Multithreading & En-têtes HTTP de Sécurité (COOP / COEP) :**
+         - Les threads C++ (`QtConcurrent`, calculs multithreadés de `TightPolygonPacker`, encodage `basis_universal`) nécessitent `SharedArrayBuffer` en WebAssembly. Cela impose obligatoirement sur le serveur web les en-têtes HTTP `Cross-Origin-Opener-Policy: same-origin` et `Cross-Origin-Embedder-Policy: require-corp`. Les hébergements simples (ex. GitHub Pages par défaut) sans proxy d'en-têtes désactivent le multithreading, bridant les performances sur 1 seul cœur CPU.
+      4. **Performance d'Encodage VRAM :**
+         - L'encodage KTX2/Basis Universal en WebAssembly sans instructions SIMD natives multicoeurs est 5x à 10x plus lent que sur CPU natif.
+      5. **Non-pertinence du CLI Headless :**
+         - Le binaire console `spritestudio-cli` est conçu pour les serveurs de build et CI/CD locaux ; il n'a aucune utilité dans un contexte de navigateur web.
+    - *Recommandation Stratégique :*
+      - **Ne pas porter l'intégralité de l'application de bureau en WASM.**
+      - **Développer un "Micro-Démonstrateur Web" (Web Showcase) :** Concevoir une interface web ultra-légère (micro-binaire WASM ou TypeScript/Canvas) hébergée sur le site vitrine permettant aux visiteurs de glisser-déposer un sprite pour tester instantanément la découpe automatique, le despill et l'aperçu d'animation, servant d'entonnoir d'acquisition vers la version de bureau complète.
 
 ---
 
@@ -1621,5 +1767,9 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 | **3. Thread-Safety du Modèle (`QPixmap`)** | **Moyenne** | **Nulle (Résolu)** | Instanciation de `QPixmap` hors-thread provoquant des plantages intermittents sous Linux (X11/Wayland) et macOS. | **✅ Résolu & Validé :** Modèle, codecs et commandes 100% migrés sur `QImage` pure en mémoire CPU. |
 | **4. Absence de Formats VRAM (M9)** | **Moyenne** | **Nulle (Résolu)** | Saturation de la mémoire vidéo et goulet d'étranglement de bande passante sur mobile et Switch. | **✅ Résolu & Validé :** Intégration de `basis_universal` (KTX2, UASTC, ETC1S, Zstd) et télémétrie live dans `ExportDialog` et le CLI. |
 | **5. Couplage Monolithique des Filtres & Codecs** | **Moyenne** | **Nulle (Résolu)** | Impossibilité pour les tiers d'étendre les formats ou d'ajouter des filtres sans forker et recompiler l'application entière. | **✅ Résolu & Validé (M11) :** Architecture dynamique `QPluginLoader`, `libSpriteStudioCore` partagée, macro d'export API, CMake package config et exemples SDK. |
-| **6. Dispersion Fonctionnelle (*Feature Creep*)** | **Élevée** | **Faible (Maîtrisé)** | Risque de diluer le produit en voulant concurrencer Photoshop ou Spine. | **✅ Maintenu :** Positionnement clair de **passerelle de conditionnement, découpe, empaquetage et optimisation** pour moteurs de jeu. |
-| **7. Consommation RAM sur Grands Atlas** | **Moyenne** | **Faible (Maîtrisé)** | Clonage d'images volumineuses dans la pile `QUndoStack` (atlas 4K/8K). | **✅ Optimisé :** Copies partielles par rectangles délimités (*dirty rects*) lors de l'édition pixel M4 et copy-on-write `QImage`. |
+| **6. Instabilité Drag & Drop Filmstrip (M15)** | **Critique** | **Nulle (Résolu)** | Perte ou désynchronisation de frames lors de la réorganisation sur la timeline. | **✅ Résolu & Validé (M15) :** Refonte avec `FilmstripListWidget` dédié, drop séquentiel 1D précis, indicateur visuel bleu `#2980b9`, découplage transactionnel sans récursion destructrice et tests unitaires CTest. |
+| **7. Utilisation Illégale par Gros Studios sans Licence** | **Élevée** | **Moyenne** | Perte de revenus B2B auprès des studios générant plus de 1M$ de CA. | **💡 Planifié M-DEVOPS :** Double release CI, watermarking discret non destructif dans les métadonnées et script d'audit de conformité. |
+| **8. Blocage SmartScreen / Gatekeeper à l'Exécution** | **Élevée** | **Élevée (Actuel)** | Rejet des utilisateurs frileux face aux alertes de sécurité des OS au premier lancement. | **💡 Planifié M-DEVOPS :** Signature de code automatisée par CI via Microsoft Trusted Signing (Windows) et Apple Developer ID/Notarization (macOS). |
+| **9. Saturation RAM sur Très Grands Atlas (8K/16K)** | **Moyenne** | **Moyenne** | Ralentissement ou plantage lors de multiples modifications avec grand historique Undo. | **💡 Planifié M14 :** Plafonnement configurable de `QUndoStack`, mémorisation par *dirty rects* et compression mémoire LZ4 des états anciens. |
+| **10. Complexité Démesurée du Rigging Squelettique (M12)** | **Élevée** | **Moyenne** | Dérive du projet vers un clone incomplet de Spine ou Blender. | **💡 Cadrage M12 :** Découpe anatomique + armature 2D simple + export direct vers formats établis (Spine JSON, Godot Skeleton2D, Unity). |
+| **11. Lourdeur d'un Port WebAssembly Intégral (M13)** | **Moyenne** | **Élevée** | Expérience web lente et dégradée (téléchargement > 30 Mo, sandbox filesystem). | **💡 Cadrage M13 :** Restreindre le web à un micro-démonstrateur vitrine léger sans porter le moteur complet. |
