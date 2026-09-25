@@ -45,8 +45,7 @@
           "Éditeur de pixels avec palettes rétro (NES, GameBoy, Pico-8...)",
           "Maillages polygonaux serrés M8 & compression VRAM GPU KTX2",
           "Exports moteurs (Godot 4, Unity, Unreal Paper2D, TexturePacker)",
-          "Plugins sous licence Plugin Source-Available (seuil 1 000 000 $ USD)",
-          "Watermarking discret de conformité (GUI: 'SSG' / CLI: 'SSC')"
+          "Plugins sous licence Plugin Source-Available (seuil 1 000 000 $ USD)"
         ],
         "en": [
           "Complete C++ engine (sprite slicing, atlas packing, animations)",
@@ -54,8 +53,7 @@
           "Pixel editor with retro palettes (NES, GameBoy, Pico-8...)",
           "Tight polygonal meshes M8 & GPU VRAM compression KTX2",
           "Game engine exporters (Godot 4, Unity, Unreal Paper2D, TexturePacker)",
-          "Plugins under Plugin Source-Available License ($1,000,000 USD revenue threshold)",
-          "Discrete compliance watermark (GUI: 'SSG' / CLI: 'SSC')"
+          "Plugins under Plugin Source-Available License ($1,000,000 USD revenue threshold)"
         ],
         "ja": [
           "完全なC++エンジン（スプライト抽出、アトラス、アニメーション）",
@@ -63,8 +61,7 @@
           "レトロパレット（NES、GameBoy、Pico-8など）対応ピクセルエディタ",
           "M8密集ポリゴンメッシュ＆GPU VRAM KTX2テクスチャ圧縮",
           "ゲームエンジン出力（Godot 4、Unity、Unreal Paper2D、TexturePacker）",
-          "Plugin Source-Availableライセンス対象プラグイン（年間売上100万ドル基準）",
-          "コンプライアンス透かし（GUI: 'SSG' / CLI: 'SSC'）"
+          "Plugin Source-Availableライセンス対象プラグイン（年間売上100万ドル基準）"
         ]
       }
     },
@@ -78,7 +75,7 @@
       "price": {
         "fr": "29 €",
         "en": "$29",
-        "ja": "3 400 円"
+        "ja": "2 990 円"
       },
       "period": {
         "fr": "Par poste / an",
@@ -130,7 +127,7 @@
       "price": {
         "fr": "149 €",
         "en": "$149",
-        "ja": "18 000 円"
+        "ja": "14 900 円"
       },
       "period": {
         "fr": "Par runner CI / an",

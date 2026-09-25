@@ -1,4 +1,4 @@
-Plugin Source-Available License Agreement
+BentoPack Plugin Source-Available License Agreement
 
 This End-User License Agreement ("EULA") applies to the source code and associated assets of the specific plugins and proprietary filters (the "Software") provided in this directory.
 
@@ -10,7 +10,7 @@ This license adopts a revenue-based threshold for free usage. You are granted a 
 
 2. Commercial License Requirement
 
-If your gross revenue exceeds the $1,000,000 USD threshold, your rights under this free license automatically terminate. To continue using the Software legally, you must purchase a Commercial SpriteStudio License.
+If your gross revenue exceeds the $1,000,000 USD threshold, your rights under this free license automatically terminate. To continue using the Software legally, you must purchase a Commercial BentoPack License.
 
 3. Pre-compiled Binaries & Convenience Purchases
 
@@ -20,10 +20,17 @@ If you choose to purchase pre-compiled, ready-to-use binaries (e.g., via Steam, 
 4. Restrictions on Redistribution
 
 You may use the Software to create output files (e.g., sprite atlases, meshes, game assets) for your projects, and you hold full copyright to that output. However, you may NOT:
+
 * Redistribute, sublicense, or sell the Software (source code or compiled binaries) to third parties.
+
 * Offer the Software as a standalone service (SaaS) or as a direct competitor to this product.
-* Bypass or modify any code intended to identify community-built binaries versus officially distributed commercial binaries.
+
+* Bypass, disable, remove, or modify any technical identification mechanisms (including but not limited to code intended to identify community-built binaries or watermarks integrated into the generated output files). Any such modification constitutes a fundamental breach of this agreement and results in immediate termination of this license.
 
 5. No Warranty
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+6. Governing Law and Jurisdiction
+
+This EULA shall be governed by and construed in accordance with the laws of Japan. Any dispute arising from or relating to this EULA shall be subject to the exclusive jurisdiction of the courts located in Japan.
