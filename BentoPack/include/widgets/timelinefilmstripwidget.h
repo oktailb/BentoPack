@@ -20,7 +20,7 @@
 #ifndef TIMELINEFILMSTRIPWIDGET_H
 #define TIMELINEFILMSTRIPWIDGET_H
 
-#include "bentopackcore_export.h"
+#include "bentopackwidgets_export.h"
 #include "widgets/filmstriplistwidget.h"
 #include <QWidget>
 #include <QLabel>
@@ -34,7 +34,7 @@ class AnimationController;
 /**
  * @brief Interactive horizontal filmstrip timeline widget displaying and reordering the active animation's frames.
  */
-class SPRITESTUDIO_CORE_EXPORT TimelineFilmstripWidget : public QWidget
+class BENTOPACK_WIDGETS_EXPORT TimelineFilmstripWidget : public QWidget
 {
     Q_OBJECT
 

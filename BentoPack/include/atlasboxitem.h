@@ -27,6 +27,7 @@
 #include <QFont>
 #include <QPolygonF>
 #include <QSet>
+#include "bentopackwidgets_export.h"
 
 /**
  * @brief Interactive QGraphicsObject representing a sprite bounding box on the atlas.
@@ -34,7 +35,7 @@
  * Provides 8 resize handles when selected, drag-to-move, context menu, and emits
  * signals for selection and geometry modifications with undo/redo integration.
  */
-class AtlasBoxItem : public QGraphicsObject
+class BENTOPACK_WIDGETS_EXPORT AtlasBoxItem : public QGraphicsObject
 {
     Q_OBJECT
 

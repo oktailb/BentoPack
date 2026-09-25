@@ -37,7 +37,7 @@
 #include "controller/animationcontroller.h"
 #include "controller/atlasviewcontroller.h"
 #include "widgets/timelinefilmstripwidget.h"
-#include "bentopackcore_export.h"
+#include "bentopackwidgets_export.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -107,7 +107,7 @@ private:
  * - AtlasViewController: Atlas QGraphicsView, zoom/pan, slicing tools, and interactive boxes.
  * - AnimationController: Animation playback, tree widget, preview rendering, and animation CRUD.
  */
-class SPRITESTUDIO_CORE_EXPORT MainWindow : public QMainWindow
+class BENTOPACK_WIDGETS_EXPORT MainWindow : public QMainWindow
 {
     Q_OBJECT
 

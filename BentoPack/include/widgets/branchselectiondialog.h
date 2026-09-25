@@ -23,11 +23,12 @@
 #include <QDialog>
 #include <QList>
 #include "project/sessionmanager.h"
+#include "bentopackwidgets_export.h"
 
 class QListWidget;
 class QPushButton;
 
-class BranchSelectionDialog : public QDialog
+class BENTOPACK_WIDGETS_EXPORT BranchSelectionDialog : public QDialog
 {
     Q_OBJECT
 

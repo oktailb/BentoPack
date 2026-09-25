@@ -421,12 +421,12 @@ void TestCli::testWatchDebouncedRepack()
     daemon.releaseDirectoryLock();
 }
 
-#include <QApplication>
+#include <QGuiApplication>
 
 int main(int argc, char *argv[])
 {
     qputenv("QT_QPA_PLATFORM", "offscreen");
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     TestCli tc;
     return QTest::qExec(&tc, argc, argv);
 }

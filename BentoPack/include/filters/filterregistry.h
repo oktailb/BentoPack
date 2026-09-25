@@ -31,10 +31,8 @@
 
 #include "bentopackcore_export.h"
 
-class QMenu;
 class SpriteDocument;
 class QUndoStack;
-class QWidget;
 
 /**
  * @brief Central registry managing built-in and dynamic filter plugins.
@@ -59,14 +57,6 @@ public:
 
     void initDefaultFilters();
     void rescanPlugins();
-
-    /**
-     * @brief Populates a QMenu with actions for all registered filters grouped by category.
-     */
-    void populateMenu(QMenu *menu,
-                      SpriteDocument *doc,
-                      QUndoStack *undoStack,
-                      QWidget *parentWindow);
 
 private:
     FilterRegistry() = default;

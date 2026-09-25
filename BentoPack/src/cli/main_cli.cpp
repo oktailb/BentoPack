@@ -17,7 +17,7 @@
  under the License.
 */
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QTextStream>
 #include <QJsonDocument>
 #include "config/appconfig.h"
@@ -27,10 +27,12 @@
 
 int main(int argc, char *argv[])
 {
-    // Force offscreen headless operation (no display server required)
-    qputenv("QT_QPA_PLATFORM", "offscreen");
+    // Default to offscreen platform for headless environments if not explicitly specified
+    if (qEnvironmentVariableIsEmpty("QT_QPA_PLATFORM")) {
+        qputenv("QT_QPA_PLATFORM", "offscreen");
+    }
 
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     QCoreApplication::setOrganizationName(QStringLiteral("BentoPack"));
     QCoreApplication::setApplicationName(QStringLiteral("BentoPackCli"));
 

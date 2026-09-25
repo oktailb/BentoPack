@@ -10,6 +10,7 @@ target_include_directories(filter_outline PUBLIC
 )
 
 target_link_libraries(filter_outline PRIVATE
+    BentoPackWidgets
     BentoPackCore
     Qt6::Core
     Qt6::Gui

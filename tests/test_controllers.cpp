@@ -36,6 +36,7 @@
 #include "commands/filtercommands.h"
 #include "widgets/timelinefilmstripwidget.h"
 #include "widgets/filmstriplistwidget.h"
+#include "widgets/filtermenubuilder.h"
 #include "aboutdialog.h"
 #include "localizationmanager.h"
 #include <QTabWidget>
@@ -2185,7 +2186,7 @@ void TestControllers::testFilterRegistry()
     QMenu testMenu;
     SpriteDocument doc;
     QUndoStack undoStack;
-    reg.populateMenu(&testMenu, &doc, &undoStack, nullptr);
+    FilterMenuBuilder::populateMenu(&testMenu, &doc, &undoStack, nullptr);
     
     // Count non-separator, non-section menu actions (the actual filter items)
     int filterActionCount = 0;

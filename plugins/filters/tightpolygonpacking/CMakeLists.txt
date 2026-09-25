@@ -11,6 +11,7 @@ target_include_directories(filter_tightpolygonpacking PUBLIC
 )
 
 target_link_libraries(filter_tightpolygonpacking PRIVATE
+    BentoPackWidgets
     BentoPackCore
     Qt6::Core
     Qt6::Gui

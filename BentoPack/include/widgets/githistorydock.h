@@ -30,6 +30,7 @@
 #include <QToolButton>
 #include <QPointer>
 #include "project/sessionmanager.h"
+#include "bentopackwidgets_export.h"
 
 class ProjectController;
 
@@ -84,7 +85,7 @@ protected:
 /**
  * @brief Dockable widget displaying the Git commit tree, revision metadata, and time-travel controls.
  */
-class SPRITESTUDIO_CORE_EXPORT GitHistoryDock : public QDockWidget
+class BENTOPACK_WIDGETS_EXPORT GitHistoryDock : public QDockWidget
 {
     Q_OBJECT
 

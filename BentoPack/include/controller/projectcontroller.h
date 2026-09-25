@@ -33,7 +33,6 @@
 
 class SpriteDocument;
 class QUndoStack;
-class QWidget;
 
 struct SPRITESTUDIO_CORE_EXPORT AsyncExtractionResult {
     enum JobType { JobOpen, JobRemoveBackground };
@@ -74,7 +73,6 @@ public:
     QList<GitCommitInfo> redoBranches() const;
     bool undoGit();
     bool redoGit(const QString &targetCommitHash = QString());
-    bool promptAndRedoGit(QWidget *parent = nullptr);
 
     bool isProjectModified() const { return m_isModified; }
     void setProjectModified(bool modified);

@@ -23,13 +23,14 @@
 #include <QStandardItemModel>
 #include <QObject>
 #include <QMimeData>
+#include "bentopackwidgets_export.h"
 
 /**
  * @file arrangementmodel.h
  * @brief Custom QStandardItemModel subclass to handle specialized drag-and-drop behavior,
  * including drag initialization and detection of merge operations.
  */
-class ArrangementModel : public QStandardItemModel
+class BENTOPACK_WIDGETS_EXPORT ArrangementModel : public QStandardItemModel
 {
   Q_OBJECT
 

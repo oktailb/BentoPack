@@ -27,6 +27,8 @@
 #include "include/widgets/settingsdialog.h"
 #include "include/widgets/polygonmeshdialog.h"
 #include "include/widgets/pixeleditordialog.h"
+#include "include/widgets/branchselectiondialog.h"
+#include "include/widgets/filtermenubuilder.h"
 #include "include/filters/filterregistry.h"
 #include <QShortcut>
 #include <QSettings>
@@ -537,7 +539,7 @@ void MainWindow::setupShortcuts()
     // Create Filters Menu dynamically from FilterRegistry
     m_filtersMenu = new QMenu(tr("KEY_MENU_FILTERS"), this);
     menuBar()->insertMenu(ui->menuHelp->menuAction(), m_filtersMenu);
-    FilterRegistry::instance().populateMenu(m_filtersMenu, m_document, m_undoStack, this);
+    FilterMenuBuilder::populateMenu(m_filtersMenu, m_document, m_undoStack, this);
 
     ui->menuHelp->addSeparator();
     m_helpPrefAction = ui->menuHelp->addAction(tr("KEY_ACTION_SETTINGS"));
@@ -937,7 +939,7 @@ void MainWindow::retranslateUi()
     }
     if (m_filtersMenu) {
         m_filtersMenu->setTitle(tr("KEY_MENU_FILTERS"));
-        FilterRegistry::instance().populateMenu(m_filtersMenu, m_document, m_undoStack, this);
+        FilterMenuBuilder::populateMenu(m_filtersMenu, m_document, m_undoStack, this);
     }
     if (m_prefAction) {
         m_prefAction->setText(tr("KEY_ACTION_SETTINGS"));
@@ -1194,7 +1196,15 @@ void MainWindow::onUndoTriggered()
 void MainWindow::onRedoTriggered()
 {
     if (m_projectController && m_projectController->hasMultipleRedoBranches()) {
-        m_projectController->promptAndRedoGit(this);
+        QList<GitCommitInfo> branches = m_projectController->redoBranches();
+        if (branches.size() == 1) {
+            m_projectController->redoGit(branches.first().hash);
+        } else if (!branches.isEmpty()) {
+            QString selected = BranchSelectionDialog::selectBranch(branches, this);
+            if (!selected.isEmpty()) {
+                m_projectController->redoGit(selected);
+            }
+        }
         updateUndoRedoActions();
         return;
     }

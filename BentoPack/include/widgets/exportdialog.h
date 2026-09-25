@@ -24,6 +24,7 @@
 #include <memory>
 #include "extractor/export.h"
 #include "model/spritedocument.h"
+#include "bentopackwidgets_export.h"
 
 namespace Ui {
 class ExportDialog;
@@ -32,7 +33,7 @@ class ExportDialog;
 class ProjectController;
 class QTimer;
 
-class ExportDialog : public QDialog
+class BENTOPACK_WIDGETS_EXPORT ExportDialog : public QDialog
 {
     Q_OBJECT
 

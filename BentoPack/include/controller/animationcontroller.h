@@ -33,7 +33,7 @@
 #include <QComboBox>
 #include "model/spritedocument.h"
 
-#include "bentopackcore_export.h"
+#include "bentopackwidgets_export.h"
 
 class AnimationPlayer;
 class TimelineFilmstripWidget;
@@ -42,7 +42,7 @@ class QUndoStack;
 /**
  * @brief Controller managing animation playback, preview rendering, timeline, and animation list CRUD.
  */
-class SPRITESTUDIO_CORE_EXPORT AnimationController : public QObject
+class BENTOPACK_WIDGETS_EXPORT AnimationController : public QObject
 {
     Q_OBJECT
 

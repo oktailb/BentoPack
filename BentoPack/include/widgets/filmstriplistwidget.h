@@ -20,7 +20,7 @@
 #ifndef FILMSTRIPLISTWIDGET_H
 #define FILMSTRIPLISTWIDGET_H
 
-#include "bentopackcore_export.h"
+#include "bentopackwidgets_export.h"
 #include <QListWidget>
 #include <QPoint>
 
@@ -37,7 +37,7 @@ class QMouseEvent;
  * Implements deterministic linear drag-and-drop insertion with a high-contrast
  * vertical insertion line indicator, bypassing Qt's fragile IconMode InternalMove positioning.
  */
-class SPRITESTUDIO_CORE_EXPORT FilmstripListWidget : public QListWidget
+class BENTOPACK_WIDGETS_EXPORT FilmstripListWidget : public QListWidget
 {
     Q_OBJECT
 

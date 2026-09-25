@@ -35,12 +35,13 @@ class QPushButton;
 class QGroupBox;
 class QDialogButtonBox;
 class QUndoStack;
+#include "bentopackwidgets_export.h"
 
 /**
  * @brief Interactive dialog for tuning 2D polygon and tight mesh parameters
  *        with live preview, wireframe rendering, and GPU overdraw reduction metrics.
  */
-class PolygonMeshDialog : public QDialog
+class BENTOPACK_WIDGETS_EXPORT PolygonMeshDialog : public QDialog
 {
     Q_OBJECT
 

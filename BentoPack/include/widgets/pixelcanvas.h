@@ -37,11 +37,13 @@ enum class PixelTool {
     SelectColor
 };
 
+#include "bentopackwidgets_export.h"
+
 /**
  * @brief High-precision pixel-art canvas widget with zoom, grid, Bresenham drawing,
  * selections, clipboard, and local undo/redo.
  */
-class PixelCanvas : public QWidget
+class BENTOPACK_WIDGETS_EXPORT PixelCanvas : public QWidget
 {
     Q_OBJECT
 

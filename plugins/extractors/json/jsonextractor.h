@@ -7,7 +7,6 @@
 
 #include <QtPlugin>
 #include "extractor/extractor.h"
-#include "jsonExtractordialog.h"
 
 /**
  * @brief Extractor plugin for JSON sprite databases (TexturePacker, Aseprite).

@@ -10,6 +10,7 @@ target_include_directories(filter_pixelrescale PUBLIC
 )
 
 target_link_libraries(filter_pixelrescale PRIVATE
+    BentoPackWidgets
     BentoPackCore
     Qt6::Core
     Qt6::Gui

@@ -18,11 +18,7 @@
 */
 
 #include "filters/filterregistry.h"
-#include "widgets/filterdialogbase.h"
 #include "model/spritedocument.h"
-#include <QMenu>
-#include <QAction>
-#include <QMessageBox>
 #include <QDir>
 #include <QFileInfo>
 #include <QPluginLoader>
@@ -186,63 +182,3 @@ void FilterRegistry::loadPlugins(const QString &dirPath)
     }
 }
 
-void FilterRegistry::populateMenu(QMenu *menu,
-                                  SpriteDocument *doc,
-                                  QUndoStack *undoStack,
-                                  QWidget *parentWindow)
-{
-    if (!menu) return;
-    menu->clear();
-
-    if (!m_initialized) {
-        initDefaultFilters();
-    }
-
-    QStringList cats = categories();
-    for (int i = 0; i < cats.size(); ++i) {
-        const QString &cat = cats[i];
-        if (i > 0) {
-            menu->addSeparator();
-        }
-
-        // Section header for category
-        QString catDisplay = cat;
-        if (cat == QLatin1String("Cleanup"))       catDisplay = QObject::tr("Cleanup");
-        else if (cat == QLatin1String("Colors"))   catDisplay = QObject::tr("Colors");
-        else if (cat == QLatin1String("Effects"))  catDisplay = QObject::tr("Effects");
-        else if (cat == QLatin1String("Geometry")) catDisplay = QObject::tr("Geometry");
-
-        QAction *headerAction = menu->addSection(catDisplay);
-        Q_UNUSED(headerAction);
-
-        QList<FilterPlugin*> catFilters = filtersByCategory(cat);
-        for (FilterPlugin *filter : catFilters) {
-            if (!filter) continue;
-
-            QAction *action = menu->addAction(filter->name());
-            action->setToolTip(filter->description());
-            if (!filter->shortcut().isEmpty()) {
-                action->setShortcut(filter->shortcut());
-            }
-            if (!filter->icon().isNull()) {
-                action->setIcon(filter->icon());
-            }
-
-            QObject *context = parentWindow ? static_cast<QObject*>(parentWindow) : static_cast<QObject*>(menu);
-            connect(action, &QAction::triggered, context, [filter, doc, undoStack, parentWindow]() {
-                if (!doc || doc->atlas().isNull()) {
-                    QMessageBox::information(parentWindow,
-                                             QObject::tr("No Atlas Loaded"),
-                                             QObject::tr("Please open or import a sprite sheet first before applying a filter."));
-                    return;
-                }
-
-                FilterDialogBase *dlg = filter->createDialog(doc, undoStack, parentWindow);
-                if (dlg) {
-                    dlg->exec();
-                    delete dlg;
-                }
-            });
-        }
-    }
-}

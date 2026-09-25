@@ -24,7 +24,6 @@
 #include "include/config/appconfig.h"
 #include "include/project/sessionmanager.h"
 #include "include/project/projectmanager.h"
-#include "include/widgets/branchselectiondialog.h"
 #include "packer/vramtexturecompressor.h"
 #include <QUndoStack>
 #include <QSettings>
@@ -935,24 +934,5 @@ bool ProjectController::redoGit(const QString &targetCommitHash)
     return checkoutRevision(commitToCheckout, &err);
 }
 
-bool ProjectController::promptAndRedoGit(QWidget *parent)
-{
-    if (!m_sessionManager || !m_sessionManager->hasActiveSession()) return false;
-    QString headHash = m_sessionManager->gitHeadCommitHash();
-    if (headHash.isEmpty()) return false;
-
-    QList<GitCommitInfo> children = m_sessionManager->gitChildrenOf(headHash);
-    if (children.isEmpty()) return false;
-
-    if (children.size() == 1) {
-        return redoGit(children.first().hash);
-    }
-
-    QString selected = BranchSelectionDialog::selectBranch(children, parent);
-    if (!selected.isEmpty()) {
-        return redoGit(selected);
-    }
-    return false;
-}
 
 

@@ -30,8 +30,9 @@
 #include <QFormLayout>
 #include <QPixmap>
 #include <QIcon>
+#include "bentopackwidgets_export.h"
 
-class AboutDialog : public QDialog
+class BENTOPACK_WIDGETS_EXPORT AboutDialog : public QDialog
 {
   Q_OBJECT
 

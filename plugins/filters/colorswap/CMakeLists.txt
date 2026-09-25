@@ -10,6 +10,7 @@ target_include_directories(filter_colorswap PUBLIC
 )
 
 target_link_libraries(filter_colorswap PRIVATE
+    BentoPackWidgets
     BentoPackCore
     Qt6::Core
     Qt6::Gui

@@ -51,16 +51,20 @@
 
 ## 🔧 Chantiers Techniques Issus de l'Audit Critique (Priorité Immédiate)
 
-### CH-TECH-1 : Scission Architecturale de `BentoPackCore` (Découplage UI / Headless)
-- **Constat d'Audit :** La cible CMake `BentoPackCore` compile `MainWindow`, l'ensemble des boîtes de dialogue et dépend de `Qt6::Widgets`. Par conséquent, le CLI headless `bentopack-cli` lie inutilement l'infrastructure graphique et impose `qputenv("QT_QPA_PLATFORM", "offscreen")` avec des dépendances X11/Wayland/libGL sur les serveurs de build CI. De plus, les plugins de filtres et d'extracteurs lient `MainWindow` via le Core.
-- **Plan d'Action :**
-  1. **Scinder la bibliothèque en deux cibles distinctes :**
-     - `BentoPackCore` (Shared Library) : Modèles de données (`SpriteDocument`), algorithmes d'empaquetage (`AtlasPacker`, `MaxRectsPacker`, `TightPolygonPacker`), géométrie (`ContourTracer`, `Triangulator`), compression VRAM (`VramTextureCompressor`), gestionnaire de licence (`LicenseManager`, `IntegrityGuard`), sessions et codecs d'I/O headless. Dépendances strictes : `Qt6::Core`, `Qt6::Gui`, `Qt6::Concurrent`. **Zéro dépendance vers `Qt6::Widgets`**.
-     - `BentoPackGUI` (ou inclus directement dans l'exécutable `bentopack`) : Contrôleurs d'interface, `MainWindow`, vues `QGraphicsView`, boîtes de dialogue (`ExportDialog`, `SettingsDialog`, `PixelEditorDialog`) et délégués.
-  2. **Refactoriser `bentopack-cli` :**
-     - Remplacer `QApplication` par `QGuiApplication` (ou `QCoreApplication` si les opérations graphiques le permettent).
-     - Lier exclusivement `BentoPackCore`.
-     - Supprimer le hack `qputenv("QT_QPA_PLATFORM", "offscreen")`.
+### CH-TECH-1 : Scission Architecturale de `BentoPackCore` (Découplage UI / Headless) — ✅ **TERMINÉ**
+- **Constat d'Audit :** La cible CMake `BentoPackCore` compilait initialement `MainWindow`, l'ensemble des boîtes de dialogue et dépendait de `Qt6::Widgets`. Par conséquent, le CLI headless `bentopack-cli` liait inutilement l'infrastructure graphique.
+- **Réalisations Effectuées :**
+  1. **Scission effective en deux bibliothèques partagées distinctes :**
+     - `BentoPackCore` (Shared Library) : 100% headless (`SpriteDocument`, `AtlasPacker`, `MaxRectsPacker`, `TightPolygonPacker`, `VramTextureCompressor`, `ContourTracer`, `Triangulator`, `PolygonSimplifier`, `PolygonMerger`, `SessionManager`, `ProjectManager`, `ProjectController`, `LicenseManager`, `IntegrityGuard`, pipeline CLI et registres d'I/O). Dépendances strictes : `Qt6::Core`, `Qt6::Gui`, `Qt6::Concurrent`, `Qt6::Network`, `LibGit2`, `basisu_encoder`. **Zéro dépendance vers `Qt6::Widgets`** (validé par `ldd`).
+     - `BentoPackWidgets` (Shared Library) : Composants graphiques et interfaces utilisateur (`MainWindow`, `AnimationController`, `AtlasViewController`, `ArrangementModel`, `AtlasBoxItem`, `AboutDialog`, `FilterMenuBuilder`, `FilterDialogBase`, `ExportDialog`, `SettingsDialog`, `PixelEditorDialog`, `PixelCanvas`, `PolygonMeshDialog`, `GitHistoryDock`, `BranchSelectionDialog`, etc.). Dépendances : `BentoPackCore`, `Qt6::Widgets`.
+  2. **Refactorisation de `bentopack-cli` :**
+     - Transition vers `QGuiApplication` (plus de `QApplication` ni de dépendance à `libQt6Widgets.so`).
+     - Lancement headless allégé, parfait pour les runners CI et les serveurs de build sans serveur X11/Wayland.
+  3. **Découplage des menus et dialogues :**
+     - Extraction de la construction des menus de filtres dans `FilterMenuBuilder` (`BentoPackWidgets`), purgeant `FilterRegistry` (`BentoPackCore`) de toute dépendance vers `QMenu`, `QAction` et `QWidget`.
+     - Migration de la boîte de sélection de branche Git dans `MainWindow::onRedoTriggered`, purgeant `ProjectController` de toute inclusion de dialogue.
+  4. **Validation des tests :**
+     - 8/8 suites de tests CTest validées et passant à 100% (`test_extractors`, `test_controllers`, `test_project`, `test_core`, `test_cli`, `test_mesh`, `test_pixel_editor`, `test_vram_compression`).
 
 ### CH-TECH-2 : Finalisation du Rebranding & Élimination des Reliques `SpriteStudio`
 - **Constat d'Audit :** Le renommage de `SpriteStudio` en `BentoPack` est incomplet au niveau du code source C++ et des scripts :

@@ -10,6 +10,7 @@ target_include_directories(filter_retropalette PUBLIC
 )
 
 target_link_libraries(filter_retropalette PRIVATE
+    BentoPackWidgets
     BentoPackCore
     Qt6::Core
     Qt6::Gui

@@ -46,11 +46,11 @@ class QUndoCommand;
  * - Standardized control bar: "Live preview" checkbox, dynamic status badge, "Reset defaults" button, and OK/Cancel button box.
  * - Seamless Undo/Redo integration: pushes created QUndoCommand onto QUndoStack on OK (accept()).
  */
-#include "bentopackcore_export.h"
+#include "bentopackwidgets_export.h"
 
 struct SpriteDetectionOptions;
 
-class SPRITESTUDIO_CORE_EXPORT FilterDialogBase : public QDialog
+class BENTOPACK_WIDGETS_EXPORT FilterDialogBase : public QDialog
 {
     Q_OBJECT
 

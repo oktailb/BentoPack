@@ -17,21 +17,26 @@
  under the License.
 */
 
-#ifndef BENTOPACKCORE_EXPORT_H
-#define BENTOPACKCORE_EXPORT_H
+#ifndef FILTERMENUBUILDER_H
+#define FILTERMENUBUILDER_H
 
-#include <QtCore/qglobal.h>
+#include <QMenu>
+#include <QWidget>
+#include "bentopackwidgets_export.h"
 
-#if defined(BENTOPACK_STATIC) || defined(SPRITESTUDIO_STATIC)
-#  define BENTOPACK_CORE_EXPORT
-#elif defined(BENTOPACK_CORE_LIBRARY) || defined(SPRITESTUDIO_CORE_LIBRARY)
-#  define BENTOPACK_CORE_EXPORT Q_DECL_EXPORT
-#else
-#  define BENTOPACK_CORE_EXPORT Q_DECL_IMPORT
-#endif
+class SpriteDocument;
+class QUndoStack;
 
-#ifndef SPRITESTUDIO_CORE_EXPORT
-#  define SPRITESTUDIO_CORE_EXPORT BENTOPACK_CORE_EXPORT
-#endif
+/**
+ * @brief GUI helper that builds dynamic menu actions from registered filter plugins.
+ */
+class BENTOPACK_WIDGETS_EXPORT FilterMenuBuilder
+{
+public:
+    static void populateMenu(QMenu *menu,
+                             SpriteDocument *doc,
+                             QUndoStack *undoStack,
+                             QWidget *parentWindow);
+};
 
-#endif // BENTOPACKCORE_EXPORT_H
+#endif // FILTERMENUBUILDER_H

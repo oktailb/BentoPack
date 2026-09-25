@@ -8,43 +8,43 @@
         <location filename="../src/aboutdialog.cpp" line="65"/>
         <location filename="../src/aboutdialog.cpp" line="73"/>
         <location filename="../src/aboutdialog.cpp" line="227"/>
-        <location filename="../../tests/test_controllers.cpp" line="1705"/>
-        <location filename="../../tests/test_controllers.cpp" line="1770"/>
-        <location filename="../../tests/test_controllers.cpp" line="1835"/>
+        <location filename="../../tests/test_controllers.cpp" line="1706"/>
+        <location filename="../../tests/test_controllers.cpp" line="1771"/>
+        <location filename="../../tests/test_controllers.cpp" line="1836"/>
         <source>KEY_DIALOG_ABOUT_TITLE</source>
         <translation>À propos</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="74"/>
         <location filename="../src/aboutdialog.cpp" line="228"/>
-        <location filename="../../tests/test_controllers.cpp" line="1706"/>
-        <location filename="../../tests/test_controllers.cpp" line="1771"/>
-        <location filename="../../tests/test_controllers.cpp" line="1836"/>
+        <location filename="../../tests/test_controllers.cpp" line="1707"/>
+        <location filename="../../tests/test_controllers.cpp" line="1772"/>
+        <location filename="../../tests/test_controllers.cpp" line="1837"/>
         <source>KEY_DIALOG_ABOUT_PRICING</source>
         <translation>Tarifs &amp; Licences</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="75"/>
         <location filename="../src/aboutdialog.cpp" line="229"/>
-        <location filename="../../tests/test_controllers.cpp" line="1707"/>
-        <location filename="../../tests/test_controllers.cpp" line="1772"/>
-        <location filename="../../tests/test_controllers.cpp" line="1837"/>
+        <location filename="../../tests/test_controllers.cpp" line="1708"/>
+        <location filename="../../tests/test_controllers.cpp" line="1773"/>
+        <location filename="../../tests/test_controllers.cpp" line="1838"/>
         <source>KEY_DIALOG_ABOUT_PLUGINS</source>
         <translation>Plugins &amp; Statut</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="475"/>
-        <location filename="../../tests/test_controllers.cpp" line="1708"/>
-        <location filename="../../tests/test_controllers.cpp" line="1773"/>
-        <location filename="../../tests/test_controllers.cpp" line="1838"/>
+        <location filename="../../tests/test_controllers.cpp" line="1709"/>
+        <location filename="../../tests/test_controllers.cpp" line="1774"/>
+        <location filename="../../tests/test_controllers.cpp" line="1839"/>
         <source>KEY_PRICING_ACTIVE_EDITION</source>
         <translation>[ÉDITION ACTIVE]</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="490"/>
-        <location filename="../../tests/test_controllers.cpp" line="1709"/>
-        <location filename="../../tests/test_controllers.cpp" line="1774"/>
-        <location filename="../../tests/test_controllers.cpp" line="1839"/>
+        <location filename="../../tests/test_controllers.cpp" line="1710"/>
+        <location filename="../../tests/test_controllers.cpp" line="1775"/>
+        <location filename="../../tests/test_controllers.cpp" line="1840"/>
         <source>KEY_PRICING_TARGET_LABEL</source>
         <translation>Pour qui :</translation>
     </message>
@@ -341,9 +341,9 @@
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="25"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="549"/>
-        <location filename="../../tests/test_controllers.cpp" line="1724"/>
-        <location filename="../../tests/test_controllers.cpp" line="1789"/>
-        <location filename="../../tests/test_controllers.cpp" line="1854"/>
+        <location filename="../../tests/test_controllers.cpp" line="1725"/>
+        <location filename="../../tests/test_controllers.cpp" line="1790"/>
+        <location filename="../../tests/test_controllers.cpp" line="1855"/>
         <source>Atlas Bin-Packing (MaxRects)</source>
         <translation>Empaquetage d&apos;Atlas (MaxRects)</translation>
     </message>
@@ -557,9 +557,9 @@
     <name>AtlasPackingFilter</name>
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1723"/>
-        <location filename="../../tests/test_controllers.cpp" line="1788"/>
-        <location filename="../../tests/test_controllers.cpp" line="1853"/>
+        <location filename="../../tests/test_controllers.cpp" line="1724"/>
+        <location filename="../../tests/test_controllers.cpp" line="1789"/>
+        <location filename="../../tests/test_controllers.cpp" line="1854"/>
         <source>Atlas Bin-Packing (MaxRects)...</source>
         <translation>Empaquetage d&apos;Atlas (MaxRects)...</translation>
     </message>
@@ -591,9 +591,9 @@
     <name>BackgroundRemovalDialog</name>
     <message>
         <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="25"/>
-        <location filename="../../tests/test_controllers.cpp" line="1716"/>
-        <location filename="../../tests/test_controllers.cpp" line="1781"/>
-        <location filename="../../tests/test_controllers.cpp" line="1846"/>
+        <location filename="../../tests/test_controllers.cpp" line="1717"/>
+        <location filename="../../tests/test_controllers.cpp" line="1782"/>
+        <location filename="../../tests/test_controllers.cpp" line="1847"/>
         <source>Background Removal</source>
         <translation>Suppression d&apos;arrière-plan</translation>
     </message>
@@ -803,9 +803,9 @@ Choisissez la branche à restaurer :</translation>
     <name>ColorAdjustFilter</name>
     <message>
         <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1719"/>
-        <location filename="../../tests/test_controllers.cpp" line="1784"/>
-        <location filename="../../tests/test_controllers.cpp" line="1849"/>
+        <location filename="../../tests/test_controllers.cpp" line="1720"/>
+        <location filename="../../tests/test_controllers.cpp" line="1785"/>
+        <location filename="../../tests/test_controllers.cpp" line="1850"/>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
         <translation>Ajustement des Couleurs (HSV &amp; Contraste)...</translation>
     </message>
@@ -1065,9 +1065,9 @@ La suppression stricte efface le pixel.</translation>
     <name>ExportDialog</name>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="14"/>
-        <location filename="../../tests/test_controllers.cpp" line="1725"/>
-        <location filename="../../tests/test_controllers.cpp" line="1790"/>
-        <location filename="../../tests/test_controllers.cpp" line="1855"/>
+        <location filename="../../tests/test_controllers.cpp" line="1726"/>
+        <location filename="../../tests/test_controllers.cpp" line="1791"/>
+        <location filename="../../tests/test_controllers.cpp" line="1856"/>
         <source>Export Atlas &amp; Animations</source>
         <translation>Exporter l&apos;Atlas &amp; les Animations</translation>
     </message>
@@ -1128,17 +1128,17 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="99"/>
-        <location filename="../../tests/test_controllers.cpp" line="1726"/>
-        <location filename="../../tests/test_controllers.cpp" line="1791"/>
-        <location filename="../../tests/test_controllers.cpp" line="1856"/>
+        <location filename="../../tests/test_controllers.cpp" line="1727"/>
+        <location filename="../../tests/test_controllers.cpp" line="1792"/>
+        <location filename="../../tests/test_controllers.cpp" line="1857"/>
         <source>Keep Current Layout (WYSIWYG — As Displayed)</source>
         <translation>Conserver l&apos;agencement actuel (WYSIWYG — Tel quel)</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="104"/>
-        <location filename="../../tests/test_controllers.cpp" line="1727"/>
-        <location filename="../../tests/test_controllers.cpp" line="1792"/>
-        <location filename="../../tests/test_controllers.cpp" line="1857"/>
+        <location filename="../../tests/test_controllers.cpp" line="1728"/>
+        <location filename="../../tests/test_controllers.cpp" line="1793"/>
+        <location filename="../../tests/test_controllers.cpp" line="1858"/>
         <source>MaxRects (Best Short Side Fit — Recommended)</source>
         <translation>MaxRects (Best Short Side Fit — Recommandé)</translation>
     </message>
@@ -1199,9 +1199,9 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="216"/>
-        <location filename="../../tests/test_controllers.cpp" line="1728"/>
-        <location filename="../../tests/test_controllers.cpp" line="1793"/>
-        <location filename="../../tests/test_controllers.cpp" line="1858"/>
+        <location filename="../../tests/test_controllers.cpp" line="1729"/>
+        <location filename="../../tests/test_controllers.cpp" line="1794"/>
+        <location filename="../../tests/test_controllers.cpp" line="1859"/>
         <source>Force Power of Two (2^n)</source>
         <translation>Forcer la Puissance de Deux (2^n)</translation>
     </message>
@@ -1391,9 +1391,9 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="334"/>
-        <location filename="../../tests/test_controllers.cpp" line="1729"/>
-        <location filename="../../tests/test_controllers.cpp" line="1794"/>
-        <location filename="../../tests/test_controllers.cpp" line="1859"/>
+        <location filename="../../tests/test_controllers.cpp" line="1730"/>
+        <location filename="../../tests/test_controllers.cpp" line="1795"/>
+        <location filename="../../tests/test_controllers.cpp" line="1860"/>
         <source>Packing Efficiency: Preserved as-is (WYSIWYG)</source>
         <translation>Efficacité d&apos;empaquetage : Conservée telle quelle (WYSIWYG)</translation>
     </message>
@@ -1476,9 +1476,9 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="49"/>
         <location filename="../src/widgets/exportdialog.cpp" line="391"/>
-        <location filename="../../tests/test_controllers.cpp" line="1730"/>
-        <location filename="../../tests/test_controllers.cpp" line="1795"/>
-        <location filename="../../tests/test_controllers.cpp" line="1860"/>
+        <location filename="../../tests/test_controllers.cpp" line="1731"/>
+        <location filename="../../tests/test_controllers.cpp" line="1796"/>
+        <location filename="../../tests/test_controllers.cpp" line="1861"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -1496,9 +1496,9 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="81"/>
         <location filename="../src/widgets/filterdialogbase.cpp" line="259"/>
-        <location filename="../../tests/test_controllers.cpp" line="1717"/>
-        <location filename="../../tests/test_controllers.cpp" line="1782"/>
-        <location filename="../../tests/test_controllers.cpp" line="1847"/>
+        <location filename="../../tests/test_controllers.cpp" line="1718"/>
+        <location filename="../../tests/test_controllers.cpp" line="1783"/>
+        <location filename="../../tests/test_controllers.cpp" line="1848"/>
         <source>Live Preview</source>
         <translation>Aperçu en direct</translation>
     </message>
@@ -1511,9 +1511,9 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="86"/>
         <location filename="../src/widgets/filterdialogbase.cpp" line="263"/>
-        <location filename="../../tests/test_controllers.cpp" line="1718"/>
-        <location filename="../../tests/test_controllers.cpp" line="1783"/>
-        <location filename="../../tests/test_controllers.cpp" line="1848"/>
+        <location filename="../../tests/test_controllers.cpp" line="1719"/>
+        <location filename="../../tests/test_controllers.cpp" line="1784"/>
+        <location filename="../../tests/test_controllers.cpp" line="1849"/>
         <source>Auto-detect Sprite Boxes</source>
         <translation>Détection auto des boîtes</translation>
     </message>
@@ -1547,9 +1547,9 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="275"/>
-        <location filename="../../tests/test_controllers.cpp" line="1743"/>
-        <location filename="../../tests/test_controllers.cpp" line="1808"/>
-        <location filename="../../tests/test_controllers.cpp" line="1874"/>
+        <location filename="../../tests/test_controllers.cpp" line="1744"/>
+        <location filename="../../tests/test_controllers.cpp" line="1809"/>
+        <location filename="../../tests/test_controllers.cpp" line="1875"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -1578,9 +1578,9 @@ La suppression stricte efface le pixel.</translation>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="22"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="22"/>
         <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="22"/>
-        <location filename="../../tests/test_controllers.cpp" line="1722"/>
-        <location filename="../../tests/test_controllers.cpp" line="1787"/>
-        <location filename="../../tests/test_controllers.cpp" line="1852"/>
+        <location filename="../../tests/test_controllers.cpp" line="1723"/>
+        <location filename="../../tests/test_controllers.cpp" line="1788"/>
+        <location filename="../../tests/test_controllers.cpp" line="1853"/>
         <source>Geometry &amp; Transform</source>
         <translation>Géométrie &amp; Transformations</translation>
     </message>
@@ -1706,9 +1706,9 @@ La suppression stricte efface le pixel.</translation>
     <message>
         <location filename="../src/widgets/githistorydock.cpp" line="269"/>
         <location filename="../src/widgets/githistorydock.cpp" line="600"/>
-        <location filename="../../tests/test_controllers.cpp" line="1712"/>
-        <location filename="../../tests/test_controllers.cpp" line="1777"/>
-        <location filename="../../tests/test_controllers.cpp" line="1842"/>
+        <location filename="../../tests/test_controllers.cpp" line="1713"/>
+        <location filename="../../tests/test_controllers.cpp" line="1778"/>
+        <location filename="../../tests/test_controllers.cpp" line="1843"/>
         <source>KEY_GIT_BTN_RESTORE</source>
         <translation>Restaurer cette révision</translation>
     </message>
@@ -1925,9 +1925,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="983"/>
-        <location filename="../../tests/test_controllers.cpp" line="1701"/>
-        <location filename="../../tests/test_controllers.cpp" line="1766"/>
-        <location filename="../../tests/test_controllers.cpp" line="1831"/>
+        <location filename="../../tests/test_controllers.cpp" line="1702"/>
+        <location filename="../../tests/test_controllers.cpp" line="1767"/>
+        <location filename="../../tests/test_controllers.cpp" line="1832"/>
         <source>KEY_TOOL_SELECT</source>
         <translation>Sélectionner</translation>
     </message>
@@ -1968,30 +1968,30 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="685"/>
-        <location filename="../src/mainwindow.cpp" line="330"/>
-        <location filename="../src/mainwindow.cpp" line="915"/>
+        <location filename="../src/mainwindow.cpp" line="332"/>
+        <location filename="../src/mainwindow.cpp" line="917"/>
         <source>KEY_ANIM_COL_NAME</source>
         <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="690"/>
-        <location filename="../src/mainwindow.cpp" line="330"/>
-        <location filename="../src/mainwindow.cpp" line="917"/>
+        <location filename="../src/mainwindow.cpp" line="332"/>
+        <location filename="../src/mainwindow.cpp" line="919"/>
         <source>KEY_ANIM_COL_FPS</source>
         <translation>FPS</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="700"/>
-        <location filename="../src/mainwindow.cpp" line="330"/>
-        <location filename="../src/mainwindow.cpp" line="916"/>
+        <location filename="../src/mainwindow.cpp" line="332"/>
+        <location filename="../src/mainwindow.cpp" line="918"/>
         <source>KEY_ANIM_COL_FRAMES</source>
         <translation>Frames</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="879"/>
-        <location filename="../../tests/test_controllers.cpp" line="1695"/>
-        <location filename="../../tests/test_controllers.cpp" line="1760"/>
-        <location filename="../../tests/test_controllers.cpp" line="1825"/>
+        <location filename="../../tests/test_controllers.cpp" line="1696"/>
+        <location filename="../../tests/test_controllers.cpp" line="1761"/>
+        <location filename="../../tests/test_controllers.cpp" line="1826"/>
         <source>KEY_MENU_FILE</source>
         <translation>Fichier</translation>
     </message>
@@ -2033,18 +2033,18 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="942"/>
-        <location filename="../../tests/test_controllers.cpp" line="1699"/>
-        <location filename="../../tests/test_controllers.cpp" line="1764"/>
-        <location filename="../../tests/test_controllers.cpp" line="1829"/>
+        <location filename="../../tests/test_controllers.cpp" line="1700"/>
+        <location filename="../../tests/test_controllers.cpp" line="1765"/>
+        <location filename="../../tests/test_controllers.cpp" line="1830"/>
         <source>KEY_ACTION_OPEN</source>
         <translation>&amp;Ouvrir</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="947"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="152"/>
-        <location filename="../../tests/test_controllers.cpp" line="1700"/>
-        <location filename="../../tests/test_controllers.cpp" line="1765"/>
-        <location filename="../../tests/test_controllers.cpp" line="1830"/>
+        <location filename="../../tests/test_controllers.cpp" line="1701"/>
+        <location filename="../../tests/test_controllers.cpp" line="1766"/>
+        <location filename="../../tests/test_controllers.cpp" line="1831"/>
         <source>KEY_ACTION_SAVE</source>
         <translation>&amp;Enregistrer</translation>
     </message>
@@ -2078,92 +2078,92 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="162"/>
-        <location filename="../src/mainwindow.cpp" line="703"/>
+        <location filename="../src/mainwindow.cpp" line="164"/>
+        <location filename="../src/mainwindow.cpp" line="705"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="88"/>
         <source>KEY_MSG_LOAD_ERROR</source>
         <translation>Erreur de chargement</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="384"/>
+        <location filename="../src/mainwindow.cpp" line="386"/>
         <source>KEY_STATUS_READY_TO_START</source>
         <translation>Prêt à démarrer</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="402"/>
-        <location filename="../src/mainwindow.cpp" line="966"/>
+        <location filename="../src/mainwindow.cpp" line="404"/>
+        <location filename="../src/mainwindow.cpp" line="968"/>
         <source>KEY_STATUS_PROGRESS</source>
         <translation>Progression</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="253"/>
-        <location filename="../src/mainwindow.cpp" line="480"/>
-        <location filename="../src/mainwindow.cpp" line="969"/>
+        <location filename="../src/mainwindow.cpp" line="255"/>
+        <location filename="../src/mainwindow.cpp" line="482"/>
+        <location filename="../src/mainwindow.cpp" line="971"/>
         <source>KEY_LABEL_TIMING</source>
         <translation>Timing</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="487"/>
-        <location filename="../src/mainwindow.cpp" line="930"/>
+        <location filename="../src/mainwindow.cpp" line="489"/>
+        <location filename="../src/mainwindow.cpp" line="932"/>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Édition</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="489"/>
-        <location filename="../src/mainwindow.cpp" line="933"/>
+        <location filename="../src/mainwindow.cpp" line="491"/>
+        <location filename="../src/mainwindow.cpp" line="935"/>
         <source>KEY_ACTION_UNDO</source>
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="494"/>
-        <location filename="../src/mainwindow.cpp" line="936"/>
+        <location filename="../src/mainwindow.cpp" line="496"/>
+        <location filename="../src/mainwindow.cpp" line="938"/>
         <source>KEY_ACTION_REDO</source>
         <translation>&amp;Rétablir</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="538"/>
-        <location filename="../src/mainwindow.cpp" line="939"/>
-        <location filename="../../tests/test_controllers.cpp" line="1715"/>
-        <location filename="../../tests/test_controllers.cpp" line="1780"/>
-        <location filename="../../tests/test_controllers.cpp" line="1845"/>
+        <location filename="../src/mainwindow.cpp" line="540"/>
+        <location filename="../src/mainwindow.cpp" line="941"/>
+        <location filename="../../tests/test_controllers.cpp" line="1716"/>
+        <location filename="../../tests/test_controllers.cpp" line="1781"/>
+        <location filename="../../tests/test_controllers.cpp" line="1846"/>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Filtres</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="557"/>
-        <location filename="../src/mainwindow.cpp" line="927"/>
+        <location filename="../src/mainwindow.cpp" line="559"/>
+        <location filename="../src/mainwindow.cpp" line="929"/>
         <source>KEY_MENU_RECENT_PROJECTS</source>
         <translation>Projets récents</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="561"/>
-        <location filename="../src/mainwindow.cpp" line="924"/>
+        <location filename="../src/mainwindow.cpp" line="563"/>
+        <location filename="../src/mainwindow.cpp" line="926"/>
         <source>KEY_MENU_RECENT_FILES</source>
         <translation>Fichiers récents</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="664"/>
+        <location filename="../src/mainwindow.cpp" line="666"/>
         <source>KEY_ACTION_NO_RECENT_FILES</source>
         <translation>Aucun fichier récent</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="669"/>
-        <location filename="../src/mainwindow.cpp" line="696"/>
+        <location filename="../src/mainwindow.cpp" line="671"/>
+        <location filename="../src/mainwindow.cpp" line="698"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="677"/>
+        <location filename="../src/mainwindow.cpp" line="679"/>
         <source>KEY_ACTION_CLEAR_RECENT_FILES</source>
         <translation>Effacer les fichiers récents</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="691"/>
+        <location filename="../src/mainwindow.cpp" line="693"/>
         <source>KEY_ACTION_NO_RECENT_PROJECTS</source>
         <translation>Aucun projet récent</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="709"/>
+        <location filename="../src/mainwindow.cpp" line="711"/>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Effacer les projets récents</translation>
     </message>
@@ -2172,17 +2172,17 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <location filename="../src/mainwindow_animation.cpp" line="113"/>
         <location filename="../src/mainwindow_atlas.cpp" line="105"/>
         <location filename="../src/mainwindow_atlas.cpp" line="196"/>
-        <location filename="../../tests/test_controllers.cpp" line="1702"/>
-        <location filename="../../tests/test_controllers.cpp" line="1767"/>
-        <location filename="../../tests/test_controllers.cpp" line="1832"/>
+        <location filename="../../tests/test_controllers.cpp" line="1703"/>
+        <location filename="../../tests/test_controllers.cpp" line="1768"/>
+        <location filename="../../tests/test_controllers.cpp" line="1833"/>
         <source>KEY_CTX_CREATE_ANIM</source>
         <translation>Créer une animation depuis la sélection</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="234"/>
-        <location filename="../../tests/test_controllers.cpp" line="1703"/>
-        <location filename="../../tests/test_controllers.cpp" line="1768"/>
-        <location filename="../../tests/test_controllers.cpp" line="1833"/>
+        <location filename="../../tests/test_controllers.cpp" line="1704"/>
+        <location filename="../../tests/test_controllers.cpp" line="1769"/>
+        <location filename="../../tests/test_controllers.cpp" line="1834"/>
         <source>KEY_CTX_ADD_TO_ANIM</source>
         <translation>Ajouter à l&apos;animation</translation>
     </message>
@@ -2198,9 +2198,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="313"/>
-        <location filename="../../tests/test_controllers.cpp" line="1704"/>
-        <location filename="../../tests/test_controllers.cpp" line="1769"/>
-        <location filename="../../tests/test_controllers.cpp" line="1834"/>
+        <location filename="../../tests/test_controllers.cpp" line="1705"/>
+        <location filename="../../tests/test_controllers.cpp" line="1770"/>
+        <location filename="../../tests/test_controllers.cpp" line="1835"/>
         <source>KEY_CTX_SELECT_ALL</source>
         <translation>Tout sélectionner</translation>
     </message>
@@ -2221,8 +2221,8 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Ajuster aux pixels</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="524"/>
-        <location filename="../src/mainwindow.cpp" line="958"/>
+        <location filename="../src/mainwindow.cpp" line="526"/>
+        <location filename="../src/mainwindow.cpp" line="960"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="291"/>
         <location filename="../src/mainwindow_atlas.cpp" line="130"/>
         <location filename="../src/mainwindow_atlas.cpp" line="222"/>
@@ -2325,9 +2325,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="895"/>
-        <location filename="../../tests/test_controllers.cpp" line="1696"/>
-        <location filename="../../tests/test_controllers.cpp" line="1761"/>
-        <location filename="../../tests/test_controllers.cpp" line="1826"/>
+        <location filename="../../tests/test_controllers.cpp" line="1697"/>
+        <location filename="../../tests/test_controllers.cpp" line="1762"/>
+        <location filename="../../tests/test_controllers.cpp" line="1827"/>
         <source>KEY_MENU_VIEW</source>
         <translation>Affichage</translation>
     </message>
@@ -2342,10 +2342,10 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Rétablir la disposition par défaut des panneaux</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="533"/>
-        <location filename="../src/mainwindow.cpp" line="543"/>
-        <location filename="../src/mainwindow.cpp" line="943"/>
-        <location filename="../src/mainwindow.cpp" line="946"/>
+        <location filename="../src/mainwindow.cpp" line="535"/>
+        <location filename="../src/mainwindow.cpp" line="545"/>
+        <location filename="../src/mainwindow.cpp" line="945"/>
+        <location filename="../src/mainwindow.cpp" line="948"/>
         <source>KEY_ACTION_SETTINGS</source>
         <translation>Préférences...</translation>
     </message>
@@ -2381,9 +2381,9 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
-        <location filename="../../tests/test_controllers.cpp" line="1698"/>
-        <location filename="../../tests/test_controllers.cpp" line="1763"/>
-        <location filename="../../tests/test_controllers.cpp" line="1828"/>
+        <location filename="../../tests/test_controllers.cpp" line="1699"/>
+        <location filename="../../tests/test_controllers.cpp" line="1764"/>
+        <location filename="../../tests/test_controllers.cpp" line="1829"/>
         <source>KEY_DOCK_PREVIEW</source>
         <translation>Aperçu de l&apos;animation</translation>
     </message>
@@ -2404,8 +2404,8 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Frames de l&apos;Atlas</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="604"/>
-        <location filename="../src/mainwindow.cpp" line="609"/>
+        <location filename="../src/mainwindow.cpp" line="606"/>
+        <location filename="../src/mainwindow.cpp" line="611"/>
         <source>KEY_DOCK_GIT_HISTORY</source>
         <translation>Historique Git</translation>
     </message>
@@ -2552,14 +2552,14 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="695"/>
-        <location filename="../src/mainwindow.cpp" line="330"/>
+        <location filename="../src/mainwindow.cpp" line="332"/>
         <source>KEY_ANIM_COL_MODE</source>
         <translation>Mode</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="705"/>
-        <location filename="../src/mainwindow.cpp" line="330"/>
-        <location filename="../src/mainwindow.cpp" line="918"/>
+        <location filename="../src/mainwindow.cpp" line="332"/>
+        <location filename="../src/mainwindow.cpp" line="920"/>
         <source>KEY_ANIM_COL_DURATION</source>
         <translation>Durée</translation>
     </message>
@@ -2569,21 +2569,21 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Dupliquer cette animation</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="718"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="100"/>
-        <location filename="../../tests/test_controllers.cpp" line="1713"/>
-        <location filename="../../tests/test_controllers.cpp" line="1778"/>
-        <location filename="../../tests/test_controllers.cpp" line="1843"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="99"/>
+        <location filename="../src/mainwindow.cpp" line="720"/>
+        <location filename="../../tests/test_controllers.cpp" line="1714"/>
+        <location filename="../../tests/test_controllers.cpp" line="1779"/>
+        <location filename="../../tests/test_controllers.cpp" line="1844"/>
         <source>KEY_UNTITLED_PROJECT</source>
         <translation>Projet sans titre</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="737"/>
+        <location filename="../src/mainwindow.cpp" line="739"/>
         <source>KEY_UNKNOWN_DATE</source>
         <translation>Date inconnue</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="738"/>
+        <location filename="../src/mainwindow.cpp" line="740"/>
         <source>KEY_RECOVERY_PROMPT</source>
         <translation>Une session de travail interrompue a été détectée :
 
@@ -2593,38 +2593,38 @@ Date : %2
 Voulez-vous restaurer cette session ?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="743"/>
+        <location filename="../src/mainwindow.cpp" line="745"/>
         <source>KEY_RECOVERY_TITLE</source>
         <translation>Récupération après fermeture inattendue</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="751"/>
+        <location filename="../src/mainwindow.cpp" line="753"/>
         <source>KEY_RECOVERY_ERROR</source>
         <translation>Erreur de récupération</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="796"/>
+        <location filename="../src/mainwindow.cpp" line="798"/>
         <source>💡 Update available: %1 (Check Settings -&gt; Updates)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="819"/>
+        <location filename="../src/mainwindow.cpp" line="821"/>
         <source>KEY_UNSAVED_CHANGES_TITLE</source>
         <translation>Modifications non enregistrées</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="820"/>
+        <location filename="../src/mainwindow.cpp" line="822"/>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
         <translation>Le projet actif &apos;%1&apos; comporte des modifications non enregistrées.
 Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="841"/>
-        <location filename="../src/mainwindow.cpp" line="338"/>
-        <location filename="../src/mainwindow.cpp" line="909"/>
-        <location filename="../../tests/test_controllers.cpp" line="1697"/>
-        <location filename="../../tests/test_controllers.cpp" line="1762"/>
-        <location filename="../../tests/test_controllers.cpp" line="1827"/>
+        <location filename="../src/mainwindow.cpp" line="340"/>
+        <location filename="../src/mainwindow.cpp" line="911"/>
+        <location filename="../../tests/test_controllers.cpp" line="1698"/>
+        <location filename="../../tests/test_controllers.cpp" line="1763"/>
+        <location filename="../../tests/test_controllers.cpp" line="1828"/>
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>Barre d&apos;outils principale</translation>
     </message>
@@ -2793,19 +2793,19 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Échelle réelle 100%</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1908"/>
+        <location filename="../../tests/test_controllers.cpp" line="1909"/>
         <source>KEY_UNKNOWN_FEATURE</source>
         <translation>Fonctionnalité inconnue</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="518"/>
-        <location filename="../src/mainwindow.cpp" line="949"/>
+        <location filename="../src/mainwindow.cpp" line="520"/>
+        <location filename="../src/mainwindow.cpp" line="951"/>
         <source>KEY_ACTION_POLYGON_MESH</source>
         <translation>Maillage polygonal 2D (Tight Mesh)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="888"/>
-        <location filename="../src/mainwindow.cpp" line="955"/>
+        <location filename="../src/mainwindow.cpp" line="890"/>
+        <location filename="../src/mainwindow.cpp" line="957"/>
         <source>KEY_ACTION_TOGGLE_POLYGON_MESH</source>
         <translation>Afficher les maillages polygonaux (Wireframe)</translation>
     </message>
@@ -2816,8 +2816,8 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Maillage polygonal 2D (Tight Mesh)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="512"/>
-        <location filename="../src/mainwindow.cpp" line="952"/>
+        <location filename="../src/mainwindow.cpp" line="514"/>
+        <location filename="../src/mainwindow.cpp" line="954"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="302"/>
         <source>KEY_ACTION_PIXEL_EDITOR</source>
         <translation>Éditeur de pixels (Sprite)...</translation>
@@ -2979,9 +2979,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="45"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="688"/>
-        <location filename="../../tests/test_controllers.cpp" line="1734"/>
-        <location filename="../../tests/test_controllers.cpp" line="1799"/>
-        <location filename="../../tests/test_controllers.cpp" line="1865"/>
+        <location filename="../../tests/test_controllers.cpp" line="1735"/>
+        <location filename="../../tests/test_controllers.cpp" line="1800"/>
+        <location filename="../../tests/test_controllers.cpp" line="1866"/>
         <source>Pixel Editor — BentoPack</source>
         <translation>Éditeur de pixels — BentoPack</translation>
     </message>
@@ -3023,9 +3023,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="167"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="708"/>
-        <location filename="../../tests/test_controllers.cpp" line="1735"/>
-        <location filename="../../tests/test_controllers.cpp" line="1800"/>
-        <location filename="../../tests/test_controllers.cpp" line="1866"/>
+        <location filename="../../tests/test_controllers.cpp" line="1736"/>
+        <location filename="../../tests/test_controllers.cpp" line="1801"/>
+        <location filename="../../tests/test_controllers.cpp" line="1867"/>
         <source>Pencil (1px continuous Bresenham) [P]</source>
         <translation>Crayon (Bresenham 1px continu) [P]</translation>
     </message>
@@ -3257,9 +3257,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <name>PixelRescaleFilter</name>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1720"/>
-        <location filename="../../tests/test_controllers.cpp" line="1785"/>
-        <location filename="../../tests/test_controllers.cpp" line="1850"/>
+        <location filename="../../tests/test_controllers.cpp" line="1721"/>
+        <location filename="../../tests/test_controllers.cpp" line="1786"/>
+        <location filename="../../tests/test_controllers.cpp" line="1851"/>
         <source>Pixel Art Rescale...</source>
         <translation>Redimensionnement Pixel Art...</translation>
     </message>
@@ -3346,9 +3346,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <name>PolygonMeshDialog</name>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="251"/>
-        <location filename="../../tests/test_controllers.cpp" line="1731"/>
-        <location filename="../../tests/test_controllers.cpp" line="1796"/>
-        <location filename="../../tests/test_controllers.cpp" line="1861"/>
+        <location filename="../../tests/test_controllers.cpp" line="1732"/>
+        <location filename="../../tests/test_controllers.cpp" line="1797"/>
+        <location filename="../../tests/test_controllers.cpp" line="1862"/>
         <source>Tight Mesh &amp; 2D Polygon Packing</source>
         <translation>Maillage polygonal 2D &amp; Découpage serré</translation>
     </message>
@@ -3364,9 +3364,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="254"/>
-        <location filename="../../tests/test_controllers.cpp" line="1732"/>
-        <location filename="../../tests/test_controllers.cpp" line="1797"/>
-        <location filename="../../tests/test_controllers.cpp" line="1862"/>
+        <location filename="../../tests/test_controllers.cpp" line="1733"/>
+        <location filename="../../tests/test_controllers.cpp" line="1798"/>
+        <location filename="../../tests/test_controllers.cpp" line="1863"/>
         <source>Approximation Tolerance (ε):</source>
         <translation>Tolérance d&apos;approximation (ε) :</translation>
     </message>
@@ -3428,9 +3428,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="259"/>
-        <location filename="../../tests/test_controllers.cpp" line="1733"/>
-        <location filename="../../tests/test_controllers.cpp" line="1798"/>
-        <location filename="../../tests/test_controllers.cpp" line="1863"/>
+        <location filename="../../tests/test_controllers.cpp" line="1734"/>
+        <location filename="../../tests/test_controllers.cpp" line="1799"/>
+        <location filename="../../tests/test_controllers.cpp" line="1864"/>
         <source>Apply to Selection</source>
         <translation>Appliquer à la sélection</translation>
     </message>
@@ -3456,7 +3456,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="431"/>
-        <location filename="../../tests/test_controllers.cpp" line="1864"/>
+        <location filename="../../tests/test_controllers.cpp" line="1865"/>
         <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
         <translation>Frame cible %1 : Mode rectangle (aucun maillage)</translation>
     </message>
@@ -3479,108 +3479,108 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>ProjectController</name>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="331"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="399"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="330"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="398"/>
         <source>File does not exist: %1</source>
         <translation>Le fichier n&apos;existe pas : %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="343"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="423"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="342"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="422"/>
         <source>No suitable codec found for file: %1</source>
         <translation>Aucun codec approprié trouvé pour le fichier : %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="152"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="211"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="255"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="350"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="151"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="210"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="254"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="349"/>
         <source>No active SpriteDocument.</source>
         <translation>Aucun SpriteDocument actif.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="129"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="128"/>
         <source>New project</source>
         <translation>Nouveau projet</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="135"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="134"/>
         <source>New project created.</source>
         <translation>Nouveau projet créé.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="144"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="143"/>
         <source>Project file does not exist: %1</source>
         <translation>Le fichier projet n&apos;existe pas : %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="159"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="158"/>
         <source>Opening project %1...</source>
         <translation>Ouverture du projet %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="162"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="161"/>
         <source>Failed to open project.</source>
         <translation>Échec de l&apos;ouverture du projet.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="170"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="169"/>
         <source>Failed to deserialize project.</source>
         <translation>Échec de la désérialisation du projet.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="191"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="190"/>
         <source>Project loaded successfully: %1</source>
         <translation>Projet chargé avec succès : %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="201"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="200"/>
         <source>Project file path is empty. Use Save As.</source>
         <translation>Le chemin du fichier projet est vide. Utilisez Enregistrer sous.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="216"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="215"/>
         <source>Saving project %1...</source>
         <translation>Enregistrement du projet %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="241"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="240"/>
         <source>Project saved successfully: %1</source>
         <translation>Projet enregistré avec succès : %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="260"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="259"/>
         <source>Restoring session from %1...</source>
         <translation>Restauration de la session depuis %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="285"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="284"/>
         <source>Session recovered successfully.</source>
         <translation>Session restaurée avec succès.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="357"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="356"/>
         <source>Loading %1...</source>
         <translation>Chargement de %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="374"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="373"/>
         <source>Import %1</source>
         <translation>Importation %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="389"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="754"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="388"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="753"/>
         <source>Loaded %1 successfully.</source>
         <translation>%1 chargé avec succès.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="430"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="429"/>
         <source>Loading %1 in background...</source>
         <translation>Chargement de %1 en arrière-plan...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="473"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="472"/>
         <source>Export file path must have a valid file name: %1</source>
         <translation>Le chemin du fichier d&apos;export doit comporter un nom de fichier valide : %1</translation>
     </message>
@@ -3589,57 +3589,57 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">Le chemin du fichier est vide.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="479"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="478"/>
         <source>Document is empty.</source>
         <translation>Le document est vide.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="486"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="485"/>
         <source>No suitable exporter found for format: %1</source>
         <translation>Aucun exportateur trouvé pour le format : %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="492"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="491"/>
         <source>Saving %1...</source>
         <translation>Enregistrement de %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="502"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="501"/>
         <source>Saved %1 successfully.</source>
         <translation>%1 enregistré avec succès.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="638"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="637"/>
         <source>Removing background...</source>
         <translation>Suppression de l&apos;arrière-plan...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="662"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="661"/>
         <source>Background removed.</source>
         <translation>Arrière-plan supprimé.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="675"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="674"/>
         <source>Removing background in background...</source>
         <translation>Suppression de l&apos;arrière-plan en tâche de fond...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="742"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="741"/>
         <source>Open %1</source>
         <translation>Ouvrir %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="758"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="757"/>
         <source>Background removed successfully.</source>
         <translation>Arrière-plan supprimé avec succès.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="827"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="826"/>
         <source>Action executed</source>
         <translation>Action exécutée</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="829"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="828"/>
         <source>Project modified</source>
         <translation>Projet modifié</translation>
     </message>
@@ -3652,12 +3652,12 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">Action</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="845"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="844"/>
         <source>No active session workspace.</source>
         <translation>Aucun espace de session actif.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="872"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="871"/>
         <source>Checked out revision %1.</source>
         <translation>Restauration de la révision %1 effectuée.</translation>
     </message>
@@ -3910,23 +3910,23 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Supprimer l&apos;arrière-plan</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="442"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="441"/>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="303"/>
         <source>Failed to decode image from: %1</source>
         <translation>Impossible de décoder l&apos;image : %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="452"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="451"/>
         <source>Failed to segment sprite frames.</source>
         <translation>Échec de la découpe des sprites.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="689"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="688"/>
         <source>Failed to remove background from atlas.</source>
         <translation>Échec de la suppression du fond de l&apos;atlas.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="701"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="700"/>
         <source>Failed to segment frames after background removal.</source>
         <translation>Échec de la découpe des frames après suppression du fond.</translation>
     </message>
@@ -3946,32 +3946,32 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>La racine JSON doit être un objet.</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="210"/>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="47"/>
         <source>Cleanup</source>
         <translation>Nettoyage</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="211"/>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="48"/>
         <source>Colors</source>
         <translation>Couleurs</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="212"/>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="49"/>
         <source>Effects</source>
         <translation>Effets</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="213"/>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="50"/>
         <source>Geometry</source>
         <translation>Géométrie</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="235"/>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="71"/>
         <source>No Atlas Loaded</source>
         <translation>Aucun atlas chargé</translation>
     </message>
     <message>
-        <location filename="../src/filters/filterregistry.cpp" line="236"/>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="72"/>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Veuillez d&apos;abord ouvrir ou importer une planche de sprites avant d&apos;appliquer un filtre.</translation>
     </message>
@@ -4016,16 +4016,16 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>QPlatformTheme</name>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1738"/>
-        <location filename="../../tests/test_controllers.cpp" line="1803"/>
-        <location filename="../../tests/test_controllers.cpp" line="1869"/>
+        <location filename="../../tests/test_controllers.cpp" line="1739"/>
+        <location filename="../../tests/test_controllers.cpp" line="1804"/>
+        <location filename="../../tests/test_controllers.cpp" line="1870"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1739"/>
-        <location filename="../../tests/test_controllers.cpp" line="1804"/>
-        <location filename="../../tests/test_controllers.cpp" line="1870"/>
+        <location filename="../../tests/test_controllers.cpp" line="1740"/>
+        <location filename="../../tests/test_controllers.cpp" line="1805"/>
+        <location filename="../../tests/test_controllers.cpp" line="1871"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -4034,9 +4034,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">&amp;Annuler</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1740"/>
-        <location filename="../../tests/test_controllers.cpp" line="1805"/>
-        <location filename="../../tests/test_controllers.cpp" line="1871"/>
+        <location filename="../../tests/test_controllers.cpp" line="1741"/>
+        <location filename="../../tests/test_controllers.cpp" line="1806"/>
+        <location filename="../../tests/test_controllers.cpp" line="1872"/>
         <source>Discard</source>
         <translation>Ne pas enregistrer</translation>
     </message>
@@ -4045,9 +4045,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">&amp;Ne pas enregistrer</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1741"/>
-        <location filename="../../tests/test_controllers.cpp" line="1806"/>
-        <location filename="../../tests/test_controllers.cpp" line="1872"/>
+        <location filename="../../tests/test_controllers.cpp" line="1742"/>
+        <location filename="../../tests/test_controllers.cpp" line="1807"/>
+        <location filename="../../tests/test_controllers.cpp" line="1873"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
@@ -4060,9 +4060,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">Ne pas enregistrer</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1742"/>
-        <location filename="../../tests/test_controllers.cpp" line="1807"/>
-        <location filename="../../tests/test_controllers.cpp" line="1873"/>
+        <location filename="../../tests/test_controllers.cpp" line="1743"/>
+        <location filename="../../tests/test_controllers.cpp" line="1808"/>
+        <location filename="../../tests/test_controllers.cpp" line="1874"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -4119,9 +4119,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <name>RetroPaletteFilter</name>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1721"/>
-        <location filename="../../tests/test_controllers.cpp" line="1786"/>
-        <location filename="../../tests/test_controllers.cpp" line="1851"/>
+        <location filename="../../tests/test_controllers.cpp" line="1722"/>
+        <location filename="../../tests/test_controllers.cpp" line="1787"/>
+        <location filename="../../tests/test_controllers.cpp" line="1852"/>
         <source>Retro Palette &amp; Dithering...</source>
         <translation>Palette Rétro &amp; Tramage (Dithering)...</translation>
     </message>
@@ -4403,9 +4403,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="53"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1020"/>
-        <location filename="../../tests/test_controllers.cpp" line="1710"/>
-        <location filename="../../tests/test_controllers.cpp" line="1775"/>
-        <location filename="../../tests/test_controllers.cpp" line="1840"/>
+        <location filename="../../tests/test_controllers.cpp" line="1711"/>
+        <location filename="../../tests/test_controllers.cpp" line="1776"/>
+        <location filename="../../tests/test_controllers.cpp" line="1841"/>
         <source>KEY_SETTINGS_TITLE</source>
         <translation>Préférences</translation>
     </message>
@@ -4522,9 +4522,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="246"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1043"/>
-        <location filename="../../tests/test_controllers.cpp" line="1714"/>
-        <location filename="../../tests/test_controllers.cpp" line="1779"/>
-        <location filename="../../tests/test_controllers.cpp" line="1844"/>
+        <location filename="../../tests/test_controllers.cpp" line="1715"/>
+        <location filename="../../tests/test_controllers.cpp" line="1780"/>
+        <location filename="../../tests/test_controllers.cpp" line="1845"/>
         <source>KEY_SETTINGS_LANG_HINT</source>
         <translation>Les modifications de langue s&apos;appliquent immédiatement.</translation>
     </message>
@@ -4910,17 +4910,17 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1104"/>
-        <location filename="../../tests/test_controllers.cpp" line="1744"/>
-        <location filename="../../tests/test_controllers.cpp" line="1809"/>
-        <location filename="../../tests/test_controllers.cpp" line="1875"/>
+        <location filename="../../tests/test_controllers.cpp" line="1745"/>
+        <location filename="../../tests/test_controllers.cpp" line="1810"/>
+        <location filename="../../tests/test_controllers.cpp" line="1876"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1107"/>
-        <location filename="../../tests/test_controllers.cpp" line="1745"/>
-        <location filename="../../tests/test_controllers.cpp" line="1810"/>
-        <location filename="../../tests/test_controllers.cpp" line="1876"/>
+        <location filename="../../tests/test_controllers.cpp" line="1746"/>
+        <location filename="../../tests/test_controllers.cpp" line="1811"/>
+        <location filename="../../tests/test_controllers.cpp" line="1877"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -5006,9 +5006,9 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="53"/>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="294"/>
-        <location filename="../../tests/test_controllers.cpp" line="1711"/>
-        <location filename="../../tests/test_controllers.cpp" line="1776"/>
-        <location filename="../../tests/test_controllers.cpp" line="1841"/>
+        <location filename="../../tests/test_controllers.cpp" line="1712"/>
+        <location filename="../../tests/test_controllers.cpp" line="1777"/>
+        <location filename="../../tests/test_controllers.cpp" line="1842"/>
         <source>KEY_TIMELINE_ADD_SELECTION</source>
         <translation>+ Ajouter la sélection</translation>
     </message>

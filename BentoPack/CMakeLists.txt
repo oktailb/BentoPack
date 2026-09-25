@@ -40,15 +40,7 @@ set(${PROJECT_NAME}_TS_FILES
 )
 
 set(BentoPackCore_SRC
-    src/mainwindow.cpp
-    src/mainwindow_events.cpp
-    src/mainwindow_callbacks.cpp
-    src/mainwindow_animation.cpp
-    src/mainwindow_frames.cpp
-    src/mainwindow_atlas.cpp
     src/controller/projectcontroller.cpp
-    src/controller/animationcontroller.cpp
-    src/controller/atlasviewcontroller.cpp
     src/model/spritedocument.cpp
     src/packer/atlaspacker.cpp
     src/packer/maxrectspacker.cpp
@@ -58,19 +50,10 @@ set(BentoPackCore_SRC
     src/commands/commands.cpp
     src/extractor.cpp
     src/extractor/extractorregistry.cpp
-    src/arrangementmodel.cpp
-    src/aboutdialog.cpp
-    src/atlasboxitem.cpp
     src/config/appconfig.cpp
     src/image/spritedetector.cpp
     src/project/sessionmanager.cpp
     src/project/projectmanager.cpp
-    src/widgets/githistorydock.cpp
-    src/widgets/settingsdialog.cpp
-    src/widgets/filmstriplistwidget.cpp
-    src/widgets/timelinefilmstripwidget.cpp
-    src/widgets/exportdialog.cpp
-    src/widgets/filterdialogbase.cpp
     src/filters/filterregistry.cpp
     src/commands/filtercommands.cpp
     src/localizationmanager.cpp
@@ -89,24 +72,12 @@ set(BentoPackCore_SRC
     src/license/licensemanager.cpp
     src/license/integrityguard.cpp
     src/commands/meshcommands.cpp
-    src/widgets/polygonmeshdialog.cpp
-    src/widgets/pixelcanvas.cpp
-    src/widgets/pixeleditordialog.cpp
-    src/widgets/branchselectiondialog.cpp
-)
-
-set(BentoPackCore_UI
-    src/mainwindow.ui
-    src/widgets/exportdialog.ui
 )
 
 set(BentoPackCore_INCLUDE
     include/bentopackcore_export.h
-    include/mainwindow.h
     include/config/appconfig.h
     include/controller/projectcontroller.h
-    include/controller/animationcontroller.h
-    include/controller/atlasviewcontroller.h
     include/model/spritedocument.h
     include/packer/atlaspacker.h
     include/packer/maxrectspacker.h
@@ -116,24 +87,14 @@ set(BentoPackCore_INCLUDE
     include/commands/commands.h
     include/commands/filtercommands.h
     include/image/spritedetector.h
-    include/atlasboxitem.h
     include/project/sessionmanager.h
     include/project/projectmanager.h
-    include/widgets/githistorydock.h
-    include/widgets/settingsdialog.h
-    include/widgets/filmstriplistwidget.h
-    include/widgets/timelinefilmstripwidget.h
-    include/widgets/exportdialog.h
-    include/widgets/filterdialogbase.h
-    include/widgets/branchselectiondialog.h
     include/filters/filterplugin.h
     include/filters/filterregistry.h
     include/localizationmanager.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h
     include/extractor/export.h
-    include/arrangementmodel.h
-    include/aboutdialog.h
     include/zip/miniz.h
     include/cli/cliparser.h
     include/cli/clipackpipeline.h
@@ -146,15 +107,62 @@ set(BentoPackCore_INCLUDE
     include/license/licensemanager.h
     include/license/integrityguard.h
     include/commands/meshcommands.h
+)
+
+set(BentoPackWidgets_SRC
+    src/mainwindow.cpp
+    src/mainwindow_events.cpp
+    src/mainwindow_callbacks.cpp
+    src/mainwindow_animation.cpp
+    src/mainwindow_frames.cpp
+    src/mainwindow_atlas.cpp
+    src/controller/animationcontroller.cpp
+    src/controller/atlasviewcontroller.cpp
+    src/arrangementmodel.cpp
+    src/aboutdialog.cpp
+    src/atlasboxitem.cpp
+    src/widgets/githistorydock.cpp
+    src/widgets/settingsdialog.cpp
+    src/widgets/filmstriplistwidget.cpp
+    src/widgets/timelinefilmstripwidget.cpp
+    src/widgets/exportdialog.cpp
+    src/widgets/filterdialogbase.cpp
+    src/widgets/filtermenubuilder.cpp
+    src/widgets/polygonmeshdialog.cpp
+    src/widgets/pixelcanvas.cpp
+    src/widgets/pixeleditordialog.cpp
+    src/widgets/branchselectiondialog.cpp
+)
+
+set(BentoPackWidgets_UI
+    src/mainwindow.ui
+    src/widgets/exportdialog.ui
+)
+
+set(BentoPackWidgets_INCLUDE
+    include/bentopackwidgets_export.h
+    include/mainwindow.h
+    include/controller/animationcontroller.h
+    include/controller/atlasviewcontroller.h
+    include/arrangementmodel.h
+    include/aboutdialog.h
+    include/atlasboxitem.h
+    include/widgets/githistorydock.h
+    include/widgets/settingsdialog.h
+    include/widgets/filmstriplistwidget.h
+    include/widgets/timelinefilmstripwidget.h
+    include/widgets/exportdialog.h
+    include/widgets/filterdialogbase.h
+    include/widgets/filtermenubuilder.h
+    include/widgets/branchselectiondialog.h
     include/widgets/polygonmeshdialog.h
     include/widgets/pixelcanvas.h
     include/widgets/pixeleditordialog.h
 )
 
-# Bibliothèque partagée commune pour le Core, l'application et les plugins
+# 1. BentoPackCore: Pure headless library (Qt6::Core, Qt6::Gui, Qt6::Concurrent, Qt6::Network - ZERO Qt6::Widgets)
 add_library(BentoPackCore SHARED
     ${BentoPackCore_SRC}
-    ${BentoPackCore_UI}
     ${BentoPackCore_INCLUDE}
 )
 
@@ -162,7 +170,10 @@ set_target_properties(BentoPackCore PROPERTIES
     WINDOWS_EXPORT_ALL_SYMBOLS ON
 )
 
-target_compile_definitions(BentoPackCore PRIVATE SPRITESTUDIO_CORE_LIBRARY)
+target_compile_definitions(BentoPackCore PRIVATE
+    BENTOPACK_CORE_LIBRARY
+    SPRITESTUDIO_CORE_LIBRARY
+)
 
 qt_add_translations(BentoPackCore
     TS_FILES
@@ -170,24 +181,8 @@ qt_add_translations(BentoPackCore
     SOURCES
         ${BentoPackCore_SRC}
         ${BentoPackCore_INCLUDE}
-        ${BentoPackCore_UI}
     RESOURCE_PREFIX
         "/i18n"
-)
-
-qt6_add_resources(BentoPackCore "images"
-    PREFIX "drawer"
-    FILES
-    play.png
-    pause.png
-    stop.png
-    plus.png
-    minus.png
-    icons/tool_select.png
-    icons/tool_slice.png
-    icons/tool_trim.png
-    icons/tool_remove_bg.png
-    icons/bentopack.png
 )
 
 set_source_files_properties(${CMAKE_SOURCE_DIR}/LICENSE PROPERTIES
@@ -217,24 +212,9 @@ target_include_directories(BentoPackCore PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/bentopack>
 )
 
-install(TARGETS BentoPackCore
-    EXPORT BentoPackTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bentopack
-)
-
-install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bentopack
-    COMPONENT bentopack-dev
-    FILES_MATCHING PATTERN "*.h"
-)
-
 target_link_libraries(BentoPackCore PUBLIC
     Qt6::Core
     Qt6::Gui
-    Qt6::Widgets
     Qt6::Concurrent
     Qt6::Network
 )
@@ -255,6 +235,63 @@ if(TARGET basisu_encoder)
     endif()
 endif()
 
+# 2. BentoPackWidgets: GUI library depending on BentoPackCore and Qt6::Widgets
+add_library(BentoPackWidgets SHARED
+    ${BentoPackWidgets_SRC}
+    ${BentoPackWidgets_UI}
+    ${BentoPackWidgets_INCLUDE}
+)
+
+set_target_properties(BentoPackWidgets PROPERTIES
+    WINDOWS_EXPORT_ALL_SYMBOLS ON
+)
+
+target_compile_definitions(BentoPackWidgets PRIVATE
+    BENTOPACK_WIDGETS_LIBRARY
+    SPRITESTUDIO_WIDGETS_LIBRARY
+)
+
+qt6_add_resources(BentoPackWidgets "images"
+    PREFIX "drawer"
+    FILES
+    play.png
+    pause.png
+    stop.png
+    plus.png
+    minus.png
+    icons/tool_select.png
+    icons/tool_slice.png
+    icons/tool_trim.png
+    icons/tool_remove_bg.png
+    icons/bentopack.png
+)
+
+target_include_directories(BentoPackWidgets PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/bentopack>
+)
+
+target_link_libraries(BentoPackWidgets PUBLIC
+    BentoPackCore
+    Qt6::Widgets
+)
+
+install(TARGETS BentoPackCore BentoPackWidgets
+    EXPORT BentoPackTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bentopack
+)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bentopack
+    COMPONENT bentopack-dev
+    FILES_MATCHING PATTERN "*.h"
+)
+
 # Ressources d'icône Windows
 set(APP_EXTRA_SOURCES "")
 if(WIN32)
@@ -268,6 +305,7 @@ qt_add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    BentoPackWidgets
     BentoPackCore
 )
 

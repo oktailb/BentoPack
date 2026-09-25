@@ -34,6 +34,8 @@
 #include "export.h"
 #include "model/spritedocument.h"
 
+class QWidget;
+
 /**
  * @brief Structured error reporting for extractor operations.
  */

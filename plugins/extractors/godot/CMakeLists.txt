@@ -13,6 +13,7 @@ target_link_libraries(extractor_godot PRIVATE
     BentoPackCore
     Qt6::Core
     Qt6::Gui
+    Qt6::Widgets
 )
 
 set_target_properties(extractor_godot PROPERTIES

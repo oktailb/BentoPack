@@ -37,6 +37,7 @@
 
 class SpriteDocument;
 class PixelCanvas;
+#include "bentopackwidgets_export.h"
 
 /**
  * @brief Surgical pixel-by-pixel sprite editor dialog.
@@ -44,7 +45,7 @@ class PixelCanvas;
  * Provides continuous 1px drawing, eraser, flood fill, color/area selections,
  * clipboard, live preview, frame navigation, and dynamic/retro palettes.
  */
-class PixelEditorDialog : public QDialog
+class BENTOPACK_WIDGETS_EXPORT PixelEditorDialog : public QDialog
 {
     Q_OBJECT
 
