@@ -10,7 +10,7 @@
 #include "extractor/extractorregistry.h"
 #include "filters/filterregistry.h"
 
-using namespace SpriteStudioCli;
+using namespace BentoPackCli;
 
 static QString extractUidFromTres(const QString &tresPath)
 {
@@ -61,11 +61,11 @@ void TestCli::cleanupTestCase()
 void TestCli::testCliHelpAndVersion()
 {
     CliParser parser;
-    CliResult resHelp = parser.parseAndExecute({ QStringLiteral("spritestudio-cli"), QStringLiteral("--help") });
+    CliResult resHelp = parser.parseAndExecute({ QStringLiteral("bentopack-cli"), QStringLiteral("--help") });
     QCOMPARE(resHelp.exitCode, ExitSuccess);
-    QVERIFY(resHelp.message.contains(QStringLiteral("SpriteStudio CLI")));
+    QVERIFY(resHelp.message.contains(QStringLiteral("BentoPack CLI")));
 
-    CliResult resVersion = parser.parseAndExecute({ QStringLiteral("spritestudio-cli"), QStringLiteral("-v") });
+    CliResult resVersion = parser.parseAndExecute({ QStringLiteral("bentopack-cli"), QStringLiteral("-v") });
     QCOMPARE(resVersion.exitCode, ExitSuccess);
     QVERIFY(resVersion.message.contains(QStringLiteral("v1.0.0")));
 }
@@ -172,7 +172,7 @@ void TestCli::testGodot4ExportAndUid()
 
     CliParser parser;
     QStringList args = {
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("pack"),
         QStringLiteral("--format"), QStringLiteral("godot4"),
         QStringLiteral("--sheet"), outSheet,
@@ -214,7 +214,7 @@ void TestCli::testGodotSceneGeneration()
 
     CliParser parser;
     QStringList args = {
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("pack"),
         QStringLiteral("--format"), QStringLiteral("godot4"),
         QStringLiteral("--sheet"), outSheet,
@@ -240,11 +240,11 @@ void TestCli::testNativeSliceCommand()
 {
     QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     QString sliceDir = m_tempDir.filePath(QStringLiteral("slices_out"));
-    QString projectOut = m_tempDir.filePath(QStringLiteral("sliced_project.ssp"));
+    QString projectOut = m_tempDir.filePath(QStringLiteral("sliced_project.bento"));
 
     CliParser parser;
     QStringList args = {
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("slice"),
         QStringLiteral("--smart-crop"),
         QStringLiteral("--output-dir"), sliceDir,
@@ -269,7 +269,7 @@ void TestCli::testNativeFilterCommand()
 
     CliParser parser;
     QStringList args = {
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("filter"),
         QStringLiteral("--outline"), QStringLiteral("2"),
         QStringLiteral("--outline-color"), QStringLiteral("#FF0000"),
@@ -291,14 +291,14 @@ void TestCli::testPosixExitCodes()
 
     // 1. Unknown command / syntax error -> ExitSyntaxError (1)
     CliResult resSyntax = parser.parseAndExecute({
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("unknown_cmd_xyz")
     });
     QCOMPARE(resSyntax.exitCode, ExitSyntaxError);
 
     // 2. File not found -> ExitFileNotFound (2)
     CliResult resNotFound = parser.parseAndExecute({
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("--sheet"), QStringLiteral("out.png"),
         QStringLiteral("does_not_exist_987654.png")
     });
@@ -307,7 +307,7 @@ void TestCli::testPosixExitCodes()
     // 3. Constraint failed (max-size exceeded) -> ExitConstraintFailed (3)
     QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     CliResult resConstraint = parser.parseAndExecute({
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("--sheet"), m_tempDir.filePath(QStringLiteral("fail.png")),
         QStringLiteral("--max-size"), QStringLiteral("4"), QStringLiteral("4"),
         sampleHero
@@ -322,7 +322,7 @@ void TestCli::testJsonOutputMode()
 
     CliParser parser;
     CliResult res = parser.parseAndExecute({
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("--json"),
         QStringLiteral("--sheet"), outSheet,
         sampleHero
@@ -394,7 +394,7 @@ void TestCli::testWatchDebouncedRepack()
         repackCount++;
         CliParser p;
         return p.parseAndExecute({
-            QStringLiteral("spritestudio-cli"),
+            QStringLiteral("bentopack-cli"),
             QStringLiteral("--sheet"), outSheet,
             QStringLiteral("--data"), outData,
             watchFolder

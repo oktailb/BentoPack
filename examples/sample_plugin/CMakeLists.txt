@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
-find_package(SpriteStudio REQUIRED)
+find_package(BentoPack REQUIRED)
 
 add_library(sample_custom_extractor MODULE
     sample_extractor.cpp
@@ -14,7 +14,7 @@ add_library(sample_custom_extractor MODULE
 )
 
 target_link_libraries(sample_custom_extractor PRIVATE
-    SpriteStudio::SpriteStudioCore
+    BentoPack::BentoPackCore
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets

@@ -1,0 +1,75 @@
+.TH BENTOPACK 1 "September 2026" "BentoPack 0.11.0" "User Commands"
+.SH NAME
+bentopack \- interactive 2D sprite sheet preparation, retouching, animation and game engine packing studio
+.SH SYNOPSIS
+.B bentopack
+[\fIOPTIONS\fR] [\fIFILE\fR]
+.SH DESCRIPTION
+.B bentopack
+is an advanced desktop graphical workstation designed for video game creators, pixel artists, and technical animators.
+It bridges the gap between raw artwork creation and game engine asset pipelines by providing:
+.IP \(bu 2
+Precise sprite sheet slicing with automatic connected-components edge detection and interactive boundary box manipulation.
+.IP \(bu 2
+Comprehensive animation management with timeline filmstrip, FPS speed control, and loop modes (Loop, Once, Ping-Pong).
+.IP \(bu 2
+Interactive origin and pivot alignment reticles eliminating animation jittering across variable-dimension frames.
+.IP \(bu 2
+A modular suite of non-destructive image filters (background removal, anti-halo despill, outline generator, color swapping, HSV adjust, pixel rescaling, and retro Bayer quantization).
+.IP \(bu 2
+High-density 2D atlas packing powered by MaxRects heuristics and multithreaded Tight Polygon Mesh packing (Marching Squares, RDP simplification, and Ear-Clipping triangulation saving 60% to 80% GPU overdraw).
+.IP \(bu 2
+A surgical pixel-by-pixel editor featuring continuous Bresenham drawing, floating clipboard stamps, dynamic palette extraction, and authentic retro hardware palettes (NES, SNES, Amiga, PC-Engine, Game Boy, PICO-8, C64).
+.IP \(bu 2
+Native project preservation (\fB.bento\fR / \fB.ssp\fR) with atomic writes, crash recovery, and integrated Git Time-Travel versioning.
+.IP \(bu 2
+Multi-engine exports targeting Godot 4 (\fB.tres\fR), Unity 2D (\fB.unity.json\fR), Unreal Engine Paper2D (\fB.paper2d.json\fR), TexturePacker JSON, GIF animations, and transparent PNG archives.
+
+.SH OPTIONS
+.TP
+.B \-h\fR, \fB\-\-help
+Display command-line help options.
+.TP
+.B \-v\fR, \fB\-\-version
+Print application version and build information.
+.TP
+.B \-\-reset\-config
+Reset application settings and user preferences stored in \fIbentopack_config.json\fR to defaults.
+
+.SH SUPPORTED FILE FORMATS
+.SS Project Files
+.TP
+.B .bento\fR, \fB.ssp
+Native BentoPack Project archive (compressed ZIP containing canvas textures, slice coordinates, pivots, animations, and revision snapshots).
+.SS Image Formats
+.TP
+.B PNG, WEBP, JPEG, BMP
+Standard lossless and raster image formats for source sheets and generated texture atlases.
+.TP
+.B GIF
+Animated GIFs parsed and unpacked frame-by-frame with preservation of individual frame timing and transparent color keys.
+.TP
+.B KTX2 (Basis Universal)
+GPU-compressed texture format utilizing ETC1S / UASTC supercompression and Zstandard for minimal VRAM footprint across PC, mobile, and web targets.
+
+.SH ENVIRONMENT VARIABLES
+.TP
+.B BENTOPACK_PLUGIN_PATH
+Colon-separated list of directories searched for external dynamic filter and extractor plugins (\fB.so\fR / \fB.dll\fR).
+.TP
+.B QT_QPA_PLATFORM
+Specifies the Qt platform abstraction plugin (e.g. \fBwayland\fR, \fBxcb\fR, \fBwindows\fR, \fBcocoa\fR).
+
+.SH FILES
+.TP
+.I ~/.config/BentoPack/bentopack_config.json
+User preferences and application geometry settings.
+
+.SH SEE ALSO
+.BR bentopack-cli (1)
+.PP
+Project repository and online documentation:
+.I https://github.com/oktailb/BentoPack
+
+.SH AUTHORS
+Vincent Lecoq and BentoPack contributors.

@@ -1,21 +1,21 @@
 @tool
-class_name SpriteStudioSspImporter
+class_name BentoPackSspImporter
 extends EditorImportPlugin
 
-## Automatic Godot 4 Import Plugin for SpriteStudio .ssp projects.
+## Automatic Godot 4 Import Plugin for BentoPack .ssp projects.
 
 const SspParser = preload("ssp_parser.gd")
 
 enum Presets { PRESET_DEFAULT }
 
 func _get_importer_name() -> String:
-	return "spritestudio.ssp"
+	return "bentopack.project"
 
 func _get_visible_name() -> String:
-	return "SpriteStudio Project (.ssp)"
+	return "BentoPack Project (.bento, .ssp)"
 
 func _get_recognized_extensions() -> PackedStringArray:
-	return PackedStringArray(["ssp"])
+	return PackedStringArray(["bento", "ssp"])
 
 func _get_save_extension() -> String:
 	return "tres"
@@ -76,7 +76,7 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 	var repack_mode: bool = bool(options.get("repack_for_animated_sprite", false))
 	var parse_result: SspParser.ParseResult = SspParser.parse_ssp_file(source_file, repack_mode)
 	if not parse_result.success:
-		push_error("SpriteStudio Import Error: " + parse_result.error_message)
+		push_error("BentoPack Import Error: " + parse_result.error_message)
 		return ERR_FILE_CORRUPT
 
 	var base_path := source_file.get_basename()
@@ -114,7 +114,7 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 	var out_tres_path := "%s.%s" % [save_path, _get_save_extension()]
 	var save_err := ResourceSaver.save(parse_result.sprite_frames, out_tres_path)
 	if save_err != OK:
-		push_error("SpriteStudio: Failed to save SpriteFrames to: " + out_tres_path)
+		push_error("BentoPack: Failed to save SpriteFrames to: " + out_tres_path)
 		return save_err
 
 	# 4. Optional: Generate instantiable companion PackedScene (.tscn)
@@ -142,7 +142,7 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 		root.add_child(anim_sprite)
 		anim_sprite.owner = root
 
-		# If polygonal meshes exist, add a native SpriteStudioMeshSprite node and AnimationPlayer
+		# If polygonal meshes exist, add a native BentoPackMeshSprite node and AnimationPlayer
 		if has_m8_meshes:
 			var mesh_sprite := MeshInstance2D.new()
 			mesh_sprite.set_script(preload("mesh_sprite.gd"))

@@ -11,7 +11,7 @@ target_include_directories(extractor_json PUBLIC
 )
 
 target_link_libraries(extractor_json PRIVATE
-    SpriteStudioCore
+    BentoPackCore
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
@@ -23,6 +23,6 @@ set_target_properties(extractor_json PROPERTIES
 )
 
 install(TARGETS extractor_json
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/spritestudio/plugins/extractors
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/bentopack/plugins/extractors
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/plugins/extractors
 )

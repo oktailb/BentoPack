@@ -1,4 +1,4 @@
-// This file is part of the SpriteStudio Plugins.
+// This file is part of the BentoPack Plugins.
 // It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
@@ -270,7 +270,7 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     setProgress(50);
 
-    SpriteStudio::LicenseManager::applyWatermark(packResult.atlas);
+    BentoPack::LicenseManager::applyWatermark(packResult.atlas);
 
     bool saveOk = false;
     if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
@@ -300,11 +300,11 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     // Build Unity JSON descriptor
     QJsonObject rootObj;
-    rootObj["generator"] = SpriteStudio::LicenseManager::isCommercial() ? QStringLiteral("SpriteStudio") : QStringLiteral("SpriteStudio Community Edition");
+    rootObj["generator"] = BentoPack::LicenseManager::isCommercial() ? QStringLiteral("BentoPack") : QStringLiteral("BentoPack Community Edition");
     rootObj["version"] = QString(PROJECT_VERSION);
     rootObj["format"] = QStringLiteral("Unity2D_SpriteMesh");
     rootObj["texture"] = pngFileName;
-    SpriteStudio::LicenseManager::applyWatermark(rootObj);
+    BentoPack::LicenseManager::applyWatermark(rootObj);
 
     QJsonObject texSize;
     texSize["w"] = packResult.dimensions.width();

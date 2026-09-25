@@ -1,8 +1,8 @@
 @tool
-class_name SpriteStudioMeshSprite
+class_name BentoPackMeshSprite
 extends MeshInstance2D
 
-## 2D Polygonal Sprite Player for SpriteStudio M8 tight meshes.
+## 2D Polygonal Sprite Player for BentoPack M8 tight meshes.
 ## Plays frame-by-frame 2D polygonal animations with zero transparency overdraw on GPU.
 
 @export var atlas_texture: Texture2D:

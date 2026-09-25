@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
-# Transparent batch wrapper for Aseprite using SpriteStudio CLI
-exec spritestudio-cli --flavor aseprite "$@"
+# Transparent batch wrapper for Aseprite using BentoPack CLI
+if command -v bentopack-cli >/dev/null 2>&1; then
+  exec bentopack-cli --flavor aseprite "$@"
+else
+  exec bentopack-cli --flavor aseprite "$@"
+fi

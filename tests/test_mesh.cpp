@@ -25,8 +25,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-using namespace SpriteStudioGeometry;
-using namespace SpriteStudioCommands;
+using namespace BentoPackGeometry;
+using namespace BentoPackCommands;
 
 class TestMesh : public QObject
 {
@@ -341,7 +341,7 @@ void TestMesh::testSspSerializationWithMesh()
     QByteArray jsonData = ProjectManager::serializeDocumentToJson(doc);
     QVERIFY(!jsonData.isEmpty());
 
-    // 2. Save and load via session directory (which powers .ssp archive storage)
+    // 2. Save and load via session directory (which powers .bento archive storage)
     QString err;
     bool saveOk = ProjectManager::saveProjectToSessionDir(doc, tempDir.path(), 1.0, QPointF(0, 0), &err);
     QVERIFY2(saveOk, qPrintable(err));

@@ -88,8 +88,8 @@ jobs:
         run: |
           DESTDIR=AppDir cmake --install build
           mkdir -p AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
-          cp SpriteStudio/res/linux/SpriteStudio.desktop AppDir/usr/share/applications/
-          cp SpriteStudio/res/icons/spritestudio.png AppDir/usr/share/icons/hicolor/256x256/apps/
+          cp BentoPack/res/linux/bentopack.desktop AppDir/usr/share/applications/
+          cp BentoPack/res/icons/bentopack.png AppDir/usr/share/icons/hicolor/256x256/apps/
           
           wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
@@ -98,25 +98,27 @@ jobs:
           export QMAKE=/usr/lib/qt6/bin/qmake
           ./linuxdeploy-x86_64.AppImage \
             --appdir AppDir \
-            --desktop-file SpriteStudio/res/linux/SpriteStudio.desktop \
-            --icon-file SpriteStudio/res/icons/spritestudio.png \
+            --desktop-file BentoPack/res/linux/bentopack.desktop \
+            --icon-file BentoPack/res/icons/bentopack.png \
             --plugin qt \
             --output appimage || true
           
-          if ls SpriteStudio*.AppImage 1> /dev/null 2>&1; then
-            cp SpriteStudio*.AppImage dist/
+          if ls BentoPack*.AppImage 1> /dev/null 2>&1; then
+            cp BentoPack*.AppImage dist/
+          elif ls BentoPack*.AppImage 1> /dev/null 2>&1; then
+            cp BentoPack*.AppImage dist/
           fi
 
       - name: Package Godot Addon
         run: |
           cmake --build build --target package_godot_addon
-          cp build/dist/godot-spritestudio-addon-*.zip dist/
+          cp build/dist/godot-bentopack-addon-*.zip dist/
 
 
       - name: Upload Linux Commercial Packages (Private Artifacts)
         uses: actions/upload-artifact@v4
         with:
-          name: SpriteStudio-${{ inputs.version }}-Commercial-Linux
+          name: BentoPack-${{ inputs.version }}-Commercial-Linux
           path: dist/*
           retention-days: 90
 
@@ -174,7 +176,11 @@ jobs:
       - name: Deploy Qt Libraries
         shell: msys2 {0}
         run: |
-          windeployqt --release --compiler-runtime build/bin/SpriteStudio.exe
+          if [ -f build/bin/bentopack.exe ]; then
+            windeployqt --release --compiler-runtime build/bin/bentopack.exe
+          else
+            windeployqt --release --compiler-runtime build/bin/BentoPack.exe
+          fi
 
       - name: Code Sign Windows Binaries (Optional)
         if: ${{ inputs.sign_binaries && env.HAS_CERT == 'true' }}
@@ -190,7 +196,9 @@ jobs:
           [System.IO.File]::WriteAllBytes($certPath, $certBytes)
           
           Write-Host "Signing executable and DLLs..."
-          & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f $certPath /p $env:CERT_PASS /tr http://timestamp.digicert.com /td sha256 /fd sha256 .\build\bin\SpriteStudio.exe
+          Get-ChildItem -Path .\build\bin -Filter *.exe | ForEach-Object {
+            & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f $certPath /p $env:CERT_PASS /tr http://timestamp.digicert.com /td sha256 /fd sha256 $_.FullName
+          }
           Get-ChildItem -Path .\build\bin -Filter *.dll | ForEach-Object {
             & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f $certPath /p $env:CERT_PASS /tr http://timestamp.digicert.com /td sha256 /fd sha256 $_.FullName
           }
@@ -200,18 +208,20 @@ jobs:
         shell: msys2 {0}
         run: |
           mkdir -p dist
-          7z a dist/SpriteStudio-${{ inputs.version }}-Commercial-Windows-x64-Portable.zip ./build/bin/*
+          7z a dist/BentoPack-${{ inputs.version }}-Commercial-Windows-x64-Portable.zip ./build/bin/*
           
           cd build
           cpack -G NSIS || true
-          if ls SpriteStudio*Setup.exe 1> /dev/null 2>&1; then
-            cp SpriteStudio*Setup.exe ../dist/SpriteStudio-${{ inputs.version }}-Commercial-Windows-x64-Setup.exe
+          if ls BentoPack*Setup.exe 1> /dev/null 2>&1; then
+            cp BentoPack*Setup.exe ../dist/BentoPack-${{ inputs.version }}-Commercial-Windows-x64-Setup.exe
+          elif ls BentoPack*Setup.exe 1> /dev/null 2>&1; then
+            cp BentoPack*Setup.exe ../dist/BentoPack-${{ inputs.version }}-Commercial-Windows-x64-Setup.exe
           fi
 
       - name: Upload Windows Commercial Packages (Private Artifacts)
         uses: actions/upload-artifact@v4
         with:
-          name: SpriteStudio-${{ inputs.version }}-Commercial-Windows
+          name: BentoPack-${{ inputs.version }}-Commercial-Windows
           path: dist/*
           retention-days: 90
 
@@ -254,7 +264,11 @@ jobs:
 
       - name: Deploy Qt Libraries
         run: |
-          /opt/homebrew/opt/qt@6/bin/macdeployqt build/bin/SpriteStudio.app
+          APP_PATH="build/bin/bentopack.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH="build/bin/BentoPack.app"
+          fi
+          /opt/homebrew/opt/qt@6/bin/macdeployqt "$APP_PATH"
 
       - name: Code Sign and Notarize macOS App (Optional)
         if: ${{ inputs.sign_binaries && env.HAS_APPLE_CERT == 'true' }}
@@ -278,20 +292,28 @@ jobs:
           security import "$CERT_PATH" -k "$KEYCHAIN_PATH" -P "$APPLE_CERT_PASS" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
 
+          APP_PATH="build/bin/bentopack.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH="build/bin/BentoPack.app"
+          fi
           echo "Signing application bundle with Developer ID Application..."
           codesign --deep --force --verify --verbose --options runtime --timestamp \
-            --sign "Developer ID Application: $APPLE_TEAM_ID" build/bin/SpriteStudio.app
+            --sign "Developer ID Application: $APPLE_TEAM_ID" "$APP_PATH"
 
       - name: Package DMG and App ZIP
         run: |
           mkdir -p dist
-          hdiutil create -volname "Sprite Studio Commercial" -srcfolder build/bin/SpriteStudio.app -ov -format UDZO dist/SpriteStudio-${{ inputs.version }}-Commercial-macOS-arm64.dmg
-          ditto -c -k --sequesterRsrc --keepParent build/bin/SpriteStudio.app dist/SpriteStudio-${{ inputs.version }}-Commercial-macOS-arm64.zip
+          APP_PATH="build/bin/bentopack.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH="build/bin/BentoPack.app"
+          fi
+          hdiutil create -volname "BentoPack Commercial" -srcfolder "$APP_PATH" -ov -format UDZO dist/BentoPack-${{ inputs.version }}-Commercial-macOS-arm64.dmg
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" dist/BentoPack-${{ inputs.version }}-Commercial-macOS-arm64.zip
 
       - name: Upload macOS Commercial Packages (Private Artifacts)
         uses: actions/upload-artifact@v4
         with:
-          name: SpriteStudio-${{ inputs.version }}-Commercial-macOS
+          name: BentoPack-${{ inputs.version }}-Commercial-macOS
           path: dist/*
           retention-days: 90
 
@@ -303,7 +325,7 @@ jobs:
       - name: Print Distribution Notice
         run: |
           echo "=========================================================================="
-          echo "Sprite Studio Commercial Edition Deliverables Built Successfully!"
+          echo "BentoPack Commercial Edition Deliverables Built Successfully!"
           echo "Version: ${{ inputs.version }}"
           echo "Security Status: Verified clean of Community compliance watermarks."
           echo "Artifact Retention: 90 days (Private GitHub Actions Run Storage)."

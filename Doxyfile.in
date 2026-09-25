@@ -1,10 +1,10 @@
-# Doxyfile for SpriteStudio
+# Doxyfile for BentoPack
 # Automatically configured by CMake
 
-PROJECT_NAME           = "Sprite Studio"
+PROJECT_NAME           = "BentoPack"
 PROJECT_NUMBER         = "@PROJECT_VERSION@"
-PROJECT_BRIEF          = "2D Sprite Sheet Preparation, Retouching and Engine Packaging Studio"
-PROJECT_LOGO           = "@CMAKE_CURRENT_SOURCE_DIR@/SpriteStudio/res/icons/spritestudio.png"
+PROJECT_BRIEF          = "High-Density 2D Sprite Sheet & Polygonal Mesh Studio"
+PROJECT_LOGO           = "@CMAKE_CURRENT_SOURCE_DIR@/BentoPack/res/icons/bentopack.png"
 
 OUTPUT_DIRECTORY       = "@CMAKE_CURRENT_BINARY_DIR@/docs"
 CREATE_SUBDIRS         = NO
@@ -43,15 +43,15 @@ SORT_MEMBERS_CTORS_1ST = YES
 SORT_GROUP_NAMES       = NO
 SORT_BY_SCOPE_NAME     = NO
 
-INPUT                  = "@CMAKE_CURRENT_SOURCE_DIR@/SpriteStudio/include" \
-                         "@CMAKE_CURRENT_SOURCE_DIR@/SpriteStudio/src" \
+INPUT                  = "@CMAKE_CURRENT_SOURCE_DIR@/BentoPack/include" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/BentoPack/src" \
                          "@CMAKE_CURRENT_SOURCE_DIR@/docs"
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.hpp *.cpp *.c *.md
 RECURSIVE              = YES
-EXCLUDE                = "@CMAKE_CURRENT_SOURCE_DIR@/SpriteStudio/src/zip/miniz.c" \
-                         "@CMAKE_CURRENT_SOURCE_DIR@/SpriteStudio/include/zip/miniz.h"
+EXCLUDE                = "@CMAKE_CURRENT_SOURCE_DIR@/BentoPack/src/zip/miniz.c" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/BentoPack/include/zip/miniz.h"
 EXCLUDE_SYMLINKS       = NO
 USE_MDFILE_AS_MAINPAGE = "@CMAKE_CURRENT_SOURCE_DIR@/docs/README_DOCS.md"
 
@@ -100,7 +100,7 @@ ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = YES
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
-INCLUDE_PATH           = "@CMAKE_CURRENT_SOURCE_DIR@/SpriteStudio/include"
+INCLUDE_PATH           = "@CMAKE_CURRENT_SOURCE_DIR@/BentoPack/include"
 
 # Dot / Graphviz options
 HAVE_DOT               = @DOXYGEN_HAVE_DOT@

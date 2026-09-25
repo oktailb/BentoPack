@@ -10,13 +10,13 @@ config_version=5
 
 [application]
 
-config/name="SpriteStudio Godot Demo"
-config/description="Official demo project for the SpriteStudio Godot 4 addon."
+config/name="BentoPack Godot Demo"
+config/description="Official demo project for the BentoPack Godot 4 addon."
 config/features=PackedStringArray("4.7")
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/spritestudio/plugin.cfg")
+enabled=PackedStringArray("res://addons/bentopack/plugin.cfg")
 
 [rendering]
 

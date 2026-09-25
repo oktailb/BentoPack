@@ -1,4 +1,4 @@
-// This file is part of the SpriteStudio Plugins.
+// This file is part of the BentoPack Plugins.
 // It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
@@ -331,7 +331,7 @@ void JsonExtractor::extractFromTexturePackerFormat(const QJsonObject &framesObj,
                     }
                 }
                 if (tris.isEmpty() || tris.size() % 3 != 0) {
-                    tris = SpriteStudioGeometry::Triangulator::triangulate(poly);
+                    tris = BentoPackGeometry::Triangulator::triangulate(poly);
                 }
                 box.triangles = tris;
                 box.hasPolygonMesh = true;
@@ -430,7 +430,7 @@ void JsonExtractor::extractFromArrayFormat(const QJsonArray &framesArray,
                     }
                 }
                 if (tris.isEmpty() || tris.size() % 3 != 0) {
-                    tris = SpriteStudioGeometry::Triangulator::triangulate(poly);
+                    tris = BentoPackGeometry::Triangulator::triangulate(poly);
                 }
                 box.triangles = tris;
                 box.hasPolygonMesh = true;
@@ -569,7 +569,7 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
     setProgress(50);
 
     // Apply compliance watermarking metadata to exported atlas
-    SpriteStudio::LicenseManager::applyWatermark(packResult.atlas);
+    BentoPack::LicenseManager::applyWatermark(packResult.atlas);
 
     bool saveOk = false;
     if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
@@ -705,7 +705,7 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
 
     // Meta object
     QJsonObject metaObj;
-    metaObj["app"] = QStringLiteral("SpriteStudio");
+    metaObj["app"] = QStringLiteral("BentoPack");
     metaObj["version"] = version().toString();
     metaObj["image"] = pngFileName;
     metaObj["format"] = QStringLiteral("RGBA8888");
@@ -734,7 +734,7 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
     }
     metaObj["frameTags"] = frameTagsArray;
 
-    SpriteStudio::LicenseManager::applyWatermark(metaObj);
+    BentoPack::LicenseManager::applyWatermark(metaObj);
 
     rootObj["meta"] = metaObj;
 

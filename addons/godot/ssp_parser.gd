@@ -1,8 +1,8 @@
 @tool
-class_name SpriteStudioSspParser
+class_name BentoPackSspParser
 extends RefCounted
 
-## Pure GDScript parser for native SpriteStudio project archives (.ssp)
+## Pure GDScript parser for native BentoPack project archives (.ssp)
 ## and JSON atlas descriptors. Generates SpriteFrames, AtlasTextures, and M8 Meshes.
 
 class ParseResult:
@@ -17,7 +17,11 @@ class ParseResult:
 	var project_data: Dictionary = {}
 	var raw_atlas_png_bytes: PackedByteArray
 
-## Parses a .ssp ZIP archive or project JSON and produces ready-to-use Godot 2D resources.
+## Parses a .bento or .ssp ZIP archive or project JSON and produces ready-to-use Godot 2D resources.
+static func parse_bento_file(file_path: String, repack_for_animated_sprite: bool = false) -> ParseResult:
+	return parse_ssp_file(file_path, repack_for_animated_sprite)
+
+## Parses a .ssp or .bento ZIP archive or project JSON and produces ready-to-use Godot 2D resources.
 static func parse_ssp_file(file_path: String, repack_for_animated_sprite: bool = false) -> ParseResult:
 	var res := ParseResult.new()
 	var global_path := ProjectSettings.globalize_path(file_path)

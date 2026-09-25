@@ -1,38 +1,38 @@
-# SpriteStudio Godot 4 Addon (`godot-spritestudio-addon`)
+# BentoPack Godot 4 Addon (`godot-bentopack-addon`)
 
-Official Godot 4 integration plugin for **SpriteStudio** — Native 2D sprite slicing, texture packing, animation editing, and M8 polygonal mesh support.
+Official Godot 4 integration plugin for **BentoPack** — Native 2D sprite slicing, texture packing, animation editing, and M8 polygonal mesh support.
 
 ---
 
 ## 🚀 Key Features
 
-* **Zero-Configuration Import (`.ssp`)**: Drag and drop `.ssp` project files into your Godot project. Godot automatically imports them into:
+* **Zero-Configuration Import (`.bento` / `.ssp`)**: Drag and drop `.bento` project files into your Godot project. Godot automatically imports them into:
   * Optimised `SpriteFrames` resources with full timeline & FPS settings.
   * **Automatic M8 Polygon Clipping**: When tight polygonal packing is used, frames are automatically clipped pixel-perfect to their contours with non-overlapping repacking, completely eliminating neighbouring sprite bleed.
   * **Instant Hitbox / CollisionPolygon2D Generation**: Generates synchronized `CollisionPolygon2D` collider shapes matching the exact contour of every single animation frame. No manual hitbox tracing needed!
-  * Ready-to-use companion scenes (`.tscn`) with configured `AnimatedSprite2D`, `SpriteStudioMeshSprite`, `Area2D` (Hitbox), and `AnimationPlayer`.
-  * **M8 Tight Polygonal Meshes (`ArrayMesh`)**: GPU zero-transparency overdraw rendering via `SpriteStudioMeshSprite` / `MeshInstance2D`.
-* **1-Click FileSystem Context Menu**: Right-click on any image (`.png`, `.webp`, `.jpg`) or `.ssp` file directly in Godot's FileSystem dock for instant Auto-Slice, scene generation, or desktop editing.
-* **Polygonal Sprite Player (`SpriteStudioMeshSprite`)**: Built-in `@tool` node for playing frame-by-frame polygonal mesh animations with live collision synchronization, horizontal/vertical flipping, and gameplay signals (`frame_changed`, `animation_finished`).
-* **Inspector Integration**: Quick-action buttons in the Inspector when selecting `AnimatedSprite2D`, `Sprite2D`, or `SpriteFrames` to open the asset directly in SpriteStudio.
-* **CLI & Automation**: Seamless connection with `spritestudio-cli` for live re-packing and watch daemon support, with built-in one-click release downloader when the CLI is missing.
+  * Ready-to-use companion scenes (`.tscn`) with configured `AnimatedSprite2D`, `BentoMeshSprite`, `Area2D` (Hitbox), and `AnimationPlayer`.
+  * **M8 Tight Polygonal Meshes (`ArrayMesh`)**: GPU zero-transparency overdraw rendering via `BentoMeshSprite` / `MeshInstance2D`.
+* **1-Click FileSystem Context Menu**: Right-click on any image (`.png`, `.webp`, `.jpg`) or `.bento` file directly in Godot's FileSystem dock for instant Auto-Slice, scene generation, or desktop editing.
+* **Polygonal Sprite Player (`BentoMeshSprite`)**: Built-in `@tool` node for playing frame-by-frame polygonal mesh animations with live collision synchronization, horizontal/vertical flipping, and gameplay signals (`frame_changed`, `animation_finished`).
+* **Inspector Integration**: Quick-action buttons in the Inspector when selecting `AnimatedSprite2D`, `Sprite2D`, or `SpriteFrames` to open the asset directly in BentoPack.
+* **CLI & Automation**: Seamless connection with `bentopack-cli` (or legacy `bentopack-cli`) for live re-packing and watch daemon support, with built-in one-click release downloader when the CLI is missing.
 
 ---
 
 ## 📦 Installation
 
-1. Copy the `addons/spritestudio` directory into your Godot project's `addons/` folder:
+1. Copy the `addons/bentopack` directory into your Godot project's `addons/` folder:
    ```
    my_godot_project/
    ├── addons/
-   │   └── spritestudio/
+   │   └── bentopack/
    │       ├── plugin.cfg
-   │       ├── spritestudio_plugin.gd
+   │       ├── bentopack_plugin.gd
    │       └── ...
    └── project.godot
    ```
 2. In Godot 4, open **Project -> Project Settings -> Plugins**.
-3. Enable the **SpriteStudio Integration** plugin.
+3. Enable the **BentoPack Integration** plugin.
 
 ---
 

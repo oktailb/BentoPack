@@ -1,9 +1,9 @@
 @tool
-class_name SpriteStudioInspectorPlugin
+class_name BentoPackInspectorPlugin
 extends EditorInspectorPlugin
 
 ## Custom Godot 4 inspector panel for 2D Sprite & Animation nodes.
-## Adds quick-action buttons to open assets in SpriteStudio or trigger live re-packs.
+## Adds quick-action buttons to open assets in BentoPack or trigger live re-packs.
 
 func _can_handle(object: Object) -> bool:
 	return (object is AnimatedSprite2D or
@@ -32,14 +32,14 @@ func _parse_begin(object: Object) -> void:
 	vbox.add_theme_constant_override("separation", 4)
 
 	var title := Label.new()
-	title.text = "SpriteStudio 2D Toolkit"
+	title.text = "BentoPack 2D Toolkit"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", Color(0.4, 0.7, 1.0))
 	vbox.add_child(title)
 
 	var btn_open := Button.new()
-	btn_open.text = "🎨 Open in SpriteStudio"
-	btn_open.tooltip_text = "Launch the SpriteStudio desktop application to edit this asset."
+	btn_open.text = "🎨 Open in BentoPack"
+	btn_open.tooltip_text = "Launch the BentoPack desktop application to edit this asset."
 	btn_open.pressed.connect(_on_open_pressed.bind(object))
 	vbox.add_child(btn_open)
 
@@ -73,4 +73,4 @@ func _on_open_pressed(target_object: Object) -> void:
 	if path_to_open.is_empty():
 		path_to_open = "res://"
 
-	SpriteStudioCliBridge.open_in_editor(path_to_open)
+	BentoPackCliBridge.open_in_editor(path_to_open)

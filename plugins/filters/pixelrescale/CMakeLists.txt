@@ -10,7 +10,7 @@ target_include_directories(filter_pixelrescale PUBLIC
 )
 
 target_link_libraries(filter_pixelrescale PRIVATE
-    SpriteStudioCore
+    BentoPackCore
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
@@ -22,6 +22,6 @@ set_target_properties(filter_pixelrescale PROPERTIES
 )
 
 install(TARGETS filter_pixelrescale
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/spritestudio/plugins/filters
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/bentopack/plugins/filters
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/plugins/filters
 )

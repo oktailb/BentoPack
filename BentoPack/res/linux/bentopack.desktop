@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=BentoPack
+GenericName=Sprite Sheet & Animation Editor
+Comment=High-Density 2D Sprite Sheet & Polygonal Mesh Studio
+Exec=bentopack %F
+Icon=bentopack
+Terminal=false
+Categories=Graphics;2DGraphics;RasterGraphics;Development;
+MimeType=image/png;image/jpeg;image/bmp;image/gif;application/x-bentopack;application/x-bentopack;
+Keywords=sprite;sheet;atlas;animation;pixelart;game;bento;polygon;mesh;

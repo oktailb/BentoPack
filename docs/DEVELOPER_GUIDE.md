@@ -1,6 +1,6 @@
-# 🛠️ Guide de Développement & d'Extension — SpriteStudio
+# 🛠️ Guide de Développement & d'Extension — BentoPack
 
-Bienvenue dans le guide d'extension de **SpriteStudio**. Ce document s'adresse aux développeurs et contributeurs souhaitant enrichir SpriteStudio en concevant :
+Bienvenue dans le guide d'extension de **BentoPack** (anciennement BentoPack). Ce document s'adresse aux développeurs et contributeurs souhaitant enrichir BentoPack en concevant :
 1. **De nouveaux Codecs d'I/O (`Extractor`)** : pour importer et exporter des formats d'atlas 2D, des séquences d'animation ou des structures de métadonnées spécifiques à des moteurs de jeu.
 2. **De nouveaux Plugins de Filtres Graphiques (`FilterPlugin`)** : pour intégrer des algorithmes de retouche, de nettoyage, de transformation géométrique ou d'effets visuels avec prévisualisation en direct et annulation non-destructive.
 3. **Des modules de traitement haute performance** : respectant la thread-safety, l'accès direct en mémoire scanline et l'internationalisation.
@@ -31,7 +31,7 @@ Bienvenue dans le guide d'extension de **SpriteStudio**. Ce document s'adresse a
 
 ## 1. Vue d'Ensemble de l'Architecture
 
-SpriteStudio repose sur un patron architectural strict séparant le modèle de données, les codecs d'E/S, les commandes d'annulation et l'interface utilisateur :
+BentoPack repose sur un patron architectural strict séparant le modèle de données, les codecs d'E/S, les commandes d'annulation et l'interface utilisateur :
 
 ```
                      ┌────────────────────────┐
@@ -65,7 +65,7 @@ SpriteStudio repose sur un patron architectural strict séparant le modèle de d
 
 ### Principes Fondamentaux :
 1. **`SpriteDocument` est l'unique source de vérité** : Aucun codec ni widget ne stocke d'état de document concurrent.
-2. **Découplage Headless Total** : `SpriteStudioCore` compile et s'exécute sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`).
+2. **Découplage Headless Total** : `BentoPackCore` compile et s'exécute sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`).
 3. **Réversibilité Absolue (Undo/Redo)** : Toute modification de géométrie, d'animation ou de pixels passe par `QUndoStack`.
 
 ---
@@ -74,7 +74,7 @@ SpriteStudio repose sur un patron architectural strict séparant le modèle de d
 
 ### 2.1. Le contrat de l'interface `Extractor`
 
-Tous les codecs dérivent de la classe de base abstraite `Extractor` (`SpriteStudio/include/extractor/extractor.h`).
+Tous les codecs dérivent de la classe de base abstraite `Extractor` (`BentoPack/include/extractor/extractor.h`).
 
 ```cpp
 class Extractor : public QObject
@@ -133,9 +133,9 @@ Codes d'erreur standards disponibles : `FileNotFound`, `FileNotReadable`, `FileN
 
 ### 2.3. Enregistrement dans `ExtractorRegistry`
 
-Les codecs sont enregistrés auprès du singleton `ExtractorRegistry` (`SpriteStudio/include/extractor/extractorregistry.h`).
+Les codecs sont enregistrés auprès du singleton `ExtractorRegistry` (`BentoPack/include/extractor/extractorregistry.h`).
 
-Dans `SpriteStudio/src/extractor/extractorregistry.cpp` :
+Dans `BentoPack/src/extractor/extractorregistry.cpp` :
 ```cpp
 #include "extractor/monmoteurextractor.h"
 
@@ -339,7 +339,7 @@ void TestExtractors::testCustomEngineExport()
 
 ### 3.1. Le contrat d'interface `FilterPlugin`
 
-L'interface `FilterPlugin` (`SpriteStudio/include/filters/filterplugin.h`) encapsule les métadonnées d'un filtre et sa fabrique de boîte de dialogue :
+L'interface `FilterPlugin` (`BentoPack/include/filters/filterplugin.h`) encapsule les métadonnées d'un filtre et sa fabrique de boîte de dialogue :
 
 ```cpp
 class FilterPlugin
@@ -364,7 +364,7 @@ public:
 
 ### 3.2. Le socle interactif `FilterDialogBase`
 
-Toute boîte de dialogue de filtre dérive de `FilterDialogBase` (`SpriteStudio/include/widgets/filterdialogbase.h`).
+Toute boîte de dialogue de filtre dérive de `FilterDialogBase` (`BentoPack/include/widgets/filterdialogbase.h`).
 
 Ce socle prend automatiquement en charge :
 - **L'instantané d'état initial** : sauvegarde transparente de l'atlas, des frames, des boîtes et des animations à l'ouverture.
@@ -384,7 +384,7 @@ virtual void resetDefaults() = 0;
 
 ### 3.3. Commandes d'annulation transactionnelles (`ApplyFilterCommand`)
 
-Pour assurer une annulation atomique (`Ctrl+Z`), utilisez `ApplyFilterCommand` (`SpriteStudio/include/commands/filtercommands.h`) :
+Pour assurer une annulation atomique (`Ctrl+Z`), utilisez `ApplyFilterCommand` (`BentoPack/include/commands/filtercommands.h`) :
 
 ```cpp
 QUndoCommand* MonFilterDialog::createUndoCommand()
@@ -542,7 +542,7 @@ public:
 
 ### 3.5. Enregistrement dans `FilterRegistry`
 
-Dans `SpriteStudio/src/filters/filterregistry.cpp` :
+Dans `BentoPack/src/filters/filterregistry.cpp` :
 ```cpp
 #include "filters/invertfilter.h"
 
@@ -562,7 +562,7 @@ Le filtre apparaîtra automatiquement dans la barre de menus sous le menu **Filt
 ### 4.1. Modèle 100% `QImage` en mémoire CPU contiguë
 Ne stockez **JAMAIS** de `QPixmap` dans `SpriteDocument` ni dans les algorithmes de traitement.
 - `QPixmap` est une ressource dépendante du serveur d'affichage graphique (X11/Wayland/GDI/Metal). Son instanciation en arrière-plan (`QThread` ou `QtConcurrent`) provoque des crashs fatals intermittents.
-- Le modèle de SpriteStudio est **strictement composé de `QImage`**. La conversion vers `QPixmap` (`QPixmap::fromImage()`) est réservée aux composants finaux d'affichage UI (`AtlasViewController`, `TimelineFilmstripWidget`).
+- Le modèle de BentoPack est **strictement composé de `QImage`**. La conversion vers `QPixmap` (`QPixmap::fromImage()`) est réservée aux composants finaux d'affichage UI (`AtlasViewController`, `TimelineFilmstripWidget`).
 
 ---
 
@@ -614,7 +614,7 @@ watcher->setFuture(QtConcurrent::run([opts, frames]() {
 
 ## 5. Internationalisation (i18n) & Bonnes Pratiques
 
-SpriteStudio supporte intégralement le Français (`fr_FR`), l'Anglais (`en_US`) et le Japonais (`ja_JA`) avec basculement dynamique à chaud (`QEvent::LanguageChange`).
+BentoPack supporte intégralement le Français (`fr_FR`), l'Anglais (`en_US`) et le Japonais (`ja_JA`) avec basculement dynamique à chaud (`QEvent::LanguageChange`).
 
 ### Règle d'or sur les `Q_OBJECT` et contextes de traduction :
 Si votre dialogue ou widget hérite de `Q_OBJECT`, le contexte de traduction utilisé par `tr()` est exactement le nom de la classe.  

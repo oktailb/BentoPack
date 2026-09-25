@@ -3,7 +3,7 @@
 #   SRC_DIR: Source directory of the Godot addon (e.g. ${PROJECT_SOURCE_DIR}/addons/godot)
 #   STAGING_DIR: Temporary staging directory (e.g. ${CMAKE_BINARY_DIR}/addons_staging/godot)
 #   LICENSE_FILE: Path to LICENSE file
-#   OUTPUT_ZIP: Target zip path (e.g. ${CMAKE_BINARY_DIR}/dist/godot-spritestudio-addon-${PROJECT_VERSION}.zip)
+#   OUTPUT_ZIP: Target zip path (e.g. ${CMAKE_BINARY_DIR}/dist/godot-bentopack-addon-${PROJECT_VERSION}.zip)
 
 string(REPLACE "\"" "" SRC_DIR "${SRC_DIR}")
 string(REPLACE "\"" "" STAGING_DIR "${STAGING_DIR}")
@@ -14,7 +14,7 @@ if(NOT DEFINED SRC_DIR OR NOT DEFINED STAGING_DIR OR NOT DEFINED OUTPUT_ZIP)
     message(FATAL_ERROR "SRC_DIR, STAGING_DIR, and OUTPUT_ZIP must be defined.")
 endif()
 
-set(ADDON_DEST "${STAGING_DIR}/addons/spritestudio")
+set(ADDON_DEST "${STAGING_DIR}/addons/bentopack")
 
 # 1. Clean previous staging
 if(EXISTS "${STAGING_DIR}")
@@ -53,7 +53,7 @@ if(EXISTS "${OUTPUT_ZIP}")
 endif()
 
 execute_process(
-    COMMAND "${CMAKE_COMMAND}" -E tar "cf" "${OUTPUT_ZIP}" --format=zip "addons/spritestudio"
+    COMMAND "${CMAKE_COMMAND}" -E tar "cf" "${OUTPUT_ZIP}" --format=zip "addons/bentopack"
     WORKING_DIRECTORY "${STAGING_DIR}"
     RESULT_VARIABLE TAR_RES
 )

@@ -8,7 +8,7 @@ target_include_directories(extractor_gif PUBLIC
 )
 
 target_link_libraries(extractor_gif PRIVATE
-    SpriteStudioCore
+    BentoPackCore
     Qt6::Core
     Qt6::Gui
 )
@@ -19,6 +19,6 @@ set_target_properties(extractor_gif PROPERTIES
 )
 
 install(TARGETS extractor_gif
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/spritestudio/plugins/extractors
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/bentopack/plugins/extractors
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/plugins/extractors
 )

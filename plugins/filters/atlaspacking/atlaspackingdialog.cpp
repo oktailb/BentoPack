@@ -1,4 +1,4 @@
-// This file is part of the SpriteStudio Plugins.
+// This file is part of the BentoPack Plugins.
 // It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
@@ -45,7 +45,7 @@ AtlasPackingDialog::AtlasPackingDialog(SpriteDocument *doc, QUndoStack *undoStac
     }
 
     // Load persistent settings or defaults
-    QSettings settings(QStringLiteral("SpriteStudio"), QStringLiteral("SpriteStudio"));
+    QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
     int defaultAlgo = hasAnyMesh ? 5 : 0; // Index 5 is TightPolygon
     int algo = settings.value(QStringLiteral("atlasPacking/algorithm"), defaultAlgo).toInt();
     if (hasAnyMesh && algo < 5) {
@@ -574,7 +574,7 @@ void AtlasPackingDialog::resetDefaults()
 
 void AtlasPackingDialog::saveSettings()
 {
-    QSettings settings(QStringLiteral("SpriteStudio"), QStringLiteral("SpriteStudio"));
+    QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
     settings.setValue(QStringLiteral("atlasPacking/algorithm"), m_comboAlgorithm->currentIndex());
     settings.setValue(QStringLiteral("atlasPacking/padding"), m_spinPadding->value());
     settings.setValue(QStringLiteral("atlasPacking/borderPadding"), m_spinBorderPadding->value());

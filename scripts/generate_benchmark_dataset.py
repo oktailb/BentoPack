@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 generate_benchmark_dataset.py
-Generates an exhaustive, multi-tier benchmark dataset for formal validation of spritestudio-cli:
+Generates an exhaustive, multi-tier benchmark dataset for formal validation of bentopack-cli:
 1. characters/         : 4 distinct animated game characters (Knight, Mage, Rogue, Slime) with 48 individual frames.
 2. irregular_primes/   : 30 sprites with prime/odd dimensions (e.g. 17x31, 29x53) and extreme aspect ratios (2x120, 160x4).
 3. duplicate_cluster/  : 100 frames containing 40 unique frames + 60 exact visual duplicates to test auto-alias deduplication.
@@ -312,7 +312,7 @@ def generate_massive_batch():
 
 def main():
     print("=" * 70)
-    print("Generating Comprehensive Benchmark Dataset for SpriteStudio CLI...")
+    print("Generating Comprehensive Benchmark Dataset for BentoPack CLI...")
     print("=" * 70)
     ensure_dir(DATASET_DIR)
     generate_characters()

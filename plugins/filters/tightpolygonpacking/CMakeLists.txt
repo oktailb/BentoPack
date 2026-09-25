@@ -11,7 +11,7 @@ target_include_directories(filter_tightpolygonpacking PUBLIC
 )
 
 target_link_libraries(filter_tightpolygonpacking PRIVATE
-    SpriteStudioCore
+    BentoPackCore
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
@@ -24,6 +24,6 @@ set_target_properties(filter_tightpolygonpacking PROPERTIES
 )
 
 install(TARGETS filter_tightpolygonpacking
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/spritestudio/plugins/filters
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/bentopack/plugins/filters
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/plugins/filters
 )

@@ -1,4 +1,4 @@
-# 📸 Captures d'Écran pour le Manuel Utilisateur SpriteStudio
+# 📸 Captures d'Écran pour le Manuel Utilisateur BentoPack
 
 Ce répertoire contient les captures d'écran référencées dans [`docs/USER_GUIDE.md`](../USER_GUIDE.md).
 

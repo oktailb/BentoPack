@@ -12,9 +12,9 @@ set(PROJECT_VERSION_MINOR 11)
 set(PROJECT_VERSION_PATCH 0)
 set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
-project(SpriteStudio    VERSION ${PROJECT_VERSION}
+project(BentoPack       VERSION ${PROJECT_VERSION}
                         LANGUAGES C CXX
-                        DESCRIPTION "Little sprites and animated texture management tool"
+                        DESCRIPTION "High-density 2D sprite sheet and polygonal mesh packing studio"
             )
 
 include("build.cmake")
@@ -50,7 +50,7 @@ if(LibGit2_FOUND)
     message(STATUS "LibGit2 found: ${LIBGIT2_LIBRARIES} (includes: ${LIBGIT2_INCLUDE_DIRS})")
     add_compile_definitions(HAVE_LIBGIT2=1)
 else()
-    message(STATUS "LibGit2 not found. Git versioning in .ssp projects is disabled.")
+    message(STATUS "LibGit2 not found. Git versioning in .bento projects is disabled.")
     message(STATUS "To enable LibGit2, configure with -DLIBGIT2_ROOT=<path_to_libgit2>")
 endif()
 
@@ -112,7 +112,7 @@ if(MINGW)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols")
 endif()
 
-add_subdirectory(SpriteStudio)
+add_subdirectory(BentoPack)
 add_subdirectory(plugins)
 
 enable_testing()
@@ -120,7 +120,7 @@ add_subdirectory(tests)
 
 install(TARGETS
     ${PROJECT_NAME}
-    spritestudio-cli
+    bentopack-cli
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -128,34 +128,34 @@ install(TARGETS
 
 include(CMakePackageConfigHelpers)
 
-# Generate SpriteStudioConfigVersion.cmake
+# Generate BentoPackConfigVersion.cmake
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/SpriteStudioConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/BentoPackConfigVersion.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion
 )
 
-# Generate SpriteStudioConfig.cmake
+# Generate BentoPackConfig.cmake
 configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SpriteStudioConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/SpriteStudioConfig.cmake"
-    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SpriteStudio"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/BentoPackConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/BentoPackConfig.cmake"
+    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/BentoPack"
     PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )
 
-# Install CMake SDK export for spritestudio-dev
-install(EXPORT SpriteStudioTargets
-    FILE SpriteStudioTargets.cmake
-    NAMESPACE SpriteStudio::
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SpriteStudio"
-    COMPONENT spritestudio-dev
+# Install CMake SDK export for bentopack-dev
+install(EXPORT BentoPackTargets
+    FILE BentoPackTargets.cmake
+    NAMESPACE BentoPack::
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/BentoPack"
+    COMPONENT bentopack-dev
 )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/SpriteStudioConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/SpriteStudioConfigVersion.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SpriteStudio"
-    COMPONENT spritestudio-dev
+    "${CMAKE_CURRENT_BINARY_DIR}/BentoPackConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/BentoPackConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/BentoPack"
+    COMPONENT bentopack-dev
 )
 
 if (WIN32)
@@ -193,9 +193,9 @@ endif()
 # Godot 4 Addon Packaging Target
 # -------------------------------------------------------------------------
 set(GODOT_ADDON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/godot")
-set(GODOT_ADDON_STAGING_DIR "${CMAKE_CURRENT_BINARY_DIR}/addons_staging/godot/addons/spritestudio")
+set(GODOT_ADDON_STAGING_DIR "${CMAKE_CURRENT_BINARY_DIR}/addons_staging/godot/addons/bentopack")
 set(GODOT_ADDON_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/dist")
-set(GODOT_ADDON_ZIP "${GODOT_ADDON_DIST_DIR}/godot-spritestudio-addon-${PROJECT_VERSION}.zip")
+set(GODOT_ADDON_ZIP "${GODOT_ADDON_DIST_DIR}/godot-bentopack-addon-${PROJECT_VERSION}.zip")
 
 add_custom_target(package_godot_addon
     COMMAND ${CMAKE_COMMAND}
@@ -210,21 +210,24 @@ add_custom_target(package_godot_addon
 )
 
 install(DIRECTORY addons/godot/
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/spritestudio/addons/godot/addons/spritestudio
-    COMPONENT spritestudio
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/bentopack/addons/godot/addons/bentopack
+    COMPONENT bentopack
     PATTERN "*.uid" EXCLUDE
     PATTERN "*.import" EXCLUDE
 )
 
 
 if(UNIX AND NOT APPLE AND NOT HAIKU)
-    install(FILES SpriteStudio/res/linux/SpriteStudio.desktop
+    install(FILES BentoPack/res/linux/BentoPack.desktop
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
+        RENAME bentopack.desktop
     )
-    install(FILES SpriteStudio/res/icons/spritestudio.png
+    install(FILES BentoPack/res/icons/bentopack.png
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps
+        RENAME bentopack.png
     )
-    install(FILES docs/man/spritestudio.1 docs/man/spritestudio-cli.1
+    install(FILES
+        docs/man/bentopack.1 docs/man/bentopack-cli.1
         DESTINATION ${CMAKE_INSTALL_MANDIR}/man1
     )
 endif()
@@ -240,7 +243,7 @@ if (HAIKU)
         RENAME "Apache v2"
     )
     configure_file(
-        SpriteStudio/src/haiku.PackageInfo.in
+        BentoPack/src/haiku.PackageInfo.in
         generated/haiku.PackageInfo
     )
 endif()
@@ -251,7 +254,7 @@ set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_RELEASE 1)
 set(CPACK_PACKAGE_CONTACT "vincent.lecoq@gmail.com")
 set(CPACK_PACKAGE_VENDOR "Oktailb")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Animated Sprite Management and Assembly Tool")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "BentoPack - High-density 2D sprite sheet and polygonal mesh studio")
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
 
 # Linux CPack configuration
@@ -262,12 +265,12 @@ set(CPACK_RPM_PACKAGE_LICENSE "MIT")
 set(CPACK_RPM_PACKAGE_GROUP "Applications/Graphics")
 
 # Windows CPack configuration
-set(CPACK_NSIS_DISPLAY_NAME "Sprite Studio")
-set(CPACK_NSIS_PACKAGE_NAME "Sprite Studio")
+set(CPACK_NSIS_DISPLAY_NAME "BentoPack Studio")
+set(CPACK_NSIS_PACKAGE_NAME "BentoPack Studio")
 set(CPACK_NSIS_MODIFY_PATH ON)
 
 # macOS CPack configuration
-set(CPACK_DMG_VOLUME_NAME "Sprite Studio")
+set(CPACK_DMG_VOLUME_NAME "BentoPack Studio")
 set(CPACK_DMG_FORMAT "UDZO")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -280,10 +283,10 @@ else()
     set(CPACK_GENERATOR "TGZ")
 endif()
 
-# CPack Component packaging for spritestudio & spritestudio-dev
-set(CPACK_COMPONENTS_ALL spritestudio spritestudio-dev)
-set(CPACK_COMPONENT_SPRITESTUDIO_DISPLAY_NAME "SpriteStudio Application and Plugins")
-set(CPACK_COMPONENT_SPRITESTUDIO-DEV_DISPLAY_NAME "SpriteStudio Development SDK (Headers & CMake)")
+# CPack Component packaging for bentopack & bentopack-dev
+set(CPACK_COMPONENTS_ALL bentopack bentopack-dev)
+set(CPACK_COMPONENT_BENTOPACK_DISPLAY_NAME "BentoPack Application and Plugins")
+set(CPACK_COMPONENT_BENTOPACK-DEV_DISPLAY_NAME "BentoPack Development SDK (Headers & CMake)")
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_RPM_COMPONENT_INSTALL ON)
 

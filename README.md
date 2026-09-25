@@ -1,17 +1,17 @@
-# 🌟 SpriteStudio
+# 🍱 BentoPack
 
-[![CI](https://github.com/oktailb/SpriteStudio/actions/workflows/ci.yml/badge.svg)](https://github.com/oktailb/SpriteStudio/actions/workflows/ci.yml)
+[![CI](https://github.com/oktailb/BentoPack/actions/workflows/ci.yml/badge.svg)](https://github.com/oktailb/BentoPack/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C.svg?logo=c%2B%2B)](https://en.cppreference.com/w/cpp/17)
 [![Qt 6](https://img.shields.io/badge/Qt-6.5+-41CD52.svg?logo=qt)](https://www.qt.io/)
 [![CMake](https://img.shields.io/badge/CMake-3.20+-064F8C.svg?logo=cmake)](https://cmake.org/)
 
-> **SpriteStudio** is a fast, modular, and modern desktop application tailored for game developers, pixel artists, and 2D animators to extract, clean, arrange, and export 2D sprite sheets and animated textures.
-The UI and CLI are licensed under Apache 2.0. Specific engine integration plugins (Godot, Unity, Unreal) and advanced filters are located in the /plugins directory and are provided under a Source-Available License (free to compile for entities under $1M revenue). Pre-compiled binaries are available for purchase on Stores.
+> **BentoPack** is a fast, modular, and modern desktop application tailored for game developers, pixel artists, and 2D animators to pack, slice, arrange, and export high-density 2D sprite sheets, tight polygonal meshes, and animated textures.
+The UI and CLI are licensed under Apache 2.0. Specific engine integration plugins (Godot, Unity, Unreal) and advanced filters are located in the `/plugins` directory and are provided under a Source-Available License (free to compile for entities under $1M revenue). Pre-compiled binaries are available for purchase on Stores.
 
 ---
 
-![SpriteStudio Interface Demo](SpriteStudio.gif)
+![BentoPack Interface Demo](BentoPack.gif)
 
 ---
 
@@ -48,8 +48,8 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 * **Instant Cardinal Presets & Batch Actions:** One-click shortcuts for Ground/Bottom-Center, Center, and Top-Left (UI), with batch propagation to entire animations or the full project.
 * **Intelligent Preview Navigation:** Automatic optimal framing (*Fit In View*), 5000% razor-sharp pixel art wheel zoom, and pan controls.
 
-### 💾 Native `.ssp` Project Architecture
-* **All-in-One Compressed Format:** `.ssp` project files package project metadata, frame descriptors, and source assets into a structured ZIP archive.
+### 🍱 Native `.bento` Project Architecture
+* **All-in-One Compressed Format:** `.bento` project files package project metadata, frame descriptors, and source assets into a structured ZIP archive (with full backward compatibility for opening and migrating legacy `.ssp` files).
 * **Atomic Transactions & Crash Recovery:** Atomic file writing with journaled crash-recovery safeguard prevents project corruption.
 * **Embedded Git Time-Travel:** Integrated non-destructive versioning engine powered by LibGit2. Browse commit history, inspect visual diffs, and revert to previous states without leaving the app.
 
@@ -101,11 +101,11 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 
 * **Language:** C++17
 * **Framework:** Qt 6 (Core, Gui, Widgets, Multimedia, Concurrent, Network, Test, LinguistTools)
-* **Core Engine:** `libSpriteStudioCore` shared library with clean exported API symbols (`SPRITESTUDIOCORE_EXPORT`)
+* **Core Engine:** `libBentoPackCore` shared library with clean exported API symbols (`SPRITESTUDIOCORE_EXPORT`)
 * **Dynamic Plugin System:** Hot-loadable Qt 6 plugins (`QPluginLoader`) for both **Filters** (`plugins/filters/`) and **Codecs / Extractors** (`plugins/extractors/`)
-* **Plugin Developer SDK:** Installed public headers, CMake package configuration (`SpriteStudioConfig.cmake`), and reference examples (`examples/sample_filter_plugin`, `examples/sample_extractor_plugin`)
+* **Plugin Developer SDK:** Installed public headers, CMake package configuration (`BentoPackConfig.cmake`), and reference examples (`examples/sample_filter_plugin`, `examples/sample_extractor_plugin`)
 * **Hardware Texture Compression:** Khronos `basis_universal` (v2.50) integration for direct GPU memory upload (KTX2, UASTC, ETC1S, Zstd)
-* **Build System:** CMake 3.20+ with modular architecture (`SpriteStudioCore` + `SpriteStudio` GUI + `spritestudio-cli` + 8 automated CTest suites)
+* **Build System:** CMake 3.20+ with modular architecture (`BentoPackCore` + `BentoPack` GUI + `bentopack-cli` + 8 automated CTest suites)
 * **Versioning Engine:** LibGit2 (optional, enabled when detected)
 
 ---
@@ -131,8 +131,8 @@ sudo apt-get install -y build-essential cmake ninja-build \
   qt6-base-dev qt6-multimedia-dev qt6-tools-dev libgit2-dev
 
 # 2. Clone repository
-git clone https://github.com/oktailb/SpriteStudio.git
-cd SpriteStudio
+git clone https://github.com/oktailb/BentoPack.git
+cd BentoPack
 
 # 3. Configure and build
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -142,15 +142,15 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 
 # 5. Launch
-./build/bin/SpriteStudio
+./build/bin/BentoPack
 ```
 
 #### Windows (MinGW 64-bit or MSVC)
 
 ```powershell
 # 1. Clone repository
-git clone https://github.com/oktailb/SpriteStudio.git
-cd SpriteStudio
+git clone https://github.com/oktailb/BentoPack.git
+cd BentoPack
 
 # 2. Configure with CMake
 cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -162,14 +162,14 @@ cmake --build build --config Release --parallel
 ctest --test-dir build --output-on-failure -C Release
 
 # 5. Launch
-.\build\bin\SpriteStudio.exe
+.\build\bin\BentoPack.exe
 ```
 
 ---
 
 ## 🧪 Automated Testing
 
-SpriteStudio includes a modular test suite using `QtTest` and `CTest`, validating core models, extractors, controllers, and project serialization:
+BentoPack includes a modular test suite using `QtTest` and `CTest`, validating core models, extractors, controllers, and project serialization:
 
 ```bash
 ctest --test-dir build --output-on-failure --verbose
@@ -187,59 +187,62 @@ ctest --test-dir build --output-on-failure --verbose
 
 ---
 
-## ⚡ Command-Line Interface (`spritestudio-cli`)
+## ⚡ Command-Line Interface (`bentopack-cli`)
 
-SpriteStudio includes an autonomous, 100% headless console binary **`spritestudio-cli`** designed for game studio build pipelines and CI/CD runners (zero GUI/display required):
+BentoPack includes an autonomous, 100% headless console binary **`bentopack-cli`** (symlinked to `bentopack-cli` for backward compatibility) designed for game studio build pipelines and CI/CD runners (zero GUI/display required):
 
 ### TexturePacker Drop-In Mode (with KTX2 VRAM Compression)
 Replaces `TexturePacker` directly in existing build scripts without modifying Makefile or CMake commands:
 ```bash
 # Standard PNG packing
-spritestudio-cli --sheet atlas.png --data atlas.json \
+bentopack-cli --sheet atlas.png --data atlas.json \
   --format json-array --algorithm MaxRects --maxrects-heuristics BestShortSideFit \
   --padding 2 --extrude 1 --trim-mode Trim --size-constraints POT \
   --enable-auto-alias assets/sprites/*.png
 
 # Direct GPU Hardware Texture Compression (KTX2 UASTC 4x4 with Zstd)
-spritestudio-cli --sheet atlas.ktx2 --data atlas.json \
+bentopack-cli --sheet atlas.ktx2 --data atlas.json \
   --texture-format ktx2 --opt ASTC_4x4 --zstd-level 9 assets/sprites/*.png
 ```
 
 ### Aseprite Batch Mode
 ```bash
-spritestudio-cli -b sprites/*.png --sheet atlas.png --data atlas.json \
+bentopack-cli -b sprites/*.png --sheet atlas.png --data atlas.json \
   --sheet-type packed --list-tags
 ```
 
 ### Godot 4 Native Resource & Scene Generation
 Generates complete `.tres` `SpriteFrames` with jitter-free margins, UID stability across builds, companion `.ktx2` texture, and an instantiable `.tscn` scene:
 ```bash
-spritestudio-cli pack --format godot4 \
+bentopack-cli pack --format godot4 \
   --sheet res/player_atlas.ktx2 --data res/player_frames.tres \
   --godot-scene res/player.tscn assets/player/*.png
 ```
 
-### Native Headless Slicing & Filters
+### Native Headless Slicing, Filters & Bento Projects
 ```bash
 # Auto-slice raw sheet into individual sprites with background removal
-spritestudio-cli slice --remove-bg --tolerance 15 --smart-crop --output-dir out/ sheet.png
+bentopack-cli slice --remove-bg --tolerance 15 --smart-crop --output-dir out/ sheet.png
 
 # Apply procedural outline headless
-spritestudio-cli filter --outline 2 red --output-dir out/ sprites/*.png
+bentopack-cli filter --outline 2 red --output-dir out/ sprites/*.png
+
+# Inspect or export .bento / .ssp project metadata
+bentopack-cli bento --info project.bento
 ```
 
 ### Reactive Watch & Multi-Instance Daemon (`--watch`)
 Live background surveillance with intelligent burst debouncing and directory-isolated locking (`QLockFile`):
 ```bash
 # Interactive watch with 300ms burst debouncing
-spritestudio-cli pack --sheet atlas.png --data atlas.json --watch assets/sprites/
+bentopack-cli pack --sheet atlas.png --data atlas.json --watch assets/sprites/
 
 # Multi-instance daemon mode (isolated per directory)
-spritestudio-cli pack --sheet char_atlas.png --data char.json --watch --daemon assets/characters/
-spritestudio-cli pack --sheet ui_atlas.png --data ui.json --watch --daemon assets/ui/
+bentopack-cli pack --sheet char_atlas.png --data char.json --watch --daemon assets/characters/
+bentopack-cli pack --sheet ui_atlas.png --data ui.json --watch --daemon assets/ui/
 
 # Stop active daemon guarding a specific folder
-spritestudio-cli --stop-watch assets/characters/
+bentopack-cli --stop-watch assets/characters/
 ```
 
 ### Transparent Drop-In Wrappers
@@ -267,15 +270,15 @@ Comprehensive documentation is available in the [`docs/`](docs/) directory:
 * **[User Guide](docs/USER_GUIDE.md):** Complete, step-by-step illustrated manual covering atlas slicing, timeline animations, anchor pivots, filters, MaxRects & tight mesh packing, surgical pixel editing, and multi-engine exports.
 * **[Developer & Extension Guide](docs/DEVELOPER_GUIDE.md):** Architectural deep-dive, step-by-step tutorial for writing custom I/O codecs (`Extractor`) and image filter plugins (`FilterPlugin`), memory scanline best practices, and headless unit testing.
 * **API Reference (Doxygen):** Build the complete C++ API reference with interactive inheritance graphs by running `cmake --build build --target doxygen` (outputs to `build/docs/html/index.html`).
-* **UNIX Manual Pages:** Traditional troff/groff manpages for [`spritestudio(1)`](docs/man/spritestudio.1) and [`spritestudio-cli(1)`](docs/man/spritestudio-cli.1).
+* **UNIX Manual Pages:** Traditional troff/groff manpages for [`bentopack(1)`](docs/man/bentopack.1) and [`bentopack-cli(1)`](docs/man/bentopack-cli.1).
 
 ---
 
 ## ⚔️ Comparison & Market Positioning
 
-SpriteStudio bridges the gap between raw asset extraction/cleanup (historically handled by tools like *ShoeBox*), sprite atlas packing (*TexturePacker*), and animation sequencing (*Aseprite / Pixelorama / Godot SpriteFrames*).
+BentoPack bridges the gap between raw asset extraction/cleanup (historically handled by tools like *ShoeBox*), sprite atlas packing (*TexturePacker*), and animation sequencing (*Aseprite / Pixelorama / Godot SpriteFrames*).
 
-| Feature / Criterion | **SpriteStudio** | **TexturePacker** | **Aseprite** | **Pixelorama** | **ShoeBox** *(Discontinued)* | **Free Texture Packer** | **Godot 4 Editor** *(Built-in)* |
+| Feature / Criterion | **BentoPack** | **TexturePacker** | **Aseprite** | **Pixelorama** | **ShoeBox** *(Discontinued)* | **Free Texture Packer** | **Godot 4 Editor** *(Built-in)* |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **License & Pricing** | **Open-Source (Apache 2.0)** | Commercial (~40€) | Commercial (~20€) / Source | **Open-Source (MIT)** | Free (Abandoned) | Open-Source (MIT) | Integrated (MIT) |
 | **Core Technology** | C++17 / Qt 6 | C++ / Qt | C++ / Skia | GDScript / Godot Engine | Adobe AIR / Flash | Electron / Web | C++ / Godot Core |
@@ -288,11 +291,11 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 | **Anchor Points / Pivots** | 🟢 **Yes (Interactive Reticle, Zero-Jittering, Godot 4 / JSON)** | 🟢 Yes (All presets) | 🟢 Yes (Canvas origin) | 🟡 Canvas origin | 🟡 Basic | 🟢 Yes | 🟢 Yes |
 | **Embedded Time-Travel** | 🟢 **Unique (Git / LibGit2 dock)** | 🔴 None | 🔴 Local undo only | 🔴 Local undo only | 🔴 None | 🔴 None | 🟡 External Git |
 | **Godot 4 Integration** | 🟢 **Native (`.tres` SpriteFrames & `.tscn`)** | 🟢 Supported | 🟡 Via community plugins | 🟢 **Native (Built in Godot)** | 🔴 None | 🟡 JSON export | 🟢 Native |
-| **Headless CLI for CI/CD** | 🟢 **Yes (`spritestudio-cli`, TexturePacker, Aseprite, Godot 4)** | 🟢 **Industry standard** | 🟢 Full CLI | 🟡 Basic Godot CLI flags | 🔴 None | 🟢 npm CLI | 🟢 Headless Godot |
+| **Headless CLI for CI/CD** | 🟢 **Yes (`bentopack-cli`, TexturePacker, Aseprite, Godot 4)** | 🟢 **Industry standard** | 🟢 Full CLI | 🟡 Basic Godot CLI flags | 🔴 None | 🟢 npm CLI | 🟢 Headless Godot |
 | **VRAM Texture Compression** | 🟢 **Native KTX2, UASTC, ETC1S, Zstd, Direct GPU Zero-Decompress, CLI** | 🟢 **ASTC, ETC2, KTX2, Basis (Commercial)** | 🔴 PNG / GIF | 🔴 PNG | 🔴 PNG | 🟡 TinyPNG API | 🟢 Engine import |
 
 > [!TIP]
-> **Why SpriteStudio?** While *TexturePacker* excels at packing clean loose PNGs for AAA pipelines and *Aseprite* / *Pixelorama* are dedicated pixel art authoring tools, **SpriteStudio** is uniquely built to **rescue, decompile, clean, organize, and bridge existing 2D sheets** into production-ready game engine resources without external dependencies.
+> **Why BentoPack?** While *TexturePacker* excels at packing clean loose PNGs for AAA pipelines and *Aseprite* / *Pixelorama* are dedicated pixel art authoring tools, **BentoPack** is uniquely built to **rescue, decompile, clean, organize, and bridge existing 2D sheets** into production-ready game engine resources without external dependencies.
 
 ---
 
@@ -305,11 +308,11 @@ SpriteStudio bridges the gap between raw asset extraction/cleanup (historically 
 - [x] **M7 — Advanced Filter System & Cleanup:** Plugin registry (`FilterPlugin` / `FilterRegistry`), universal Undo (`ApplyFilterCommand`), live preview (`FilterDialogBase`), Despill/Anti-Halo (color clamping), Outline & Silhouettes, Color Swap (HSV shading)
 - [x] **M3 — Interactive Pivots & Alignment:** High-contrast double-ring reticle, interactive pivot drag in atlas & live preview, Shift+Click snapping, zero-jittering animation envelope stabilization, ground line, cardinal presets (Bottom-Center, Center, Top-Left, UI), batch application, optimal fit & 5000% zoom, engine offset export (Godot 4 margin Rect2 / JSON / .ssp)
 - [x] **M6 — Advanced Bin-Packing:** MaxRects (5 heuristics: BestShortSideFit, BestAreaFit, BestLongSideFit, BottomLeft, ContactPoint), padding, 1-2px extrusion anti-bleeding, Power-Of-Two / AnySize, auto-alias visual frame deduplication
-- [x] **M-CLI — Headless Command-Line Interface:** `spritestudio-cli` with multi-flavor dispatch (TexturePacker drop-in, Aseprite batch, Godot 4 pipeline, native slice/filter/ssp), POSIX codes, JSON output, automated benchmarks & regression tracking
+- [x] **M-CLI — Headless Command-Line Interface:** `bentopack-cli` with multi-flavor dispatch (TexturePacker drop-in, Aseprite batch, Godot 4 pipeline, native slice/filter/ssp), POSIX codes, JSON output, automated benchmarks & regression tracking
 - [x] **M8 — Polygon & Tight Mesh Packing:** Watertight Marching Squares, Ramer-Douglas-Peucker boundary reduction with outward dilation, Ear-Clipping triangulation, interactive canvas vertex editor (drag, multi-select, insert, delete), multithreaded tight polygon nesting (configurable CPU threads), and multi-engine exports (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON)
 - [x] **M9 — VRAM Texture Compression & GPU Formats:** Universal Khronos KTX2 & Basis Universal (v2.50) integration, UASTC 4x4 (75.0% VRAM reduction) & ETC1S (87.5% VRAM reduction), lossless Zstandard supercompression, live VRAM telemetry in ExportDialog, CLI automation flags, 12 automated unit tests (100% CTest).
 - [x] **M4 — Surgical Pixel Art Cleanup Editor:** Continuous 1px Bresenham pencil, 1px eraser (alpha 0), eyedropper, flood fill, rectangular/color wand selection, floating stamp clipboard, retro palettes (NES, SNES, Amiga, NEC, GB, Pico-8, C64) & dynamic sprite colors, pixel grid (≥400%), inter-frame navigation, reversible atlas synchronization
-- [x] **M11 — Dynamic Plugin Architecture & Third-Party SDK:** Fully modular Qt6 dynamic plugin ecosystem (`QPluginLoader`), shared core library (`libSpriteStudioCore`), standalone external filter (`plugins/filters/`) and extractor (`plugins/extractors/`) modules, exported CMake package config (`SpriteStudioConfig.cmake`), and developer SDK templates (`examples/`).
+- [x] **M11 — Dynamic Plugin Architecture & Third-Party SDK:** Fully modular Qt6 dynamic plugin ecosystem (`QPluginLoader`), shared core library (`libBentoPackCore`), standalone external filter (`plugins/filters/`) and extractor (`plugins/extractors/`) modules, exported CMake package config (`BentoPackConfig.cmake`), and developer SDK templates (`examples/`).
 
 ---
 

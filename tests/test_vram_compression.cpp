@@ -13,7 +13,7 @@
 #include "model/spritedocument.h"
 #include "cli/cliparser.h"
 
-using namespace SpriteStudioCli;
+using namespace BentoPackCli;
 
 class TestVramCompression : public QObject
 {
@@ -220,7 +220,7 @@ void TestVramCompression::testCliTexturePackerKtx2Export()
 
     CliParser parser;
     CliResult res = parser.parseAndExecute({
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("--sheet"), sheetOut,
         QStringLiteral("--data"), dataOut,
         QStringLiteral("--texture-format"), QStringLiteral("ktx2"),
@@ -257,7 +257,7 @@ void TestVramCompression::testCliGodotKtx2Export()
 
     CliParser parser;
     CliResult res = parser.parseAndExecute({
-        QStringLiteral("spritestudio-cli"),
+        QStringLiteral("bentopack-cli"),
         QStringLiteral("--sheet"), sheetOut,
         QStringLiteral("--data"), tresOut,
         QStringLiteral("--format"), QStringLiteral("godot"),

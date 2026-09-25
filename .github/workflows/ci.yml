@@ -51,13 +51,13 @@ jobs:
       - name: Package Godot Addon
         run: |
           cmake --build build --target package_godot_addon
-          ls -lah build/dist/godot-spritestudio-addon-*.zip
+          ls -lah build/dist/godot-bentopack-addon-*.zip
 
       - name: Upload Godot Addon Package
         uses: actions/upload-artifact@v4
         with:
-          name: godot-spritestudio-addon
-          path: build/dist/godot-spritestudio-addon-*.zip
+          name: godot-bentopack-addon
+          path: build/dist/godot-bentopack-addon-*.zip
 
   windows:
     name: Windows (MinGW 64-bit)

@@ -282,7 +282,7 @@
     }
   },
   "meta": {
-    "app": "SpriteStudio",
+    "app": "BentoPack",
     "version": "1.0",
     "image": "hero.png",
     "format": "RGBA8888",

@@ -71,8 +71,8 @@ jobs:
         run: |
           DESTDIR=AppDir cmake --install build
           mkdir -p AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
-          cp SpriteStudio/res/linux/SpriteStudio.desktop AppDir/usr/share/applications/
-          cp SpriteStudio/res/icons/spritestudio.png AppDir/usr/share/icons/hicolor/256x256/apps/
+          cp BentoPack/res/linux/bentopack.desktop AppDir/usr/share/applications/
+          cp BentoPack/res/icons/bentopack.png AppDir/usr/share/icons/hicolor/256x256/apps/
           
           wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
@@ -81,19 +81,21 @@ jobs:
           export QMAKE=/usr/lib/qt6/bin/qmake
           ./linuxdeploy-x86_64.AppImage \
             --appdir AppDir \
-            --desktop-file SpriteStudio/res/linux/SpriteStudio.desktop \
-            --icon-file SpriteStudio/res/icons/spritestudio.png \
+            --desktop-file BentoPack/res/linux/bentopack.desktop \
+            --icon-file BentoPack/res/icons/bentopack.png \
             --plugin qt \
             --output appimage || true
           
-          if ls SpriteStudio*.AppImage 1> /dev/null 2>&1; then
-            mv SpriteStudio*.AppImage build/
+          if ls BentoPack*.AppImage 1> /dev/null 2>&1; then
+            mv BentoPack*.AppImage build/
+          elif ls BentoPack*.AppImage 1> /dev/null 2>&1; then
+            mv BentoPack*.AppImage build/
           fi
 
       - name: Package Godot Addon
         run: |
           cmake --build build --target package_godot_addon
-          ls -lah build/dist/godot-spritestudio-addon-*.zip
+          ls -lah build/dist/godot-bentopack-addon-*.zip
 
       - name: Upload Linux Packages
         uses: actions/upload-artifact@v4
@@ -104,7 +106,7 @@ jobs:
             build/*.rpm
             build/*.tar.gz
             build/*.AppImage
-            build/dist/godot-spritestudio-addon-*.zip
+            build/dist/godot-bentopack-addon-*.zip
 
   release-windows:
     name: Build Windows Deliverables (ZIP Portable, NSIS Setup)
@@ -151,17 +153,23 @@ jobs:
       - name: Deploy Qt Libraries and Create Portable ZIP
         shell: msys2 {0}
         run: |
-          windeployqt --release --compiler-runtime build/bin/SpriteStudio.exe
+          if [ -f build/bin/bentopack.exe ]; then
+            windeployqt --release --compiler-runtime build/bin/bentopack.exe
+          else
+            windeployqt --release --compiler-runtime build/bin/BentoPack.exe
+          fi
           mkdir -p dist
-          7z a dist/SpriteStudio-Windows-x64-Portable.zip ./build/bin/*
+          7z a dist/BentoPack-Windows-x64-Portable.zip ./build/bin/*
 
       - name: Build NSIS Installer
         shell: msys2 {0}
         run: |
           cd build
           cpack -G NSIS || true
-          if ls SpriteStudio*Setup.exe 1> /dev/null 2>&1; then
-            cp SpriteStudio*Setup.exe ../dist/
+          if ls BentoPack*Setup.exe 1> /dev/null 2>&1; then
+            cp BentoPack*Setup.exe ../dist/
+          elif ls BentoPack*Setup.exe 1> /dev/null 2>&1; then
+            cp BentoPack*Setup.exe ../dist/
           fi
 
       - name: Upload Windows Packages
@@ -202,7 +210,11 @@ jobs:
       - name: Deploy Qt and Package DMG
         run: |
           mkdir -p dist
-          /opt/homebrew/opt/qt@6/bin/macdeployqt build/bin/SpriteStudio.app
+          APP_PATH="build/bin/bentopack.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH="build/bin/BentoPack.app"
+          fi
+          /opt/homebrew/opt/qt@6/bin/macdeployqt "$APP_PATH"
           
           # Create DMG via CPack or hdiutil
           cd build
@@ -210,12 +222,12 @@ jobs:
           if ls *.dmg 1> /dev/null 2>&1; then
             cp *.dmg ../dist/
           else
-            hdiutil create -volname "Sprite Studio" -srcfolder bin/SpriteStudio.app -ov -format UDZO ../dist/SpriteStudio-macOS-arm64.dmg
+            hdiutil create -volname "BentoPack" -srcfolder "../$APP_PATH" -ov -format UDZO ../dist/BentoPack-macOS-arm64.dmg
           fi
           cd ..
           
           # Also package ZIP of the .app
-          ditto -c -k --sequesterRsrc --keepParent build/bin/SpriteStudio.app dist/SpriteStudio-macOS-arm64.zip
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" dist/BentoPack-macOS-arm64.zip
 
       - name: Upload macOS Packages
         uses: actions/upload-artifact@v4
@@ -254,7 +266,7 @@ jobs:
             mkdir -p dist
             cmake --install build --prefix haiku_pkg
             PKG_VERSION=$(grep '^version' build/generated/haiku.PackageInfo | awk '{print $2}')
-            package create -i build/generated/haiku.PackageInfo -C haiku_pkg dist/SpriteStudio-${PKG_VERSION}-x86_64.hpkg
+            package create -i build/generated/haiku.PackageInfo -C haiku_pkg dist/BentoPack-${PKG_VERSION}-x86_64.hpkg
 
       - name: Upload Haiku Package
         uses: actions/upload-artifact@v4
@@ -300,11 +312,11 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag_info.outputs.tag }}
-          name: Sprite Studio Community Edition ${{ steps.tag_info.outputs.tag }}
+          name: BentoPack Community Edition ${{ steps.tag_info.outputs.tag }}
           body: |
-            ## Sprite Studio Community Edition (${{ steps.tag_info.outputs.tag }})
+            ## BentoPack Community Edition (${{ steps.tag_info.outputs.tag }})
 
-            This is the official public release of **Sprite Studio Community Edition**.
+            This is the official public release of **BentoPack Community Edition**.
             
             - **License:** Free for indie developers, students, open-source projects, and small teams (annual revenue < $1,000,000).
             - **Compliance:** Standard discrete export metadata is included in generated sprite sheets and atlases.

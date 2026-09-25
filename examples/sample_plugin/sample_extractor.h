@@ -15,7 +15,7 @@ public:
 
     QString id() const override { return QStringLiteral("sample_custom_extractor"); }
     QString displayName() const override { return QStringLiteral("Sample Custom Extractor"); }
-    QString description() const override { return QStringLiteral("Third-party sample plugin built using spritestudio-dev SDK."); }
+    QString description() const override { return QStringLiteral("Third-party sample plugin built using bentopack-dev SDK."); }
     QStringList supportedExtensions() const override { return { QStringLiteral("sample") }; }
     Capabilities capabilities() const override { return CanImport | CanExport; }
 

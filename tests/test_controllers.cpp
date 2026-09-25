@@ -1665,9 +1665,9 @@ void TestControllers::testI18nKeyTranslations()
 #endif
             QCoreApplication::applicationDirPath(),
             QCoreApplication::applicationDirPath() + QStringLiteral("/i18n"),
-            QCoreApplication::applicationDirPath() + QStringLiteral("/../SpriteStudio"),
-            QCoreApplication::applicationDirPath() + QStringLiteral("/../SpriteStudio/.qm"),
-            QCoreApplication::applicationDirPath() + QStringLiteral("/../SpriteStudio/i18n"),
+            QCoreApplication::applicationDirPath() + QStringLiteral("/../BentoPack"),
+            QCoreApplication::applicationDirPath() + QStringLiteral("/../BentoPack/.qm"),
+            QCoreApplication::applicationDirPath() + QStringLiteral("/../BentoPack/i18n"),
             QStringLiteral(":/i18n"),
             QStringLiteral(":/i18n/"),
             QLibraryInfo::path(QLibraryInfo::TranslationsPath)
@@ -1684,9 +1684,9 @@ void TestControllers::testI18nKeyTranslations()
 
     // 1. Test French translation
     QTranslator frTranslator;
-    bool frLoaded = loadCatalog(frTranslator, QStringLiteral("sprite_studio_fr_FR.qm"));
+    bool frLoaded = loadCatalog(frTranslator, QStringLiteral("bentopack_fr_FR.qm"));
     if (!frLoaded) {
-        QSKIP("Translation catalog sprite_studio_fr_FR.qm not found in build tree or resources on this platform.");
+        QSKIP("Translation catalog bentopack_fr_FR.qm not found in build tree or resources on this platform.");
     }
 
     {
@@ -1731,7 +1731,7 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Tight Mesh & 2D Polygon Packing"), QStringLiteral("Maillage polygonal 2D & Découpage serré"));
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Approximation Tolerance (ε):"), QStringLiteral("Tolérance d'approximation (ε) :"));
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Apply to Selection"), QStringLiteral("Appliquer à la sélection"));
-        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — SpriteStudio"), QStringLiteral("Éditeur de pixels — SpriteStudio"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — BentoPack"), QStringLiteral("Éditeur de pixels — BentoPack"));
         QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pencil (1px continuous Bresenham) [P]"), QStringLiteral("Crayon (Bresenham 1px continu) [P]"));
 
         // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
@@ -1749,9 +1749,9 @@ void TestControllers::testI18nKeyTranslations()
 
     // 2. Test English translation
     QTranslator enTranslator;
-    bool enLoaded = loadCatalog(enTranslator, QStringLiteral("sprite_studio_en_US.qm"));
+    bool enLoaded = loadCatalog(enTranslator, QStringLiteral("bentopack_en_US.qm"));
     if (!enLoaded) {
-        QSKIP("Translation catalog sprite_studio_en_US.qm not found in build tree or resources on this platform.");
+        QSKIP("Translation catalog bentopack_en_US.qm not found in build tree or resources on this platform.");
     }
 
     {
@@ -1796,7 +1796,7 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Tight Mesh & 2D Polygon Packing"), QStringLiteral("Tight Mesh & 2D Polygon Packing"));
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Approximation Tolerance (ε):"), QStringLiteral("Approximation Tolerance (ε):"));
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Apply to Selection"), QStringLiteral("Apply to Selection"));
-        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — SpriteStudio"), QStringLiteral("Pixel Editor — SpriteStudio"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — BentoPack"), QStringLiteral("Pixel Editor — BentoPack"));
         QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pencil (1px continuous Bresenham) [P]"), QStringLiteral("Pencil (1px continuous Bresenham) [P]"));
 
         // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
@@ -1814,9 +1814,9 @@ void TestControllers::testI18nKeyTranslations()
 
     // 3. Test Japanese translation
     QTranslator jaTranslator;
-    bool jaLoaded = loadCatalog(jaTranslator, QStringLiteral("sprite_studio_ja_JA.qm"));
+    bool jaLoaded = loadCatalog(jaTranslator, QStringLiteral("bentopack_ja_JA.qm"));
     if (!jaLoaded) {
-        QSKIP("Translation catalog sprite_studio_ja_JA.qm not found in build tree or resources on this platform.");
+        QSKIP("Translation catalog bentopack_ja_JA.qm not found in build tree or resources on this platform.");
     }
 
     {
@@ -1862,7 +1862,7 @@ void TestControllers::testI18nKeyTranslations()
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Approximation Tolerance (ε):"), QStringLiteral("近似許容値 (ε)："));
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Apply to Selection"), QStringLiteral("選択範囲に適用"));
         QCOMPARE(QCoreApplication::translate("PolygonMeshDialog", "Target Frame %1: Rectangle mode (no mesh applied)"), QStringLiteral("対象フレーム %1：矩形モード（メッシュ未適用）"));
-        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — SpriteStudio"), QStringLiteral("ピクセルエディタ — SpriteStudio"));
+        QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pixel Editor — BentoPack"), QStringLiteral("ピクセルエディタ — BentoPack"));
         QCOMPARE(QCoreApplication::translate("PixelEditorDialog", "Pencil (1px continuous Bresenham) [P]"), QStringLiteral("鉛筆（1px連続ブレゼンハム）[P]"));
 
         // Standard modal buttons (OK, Cancel, Discard, Save, Apply...)
@@ -2928,7 +2928,7 @@ void TestControllers::testAboutDialogDarkModeAndPricing()
     QTextEdit *pluginsEditor = qobject_cast<QTextEdit*>(tabs->currentWidget());
     QVERIFY(pluginsEditor != nullptr);
     QString pluginsHtml = pluginsEditor->toHtml();
-    QVERIFY(pluginsHtml.contains("SpriteStudioCore"));
+    QVERIFY(pluginsHtml.contains("BentoPackCore"));
     QVERIFY(pluginsHtml.contains("Apache 2.0") || pluginsHtml.contains("KEY_PLUGINS_CORE_DESC"));
 
     // Verify dark palette doesn't crash and produces screenshot artifacts
@@ -3006,8 +3006,8 @@ void TestControllers::testAboutDialogDarkModeAndPricing()
     QTextEdit *pricingJa = qobject_cast<QTextEdit*>(tabsJa->currentWidget());
     QVERIFY(pricingJa != nullptr);
     QString htmlJa = pricingJa->toHtml();
-    QVERIFY(htmlJa.contains("3 400 円") || htmlJa.contains("3,400 円"));
-    QVERIFY(htmlJa.contains("18 000 円") || htmlJa.contains("18,000 円"));
+    QVERIFY(htmlJa.contains("2 990 円") || htmlJa.contains("2,990 円") || htmlJa.contains("3 400 円") || htmlJa.contains("3,400 円"));
+    QVERIFY(htmlJa.contains("14 900 円") || htmlJa.contains("14,900 円") || htmlJa.contains("18 000 円") || htmlJa.contains("18,000 円"));
     QVERIFY(htmlJa.contains("59 000 円") || htmlJa.contains("59,000 円"));
     QVERIFY(htmlJa.contains("無料"));
     QVERIFY(htmlJa.contains("対象:"));

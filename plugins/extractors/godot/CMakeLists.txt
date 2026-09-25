@@ -10,7 +10,7 @@ target_include_directories(extractor_godot PUBLIC
 )
 
 target_link_libraries(extractor_godot PRIVATE
-    SpriteStudioCore
+    BentoPackCore
     Qt6::Core
     Qt6::Gui
 )
@@ -21,6 +21,6 @@ set_target_properties(extractor_godot PROPERTIES
 )
 
 install(TARGETS extractor_godot
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/spritestudio/plugins/extractors
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/bentopack/plugins/extractors
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/plugins/extractors
 )

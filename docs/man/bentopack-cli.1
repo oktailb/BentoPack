@@ -1,0 +1,61 @@
+.TH BENTOPACK-CLI 1 "September 2026" "BentoPack 0.11.0" "User Commands"
+.SH NAME
+bentopack-cli \- headless 2D sprite atlas packer, slicer, filter and batch exporter
+.SH SYNOPSIS
+.B bentopack-cli
+[\fIFLAVOR_OPTIONS\fR] [\fIOPTIONS\fR] [\fIINPUT_FILES\fR...]
+.br
+.B bentopack-cli
+\fISUBCOMMAND\fR [\fISUBCOMMAND_OPTIONS\fR]
+.br
+.B TexturePacker
+[\fITEXTUREPACKER_COMPATIBLE_OPTIONS\fR] [\fIINPUT_FILES\fR...]
+.br
+.B aseprite
+\-b [\fIASEPRITE_COMPATIBLE_OPTIONS\fR]
+.SH DESCRIPTION
+.B bentopack-cli
+is the non-interactive, headless command-line counterpart of the BentoPack 2D sprite preparation suite.
+It executes without any graphic display server or X11/Wayland dependencies (\fBQT_QPA_PLATFORM=offscreen\fR),
+making it suitable for studio continuous integration (CI/CD) pipelines, automated build scripts, and game engine asset compilation.
+.PP
+The tool features an automatic flavor dispatcher allowing it to function either with native subcommands
+or as a seamless 100% drop-in replacement for \fBTexturePacker\fR and \fBAseprite\fR batch invocations.
+
+.SH FLAVORS AND MODES OF OPERATION
+The operating mode is automatically inferred from the binary invocation name (\fBargv[0]\fR) or explicitly selected via \fB\-\-flavor\fR:
+.TP
+.B texturepacker
+Activated when invoked as \fBTexturePacker\fR or with \fB\-\-flavor=texturepacker\fR. Accepts all standard TexturePacker flags and generates matching JSON, Godot, or XML formats.
+.TP
+.B aseprite
+Activated when invoked as \fBaseprite\fR with \fB\-b\fR (\-\-batch) or with \fB\-\-flavor=aseprite\fR. Accepts sheet compilation flags (\fB\-\-sheet\fR, \fB\-\-data\fR, \fB\-\-list\-tags\fR, \fB\-\-sheet\-type\fR).
+.TP
+.B godot
+Natively generates Godot 4 \fBSpriteFrames\fR resources (\fB.tres\fR) with automatic sub-textures, animation sequences, unique stable UIDs, and exact pivot offset margins.
+.TP
+.B native
+Default mode when invoked as \fBbentopack-cli\fR, accepting both universal options and structured subcommands (\fBpack\fR, \fBslice\fR, \fBfilter\fR, \fBbento\fR, \fBssp\fR).
+
+.SH SUBCOMMANDS
+.TP
+.B pack
+Empack sprite frames into an optimized atlas.
+.TP
+.B slice
+Slice composite images into loose frames using connected-component detection.
+.TP
+.B filter
+Apply image processing filters (background removal, outlines, color adjustments) in headless batch mode.
+.TP
+.B bento\fR, \fBssp
+Inspect, unpack, or export native BentoPack Project archives (\fB.bento\fR, \fB.ssp\fR).
+
+.SH SEE ALSO
+.BR bentopack (1)
+.PP
+Project repository:
+.I https://github.com/oktailb/BentoPack
+
+.SH AUTHORS
+Vincent Lecoq and BentoPack contributors.

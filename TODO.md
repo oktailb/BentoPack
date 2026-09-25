@@ -1,6 +1,6 @@
-# 📋 Feuille de Route & Spécifications Métier — Sprite Studio
+# 📋 Feuille de Route & Spécifications Métier — BentoPack
 
-Ce document détaille la planification des fonctionnalités métier de **Sprite Studio**.  
+Ce document détaille la planification des fonctionnalités métier de **BentoPack** (anciennement Sprite Studio).  
 L'objectif est d'élever l'application d'un simple outil de découpe technique au rang d'**atelier complet de préparation, retouche et séquençage de sprites 2D pour le jeu vidéo et le pixel art**.
 
 ---
@@ -16,11 +16,11 @@ L'objectif est d'élever l'application d'un simple outil de découpe technique a
 | **M5** | [Format de Projet Natif (`.ssp` - Sprite Studio Project)](#m5--format-de-projet-natif-ssp---sprite-studio-project) | **Haute** | Faible | 🟢 Clôturé & Validé (100% CTest — Session, Lock, Crash Recovery, Atomic Save, Git Time-Travel & UI Dock) |
 | **M7** | [Suppression Avancée de Fond & Système de Filtres Graphiques (Filtres GIMP, Anti-Halo, Alt-Skins)](#m7--suppression-avancée-darrière-plan--système-de-filtres-graphiques-filtres-gimp-anti-halo-alt-skins) | **Moyenne** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Architecture Plugins, 7 Filtres opérationnels, Live Preview, Auto-Detect Boxes, Rollback) |
 | **M6** | [Algorithme d'Empaquetage Avancé (MaxRects Bin-Packing)](#m6--algorithme-dempaquetage-avancé-maxrects-bin-packing) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — MaxRects BSSF/BAF/BLSF, POT, Extrude, Déduplication, ExportDialog) |
-| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-spritestudio-cli) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Drop-in 100% TexturePacker, Aseprite -b, Godot 4 UID/Scene, Slice, Filter, SSP, POSIX, JSON) |
+| **M-CLI** | [Interface Ligne de Commande & Automatisation CI/CD (`bentopack-cli`)](#m-cli--interface-ligne-de-commande--automatisation-cicd-bentopack-cli) | **Haute** | Moyenne | 🟢 Clôturé & Validé (100% CTest — Drop-in 100% TexturePacker, Aseprite -b, Godot 4 UID/Scene, Slice, Filter, SSP, POSIX, JSON) |
 | **M4** | [Outil d'Édition de Pixels (Pixel Art Retouching)](#m4--outil-dédition-de-pixels-pixel-art-retouching) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Bresenham 1px, Gomme alpha 0, Pipette, Seau, Sélections Marquee/Wand, Tampon Flottant, Palettes NES/SNES/Amiga/NEC/GB/Pico8/C64, Navigation Inter-frames, 19 tests CTest) |
 | **M8** | [Empaquetage Polygonal & Maillages Serrés (Polygon / Tight Mesh Packing)](#m8--empaquetage-polygonal--maillages-serrés-polygon--tight-mesh-packing) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — Marching Squares, RDP, Ear-Clipping, Wireframe HMI, Édition Sommets, Tight Packing Multithreadé & Configurable, Export Unity/Unreal/Godot, 22 tests CTest) |
 | **M9** | [Compression de Textures VRAM & Formats GPU (KTX2 / Basis Universal / ASTC)](#m9--compression-de-textures-vram--formats-gpu-ktx2--basis-universal--astc) | **Moyenne** | Haute | 🟢 Clôturé & Validé (100% CTest — KTX2, UASTC, ETC1S, Zstd, Décompression CPU 0, Transcodage RGBA, ExportDialog IHM & Télémétrie Live VRAM, CLI CI/CD, 12 tests CTest) |
-| **M11** | [Architecture Dynamique de Plugins Qt6 & SDK Tiers](#m11--architecture-dynamique-de-plugins-qt6--sdk-tiers) | **Haute** | Haute | 🟢 Clôturé & Validé (100% CTest — libSpriteStudioCore.so, QPluginLoader, 9 filtres & 6 extracteurs externalisés, SDK d'extension, SpriteStudioConfig.cmake) |
+| **M11** | [Architecture Dynamique de Plugins Qt6 & SDK Tiers](#m11--architecture-dynamique-de-plugins-qt6--sdk-tiers) | **Haute** | Haute | 🟢 Clôturé & Validé (100% CTest — libBentoPackCore.so, QPluginLoader, 9 filtres & 6 extracteurs externalisés, SDK d'extension, BentoPackConfig.cmake) |
 | **M10** | [Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)](#m10--intégration-aux-écosystèmes--marchés-moteurs-de-jeu-godot-assetlib-unity-upm-unreal-fab) | **Haute (À faire)** | Moyenne | 💡 **À faire** (Plugins moteurs, Importateurs automatiques, Hot-Reload, Stores) |
 | **M15** | [Refonte & Stabilisation du Studio d'Animation (Bug Drag & Drop Filmstrip)](#m15--refonte--stabilisation-du-studio-danimation-correction-critique-du-drag--drop-de-la-timeline-filmstrip) | **Haute (Critique)** | Moyenne | 🟢 **Clôturé & Validé** (100% CTest — FilmstripListWidget dédié, calcul linéaire du drop, indicateur visuel bleu contrasté, découplage transactionnel sans récursion destructrice, synchronisation Undo/Redo sans perte de frames, tests unitaires) |
 | **M-DEVOPS** | [Stratégie de Release CI Duale (Community vs Commerciale), Watermarking Discret & Signature du Code](#m-devops--stratégie-de-release-ci-duale-community-vs-commerciale-watermarking-discret--signature-du-code) | **Haute** | Moyenne | 🟢 **Clôturé & Validé** (100% CTest — Approche B cryptographique déterministe, LicenseManager, secret build-time, watermarking PNG tEXt/JSON/Godot/Unity/Unreal, workflows `release-community.yml` & `release-commercial.yml` privés 90j, support signature) |
@@ -81,7 +81,7 @@ L'application souffre d'une transition inachevée entre un code impératif legac
     - Unification du nettoyage dans `AtlasViewController::clearAtlas()` (détachement et libération explicite des items de preview `m_newSlicePreviewItem` et `m_selectionRectItem` avant l'appel à `m_scene->clear()`).
     - Destructeur `~AtlasViewController()` simplifié et sécurisé contre les doubles libérations et pointeurs pendants.
   - **Gestionnaire central de configuration maintenable (`AppConfig`) :**
-    - Création de `include/config/appconfig.h` et `src/config/appconfig.cpp` produisant et chargeant un fichier JSON propre et indenté (`spritestudio_config.json`).
+    - Création de `include/config/appconfig.h` et `src/config/appconfig.cpp` produisant et chargeant un fichier JSON propre et indenté (`bentopack_config.json`).
     - Localisation hybride : répertoire local/portable en priorité, puis chemin système standard `QStandardPaths::AppConfigLocation`.
     - Tolérance totale aux pannes (*fail-safe*) : en cas de syntaxe JSON corrompue ou de champs manquants suite à une édition manuelle par l'utilisateur, l'application ne crashe jamais et bascule automatiquement sur les valeurs par défaut saines en consignant un avertissement.
   - **Élimination complète des constantes magiques disséminées :**
@@ -136,8 +136,8 @@ L'application souffre d'une transition inachevée entre un code impératif legac
       - Menus contextuels atlas & animation : `KEY_CTX_CREATE_ANIM`, `KEY_CTX_REVERSE_ANIM`, `KEY_CTX_DELETE_ANIM`, `KEY_CTX_TRIM_SLICE`, `KEY_CTX_MERGE_SLICES`, `KEY_CTX_DELETE_FRAMES`, `KEY_CTX_ERASE_PIXELS`, `KEY_CTX_REMOVE_BG`, `KEY_CTX_INVERT_SEL`.
       - Messages & dialogues : `KEY_DIALOG_OPEN_TITLE`, `KEY_DIALOG_ABOUT_TITLE`, `KEY_MSG_LOAD_ERROR`, `KEY_MSG_SAVE_ERROR`, `KEY_STATUS_READY`, `KEY_LABEL_TIMING`...
     - **Visibilité immédiate des manques :** Si une traduction est omise dans les fichiers `.ts`/`.qm`, la clé brute `KEY_...` s'affiche directement dans l'interface graphique, rendant toute régression ou oubli immédiatement détectable visuellement.
-    - Synchronisation et traduction intégrale (100%) des catalogues linguistiques `sprite_studio_fr_FR.ts`, `sprite_studio_en_US.ts` et `sprite_studio_ja_JA.ts`.
-    - Fallback automatique dans `main.cpp` vers la langue anglaise `sprite_studio_en_US` si la locale système de l'utilisateur n'est pas prise en charge.
+    - Synchronisation et traduction intégrale (100%) des catalogues linguistiques `bentopack_fr_FR.ts`, `bentopack_en_US.ts` et `bentopack_ja_JA.ts`.
+    - Fallback automatique dans `main.cpp` vers la langue anglaise `bentopack_en_US` si la locale système de l'utilisateur n'est pas prise en charge.
   - **Intégration d'icônes modernes sur la barre d'outils de découpe :**
     - Ajout de 4 icônes PNG nettes 24x24 (`icons/tool_select.png`, `icons/tool_slice.png`, `icons/tool_trim.png`, `icons/tool_remove_bg.png`) compilées dans le fichier de ressource `images` (`:/drawer/...`).
     - Présentation visuelle soignée avec icônes aux côtés du texte (`Qt::ToolButtonTextBesideIcon`).
@@ -258,13 +258,13 @@ Dans l'interface actuelle, le bloc de droite `animationArea` combine :
    - Raccourcis clavier : `Espace` (Play/Pause), `Flèche Gauche / Droite` (Frame step).
 
 ### Fichiers & Composants Réalisés
-- `SpriteStudio/src/mainwindow.ui` : Réorganisation ergonomique par `QSplitter` horizontal et vertical avec `QTabWidget` inférieur (`[🎞️ Timeline]`, `[🗃️ Atlas Frames]`), barre de transport moderne et barre d'outils d'animations.
-- `SpriteStudio/include/widgets/timelinefilmstripwidget.h` & `src/widgets/timelinefilmstripwidget.cpp` : Ruban de vignettes ordonnées, surbrillance temps réel, réordonnancement par glisser-déposer, duplication/suppression/sélection.
-- `SpriteStudio/include/model/spritedocument.h` & `src/model/spritedocument.cpp` : `SpriteAnimation::LoopMode` (`Loop`, `Once`, `PingPong`), `durationMs()`, et méthodes documentaires de séquence.
-- `SpriteStudio/include/animation/animationplayer.h` & `src/animation/animationplayer.cpp` : Moteur de lecture prenant en charge `PingPong`, `Once`, `advanceFrame()`, `firstFrame()`, `lastFrame()`, `seek()`.
-- `SpriteStudio/include/commands/commands.h` & `src/commands/commands.cpp` : Commandes Undo/Redo (`RenameAnimationCommand`, `DuplicateAnimationCommand`, `ReorderAnimationFramesCommand`, `ChangeAnimationPropertiesCommand`).
-- `SpriteStudio/src/controller/animationcontroller.cpp` : Synchronisation bidirectionnelle scrubber/timeline/list/preview, édition inline (double-clic nom et FPS).
-- `SpriteStudio/src/project/projectmanager.cpp` : Sérialisation et désérialisation de `loop_mode` dans `.ssp`.
+- `BentoPack/src/mainwindow.ui` : Réorganisation ergonomique par `QSplitter` horizontal et vertical avec `QTabWidget` inférieur (`[🎞️ Timeline]`, `[🗃️ Atlas Frames]`), barre de transport moderne et barre d'outils d'animations.
+- `BentoPack/include/widgets/timelinefilmstripwidget.h` & `src/widgets/timelinefilmstripwidget.cpp` : Ruban de vignettes ordonnées, surbrillance temps réel, réordonnancement par glisser-déposer, duplication/suppression/sélection.
+- `BentoPack/include/model/spritedocument.h` & `src/model/spritedocument.cpp` : `SpriteAnimation::LoopMode` (`Loop`, `Once`, `PingPong`), `durationMs()`, et méthodes documentaires de séquence.
+- `BentoPack/include/animation/animationplayer.h` & `src/animation/animationplayer.cpp` : Moteur de lecture prenant en charge `PingPong`, `Once`, `advanceFrame()`, `firstFrame()`, `lastFrame()`, `seek()`.
+- `BentoPack/include/commands/commands.h` & `src/commands/commands.cpp` : Commandes Undo/Redo (`RenameAnimationCommand`, `DuplicateAnimationCommand`, `ReorderAnimationFramesCommand`, `ChangeAnimationPropertiesCommand`).
+- `BentoPack/src/controller/animationcontroller.cpp` : Synchronisation bidirectionnelle scrubber/timeline/list/preview, édition inline (double-clic nom et FPS).
+- `BentoPack/src/project/projectmanager.cpp` : Sérialisation et désérialisation de `loop_mode` dans `.ssp`.
 
 | Spécification M2 | Statut | Composant / Fichier | Diagnostic & Observations |
 |---|:---:|---|---|
@@ -343,7 +343,7 @@ Le point d'ancrage (ou pivot) définit le point de référence (souvent au nivea
 | **Export/Import Godot 4 (margin Rect2)** | ✅ **RÉSOLU & VALIDÉ** | `godotextractor.cpp` | Écriture et lecture du décalage de marge dans les sous-ressources `AtlasTexture`. |
 | **Export/Import JSON (pivot normalisé)** | ✅ **RÉSOLU & VALIDÉ** | `jsonextractor.cpp` | Round-trip exact du pivot normalisé `{ "x", "y" }`. |
 | **Format de Projet Natif .ssp** | ✅ **RÉSOLU & VALIDÉ** | `projectmanager.cpp` | Sérialisation et désérialisation JSON pérennes. |
-| **Traductions FR / EN / JA** | ✅ **RÉSOLU & VALIDÉ** | `sprite_studio_*.ts` | 100% traduit (0 unfinished, 519 strings). |
+| **Traductions FR / EN / JA** | ✅ **RÉSOLU & VALIDÉ** | `bentopack_*.ts` | 100% traduit (0 unfinished, 519 strings). |
 | **Tests CTest automatisés** | ✅ **RÉSOLU & VALIDÉ** | `test_core`, `test_controllers`, `test_extractors`, `test_project` | 100% de succès sur la suite complète. |
 
 ---
@@ -413,13 +413,13 @@ Un format de sauvegarde de session de travail (`.ssp`) est indispensable.
 ### Réalisations & Architecture Validée (85 tests CTest 100% Succès)
 1. **Archive Conteneur ZIP (`.ssp`) & Gestionnaire de Session (`SessionManager`) :**
    - Implémentation de `SessionManager` (`include/project/sessionmanager.h` / `src/project/sessionmanager.cpp`).
-   - Espace de travail temporaire automatique sur disque : `%TEMP%/SpriteStudio/sessions/<session_uuid>/` (garantissant 0 saturation RAM sur les gros atlas).
+   - Espace de travail temporaire automatique sur disque : `%TEMP%/BentoPack/sessions/<session_uuid>/` (garantissant 0 saturation RAM sur les gros atlas).
    - Prise en charge native de la compression/décompression ZIP cross-platform via `Qt6::CorePrivate` (`QZipReader` et `QZipWriter`), éliminant toute dépendance tierce (comme zlib externe ou libzip).
    - **Sauvegarde atomique sécurisée :** Écriture vers `.ssp.tmp` puis renommage atomique vers `.ssp` avec remplacement propre, évitant toute corruption en cas d'interruption système.
 
 2. **Sérialisation Complète du Document (`ProjectManager`) :**
    - Implémentation de `ProjectManager` (`include/project/projectmanager.h` / `src/project/projectmanager.cpp`).
-   - Fichier manifeste `project.json` (signature `"SpriteStudioProject"`, version `"1.0"`, métadonnées, dates, nom du projet).
+   - Fichier manifeste `project.json` (signature `"BentoPackProject"`, version `"1.0"`, métadonnées, dates, nom du projet).
    - Sauvegarde de l'atlas embarqué sous `assets/atlas.png` pour une portabilité totale du projet.
    - Sérialisation exhaustive de toutes les boîtes (`rect`, `index`, `selected`, `groupId`, `overlapping`, et `pivot` préparé pour M3), ainsi que de l'ensemble des animations (`name`, `fps`, `loop`, `frames`).
    - Mémorisation de l'état de vue (`zoomFactor`, `panX`, `panY`).
@@ -460,7 +460,7 @@ Un format de sauvegarde de session de travail (`.ssp`) est indispensable.
      - `Enregistrer Projet` (`Ctrl+S`) et `Enregistrer Projet Sous...` (`Ctrl+Shift+S`).
      - `Exporter...` (`Ctrl+E`) et `Exporter Sous...` (`Ctrl+Shift+E`).
      - Sous-menu `Projets Récents` (historique séparé des fichiers récents importés).
-   - Indicateur de modification non enregistrée `*` dans la barre de titre (`SpriteStudio - MonProjet.ssp *`).
+   - Indicateur de modification non enregistrée `*` dans la barre de titre (`BentoPack - MonProjet.ssp *`).
    - Dialogue de confirmation à la fermeture de l'application et à la création/ouverture de projet (`maybeSave`) protégeant les données non enregistrées.
    - Prise en charge des traductions complètes en français et anglais.
 
@@ -495,8 +495,8 @@ L'exportation actuelle vers Godot ou TexturePacker utilise un placement en grill
 | **Tests CTest automatisés** | ⏳ **À implémenter** | `tests/test_core.cpp` | Validation de non-chevauchement, compacité, déduplication et stabilité multiplateforme. |
 
 ### Fichiers & Composants Cibles
-- `SpriteStudio/include/packer/atlaspacker.h` / `src/packer/atlaspacker.cpp`.
-- `SpriteStudio/include/packer/maxrectspacker.h` / `src/packer/maxrectspacker.cpp`.
+- `BentoPack/include/packer/atlaspacker.h` / `src/packer/atlaspacker.cpp`.
+- `BentoPack/include/packer/maxrectspacker.h` / `src/packer/maxrectspacker.cpp`.
 
 ---
 
@@ -504,7 +504,7 @@ L'exportation actuelle vers Godot ou TexturePacker utilise un placement en grill
 
 ### 🏛️ Architecture Extensible de Plugins de Filtres Graphiques (`FilterPlugin` & `FilterRegistry`) — ✅ TERMINÉ & VALIDÉ (100%)
 
-Pour éviter la prolifération de fenêtres ad-hoc et permettre l'ajout modulaire de nouveaux traitements sans modifier `MainWindow`, SpriteStudio s'appuie désormais sur une architecture standardisée de plugins et de registre centralisée :
+Pour éviter la prolifération de fenêtres ad-hoc et permettre l'ajout modulaire de nouveaux traitements sans modifier `MainWindow`, BentoPack s'appuie désormais sur une architecture standardisée de plugins et de registre centralisée :
 
 - **Interface Abstraite de Plugin `FilterPlugin` (`include/filters/filterplugin.h`) :**
   - Contrat standardisé pour chaque filtre : `id()`, `name()`, `description()`, `category()`, `shortcut()`, et fabrique de dialogue `createDialog(parent, projectController)`.
@@ -536,7 +536,7 @@ Pour éviter la prolifération de fenêtres ad-hoc et permettre l'ajout modulair
 
 #### 1. Suppression d'Arrière-Plan (`BackgroundRemovalFilter` / `BackgroundRemovalDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Éliminer le fond uni d'une planche importée et recalculer automatiquement les boîtes englobantes de chaque sprite.
-- **Plugin :** ID `org.spritestudio.filter.background_removal`, catégorie `Cleanup`.
+- **Plugin :** ID `org.bentopack.filter.background_removal`, catégorie `Cleanup`.
 - **Paramètres :**
   - Échantillonnage automatique et pastille visuelle de la couleur dominante (#RRGGBB).
   - Curseur Tolérance de couleur (0 à 100).
@@ -547,7 +547,7 @@ Pour éviter la prolifération de fenêtres ad-hoc et permettre l'ajout modulair
 
 #### 2. Débavurage & Anti-Halo (*Despill / Edge Cleanup*) (`DespillFilter` / `DespillFilterDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Éliminer le liseré verdâtre, blanc ou magenta de 1 pixel persistant sur le pourtour des sprites après détourage d'un fond JPEG ou antialiasé.
-- **Plugin :** ID `org.spritestudio.filter.despill`, catégorie `Cleanup`.
+- **Plugin :** ID `org.bentopack.filter.despill`, catégorie `Cleanup`.
 - **Paramètres :**
   - Pipette / Sélecteur de couleur du liseré à neutraliser.
   - Curseur Tolérance de détection périphérique (0 à 100).
@@ -558,7 +558,7 @@ Pour éviter la prolifération de fenêtres ad-hoc et permettre l'ajout modulair
 
 #### 3. Échange de Palette & Color Swap (*Alt-Skins / Recoloring*) (`ColorSwapFilter` / `ColorSwapFilterDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Générer en un clic des variantes de personnages (Joueur 1 vs Joueur 2, variantes d'ennemis Gobelin vert $\rightarrow$ Gobelin de feu rouge) sans redessiner.
-- **Plugin :** ID `org.spritestudio.filter.color_swap`, catégorie `Colors`.
+- **Plugin :** ID `org.bentopack.filter.color_swap`, catégorie `Colors`.
 - **Paramètres :**
   - Sélecteur de couleur source (pipette) et couleur de destination.
   - Curseur de tolérance colorimétrique (0 à 100).
@@ -567,7 +567,7 @@ Pour éviter la prolifération de fenêtres ad-hoc et permettre l'ajout modulair
 
 #### 4. Générateur de Contours & Silhouettes (*Outline & Stroke Generator*) (`OutlineFilter` / `OutlineFilterDialog`) — ✅ Validé & Opérationnel
 - **Rôle :** Ajouter un contour marqué autour des sprites (effet de surbrillance/hover, style sticker, lisibilité sur décors sombres) ou produire des masques d'impact.
-- **Plugin :** ID `org.spritestudio.filter.outline`, catégorie `Effects`.
+- **Plugin :** ID `org.bentopack.filter.outline`, catégorie `Effects`.
 - **Paramètres :**
   - Curseur Épaisseur (1 à 4 px).
   - Sélecteur de couleur du trait (noir `#000000`, blanc `#ffffff`, doré `#ffcc00`, ou personnalisé via dialogue de couleur).
@@ -710,7 +710,7 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 
 ### 🔬 Réalisations Architecturales & Techniques Clôturées
 
-#### 1. Pipeline Géométrique 2D Haute Performance (`SpriteStudioGeometry`) :
+#### 1. Pipeline Géométrique 2D Haute Performance (`BentoPackGeometry`) :
 - **Extraction de contours étanches (`ContourTracer`) :**
   - Algorithme *Marching Squares* 2D évaluant la grille discrète du canal alpha (seuil configurable $\alpha \in [1..255]$).
   - Échantillonnage sous-pixel étanche avec grille paddée de 1 pixel garantissant la fermeture géométrique absolue sans risque de boucle infinie.
@@ -794,14 +794,14 @@ L'**empaquetage polygonal (*Tight Packing / Sprite Mesh*)** substitue au rectang
 ---
 
 ### 📁 Fichiers & Composants Réalisés
-- `SpriteStudio/include/geometry/contourtracer.h` / `src/geometry/contourtracer.cpp` : Marching Squares étanche 2D.
-- `SpriteStudio/include/geometry/polygonsimplifier.h` / `src/geometry/polygonsimplifier.cpp` : Simplification RDP, outward normal dilation, vertex budget.
-- `SpriteStudio/include/geometry/triangulator.h` / `src/geometry/triangulator.cpp` : Ear-Clipping triangulation, formule de Shoelace, télémétrie overdraw.
-- `SpriteStudio/include/packer/tightpolygonpacker.h` / `src/packer/tightpolygonpacker.cpp` : Algorithme de bin-packing polygonal avec multithreading et optimisation des ancres.
-- `SpriteStudio/include/widgets/polygonmeshdialog.h` / `src/widgets/polygonmeshdialog.cpp` : Boîte de dialogue interactive de réglage de maillage.
-- `SpriteStudio/include/widgets/atlaspackingdialog.h` / `src/widgets/atlaspackingdialog.cpp` : IHM d'empaquetage avec sélection de threads, calcul à la demande et contrôle de prévisualisation.
-- `SpriteStudio/src/widgets/atlasboxitem.cpp` : Rendu fil de fer, manipulation de sommets, hit-testing polygonal.
-- `SpriteStudio/src/extractor/unityextractor.cpp`, `unrealextractor.cpp`, `godotextractor.cpp` : Codecs d'export multi-moteurs.
+- `BentoPack/include/geometry/contourtracer.h` / `src/geometry/contourtracer.cpp` : Marching Squares étanche 2D.
+- `BentoPack/include/geometry/polygonsimplifier.h` / `src/geometry/polygonsimplifier.cpp` : Simplification RDP, outward normal dilation, vertex budget.
+- `BentoPack/include/geometry/triangulator.h` / `src/geometry/triangulator.cpp` : Ear-Clipping triangulation, formule de Shoelace, télémétrie overdraw.
+- `BentoPack/include/packer/tightpolygonpacker.h` / `src/packer/tightpolygonpacker.cpp` : Algorithme de bin-packing polygonal avec multithreading et optimisation des ancres.
+- `BentoPack/include/widgets/polygonmeshdialog.h` / `src/widgets/polygonmeshdialog.cpp` : Boîte de dialogue interactive de réglage de maillage.
+- `BentoPack/include/widgets/atlaspackingdialog.h` / `src/widgets/atlaspackingdialog.cpp` : IHM d'empaquetage avec sélection de threads, calcul à la demande et contrôle de prévisualisation.
+- `BentoPack/src/widgets/atlasboxitem.cpp` : Rendu fil de fer, manipulation de sommets, hit-testing polygonal.
+- `BentoPack/src/extractor/unityextractor.cpp`, `unrealextractor.cpp`, `godotextractor.cpp` : Codecs d'export multi-moteurs.
 - `tests/test_mesh.cpp` : Suite automatisée de 22 tests unitaires (100% de réussite sous CTest).
 
 ---
@@ -839,11 +839,11 @@ Dans le développement de jeux vidéo 2D actuels (notamment sur mobile, Nintendo
 | **BC7 / BPTC** | Microsoft / Khronos | PC (DirectX 11/12, Vulkan), PS4/PS5, Xbox | 8 bpp ($4\times 4$ blocs) | 🟢 **Excellente** (couche alpha haute fidélité) |
 | **BC3 / DXT5** | Microsoft | PC legacy (DirectX 9/10), OpenGL classique | 8 bpp ($4\times 4$ blocs) | 🟡 Moyenne (artefacts sur dégradés fins) |
 | **ETC2 / EAC** | Ericsson / Khronos | Android (OpenGL ES 3.0+), WebGL 2.0 | 8 bpp ($4\times 4$ blocs) | 🟢 Bonne pour RGBA standard |
-| **KTX2 + Basis Universal** | Khronos Group / Binomial | **Universel multiplateforme** (Web, Mobile, Consoles, PC) | Supercompressé via UASTC/ETC1S + Zstandard | 🟢 **Idéal pour SpriteStudio** (transcodable à la volée vers tous les formats GPU) |
+| **KTX2 + Basis Universal** | Khronos Group / Binomial | **Universel multiplateforme** (Web, Mobile, Consoles, PC) | Supercompressé via UASTC/ETC1S + Zstandard | 🟢 **Idéal pour BentoPack** (transcodable à la volée vers tous les formats GPU) |
 
 ---
 
-### 🏛️ Architecture Technique & Spécifications Métier pour SpriteStudio
+### 🏛️ Architecture Technique & Spécifications Métier pour BentoPack
 
 Pour égaler TexturePacker Pro tout en conservant une licence open-source pérenne (Apache 2.0 / sans dépendance propriétaire), l'implémentation reposera sur **Basis Universal / KTX2** (Khronos Group) :
 
@@ -874,7 +874,7 @@ Pour égaler TexturePacker Pro tout en conservant une licence open-source péren
 ```
 
 #### 1. Moteur d'Encodage C++ (`VramTextureCompressor`) :
-- Création de `SpriteStudio/include/packer/vramtexturecompressor.h` et `src/packer/vramtexturecompressor.cpp`.
+- Création de `BentoPack/include/packer/vramtexturecompressor.h` et `src/packer/vramtexturecompressor.cpp`.
 - Intégration de la bibliothèque C++ open-source **`basis_universal`** (Apache 2.0 / Binomial / Khronos Group) via CMake `FetchContent` ou sous-module dans `lib/basis_universal`.
 - **Modes d'encodage supportés :**
   - **`KTX2_UASTC` (Recommandé par défaut) :** Format universel $4\times 4$ (8 bpp) équivalent en qualité visuelle à ASTC $4\times 4$ et BC7, spécialement calibré pour préserver la précision des contours pixel art et des demi-transparences (anti-aliasing).
@@ -895,16 +895,16 @@ Pour égaler TexturePacker Pro tout en conservant une licence open-source péren
   - Case à cocher : *Générer les Mipmaps (avec pré-multiplication alpha pour éviter le noircissement des bords)*.
   - Télémétrie en direct : estimation de l'empreinte VRAM (ex : *« VRAM : 16 Mo (PNG) → 4 Mo (KTX2 UASTC) — Économie : -75% »*).
 
-#### 3. Intégration dans l'Interface Ligne de Commande (`spritestudio-cli`) :
+#### 3. Intégration dans l'Interface Ligne de Commande (`bentopack-cli`) :
 - Extension des arguments CLI pour les pipelines d'intégration continue (CI/CD) des studios :
   - Syntaxe TexturePacker émulée :
     ```bash
-    spritestudio-cli --sheet atlas.ktx2 --data atlas.json \
+    bentopack-cli --sheet atlas.ktx2 --data atlas.json \
       --texture-format ktx2 --opt ASTC_4x4 assets/*.png
     ```
-  - Syntaxe native SpriteStudio :
+  - Syntaxe native BentoPack :
     ```bash
-    spritestudio-cli pack --sheet atlas.ktx2 --data atlas.json \
+    bentopack-cli pack --sheet atlas.ktx2 --data atlas.json \
       --vram-format uastc --zstd-level 9 assets/sprites/
     ```
 
@@ -927,7 +927,7 @@ Pour égaler TexturePacker Pro tout en conservant une licence open-source péren
    - Résolution du conflit de macros Qt (`#define emit`) dans `basisu_enc.h` via `#pragma push_macro("emit")` / `#undef emit` / `#pragma pop_macro("emit")`.
 
 2. **Moteur d'Encodage Haute Performance (`VramTextureCompressor`) :**
-   - Création de `SpriteStudio/include/packer/vramtexturecompressor.h` et `src/packer/vramtexturecompressor.cpp`.
+   - Création de `BentoPack/include/packer/vramtexturecompressor.h` et `src/packer/vramtexturecompressor.cpp`.
    - Compression directe en mémoire `compressToKtx2(QImage, options)` et fichier `compressToFile()`.
    - Transcodage direct `transcodeToRgba(ktx2Data)` vers `QImage` RGBA32 sans dépendance d'API GPU.
    - Télémétrie en temps réel (`estimateVramBytes`, `VramCompressionStats`, taux d'économie VRAM).
@@ -943,7 +943,7 @@ Pour égaler TexturePacker Pro tout en conservant une licence open-source péren
    - Contrôles de qualité (Fast, Normal, High Quality), activation et curseur de niveau Zstandard (1-22).
    - Affichage dynamique de l'économie VRAM en direct dans les statistiques (ex. `-75.0%` pour UASTC, `-87.5%` pour ETC1S vs RGBA8888).
 
-5. **Automatisation CLI & Compatibilité TexturePacker (`spritestudio-cli`) :**
+5. **Automatisation CLI & Compatibilité TexturePacker (`bentopack-cli`) :**
    - Prise en charge des arguments standard :
      - `--texture-format <png|ktx2|basis>`
      - `--opt <ASTC_4x4|BC7|ETC2_RGBA|RGBA8888>`
@@ -961,12 +961,12 @@ Pour égaler TexturePacker Pro tout en conservant une licence open-source péren
 ## M11 : Architecture Dynamique de Plugins Qt6 & SDK Tiers (Filtres & Codecs .so / .dll)
 
 ### 📌 Contexte & Enjeux d'Extensibilité
-Pour transformer SpriteStudio en une plateforme extensible pérenne et ouverte aux studios et à la communauté, le couplage monolithique des filtres graphiques et des codecs d'import/export devait être totalement éliminé.
+Pour transformer BentoPack en une plateforme extensible pérenne et ouverte aux studios et à la communauté, le couplage monolithique des filtres graphiques et des codecs d'import/export devait être totalement éliminé.
 
 Historiquement intégrés au cœur du binaire, l'ajout d'un filtre ou d'un format propriétaire imposait la recompilation de l'application entière. L'objectif du chantier **M11** a été de :
 1. Découpler l'intégralité des filtres et extracteurs en bibliothèques dynamiques partagées (`.so` sous Linux, `.dll` sous Windows, `.dylib` sous macOS) chargées à l'exécution.
-2. Établir une bibliothèque partagée `SpriteStudioCore` propre avec exportation systématique des symboles de l'API publique (`SPRITESTUDIOCORE_EXPORT`).
-3. Fournir un SDK d'extension complet avec fichiers CMake installables (`SpriteStudioConfig.cmake`) et projets d'exemples compilables en dehors de l'arborescence source.
+2. Établir une bibliothèque partagée `BentoPackCore` propre avec exportation systématique des symboles de l'API publique (`SPRITESTUDIOCORE_EXPORT`).
+3. Fournir un SDK d'extension complet avec fichiers CMake installables (`BentoPackConfig.cmake`) et projets d'exemples compilables en dehors de l'arborescence source.
 4. Rétablir une clarté IHM totale en séparant l'empaquetage polygonal serré (*Tight Polygon Packing (Nesting)*) de l'empaquetage rectangulaire classique (*MaxRects Bin-Packing*).
 
 ---
@@ -975,7 +975,7 @@ Historiquement intégrés au cœur du binaire, l'ajout d'un filtre ou d'un forma
 
 ```
                        ┌─────────────────────────────────────┐
-                       │    libSpriteStudioCore.so / .dll    │
+                       │    libBentoPackCore.so / .dll    │
                        │    (Moteur, Modèle, Registres)      │
                        └──────────────────┬──────────────────┘
                                           │
@@ -1019,13 +1019,13 @@ Historiquement intégrés au cœur du binaire, l'ajout d'un filtre ou d'un forma
      - `extractor_gif` : Décompilation de GIF animés multi-frames.
      - `extractor_json` : TexturePacker & Aseprite JSON standard.
 
-3. **Cœur `SpriteStudioCore` Partagé & API Exportée :**
-   - Génération de l'en-tête d'export `spritestudiocore_export.h` via `GenerateExportHeader(SpriteStudioCore)`.
+3. **Cœur `BentoPackCore` Partagé & API Exportée :**
+   - Génération de l'en-tête d'export `bentopackcore_export.h` via `GenerateExportHeader(BentoPackCore)`.
    - Annotation systématique des classes et interfaces publiques avec `SPRITESTUDIOCORE_EXPORT` (`SpriteDocument`, `Extractor`, `ExtractorRegistry`, `FilterPlugin`, `FilterRegistry`, `AtlasPacker`, `VramTextureCompressor`, etc.).
    - Idempotence et protection contre les doublons dans `FilterRegistry` et `ExtractorRegistry` lors des ré-initialisations successives.
 
 4. **SDK Développeur Tiers & Modèles de Référence :**
-   - Fichier de configuration CMake `cmake/SpriteStudioConfig.cmake.in` permettant l'utilisation de `find_package(SpriteStudio REQUIRED)` dans des projets tiers externes.
+   - Fichier de configuration CMake `cmake/BentoPackConfig.cmake.in` permettant l'utilisation de `find_package(BentoPack REQUIRED)` dans des projets tiers externes.
    - Projets de démonstration complets et documentés :
      - `examples/sample_filter_plugin` : Exemple de filtre d'inversion colorimétrique négative.
      - `examples/sample_extractor_plugin` : Exemple d'exportateur CSV simple.
@@ -1039,12 +1039,12 @@ Historiquement intégrés au cœur du binaire, l'ajout d'un filtre ou d'un forma
 ## M10 : Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)
 
 ### 📌 Contexte & Enjeux d'Adoption
-Pour qu'un atelier comme **SpriteStudio** s'impose durablement auprès de la communauté des créateurs de jeux vidéo indépendants comme des studios professionnels, la simple capacité à exporter des fichiers techniques (`.tres`, `.json`, `.png`) ne suffit pas. **L'intégration native, directe et fluide dans l'environnement de développement quotidien (Game Engine IDE)** est le catalyseur clé d'adoption.
+Pour qu'un atelier comme **BentoPack** s'impose durablement auprès de la communauté des créateurs de jeux vidéo indépendants comme des studios professionnels, la simple capacité à exporter des fichiers techniques (`.tres`, `.json`, `.png`) ne suffit pas. **L'intégration native, directe et fluide dans l'environnement de développement quotidien (Game Engine IDE)** est le catalyseur clé d'adoption.
 
 Les développeurs recherchent un flux de travail sans friction (*zero-friction workflow*) :
-1. **Découverte & Installation en 1 Clic :** Retrouver et installer l'extension SpriteStudio directement depuis les magasins et gestionnaires de paquets officiels intégrés au moteur (Godot Asset Library, Unity Package Manager, Epic Games Fab).
-2. **Importation & Conversion Transparentes :** Glisser-déposer un projet SpriteStudio (`.ssp`), un atlas ou un JSON dans l'arborescence du projet et voir le moteur créer instantanément les ressources 2D prêtes au jeu (Sprites, Animations, Colliders, Meshes) sans réglage manuel fastidieux.
-3. **Hot-Reloading Bidirectionnel en Temps Réel :** Retoucher un pixel, réordonner une séquence ou ajuster un pivot dans SpriteStudio, faire `Ctrl+S`, et constater le rechargement immédiat de la scène ou du jeu en cours d'exécution.
+1. **Découverte & Installation en 1 Clic :** Retrouver et installer l'extension BentoPack directement depuis les magasins et gestionnaires de paquets officiels intégrés au moteur (Godot Asset Library, Unity Package Manager, Epic Games Fab).
+2. **Importation & Conversion Transparentes :** Glisser-déposer un projet BentoPack (`.ssp`), un atlas ou un JSON dans l'arborescence du projet et voir le moteur créer instantanément les ressources 2D prêtes au jeu (Sprites, Animations, Colliders, Meshes) sans réglage manuel fastidieux.
+3. **Hot-Reloading Bidirectionnel en Temps Réel :** Retoucher un pixel, réordonner une séquence ou ajuster un pivot dans BentoPack, faire `Ctrl+S`, et constater le rechargement immédiat de la scène ou du jeu en cours d'exécution.
 
 ---
 
@@ -1052,7 +1052,7 @@ Les développeurs recherchent un flux de travail sans friction (*zero-friction w
 
 ```
                 ┌──────────────────────────────────────────────┐
-                │          SpriteStudio Desktop / CLI          │
+                │          BentoPack Desktop / CLI          │
                 │     (.ssp, Atlas PNG/KTX2, JSON, TRES, Mesh) │
                 └──────────────────────┬───────────────────────┘
                                        │
@@ -1069,7 +1069,7 @@ Les développeurs recherchent un flux de travail sans friction (*zero-friction w
  └──────────────────────┘   └──────────────────────┘   └──────────────────────┘
 ```
 
-#### 1. Écosystème Godot Engine (`godot-spritestudio-addon`)
+#### 1. Écosystème Godot Engine (`godot-bentopack-addon`)
 - **Distribution & Visibilité :**
   - Publication officielle sur la **Godot Asset Library** (`godotengine.org/asset-library`), accessible en 1 clic dans l'onglet *AssetLib* de l'éditeur Godot 4.x.
   - Dépôt GitHub dédié avec templates d'exemples (Platformer 2D, Top-Down).
@@ -1082,12 +1082,12 @@ Les développeurs recherchent un flux de travail sans friction (*zero-friction w
       - La ressource `SpriteFrames` avec toutes les animations configurées (noms, FPS, boucles Loop/PingPong).
       - Les marges de décalage de pivot exactes (`margin = Rect2(...)`) supprimant le sautillement.
       - Optionnellement, la ressource `ArrayMesh` 2D exploitant les maillages polygonaux serrés M8 pour un rendu sans overdraw via `MeshInstance2D`.
-  - **Live Hot-Reloading via Daemon (`spritestudio-cli --watch`) :**
-    - Synchronisation avec le mode veille de `spritestudio-cli` : à chaque sauvegarde de planche, l'éditeur Godot recharge à chaud les animations sans nécessiter de redémarrage.
+  - **Live Hot-Reloading via Daemon (`bentopack-cli --watch`) :**
+    - Synchronisation avec le mode veille de `bentopack-cli` : à chaque sauvegarde de planche, l'éditeur Godot recharge à chaud les animations sans nécessiter de redémarrage.
   - **Intégration Ergonomique à l'Inspecteur Godot :**
-    - Bouton d'accès rapide *"Ouvrir dans SpriteStudio"* dans l'inspecteur lors de la sélection d'un `AnimatedSprite2D`, `Sprite2D` ou d'un fichier `.tres`.
+    - Bouton d'accès rapide *"Ouvrir dans BentoPack"* dans l'inspecteur lors de la sélection d'un `AnimatedSprite2D`, `Sprite2D` ou d'un fichier `.tres`.
 
-#### 2. Écosystème Unity (`com.spritestudio.importer`)
+#### 2. Écosystème Unity (`com.bentopack.importer`)
 - **Distribution & Visibilité :**
   - Paquet officiel **Unity Package Manager (UPM)** hébergé sur Git et référencé sur le registre communautaire standard **OpenUPM**.
   - Soumission sur l'**Unity Asset Store** (catégorie *2D Tools / Utilities*) pour une découvrabilité maximale.
@@ -1097,14 +1097,14 @@ Les développeurs recherchent un flux de travail sans friction (*zero-friction w
     - Configuration automatique du `TextureImporter` (FilterMode `Point (no filter)`, format de compression texture optimal, alpha is transparency).
     - Découpe automatique des sous-sprites (`SpriteMetaData`) avec pivots personnalisés (`Alignment.Custom` et coordonnées UV normalisées).
     - **Injection Native des Maillages Serrés M8 (`SpriteMeshType.Tight`) :**
-      - Application directe des sommets et triangles calculés par SpriteStudio via `Sprite.OverrideGeometry()`.
+      - Application directe des sommets et triangles calculés par BentoPack via `Sprite.OverrideGeometry()`.
       - **Bénéfice majeur sous Unity :** Économie de 60% à 80% du fillrate GPU sans nécessiter de retouche manuelle du *Sprite Editor Mesh*.
   - **Générateur Automatique d'Animations (`AnimationClip`) :**
     - Création instantanée des clips d'animation avec courbes d'échange de frames (`SpriteRenderer.m_Sprite`) cadencées au framerate d'origine.
   - **Menu Contextuel dans Unity :**
-    - Clic droit sur un sprite dans la fenêtre *Project* : *"SpriteStudio > Edit with SpriteStudio"*.
+    - Clic droit sur un sprite dans la fenêtre *Project* : *"BentoPack > Edit with BentoPack"*.
 
-#### 3. Écosystème Unreal Engine (`SpriteStudio UE5 Plugin`)
+#### 3. Écosystème Unreal Engine (`BentoPack UE5 Plugin`)
 - **Distribution & Visibilité :**
   - Publication sur la nouvelle place de marché unifiée d'Epic Games : **Fab** (`fab.com`), remplaçant l'Unreal Engine Marketplace.
   - Dépôt open-source compatible avec Unreal Engine 5.x.
@@ -1119,7 +1119,7 @@ Les développeurs recherchent un flux de travail sans friction (*zero-friction w
 - **Moteurs Web 2D :**
   - Loaders et exemples documentés pour **Phaser.js**, **PixiJS**, **Defold** et **Three.js** (atlas JSON + KTX2).
 - **Moteurs Indie C/C++ & Lua :**
-  - Parseur léger open-source en C pur (*single-header library* `spritestudio.h`) pour **Raylib** et **Love2D**.
+  - Parseur léger open-source en C pur (*single-header library* `bentopack.h`) pour **Raylib** et **Love2D**.
 - **Fantasy Consoles & Rétro :**
   - Exportateurs directs vers formats cartouches **Pico-8** (`.p8` / spritesheet 128x128) et **TIC-80**.
 
@@ -1128,28 +1128,28 @@ Les développeurs recherchent un flux de travail sans friction (*zero-friction w
 ### 📋 Phasage Recommandé pour le Jalon M10
 
 1. **Étape 1 — Formalisation de la Commande CLI Dédiée :**
-   - Implémentation de `spritestudio-cli export-engine --target=<godot|unity|unreal>` pour produire des bundles normalisés tout-en-un (textures, métadonnées, animations, maillages).
-2. **Étape 2 — Addon Officiel Godot 4 (`godot-spritestudio-addon`) :**
+   - Implémentation de `bentopack-cli export-engine --target=<godot|unity|unreal>` pour produire des bundles normalisés tout-en-un (textures, métadonnées, animations, maillages).
+2. **Étape 2 — Addon Officiel Godot 4 (`godot-bentopack-addon`) :**
    - Développement du plugin GDScript, validation multiplateforme et soumission à la Godot Asset Library.
-3. **Étape 3 — Package Unity UPM (`com.spritestudio.importer`) :**
+3. **Étape 3 — Package Unity UPM (`com.bentopack.importer`) :**
    - Développement du `ScriptedImporter` C#, packaging OpenUPM et soumission Asset Store.
 4. **Étape 4 — Plugin Unreal Engine 5 (Fab Marketplace) :**
    - Développement du module C++ avec `UFactory` pour Paper2D/PaperZD et soumission sur le portail Fab.
 
 ---
 
-## M-CLI : Interface Ligne de Commande & Automatisation CI/CD (`spritestudio-cli`) — 🚀 Compatibilité Totale TexturePacker, Aseprite & Godot 4
+## M-CLI : Interface Ligne de Commande & Automatisation CI/CD (`bentopack-cli`) — 🚀 Compatibilité Totale TexturePacker, Aseprite & Godot 4
 
 ### 📌 Contexte & Enjeux Industriels
 Dans les studios professionnels et les productions indépendantes d'envergure, les artistes ne manipulent pas manuellement une interface graphique pour exporter 50 planches à chaque mise à jour de sprites. Des scripts de build (Makefiles, scripts Python, CMake) et des pipelines d'Intégration Continue (GitHub Actions, GitLab CI) ré-empaquettent automatiquement les atlas et régénèrent les métadonnées de moteur de jeu (`.tres`, `.json`).
 
 **TexturePacker** doit l'essentiel de son quasi-monopole en studio à son binaire en ligne de commande scriptable. De son côté, **Aseprite** est omniprésent pour le dessin et l'export batch de frames via son interface `-b` (`aseprite -b`). Enfin, **Godot 4** est devenu le moteur 2D de référence exigeant des fichiers de ressources natifs (`SpriteFrames` `.tres`) avec sous-textures `AtlasTexture`.
 
-**Objectifs Stratégiques Majeurs de SpriteStudio :**
+**Objectifs Stratégiques Majeurs de BentoPack :**
 1. **Drop-in Replacement 100% de TexturePacker :** Remplacer purement et simplement le binaire `TexturePacker` dans n'importe quel pipeline studio existant sans modifier un seul script de build (compatibilité syntaxique des flags et sémantique des formats d'export JSON/Godot).
 2. **Compatibilité Étendue avec Aseprite CLI :** Accepter la syntaxe de compilation de feuilles de sprites d'Aseprite (`--sheet`, `--data`, `--list-tags`, `--sheet-type`, etc.).
 3. **Intégration Native & Transparente Godot 4 :** Générer directement des ressources `.tres` `SpriteFrames` riches avec `margin = Rect2(...)` (pivots M3 & trim M1) et préservation des UIDs Godot 4 (`uid://...`), évitant toute importation manuelle dans l'éditeur.
-4. **Moteur Headless Ultra-Rapide ($< 80$ ms) :** Binaire console autonome lié à la bibliothèque statique `SpriteStudioCore` fonctionnant hors-affichage (`QT_QPA_PLATFORM=offscreen` / `QCoreApplication`), sans dépendance GUI.
+4. **Moteur Headless Ultra-Rapide ($< 80$ ms) :** Binaire console autonome lié à la bibliothèque statique `BentoPackCore` fonctionnant hors-affichage (`QT_QPA_PLATFORM=offscreen` / `QCoreApplication`), sans dépendance GUI.
 
 ---
 
@@ -1163,7 +1163,7 @@ Dans les studios professionnels et les productions indépendantes d'envergure, l
 
 ### 🏛️ Architecture Multi-Saveurs du Parser CLI (`CliDispatcher`)
 
-Pour supporter à la fois la syntaxe TexturePacker, la syntaxe Aseprite et les sous-commandes natives SpriteStudio sans collision de paramètres, le binaire repose sur une architecture à détection de saveur (*CLI Flavor Detection*) :
+Pour supporter à la fois la syntaxe TexturePacker, la syntaxe Aseprite et les sous-commandes natives BentoPack sans collision de paramètres, le binaire repose sur une architecture à détection de saveur (*CLI Flavor Detection*) :
 
 ```
                         [Invocation CLI / argv]
@@ -1181,7 +1181,7 @@ Pour supporter à la fois la syntaxe TexturePacker, la syntaxe Aseprite et les s
                     │                             │
                     └──────────────┬──────────────┘
                                    │
-        [argv[0] == "spritestudio-cli" ou --flavor=...]
+        [argv[0] == "bentopack-cli" ou --flavor=...]
                                    ▼
                     ┌──────────────────────────┐
                     │ Universal / Native Mode  │
@@ -1206,7 +1206,7 @@ Pour supporter à la fois la syntaxe TexturePacker, la syntaxe Aseprite et les s
 - **Détection Automatique par Alias (`argv[0]`) :**
   - Si le binaire est invoqué sous le nom `TexturePacker` (ou `TexturePacker.exe` via lien symbolique, wrapper shell ou copie dans le `PATH`), il active par défaut la saveur stricte TexturePacker.
   - Si invoqué sous `aseprite`, il active la saveur Aseprite.
-  - Si invoqué sous `spritestudio-cli`, il accepte soit les sous-commandes natives, soit les options TexturePacker/Aseprite de façon universelle.
+  - Si invoqué sous `bentopack-cli`, il accepte soit les sous-commandes natives, soit les options TexturePacker/Aseprite de façon universelle.
   - Un paramètre explicite `--flavor <texturepacker|aseprite|godot|native>` permet de forcer la saveur si nécessaire.
 
 ---
@@ -1215,7 +1215,7 @@ Pour supporter à la fois la syntaxe TexturePacker, la syntaxe Aseprite et les s
 
 TexturePacker est émulé à 100% de sa syntaxe et de ses fonctionnalités de packing d'atlas :
 
-| Argument TexturePacker | Type / Valeurs | Rôle & Équivalence Métier SpriteStudio |
+| Argument TexturePacker | Type / Valeurs | Rôle & Équivalence Métier BentoPack |
 |---|---|---|
 | `--sheet <file>` | Fichier (`.png`) | Fichier image de sortie de l'atlas composite (`AtlasPacker::pack()`). |
 | `--data <file>` | Fichier (`.json`, `.tres`) | Fichier de métadonnées généré (JSON TexturePacker ou Godot 4 SpriteFrames). |
@@ -1246,7 +1246,7 @@ TexturePacker est émulé à 100% de sa syntaxe et de ses fonctionnalités de pa
 **Exemple d'Exécution en Drop-in Replacement TexturePacker :**
 ```bash
 # Appel strict identique à TexturePacker dans un Makefile ou script de build
-spritestudio-cli --sheet characters.png --data characters.json \
+bentopack-cli --sheet characters.png --data characters.json \
   --format json-array --algorithm MaxRects --maxrects-heuristics BestShortSideFit \
   --padding 2 --extrude 1 --trim-mode Trim --size-constraints POT \
   --max-size 2048 2048 assets/sprites/*.png
@@ -1256,11 +1256,11 @@ spritestudio-cli --sheet characters.png --data characters.json \
 
 ### 🎨 2. Compatibilité Étendue avec Aseprite CLI (`aseprite -b`)
 
-Aseprite est le standard de création pixel art. `spritestudio-cli` supporte les commandes d'export de planches et de métadonnées d'animation d'Aseprite :
+Aseprite est le standard de création pixel art. `bentopack-cli` supporte les commandes d'export de planches et de métadonnées d'animation d'Aseprite :
 
-| Argument Aseprite | Type / Valeurs | Rôle & Équivalence Métier SpriteStudio |
+| Argument Aseprite | Type / Valeurs | Rôle & Équivalence Métier BentoPack |
 |---|---|---|
-| `-b`, `--batch` | Drapeau | Mode non-interactif / headless (implicite et natif dans `spritestudio-cli`). |
+| `-b`, `--batch` | Drapeau | Mode non-interactif / headless (implicite et natif dans `bentopack-cli`). |
 | `--sheet <file>` | Fichier image (`.png`) | Fichier de destination de la planche de sprites générée. |
 | `--data <file>` | Fichier JSON (`.json`) | Fichier de données JSON exporté avec tags d'animations et frames. |
 | `--format <fmt>` | `json-array`, `json-hash` | Structure du JSON Aseprite (`frames`, `meta`, `frameTags`). |
@@ -1282,7 +1282,7 @@ Aseprite est le standard de création pixel art. `spritestudio-cli` supporte les
 **Exemple d'Exécution Compatible Aseprite :**
 ```bash
 # Compilation d'atlas Aseprite avec extraction des animations
-spritestudio-cli -b character.ssp --sheet character_sheet.png --data character_sheet.json \
+bentopack-cli -b character.ssp --sheet character_sheet.png --data character_sheet.json \
   --format json-array --list-tags --sheet-type packed --trim
 ```
 
@@ -1301,23 +1301,23 @@ L'intégration avec Godot 4 va au-delà d'un simple export de texture : elle pro
      - `filter = Nearest` : Préréglage de filtrage net pour les jeux en pixel art.
 2. **Gestion Intelligente des UIDs Godot 4 (`--godot-uid`) :**
    - Godot 4 associe un identifiant unique universel `uid://...` à chaque fichier de ressource.
-   - Lors d'une régénération automatique en CI/CD, `spritestudio-cli` conserve l'UID préexistant dans le fichier `.tres` cible ou en calcule un déterministe pour éviter de briser les dépendances et de polluer les diffs Git.
+   - Lors d'une régénération automatique en CI/CD, `bentopack-cli` conserve l'UID préexistant dans le fichier `.tres` cible ou en calcule un déterministe pour éviter de briser les dépendances et de polluer les diffs Git.
 3. **Génération Optionnelle de Scène Complète (`--godot-scene <node.tscn>`) :**
    - Option `--godot-scene player.tscn` produisant une scène 2D instantiable avec un nœud `[node name="Player" type="AnimatedSprite2D"]` pré-câblé avec toutes ses animations (`idle`, `run`, `jump`), son FPS exact et sa configuration de boucle (`loop = true/false`).
 4. **Enchaînement CI Headless avec Godot :**
-   - `spritestudio-cli` retourne des codes d'état POSIX stricts permettant d'enchaîner directement dans un pipeline GitHub Actions :
+   - `bentopack-cli` retourne des codes d'état POSIX stricts permettant d'enchaîner directement dans un pipeline GitHub Actions :
      ```bash
-     spritestudio-cli pack --format godot4 --sheet res://assets/sprites.png --data res://assets/sprites.tres assets/raw/*.png
+     bentopack-cli pack --format godot4 --sheet res://assets/sprites.png --data res://assets/sprites.tres assets/raw/*.png
      godot --headless --import  # Importation automatique dans le projet Godot sans interface graphique !
      ```
 
 ---
 
-### ⚡ 4. Super-Pouvoirs Exclusifs SpriteStudio (Au-delà de la Concurrence)
+### ⚡ 4. Super-Pouvoirs Exclusifs BentoPack (Au-delà de la Concurrence)
 
-Là où TexturePacker et Aseprite exigent que les sprites soient déjà découpés en amont dans des fichiers PNG individuels, `spritestudio-cli` apporte ses algorithmes de découpage et de filtrage uniques :
+Là où TexturePacker et Aseprite exigent que les sprites soient déjà découpés en amont dans des fichiers PNG individuels, `bentopack-cli` apporte ses algorithmes de découpage et de filtrage uniques :
 
-1. **Découpage Automatique de Planches Brutes (`spritestudio-cli slice`) :**
+1. **Découpage Automatique de Planches Brutes (`bentopack-cli slice`) :**
    - Découpe automatique d'une planche brute ou d'un rip JPEG en sprites individuels sans fichier de métadonnées préalable.
    - Algorithme de composantes connexes accéléré par `SpatialGrid2D` ($O(N)$ en $< 20$ ms).
    - Arguments :
@@ -1328,7 +1328,7 @@ Là où TexturePacker et Aseprite exigent que les sprites soient déjà découp�
      - `--order <row-major|column-major>` : Tri séquentiel de lecture des frames.
      - `--output-project <file.ssp>` : Sauvegarde directe sous forme de projet complet `.ssp`.
 
-2. **Application de Filtres Graphiques Headless (`spritestudio-cli filter`) :**
+2. **Application de Filtres Graphiques Headless (`bentopack-cli filter`) :**
    - Applique en ligne de commande les filtres M7 sur une planche ou un projet sans ouvrir l'IHM :
      - `--despill [hexColor] --despill-mode <clamp|strict>` : Suppression du liseré périphérique de 1 px.
      - `--outline <1-4> --outline-color <hexColor>` : Génération de contours vectoriels nets.
@@ -1337,7 +1337,7 @@ Là où TexturePacker et Aseprite exigent que les sprites soient déjà découp�
      - `--pixel-rescale <2x|3x|4x> --filter <scale2x|nearest>` : Agrandissement procédural sans flou.
      - `--retro-palette <preset|file.hex|file.gpl> --dither <bayer4x4>` : Quantification rétro.
 
-3. **Time-Travel & Manipulation de Projets `.ssp` (`spritestudio-cli ssp`) :**
+3. **Time-Travel & Manipulation de Projets `.ssp` (`bentopack-cli ssp`) :**
    - `--checkout-revision <hash>` : Extraction headless d'une révision Git historique embarquée dans un `.ssp`.
    - `--export <format>` : Conversion d'un `.ssp` vers Godot, JSON, ou GIF animé.
 
@@ -1375,22 +1375,22 @@ Pour garantir une intégration sans faille dans les scripts Bash, PowerShell et 
 | Composant M-CLI | Statut | Fichier(s) Cibles | Diagnostic & Livrables |
 |---|:---:|---|---|
 | **Spécification Multi-Saveur & Rétrocompatibilité** | ✅ **RÉSOLU & VALIDÉ** | `TODO.md` | Spécifications complètes 100% TexturePacker, Aseprite et Godot 4. |
-| **Socle Moteur Headless (`SpriteStudioCore`)** | ✅ **RÉSOLU & VALIDÉ** | `SpriteStudioCore` | Bibliothèque découplée de l'IHM, opérant sur `QImage` pure en offscreen. |
+| **Socle Moteur Headless (`BentoPackCore`)** | ✅ **RÉSOLU & VALIDÉ** | `BentoPackCore` | Bibliothèque découplée de l'IHM, opérant sur `QImage` pure en offscreen. |
 | **Parser Universel & Dispatcher (`CliDispatcher`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/cliparser.h`, `src/cli/cliparser.cpp` | Détection par `argv[0]`, analyse des arguments et validation POSIX. |
 | **Émulateur TexturePacker (`TexturePackerAdapter`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/tp_adapter.h`, `src/cli/tp_adapter.cpp` | Mapping complet des 22 arguments TexturePacker vers le moteur de packing M6. |
 | **Émulateur Aseprite (`AsepriteAdapter`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/aseprite_adapter.h`, `src/cli/aseprite_adapter.cpp` | Support de `-b`, `--sheet`, `--data`, `--list-tags`, `--sheet-type`, `--trim`. |
 | **Pipeline Natif Godot 4 (`GodotPipeline`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/godot_pipeline.h`, `src/cli/godot_pipeline.cpp` | Génération `.tres` SpriteFrames, UIDs stables, marges de pivots et scènes `.tscn`. |
 | **Commandes Étendues (`slice`, `filter`, `ssp`)** | ✅ **RÉSOLU & VALIDÉ** | `include/cli/native_commands.h`, `src/cli/native_commands.cpp` | Automatisation headless de `SpriteDetector`, des filtres M7 et de `ProjectManager`. |
-| **Cible Exécutable CMake (`spritestudio-cli`)** | ✅ **RÉSOLU & VALIDÉ** | `SpriteStudio/CMakeLists.txt` | Cible console légère liée à `SpriteStudioCore`, sans dépendance d'affichage. |
+| **Cible Exécutable CMake (`bentopack-cli`)** | ✅ **RÉSOLU & VALIDÉ** | `BentoPack/CMakeLists.txt` | Cible console légère liée à `BentoPackCore`, sans dépendance d'affichage. |
 | **Suite de Tests CLI Headless** | ✅ **RÉSOLU & VALIDÉ** | `tests/test_cli.cpp` | 9 tests unitaires automatisés validant syntaxes, formats, codes POSIX et sortie JSON (100% CTest). |
 
 ### Fichiers & Composants Cibles
-- `SpriteStudio/include/cli/cliparser.h` / `src/cli/cliparser.cpp` : Moteur de dispatching et parsing multi-saveur.
-- `SpriteStudio/include/cli/tp_adapter.h` / `src/cli/tp_adapter.cpp` : Adaptateur de rétrocompatibilité TexturePacker 100%.
-- `SpriteStudio/include/cli/aseprite_adapter.h` / `src/cli/aseprite_adapter.cpp` : Adaptateur Aseprite.
-- `SpriteStudio/include/cli/godot_pipeline.h` / `src/cli/godot_pipeline.cpp` : Pipeline Godot 4 SpriteFrames & UIDs.
-- `SpriteStudio/src/cli/main_cli.cpp` : Point d'entrée de l'application console.
-- `SpriteStudio/CMakeLists.txt` : Déclaration de la cible console `spritestudio-cli`.
+- `BentoPack/include/cli/cliparser.h` / `src/cli/cliparser.cpp` : Moteur de dispatching et parsing multi-saveur.
+- `BentoPack/include/cli/tp_adapter.h` / `src/cli/tp_adapter.cpp` : Adaptateur de rétrocompatibilité TexturePacker 100%.
+- `BentoPack/include/cli/aseprite_adapter.h` / `src/cli/aseprite_adapter.cpp` : Adaptateur Aseprite.
+- `BentoPack/include/cli/godot_pipeline.h` / `src/cli/godot_pipeline.cpp` : Pipeline Godot 4 SpriteFrames & UIDs.
+- `BentoPack/src/cli/main_cli.cpp` : Point d'entrée de l'application console.
+- `BentoPack/CMakeLists.txt` : Déclaration de la cible console `bentopack-cli`.
 
 ---
 
@@ -1437,7 +1437,7 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
 - **Élimination de la Dépendance Privée Qt (`Qt6::CorePrivate`) — ✅ TERMINÉ :**
   - *Constat :* La compression et décompression des archives `.ssp` s'appuyait sur `<QtCore/private/qzipreader_p.h>` et `qzipwriter_p.h`.
   - *Problème & Risque :* Les distributions Linux (Ubuntu/Debian) n'exposent pas `Qt6CorePrivateConfig.cmake` pour des raisons de stabilité d'ABI, provoquant l'échec de `find_package(Qt6CorePrivate)` et imposant des contournements complexes et fragiles dans le CI (`install-qt-action` + Python).
-  - *Réalisé :* Intégration de la bibliothèque ZIP autonome et éprouvée `miniz` (v3.1.2, domaine public / MIT) dans `SpriteStudio/include/zip/miniz.h` et `SpriteStudio/src/zip/miniz.c`. Migration complète de `sessionmanager.cpp` sur l'API `miniz`, suppression totale de `CorePrivate` dans CMake, et gestion propre de la libération des descripteurs de fichiers évitant les verrous de renommage sous Windows. Résultat : 18/18 sous-tests `.ssp` validés sous CTest sans dépendance privée.
+  - *Réalisé :* Intégration de la bibliothèque ZIP autonome et éprouvée `miniz` (v3.1.2, domaine public / MIT) dans `BentoPack/include/zip/miniz.h` et `BentoPack/src/zip/miniz.c`. Migration complète de `sessionmanager.cpp` sur l'API `miniz`, suppression totale de `CorePrivate` dans CMake, et gestion propre de la libération des descripteurs de fichiers évitant les verrous de renommage sous Windows. Résultat : 18/18 sous-tests `.ssp` validés sous CTest sans dépendance privée.
 
 ---
 
@@ -1447,7 +1447,7 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
   - *Constat :* Dans `SpriteDetector::detectToImages()`, le filtrage des boîtes englobantes entièrement incluses dans d'autres utilisait une double boucle imbriquée $N \times N$ naïve (`componentRects[j].contains(componentRects[i])`).
   - *Problème résolu :* Sur une planche bruitée générant 2000 à 5000 composantes parasites, ce test effectuait entre 4 et 25 millions de comparaisons géométriques, provoquant un gel CPU notable.
   - *Réalisé :*
-    - Implémentation d'une structure de partitionnement spatial 2D contiguë `SpatialGrid2D` dans `SpriteStudio/src/image/spritedetector.cpp`.
+    - Implémentation d'une structure de partitionnement spatial 2D contiguë `SpatialGrid2D` dans `BentoPack/src/image/spritedetector.cpp`.
     - Dimensionnement adaptatif du maillage (grille de $16\times 16$ à $64\times 64$ cellules indexées en $O(1)$) selon les dimensions de l'atlas et la densité de composantes.
     - Propriété géométrique exploitée : tout rectangle englobant $R_j$ contenant $R_i$ couvre impérativement son coin supérieur gauche $(R_i.\text{left}(), R_i.\text{top}())$ et réside obligatoirement dans la cellule correspondante.
     - Élimination immédiate des faux candidats par pré-filtrage de dimensions ($W_j \ge W_i$ et $H_j \ge H_i$) et gestion déterministe des égalités strictes (évitant la suppression mutuelle de boîtes identiques).
@@ -1497,9 +1497,9 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
   - *Contexte & Problème résolu :* Élimination des clés internes brutes (`KEY_MENU_FILTERS`, `KEY_DIALOG_REMOVE_BG_TITLE`) affichées dans l'IHM et des textes français codés en dur dans les boîtes de dialogue de filtres lorsque l'interface était basculée en anglais ou japonais.
   - *Standardisation des sources :* Normalisation de l'ensemble des chaînes sources C++ en anglais standard (`tr("Live Preview")`, `tr("Reset Defaults")`, `tr("Background Removal")`, `tr("Despill & Edge Cleanup")`, `tr("Outline & Silhouette Generator")`, `tr("Color Swap & Alt-Skins")`, tooltips, badges et labels).
   - *Couverture intégrale des catalogues linguistiques :*
-    - `sprite_studio_fr_FR.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
-    - `sprite_studio_en_US.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
-    - `sprite_studio_ja_JA.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
+    - `bentopack_fr_FR.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
+    - `bentopack_en_US.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
+    - `bentopack_ja_JA.ts` / `.qm` : 419 chaînes traduites (0 inachevée).
   - *Mise à jour dynamique de l'IHM :* Prise en charge du rechargement à la volée du menu Filtres et de ses catégories lors d'un événement `QEvent::LanguageChange`.
   - *Validation par tests automatisés :* Extension de `testLanguageCatalogLoad()` dans `tests/test_controllers.cpp` validant la traduction de `KEY_MENU_FILTERS`, `BackgroundRemovalDialog`, `FilterDialogBase` et du contrôleur de projet pour les 3 langues.
 
@@ -1507,8 +1507,8 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
 
 ### 3. DevOps, Build & Automatisation (Tests & CI/CD)
 
-- **Factorisation CMake (Bibliothèque Commune `SpriteStudioCore`) — ✅ TERMINÉ :**
-  - *Réalisé :* Bibliothèque statique `SpriteStudioCore` créée dans `SpriteStudio/CMakeLists.txt` liant l'ensemble du moteur, UI, traductions et ressources. `tests/CMakeLists.txt` allégé de 264 à 48 lignes avec liaison directe à `SpriteStudioCore`. Temps de compilation des tests divisé par 3.
+- **Factorisation CMake (Bibliothèque Commune `BentoPackCore`) — ✅ TERMINÉ :**
+  - *Réalisé :* Bibliothèque statique `BentoPackCore` créée dans `BentoPack/CMakeLists.txt` liant l'ensemble du moteur, UI, traductions et ressources. `tests/CMakeLists.txt` allégé de 264 à 48 lignes avec liaison directe à `BentoPackCore`. Temps de compilation des tests divisé par 3.
 
 - **Pipeline d'Intégration Continue Robuste (GitHub Actions CI/CD) — ✅ TERMINÉ :**
   - *Réalisé :* Fichier `.github/workflows/ci.yml` configuré et stabilisé sans artifices fragiles :
@@ -1519,7 +1519,7 @@ Ce volet consigne l'ensemble des axes d'amélioration, points de fragilité et d
       - Éradication des blocages VM (remplacement du montage `sshfs` sujet aux deadlocks FUSE par `sync: rsync`, allocation `mem: 4096` et `cpu: 2`, limitation de la concurrence Ninja à `-j 2` pour prévenir l'épuisement mémoire, `timeout-minutes: 35`).
       - Automatisation non interactive de `pkgman` avec injection de confirmation (`echo 1 | pkgman install ...`).
       - Rétrocompatibilité universelle `libgit2` : prise en charge des versions historiques (`libgit2 0.25` fourni par HaikuPorts) en fournissant un alias automatique `git_buf_dispose` vers `git_buf_free` pour les versions `< 0.28` dans `appconfig.cpp`.
-      - Découplage du packaging HPKG : suppression du hook intrusif `POST_BUILD` sur l'exécutable `SpriteStudio`, remplacement par une cible dédiée `haiku_package` et installation conforme des licences dans `data/licenses` (`Apache License Version 2.0` / `Apache v2`) pour valider les règles de conformité Haiku.
+      - Découplage du packaging HPKG : suppression du hook intrusif `POST_BUILD` sur l'exécutable `BentoPack`, remplacement par une cible dédiée `haiku_package` et installation conforme des licences dans `data/licenses` (`Apache License Version 2.0` / `Apache v2`) pour valider les règles de conformité Haiku.
     - Exécution automatisée de `ctest --output-on-failure --verbose` sur l'ensemble des cibles avec 100% de succès.
 
 - **Automatisation Intégrale des Releases GitHub (Multiplateforme) — ✅ TERMINÉ :**
@@ -1567,9 +1567,9 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 4. **Étape 7 — Empaquetage Avancé MaxRects (M6) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
    - *Objectif :* Atteindre une densité d'atlas comparable à TexturePacker pour minimiser la VRAM en production.
    - *Livrables :* Algorithmes *Best Short Side Fit* (BSSF) et *Best Area Fit* (BAF), padding anti-saignement, extrusion de bordure (1 px), déduplication des frames identiques et dialogue interactif dans l'IHM.
-5. **Étape 8 — Outil en Ligne de Commande Headless (M-CLI / `spritestudio-cli`) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
-   - *Objectif :* Intégrer SpriteStudio dans les chaînes de compilation automatisées (CI/CD) des studios pros en fournissant un drop-in replacement 100% compatible avec TexturePacker, une compatibilité avec la CLI Aseprite (`aseprite -b`) et un pipeline natif Godot 4.
-   - *Livrables :* Binaire autonome `spritestudio-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`), dispatcher multi-saveurs, support complet des arguments TexturePacker (`--sheet`, `--data`, `--format`, `--opt`, `--trim-mode`, `--extrude`, etc.), options Aseprite (`-b`, `--list-tags`, `--sheet-type`), génération directe de ressources Godot 4 `.tres` (avec préservation des UIDs et marges de pivots), sous-commandes natives (`pack`, `slice`, `filter`, `ssp`), codes de sortie POSIX et sortie JSON structurée (`--json`).
+5. **Étape 8 — Outil en Ligne de Commande Headless (M-CLI / `bentopack-cli`) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
+   - *Objectif :* Intégrer BentoPack dans les chaînes de compilation automatisées (CI/CD) des studios pros en fournissant un drop-in replacement 100% compatible avec TexturePacker, une compatibilité avec la CLI Aseprite (`aseprite -b`) et un pipeline natif Godot 4.
+   - *Livrables :* Binaire autonome `bentopack-cli` sans serveur d'affichage (`QT_QPA_PLATFORM=offscreen`), dispatcher multi-saveurs, support complet des arguments TexturePacker (`--sheet`, `--data`, `--format`, `--opt`, `--trim-mode`, `--extrude`, etc.), options Aseprite (`-b`, `--list-tags`, `--sheet-type`), génération directe de ressources Godot 4 `.tres` (avec préservation des UIDs et marges de pivots), sous-commandes natives (`pack`, `slice`, `filter`, `ssp`), codes de sortie POSIX et sortie JSON structurée (`--json`).
 
 ---
 
@@ -1588,8 +1588,8 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 
 ### 🧩 Phase D — Modularité Dynamique & Écosystème d'Extensions — 🟢 100% CLÔTURÉE
 9. **Étape 12 — Architecture Dynamique de Plugins Qt6 & SDK Tiers (M11) — ✅ TERMINÉ & VALIDÉ (100% CTest) :**
-   - *Objectif :* Découpler le cœur de l'application et ouvrir SpriteStudio aux extensions communautaires sans recompilation du binaire principal.
-   - *Livrables :* Transformation de `SpriteStudioCore` en bibliothèque partagée (`libSpriteStudioCore.so`), export des symboles d'API via macro dédiée (`SPRITESTUDIOCORE_EXPORT`), externalisation des 6 extracteurs de formats (`godot`, `unity`, `unreal`, `spritesheet`, `gif`, `json`) et des 9 filtres de traitement (`backgroundremoval`, `despill`, `outline`, `colorswap`, `coloradjust`, `pixelrescale`, `retropalette`, `atlaspacking`, `tightpolygonpacking`), raccourci et entrée de menu dédiée `Tight Polygon Packing (Nesting)...` (`Ctrl+Shift+T`), chargement dynamique multiplateforme via `QPluginLoader`, configuration CMake installable (`SpriteStudioConfig.cmake`), et projets modèles SDK documentés (`examples/sample_filter_plugin`, `examples/sample_extractor_plugin`). 8 suites CTest 100% passées.
+   - *Objectif :* Découpler le cœur de l'application et ouvrir BentoPack aux extensions communautaires sans recompilation du binaire principal.
+   - *Livrables :* Transformation de `BentoPackCore` en bibliothèque partagée (`libBentoPackCore.so`), export des symboles d'API via macro dédiée (`SPRITESTUDIOCORE_EXPORT`), externalisation des 6 extracteurs de formats (`godot`, `unity`, `unreal`, `spritesheet`, `gif`, `json`) et des 9 filtres de traitement (`backgroundremoval`, `despill`, `outline`, `colorswap`, `coloradjust`, `pixelrescale`, `retropalette`, `atlaspacking`, `tightpolygonpacking`), raccourci et entrée de menu dédiée `Tight Polygon Packing (Nesting)...` (`Ctrl+Shift+T`), chargement dynamique multiplateforme via `QPluginLoader`, configuration CMake installable (`BentoPackConfig.cmake`), et projets modèles SDK documentés (`examples/sample_filter_plugin`, `examples/sample_extractor_plugin`). 8 suites CTest 100% passées.
 
 ---
 
@@ -1608,29 +1608,29 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
         - **Export & VRAM :** Configurations par défaut pour les formats cibles (Godot 4, TexturePacker JSON, Unity, Unreal, CSS), formats de texture (PNG, WebP, KTX2), algorithmes de packing (MaxRects, Polygonal, etc.), activation et niveau Zstandard (1–22).
         - **Gestionnaire de Plugins :** Arborescence dédiée pour inspecter tous les filtres (`FilterPlugin`) et extracteurs/codecs (`Extractor`) chargés, détails complets (nom, version, extensions, capacités, raccourcis), ouverture en un clic du dossier plugins et rechargement à chaud (*Hot-Reload* sans redémarrer via `FilterRegistry::rescanPlugins` et `ExtractorRegistry::rescanPlugins`).
         - **Identité Git :** Configuration persistante du nom d'auteur et de l'e-mail de commit, détection en 1 clic de l'identité Git système, diagnostic d'état du moteur LibGit2.
-        - **Mises à Jour Logicielles :** Requête asynchrone non-bloquante vers l'API GitHub Releases (`/repos/oktailb/SpriteStudio/releases/latest`), comparaison de version sémantique via `QVersionNumber`, affichage des notes de version au format Markdown avec liens cliquables, et bouton de redirection directe vers la page de téléchargement GitHub.
+        - **Mises à Jour Logicielles :** Requête asynchrone non-bloquante vers l'API GitHub Releases (`/repos/oktailb/BentoPack/releases/latest`), comparaison de version sémantique via `QVersionNumber`, affichage des notes de version au format Markdown avec liens cliquables, et bouton de redirection directe vers la page de téléchargement GitHub.
 
 ---
 11. **Étape 14 — Intégration aux Écosystèmes & Marchés Moteurs de Jeu (M10 - Godot AssetLib, Unity UPM, Unreal Fab) — 💡 À FAIRE :**
-    - *Objectif :* Éliminer toute friction pour les développeurs en intégrant SpriteStudio directement dans leur environnement de développement quotidien et sur les magasins officiels d'assets.
+    - *Objectif :* Éliminer toute friction pour les développeurs en intégrant BentoPack directement dans leur environnement de développement quotidien et sur les magasins officiels d'assets.
     - *Plan d'Action Détaillé :*
-      - **1. Addon Officiel Godot 4 (`godot-spritestudio-addon`) :**
+      - **1. Addon Officiel Godot 4 (`godot-bentopack-addon`) :**
         - Plugin GDScript pur (zéro dépendance compilée) à soumettre sur la **Godot Asset Library**.
         - `EditorFileSystemImportPlugin` interceptant automatiquement les projets `.ssp` et fichiers d'atlas dans `res://`.
         - Génération automatique des `SpriteFrames` (`.tres`), `AtlasTexture`, et maillages 2D `ArrayMesh` M8.
-        - Synchronisation à chaud (*Live Hot-Reload*) avec le démon `spritestudio-cli --watch`.
-        - Bouton d'accès rapide *"Ouvrir dans SpriteStudio"* dans l'inspecteur Godot 4.
-      - **2. Package Unity UPM (`com.spritestudio.importer`) :**
+        - Synchronisation à chaud (*Live Hot-Reload*) avec le démon `bentopack-cli --watch`.
+        - Bouton d'accès rapide *"Ouvrir dans BentoPack"* dans l'inspecteur Godot 4.
+      - **2. Package Unity UPM (`com.bentopack.importer`) :**
         - Déploiement sur le registre standard communautaire **OpenUPM** et soumission **Unity Asset Store** (catégorie *2D Tools*).
         - `ScriptedImporter` C# prenant en charge `.ssp` et les JSON d'atlas.
         - Injection directe de la géométrie de maillage serré M8 via `Sprite.OverrideGeometry()` (économie de 60-80% de fillrate GPU sans retouche manuelle).
         - Génération automatique des `AnimationClip` cadencés au framerate d'origine.
-      - **3. Plugin Unreal Engine 5 (`SpriteStudio UE5`) :**
+      - **3. Plugin Unreal Engine 5 (`BentoPack UE5`) :**
         - Module C++ avec `UFactory` pour la nouvelle marketplace unifiée d'Epic Games (**Fab**).
         - Création transparente d'assets `UPaperSprite` et `UPaperFlipbook`, interfaçage avec le plugin de référence **PaperZD**.
         - Application des polygones de rendu personnalisés (`RenderGeometry`) pour éliminer l'overdraw de translucidité sous UE5.
       - **4. Commande CLI Dédiée :**
-        - Implémentation de `spritestudio-cli export-engine --target=<godot|unity|unreal>` produisant des bundles clé-en-main.
+        - Implémentation de `bentopack-cli export-engine --target=<godot|unity|unreal>` produisant des bundles clé-en-main.
 
 ---
 
@@ -1694,10 +1694,10 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
         - Stockage des livrables en artefacts privés avec rétention de 90 jours pour distribution aux clients payants et déploiement stores.
         - Étapes de signature de code multiplateforme (Windows Signtool, Apple Developer ID & Notarization).
     - *Watermarking Discret Non Destructif Implémenté :*
-      - **Atlas PNG :** Chunks standards `tEXt` (`Generator: SpriteStudio Community Edition`, `X-SpriteStudio-License: Community-Exemption-Under-1M`, `X-SpriteStudio-Notice: Free for indie/personal use (<1M$ ARR)`). Zéro impact sur les pixels.
-      - **JSON (TexturePacker / Aseprite / Unity / Unreal) :** Blocs `"meta": { "app": "SpriteStudio Community Edition", "license": "Community-Exemption-Under-1M" }`.
-      - **Godot 4 :** Commentaire d'en-tête discret `; Generated by SpriteStudio Community Edition (Free for personal/indie use < 1,000,000$ ARR)`.
-      - **CLI :** Affichage de l'édition courante dans `spritestudio-cli --version`.
+      - **Atlas PNG :** Chunks standards `tEXt` (`Generator: BentoPack Community Edition`, `X-BentoPack-License: Community-Exemption-Under-1M`, `X-BentoPack-Notice: Free for indie/personal use (<1M$ ARR)`). Zéro impact sur les pixels.
+      - **JSON (TexturePacker / Aseprite / Unity / Unreal) :** Blocs `"meta": { "app": "BentoPack Community Edition", "license": "Community-Exemption-Under-1M" }`.
+      - **Godot 4 :** Commentaire d'en-tête discret `; Generated by BentoPack Community Edition (Free for personal/indie use < 1,000,000$ ARR)`.
+      - **CLI :** Affichage de l'édition courante dans `bentopack-cli --version`.
 
 
 ---
@@ -1740,7 +1740,7 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 ---
 
 16. **Étape 19 — Analyse de Faisabilité & Limites d'une Version WebAssembly (M13 - WASM) :**
-    - *Contexte :* Évaluer la viabilité technique d'un portage de SpriteStudio dans le navigateur via WebAssembly (Qt 6 for WebAssembly / Emscripten).
+    - *Contexte :* Évaluer la viabilité technique d'un portage de BentoPack dans le navigateur via WebAssembly (Qt 6 for WebAssembly / Emscripten).
     - *Limites Techniques & Contraintes Majeures :*
       1. **Poids du Binaire & Temps de Chargement Initial :**
          - Le runtime Qt 6 WebAssembly avec les modules Core, Gui, Widgets et Network pèse entre **25 et 40 Mo non compressé** (~12 à 18 Mo compressé gzip/brotli). Ce temps de téléchargement initial dégrade l'expérience utilisateur par rapport à une page web classique.
@@ -1751,7 +1751,7 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
       4. **Performance d'Encodage VRAM :**
          - L'encodage KTX2/Basis Universal en WebAssembly sans instructions SIMD natives multicoeurs est 5x à 10x plus lent que sur CPU natif.
       5. **Non-pertinence du CLI Headless :**
-         - Le binaire console `spritestudio-cli` est conçu pour les serveurs de build et CI/CD locaux ; il n'a aucune utilité dans un contexte de navigateur web.
+         - Le binaire console `bentopack-cli` est conçu pour les serveurs de build et CI/CD locaux ; il n'a aucune utilité dans un contexte de navigateur web.
     - *Recommandation Stratégique :*
       - **Ne pas porter l'intégralité de l'application de bureau en WASM.**
       - **Développer un "Micro-Démonstrateur Web" (Web Showcase) :** Concevoir une interface web ultra-légère (micro-binaire WASM ou TypeScript/Canvas) hébergée sur le site vitrine permettant aux visiteurs de glisser-déposer un sprite pour tester instantanément la découpe automatique, le despill et l'aperçu d'animation, servant d'entonnoir d'acquisition vers la version de bureau complète.
@@ -1763,10 +1763,10 @@ L'ordonnancement des chantiers est articulé en 3 phases progressives pour maxim
 | Risque Identifié | Gravité | Probabilité | Impact Métier & Technique | Stratégie d'Atténuation Adoptée |
 |---|:---:|:---:|---|---|
 | **1. Absence de Pivots (M3)** | **Critique** | **Nulle (Résolu)** | Risque de sautillement d'animation et décalages moteurs de jeu. | **✅ Résolu & Validé :** Système de pivots M3 complet, enveloppe d'animation sans jittering, réticules interactifs atlas et aperçu, exports Godot/JSON/SSP, 100% CTest. |
-| **2. Absence d'Interface CLI** | **Élevée** | **Nulle (Résolu)** | SpriteStudio exclu des pipelines d'intégration continue (CI/CD) des studios pros. | **✅ Résolu & Validé :** Binaire headless autonome `spritestudio-cli` avec mode drop-in TexturePacker, Aseprite et pipeline natif Godot 4. |
+| **2. Absence d'Interface CLI** | **Élevée** | **Nulle (Résolu)** | BentoPack exclu des pipelines d'intégration continue (CI/CD) des studios pros. | **✅ Résolu & Validé :** Binaire headless autonome `bentopack-cli` avec mode drop-in TexturePacker, Aseprite et pipeline natif Godot 4. |
 | **3. Thread-Safety du Modèle (`QPixmap`)** | **Moyenne** | **Nulle (Résolu)** | Instanciation de `QPixmap` hors-thread provoquant des plantages intermittents sous Linux (X11/Wayland) et macOS. | **✅ Résolu & Validé :** Modèle, codecs et commandes 100% migrés sur `QImage` pure en mémoire CPU. |
 | **4. Absence de Formats VRAM (M9)** | **Moyenne** | **Nulle (Résolu)** | Saturation de la mémoire vidéo et goulet d'étranglement de bande passante sur mobile et Switch. | **✅ Résolu & Validé :** Intégration de `basis_universal` (KTX2, UASTC, ETC1S, Zstd) et télémétrie live dans `ExportDialog` et le CLI. |
-| **5. Couplage Monolithique des Filtres & Codecs** | **Moyenne** | **Nulle (Résolu)** | Impossibilité pour les tiers d'étendre les formats ou d'ajouter des filtres sans forker et recompiler l'application entière. | **✅ Résolu & Validé (M11) :** Architecture dynamique `QPluginLoader`, `libSpriteStudioCore` partagée, macro d'export API, CMake package config et exemples SDK. |
+| **5. Couplage Monolithique des Filtres & Codecs** | **Moyenne** | **Nulle (Résolu)** | Impossibilité pour les tiers d'étendre les formats ou d'ajouter des filtres sans forker et recompiler l'application entière. | **✅ Résolu & Validé (M11) :** Architecture dynamique `QPluginLoader`, `libBentoPackCore` partagée, macro d'export API, CMake package config et exemples SDK. |
 | **6. Instabilité Drag & Drop Filmstrip (M15)** | **Critique** | **Nulle (Résolu)** | Perte ou désynchronisation de frames lors de la réorganisation sur la timeline. | **✅ Résolu & Validé (M15) :** Refonte avec `FilmstripListWidget` dédié, drop séquentiel 1D précis, indicateur visuel bleu `#2980b9`, découplage transactionnel sans récursion destructrice et tests unitaires CTest. |
 | **7. Utilisation Illégale par Gros Studios sans Licence** | **Élevée** | **Moyenne** | Perte de revenus B2B auprès des studios générant plus de 1M$ de CA. | **💡 Planifié M-DEVOPS :** Double release CI, watermarking discret non destructif dans les métadonnées et script d'audit de conformité. |
 | **8. Blocage SmartScreen / Gatekeeper à l'Exécution** | **Élevée** | **Élevée (Actuel)** | Rejet des utilisateurs frileux face aux alertes de sécurité des OS au premier lancement. | **💡 Planifié M-DEVOPS :** Signature de code automatisée par CI via Microsoft Trusted Signing (Windows) et Apple Developer ID/Notarization (macOS). |

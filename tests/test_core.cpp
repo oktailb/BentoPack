@@ -950,75 +950,75 @@ void TestCore::testCommandChangePivot()
 
 void TestCore::testLicenseComplianceAndWatermarking()
 {
-    bool isComm = SpriteStudio::LicenseManager::isCommercial();
+    bool isComm = BentoPack::LicenseManager::isCommercial();
 
     // Test both GUI and CLI tool types
-    for (SpriteStudio::ToolType t : {SpriteStudio::ToolType::GUI, SpriteStudio::ToolType::CLI}) {
-        SpriteStudio::LicenseManager::setToolType(t);
-        const QString toolStr = (t == SpriteStudio::ToolType::CLI) ? QStringLiteral("CLI") : QStringLiteral("GUI");
+    for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
+        BentoPack::LicenseManager::setToolType(t);
+        const QString toolStr = (t == BentoPack::ToolType::CLI) ? QStringLiteral("CLI") : QStringLiteral("GUI");
 
         if (isComm) {
             // 1. Commercial Edition assertions
-            QCOMPARE(SpriteStudio::LicenseManager::edition(), SpriteStudio::Edition::Commercial);
-            QCOMPARE(SpriteStudio::LicenseManager::editionName(), QStringLiteral("Commercial Edition"));
+            QCOMPARE(BentoPack::LicenseManager::edition(), BentoPack::Edition::Commercial);
+            QCOMPARE(BentoPack::LicenseManager::editionName(), QStringLiteral("Commercial Edition"));
 
             // 2. Compliance metadata
-            QMap<QString, QString> meta = SpriteStudio::LicenseManager::complianceMetadata();
-            QCOMPARE(meta.value(QStringLiteral("Generator")), QStringLiteral("SpriteStudio %1").arg(toolStr));
-            QCOMPARE(meta.value(QStringLiteral("X-SpriteStudio-Tool")), toolStr);
-            QVERIFY(!meta.contains(QStringLiteral("X-SpriteStudio-License")));
+            QMap<QString, QString> meta = BentoPack::LicenseManager::complianceMetadata();
+            QCOMPARE(meta.value(QStringLiteral("Generator")), QStringLiteral("BentoPack %1").arg(toolStr));
+            QCOMPARE(meta.value(QStringLiteral("X-BentoPack-Tool")), toolStr);
+            QVERIFY(!meta.contains(QStringLiteral("X-BentoPack-License")));
 
             // 3. Image watermarking (clean in commercial)
             QImage testImg(32, 32, QImage::Format_ARGB32_Premultiplied);
             testImg.fill(Qt::blue);
-            SpriteStudio::LicenseManager::applyWatermark(testImg);
-            QCOMPARE(testImg.text(QStringLiteral("Generator")), QStringLiteral("SpriteStudio %1").arg(toolStr));
-            QCOMPARE(testImg.text(QStringLiteral("X-SpriteStudio-Tool")), toolStr);
-            QVERIFY(testImg.text(QStringLiteral("X-SpriteStudio-License")).isEmpty());
+            BentoPack::LicenseManager::applyWatermark(testImg);
+            QCOMPARE(testImg.text(QStringLiteral("Generator")), QStringLiteral("BentoPack %1").arg(toolStr));
+            QCOMPARE(testImg.text(QStringLiteral("X-BentoPack-Tool")), toolStr);
+            QVERIFY(testImg.text(QStringLiteral("X-BentoPack-License")).isEmpty());
 
             // 4. JSON metadata (clean in commercial)
             QJsonObject jsonMeta;
             jsonMeta["version"] = "1.0";
-            SpriteStudio::LicenseManager::applyWatermark(jsonMeta);
-            QCOMPARE(jsonMeta["app"].toString(), QStringLiteral("SpriteStudio %1").arg(toolStr));
+            BentoPack::LicenseManager::applyWatermark(jsonMeta);
+            QCOMPARE(jsonMeta["app"].toString(), QStringLiteral("BentoPack %1").arg(toolStr));
             QCOMPARE(jsonMeta["tool"].toString(), toolStr);
             QVERIFY(!jsonMeta.contains(QStringLiteral("license")));
 
             // 5. Header comment
-            QString header = SpriteStudio::LicenseManager::watermarkHeaderComment();
+            QString header = BentoPack::LicenseManager::watermarkHeaderComment();
             QVERIFY(!header.contains(QStringLiteral("Community Edition")));
         } else {
             // 1. Community Edition assertions
-            QCOMPARE(SpriteStudio::LicenseManager::edition(), SpriteStudio::Edition::Community);
-            QCOMPARE(SpriteStudio::LicenseManager::editionName(), QStringLiteral("Community Edition"));
+            QCOMPARE(BentoPack::LicenseManager::edition(), BentoPack::Edition::Community);
+            QCOMPARE(BentoPack::LicenseManager::editionName(), QStringLiteral("Community Edition"));
 
             // 2. Compliance metadata dictionary
-            QMap<QString, QString> meta = SpriteStudio::LicenseManager::complianceMetadata();
-            QCOMPARE(meta.value(QStringLiteral("Generator")), QStringLiteral("SpriteStudio %1 Community Edition").arg(toolStr));
-            QCOMPARE(meta.value(QStringLiteral("X-SpriteStudio-Tool")), toolStr);
-            QCOMPARE(meta.value(QStringLiteral("X-SpriteStudio-License")), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
+            QMap<QString, QString> meta = BentoPack::LicenseManager::complianceMetadata();
+            QCOMPARE(meta.value(QStringLiteral("Generator")), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
+            QCOMPARE(meta.value(QStringLiteral("X-BentoPack-Tool")), toolStr);
+            QCOMPARE(meta.value(QStringLiteral("X-BentoPack-License")), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
 
             // 3. Image watermarking (PNG tEXt chunk metadata)
             QImage testImg(32, 32, QImage::Format_ARGB32_Premultiplied);
             testImg.fill(Qt::blue);
-            SpriteStudio::LicenseManager::applyWatermark(testImg);
-            QCOMPARE(testImg.text(QStringLiteral("Generator")), QStringLiteral("SpriteStudio %1 Community Edition").arg(toolStr));
-            QCOMPARE(testImg.text(QStringLiteral("X-SpriteStudio-Tool")), toolStr);
-            QCOMPARE(testImg.text(QStringLiteral("X-SpriteStudio-License")), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
-            QVERIFY(testImg.text(QStringLiteral("X-SpriteStudio-Notice")).contains(QStringLiteral("<1M$")));
+            BentoPack::LicenseManager::applyWatermark(testImg);
+            QCOMPARE(testImg.text(QStringLiteral("Generator")), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
+            QCOMPARE(testImg.text(QStringLiteral("X-BentoPack-Tool")), toolStr);
+            QCOMPARE(testImg.text(QStringLiteral("X-BentoPack-License")), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
+            QVERIFY(testImg.text(QStringLiteral("X-BentoPack-Notice")).contains(QStringLiteral("<1M$")));
 
             // 4. JSON metadata watermarking
             QJsonObject jsonMeta;
             jsonMeta["version"] = "1.0";
-            SpriteStudio::LicenseManager::applyWatermark(jsonMeta);
-            QCOMPARE(jsonMeta["app"].toString(), QStringLiteral("SpriteStudio %1 Community Edition").arg(toolStr));
+            BentoPack::LicenseManager::applyWatermark(jsonMeta);
+            QCOMPARE(jsonMeta["app"].toString(), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
             QCOMPARE(jsonMeta["tool"].toString(), toolStr);
             QCOMPARE(jsonMeta["license"].toString(), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
 
             // 5. Header comment
-            QString header = SpriteStudio::LicenseManager::watermarkHeaderComment();
+            QString header = BentoPack::LicenseManager::watermarkHeaderComment();
             QVERIFY(header.contains(QStringLiteral("Community Edition")));
-            if (t == SpriteStudio::ToolType::CLI) {
+            if (t == BentoPack::ToolType::CLI) {
                 QVERIFY(header.contains(QStringLiteral("Commercial CLI Automation")));
             } else {
                 QVERIFY(header.contains(QStringLiteral("Commercial seat license")));
@@ -1029,15 +1029,15 @@ void TestCore::testLicenseComplianceAndWatermarking()
 
 void TestCore::testIntegrityGuardAndForensicWatermarking()
 {
-    bool isComm = SpriteStudio::LicenseManager::isCommercial();
+    bool isComm = BentoPack::LicenseManager::isCommercial();
 
     // 1. Initial integrity verification
-    QCOMPARE(SpriteStudio::IntegrityGuard::isCommercialAuthentic(), isComm);
-    QVERIFY(!SpriteStudio::IntegrityGuard::isTampered());
+    QCOMPARE(BentoPack::IntegrityGuard::isCommercialAuthentic(), isComm);
+    QVERIFY(!BentoPack::IntegrityGuard::isTampered());
 
     // 2. Test steganographic Alpha == 0 pixel watermarking for GUI and CLI
-    for (SpriteStudio::ToolType t : {SpriteStudio::ToolType::GUI, SpriteStudio::ToolType::CLI}) {
-        SpriteStudio::LicenseManager::setToolType(t);
+    for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
+        BentoPack::LicenseManager::setToolType(t);
 
         QImage testImg(16, 16, QImage::Format_ARGB32);
         testImg.fill(Qt::transparent); // initially 0x00000000
@@ -1047,20 +1047,20 @@ void TestCore::testIntegrityGuardAndForensicWatermarking()
             }
         }
 
-        SpriteStudio::IntegrityGuard::applySteganographicWatermark(testImg);
+        BentoPack::IntegrityGuard::applySteganographicWatermark(testImg);
 
         if (isComm) {
             // Commercial: transparent pixels remain clean 0x00000000
             QRgb pTrans = testImg.pixel(0, 0);
             QCOMPARE(qAlpha(pTrans), 0);
-            QCOMPARE(pTrans, SpriteStudio::IntegrityGuard::CLEAN_COMMERCIAL_ALPHA0);
+            QCOMPARE(pTrans, BentoPack::IntegrityGuard::CLEAN_COMMERCIAL_ALPHA0);
         } else {
             // Community: transparent pixels have Alpha == 0 but RGB channels contain:
             // GUI: 'S','S','G' (0x00535347)
             // CLI: 'S','S','C' (0x00535343)
-            QRgb expectedMark = (t == SpriteStudio::ToolType::CLI)
-                ? SpriteStudio::IntegrityGuard::MAGIC_COMMUNITY_CLI_ALPHA0
-                : SpriteStudio::IntegrityGuard::MAGIC_COMMUNITY_GUI_ALPHA0;
+            QRgb expectedMark = (t == BentoPack::ToolType::CLI)
+                ? BentoPack::IntegrityGuard::MAGIC_COMMUNITY_CLI_ALPHA0
+                : BentoPack::IntegrityGuard::MAGIC_COMMUNITY_GUI_ALPHA0;
 
             QRgb pTrans = testImg.pixel(0, 0);
             QCOMPARE(qAlpha(pTrans), 0);
@@ -1072,7 +1072,7 @@ void TestCore::testIntegrityGuardAndForensicWatermarking()
             QCOMPARE(qRed(pCenter), 255);
 
             // Test saving to PNG and reloading
-            QString tmpPng = QDir::temp().filePath(QStringLiteral("test_stego_%1.png").arg(t == SpriteStudio::ToolType::CLI ? "cli" : "gui"));
+            QString tmpPng = QDir::temp().filePath(QStringLiteral("test_stego_%1.png").arg(t == BentoPack::ToolType::CLI ? "cli" : "gui"));
             QVERIFY(testImg.save(tmpPng, "PNG"));
             QImage reloaded(tmpPng);
             QVERIFY(!reloaded.isNull());
@@ -1083,49 +1083,49 @@ void TestCore::testIntegrityGuardAndForensicWatermarking()
 
     // 3. Test Layout Signatures
     QString payload = QStringLiteral("atlas.png:512x512:16");
-    QString sig = SpriteStudio::IntegrityGuard::computeLayoutSignature(payload);
+    QString sig = BentoPack::IntegrityGuard::computeLayoutSignature(payload);
     QVERIFY(!sig.isEmpty());
     if (isComm) {
         QVERIFY(sig.startsWith(QStringLiteral("comm-")));
     } else {
         QCOMPARE(sig, QStringLiteral("community-unverified"));
     }
-    QVERIFY(SpriteStudio::IntegrityGuard::verifyLayoutSignature(payload, sig));
+    QVERIFY(BentoPack::IntegrityGuard::verifyLayoutSignature(payload, sig));
 
     // 4. Test Simulated Tamper Detection for GUI and CLI
-    SpriteStudio::IntegrityGuard::setSimulatedTampered(true);
-    QVERIFY(SpriteStudio::IntegrityGuard::isTampered());
-    QVERIFY(!SpriteStudio::IntegrityGuard::isCommercialAuthentic());
+    BentoPack::IntegrityGuard::setSimulatedTampered(true);
+    QVERIFY(BentoPack::IntegrityGuard::isTampered());
+    QVERIFY(!BentoPack::IntegrityGuard::isCommercialAuthentic());
 
-    for (SpriteStudio::ToolType t : {SpriteStudio::ToolType::GUI, SpriteStudio::ToolType::CLI}) {
-        SpriteStudio::LicenseManager::setToolType(t);
+    for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
+        BentoPack::LicenseManager::setToolType(t);
 
-        QRgb expectedTamperMark = (t == SpriteStudio::ToolType::CLI)
-            ? SpriteStudio::IntegrityGuard::MAGIC_TAMPERED_CLI_ALPHA0
-            : SpriteStudio::IntegrityGuard::MAGIC_TAMPERED_GUI_ALPHA0;
+        QRgb expectedTamperMark = (t == BentoPack::ToolType::CLI)
+            ? BentoPack::IntegrityGuard::MAGIC_TAMPERED_CLI_ALPHA0
+            : BentoPack::IntegrityGuard::MAGIC_TAMPERED_GUI_ALPHA0;
 
         QImage tamperedImg(10, 10, QImage::Format_ARGB32);
         tamperedImg.fill(Qt::transparent);
-        SpriteStudio::IntegrityGuard::applySteganographicWatermark(tamperedImg);
+        BentoPack::IntegrityGuard::applySteganographicWatermark(tamperedImg);
         QCOMPARE(tamperedImg.pixel(0, 0), expectedTamperMark);
 
         // Metadata under tampered mode
         QJsonObject tamperedMeta;
-        SpriteStudio::LicenseManager::applyWatermark(tamperedMeta);
+        BentoPack::LicenseManager::applyWatermark(tamperedMeta);
         QCOMPARE(tamperedMeta.value(QStringLiteral("integrity")).toString(),
                  QStringLiteral("TAMPERED_CIRCUMVENTION_DETECTED"));
         QCOMPARE(tamperedMeta.value(QStringLiteral("signature")).toString(),
                  QStringLiteral("tampered-tamper-detected"));
 
         // Header comment under tampered mode
-        QString tamperedHead = SpriteStudio::LicenseManager::watermarkHeaderComment();
+        QString tamperedHead = BentoPack::LicenseManager::watermarkHeaderComment();
         QVERIFY(tamperedHead.contains(QStringLiteral("Tampered")));
     }
 
     // Reset simulated tamper state and default tool type
-    SpriteStudio::IntegrityGuard::setSimulatedTampered(false);
-    SpriteStudio::LicenseManager::setToolType(SpriteStudio::ToolType::GUI);
-    QVERIFY(!SpriteStudio::IntegrityGuard::isTampered());
+    BentoPack::IntegrityGuard::setSimulatedTampered(false);
+    BentoPack::LicenseManager::setToolType(BentoPack::ToolType::GUI);
+    QVERIFY(!BentoPack::IntegrityGuard::isTampered());
 }
 
 #include <QApplication>

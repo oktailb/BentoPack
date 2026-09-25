@@ -1,0 +1,225 @@
+{
+  "title": {
+    "fr": "Grille Tarifaire & Modèle de Licence",
+    "en": "Pricing & Licensing Model",
+    "ja": "価格とライセンスモデル"
+  },
+  "disclaimer": {
+    "fr": "Les tarifs ci-dessous sont indicatifs.",
+    "en": "The prices below are indicative.",
+    "ja": "以下の価格は目安です。"
+  },
+  "tiers": [
+    {
+      "id": "community",
+      "name": {
+        "fr": "Community Edition (GUI & CLI)",
+        "en": "Community Edition (GUI & CLI)",
+        "ja": "Community Edition（GUI＆CLI）"
+      },
+      "price": {
+        "fr": "0 €",
+        "en": "$0",
+        "ja": "0 円"
+      },
+      "period": {
+        "fr": "Gratuit (< 1M$ CA)",
+        "en": "Free (< $1M revenue)",
+        "ja": "無料（年間売上100万ドル未満）"
+      },
+      "badge": {
+        "fr": "Standard / Évaluation",
+        "en": "Default / Evaluation",
+        "ja": "標準 / 評価用"
+      },
+      "badge_color": "#3b82f6",
+      "target": {
+        "fr": "Étudiants, Hobbyistes, Équipes en amorçage et Studios avec CA annuel < 1 000 000 $ USD",
+        "en": "Students, Hobbyists, Indie teams and Studios with annual revenue < $1,000,000 USD",
+        "ja": "学生、ホビー開発者、シードチーム、年間売上100万ドル未満のスタジオ"
+      },
+      "features": {
+        "fr": [
+          "Moteur complet C++ (découpe de sprites, atlas, animations)",
+          "Interface graphique GUI & CLI headless incluses",
+          "Éditeur de pixels avec palettes rétro (NES, GameBoy, Pico-8...)",
+          "Maillages polygonaux serrés M8 & compression VRAM GPU KTX2",
+          "Exports moteurs (Godot 4, Unity, Unreal Paper2D, TexturePacker)",
+          "Plugins sous licence Plugin Source-Available (seuil 1 000 000 $ USD)"
+        ],
+        "en": [
+          "Complete C++ engine (sprite slicing, atlas packing, animations)",
+          "Desktop GUI & headless CLI included",
+          "Pixel editor with retro palettes (NES, GameBoy, Pico-8...)",
+          "Tight polygonal meshes M8 & GPU VRAM compression KTX2",
+          "Game engine exporters (Godot 4, Unity, Unreal Paper2D, TexturePacker)",
+          "Plugins under Plugin Source-Available License ($1,000,000 USD revenue threshold)"
+        ],
+        "ja": [
+          "完全なC++エンジン（スプライト抽出、アトラス、アニメーション）",
+          "デスクトップGUIおよびヘッドレスCLI付属",
+          "レトロパレット（NES、GameBoy、Pico-8など）対応ピクセルエディタ",
+          "M8密集ポリゴンメッシュ＆GPU VRAM KTX2テクスチャ圧縮",
+          "ゲームエンジン出力（Godot 4、Unity、Unreal Paper2D、TexturePacker）",
+          "Plugin Source-Availableライセンス対象プラグイン（年間売上100万ドル基準）"
+        ]
+      }
+    },
+    {
+      "id": "gui_seat",
+      "name": {
+        "fr": "GUI Commerciale (Poste / Per-Seat)",
+        "en": "Commercial GUI (Per-Seat)",
+        "ja": "商用GUI（1シートライセンス）"
+      },
+      "price": {
+        "fr": "29 €",
+        "en": "$29",
+        "ja": "2 990 円"
+      },
+      "period": {
+        "fr": "Par poste / an",
+        "en": "Per seat / year",
+        "ja": "1シート / 年"
+      },
+      "badge": {
+        "fr": "Poste Graphiste / Dev",
+        "en": "Per-Seat License",
+        "ja": "個別シート"
+      },
+      "badge_color": "#10b981",
+      "target": {
+        "fr": "Graphistes, animateurs et développeurs indépendants ou en studio utilisant l'interface graphique",
+        "en": "Artists, animators and developers using the desktop graphical editor",
+        "ja": "デスクトップGUIエディタを使用するアーティスト、アニメーター、個別開発者"
+      },
+      "features": {
+        "fr": [
+          "Licence commerciale certifiée pour 1 poste utilisateur (GUI)",
+          "Exports GUI 100% propres sans aucun tag ni filigrane stéganographique",
+          "Mises à jour prioritaires et accès à toutes les fonctionnalités de l'éditeur",
+          "Installeur officiel signé numériquement (sans avertissement de sécurité)",
+          "Utilisation commerciale sans restriction de chiffre d'affaires"
+        ],
+        "en": [
+          "Certified commercial license for 1 user workstation (GUI)",
+          "100% clean GUI exports without tags or steganographic watermarks",
+          "Priority updates and full access to desktop editor features",
+          "Official digitally-signed installer (no security warnings)",
+          "Commercial use with no revenue restrictions"
+        ],
+        "ja": [
+          "1ユーザー作業環境向けの認定商用ライセンス（GUI）",
+          "タグや透かしのない100%クリーンなGUIエクスポート",
+          "優先アップデートおよびデスクトップ機能へのフルアクセス",
+          "公式デジタル署名済みインストーラー（警告なし）",
+          "売上制限なしの商用利用"
+        ]
+      }
+    },
+    {
+      "id": "cli_pipeline",
+      "name": {
+        "fr": "CLI Pipeline Automation (CI/CD)",
+        "en": "CLI Automation Pipeline (CI/CD)",
+        "ja": "CLIパイプライン自動化（CI/CD）"
+      },
+      "price": {
+        "fr": "149 €",
+        "en": "$149",
+        "ja": "14 900 円"
+      },
+      "period": {
+        "fr": "Par runner CI / an",
+        "en": "Per CI runner / year",
+        "ja": "CIランナー / 年"
+      },
+      "badge": {
+        "fr": "CI / CD Build",
+        "en": "CI / CD Build",
+        "ja": "CI/CDビルド"
+      },
+      "badge_color": "#f59e0b",
+      "target": {
+        "fr": "Serveurs d'intégration continue (GitHub Actions, GitLab CI, Jenkins, pipelines de build automatisés)",
+        "en": "Continuous Integration servers (GitHub Actions, GitLab CI, Jenkins, automated build pipelines)",
+        "ja": "CI/CDサーバー（GitHub Actions、GitLab CI、Jenkins、自動ビルド環境）"
+      },
+      "features": {
+        "fr": [
+          "Binaire headless bentopack-cli certifié pour l'automatisation en production",
+          "Exports CI 100% propres sans tag ni filigrane stéganographique CLI",
+          "Génération d'atlas et de spritesheets en quelques secondes sur machine de build",
+          "Support complet du mode batch, arguments CLI et sorties JSON pour scripts",
+          "Idéal pour automatiser la génération d'assets dans les dépôts Git d'équipe"
+        ],
+        "en": [
+          "Headless bentopack-cli binary certified for production build automation",
+          "100% clean CI exports without tags or steganographic CLI watermarks",
+          "Atlas and spritesheet generation in seconds on build machines",
+          "Full support for batch packing, CLI flags and JSON output for pipeline scripts",
+          "Ideal for automating asset packing directly in team Git repositories"
+        ],
+        "ja": [
+          "本番ビルド自動化向けに認定されたヘッドレスbentopack-cliバイナリ",
+          "タグやCLI透かしのない100%クリーンなCIエクスポート",
+          "ビルドサーバー上での高速アトラス・スプライトシート一括生成",
+          "バッチ処理、CLIフラグ、スクリプト連携用JSON出力の完全サポート",
+          "チームのGitリポジトリにおけるアセット自動生成に最適"
+        ]
+      }
+    },
+    {
+      "id": "enterprise",
+      "name": {
+        "fr": "Studio Entreprise (Site Illimité)",
+        "en": "Studio Enterprise (Site Unlimited)",
+        "ja": "スタジオ企業向け（サイト内無制限）"
+      },
+      "price": {
+        "fr": "499 €",
+        "en": "$499",
+        "ja": "59 000 円"
+      },
+      "period": {
+        "fr": "Par an / Studio illimité",
+        "en": "Per year / Unlimited Studio",
+        "ja": "年間 / スタジオ無制限"
+      },
+      "badge": {
+        "fr": "Studio & Entreprise",
+        "en": "Studio & Enterprise",
+        "ja": "スタジオ一括"
+      },
+      "badge_color": "#8b5cf6",
+      "target": {
+        "fr": "Studios de jeux et entreprises (postes GUI illimités + runners CLI illimités, CA > 1 000 000 $)",
+        "en": "Game studios and enterprises (unlimited GUI seats + unlimited CI runners, revenue > $1,000,000)",
+        "ja": "ゲームスタジオおよび法人（GUIシート無制限＋CIランナー無制限、売上100万ドル以上対応）"
+      },
+      "features": {
+        "fr": [
+          "Postes GUI illimités pour tous les graphistes, animateurs et développeurs du studio",
+          "Utilisation illimitée du binaire bentopack-cli sur tous vos serveurs et runners CI/CD",
+          "Exports GUI et CLI 100% propres sans aucun tag ni filigrane stéganographique",
+          "Licence commerciale conforme aux exigences contractuelles pour CA > 1 000 000 $ USD",
+          "Accès direct au support des mainteneurs et garanties de délai (SLA)"
+        ],
+        "en": [
+          "Unlimited GUI seats for all artists, animators, and developers in the studio",
+          "Unlimited use of bentopack-cli across all your CI/CD build servers and runners",
+          "100% clean GUI & CLI exports without tags or steganographic watermarks",
+          "Commercial license compliant with contractual terms for revenue > $1,000,000 USD",
+          "Direct access to maintainer support with SLA guarantees"
+        ],
+        "ja": [
+          "スタジオ内の全アーティスト、アニメーター、開発者向けGUIシート無制限",
+          "全CI/CDビルドサーバー・ランナーでのbentopack-cli無制限利用",
+          "タグや透かしのない100%クリーンなGUI＆CLIエクスポート",
+          "年間売上100万ドル以上の法人要件に準拠した商用ライセンス",
+          "メンテナーへの直接サポートおよびSLA保証"
+        ]
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-// This file is part of the SpriteStudio Plugins.
+// This file is part of the BentoPack Plugins.
 // It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
@@ -445,7 +445,7 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     setProgress(60);
 
-    SpriteStudio::LicenseManager::applyWatermark(packResult.atlas);
+    BentoPack::LicenseManager::applyWatermark(packResult.atlas);
 
     bool saveOk = false;
     if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
@@ -484,7 +484,7 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     }
 
     QTextStream out(&outFile);
-    out << SpriteStudio::LicenseManager::watermarkHeaderComment();
+    out << BentoPack::LicenseManager::watermarkHeaderComment();
 
     // Resolve Godot 4 UID
     QString uid = options.extraParams.value(QStringLiteral("godot_uid")).toString();

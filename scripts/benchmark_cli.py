@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 benchmark_cli.py
-Automated validation, benchmarking, and tracking suite for SpriteStudio CLI (spritestudio-cli).
+Automated validation, benchmarking, and tracking suite for BentoPack CLI (bentopack-cli).
 Executes 24 formal scenarios covering:
 - Drop-in TexturePacker emulation (MaxRects heuristics, POT, padding, extrusion, trim, auto-alias)
 - Aseprite batch mode (-b, layouts, frameTags)
@@ -37,20 +37,25 @@ REPORT_PATH = os.path.join(BENCHMARK_DIR, "REPORT.md")
 # ----------------------------------------------------------------------
 def find_cli_binary():
     candidates = [
-        os.path.join(ROOT_DIR, "build", "Desktop_Qt_6_10_2_MinGW_64_bit-Debug", "bin", "spritestudio-cli.exe"),
-        os.path.join(ROOT_DIR, "build", "Desktop_Qt_6_10_2_MinGW_64_bit-Release", "bin", "spritestudio-cli.exe"),
-        os.path.join(ROOT_DIR, "build", "bin", "spritestudio-cli.exe"),
-        os.path.join(ROOT_DIR, "build", "spritestudio-cli.exe"),
-        os.path.join(ROOT_DIR, "build", "bin", "spritestudio-cli"),
-        os.path.join(ROOT_DIR, "build", "spritestudio-cli"),
+        os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "build", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli"),
+        os.path.join(ROOT_DIR, "build", "bentopack-cli"),
+        os.path.join(ROOT_DIR, "build", "Desktop_Qt_6_10_2_MinGW_64_bit-Debug", "bin", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "build", "Desktop_Qt_6_10_2_MinGW_64_bit-Release", "bin", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "build", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli"),
+        os.path.join(ROOT_DIR, "build", "bentopack-cli"),
     ]
     for c in candidates:
         if os.path.isfile(c) and os.access(c, os.X_OK):
             return os.path.abspath(c)
     # Check PATH
-    which_cli = shutil.which("spritestudio-cli")
-    if which_cli:
-        return which_cli
+    for b in ["bentopack-cli", "bentopack-cli"]:
+        which_cli = shutil.which(b)
+        if which_cli:
+            return which_cli
     return None
 
 def get_git_info():
@@ -99,7 +104,7 @@ def execute_benchmarks(cli_bin):
         print(f"  {status_sym:<6} | {name:<32} | {round(duration_ms, 1):>7} ms | {details}")
 
     print("\n" + "=" * 80)
-    print(f"Running SpriteStudio CLI Benchmarks with: {cli_bin}")
+    print(f"Running BentoPack CLI Benchmarks with: {cli_bin}")
     print("=" * 80)
 
     # 1. TP_MaxRects_BSSF
@@ -466,7 +471,7 @@ def generate_report(results, cli_bin):
 
     # Build Markdown Report
     lines = []
-    lines.append("# Rapport Formel d'Évaluation & de Performance CLI (`spritestudio-cli`)\n")
+    lines.append("# Rapport Formel d'Évaluation & de Performance CLI (`bentopack-cli`)\n")
     lines.append(f"> **Date du Rapport :** {now_str}  ")
     lines.append(f"> **Version Git :** `{commit}` (branche `{branch}`)  ")
     lines.append(f"> **Binaire Testé :** `{cli_bin}`  ")
@@ -527,7 +532,7 @@ def generate_report(results, cli_bin):
 def main():
     cli_bin = find_cli_binary()
     if not cli_bin:
-        print("[ERROR] Could not find spritestudio-cli binary. Please compile the project first.")
+        print("[ERROR] Could not find bentopack-cli binary. Please compile the project first.")
         sys.exit(1)
 
     # Ensure dataset is generated

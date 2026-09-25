@@ -765,10 +765,10 @@ TRANSLATIONS = {
         }
     },
     "PixelEditorDialog": {
-        "Pixel Editor — SpriteStudio": {
-            "fr_FR": "Éditeur de pixels — SpriteStudio",
-            "en_US": "Pixel Editor — SpriteStudio",
-            "ja_JA": "ピクセルエディタ — SpriteStudio"
+        "Pixel Editor — BentoPack": {
+            "fr_FR": "Éditeur de pixels — BentoPack",
+            "en_US": "Pixel Editor — BentoPack",
+            "ja_JA": "ピクセルエディタ — BentoPack"
         },
         "◀ Previous Frame": {
             "fr_FR": "◀ Frame précédente",
@@ -2768,10 +2768,10 @@ TRANSLATIONS = {
 }
 
 # Alias for namespaced context
-TRANSLATIONS["SpriteStudioWidgets::PolygonMeshDialog"] = TRANSLATIONS["PolygonMeshDialog"]
+TRANSLATIONS["BentoPackWidgets::PolygonMeshDialog"] = TRANSLATIONS["PolygonMeshDialog"]
 
 def update_file(lang):
-    filepath = f"SpriteStudio/i18n/sprite_studio_{lang}.ts"
+    filepath = f"BentoPack/i18n/bentopack_{lang}.ts"
     tree = ET.parse(filepath)
     root = tree.getroot()
 
@@ -2847,7 +2847,7 @@ if __name__ == "__main__":
         lrel = shutil.which(lrel)
     if lrel:
         for l in ["fr_FR", "en_US", "ja_JA"]:
-            ts_path = f"SpriteStudio/i18n/sprite_studio_{l}.ts"
-            qm_path = f"SpriteStudio/i18n/sprite_studio_{l}.qm"
+            ts_path = f"BentoPack/i18n/bentopack_{l}.ts"
+            qm_path = f"BentoPack/i18n/bentopack_{l}.qm"
             subprocess.run([lrel, ts_path, "-qm", qm_path], check=True)
             print(f"[{l}] Compiled binary QM: {qm_path}")

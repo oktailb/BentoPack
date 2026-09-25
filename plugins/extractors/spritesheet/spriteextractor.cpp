@@ -1,4 +1,4 @@
-// This file is part of the SpriteStudio Plugins.
+// This file is part of the BentoPack Plugins.
 // It is subject to the license terms in the LICENSE-PLUGINS.md file found in the plugins directory.
 // Commercial use for entities exceeding $1M USD gross revenue requires a separate commercial license.
 
@@ -82,7 +82,7 @@ bool SpriteExtractor::write(const QString &filePath, const SpriteDocument &inDoc
     if (format.isEmpty()) format = QStringLiteral("PNG");
 
     QImage atlasToSave = inDoc.atlas();
-    SpriteStudio::LicenseManager::applyWatermark(atlasToSave);
+    BentoPack::LicenseManager::applyWatermark(atlasToSave);
 
     if (!atlasToSave.save(filePath, format.toLatin1().constData())) {
         if (error) {

@@ -29,6 +29,7 @@ private slots:
     void testSessionManagerStartAndLock();
     void testZipPackingAndUnpacking();
     void testAtomicSaveSessionToSsp();
+    void testBentoPackSaveAndLoadRoundtrip();
     void testCrashDetectionAndDiscard();
     void testProjectSerializationFidelity();
     void testProjectManagerSessionDir();
@@ -61,7 +62,7 @@ void TestProject::testSessionManagerStartAndLock()
     SessionManager session;
     QVERIFY(!session.hasActiveSession());
 
-    QString origFile = m_tempDir.filePath("test_orig.ssp");
+    QString origFile = m_tempDir.filePath("test_orig.bento");
     QVERIFY(session.startNewSession(origFile));
     QVERIFY(session.hasActiveSession());
     QVERIFY(!session.currentSessionDir().isEmpty());
@@ -94,7 +95,7 @@ void TestProject::testZipPackingAndUnpacking()
 
     QFile file1(srcDir + "/file1.txt");
     QVERIFY(file1.open(QIODevice::WriteOnly));
-    file1.write("Hello SpriteStudio");
+    file1.write("Hello BentoPack");
     file1.close();
 
     QFile file2(srcDir + "/sub/file2.txt");
@@ -112,7 +113,7 @@ void TestProject::testZipPackingAndUnpacking()
 
     QFile read1(dstDir + "/file1.txt");
     QVERIFY(read1.open(QIODevice::ReadOnly));
-    QCOMPARE(read1.readAll(), QByteArray("Hello SpriteStudio"));
+    QCOMPARE(read1.readAll(), QByteArray("Hello BentoPack"));
     read1.close();
 
     QFile read2(dstDir + "/sub/file2.txt");
@@ -129,10 +130,10 @@ void TestProject::testAtomicSaveSessionToSsp()
     // Put a dummy file into session workspace
     QFile pj(session.sessionProjectJsonPath());
     QVERIFY(pj.open(QIODevice::WriteOnly));
-    pj.write("{\"format\":\"SpriteStudioProject\"}");
+    pj.write("{\"format\":\"BentoPackProject\"}");
     pj.close();
 
-    QString targetSsp = m_tempDir.filePath("saved_project.ssp");
+    QString targetSsp = m_tempDir.filePath("saved_project.bento");
     QString errorMsg;
     QVERIFY2(session.saveSessionToSsp(targetSsp, &errorMsg), qPrintable(errorMsg));
     QVERIFY(QFile::exists(targetSsp));
@@ -144,6 +145,38 @@ void TestProject::testAtomicSaveSessionToSsp()
     QVERIFY(!QFile::exists(targetSsp + ".tmp")); // Temporary file should be cleanly renamed
 
     session.closeCurrentSession(true);
+}
+
+void TestProject::testBentoPackSaveAndLoadRoundtrip()
+{
+    SessionManager session;
+    QVERIFY(session.startNewSession());
+
+    QFile pj(session.sessionProjectJsonPath());
+    QVERIFY(pj.open(QIODevice::WriteOnly));
+    pj.write("{\"format\":\"BentoPackProject\",\"generator\":\"BentoPack\"}");
+    pj.close();
+
+    QString targetBento = m_tempDir.filePath("saved_project.bento");
+    QString errorMsg;
+    QVERIFY2(session.saveSessionToBento(targetBento, &errorMsg), qPrintable(errorMsg));
+    QVERIFY(QFile::exists(targetBento));
+    QCOMPARE(session.currentOriginalFilePath(), targetBento);
+
+    session.closeCurrentSession(true);
+
+    // Now open from .bento
+    SessionManager session2;
+    QVERIFY2(session2.openSessionFromBento(targetBento, &errorMsg), qPrintable(errorMsg));
+    QVERIFY(QFile::exists(session2.sessionProjectJsonPath()));
+
+    QFile readPj(session2.sessionProjectJsonPath());
+    QVERIFY(readPj.open(QIODevice::ReadOnly));
+    QByteArray content = readPj.readAll();
+    readPj.close();
+    QVERIFY(content.contains("BentoPackProject"));
+
+    session2.closeCurrentSession(true);
 }
 
 void TestProject::testCrashDetectionAndDiscard()
@@ -160,7 +193,7 @@ void TestProject::testCrashDetectionAndDiscard()
     QJsonObject obj;
     obj["pid"] = 99999999;
     obj["sessionUuid"] = "fake_crashed_session_uuid";
-    obj["originalFilePath"] = "c:/crashed/game_hero.ssp";
+    obj["originalFilePath"] = "c:/crashed/game_hero.bento";
     obj["status"] = "active";
     obj["created"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODateWithMs);
     obj["lastModified"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODateWithMs);
@@ -172,7 +205,7 @@ void TestProject::testCrashDetectionAndDiscard()
     for (const auto &info : orphans) {
         if (info.sessionDir == fakeOrphanDir) {
             found = true;
-            QCOMPARE(info.projectName, QStringLiteral("game_hero.ssp"));
+            QCOMPARE(info.projectName, QStringLiteral("game_hero.bento"));
             break;
         }
     }
@@ -191,7 +224,7 @@ void TestProject::testCrashDetectionAndDiscard()
 void TestProject::testProjectSerializationFidelity()
 {
     SpriteDocument doc;
-    doc.setFilePath("test_project.ssp");
+    doc.setFilePath("test_project.bento");
 
     // Create 64x64 colored atlas
     QImage atlas(64, 64, QImage::Format_ARGB32);
@@ -303,7 +336,7 @@ void TestProject::testProjectControllerWorkflow()
     QVERIFY(controller.isProjectModified());
 
     // Save project
-    QString sspFile = m_tempDir.filePath("controller_project.ssp");
+    QString sspFile = m_tempDir.filePath("controller_project.bento");
     QString errorMsg;
     QVERIFY2(controller.saveProject(sspFile, &errorMsg), qPrintable(errorMsg));
     QVERIFY(!controller.isProjectModified());
@@ -328,7 +361,7 @@ void TestProject::testRecentProjects()
     controller.clearRecentProjects();
     QVERIFY(controller.recentProjects().isEmpty());
 
-    QString dummyProj = m_tempDir.filePath("recent_test.ssp");
+    QString dummyProj = m_tempDir.filePath("recent_test.bento");
     QFile f(dummyProj);
     QVERIFY(f.open(QIODevice::WriteOnly));
     f.write("test");
@@ -410,7 +443,7 @@ void TestProject::testGitSavedInSsp()
 
     undoStack.push(new AddSliceCommand(&doc, QRect(0, 0, 32, 32)));
 
-    QString sspPath = m_tempDir.filePath("git_project.ssp");
+    QString sspPath = m_tempDir.filePath("git_project.bento");
     QVERIFY(controller.saveProject(sspPath));
 
     // Verify loading the saved project preserves the git log
@@ -520,7 +553,7 @@ void TestProject::testGitConfigSettingsPersistence()
     cfg.setConfigFilePath(testCfgPath);
 
     cfg.git().authorName = QStringLiteral("Alice Tester");
-    cfg.git().authorEmail = QStringLiteral("alice@spritestudio.test");
+    cfg.git().authorEmail = QStringLiteral("alice@bentopack.test");
     QVERIFY(cfg.save());
 
     // Reset and reload
@@ -529,7 +562,7 @@ void TestProject::testGitConfigSettingsPersistence()
 
     QVERIFY(cfg.load());
     QCOMPARE(cfg.git().authorName, QStringLiteral("Alice Tester"));
-    QCOMPARE(cfg.git().authorEmail, QStringLiteral("alice@spritestudio.test"));
+    QCOMPARE(cfg.git().authorEmail, QStringLiteral("alice@bentopack.test"));
 
     // Clean up custom path
     cfg.setConfigFilePath(QString());
@@ -546,7 +579,7 @@ void TestProject::testGitAuthorIdentityInCommits()
     QCOMPARE(session.authorName(), QStringLiteral("Bob SpriteMaker"));
     QCOMPARE(session.authorEmail(), QStringLiteral("bob@pixelart.org"));
 
-    QVERIFY(session.startNewSession(m_tempDir.filePath("custom_author.ssp")));
+    QVERIFY(session.startNewSession(m_tempDir.filePath("custom_author.bento")));
 
     // Write a dummy file to commit
     QFile f(session.sessionProjectJsonPath());

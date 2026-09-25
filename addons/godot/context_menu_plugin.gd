@@ -1,8 +1,8 @@
 @tool
-class_name SpriteStudioContextMenuPlugin
+class_name BentoPackContextMenuPlugin
 extends EditorContextMenuPlugin
 
-## Editor Context Menu Plugin for SpriteStudio.
+## Editor Context Menu Plugin for BentoPack.
 ## Adds 1-click actions to the Godot FileSystem dock for images (.png, .webp, .jpg) and projects (.ssp).
 
 var _plugin: EditorPlugin
@@ -25,17 +25,17 @@ func _popup_menu(paths: PackedStringArray) -> void:
 			has_image = true
 			if target_image.is_empty():
 				target_image = p
-		elif ext == "ssp":
+		elif ext in ["ssp", "bento"]:
 			has_ssp = true
 			if target_ssp.is_empty():
 				target_ssp = p
 
 	if has_image:
-		add_context_menu_item("⚡ SpriteStudio: Auto-Slice & Générer Scène", _on_auto_slice.bind(target_image))
-		add_context_menu_item("🔧 SpriteStudio: Configurer dans le Dock", _on_open_in_dock.bind(target_image))
+		add_context_menu_item("⚡ BentoPack: Auto-Slice & Générer Scène", _on_auto_slice.bind(target_image))
+		add_context_menu_item("🔧 BentoPack: Configurer dans le Dock", _on_open_in_dock.bind(target_image))
 
 	if has_ssp:
-		add_context_menu_item("🎨 SpriteStudio: Ouvrir dans l'éditeur Desktop", _on_open_in_desktop.bind(target_ssp))
+		add_context_menu_item("🎨 BentoPack: Ouvrir dans l'éditeur Desktop", _on_open_in_desktop.bind(target_ssp))
 
 func _on_auto_slice(arg1: Variant = null, arg2: Variant = null) -> void:
 	var path: String = ""
@@ -49,22 +49,22 @@ func _on_auto_slice(arg1: Variant = null, arg2: Variant = null) -> void:
 	if path.is_empty():
 		return
 
-	var target_ssp := path.get_basename() + ".ssp"
+	var target_ssp := path.get_basename() + ".bento"
 	var global_src := ProjectSettings.globalize_path(path)
 	var global_target := ProjectSettings.globalize_path(target_ssp)
 
 	var cli_args: Array[String] = ["slice", "--output-project", global_target, global_src]
-	var res := SpriteStudioCliBridge.run_cli(cli_args)
+	var res := BentoPackCliBridge.run_cli(cli_args)
 
 	if res.get("success", false):
-		print("[SpriteStudio] Auto-Slice réussi pour %s -> %s" % [path.get_file(), target_ssp.get_file()])
+		print("[BentoPack] Auto-Slice réussi pour %s -> %s" % [path.get_file(), target_ssp.get_file()])
 		if Engine.is_editor_hint():
 			EditorInterface.get_resource_filesystem().scan()
 	else:
 		var err: String = res.get("error", "Échec de l'exécution CLI")
-		push_error("[SpriteStudio] Auto-Slice a échoué: " + err)
+		push_error("[BentoPack] Auto-Slice a échoué: " + err)
 		if Engine.is_editor_hint():
-			OS.alert("Échec de l'Auto-Slice pour " + path.get_file() + "\n" + err, "SpriteStudio")
+			OS.alert("Échec de l'Auto-Slice pour " + path.get_file() + "\n" + err, "BentoPack")
 
 func _on_open_in_dock(arg1: Variant = null, arg2: Variant = null) -> void:
 	var path: String = ""
@@ -89,4 +89,4 @@ func _on_open_in_desktop(arg1: Variant = null, arg2: Variant = null) -> void:
 		path = (arg1 as PackedStringArray)[0]
 
 	if not path.is_empty():
-		SpriteStudioCliBridge.open_in_editor(path)
+		BentoPackCliBridge.open_in_editor(path)

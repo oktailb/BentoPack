@@ -1,3 +1,3 @@
 @echo off
-rem Transparent drop-in wrapper for TexturePacker using SpriteStudio CLI
-spritestudio-cli.exe --flavor tp %*
+rem Transparent drop-in wrapper for TexturePacker using BentoPack CLI
+bentopack-cli.exe --flavor tp %*

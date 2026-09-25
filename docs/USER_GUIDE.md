@@ -1,6 +1,6 @@
-# 📖 Manuel de l'Utilisateur — SpriteStudio
+# 📖 Manuel de l'Utilisateur — BentoPack
 
-Bienvenue dans le manuel d'utilisation officiel de **SpriteStudio**, l'atelier tout-en-un pour la préparation, la retouche chirurgicale, le séquençage d'animations et l'exportation optimisée de planches de sprites 2D pour le jeu vidéo et le pixel art.
+Bienvenue dans le manuel d'utilisation officiel de **BentoPack** (anciennement BentoPack), l'atelier tout-en-un pour la préparation, la retouche chirurgicale, le séquençage d'animations et l'exportation optimisée de planches de sprites 2D pour le jeu vidéo et le pixel art.
 
 ---
 
@@ -13,16 +13,16 @@ Bienvenue dans le manuel d'utilisation officiel de **SpriteStudio**, l'atelier t
 6. [Empaquetage d'Atlas MaxRects (Compacité Optimale)](#6-empaquetage-datlas-maxrects-compacité-optimale)
 7. [Empaquetage Polygonal & Maillages Serrés (Tight Mesh)](#7-empaquetage-polygonal--maillages-serrés-tight-mesh)
 8. [Atelier d'Édition Pixel par Pixel Chirurgicale](#8-atelier-dédition-pixel-par-pixel-chirurgicale)
-9. [Format de Projet Natif (`.ssp`) & Voyage dans le Temps Git](#9-format-de-projet-natif-ssp--voyage-dans-le-temps-git)
+9. [Format de Projet Natif (`.bento` / `.ssp`) & Voyage dans le Temps Git](#9-format-de-projet-natif-bento--ssp--voyage-dans-le-temps-git)
 10. [Exportations Multi-Moteurs (Godot, Unity, Unreal, JSON)](#10-exportations-multi-moteurs-godot-unity-unreal-json)
-11. [Automatisation en Ligne de Commande (`spritestudio-cli`)](#11-automatisation-en-ligne-de-commande-spritestudio-cli)
+11. [Automatisation en Ligne de Commande (`bentopack-cli`)](#11-automatisation-en-ligne-de-commande-bentopack-cli)
 12. [Mémento des Raccourcis Clavier](#12-mémento-des-raccourcis-clavier)
 
 ---
 
 ## 1. Prise en Main & Interface Principale
 
-L'interface de SpriteStudio est conçue pour maximiser l'espace de travail visuel tout en maintenant les outils de précision accessibles.
+L'interface de BentoPack est conçue pour maximiser l'espace de travail visuel tout en maintenant les outils de précision accessibles.
 
 ![Vue d'Ensemble de l'Interface Principale](screenshots/01_main_window_overview.webp)
 
@@ -182,7 +182,7 @@ Sur smartphone, Nintendo Switch ou consoles portables, l'overdraw GPU (coût de 
 
 ## 8. Atelier d'Édition Pixel par Pixel Chirurgicale
 
-Corrigez rapidement un pixel mal placé, un artefact oublié ou harmonisez une couleur sans quitter SpriteStudio. Raccourci : `Ctrl+E` ou clic droit sur une frame > *Éditer les pixels...*.
+Corrigez rapidement un pixel mal placé, un artefact oublié ou harmonisez une couleur sans quitter BentoPack. Raccourci : `Ctrl+E` ou clic droit sur une frame > *Éditer les pixels...*.
 
 ![Atelier d'Édition Pixel par Pixel](screenshots/09_pixel_editor_dialog.webp)
 
@@ -213,7 +213,7 @@ Sauvegardez l'intégralité de votre travail (atlas original, découpes, pivots,
 ![Historique Git Intégré et Time-Travel Dock](screenshots/10_git_history_dock.webp)
 
 ### Sécurité & Tolérance aux Pannes :
-- **Format `.ssp` (Sprite Studio Project) :** Archive ZIP compressée (moteur autonome `miniz`) contenant l'atlas haute fidélité, le fichier descripteur `project.json` et les snapshots.
+- **Format `.bento` / `.ssp` (BentoPack Project) :** Archive ZIP compressée (moteur autonome `miniz`) contenant l'atlas haute fidélité, le fichier descripteur `project.json` et les snapshots.
 - **Écriture Atomique & Verrou de Concurrence :** Empêche la corruption en cas de coupure de courant ou d'accès simultané.
 - **Restauration Après Crash (*Crash Recovery*) :** Sauvegarde automatique périodique en arrière-plan permettant de récupérer vos travaux non enregistrés dès la réouverture.
 
@@ -240,35 +240,35 @@ Exportez vos planches configurées directement dans les formats attendus par les
 
 ---
 
-## 11. Automatisation en Ligne de Commande (`spritestudio-cli`)
+## 11. Automatisation en Ligne de Commande (`bentopack-cli`)
 
-Intégrez SpriteStudio dans vos scripts de build ou chaînes d'intégration continue (GitHub Actions, GitLab CI).
+Intégrez BentoPack dans vos scripts de build ou chaînes d'intégration continue (GitHub Actions, GitLab CI).
 
-Le binaire `spritestudio-cli` fonctionne en mode headless total sans interface graphique (`QT_QPA_PLATFORM=offscreen`).
+Le binaire `bentopack-cli` fonctionne en mode headless total sans interface graphique (`QT_QPA_PLATFORM=offscreen`).
 
 ### 1. Remplacement Direct de TexturePacker (Drop-in 100%) :
 Utilisez exactement les mêmes arguments que TexturePacker :
 ```bash
-spritestudio-cli --sheet atlas.png --data atlas.json --format json-array \
+bentopack-cli --sheet atlas.png --data atlas.json --format json-array \
   --trim-mode Crop --extrude 1 assets/*.png
 ```
 
 ### 2. Émulation Aseprite CLI :
 ```bash
-spritestudio-cli -b character.aseprite --sheet anim.png --data anim.json --list-tags
+bentopack-cli -b character.aseprite --sheet anim.png --data anim.json --list-tags
 ```
 
 ### 3. Pipeline Natif Godot 4 :
 Générez directement la ressource `SpriteFrames` prête pour Godot 4 :
 ```bash
-spritestudio-cli --sheet res://sprites/hero.png --godot-tres res://sprites/hero_frames.tres \
+bentopack-cli --sheet res://sprites/hero.png --godot-tres res://sprites/hero_frames.tres \
   --trim --shape-padding 2 assets/hero/*.png
 ```
 
 ### 4. Mode Démon Surveillant (`--watch`) :
-Surveille un dossier et régénère automatiquement l'atlas dès qu'un fichier PNG ou `.ssp` est modifié :
+Surveille un dossier et régénère automatiquement l'atlas dès qu'un fichier PNG ou `.bento` est modifié :
 ```bash
-spritestudio-cli --watch --sheet dist/atlas.png --data dist/atlas.json src/sprites/
+bentopack-cli --watch --sheet dist/atlas.png --data dist/atlas.json src/sprites/
 ```
 
 ---
