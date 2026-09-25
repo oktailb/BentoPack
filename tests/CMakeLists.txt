@@ -50,19 +50,59 @@ if (MINGW)
 endif()
 add_test(NAME test_extractors COMMAND test_extractors)
 
-# 2. test_controllers
-add_executable(test_controllers test_controllers.cpp)
-target_include_directories(test_controllers PRIVATE ${PLUGIN_INCLUDES})
-target_compile_definitions(test_controllers PRIVATE
+# 2. test_app_config
+add_executable(test_app_config test_app_config.cpp)
+target_link_libraries(test_app_config PRIVATE BentoPackCore Qt6::Test)
+set_target_properties(test_app_config PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_app_config PRIVATE -mconsole)
+endif()
+add_test(NAME test_app_config COMMAND test_app_config)
+
+# 3. test_controller_project
+add_executable(test_controller_project test_controller_project.cpp)
+target_include_directories(test_controller_project PRIVATE ${PLUGIN_INCLUDES})
+target_compile_definitions(test_controller_project PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_controller_project PRIVATE BentoPackWidgets BentoPackCore ${ALL_EXTRACTOR_PLUGINS} Qt6::Test)
+set_target_properties(test_controller_project PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_controller_project PRIVATE -mconsole)
+endif()
+add_test(NAME test_controller_project COMMAND test_controller_project)
+
+# 4. test_controller_animation
+add_executable(test_controller_animation test_controller_animation.cpp)
+target_compile_definitions(test_controller_animation PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_controller_animation PRIVATE BentoPackWidgets BentoPackCore Qt6::Test)
+set_target_properties(test_controller_animation PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_controller_animation PRIVATE -mconsole)
+endif()
+add_test(NAME test_controller_animation COMMAND test_controller_animation)
+
+# 5. test_controller_atlas
+add_executable(test_controller_atlas test_controller_atlas.cpp)
+target_compile_definitions(test_controller_atlas PRIVATE
     SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample"
     QM_DIR="${CMAKE_BINARY_DIR}/BentoPack"
 )
-target_link_libraries(test_controllers PRIVATE BentoPackWidgets BentoPackCore ${ALL_EXTRACTOR_PLUGINS} ${ALL_FILTER_PLUGINS} Qt6::Test)
-set_target_properties(test_controllers PROPERTIES WIN32_EXECUTABLE FALSE)
+target_link_libraries(test_controller_atlas PRIVATE BentoPackWidgets BentoPackCore Qt6::Test)
+set_target_properties(test_controller_atlas PROPERTIES WIN32_EXECUTABLE FALSE)
 if (MINGW)
-    target_link_options(test_controllers PRIVATE -mconsole)
+    target_link_options(test_controller_atlas PRIVATE -mconsole)
 endif()
-add_test(NAME test_controllers COMMAND test_controllers)
+add_test(NAME test_controller_atlas COMMAND test_controller_atlas)
+
+# 6. test_filters
+add_executable(test_filters test_filters.cpp)
+target_include_directories(test_filters PRIVATE ${PLUGIN_INCLUDES})
+target_compile_definitions(test_filters PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_filters PRIVATE BentoPackWidgets BentoPackCore ${ALL_EXTRACTOR_PLUGINS} ${ALL_FILTER_PLUGINS} Qt6::Test)
+set_target_properties(test_filters PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_filters PRIVATE -mconsole)
+endif()
+add_test(NAME test_filters COMMAND test_filters)
 
 # 3. test_project
 add_executable(test_project test_project.cpp)
@@ -126,7 +166,57 @@ if (MINGW)
 endif()
 add_test(NAME test_vram_compression COMMAND test_vram_compression)
 
-set_tests_properties(test_extractors test_controllers test_project test_core test_cli test_mesh test_pixel_editor test_vram_compression
+# 9. test_robustness
+add_executable(test_robustness test_robustness.cpp)
+target_include_directories(test_robustness PRIVATE ${PLUGIN_INCLUDES})
+target_compile_definitions(test_robustness PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_robustness PRIVATE BentoPackWidgets BentoPackCore ${ALL_EXTRACTOR_PLUGINS} Qt6::Test)
+set_target_properties(test_robustness PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_robustness PRIVATE -mconsole)
+endif()
+add_test(NAME test_robustness COMMAND test_robustness)
+
+# 10. test_gui_integration
+add_executable(test_gui_integration test_gui_integration.cpp)
+target_compile_definitions(test_gui_integration PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_gui_integration PRIVATE BentoPackWidgets BentoPackCore Qt6::Test)
+set_target_properties(test_gui_integration PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_gui_integration PRIVATE -mconsole)
+endif()
+add_test(NAME test_gui_integration COMMAND test_gui_integration)
+
+# 11. test_concurrency_and_security
+add_executable(test_concurrency_and_security test_concurrency_and_security.cpp)
+target_include_directories(test_concurrency_and_security PRIVATE ${PLUGIN_INCLUDES})
+target_compile_definitions(test_concurrency_and_security PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_concurrency_and_security PRIVATE BentoPackWidgets BentoPackCore ${ALL_EXTRACTOR_PLUGINS} Qt6::Test)
+set_target_properties(test_concurrency_and_security PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_concurrency_and_security PRIVATE -mconsole)
+endif()
+add_test(NAME test_concurrency_and_security COMMAND test_concurrency_and_security)
+
+set(ALL_TEST_TARGETS
+    test_extractors
+    test_app_config
+    test_controller_project
+    test_controller_animation
+    test_controller_atlas
+    test_filters
+    test_project
+    test_core
+    test_cli
+    test_mesh
+    test_pixel_editor
+    test_vram_compression
+    test_robustness
+    test_gui_integration
+    test_concurrency_and_security
+)
+
+set_tests_properties(${ALL_TEST_TARGETS}
     PROPERTIES ENVIRONMENT "BENTOPACK_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin/plugins"
 )
 
@@ -146,7 +236,7 @@ if(WIN32)
     )
 
     add_custom_command(
-        TARGET test_controllers POST_BUILD
+        TARGET test_filters POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:extractor_godot>
             $<TARGET_FILE:extractor_unity>
@@ -164,12 +254,12 @@ if(WIN32)
             $<TARGET_FILE:filter_atlaspacking>
             $<TARGET_FILE:filter_tightpolygonpacking>
             "${CMAKE_BINARY_DIR}/bin"
-        COMMENT "Copying extractor and filter plugin DLLs to bin directory for test_controllers"
+        COMMENT "Copying extractor and filter plugin DLLs to bin directory for test_filters"
     )
 
     # Also prepend paths in CTest environment
     if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.22")
-        set_tests_properties(test_extractors test_controllers test_project test_core test_cli test_mesh test_pixel_editor test_vram_compression
+        set_tests_properties(${ALL_TEST_TARGETS}
             PROPERTIES ENVIRONMENT_MODIFICATION
                 "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin"
                 "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin/plugins/extractors"

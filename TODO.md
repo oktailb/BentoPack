@@ -97,14 +97,24 @@
   3. **Alignement CPack RPM :** `CPACK_RPM_PACKAGE_LICENSE` mis à jour en `"Apache-2.0"`.
   4. **Validation :** Compilation complète et validation de l'ensemble des 8 suites de tests CTest (100% Passed).
 
-### CH-TECH-4 : Découpage de la Suite de Test Monolithique (`test_controllers.cpp`)
-- **Constat d'Audit :** Le fichier `tests/test_controllers.cpp` compte plus de 3 048 lignes regroupant 32 tests hétérogènes (AppConfig, ProjectController, AnimationController, AtlasViewController, filtres, i18n, Git time-travel).
-- **Plan d'Action :**
-  - Découper ce fichier en suites thématiques spécialisées :
-    - `test_controller_project.cpp` : Chargement, sauvegarde asynchrone, sessions, Git time-travel.
-    - `test_controller_animation.cpp` : Timeline, scrubber, lecture, modes de boucle.
-    - `test_controller_atlas.cpp` : Interactions QGraphicsView, zoom au curseur, sélection par lasso, manipulation des boîtes.
-    - `test_app_config.cpp` : Persistance JSON, fallback en cas de fichier corrompu, synchronisation i18n.
+### CH-TECH-4 : Découpage de la Suite de Test Monolithique (`test_controllers.cpp`) — ✅ **TERMINÉ**
+- **Constat d'Audit :** Le fichier `tests/test_controllers.cpp` comptait plus de 3 048 lignes regroupant plus de 60 tests hétérogènes (AppConfig, ProjectController, AnimationController, AtlasViewController, filtres, i18n, Git time-travel).
+- **Réalisations Effectuées :**
+  1. **Découpage en 5 suites de tests modulaires et spécialisées :**
+     - [`test_app_config.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_app_config.cpp) : Persistance JSON, fallback fichier corrompu, configuration par défaut.
+     - [`test_controller_project.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_controller_project.cpp) : Chargement de projets (JSON, GIF), gestion des fichiers récents, suppression de fond asynchrone, intégration Git time-travel & branching.
+     - [`test_controller_animation.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_controller_animation.cpp) : Playback, création/suppression/duplication/renommage d'animations, timeline filmstrip drag-and-drop, réorganisation de frames, persistance des modes de boucle, alignement de pivots, masquage polygonal.
+     - [`test_controller_atlas.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_controller_atlas.cpp) : Interactions QGraphicsView, modes d'outils, zoom centré souris, sélection lasso/marquee, manipulation de boîtes et de pivots, translations i18n, persistance des docks.
+     - [`test_filters.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_filters.cpp) : Registre de filtres & plugins, algorithmes (Despill, Outline, ColorSwap, ColorAdjust, PixelRescale, RetroPalette, AtlasPacking), auto-détection de boîtes, rendu de l'AboutDialog en mode sombre et tarification dynamique multilingue.
+  2. **Refonte de [`tests/CMakeLists.txt`](file:///home/oktail/Documents/GitHub/BentoPack/tests/CMakeLists.txt) :**
+     - Remplacement de la cible monolithique `test_controllers` par 5 exécutables de test distincts (`test_app_config`, `test_controller_project`, `test_controller_animation`, `test_controller_atlas`, `test_filters`).
+     - Configuration des dépendances, plugins DLL Windows en post-build et variables d'environnement (`BENTOPACK_PLUGIN_PATH`).
+  3. **Suppression du monolithe :** Suppression définitive de `tests/test_controllers.cpp`.
+  4. **Extension majeure de la couverture de tests (3 nouvelles suites) :**
+     - [`test_robustness.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_robustness.cpp) : Robustesse I/O, tolérance aux fichiers `.bento` corrompus/0-byte, ZIP incomplets, `project.json` manquant/invalide, syntaxes JSON corrompues, image d'atlas manquante, formats Aseprite/TexturePacker malformés, packing 0-slice, sprites surdimensionnés et chemins de répertoires Unicode avec espaces.
+     - [`test_gui_integration.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_gui_integration.cpp) : Initialisation `MainWindow` headless/offscreen, hiérarchie des menus, cycle de vie du dirty flag, filtrage MIME du drag-and-drop, déclencheurs de lecture d'animation, boîtes de dialogue (`ExportDialog` chemins et configurations par défaut, `BranchSelectionDialog` sélection et checkout de branches Git).
+     - [`test_concurrency_and_security.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_concurrency_and_security.cpp) : Sécurité multithread des tâches asynchrones (`QFutureWatcher`, détourage IA et ouvertures de fichiers asynchrones sans interblocage), injection du filigrane stéganographique dans les pixels alpha zéro (`IntegrityGuard`), calcul et vérification de la signature HMAC de layout, et détection/rejet des falsifications.
+  5. **Validation CTest :** **15/15 suites de test** validées avec **100% de réussite** (temps d'exécution total : ~2.6 secondes).
 
 ### CH-TECH-5 : Hygiène Git & Nettoyage des Artefacts de Test
 - **Constat d'Audit :** L'espace de travail contient 86 fichiers `.tres` orphelins, des images d'atlas volumineuses non suivies dans `examples/godot_demo/`, et des fichiers `.uid` de Godot non ignorés. Les scripts d'audit et de génération de clés dans `scripts/` ne sont pas versionnés.
