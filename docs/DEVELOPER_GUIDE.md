@@ -1,6 +1,6 @@
 # 🛠️ Guide de Développement & d'Extension — BentoPack
 
-Bienvenue dans le guide d'extension de **BentoPack** (anciennement BentoPack). Ce document s'adresse aux développeurs et contributeurs souhaitant enrichir BentoPack en concevant :
+Bienvenue dans le guide d'extension de **BentoPack**. Ce document s'adresse aux développeurs et contributeurs souhaitant enrichir BentoPack en concevant :
 1. **De nouveaux Codecs d'I/O (`Extractor`)** : pour importer et exporter des formats d'atlas 2D, des séquences d'animation ou des structures de métadonnées spécifiques à des moteurs de jeu.
 2. **De nouveaux Plugins de Filtres Graphiques (`FilterPlugin`)** : pour intégrer des algorithmes de retouche, de nettoyage, de transformation géométrique ou d'effets visuels avec prévisualisation en direct et annulation non-destructive.
 3. **Des modules de traitement haute performance** : respectant la thread-safety, l'accès direct en mémoire scanline et l'internationalisation.

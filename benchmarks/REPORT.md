@@ -2,7 +2,7 @@
 
 > **Date du Rapport :** 2026-09-17 16:24:47  
 > **Version Git :** `0ea40f5` (branche `main`)  
-> **Binaire Testé :** `C:\Users\ec135\Documents\GitHub\BentoPack\build\Desktop_Qt_6_10_2_MinGW_64_bit-Debug\bin\bentopack-cli.exe`  
+> **Binaire Testé :** `bin/bentopack-cli`  
 > **Environnement :** Windows 10 (AMD64)  
 
 ---
@@ -52,7 +52,7 @@
 ## 📈 Historique & Suivi des Régressions
 
 Chaque exécution enregistre un instantané JSON immuable dans `benchmarks/history/`.
-- **Enregistrement actuel :** [`20260917_162447_0ea40f5.json`](file:///C:/Users/ec135/Documents/GitHub/BentoPack/benchmarks/history/20260917_162447_0ea40f5.json)
+- **Enregistrement actuel :** [`20260917_162447_0ea40f5.json`](history/20260917_162447_0ea40f5.json)
 
 | Date | Commit | Tests Validés | Temps Total | Débit (FPS) |
 |---|:---:|:---:|:---:|:---:|

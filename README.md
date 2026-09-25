@@ -105,7 +105,7 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 * **Dynamic Plugin System:** Hot-loadable Qt 6 plugins (`QPluginLoader`) for both **Filters** (`plugins/filters/`) and **Codecs / Extractors** (`plugins/extractors/`)
 * **Plugin Developer SDK:** Installed public headers, CMake package configuration (`BentoPackConfig.cmake`), and reference examples (`examples/sample_filter_plugin`, `examples/sample_extractor_plugin`)
 * **Hardware Texture Compression:** Khronos `basis_universal` (v2.50) integration for direct GPU memory upload (KTX2, UASTC, ETC1S, Zstd)
-* **Build System:** CMake 3.20+ with modular architecture (`BentoPackCore` + `BentoPack` GUI + `bentopack-cli` + 8 automated CTest suites)
+* **Build System:** CMake 3.20+ with modular architecture (`BentoPackCore` + `BentoPack` GUI + `bentopack-cli` + 15 automated CTest suites)
 * **Versioning Engine:** LibGit2 (optional, enabled when detected)
 
 ---

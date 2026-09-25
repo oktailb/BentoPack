@@ -128,12 +128,15 @@
   2. **Nettoyage du working directory :** Suppression des 86 fichiers orphelins et validation d'un état propre.
   3. **Audit de sécurité des scripts (`scripts/`) :** Vérification de l'absence de fuite de secrets ou de tokens pré-enregistrés dans `audit_asset_compliance.py` et `generate_commercial_key.py`.
 
-### CH-TECH-6 : Synchronisation & Correction de la Documentation
-- **Constat d'Audit :** Coquilles post-rebranding dans `docs/USER_GUIDE.md` et `docs/DEVELOPER_GUIDE.md` (`"anciennement BentoPack"`), chemins d'exemples SDK obsolètes dans `README.md` (`examples/sample_filter_plugin` inexistant), et fuites de chemins absolus Windows dans `benchmarks/REPORT.md`.
-- **Plan d'Action :**
-  1. Corriger les mentions d'historique dans les guides.
-  2. Créer l'exemple manquant `examples/sample_filter_plugin` ou aligner le `README.md` sur `examples/sample_plugin`.
-  3. Purger les chemins absolus locaux dans `benchmarks/REPORT.md` au profit de chemins relatifs portables.
+### CH-TECH-6 : Synchronisation & Correction de la Documentation — ✅ **TERMINÉ**
+- **Constat d'Audit :** Coquilles post-rebranding dans `docs/USER_GUIDE.md`, `docs/README_DOCS.md` et `docs/DEVELOPER_GUIDE.md` (`"anciennement BentoPack"`), chemins d'exemples SDK obsolètes dans `README.md` (`examples/sample_filter_plugin` inexistant), et fuites de chemins absolus Windows dans `benchmarks/REPORT.md`.
+- **Réalisations Effectuées :**
+  1. **Purge des coquilles de rebranding :** Remplacement de `"BentoPack (anciennement BentoPack)"` par `"BentoPack"` dans `docs/USER_GUIDE.md`, `docs/README_DOCS.md` et `docs/DEVELOPER_GUIDE.md`.
+  2. **Complétion du SDK Plugin Developer :**
+     - Création de l'exemple de référence manquant [`examples/sample_filter_plugin/`](file:///home/oktail/Documents/GitHub/BentoPack/examples/sample_filter_plugin) (`CMakeLists.txt`, `sample_filter.h`, `sample_filter.cpp`, `README.md`).
+     - Renommage cohérent de `examples/sample_plugin/` en [`examples/sample_extractor_plugin/`](file:///home/oktail/Documents/GitHub/BentoPack/examples/sample_extractor_plugin).
+     - Alignement de [`README.md`](file:///home/oktail/Documents/GitHub/BentoPack/README.md) sur les deux exemples du SDK et mise à jour du compteur de suites CTest (15 suites au lieu de 8).
+  3. **Purge des chemins Windows absolus :** Nettoyage de `benchmarks/REPORT.md` (remplacement de `C:\Users\ec135\...` par des chemins relatifs portables `bin/bentopack-cli` et `history/...`).
 
 ---
 

@@ -1,10 +1,10 @@
 # Documentation de l'API C++ — BentoPack
 
-Bienvenue dans la documentation de l'API de **BentoPack** (anciennement BentoPack), un atelier complet de découpe, manipulation géométrique, filtrage et empaquetage d'atlas de sprites 2D pour le jeu vidéo.
+Bienvenue dans la documentation de l'API de **BentoPack**, un atelier complet de découpe, manipulation géométrique, filtrage et empaquetage d'atlas de sprites 2D pour le jeu vidéo.
 
 ## 🏛️ Architecture & Composants Principaux
 
-### 1. Modèle de Données Pur (`BentoPackCore` / `BentoPackCore`)
+### 1. Modèle de Données Pur (`BentoPackCore`)
 - \ref SpriteDocument : L'unique source de vérité de l'application. Stocke l'atlas de base (`QImage`), la liste des frames découpées (`QList<QImage>`), les boîtes de délimitation (`QList<SpriteBox>`) et les séquences d'animation (`QList<SpriteAnimation>`).
 - \ref SpriteBox : Structure représentant une boîte englobante de frame avec rectangle $X, Y, W, H$, configuration de point d'ancrage / pivot (`QPoint`) et maillage polygonal 2D (`QPolygonF vertices`, indices de triangulation, mode de maillage).
 - \ref SpriteAnimation : Structure décrivant une séquence d'animation cadencée (nom, FPS, mode de boucle `Loop / Once / PingPong`, liste des index de frames).

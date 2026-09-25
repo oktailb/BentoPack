@@ -1,6 +1,6 @@
 # 📖 Manuel de l'Utilisateur — BentoPack
 
-Bienvenue dans le manuel d'utilisation officiel de **BentoPack** (anciennement BentoPack), l'atelier tout-en-un pour la préparation, la retouche chirurgicale, le séquençage d'animations et l'exportation optimisée de planches de sprites 2D pour le jeu vidéo et le pixel art.
+Bienvenue dans le manuel d'utilisation officiel de **BentoPack**, l'atelier tout-en-un pour la préparation, la retouche chirurgicale, le séquençage d'animations et l'exportation optimisée de planches de sprites 2D pour le jeu vidéo et le pixel art.
 
 ---
 
