@@ -107,6 +107,12 @@ jobs:
             cp SpriteStudio*.AppImage dist/
           fi
 
+      - name: Package Godot Addon
+        run: |
+          cmake --build build --target package_godot_addon
+          cp build/dist/godot-spritestudio-addon-*.zip dist/
+
+
       - name: Upload Linux Commercial Packages (Private Artifacts)
         uses: actions/upload-artifact@v4
         with:

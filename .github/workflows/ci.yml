@@ -48,6 +48,17 @@ jobs:
         run: |
           ctest --test-dir build --output-on-failure --verbose
 
+      - name: Package Godot Addon
+        run: |
+          cmake --build build --target package_godot_addon
+          ls -lah build/dist/godot-spritestudio-addon-*.zip
+
+      - name: Upload Godot Addon Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-spritestudio-addon
+          path: build/dist/godot-spritestudio-addon-*.zip
+
   windows:
     name: Windows (MinGW 64-bit)
     runs-on: windows-latest

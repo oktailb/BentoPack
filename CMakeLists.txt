@@ -189,6 +189,34 @@ else()
     message(STATUS "Doxygen not found. Documentation targets will not be built.")
 endif()
 
+# -------------------------------------------------------------------------
+# Godot 4 Addon Packaging Target
+# -------------------------------------------------------------------------
+set(GODOT_ADDON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/godot")
+set(GODOT_ADDON_STAGING_DIR "${CMAKE_CURRENT_BINARY_DIR}/addons_staging/godot/addons/spritestudio")
+set(GODOT_ADDON_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/dist")
+set(GODOT_ADDON_ZIP "${GODOT_ADDON_DIST_DIR}/godot-spritestudio-addon-${PROJECT_VERSION}.zip")
+
+add_custom_target(package_godot_addon
+    COMMAND ${CMAKE_COMMAND}
+        -DSRC_DIR="${GODOT_ADDON_SRC_DIR}"
+        -DSTAGING_DIR="${CMAKE_CURRENT_BINARY_DIR}/addons_staging/godot"
+        -DLICENSE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
+        -DOUTPUT_ZIP="${GODOT_ADDON_ZIP}"
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_godot_addon.cmake"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    COMMENT "Packaging Godot 4 Addon into ${GODOT_ADDON_ZIP}..."
+    VERBATIM
+)
+
+install(DIRECTORY addons/godot/
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/spritestudio/addons/godot/addons/spritestudio
+    COMPONENT spritestudio
+    PATTERN "*.uid" EXCLUDE
+    PATTERN "*.import" EXCLUDE
+)
+
+
 if(UNIX AND NOT APPLE AND NOT HAIKU)
     install(FILES SpriteStudio/res/linux/SpriteStudio.desktop
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications

@@ -90,6 +90,11 @@ jobs:
             mv SpriteStudio*.AppImage build/
           fi
 
+      - name: Package Godot Addon
+        run: |
+          cmake --build build --target package_godot_addon
+          ls -lah build/dist/godot-spritestudio-addon-*.zip
+
       - name: Upload Linux Packages
         uses: actions/upload-artifact@v4
         with:
@@ -99,6 +104,7 @@ jobs:
             build/*.rpm
             build/*.tar.gz
             build/*.AppImage
+            build/dist/godot-spritestudio-addon-*.zip
 
   release-windows:
     name: Build Windows Deliverables (ZIP Portable, NSIS Setup)
