@@ -31,7 +31,7 @@
 *.out
 *.app
 
-build/
+build*/
 bin/
 lib/
 .qtcreator/
@@ -48,5 +48,41 @@ CMakeLists.txt.user*
 .idea/
 benchmarks/dataset/
 benchmarks/output/
+# Godot Engine Cache & Generated Demo Artifacts
+.godot/
+*.import
+*.uid
+examples/godot_demo/*.tres
+examples/godot_demo/*.png
+examples/godot_demo/*.bento
+
+# Python Cache
+__pycache__/
+*.py[cod]
 scripts/__pycache__/
+.pytest_cache/
+
+# OS and Editor Specific
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Test & Debug Artifacts
+test_output/
+*.log
+*.dmp
+*.core
+
+# Keys, Local Secrets & Licenses (NEVER COMMIT)
+*.key
+*.secret
+*.pem
+BentoPack/src/generated/license_config.h
+
+# Private Business Strategy & Monetization (DO NOT COMMIT)
+BUSINESS.md
+docs/BUSINESS*.md
+business/
 

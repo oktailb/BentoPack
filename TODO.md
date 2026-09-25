@@ -116,12 +116,17 @@
      - [`test_concurrency_and_security.cpp`](file:///home/oktail/Documents/GitHub/BentoPack/tests/test_concurrency_and_security.cpp) : Sécurité multithread des tâches asynchrones (`QFutureWatcher`, détourage IA et ouvertures de fichiers asynchrones sans interblocage), injection du filigrane stéganographique dans les pixels alpha zéro (`IntegrityGuard`), calcul et vérification de la signature HMAC de layout, et détection/rejet des falsifications.
   5. **Validation CTest :** **15/15 suites de test** validées avec **100% de réussite** (temps d'exécution total : ~2.6 secondes).
 
-### CH-TECH-5 : Hygiène Git & Nettoyage des Artefacts de Test
-- **Constat d'Audit :** L'espace de travail contient 86 fichiers `.tres` orphelins, des images d'atlas volumineuses non suivies dans `examples/godot_demo/`, et des fichiers `.uid` de Godot non ignorés. Les scripts d'audit et de génération de clés dans `scripts/` ne sont pas versionnés.
-- **Plan d'Action :**
-  1. Mettre à jour `.gitignore` pour ignorer systématiquement `examples/godot_demo/*.tres`, `examples/godot_demo/*.png`, `examples/godot_demo/*.bento` et `*.uid`.
-  2. Nettoyer les fichiers générés orphelins du working directory.
-  3. Versionner proprement `scripts/audit_asset_compliance.py` et `scripts/generate_commercial_key.py`.
+### CH-TECH-5 : Hygiène Git & Nettoyage des Artefacts de Test — ✅ **TERMINÉ**
+- **Constat d'Audit :** L'espace de travail contenait des fichiers `.tres` orphelins, des images d'atlas volumineuses non suivies dans `examples/godot_demo/`, et des fichiers `.uid` de Godot non ignorés.
+- **Réalisations Effectuées :**
+  1. **Mise à jour exhaustive de `.gitignore` :**
+     - Exclusion des artefacts de démo Godot générés (`examples/godot_demo/*.tres`, `examples/godot_demo/*.png`, `examples/godot_demo/*.bento`).
+     - Exclusion des métadonnées de cache Godot 4 (`.godot/`, `*.import`, `*.uid`).
+     - Exclusion des caches Python (`__pycache__/`, `*.py[cod]`, `.pytest_cache/`).
+     - Exclusion des artefacts d'OS et d'éditeurs (`.DS_Store`, `Thumbs.db`, `*~`).
+     - Exclusion préventive des clés privées et secrets (`*.key`, `*.secret`, `*.pem`, `license_config.h`).
+  2. **Nettoyage du working directory :** Suppression des 86 fichiers orphelins et validation d'un état propre.
+  3. **Audit de sécurité des scripts (`scripts/`) :** Vérification de l'absence de fuite de secrets ou de tokens pré-enregistrés dans `audit_asset_compliance.py` et `generate_commercial_key.py`.
 
 ### CH-TECH-6 : Synchronisation & Correction de la Documentation
 - **Constat d'Audit :** Coquilles post-rebranding dans `docs/USER_GUIDE.md` et `docs/DEVELOPER_GUIDE.md` (`"anciennement BentoPack"`), chemins d'exemples SDK obsolètes dans `README.md` (`examples/sample_filter_plugin` inexistant), et fuites de chemins absolus Windows dans `benchmarks/REPORT.md`.
