@@ -22,6 +22,7 @@ import json
 import time
 import shutil
 import platform
+import argparse
 import subprocess
 from datetime import datetime
 
@@ -35,27 +36,48 @@ REPORT_PATH = os.path.join(BENCHMARK_DIR, "REPORT.md")
 # ----------------------------------------------------------------------
 # Helper Functions
 # ----------------------------------------------------------------------
-def find_cli_binary():
+def find_cli_binary(custom_path=None):
+    if custom_path:
+        p = os.path.abspath(custom_path)
+        if os.path.isfile(p) and os.access(p, os.X_OK):
+            return p
+
+    # Check environment variable
+    env_cli = os.environ.get("BENTOPACK_CLI")
+    if env_cli and os.path.isfile(env_cli) and os.access(env_cli, os.X_OK):
+        return os.path.abspath(env_cli)
+
+    # Candidate paths across build layouts (Linux, macOS, Windows)
     candidates = [
-        os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli.exe"),
-        os.path.join(ROOT_DIR, "build", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "build", "Desktop-Debug", "bin", "bentopack-cli"),
+        os.path.join(ROOT_DIR, "build", "Desktop-Debug", "bin", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "build", "Desktop-Release", "bin", "bentopack-cli"),
+        os.path.join(ROOT_DIR, "build", "Desktop-Release", "bin", "bentopack-cli.exe"),
         os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli"),
+        os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli.exe"),
         os.path.join(ROOT_DIR, "build", "bentopack-cli"),
+        os.path.join(ROOT_DIR, "build", "bentopack-cli.exe"),
+        os.path.join(ROOT_DIR, "bin", "bentopack-cli"),
+        os.path.join(ROOT_DIR, "bin", "bentopack-cli.exe"),
         os.path.join(ROOT_DIR, "build", "Desktop_Qt_6_10_2_MinGW_64_bit-Debug", "bin", "bentopack-cli.exe"),
         os.path.join(ROOT_DIR, "build", "Desktop_Qt_6_10_2_MinGW_64_bit-Release", "bin", "bentopack-cli.exe"),
-        os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli.exe"),
-        os.path.join(ROOT_DIR, "build", "bentopack-cli.exe"),
-        os.path.join(ROOT_DIR, "build", "bin", "bentopack-cli"),
-        os.path.join(ROOT_DIR, "build", "bentopack-cli"),
     ]
     for c in candidates:
         if os.path.isfile(c) and os.access(c, os.X_OK):
             return os.path.abspath(c)
-    # Check PATH
-    for b in ["bentopack-cli", "bentopack-cli"]:
-        which_cli = shutil.which(b)
+
+    # Recursive glob inside build directory
+    bin_names = ["bentopack-cli.exe", "bentopack-cli"] if platform.system() == "Windows" else ["bentopack-cli"]
+    for bname in bin_names:
+        for found in glob.glob(os.path.join(ROOT_DIR, "build", "**", bname), recursive=True):
+            if os.path.isfile(found) and os.access(found, os.X_OK) and not found.endswith((".o", ".a", ".so", ".dylib")):
+                return os.path.abspath(found)
+
+    # Check system PATH
+    for bname in ["bentopack-cli", "bentopack-cli.exe"]:
+        which_cli = shutil.which(bname)
         if which_cli:
-            return which_cli
+            return os.path.abspath(which_cli)
     return None
 
 def get_git_info():
@@ -66,17 +88,56 @@ def get_git_info():
     except Exception:
         return "unknown", "unknown"
 
+def extract_frames_list(json_data):
+    """Normalize frames container which can be either a dict (json-hash) or a list (json-array)."""
+    frames_obj = json_data.get("frames", {})
+    if isinstance(frames_obj, dict):
+        return list(frames_obj.values())
+    elif isinstance(frames_obj, list):
+        return frames_obj
+    return []
+
+
 def run_command(cmd_list):
     env = os.environ.copy()
     bin_dir = os.path.dirname(cmd_list[0]) if os.path.isabs(cmd_list[0]) else ""
-    qt_paths = [
-        bin_dir,
-        r"C:\Qt\6.10.2\mingw_64\bin",
-        r"C:\Qt\Tools\mingw1310_64\bin",
-        r"C:\Qt\Tools\Ninja",
-        r"C:\Qt\Tools\CMake_64\bin",
+
+    # Locate plugins directory next to binary or within build tree
+    plugin_candidates = [
+        os.path.join(bin_dir, "plugins"),
+        os.path.join(bin_dir, "..", "plugins"),
+        os.path.join(ROOT_DIR, "bin", "plugins"),
+        os.path.join(ROOT_DIR, "build", "Desktop-Debug", "bin", "plugins"),
     ]
-    env["PATH"] = ";".join([p for p in qt_paths if os.path.isdir(p)]) + ";" + env.get("PATH", "")
+    for p in plugin_candidates:
+        if os.path.isdir(p):
+            env["BENTOPACK_PLUGIN_PATH"] = os.path.abspath(p)
+            break
+
+    if platform.system() == "Windows":
+        qt_paths = [
+            bin_dir,
+            r"C:\Qt\6.10.2\mingw_64\bin",
+            r"C:\Qt\Tools\mingw1310_64\bin",
+            r"C:\Qt\Tools\Ninja",
+            r"C:\Qt\Tools\CMake_64\bin",
+        ]
+        valid_paths = [p for p in qt_paths if os.path.isdir(p)]
+        if valid_paths:
+            env["PATH"] = ";".join(valid_paths) + ";" + env.get("PATH", "")
+    else:
+        # POSIX (Linux / macOS)
+        if bin_dir:
+            lib_dir = os.path.abspath(os.path.join(bin_dir, "..", "lib"))
+            current_ld = env.get("LD_LIBRARY_PATH", "")
+            ld_parts = [bin_dir, lib_dir]
+            if current_ld:
+                ld_parts.append(current_ld)
+            env["LD_LIBRARY_PATH"] = ":".join(ld_parts)
+
+            current_path = env.get("PATH", "")
+            env["PATH"] = f"{bin_dir}:{current_path}"
+
     start_t = time.perf_counter()
     proc = subprocess.run(cmd_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=ROOT_DIR, env=env)
     elapsed_ms = (time.perf_counter() - start_t) * 1000.0
@@ -199,8 +260,8 @@ def execute_benchmarks(cli_bin):
     if rc == 0 and os.path.exists(data):
         with open(data) as f:
             j = json.load(f)
-            frames = j.get("frames", [])
-            trimmed_count = sum(1 for fr in frames if fr.get("trimmed") is True)
+            frames = extract_frames_list(j)
+            trimmed_count = sum(1 for fr in frames if isinstance(fr, dict) and fr.get("trimmed") is True)
             passed = trimmed_count > 0
     record("TP_Trim_Mode_Trim", "TexturePacker", passed, dur, f"Transparency trimmed ({trimmed_count} frames)")
 
@@ -245,8 +306,8 @@ def execute_benchmarks(cli_bin):
     if rc == 0 and os.path.exists(data):
         with open(data) as f:
             j = json.load(f)
-            fr = j.get("frames", [])
-            if fr and "pivot" in fr[0]:
+            fr = extract_frames_list(j)
+            if fr and isinstance(fr[0], dict) and "pivot" in fr[0]:
                 p = fr[0]["pivot"]
                 passed = abs(p.get("x", 0) - 0.5) < 0.01 and abs(p.get("y", 0) - 1.0) < 0.01
     record("TP_CustomPivots", "TexturePacker", passed, dur, "Normalized pivot point (0.5, 1.0) validated in JSON")
@@ -470,11 +531,12 @@ def generate_report(results, cli_bin):
         diff_fps_str = f"{'+' if fps_diff > 0 else ''}{fps_diff:.1f} FPS"
 
     # Build Markdown Report
+    rel_cli_bin = os.path.relpath(cli_bin, ROOT_DIR).replace(os.sep, "/") if cli_bin.startswith(ROOT_DIR) else os.path.basename(cli_bin)
     lines = []
     lines.append("# Rapport Formel d'Évaluation & de Performance CLI (`bentopack-cli`)\n")
     lines.append(f"> **Date du Rapport :** {now_str}  ")
     lines.append(f"> **Version Git :** `{commit}` (branche `{branch}`)  ")
-    lines.append(f"> **Binaire Testé :** `{cli_bin}`  ")
+    lines.append(f"> **Binaire Testé :** `{rel_cli_bin}`  ")
     lines.append(f"> **Environnement :** {platform.system()} {platform.release()} ({platform.machine()})  \n")
     lines.append("---\n")
 
@@ -500,7 +562,8 @@ def generate_report(results, cli_bin):
 
     lines.append("## 📈 Historique & Suivi des Régressions\n")
     lines.append("Chaque exécution enregistre un instantané JSON immuable dans `benchmarks/history/`.")
-    lines.append(f"- **Enregistrement actuel :** [`{os.path.basename(history_file_path)}`](file:///{history_file_path.replace(os.sep, '/')})\n")
+    rel_hist_path = os.path.relpath(history_file_path, BENCHMARK_DIR).replace(os.sep, "/")
+    lines.append(f"- **Enregistrement actuel :** [`{os.path.basename(history_file_path)}`]({rel_hist_path})\n")
 
     all_hist = sorted(glob.glob(os.path.join(HISTORY_DIR, "*.json")))
     if all_hist:
@@ -530,9 +593,13 @@ def generate_report(results, cli_bin):
     print("=" * 80)
 
 def main():
-    cli_bin = find_cli_binary()
+    parser = argparse.ArgumentParser(description="Automated benchmark and validation suite for BentoPack CLI.")
+    parser.add_argument("--cli", dest="cli_path", default=None, help="Explicit path to bentopack-cli executable.")
+    args = parser.parse_args()
+
+    cli_bin = find_cli_binary(args.cli_path)
     if not cli_bin:
-        print("[ERROR] Could not find bentopack-cli binary. Please compile the project first.")
+        print("[ERROR] Could not find bentopack-cli binary. Please compile the project first or provide --cli <path>.")
         sys.exit(1)
 
     # Ensure dataset is generated
@@ -546,3 +613,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

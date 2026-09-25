@@ -627,7 +627,8 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
         fRect["h"] = r.height();
         frameData["frame"] = fRect;
         frameData["rotated"] = false;
-        frameData["trimmed"] = false;
+        bool isTrimmed = options.trimSprites || options.extraParams.value(QStringLiteral("trim")).toBool();
+        frameData["trimmed"] = isTrimmed;
 
         QJsonObject sRect;
         sRect["x"] = 0;

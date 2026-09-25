@@ -401,6 +401,8 @@ CliResult CliPackPipeline::execute(const QStringList &args)
         ExportOptions expOpts;
         expOpts.packOptions = packOpts;
         expOpts.vramOptions = vOpts;
+        expOpts.trimSprites = doTrim;
+        expOpts.extraParams[QStringLiteral("trim")] = doTrim;
         if (isVram) {
             if (sheetPath.endsWith(QStringLiteral(".basis"), Qt::CaseInsensitive)) {
                 expOpts.textureFormat = TEXTURE_FORMAT_BASIS;
