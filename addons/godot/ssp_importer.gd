@@ -47,6 +47,11 @@ func _get_import_options(path: String, preset_index: int) -> Array[Dictionary]:
 			"property_hint": PROPERTY_HINT_NONE,
 		},
 		{
+			"name": "collider_visible",
+			"default_value": false,
+			"property_hint": PROPERTY_HINT_NONE,
+		},
+		{
 			"name": "pixel_art_filter",
 			"default_value": true,
 			"property_hint": PROPERTY_HINT_NONE,
@@ -197,6 +202,7 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 				hitbox_area.name = "Hitbox"
 				col_polygon_node = CollisionPolygon2D.new()
 				col_polygon_node.name = "CollisionPolygon2D"
+				col_polygon_node.visible = options.get("collider_visible", false)
 
 				# Initialize with first frame polygon
 				if not first_anim.is_empty() and col_map.has(first_anim):
