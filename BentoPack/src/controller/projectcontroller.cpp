@@ -403,8 +403,8 @@ void ProjectController::openFileAsync(const QString &filePath)
     QFileInfo fi(filePath);
     QString ext = fi.suffix().toLower();
 
-    // If it's a native project (.bento)
-    if (ext == QStringLiteral("ssp")) {
+    // If it's a native project (.bento or legacy .ssp)
+    if (ext == QStringLiteral("bento") || ext == QStringLiteral("ssp")) {
         openProject(filePath);
         return;
     }

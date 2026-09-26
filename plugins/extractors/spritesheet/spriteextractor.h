@@ -28,7 +28,7 @@ public:
     QString description() const override { return QStringLiteral("Static sprite sheet with automatic alpha edge detection."); }
     QVersionNumber version() const override { return QVersionNumber(1, 1, 0); }
     QStringList supportedExtensions() const override {
-        return { QStringLiteral("png"), QStringLiteral("jpg"), QStringLiteral("jpeg"), QStringLiteral("bmp"), QStringLiteral("ktx2"), QStringLiteral("basis") };
+        return { QStringLiteral("png"), QStringLiteral("webp"), QStringLiteral("jpg"), QStringLiteral("jpeg"), QStringLiteral("bmp"), QStringLiteral("ktx2"), QStringLiteral("basis") };
     }
     Capabilities capabilities() const override {
         return CanImport | CanExport | SupportsAtlasMetadata;

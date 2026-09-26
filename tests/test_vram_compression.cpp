@@ -36,7 +36,7 @@ private slots:
     void testGodotExtractorReadKtx2Roundtrip();
     void testJsonExtractorReadKtx2Roundtrip();
     void testEmptyBaseNameExportRejection();
-    void testReadUserRyuTres();
+    void testReadUserSampleTres();
     void testUnityExtractorReadRoundtrip();
     void testUnrealExtractorReadRoundtrip();
 
@@ -385,16 +385,19 @@ void TestVramCompression::testEmptyBaseNameExportRejection()
     QVERIFY(!err.toString().isEmpty());
 }
 
-void TestVramCompression::testReadUserRyuTres()
+void TestVramCompression::testReadUserSampleTres()
 {
-    QString ryuTres = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/ryu.tres");
-    if (!QFile::exists(ryuTres)) {
-        QSKIP("sample/ryu.tres not found");
+    QString sampleTres = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.tres");
+    if (!QFile::exists(sampleTres)) {
+        sampleTres = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero_godot.tres");
+    }
+    if (!QFile::exists(sampleTres)) {
+        QSKIP("sample Godot tres not found");
     }
     GodotExtractor godot;
     SpriteDocument doc;
     ExtractorError err;
-    bool ok = godot.read(ryuTres, doc, &err);
+    bool ok = godot.read(sampleTres, doc, &err);
     QVERIFY2(ok, qPrintable(err.toString()));
     QVERIFY(doc.frameCount() > 0);
     QVERIFY(!doc.atlas().isNull());

@@ -51,7 +51,9 @@ void TestExtractors::initTestCase()
     };
 
     for (const QString &cand : candidates) {
-        if (QFile::exists(cand + QStringLiteral("/hero.png")) || QFile::exists(cand + QStringLiteral("/ryu.png"))) {
+        if (QFile::exists(cand + QStringLiteral("/hero.png")) ||
+            QFile::exists(cand + QStringLiteral("/hero.webp")) ||
+            QFile::exists(cand + QStringLiteral("/hero.bento"))) {
             m_sampleDir = QDir(cand).canonicalPath();
             break;
         }
@@ -104,7 +106,6 @@ void TestExtractors::testSpriteExtractorCapabilities()
 void TestExtractors::testSpriteExtractorReadPng()
 {
     QString pngPath = m_sampleDir + QStringLiteral("/hero.png");
-    if (!QFile::exists(pngPath)) pngPath = m_sampleDir + QStringLiteral("/ryu.png");
     if (!QFile::exists(pngPath)) {
         QSKIP("Sample file not present.");
     }
@@ -135,7 +136,6 @@ void TestExtractors::testSpriteExtractorReadPng()
 void TestExtractors::testJsonExtractorReadWrite()
 {
     QString jsonPath = m_sampleDir + QStringLiteral("/hero.json");
-    if (!QFile::exists(jsonPath)) jsonPath = m_sampleDir + QStringLiteral("/ryu.json");
     if (!QFile::exists(jsonPath)) {
         QSKIP("Sample file not present.");
     }
@@ -184,7 +184,6 @@ void TestExtractors::testJsonExtractorReadWrite()
 void TestExtractors::testGodotExtractorReadWrite()
 {
     QString godotTres = m_sampleDir + QStringLiteral("/hero_godot.tres");
-    if (!QFile::exists(godotTres)) godotTres = m_sampleDir + QStringLiteral("/ryu_godot.tres");
     if (!QFile::exists(godotTres)) {
         QSKIP("Sample file not present.");
     }
@@ -249,7 +248,6 @@ void TestExtractors::testGodotExtractorReadWrite()
 void TestExtractors::testGifExtractorRead()
 {
     QString gifPath = m_sampleDir + QStringLiteral("/hero.gif");
-    if (!QFile::exists(gifPath)) gifPath = m_sampleDir + QStringLiteral("/ryu_hd.gif");
     if (!QFile::exists(gifPath)) {
         QSKIP("Sample file not present.");
     }

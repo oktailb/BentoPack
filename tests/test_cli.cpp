@@ -57,9 +57,10 @@ void TestCli::initTestCase()
     ExtractorRegistry::instance().loadPlugins(binPlugins);
     FilterRegistry::instance().loadPlugins(binPlugins);
 
-    m_sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
-    if (!QFile::exists(m_sampleHero)) {
-        m_sampleHero = m_tempDir.filePath(QStringLiteral("hero.png"));
+    m_sampleHero = m_tempDir.filePath(QStringLiteral("hero.png"));
+    if (QFile::exists(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png"))) {
+        QFile::copy(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png"), m_sampleHero);
+    } else {
         QImage img(140, 146, QImage::Format_ARGB32_Premultiplied);
         img.fill(Qt::transparent);
         QPainter p(&img);
@@ -69,8 +70,10 @@ void TestCli::initTestCase()
         img.save(m_sampleHero);
     }
 
-    m_sampleJson = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.json");
-    if (!QFile::exists(m_sampleJson)) {
+    m_sampleJson = m_tempDir.filePath(QStringLiteral("hero.json"));
+    if (QFile::exists(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.json"))) {
+        QFile::copy(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.json"), m_sampleJson);
+    } else {
         m_sampleJson = m_tempDir.filePath(QStringLiteral("hero.json"));
         QJsonObject root;
         QJsonObject frames;

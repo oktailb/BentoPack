@@ -3,6 +3,7 @@
 #include <QTemporaryDir>
 #include <QUndoStack>
 #include <QPainter>
+#include <QImageReader>
 #include <QFile>
 #include <QDir>
 #include <QCoreApplication>
@@ -25,6 +26,7 @@ private slots:
 
     void testProjectControllerOpenJson();
     void testProjectControllerOpenGif();
+    void testProjectControllerOpenWebp();
     void testProjectControllerOpenBento();
     void testProjectControllerOpenNonExistent();
     void testProjectControllerRecentFiles();
@@ -50,7 +52,9 @@ void TestControllerProject::initTestCase()
         QDir::current().filePath(QStringLiteral("sample"))
     };
     for (const QString &cand : candidates) {
-        if (QFile::exists(cand + QStringLiteral("/hero.png")) || QFile::exists(cand + QStringLiteral("/ryu.png"))) {
+        if (QFile::exists(cand + QStringLiteral("/hero.png")) ||
+            QFile::exists(cand + QStringLiteral("/hero.webp")) ||
+            QFile::exists(cand + QStringLiteral("/hero.bento"))) {
             m_sampleDir = QDir(cand).canonicalPath();
             break;
         }
@@ -74,7 +78,6 @@ void TestControllerProject::cleanupTestCase()
 void TestControllerProject::testProjectControllerOpenJson()
 {
     QString jsonPath = m_sampleDir + QStringLiteral("/hero.json");
-    if (!QFile::exists(jsonPath)) jsonPath = m_sampleDir + QStringLiteral("/ryu.json");
     if (!QFile::exists(jsonPath)) {
         QSKIP("Sample file not present.");
     }
@@ -99,7 +102,6 @@ void TestControllerProject::testProjectControllerOpenJson()
 void TestControllerProject::testProjectControllerOpenGif()
 {
     QString gifPath = m_sampleDir + QStringLiteral("/hero.gif");
-    if (!QFile::exists(gifPath)) gifPath = m_sampleDir + QStringLiteral("/ryu_hd.gif");
     if (!QFile::exists(gifPath)) {
         QSKIP("Sample file not present.");
     }
@@ -114,6 +116,30 @@ void TestControllerProject::testProjectControllerOpenGif()
     QVERIFY(ok);
     QCOMPARE(spyLoaded.count(), 1);
     QVERIFY(doc.frameCount() > 1);
+}
+
+void TestControllerProject::testProjectControllerOpenWebp()
+{
+    QString webpPath = m_sampleDir + QStringLiteral("/hero.webp");
+    if (!QFile::exists(webpPath)) {
+        QSKIP("Sample file not present.");
+    }
+
+    if (!QImageReader::supportedImageFormats().contains("webp")) {
+        QSKIP("WebP imageformat plugin not installed in Qt environment.");
+    }
+
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    ProjectController controller(&doc, &undoStack);
+
+    QSignalSpy spyLoaded(&controller, &ProjectController::fileLoaded);
+
+    bool ok = controller.openFile(webpPath);
+    QVERIFY(ok);
+    QCOMPARE(spyLoaded.count(), 1);
+    QVERIFY(!doc.atlas().isNull());
+    QVERIFY(doc.frameCount() > 0);
 }
 
 void TestControllerProject::testProjectControllerOpenBento()
@@ -284,7 +310,7 @@ void TestControllerProject::testProjectControllerDominantBackgroundColorAndUndo(
 void TestControllerProject::testProjectControllerOpenAsync()
 {
     QString pngPath = m_sampleDir + QStringLiteral("/hero.png");
-    if (!QFile::exists(pngPath)) pngPath = m_sampleDir + QStringLiteral("/ryu.png");
+    if (!QFile::exists(pngPath)) pngPath = m_sampleDir + QStringLiteral("/hero.webp");
     if (!QFile::exists(pngPath)) {
         QSKIP("Sample file not present.");
     }
@@ -385,7 +411,7 @@ void TestControllerProject::testUndoRedoGitHeadSync()
         QSKIP("Git integration not compiled in.");
     }
     QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
-    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/ryu.png");
+    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/hero.webp");
     if (!QFile::exists(heroPath)) {
         QSKIP("Sample file not present.");
     }
@@ -450,7 +476,7 @@ void TestControllerProject::testUndoGitWhenUndoStackEmpty()
         QSKIP("Git integration not compiled in.");
     }
     QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
-    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/ryu.png");
+    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/hero.webp");
     if (!QFile::exists(heroPath)) {
         QSKIP("Sample file not present.");
     }
@@ -496,7 +522,7 @@ void TestControllerProject::testGitBranchingAndRedoSelection()
         QSKIP("Git integration not compiled in.");
     }
     QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
-    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/ryu.png");
+    if (!QFile::exists(heroPath)) heroPath = m_sampleDir + QStringLiteral("/hero.webp");
     if (!QFile::exists(heroPath)) {
         QSKIP("Sample file not present.");
     }
