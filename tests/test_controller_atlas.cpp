@@ -1019,10 +1019,27 @@ void TestControllerAtlas::testSelectionOrderPreserved()
 
 int main(int argc, char *argv[])
 {
+    std::setvbuf(stdout, nullptr, _IONBF, 0);
+    std::setvbuf(stderr, nullptr, _IONBF, 0);
     qputenv("QT_QPA_PLATFORM", "offscreen");
+    qputenv("QT_ASSUME_STDERR_HAS_CONSOLE", "1");
+    qputenv("QT_FORCE_STDERR_LOGGING", "1");
+
     QApplication app(argc, argv);
     TestControllerAtlas tc;
-    return QTest::qExec(&tc, argc, argv);
+
+    QStringList args;
+    for (int i = 0; i < argc; ++i) {
+        args << QString::fromLocal8Bit(argv[i]);
+    }
+    if (!args.contains(QStringLiteral("-o"))) {
+        args << QStringLiteral("-o") << QStringLiteral("-,txt");
+    }
+
+    int result = QTest::qExec(&tc, args);
+    std::fflush(stdout);
+    std::fflush(stderr);
+    return result;
 }
 
 #include "test_controller_atlas.moc"

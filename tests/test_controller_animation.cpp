@@ -480,10 +480,17 @@ void TestControllerAnimation::testTransportSpeedTimingStability()
     timingLabel.setFixedWidth(120);
     timingLabel.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    // Initial widths
-    QCOMPARE(fpsLabel.width(), 28);
-    QCOMPARE(fpsSpinBox.width(), 55);
-    QCOMPARE(timingLabel.width(), 120);
+    // Explicitly verify the fixed width constraints
+    QCOMPARE(fpsLabel.minimumWidth(), 28);
+    QCOMPARE(fpsLabel.maximumWidth(), 28);
+    QCOMPARE(fpsSpinBox.minimumWidth(), 55);
+    QCOMPARE(fpsSpinBox.maximumWidth(), 55);
+    QCOMPARE(timingLabel.minimumWidth(), 120);
+    QCOMPARE(timingLabel.maximumWidth(), 120);
+
+    const int initialLabelW = fpsLabel.width();
+    const int initialSpinW = fpsSpinBox.width();
+    const int initialTimingW = timingLabel.width();
 
     // Connect FPS changes to update timingLabel exactly as MainWindow does
     connect(&animCtrl, &AnimationController::fpsChanged, [&](int fps) {
@@ -506,9 +513,9 @@ void TestControllerAnimation::testTransportSpeedTimingStability()
         QVERIFY(timingLabel.text().contains(expectedMs));
 
         // CRITICAL: The widths of the widgets MUST remain strictly invariant
-        QCOMPARE(fpsLabel.width(), 28);
-        QCOMPARE(fpsSpinBox.width(), 55);
-        QCOMPARE(timingLabel.width(), 120);
+        QCOMPARE(fpsLabel.width(), initialLabelW);
+        QCOMPARE(fpsSpinBox.width(), initialSpinW);
+        QCOMPARE(timingLabel.width(), initialTimingW);
     }
 }
 
@@ -544,7 +551,7 @@ void TestControllerAnimation::testAnimationControllerPivotAlignment()
     QList<QGraphicsItem*> items = scene->items();
     QGraphicsPixmapItem *pixItem = nullptr;
     for (QGraphicsItem *it : items) {
-        pixItem = dynamic_cast<QGraphicsPixmapItem*>(it);
+        pixItem = qgraphicsitem_cast<QGraphicsPixmapItem*>(it);
         if (pixItem) break;
     }
     QVERIFY(pixItem != nullptr);
@@ -597,7 +604,6 @@ void TestControllerAnimation::testAnimationPreviewZoomAndFit()
 
     QGraphicsView view;
     view.resize(300, 300);
-    view.show();
 
     AnimationController animCtrl(&doc, nullptr, nullptr, nullptr, &view);
     animCtrl.selectAnimation(QStringLiteral("run"));
@@ -638,7 +644,6 @@ void TestControllerAnimation::testAnimationPreviewPivotInteraction()
 
     QGraphicsView view;
     view.resize(400, 400);
-    view.show();
 
     AnimationController animCtrl(&doc, &undoStack, nullptr, nullptr, &view);
     animCtrl.selectAnimation(QStringLiteral("idle"));
@@ -706,7 +711,7 @@ void TestControllerAnimation::testAnimationPolygonMasking()
 
     QGraphicsPixmapItem *pixItem = nullptr;
     for (QGraphicsItem *it : scene->items()) {
-        pixItem = dynamic_cast<QGraphicsPixmapItem*>(it);
+        pixItem = qgraphicsitem_cast<QGraphicsPixmapItem*>(it);
         if (pixItem) break;
     }
     QVERIFY(pixItem != nullptr);
@@ -720,10 +725,27 @@ void TestControllerAnimation::testAnimationPolygonMasking()
 
 int main(int argc, char *argv[])
 {
+    std::setvbuf(stdout, nullptr, _IONBF, 0);
+    std::setvbuf(stderr, nullptr, _IONBF, 0);
     qputenv("QT_QPA_PLATFORM", "offscreen");
+    qputenv("QT_ASSUME_STDERR_HAS_CONSOLE", "1");
+    qputenv("QT_FORCE_STDERR_LOGGING", "1");
+
     QApplication app(argc, argv);
     TestControllerAnimation tc;
-    return QTest::qExec(&tc, argc, argv);
+
+    QStringList args;
+    for (int i = 0; i < argc; ++i) {
+        args << QString::fromLocal8Bit(argv[i]);
+    }
+    if (!args.contains(QStringLiteral("-o"))) {
+        args << QStringLiteral("-o") << QStringLiteral("-,txt");
+    }
+
+    int result = QTest::qExec(&tc, args);
+    std::fflush(stdout);
+    std::fflush(stderr);
+    return result;
 }
 
 #include "test_controller_animation.moc"
