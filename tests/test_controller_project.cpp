@@ -97,8 +97,8 @@ void TestControllerProject::testProjectControllerOpenJson()
 
 void TestControllerProject::testProjectControllerOpenGif()
 {
-    QString gifPath = m_sampleDir + QStringLiteral("/hero.gif");
-    if (!QFile::exists(gifPath)) gifPath = m_sampleDir + QStringLiteral("/ryu_hd.gif");
+    QString gifPath = m_sampleDir + QStringLiteral("/hero.webp");
+    if (!QFile::exists(gifPath)) gifPath = m_sampleDir + QStringLiteral("/hero.webp");
     if (!QFile::exists(gifPath)) {
         QSKIP("Sample file not present.");
     }
