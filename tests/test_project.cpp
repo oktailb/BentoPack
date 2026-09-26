@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QImageWriter>
 #include <QUndoStack>
 
 #include "project/sessionmanager.h"
@@ -304,7 +305,11 @@ void TestProject::testProjectManagerSessionDir()
     QVERIFY2(ProjectManager::saveProjectToSessionDir(doc, sessionDir, 1.5, QPointF(5, 5), &errorMsg), qPrintable(errorMsg));
 
     QVERIFY(QFile::exists(sessionDir + "/project.json"));
-    QVERIFY(QFile::exists(sessionDir + "/assets/atlas.png"));
+    if (QImageWriter::supportedImageFormats().contains("webp")) {
+        QVERIFY(QFile::exists(sessionDir + "/assets/atlas.webp"));
+    } else {
+        QVERIFY(QFile::exists(sessionDir + "/assets/atlas.png"));
+    }
 
     SpriteDocument loadedDoc;
     double zoom = 1.0;

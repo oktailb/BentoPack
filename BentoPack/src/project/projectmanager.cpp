@@ -26,6 +26,9 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QImage>
+#include <QImageReader>
+#include <QImageWriter>
+#include <QDebug>
 
 QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
                                                     const QString &relativeAtlasPath,
@@ -336,11 +339,29 @@ bool ProjectManager::saveProjectToSessionDir(const SpriteDocument &doc,
     // Save Atlas Image if present
     QString relativeAtlasPath;
     if (!doc.atlas().isNull()) {
-        relativeAtlasPath = QStringLiteral("assets/atlas.png");
-        QString atlasFullPath = sDir.filePath(relativeAtlasPath);
-        if (!doc.atlas().save(atlasFullPath, "PNG")) {
-            if (errorMsg) *errorMsg = QStringLiteral("Failed to save atlas image to ") + atlasFullPath;
-            return false;
+        bool canWriteWebp = QImageWriter::supportedImageFormats().contains("webp");
+        if (canWriteWebp) {
+            relativeAtlasPath = QStringLiteral("assets/atlas.webp");
+            QString atlasFullPath = sDir.filePath(relativeAtlasPath);
+            // Save WebP in lossless mode (quality 100)
+            if (!doc.atlas().save(atlasFullPath, "WEBP", 100)) {
+                // If WebP saving failed, fallback to PNG
+                qWarning() << "[BentoPack] WebP writer failed. Falling back to PNG for project atlas archive.";
+                relativeAtlasPath = QStringLiteral("assets/atlas.png");
+                atlasFullPath = sDir.filePath(relativeAtlasPath);
+                if (!doc.atlas().save(atlasFullPath, "PNG")) {
+                    if (errorMsg) *errorMsg = QStringLiteral("Failed to save atlas image to ") + atlasFullPath;
+                    return false;
+                }
+            }
+        } else {
+            qWarning() << "[BentoPack] WebP image format plugin not found in Qt environment. Saving atlas as PNG fallback.";
+            relativeAtlasPath = QStringLiteral("assets/atlas.png");
+            QString atlasFullPath = sDir.filePath(relativeAtlasPath);
+            if (!doc.atlas().save(atlasFullPath, "PNG")) {
+                if (errorMsg) *errorMsg = QStringLiteral("Failed to save atlas image to ") + atlasFullPath;
+                return false;
+            }
         }
     }
 
