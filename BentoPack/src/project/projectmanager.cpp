@@ -29,6 +29,7 @@
 #include <QImageReader>
 #include <QImageWriter>
 #include <QDebug>
+#include "packer/vramtexturecompressor.h"
 
 QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
                                                     const QString &relativeAtlasPath,
@@ -195,10 +196,25 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
     if (!relativeAtlasFile.isEmpty()) {
         QString fullAtlasPath = QDir(sessionDir).filePath(relativeAtlasFile);
         if (QFile::exists(fullAtlasPath)) {
-            atlasImage.load(fullAtlasPath);
+            QString loadErr;
+            atlasImage = VramTextureCompressor::loadAtlasImage(fullAtlasPath, &loadErr);
             if (!atlasImage.isNull()) {
                 outDoc.setAtlas(atlasImage);
+            } else {
+                qWarning() << "[BentoPack] Failed to load project atlas:" << fullAtlasPath << loadErr;
+                if (errorMsg) {
+                    *errorMsg = loadErr.isEmpty()
+                        ? QObject::tr("Failed to decode project atlas: %1").arg(relativeAtlasFile)
+                        : loadErr;
+                }
+                return false;
             }
+        } else if (relativeAtlasFile.startsWith(QStringLiteral("assets/"))) {
+            qWarning() << "[BentoPack] Project atlas referenced in project.json not found on disk:" << fullAtlasPath;
+            if (errorMsg) {
+                *errorMsg = QObject::tr("Project atlas image file not found in session: %1").arg(relativeAtlasFile);
+            }
+            return false;
         }
     }
 
@@ -356,6 +372,7 @@ bool ProjectManager::saveProjectToSessionDir(const SpriteDocument &doc,
             }
         } else {
             qWarning() << "[BentoPack] WebP image format plugin not found in Qt environment. Saving atlas as PNG fallback.";
+            qWarning().noquote() << VramTextureCompressor::missingFormatHelp(QStringLiteral("webp"));
             relativeAtlasPath = QStringLiteral("assets/atlas.png");
             QString atlasFullPath = sDir.filePath(relativeAtlasPath);
             if (!doc.atlas().save(atlasFullPath, "PNG")) {

@@ -226,6 +226,10 @@ if(LibGit2_FOUND)
     target_link_libraries(BentoPackCore PRIVATE LibGit2::LibGit2)
 endif()
 
+if(WebP_FOUND)
+    target_link_libraries(BentoPackCore PRIVATE WebP::webp)
+endif()
+
 if(TARGET basisu_encoder)
     target_include_directories(BentoPackCore PRIVATE
         $<BUILD_INTERFACE:${basis_universal_SOURCE_DIR}>

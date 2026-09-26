@@ -80,6 +80,7 @@ public:
     static qint64 estimateVramBytes(int width, int height, VramFormat format);
     static QString formatName(VramFormat format);
     static QString formatExtension(VramFormat format);
+    static QString missingFormatHelp(const QString &format);
 };
 
 #endif // VRAMTEXTURECOMPRESSOR_H

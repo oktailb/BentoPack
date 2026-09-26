@@ -54,6 +54,12 @@ else()
     message(STATUS "To enable LibGit2, configure with -DLIBGIT2_ROOT=<path_to_libgit2>")
 endif()
 
+find_package(WebP QUIET)
+if(WebP_FOUND)
+    message(STATUS "WebP found: ${WEBP_LIBRARIES}")
+    add_compile_definitions(HAVE_LIBWEBP=1)
+endif()
+
 # M9: VRAM Hardware Texture Compression (Basis Universal / KTX2)
 option(ENABLE_VRAM_COMPRESSION "Enable KTX2 / Basis Universal VRAM texture compression" ON)
 if(ENABLE_VRAM_COMPRESSION)

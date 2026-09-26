@@ -21,6 +21,7 @@
 #include <QFile>
 #include <QDir>
 #include <QThread>
+#include <QImageReader>
 #include <algorithm>
 #include <mutex>
 
@@ -38,6 +39,10 @@
 #pragma pop_macro("emit")
 #undef RESTORE_EMIT
 #endif
+#endif
+
+#if defined(HAVE_LIBWEBP)
+#include <webp/decode.h>
 #endif
 
 namespace {
@@ -291,6 +296,23 @@ QImage VramTextureCompressor::loadAtlasImage(const QString &filePath, QString *o
         return (img.format() == QImage::Format_ARGB32) ? img : img.convertToFormat(QImage::Format_ARGB32);
     }
 
+#if defined(HAVE_LIBWEBP)
+    if (ext == QStringLiteral("webp")) {
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly)) {
+            QByteArray data = file.readAll();
+            int w = 0, h = 0;
+            if (WebPGetInfo(reinterpret_cast<const uint8_t*>(data.constData()), data.size(), &w, &h) && w > 0 && h > 0) {
+                QImage webpImg(w, h, QImage::Format_RGBA8888);
+                if (WebPDecodeRGBAInto(reinterpret_cast<const uint8_t*>(data.constData()), data.size(),
+                                       webpImg.bits(), webpImg.sizeInBytes(), webpImg.bytesPerLine())) {
+                    return webpImg.convertToFormat(QImage::Format_ARGB32);
+                }
+            }
+        }
+    }
+#endif
+
     // Fallback: check if the file is actually a KTX2 container despite unusual extension
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly)) {
@@ -300,8 +322,42 @@ QImage VramTextureCompressor::loadAtlasImage(const QString &filePath, QString *o
         }
     }
 
-    if (outError) *outError = QObject::tr("Failed to decode image from: %1").arg(filePath);
+    if (outError) {
+        QString help = missingFormatHelp(ext);
+        if (!help.isEmpty() && !QImageReader::supportedImageFormats().contains(ext.toUtf8())) {
+            *outError = QObject::tr("Failed to decode image from %1.\n\n%2").arg(filePath, help);
+        } else {
+            *outError = QObject::tr("Failed to decode image from: %1").arg(filePath);
+        }
+    }
     return QImage();
+}
+
+QString VramTextureCompressor::missingFormatHelp(const QString &format)
+{
+    QString lower = format.toLower();
+    if (lower == QStringLiteral("webp")) {
+        return QObject::tr(
+            "The WebP image format plugin is not installed in your Qt environment.\n\n"
+            "To enable WebP support on Linux, install the corresponding package:\n"
+            "  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats\n"
+            "  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins\n"
+            "  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats\n"
+            "  • openSUSE:              sudo zypper install libqt6-qtimageformats\n\n"
+            "On Windows / macOS, ensure Qt imageformats plugins (qwebp) are deployed with the application."
+        );
+    }
+    if (lower == QStringLiteral("tga") || lower == QStringLiteral("tif") || lower == QStringLiteral("tiff")) {
+        return QObject::tr(
+            "The %1 image format requires the Qt6 imageformats plugin.\n\n"
+            "Install package:\n"
+            "  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats\n"
+            "  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins\n"
+            "  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats\n"
+            "  • openSUSE:              sudo zypper install libqt6-qtimageformats"
+        ).arg(lower.toUpper());
+    }
+    return QString();
 }
 
 qint64 VramTextureCompressor::estimateVramBytes(int width, int height, VramFormat format)

@@ -8,43 +8,43 @@
         <location filename="../src/aboutdialog.cpp" line="65"/>
         <location filename="../src/aboutdialog.cpp" line="73"/>
         <location filename="../src/aboutdialog.cpp" line="227"/>
-        <location filename="../../tests/test_controllers.cpp" line="1706"/>
-        <location filename="../../tests/test_controllers.cpp" line="1771"/>
-        <location filename="../../tests/test_controllers.cpp" line="1836"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="547"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="612"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="677"/>
         <source>KEY_DIALOG_ABOUT_TITLE</source>
         <translation>情報</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="74"/>
         <location filename="../src/aboutdialog.cpp" line="228"/>
-        <location filename="../../tests/test_controllers.cpp" line="1707"/>
-        <location filename="../../tests/test_controllers.cpp" line="1772"/>
-        <location filename="../../tests/test_controllers.cpp" line="1837"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="548"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="613"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="678"/>
         <source>KEY_DIALOG_ABOUT_PRICING</source>
         <translation>価格とライセンス</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="75"/>
         <location filename="../src/aboutdialog.cpp" line="229"/>
-        <location filename="../../tests/test_controllers.cpp" line="1708"/>
-        <location filename="../../tests/test_controllers.cpp" line="1773"/>
-        <location filename="../../tests/test_controllers.cpp" line="1838"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="549"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="614"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="679"/>
         <source>KEY_DIALOG_ABOUT_PLUGINS</source>
         <translation>プラグインと状態</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="475"/>
-        <location filename="../../tests/test_controllers.cpp" line="1709"/>
-        <location filename="../../tests/test_controllers.cpp" line="1774"/>
-        <location filename="../../tests/test_controllers.cpp" line="1839"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="550"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="615"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="680"/>
         <source>KEY_PRICING_ACTIVE_EDITION</source>
         <translation>[有効なエディション]</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="490"/>
-        <location filename="../../tests/test_controllers.cpp" line="1710"/>
-        <location filename="../../tests/test_controllers.cpp" line="1775"/>
-        <location filename="../../tests/test_controllers.cpp" line="1840"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="551"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="616"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="681"/>
         <source>KEY_PRICING_TARGET_LABEL</source>
         <translation>対象:</translation>
     </message>
@@ -341,9 +341,9 @@
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="25"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingdialog.cpp" line="549"/>
-        <location filename="../../tests/test_controllers.cpp" line="1725"/>
-        <location filename="../../tests/test_controllers.cpp" line="1790"/>
-        <location filename="../../tests/test_controllers.cpp" line="1855"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="566"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="631"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="696"/>
         <source>Atlas Bin-Packing (MaxRects)</source>
         <translation>アトラスビンパッキング (MaxRects)</translation>
     </message>
@@ -557,9 +557,9 @@
     <name>AtlasPackingFilter</name>
     <message>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1724"/>
-        <location filename="../../tests/test_controllers.cpp" line="1789"/>
-        <location filename="../../tests/test_controllers.cpp" line="1854"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="565"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="630"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="695"/>
         <source>Atlas Bin-Packing (MaxRects)...</source>
         <translation>アトラスビンパッキング (MaxRects)...</translation>
     </message>
@@ -591,9 +591,9 @@
     <name>BackgroundRemovalDialog</name>
     <message>
         <location filename="../../plugins/filters/backgroundremoval/backgroundremovaldialog.cpp" line="25"/>
-        <location filename="../../tests/test_controllers.cpp" line="1717"/>
-        <location filename="../../tests/test_controllers.cpp" line="1782"/>
-        <location filename="../../tests/test_controllers.cpp" line="1847"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="558"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="623"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="688"/>
         <source>Background Removal</source>
         <translation>背景の削除</translation>
     </message>
@@ -803,9 +803,9 @@ Choose which branch to restore:</source>
     <name>ColorAdjustFilter</name>
     <message>
         <location filename="../../plugins/filters/coloradjust/coloradjustfilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1720"/>
-        <location filename="../../tests/test_controllers.cpp" line="1785"/>
-        <location filename="../../tests/test_controllers.cpp" line="1850"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="561"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="626"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="691"/>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
         <translation>カラー調整 (HSV・コントラスト)...</translation>
     </message>
@@ -1065,9 +1065,9 @@ Strict removal clears the pixel.</source>
     <name>ExportDialog</name>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="14"/>
-        <location filename="../../tests/test_controllers.cpp" line="1726"/>
-        <location filename="../../tests/test_controllers.cpp" line="1791"/>
-        <location filename="../../tests/test_controllers.cpp" line="1856"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="567"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="632"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="697"/>
         <source>Export Atlas &amp; Animations</source>
         <translation>アトラスとアニメーションのエクスポート</translation>
     </message>
@@ -1128,17 +1128,17 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="99"/>
-        <location filename="../../tests/test_controllers.cpp" line="1727"/>
-        <location filename="../../tests/test_controllers.cpp" line="1792"/>
-        <location filename="../../tests/test_controllers.cpp" line="1857"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="568"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="633"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="698"/>
         <source>Keep Current Layout (WYSIWYG — As Displayed)</source>
         <translation>現在の配置を維持 (WYSIWYG — 表示通り)</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="104"/>
-        <location filename="../../tests/test_controllers.cpp" line="1728"/>
-        <location filename="../../tests/test_controllers.cpp" line="1793"/>
-        <location filename="../../tests/test_controllers.cpp" line="1858"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="569"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="634"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="699"/>
         <source>MaxRects (Best Short Side Fit — Recommended)</source>
         <translation>MaxRects (Best Short Side Fit — 推奨)</translation>
     </message>
@@ -1199,9 +1199,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.ui" line="216"/>
-        <location filename="../../tests/test_controllers.cpp" line="1729"/>
-        <location filename="../../tests/test_controllers.cpp" line="1794"/>
-        <location filename="../../tests/test_controllers.cpp" line="1859"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="570"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="635"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="700"/>
         <source>Force Power of Two (2^n)</source>
         <translation>2の累乗サイズに強制 (2^n)</translation>
     </message>
@@ -1391,9 +1391,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="334"/>
-        <location filename="../../tests/test_controllers.cpp" line="1730"/>
-        <location filename="../../tests/test_controllers.cpp" line="1795"/>
-        <location filename="../../tests/test_controllers.cpp" line="1860"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="571"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="636"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="701"/>
         <source>Packing Efficiency: Preserved as-is (WYSIWYG)</source>
         <translation>充填効率：そのまま維持 (WYSIWYG)</translation>
     </message>
@@ -1476,9 +1476,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="49"/>
         <location filename="../src/widgets/exportdialog.cpp" line="391"/>
-        <location filename="../../tests/test_controllers.cpp" line="1731"/>
-        <location filename="../../tests/test_controllers.cpp" line="1796"/>
-        <location filename="../../tests/test_controllers.cpp" line="1861"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="572"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="637"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="702"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -1496,9 +1496,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="81"/>
         <location filename="../src/widgets/filterdialogbase.cpp" line="259"/>
-        <location filename="../../tests/test_controllers.cpp" line="1718"/>
-        <location filename="../../tests/test_controllers.cpp" line="1783"/>
-        <location filename="../../tests/test_controllers.cpp" line="1848"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="559"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="624"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="689"/>
         <source>Live Preview</source>
         <translation>リアルタイムプレビュー</translation>
     </message>
@@ -1511,9 +1511,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="86"/>
         <location filename="../src/widgets/filterdialogbase.cpp" line="263"/>
-        <location filename="../../tests/test_controllers.cpp" line="1719"/>
-        <location filename="../../tests/test_controllers.cpp" line="1784"/>
-        <location filename="../../tests/test_controllers.cpp" line="1849"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="560"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="625"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="690"/>
         <source>Auto-detect Sprite Boxes</source>
         <translation>スプライト枠の自動検出</translation>
     </message>
@@ -1547,9 +1547,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="275"/>
-        <location filename="../../tests/test_controllers.cpp" line="1744"/>
-        <location filename="../../tests/test_controllers.cpp" line="1809"/>
-        <location filename="../../tests/test_controllers.cpp" line="1875"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="585"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="650"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="716"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -1578,9 +1578,9 @@ Strict removal clears the pixel.</source>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="22"/>
         <location filename="../../plugins/filters/atlaspacking/atlaspackingfilter.cpp" line="22"/>
         <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="22"/>
-        <location filename="../../tests/test_controllers.cpp" line="1723"/>
-        <location filename="../../tests/test_controllers.cpp" line="1788"/>
-        <location filename="../../tests/test_controllers.cpp" line="1853"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="564"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="629"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="694"/>
         <source>Geometry &amp; Transform</source>
         <translation>ジオメトリと変形</translation>
     </message>
@@ -1706,9 +1706,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/githistorydock.cpp" line="269"/>
         <location filename="../src/widgets/githistorydock.cpp" line="600"/>
-        <location filename="../../tests/test_controllers.cpp" line="1713"/>
-        <location filename="../../tests/test_controllers.cpp" line="1778"/>
-        <location filename="../../tests/test_controllers.cpp" line="1843"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="554"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="619"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="684"/>
         <source>KEY_GIT_BTN_RESTORE</source>
         <translation>このリビジョンを復元</translation>
     </message>
@@ -1881,37 +1881,37 @@ Strict removal clears the pixel.</source>
         <translation>関連画像の保存に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="745"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="746"/>
         <source>Cannot write to JSON file: %1</source>
         <translation>JSONファイルに書き込めません: %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="756"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="757"/>
         <source>Exported JSON descriptor %1 and image %2</source>
         <translation>JSONディスクリプタ %1 および画像 %2 をエクスポートしました</translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="773"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="774"/>
         <source>Default JSON Structure:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="775"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="776"/>
         <source>Hash Object (TexturePacker Hash)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="776"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="777"/>
         <source>Array List (TexturePacker Array / Aseprite)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="789"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="790"/>
         <source>Include animation frameTags in metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="799"/>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="800"/>
         <source>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1964,9 +1964,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/mainwindow.cpp" line="540"/>
         <location filename="../src/mainwindow.cpp" line="941"/>
-        <location filename="../../tests/test_controllers.cpp" line="1716"/>
-        <location filename="../../tests/test_controllers.cpp" line="1781"/>
-        <location filename="../../tests/test_controllers.cpp" line="1846"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="557"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="622"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="687"/>
         <source>KEY_MENU_FILTERS</source>
         <translation>フィルター(&amp;F)</translation>
     </message>
@@ -2015,9 +2015,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="983"/>
-        <location filename="../../tests/test_controllers.cpp" line="1702"/>
-        <location filename="../../tests/test_controllers.cpp" line="1767"/>
-        <location filename="../../tests/test_controllers.cpp" line="1832"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="543"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="608"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="673"/>
         <source>KEY_TOOL_SELECT</source>
         <translation>選択・編集</translation>
     </message>
@@ -2079,9 +2079,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="879"/>
-        <location filename="../../tests/test_controllers.cpp" line="1696"/>
-        <location filename="../../tests/test_controllers.cpp" line="1761"/>
-        <location filename="../../tests/test_controllers.cpp" line="1826"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="537"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="602"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="667"/>
         <source>KEY_MENU_FILE</source>
         <translation>ファイル</translation>
     </message>
@@ -2123,18 +2123,18 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="942"/>
-        <location filename="../../tests/test_controllers.cpp" line="1700"/>
-        <location filename="../../tests/test_controllers.cpp" line="1765"/>
-        <location filename="../../tests/test_controllers.cpp" line="1830"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="541"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="606"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="671"/>
         <source>KEY_ACTION_OPEN</source>
         <translation>開く(&amp;O)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="947"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="152"/>
-        <location filename="../../tests/test_controllers.cpp" line="1701"/>
-        <location filename="../../tests/test_controllers.cpp" line="1766"/>
-        <location filename="../../tests/test_controllers.cpp" line="1831"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="542"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="607"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="672"/>
         <source>KEY_ACTION_SAVE</source>
         <translation>保存(&amp;S)</translation>
     </message>
@@ -2172,17 +2172,17 @@ Strict removal clears the pixel.</source>
         <location filename="../src/mainwindow_animation.cpp" line="113"/>
         <location filename="../src/mainwindow_atlas.cpp" line="105"/>
         <location filename="../src/mainwindow_atlas.cpp" line="196"/>
-        <location filename="../../tests/test_controllers.cpp" line="1703"/>
-        <location filename="../../tests/test_controllers.cpp" line="1768"/>
-        <location filename="../../tests/test_controllers.cpp" line="1833"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="544"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="609"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="674"/>
         <source>KEY_CTX_CREATE_ANIM</source>
         <translation>選択範囲からアニメーションを作成する</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="234"/>
-        <location filename="../../tests/test_controllers.cpp" line="1704"/>
-        <location filename="../../tests/test_controllers.cpp" line="1769"/>
-        <location filename="../../tests/test_controllers.cpp" line="1834"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="545"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="610"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="675"/>
         <source>KEY_CTX_ADD_TO_ANIM</source>
         <translation>アニメーションに追加</translation>
     </message>
@@ -2198,9 +2198,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="313"/>
-        <location filename="../../tests/test_controllers.cpp" line="1705"/>
-        <location filename="../../tests/test_controllers.cpp" line="1770"/>
-        <location filename="../../tests/test_controllers.cpp" line="1835"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="546"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="611"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="676"/>
         <source>KEY_CTX_SELECT_ALL</source>
         <translation>すべて選択</translation>
     </message>
@@ -2325,9 +2325,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="895"/>
-        <location filename="../../tests/test_controllers.cpp" line="1697"/>
-        <location filename="../../tests/test_controllers.cpp" line="1762"/>
-        <location filename="../../tests/test_controllers.cpp" line="1827"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="538"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="603"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="668"/>
         <source>KEY_MENU_VIEW</source>
         <translation>表示(&amp;V)</translation>
     </message>
@@ -2381,9 +2381,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
-        <location filename="../../tests/test_controllers.cpp" line="1699"/>
-        <location filename="../../tests/test_controllers.cpp" line="1764"/>
-        <location filename="../../tests/test_controllers.cpp" line="1829"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="540"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="605"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="670"/>
         <source>KEY_DOCK_PREVIEW</source>
         <translation>アニメーションプレビュー</translation>
     </message>
@@ -2571,9 +2571,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="99"/>
         <location filename="../src/mainwindow.cpp" line="720"/>
-        <location filename="../../tests/test_controllers.cpp" line="1714"/>
-        <location filename="../../tests/test_controllers.cpp" line="1779"/>
-        <location filename="../../tests/test_controllers.cpp" line="1844"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="555"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="620"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="685"/>
         <source>KEY_UNTITLED_PROJECT</source>
         <translation>無題のプロジェクト</translation>
     </message>
@@ -2622,9 +2622,9 @@ Strict removal clears the pixel.</source>
         <location filename="../src/mainwindow.ui" line="841"/>
         <location filename="../src/mainwindow.cpp" line="340"/>
         <location filename="../src/mainwindow.cpp" line="911"/>
-        <location filename="../../tests/test_controllers.cpp" line="1698"/>
-        <location filename="../../tests/test_controllers.cpp" line="1763"/>
-        <location filename="../../tests/test_controllers.cpp" line="1828"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="539"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="604"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="669"/>
         <source>KEY_TOOLBAR_MAIN</source>
         <translation>メインツールバー</translation>
     </message>
@@ -2793,7 +2793,7 @@ Strict removal clears the pixel.</source>
         <translation>等倍 100%（実寸）</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1909"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="750"/>
         <source>KEY_UNKNOWN_FEATURE</source>
         <translation>不明な機能</translation>
     </message>
@@ -2979,9 +2979,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="45"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="688"/>
-        <location filename="../../tests/test_controllers.cpp" line="1735"/>
-        <location filename="../../tests/test_controllers.cpp" line="1800"/>
-        <location filename="../../tests/test_controllers.cpp" line="1866"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="576"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="641"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="707"/>
         <source>Pixel Editor — BentoPack</source>
         <translation>ピクセルエディタ — BentoPack</translation>
     </message>
@@ -3023,9 +3023,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="167"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="708"/>
-        <location filename="../../tests/test_controllers.cpp" line="1736"/>
-        <location filename="../../tests/test_controllers.cpp" line="1801"/>
-        <location filename="../../tests/test_controllers.cpp" line="1867"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="577"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="642"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="708"/>
         <source>Pencil (1px continuous Bresenham) [P]</source>
         <translation>鉛筆（1px連続ブレゼンハム）[P]</translation>
     </message>
@@ -3257,9 +3257,9 @@ Strict removal clears the pixel.</source>
     <name>PixelRescaleFilter</name>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1721"/>
-        <location filename="../../tests/test_controllers.cpp" line="1786"/>
-        <location filename="../../tests/test_controllers.cpp" line="1851"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="562"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="627"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="692"/>
         <source>Pixel Art Rescale...</source>
         <translation>ピクセルアートリサイズ...</translation>
     </message>
@@ -3346,9 +3346,9 @@ Strict removal clears the pixel.</source>
     <name>PolygonMeshDialog</name>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="251"/>
-        <location filename="../../tests/test_controllers.cpp" line="1732"/>
-        <location filename="../../tests/test_controllers.cpp" line="1797"/>
-        <location filename="../../tests/test_controllers.cpp" line="1862"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="573"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="638"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="703"/>
         <source>Tight Mesh &amp; 2D Polygon Packing</source>
         <translation>2Dポリゴンメッシュ＆タイトパッキング</translation>
     </message>
@@ -3364,9 +3364,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="254"/>
-        <location filename="../../tests/test_controllers.cpp" line="1733"/>
-        <location filename="../../tests/test_controllers.cpp" line="1798"/>
-        <location filename="../../tests/test_controllers.cpp" line="1863"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="574"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="639"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="704"/>
         <source>Approximation Tolerance (ε):</source>
         <translation>近似許容値 (ε)：</translation>
     </message>
@@ -3428,9 +3428,9 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="259"/>
-        <location filename="../../tests/test_controllers.cpp" line="1734"/>
-        <location filename="../../tests/test_controllers.cpp" line="1799"/>
-        <location filename="../../tests/test_controllers.cpp" line="1864"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="575"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="640"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="705"/>
         <source>Apply to Selection</source>
         <translation>選択範囲に適用</translation>
     </message>
@@ -3456,7 +3456,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="431"/>
-        <location filename="../../tests/test_controllers.cpp" line="1865"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="706"/>
         <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
         <translation>対象フレーム %1：矩形モード（メッシュ未適用）</translation>
     </message>
@@ -3909,7 +3909,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="441"/>
-        <location filename="../src/packer/vramtexturecompressor.cpp" line="303"/>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="330"/>
         <source>Failed to decode image from: %1</source>
         <translation>画像 %1 のデコードに失敗しました</translation>
     </message>
@@ -3996,34 +3996,75 @@ Strict removal clears the pixel.</source>
         <translation>ポリゴンメッシュを設定</translation>
     </message>
     <message>
-        <location filename="../src/packer/vramtexturecompressor.cpp" line="271"/>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="276"/>
         <source>Image file does not exist: %1</source>
         <translation>画像ファイルが存在しません：%1</translation>
     </message>
     <message>
-        <location filename="../src/packer/vramtexturecompressor.cpp" line="281"/>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="286"/>
         <source>Failed to open file for reading: %1</source>
         <translation>読み込み用ファイルのオープンに失敗しました：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="328"/>
+        <source>Failed to decode image from %1.
+
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="340"/>
+        <source>The WebP image format plugin is not installed in your Qt environment.
+
+To enable WebP support on Linux, install the corresponding package:
+  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
+  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
+  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
+  • openSUSE:              sudo zypper install libqt6-qtimageformats
+
+On Windows / macOS, ensure Qt imageformats plugins (qwebp) are deployed with the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/packer/vramtexturecompressor.cpp" line="351"/>
+        <source>The %1 image format requires the Qt6 imageformats plugin.
+
+Install package:
+  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
+  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
+  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
+  • openSUSE:              sudo zypper install libqt6-qtimageformats</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="499"/>
         <source>No suitable exporter found for format: %1</source>
         <translation type="unfinished">フォーマット %1 に対応するエクスポーターが見つかりません</translation>
     </message>
+    <message>
+        <location filename="../src/project/projectmanager.cpp" line="207"/>
+        <source>Failed to decode project atlas: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/project/projectmanager.cpp" line="215"/>
+        <source>Project atlas image file not found in session: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QPlatformTheme</name>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1739"/>
-        <location filename="../../tests/test_controllers.cpp" line="1804"/>
-        <location filename="../../tests/test_controllers.cpp" line="1870"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="580"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="645"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="711"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1740"/>
-        <location filename="../../tests/test_controllers.cpp" line="1805"/>
-        <location filename="../../tests/test_controllers.cpp" line="1871"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="581"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="646"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="712"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -4032,9 +4073,9 @@ Strict removal clears the pixel.</source>
         <translation type="vanished">キャンセル(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1741"/>
-        <location filename="../../tests/test_controllers.cpp" line="1806"/>
-        <location filename="../../tests/test_controllers.cpp" line="1872"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="582"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="647"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="713"/>
         <source>Discard</source>
         <translation>破棄</translation>
     </message>
@@ -4043,9 +4084,9 @@ Strict removal clears the pixel.</source>
         <translation type="vanished">破棄(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1742"/>
-        <location filename="../../tests/test_controllers.cpp" line="1807"/>
-        <location filename="../../tests/test_controllers.cpp" line="1873"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="583"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="648"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="714"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -4058,9 +4099,9 @@ Strict removal clears the pixel.</source>
         <translation type="vanished">保存しない</translation>
     </message>
     <message>
-        <location filename="../../tests/test_controllers.cpp" line="1743"/>
-        <location filename="../../tests/test_controllers.cpp" line="1808"/>
-        <location filename="../../tests/test_controllers.cpp" line="1874"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="584"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="649"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="715"/>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
@@ -4117,9 +4158,9 @@ Strict removal clears the pixel.</source>
     <name>RetroPaletteFilter</name>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="11"/>
-        <location filename="../../tests/test_controllers.cpp" line="1722"/>
-        <location filename="../../tests/test_controllers.cpp" line="1787"/>
-        <location filename="../../tests/test_controllers.cpp" line="1852"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="563"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="628"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="693"/>
         <source>Retro Palette &amp; Dithering...</source>
         <translation>レトロパレット＆ディザリング...</translation>
     </message>
@@ -4401,9 +4442,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="53"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1020"/>
-        <location filename="../../tests/test_controllers.cpp" line="1711"/>
-        <location filename="../../tests/test_controllers.cpp" line="1776"/>
-        <location filename="../../tests/test_controllers.cpp" line="1841"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="552"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="617"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="682"/>
         <source>KEY_SETTINGS_TITLE</source>
         <translation>設定</translation>
     </message>
@@ -4520,9 +4561,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="246"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1043"/>
-        <location filename="../../tests/test_controllers.cpp" line="1715"/>
-        <location filename="../../tests/test_controllers.cpp" line="1780"/>
-        <location filename="../../tests/test_controllers.cpp" line="1845"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="556"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="621"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="686"/>
         <source>KEY_SETTINGS_LANG_HINT</source>
         <translation>言語の変更は即座に適用されます。</translation>
     </message>
@@ -4908,17 +4949,17 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1104"/>
-        <location filename="../../tests/test_controllers.cpp" line="1745"/>
-        <location filename="../../tests/test_controllers.cpp" line="1810"/>
-        <location filename="../../tests/test_controllers.cpp" line="1876"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="586"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="651"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="717"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1107"/>
-        <location filename="../../tests/test_controllers.cpp" line="1746"/>
-        <location filename="../../tests/test_controllers.cpp" line="1811"/>
-        <location filename="../../tests/test_controllers.cpp" line="1877"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="587"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="652"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="718"/>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
@@ -5004,9 +5045,9 @@ Strict removal clears the pixel.</source>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="53"/>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="294"/>
-        <location filename="../../tests/test_controllers.cpp" line="1712"/>
-        <location filename="../../tests/test_controllers.cpp" line="1777"/>
-        <location filename="../../tests/test_controllers.cpp" line="1842"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="553"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="618"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="683"/>
         <source>KEY_TIMELINE_ADD_SELECTION</source>
         <translation>+ 選択を追加</translation>
     </message>
