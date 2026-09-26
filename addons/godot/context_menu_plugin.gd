@@ -3,7 +3,7 @@ class_name BentoPackContextMenuPlugin
 extends EditorContextMenuPlugin
 
 ## Editor Context Menu Plugin for BentoPack.
-## Adds 1-click actions to the Godot FileSystem dock for images (.png, .webp, .jpg) and projects (.ssp).
+## Adds 1-click actions to the Godot FileSystem dock for images (.png, .webp, .jpg) and projects (.bento).
 
 var _plugin: EditorPlugin
 
@@ -15,9 +15,9 @@ func _popup_menu(paths: PackedStringArray) -> void:
 		return
 
 	var has_image := false
-	var has_ssp := false
+	var has_bento := false
 	var target_image := ""
-	var target_ssp := ""
+	var target_bento := ""
 
 	for p in paths:
 		var ext := p.get_extension().to_lower()
@@ -25,17 +25,17 @@ func _popup_menu(paths: PackedStringArray) -> void:
 			has_image = true
 			if target_image.is_empty():
 				target_image = p
-		elif ext in ["ssp", "bento"]:
-			has_ssp = true
-			if target_ssp.is_empty():
-				target_ssp = p
+		elif ext == "bento":
+			has_bento = true
+			if target_bento.is_empty():
+				target_bento = p
 
 	if has_image:
 		add_context_menu_item("⚡ BentoPack: Auto-Slice & Générer Scène", _on_auto_slice.bind(target_image))
 		add_context_menu_item("🔧 BentoPack: Configurer dans le Dock", _on_open_in_dock.bind(target_image))
 
-	if has_ssp:
-		add_context_menu_item("🎨 BentoPack: Ouvrir dans l'éditeur Desktop", _on_open_in_desktop.bind(target_ssp))
+	if has_bento:
+		add_context_menu_item("🎨 BentoPack: Ouvrir dans l'éditeur Desktop", _on_open_in_desktop.bind(target_bento))
 
 func _on_auto_slice(arg1: Variant = null, arg2: Variant = null) -> void:
 	var path: String = ""
@@ -49,15 +49,15 @@ func _on_auto_slice(arg1: Variant = null, arg2: Variant = null) -> void:
 	if path.is_empty():
 		return
 
-	var target_ssp := path.get_basename() + ".bento"
+	var target_bento := path.get_basename() + ".bento"
 	var global_src := ProjectSettings.globalize_path(path)
-	var global_target := ProjectSettings.globalize_path(target_ssp)
+	var global_target := ProjectSettings.globalize_path(target_bento)
 
 	var cli_args: Array[String] = ["slice", "--output-project", global_target, global_src]
 	var res := BentoPackCliBridge.run_cli(cli_args)
 
 	if res.get("success", false):
-		print("[BentoPack] Auto-Slice réussi pour %s -> %s" % [path.get_file(), target_ssp.get_file()])
+		print("[BentoPack] Auto-Slice réussi pour %s -> %s" % [path.get_file(), target_bento.get_file()])
 		if Engine.is_editor_hint():
 			EditorInterface.get_resource_filesystem().scan()
 	else:

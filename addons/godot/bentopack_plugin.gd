@@ -4,14 +4,14 @@ extends EditorPlugin
 
 ## Main EditorPlugin entrypoint for the official BentoPack Godot 4 addon.
 
-var _importer: BentoPackSspImporter
+var _importer: BentoImporter
 var _inspector_plugin: BentoPackInspectorPlugin
 var _dock: BentoPackDock
 var _context_menu_plugin: RefCounted
 
 func _enter_tree() -> void:
-	# 1. Register .ssp Import Plugin
-	_importer = BentoPackSspImporter.new()
+	# 1. Register .bento Import Plugin
+	_importer = BentoImporter.new()
 	add_import_plugin(_importer)
 
 	# 2. Register Custom Inspector Plugin

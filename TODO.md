@@ -153,11 +153,12 @@ L'adoption en studio et par les créateurs indépendants dépend de la suppressi
 #### 1. Écosystème Godot Engine 4 (`godot-bentopack-addon`)
 - **Nature :** `EditorPlugin` en GDScript pur (zéro dépendance binaire, multiplateforme).
 - **Fonctionnalités :**
-  - `EditorFileSystemImportPlugin` prenant en charge nativement les fichiers `.bento` et `.ssp`.
+  - `EditorFileSystemImportPlugin` prenant en charge nativement les fichiers `.bento` avec décompression native WebP (`load_webp_from_buffer`), PNG et JPEG.
   - Génération automatique de `SpriteFrames` (`.tres`) et sous-ressources `AtlasTexture`.
   - Application des décalages de pivots exacts via `margin = Rect2(...)`.
-  - Génération de ressources `ArrayMesh` 2D pour le rendu sans overdraw via `MeshInstance2D`.
-  - Bouton *"Ouvrir dans BentoPack"* dans l'inspecteur Godot sur les nœuds `AnimatedSprite2D` et `Sprite2D`.
+  - Génération de ressources `ArrayMesh` 2D pour le rendu sans overdraw via `BentoMeshSprite` / `MeshInstance2D`.
+  - Synchronisation temps réel des hitboxes `CollisionPolygon2D` calculées automatiquement frame par frame.
+  - Bouton *"Ouvrir dans BentoPack"* dans l'inspecteur Godot sur les nœuds `AnimatedSprite2D`, `Sprite2D` et `SpriteFrames`.
 - **Publication :** Soumission officielle sur la [Godot Asset Library](https://godotengine.org/asset-library).
 
 #### 2. Écosystème Unity (`com.bentopack.importer`)
@@ -176,6 +177,36 @@ L'adoption en studio et par les créateurs indépendants dépend de la suppressi
   - Interfaçage natif avec **PaperZD** (State Machines d'animation 2D).
   - Définition de la géométrie de rendu personnalisée (`RenderGeometry`) issue du maillage M8 pour minimiser le coût de translucidité.
 - **Publication :** Soumission sur la nouvelle marketplace unifiée d'Epic Games : **Fab** (`fab.com`).
+
+---
+
+## 🔌 Écosystème des Formats & Plugins Extracteurs (État des Lieux & Évolutions Post-M10)
+
+### 📌 État Actuel des Plugins Extracteurs (Socle Validé)
+| Plugin | Extensions | Import | Export | Spécificités & Rôle dans le Pipeline |
+|---|---|:---:|:---:|---|
+| **`spritesheet`** | `.png`, `.webp`, `.jpg`, `.jpeg`, `.bmp`, `.ktx2`, `.basis` | ✅ | ✅ | Découpe automatique par seuillage alpha & tolérance, smart crop, compression VRAM GPU matérielle (KTX2 UASTC/ETC1S, Basis). |
+| **`gif`** | `.gif` | ✅ | ❌ | Import de séquences animées avec timings (FPS) et décomposition des frames. |
+| **`json`** | `.json` | ✅ | ✅ | Standard TexturePacker (Hash & Array) + Aseprite (`frameTags` convertis nativement en animations BentoPack avec leurs `loop_mode`). Interopérable d'emblée avec Phaser 3, PixiJS, Bevy, Raylib, Defold. |
+| **`godot`** | `.tres` | ✅ | ✅ | Format texte natif Godot 4.x (`SpriteFrames`) avec sous-ressources `AtlasTexture`, animations et atlas compagnon. |
+| **`unity`** | `.unity.json`, `.json` | ✅ | ✅ | Descripteur de maillage serré (*Tight Sprite Mesh*) injectant sommets, UVs et triangles dans `Sprite.OverrideGeometry`. |
+| **`unreal`** | `.paper2d.json`, `.json` | ✅ | ✅ | Format dédié UE5 Paper2D / PaperZD avec géométrie de rendu polygonale M8 (`RenderGeometry`) et `CollisionGeometry`. |
+
+> **Diagnostic M10 :** Ce socle couvre 100% des besoins requis pour l'implémentation des packages moteurs du M10 (Godot AssetLib, Unity UPM, Unreal Fab).
+
+### 🚀 Formats Cibles Post-M10 (Élargissement Industriel)
+
+1. **Format Texte LibGDX / Spine (`.atlas`) — Priorité Moyenne :**
+   - **Enjeu :** Standard clé-valeur textuel ultra-répandu dans les frameworks indés et légers (Raylib, Bevy Rust, MonoGame, Defold, LibGDX).
+   - **Avantage :** Parsing trivial sans dépendance JSON, interopérabilité directe avec les runtimes Spine officiels.
+   - **Complexité :** Faible (~150 lignes C++).
+2. **Format Binaire Natif Aseprite (`.ase` / `.aseprite`) — Priorité UX & Confort :**
+   - **Enjeu :** Ouvrir ou glisser-déposer directement un projet Aseprite dans BentoPack sans étape intermédiaire manuelle d'exportation vers JSON+PNG.
+   - **Avantage :** Argument produit majeur pour la communauté des pixel-artists.
+   - **Complexité :** Moyenne (décodage du format binaire ouvert Aseprite : calques, chunks d'images, tags, palettes).
+3. **Format Apple / Cocos2d-x (`.plist` XML) — Priorité Basse :**
+   - **Enjeu :** Compatibilité avec les pipelines historiques de jeux mobiles 2D (Cocos2d-x, SpriteKit iOS) encore présents sur certains marchés asiatiques.
+   - **Complexité :** Faible (sérialisation XML de dictionnaires/rectangles).
 
 ---
 
@@ -242,4 +273,4 @@ Concevoir un **micro-démonstrateur web vitrine ultra-léger** (mini-module WebA
 | **Semaine 3-4** | **CH-TECH-1 & CH-TECH-4** | • Scinder `BentoPackCore` (pur headless) et `BentoPackGUI`<br>• Alléger `bentopack-cli` (dépendance `Qt6Widgets` éliminée)<br>• Découper `test_controllers.cpp` en 4 fichiers de tests ciblés | Architecture saine, CLI prêt pour la CI cloud minimale. |
 | **Mois 2** | **M10 (Godot & Stores)** | • Finaliser et publier l'addon Godot 4 sur AssetLib<br>• Lancer la page Steam et la boutique Itch.io pour la version Store Convenience | Premier flux de revenus et visibilité communauté. |
 | **Mois 3** | **M10 (Unity & Unreal)** | • Développer le package Unity UPM avec support `SpriteMeshType.Tight`<br>• Développer le plugin UE5 PaperZD pour Fab | Couverture complète des trois moteurs majeurs du marché. |
-| **Mois 4-5** | **M14 & M12** | • Vectorisation SIMD des filtres graphiques<br>• Cadrage et développement initial du rigging 2D (Spine JSON) | Performances extrêmes 8K/16K et diversification fonctionnelle. |
+| **Mois 4-5** | **M14, M12 & Formats Post-M10** | • Vectorisation SIMD des filtres graphiques<br>• Cadrage et développement initial du rigging 2D (Spine JSON)<br>• Extracteur LibGDX/Spine (`.atlas`) et import direct Aseprite (`.aseprite`) | Performances extrêmes 8K/16K, diversification fonctionnelle et interopérabilité étendue. |

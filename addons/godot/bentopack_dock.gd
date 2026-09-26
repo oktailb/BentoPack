@@ -5,11 +5,11 @@ extends PanelContainer
 ## Bottom Panel Dock for BentoPack in Godot 4 Editor.
 ## Allows importing raw bitmap atlases, auto-slicing, M8 tight packing, and watch daemon management.
 
-signal process_requested(args: Array[String], output_ssp: String)
-signal watch_toggled(active: bool, source_path: String, output_ssp: String, args: Array[String])
+signal process_requested(args: Array[String], output_bento: String)
+signal watch_toggled(active: bool, source_path: String, output_bento: String, args: Array[String])
 
 var _source_path_edit: LineEdit
-var _target_ssp_edit: LineEdit
+var _target_bento_edit: LineEdit
 var _slice_mode_opt: OptionButton
 var _tile_w_spin: SpinBox
 var _tile_h_spin: SpinBox
@@ -101,15 +101,15 @@ func _build_ui() -> void:
 
 	# 2. Target Output (OUTPUT)
 	var target_lbl := Label.new()
-	target_lbl.text = "Fichier projet (Sortie .ssp) :"
-	target_lbl.tooltip_text = "Fichier projet .ssp généré par le CLI et automatiquement importé dans Godot avec les animations et le mesh polygonal."
+	target_lbl.text = "Fichier projet (Sortie .bento) :"
+	target_lbl.tooltip_text = "Fichier projet .bento généré par le CLI et automatiquement importé dans Godot avec les animations et le mesh polygonal."
 	grid.add_child(target_lbl)
 
-	_target_ssp_edit = LineEdit.new()
-	_target_ssp_edit.text = "res://character.ssp"
-	_target_ssp_edit.tooltip_text = "Nom du fichier .ssp à créer à partir de l'image source."
-	_target_ssp_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.add_child(_target_ssp_edit)
+	_target_bento_edit = LineEdit.new()
+	_target_bento_edit.text = "res://character.bento"
+	_target_bento_edit.tooltip_text = "Nom du fichier .bento à créer à partir de l'image source."
+	_target_bento_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_child(_target_bento_edit)
 
 	var target_empty := Control.new()
 	grid.add_child(target_empty)
@@ -218,27 +218,27 @@ func _on_browse_pressed() -> void:
 
 func _on_file_selected(path: String) -> void:
 	_source_path_edit.text = path
-	if _target_ssp_edit.text.is_empty() or _target_ssp_edit.text == "res://character.ssp":
-		_target_ssp_edit.text = path.get_basename() + ".ssp"
+	if _target_bento_edit.text.is_empty() or _target_bento_edit.text == "res://character.bento":
+		_target_bento_edit.text = path.get_basename() + ".bento"
 
 func _on_slice_mode_changed(idx: int) -> void:
 	_grid_container.visible = (idx == 1)
 
 func _on_process_pressed() -> void:
 	var src: String = _source_path_edit.text.strip_edges()
-	var target_ssp: String = _target_ssp_edit.text.strip_edges()
+	var target_bento: String = _target_bento_edit.text.strip_edges()
 
 	if src.is_empty():
 		_status_lbl.text = "Erreur : Veuillez spécifier un fichier image source."
 		_status_lbl.modulate = Color(1, 0.3, 0.3)
 		return
 
-	if target_ssp.is_empty():
-		target_ssp = src.get_basename() + ".ssp"
-		_target_ssp_edit.text = target_ssp
+	if target_bento.is_empty():
+		target_bento = src.get_basename() + ".bento"
+		_target_bento_edit.text = target_bento
 
 	var global_src := ProjectSettings.globalize_path(src)
-	var global_target := ProjectSettings.globalize_path(target_ssp)
+	var global_target := ProjectSettings.globalize_path(target_bento)
 
 	var cli_args: Array[String] = []
 
@@ -253,7 +253,7 @@ func _on_process_pressed() -> void:
 	var slice_mode := _slice_mode_opt.selected
 	if slice_mode == 0: # Auto-Slice (Transparence / Silhouettes)
 		cli_args.append("slice")
-		if target_ssp.ends_with(".ssp"):
+		if target_bento.ends_with(".bento"):
 			cli_args.append("--output-project")
 			cli_args.append(global_target)
 		else:
@@ -298,7 +298,7 @@ func _on_process_pressed() -> void:
 	else:
 		var res := BentoPackCliBridge.run_cli(cli_args)
 		if res.get("success", false):
-			_status_lbl.text = "Succès ! %s généré et prêt dans Godot." % target_ssp.get_file()
+			_status_lbl.text = "Succès ! %s généré et prêt dans Godot." % target_bento.get_file()
 			_status_lbl.modulate = Color(0.3, 1.0, 0.4)
 			# Refresh Editor FileSystem
 			if Engine.is_editor_hint():

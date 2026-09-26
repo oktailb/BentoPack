@@ -6,7 +6,7 @@ Official Godot 4 integration plugin for **BentoPack** — Native 2D sprite slici
 
 ## 🚀 Key Features
 
-* **Zero-Configuration Import (`.bento` / `.ssp`)**: Drag and drop `.bento` project files into your Godot project. Godot automatically imports them into:
+* **Zero-Configuration Import (`.bento`)**: Drag and drop `.bento` project files into your Godot project. Godot automatically imports them into:
   * Optimised `SpriteFrames` resources with full timeline & FPS settings.
   * **Automatic M8 Polygon Clipping**: When tight polygonal packing is used, frames are automatically clipped pixel-perfect to their contours with non-overlapping repacking, completely eliminating neighbouring sprite bleed.
   * **Instant Hitbox / CollisionPolygon2D Generation**: Generates synchronized `CollisionPolygon2D` collider shapes matching the exact contour of every single animation frame. No manual hitbox tracing needed!

@@ -64,11 +64,11 @@ func _on_open_pressed(target_object: Object) -> void:
 		if not res.resource_path.is_empty():
 			path_to_open = res.resource_path
 
-	# Check if a sibling .ssp project file exists
+	# Check if a sibling .bento project file exists
 	if not path_to_open.is_empty():
-		var possible_ssp := path_to_open.get_basename() + ".ssp"
-		if FileAccess.file_exists(ProjectSettings.globalize_path(possible_ssp)):
-			path_to_open = possible_ssp
+		var possible_bento := path_to_open.get_basename() + ".bento"
+		if FileAccess.file_exists(ProjectSettings.globalize_path(possible_bento)):
+			path_to_open = possible_bento
 
 	if path_to_open.is_empty():
 		path_to_open = "res://"

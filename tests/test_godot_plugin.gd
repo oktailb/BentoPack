@@ -1,12 +1,12 @@
 extends SceneTree
 
 ## Standalone Godot 4 Headless Test Suite for the BentoPack Addon.
-## Tests SspParser, SspImporter, M8 Mesh creation, and CliBridge.
+## Tests BentoParser, BentoImporter, M8 Mesh creation, WebP Atlas decompression, and CliBridge.
 
-const SspParser = preload("res://addons/bentopack/ssp_parser.gd")
+const BentoParser = preload("res://addons/bentopack/bento_parser.gd")
 const CliBridge = preload("res://addons/bentopack/cli_bridge.gd")
-const SspImporter = preload("res://addons/bentopack/ssp_importer.gd")
-const MeshSprite = preload("res://addons/bentopack/mesh_sprite.gd")
+const BentoImporter = preload("res://addons/bentopack/bento_importer.gd")
+const BentoMeshSprite = preload("res://addons/bentopack/bento_mesh_sprite.gd")
 
 var _tests_passed := 0
 var _tests_failed := 0
@@ -15,12 +15,13 @@ func _init() -> void:
 	print("\n=== Running BentoPack Godot 4 Addon Test Suite ===")
 
 	test_cli_bridge_detection()
-	test_ssp_parser_with_synthetic_project()
+	test_bento_parser_with_synthetic_project()
 	test_m8_mesh_generation()
 	test_collision_polygon_generation()
 	test_mesh_sprite_live_collision_sync()
-	test_ssp_importer_metadata()
-	test_real_ssp_zip_file_parsing()
+	test_bento_importer_metadata()
+	test_real_bento_zip_file_parsing()
+	test_webp_atlas_decompression()
 
 	print("\n=== Test Results: %d Passed, %d Failed ===" % [_tests_passed, _tests_failed])
 
@@ -47,10 +48,10 @@ func test_cli_bridge_detection() -> void:
 	if not cli_path.is_empty():
 		var res := CliBridge.run_cli(["--version"])
 		assert_true(res.get("success", false), "CliBridge can execute bentopack-cli --version")
-		assert_true(res.get("output", "").contains("BentoPack") or res.get("output", "").contains("BentoPack"), "CliBridge output contains 'BentoPack'")
+		assert_true(res.get("output", "").contains("BentoPack"), "CliBridge output contains 'BentoPack'")
 
-func test_ssp_parser_with_synthetic_project() -> void:
-	print("\n[Suite 2: SspParser Project Logic]")
+func test_bento_parser_with_synthetic_project() -> void:
+	print("\n[Suite 2: BentoParser Project Logic]")
 
 	# Create a synthetic project dictionary
 	var project_dict := {
@@ -58,9 +59,10 @@ func test_ssp_parser_with_synthetic_project() -> void:
 		"version": "1.0",
 		"name": "KnightHero",
 		"atlas": {
-			"file": "assets/atlas.png",
+			"file": "atlas.png",
 			"width": 128,
-			"height": 128
+			"height": 128,
+			"format": "RGBA8888"
 		},
 		"boxes": [
 			{
@@ -76,57 +78,70 @@ func test_ssp_parser_with_synthetic_project() -> void:
 		],
 		"animations": [
 			{
-				"name": "walk",
+				"name": "idle",
 				"fps": 12.0,
 				"loop": true,
-				"loop_mode": "loop",
 				"frames": [0, 1]
 			}
 		]
 	}
 
+	# Create a fake 128x128 image
 	var img := Image.create(128, 128, false, Image.FORMAT_RGBA8)
-	var parse_res: SspParser.ParseResult = SspParser.parse_project_dict(project_dict, img)
+	img.fill(Color(0.2, 0.4, 0.8, 1.0))
 
-	assert_true(parse_res.success, "Synthetic project parsed successfully")
-	assert_true(parse_res.project_name == "KnightHero", "Project name matches 'KnightHero'")
-	assert_true(parse_res.sprite_frames != null, "SpriteFrames resource instantiated")
-	assert_true(parse_res.sprite_frames.has_animation("walk"), "Animation 'walk' exists")
-	assert_true(parse_res.sprite_frames.get_animation_speed("walk") == 12.0, "Animation speed is 12 FPS")
-	assert_true(parse_res.sprite_frames.get_frame_count("walk") == 2, "Animation has 2 frames")
+	var parse_res: BentoParser.ParseResult = BentoParser.parse_project_dict(project_dict, img)
+	assert_true(parse_res.success, "BentoParser successfully parsed synthetic project dict")
+	assert_true(parse_res.project_name == "KnightHero", "Parsed project name matches")
+	assert_true(parse_res.sprite_frames != null, "SpriteFrames resource created")
+	assert_true(parse_res.sprite_frames.has_animation("idle"), "SpriteFrames contains 'idle' animation")
+	assert_true(parse_res.sprite_frames.get_frame_count("idle") == 2, "'idle' animation has 2 frames")
+	assert_true(parse_res.sprite_frames.get_animation_speed("idle") == 12.0, "'idle' animation speed is 12 FPS")
+	assert_true(parse_res.sprite_frames.get_animation_loop("idle") == true, "'idle' animation loops")
 
-	var frame0: Texture2D = parse_res.sprite_frames.get_frame_texture("walk", 0)
+	var frame0: Texture2D = parse_res.sprite_frames.get_frame_texture("idle", 0)
 	assert_true(frame0 is AtlasTexture, "Frame texture is an AtlasTexture")
-	var at0 := frame0 as AtlasTexture
-	assert_true(at0.region == Rect2(0, 0, 32, 32), "AtlasTexture region is Rect2(0,0,32,32)")
-	assert_true(at0.get_size() == Vector2(32, 32), "AtlasTexture size is valid (32, 32)")
+	if frame0 is AtlasTexture:
+		var at: AtlasTexture = frame0
+		assert_true(at.region == Rect2(0, 0, 32, 32), "Frame 0 region is Rect2(0, 0, 32, 32)")
 
 func test_m8_mesh_generation() -> void:
-	print("\n[Suite 3: M8 Tight Polygon Mesh Generation]")
+	print("\n[Suite 3: M8 Tight Polygonal Mesh Generation]")
 
 	var project_dict := {
 		"format": "BentoPackProject",
+		"version": "1.0",
 		"name": "MeshHero",
-		"atlas": {"width": 64, "height": 64},
+		"atlas": {
+			"file": "atlas.png",
+			"width": 256,
+			"height": 256
+		},
 		"boxes": [
 			{
 				"index": 0,
-				"rect": {"x": 10, "y": 10, "w": 20, "h": 20},
-				"pivot": {"x": 10, "y": 20},
-				"hasPolygonMesh": true,
-				"polygon": [0.0, 0.0, 20.0, 0.0, 20.0, 20.0, 0.0, 20.0],
-				"vertices": [0.0, 0.0, 20.0, 0.0, 20.0, 20.0, 0.0, 20.0],
-				"indices": [0, 1, 2, 0, 2, 3]
+				"rect": {"x": 10, "y": 20, "w": 64, "h": 64},
+				"pivot": {"x": 32, "y": 64, "custom": true},
+				# Polygon coordinates relative to the cropped sprite (0..64)
+				"polygon": [
+					0, 0,
+					64, 0,
+					64, 64,
+					0, 64
+				],
+				# 2 triangles (indices referencing polygon vertices)
+				"triangles": [
+					0, 1, 2,
+					0, 2, 3
+				]
 			}
-		],
-		"animations": []
+		]
 	}
 
-	var parse_res: SspParser.ParseResult = SspParser.parse_project_dict(project_dict)
-	assert_true(parse_res.meshes.has(0), "M8 mesh created for box 0")
+	var parse_res: BentoParser.ParseResult = BentoParser.parse_project_dict(project_dict)
+	assert_true(parse_res.meshes.has(0), "Parsed M8 mesh for box 0")
 
-	var mesh: ArrayMesh = parse_res.meshes.get(0)
-	assert_true(mesh != null, "ArrayMesh object is valid")
+	var mesh: ArrayMesh = parse_res.meshes[0]
 	assert_true(mesh.get_surface_count() == 1, "ArrayMesh has 1 surface")
 	var arrays := mesh.surface_get_arrays(0)
 	var verts: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
@@ -134,39 +149,39 @@ func test_m8_mesh_generation() -> void:
 	var idxs: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
 	assert_true(idxs.size() == 6, "ArrayMesh has 6 indices (2 triangles)")
 
-func test_ssp_importer_metadata() -> void:
-	print("\n[Suite 4: SspImporter Configuration]")
+func test_bento_importer_metadata() -> void:
+	print("\n[Suite 4: BentoImporter Configuration]")
 	if ClassDB.can_instantiate("EditorImportPlugin"):
-		var imp = SspImporter.new()
-		assert_true(imp._get_importer_name() == "bentopack.ssp", "Importer name is 'bentopack.ssp'")
-		assert_true(imp._get_recognized_extensions().has("ssp"), "Recognizes 'ssp' extension")
+		var imp = BentoImporter.new()
+		assert_true(imp._get_importer_name() == "bentopack.bento", "Importer name is 'bentopack.bento'")
+		assert_true(imp._get_recognized_extensions().has("bento"), "Recognizes 'bento' extension")
 		assert_true(imp._get_save_extension() == "tres", "Saves to 'tres'")
 		assert_true(imp._get_resource_type() == "SpriteFrames", "Resource type is 'SpriteFrames'")
 		var opts: Array[Dictionary] = imp._get_import_options("", 0)
 		assert_true(opts.size() >= 3, "Has configurable import options")
 	else:
-		print("  [PASS] SspImporter is valid editor-only class (runtime mode detected)")
+		print("  [PASS] BentoImporter is valid editor-only class (runtime mode detected)")
 		_tests_passed += 1
 
-func test_real_ssp_zip_file_parsing() -> void:
-	print("\n[Suite 5: Real .ssp Archive Extraction via ZIPReader]")
-	# Create a real .ssp ZIP archive using bentopack-cli
+func test_real_bento_zip_file_parsing() -> void:
+	print("\n[Suite 5: Real .bento Archive Extraction via ZIPReader]")
+	# Create a real .bento ZIP archive using bentopack-cli
 	var tmp_img := "/tmp/godot_test_frame.png"
-	var tmp_ssp := "/tmp/godot_real_test.ssp"
+	var tmp_bento := "/tmp/godot_real_test.bento"
 
 	# Make a test PNG
 	var test_img := Image.create(48, 48, false, Image.FORMAT_RGBA8)
 	test_img.fill(Color(1, 0, 0, 1))
 	test_img.save_png(tmp_img)
 
-	# Slice & create .ssp with bentopack-cli
-	var cli_res := CliBridge.run_cli(["slice", tmp_img, "--output-project", tmp_ssp])
-	assert_true(cli_res.get("success", false), "bentopack-cli generated real .ssp archive")
+	# Slice & create .bento with bentopack-cli
+	var cli_res := CliBridge.run_cli(["slice", tmp_img, "--output-project", tmp_bento])
+	assert_true(cli_res.get("success", false), "bentopack-cli generated real .bento archive")
 
-	if FileAccess.file_exists(tmp_ssp):
-		var parse_res := SspParser.parse_ssp_file(tmp_ssp)
-		assert_true(parse_res.success, "SspParser successfully extracted real .ssp ZIP archive")
-		assert_true(parse_res.atlas_image != null, "Extracted atlas.png image is valid")
+	if FileAccess.file_exists(tmp_bento):
+		var parse_res := BentoParser.parse_bento_file(tmp_bento)
+		assert_true(parse_res.success, "BentoParser successfully extracted real .bento ZIP archive")
+		assert_true(parse_res.atlas_image != null, "Extracted atlas image is valid")
 		assert_true(parse_res.atlas_image.get_width() > 0, "Atlas image has non-zero width")
 		assert_true(parse_res.sprite_frames != null, "Extracted and built SpriteFrames resource")
 		assert_true(parse_res.sprite_frames.get_frame_count("default") >= 1, "Default animation has extracted frames")
@@ -192,7 +207,7 @@ func test_collision_polygon_generation() -> void:
 		]
 	}
 
-	var parse_res: SspParser.ParseResult = SspParser.parse_project_dict(project_dict)
+	var parse_res: BentoParser.ParseResult = BentoParser.parse_project_dict(project_dict)
 	assert_true(parse_res.collision_polygons.has(0), "Box 0 has generated collision polygon")
 	assert_true(parse_res.collision_polygons.has(1), "Box 1 has generated rectangular fallback collision polygon")
 
@@ -207,7 +222,7 @@ func test_collision_polygon_generation() -> void:
 	assert_true(poly1[0] == Vector2(-15, -60), "Box 1 vertex 0 centered on pivot is (-15, -60)")
 
 func test_mesh_sprite_live_collision_sync() -> void:
-	print("\n[Suite 7: BentoPackMeshSprite Live Hitbox Synchronization]")
+	print("\n[Suite 7: BentoMeshSprite Live Hitbox Synchronization]")
 	var root := Node2D.new()
 
 	var hitbox_area := Area2D.new()
@@ -217,7 +232,7 @@ func test_mesh_sprite_live_collision_sync() -> void:
 	hitbox_area.add_child(col_poly)
 	root.add_child(hitbox_area)
 
-	var mesh_sprite = MeshSprite.new()
+	var mesh_sprite = BentoMeshSprite.new()
 	mesh_sprite.name = "MeshSprite"
 	root.add_child(mesh_sprite)
 
@@ -253,3 +268,66 @@ func test_mesh_sprite_live_collision_sync() -> void:
 
 	root.free()
 
+func test_webp_atlas_decompression() -> void:
+	print("\n[Suite 8: Native WebP Atlas Decompression in .bento]")
+	# Create a synthetic .bento ZIP archive containing atlas.webp
+	var zip_packer := ZIPPacker.new()
+	var tmp_webp_bento := "/tmp/test_webp_archive.bento"
+	var err := zip_packer.open(tmp_webp_bento)
+	assert_true(err == OK, "ZIPPacker opened /tmp/test_webp_archive.bento")
+
+	# 1. Create a 32x32 test image and encode to WebP
+	var test_img := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	test_img.fill(Color(0.1, 0.8, 0.3, 1.0))
+	var webp_bytes := test_img.save_webp_to_buffer(true) # lossless
+	assert_true(webp_bytes.size() > 0, "Image encoded to WebP buffer")
+
+	# 2. project.json referencing atlas.webp
+	var proj_dict := {
+		"format": "BentoPackProject",
+		"version": "1.0",
+		"name": "WebpHero",
+		"atlas": {
+			"file": "atlas.webp",
+			"width": 32,
+			"height": 32,
+			"format": "RGBA8888"
+		},
+		"boxes": [
+			{
+				"index": 0,
+				"rect": {"x": 0, "y": 0, "w": 32, "h": 32},
+				"pivot": {"x": 16, "y": 32, "custom": true}
+			}
+		],
+		"animations": [
+			{
+				"name": "idle",
+				"fps": 8.0,
+				"loop": true,
+				"frames": [0]
+			}
+		]
+	}
+	var proj_json_bytes := JSON.stringify(proj_dict).to_utf8_buffer()
+
+	# 3. Write files into zip
+	zip_packer.start_file("project.json")
+	zip_packer.write_file(proj_json_bytes)
+	zip_packer.close_file()
+
+	zip_packer.start_file("atlas.webp")
+	zip_packer.write_file(webp_bytes)
+	zip_packer.close_file()
+
+	zip_packer.close()
+
+	# 4. Parse using BentoParser
+	var res := BentoParser.parse_bento_file(tmp_webp_bento)
+	assert_true(res.success, "BentoParser successfully unpacked .bento with WebP atlas")
+	assert_true(res.atlas_format == "webp", "Detected atlas_format == 'webp'")
+	assert_true(res.atlas_image != null, "Decompressed WebP atlas into valid Image")
+	if res.atlas_image != null:
+		assert_true(res.atlas_image.get_width() == 32, "Decompressed WebP width is 32")
+		assert_true(res.atlas_image.get_height() == 32, "Decompressed WebP height is 32")
+	assert_true(res.sprite_frames != null, "Generated SpriteFrames from WebP atlas")
