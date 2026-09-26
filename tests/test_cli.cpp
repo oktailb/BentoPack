@@ -1,6 +1,8 @@
 #include <QtTest/QtTest>
 #include <QTemporaryDir>
 #include <QFile>
+#include <QImage>
+#include <QPainter>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -44,6 +46,8 @@ private slots:
 
 private:
     QTemporaryDir m_tempDir;
+    QString m_sampleHero;
+    QString m_sampleJson;
 };
 
 void TestCli::initTestCase()
@@ -52,6 +56,63 @@ void TestCli::initTestCase()
     QString binPlugins = QDir(QCoreApplication::applicationDirPath()).filePath(QStringLiteral("plugins"));
     ExtractorRegistry::instance().loadPlugins(binPlugins);
     FilterRegistry::instance().loadPlugins(binPlugins);
+
+    m_sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
+    if (!QFile::exists(m_sampleHero)) {
+        m_sampleHero = m_tempDir.filePath(QStringLiteral("hero.png"));
+        QImage img(140, 146, QImage::Format_ARGB32_Premultiplied);
+        img.fill(Qt::transparent);
+        QPainter p(&img);
+        p.fillRect(10, 10, 32, 32, QColor(255, 0, 0, 255));
+        p.fillRect(60, 60, 40, 40, QColor(0, 255, 0, 255));
+        p.end();
+        img.save(m_sampleHero);
+    }
+
+    m_sampleJson = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.json");
+    if (!QFile::exists(m_sampleJson)) {
+        m_sampleJson = m_tempDir.filePath(QStringLiteral("hero.json"));
+        QJsonObject root;
+        QJsonObject frames;
+        QJsonObject f1;
+        f1[QStringLiteral("frame")] = QJsonObject{
+            {QStringLiteral("x"), 10}, {QStringLiteral("y"), 10},
+            {QStringLiteral("w"), 32}, {QStringLiteral("h"), 32}
+        };
+        f1[QStringLiteral("rotated")] = false;
+        f1[QStringLiteral("trimmed")] = false;
+        f1[QStringLiteral("spriteSourceSize")] = QJsonObject{
+            {QStringLiteral("x"), 0}, {QStringLiteral("y"), 0},
+            {QStringLiteral("w"), 32}, {QStringLiteral("h"), 32}
+        };
+        f1[QStringLiteral("sourceSize")] = QJsonObject{
+            {QStringLiteral("w"), 32}, {QStringLiteral("h"), 32}
+        };
+        frames[QStringLiteral("hero_idle_00.png")] = f1;
+        root[QStringLiteral("frames")] = frames;
+
+        QJsonObject meta;
+        meta[QStringLiteral("image")] = QFileInfo(m_sampleHero).fileName();
+        meta[QStringLiteral("size")] = QJsonObject{
+            {QStringLiteral("w"), 140}, {QStringLiteral("h"), 146}
+        };
+        meta[QStringLiteral("scale")] = QStringLiteral("1");
+        meta[QStringLiteral("frameTags")] = QJsonArray{
+            QJsonObject{
+                {QStringLiteral("name"), QStringLiteral("idle")},
+                {QStringLiteral("from"), 0},
+                {QStringLiteral("to"), 0},
+                {QStringLiteral("direction"), QStringLiteral("forward")}
+            }
+        };
+        root[QStringLiteral("meta")] = meta;
+
+        QFile jf(m_sampleJson);
+        if (jf.open(QIODevice::WriteOnly)) {
+            jf.write(QJsonDocument(root).toJson());
+            jf.close();
+        }
+    }
 }
 
 void TestCli::cleanupTestCase()
@@ -72,9 +133,6 @@ void TestCli::testCliHelpAndVersion()
 
 void TestCli::testTexturePackerFlavorPacking()
 {
-    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
-    QVERIFY(QFile::exists(sampleHero));
-
     QString outSheet = m_tempDir.filePath(QStringLiteral("tp_sheet.png"));
     QString outData = m_tempDir.filePath(QStringLiteral("tp_data.json"));
 
@@ -90,7 +148,7 @@ void TestCli::testTexturePackerFlavorPacking()
         QStringLiteral("--padding"), QStringLiteral("4"),
         QStringLiteral("--extrude"), QStringLiteral("1"),
         QStringLiteral("--trim-mode"), QStringLiteral("Trim"),
-        sampleHero
+        m_sampleHero
     };
 
     CliResult res = parser.parseAndExecute(args);
@@ -126,9 +184,6 @@ void TestCli::testTexturePackerFlavorPacking()
 
 void TestCli::testAsepriteFlavorPacking()
 {
-    QString sampleJson = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.json");
-    QVERIFY(QFile::exists(sampleJson));
-
     QString outSheet = m_tempDir.filePath(QStringLiteral("ase_sheet.png"));
     QString outData = m_tempDir.filePath(QStringLiteral("ase_data.json"));
 
@@ -136,7 +191,7 @@ void TestCli::testAsepriteFlavorPacking()
     QStringList args = {
         QStringLiteral("aseprite"),
         QStringLiteral("-b"),
-        sampleJson,
+        m_sampleJson,
         QStringLiteral("--sheet"), outSheet,
         QStringLiteral("--data"), outData,
         QStringLiteral("--format"), QStringLiteral("json-array"),
@@ -166,7 +221,6 @@ void TestCli::testAsepriteFlavorPacking()
 
 void TestCli::testGodot4ExportAndUid()
 {
-    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     QString outSheet = m_tempDir.filePath(QStringLiteral("godot_sheet.png"));
     QString outTres = m_tempDir.filePath(QStringLiteral("godot_data.tres"));
 
@@ -177,7 +231,7 @@ void TestCli::testGodot4ExportAndUid()
         QStringLiteral("--format"), QStringLiteral("godot4"),
         QStringLiteral("--sheet"), outSheet,
         QStringLiteral("--data"), outTres,
-        sampleHero
+        m_sampleHero
     };
 
     CliResult res = parser.parseAndExecute(args);
@@ -207,7 +261,6 @@ void TestCli::testGodot4ExportAndUid()
 
 void TestCli::testGodotSceneGeneration()
 {
-    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     QString outSheet = m_tempDir.filePath(QStringLiteral("godot_scene_sheet.png"));
     QString outTres = m_tempDir.filePath(QStringLiteral("godot_scene_data.tres"));
     QString outTscn = m_tempDir.filePath(QStringLiteral("player.tscn"));
@@ -220,7 +273,7 @@ void TestCli::testGodotSceneGeneration()
         QStringLiteral("--sheet"), outSheet,
         QStringLiteral("--data"), outTres,
         QStringLiteral("--godot-scene"), outTscn,
-        sampleHero
+        m_sampleHero
     };
 
     CliResult res = parser.parseAndExecute(args);
@@ -238,7 +291,6 @@ void TestCli::testGodotSceneGeneration()
 
 void TestCli::testNativeSliceCommand()
 {
-    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     QString sliceDir = m_tempDir.filePath(QStringLiteral("slices_out"));
     QString projectOut = m_tempDir.filePath(QStringLiteral("sliced_project.bento"));
 
@@ -249,7 +301,7 @@ void TestCli::testNativeSliceCommand()
         QStringLiteral("--smart-crop"),
         QStringLiteral("--output-dir"), sliceDir,
         QStringLiteral("--output-project"), projectOut,
-        sampleHero
+        m_sampleHero
     };
 
     CliResult res = parser.parseAndExecute(args);
@@ -264,7 +316,6 @@ void TestCli::testNativeSliceCommand()
 
 void TestCli::testNativeFilterCommand()
 {
-    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     QString outFiltered = m_tempDir.filePath(QStringLiteral("hero_outlined.png"));
 
     CliParser parser;
@@ -274,7 +325,7 @@ void TestCli::testNativeFilterCommand()
         QStringLiteral("--outline"), QStringLiteral("2"),
         QStringLiteral("--outline-color"), QStringLiteral("#FF0000"),
         QStringLiteral("--output"), outFiltered,
-        sampleHero
+        m_sampleHero
     };
 
     CliResult res = parser.parseAndExecute(args);
@@ -305,19 +356,17 @@ void TestCli::testPosixExitCodes()
     QCOMPARE(resNotFound.exitCode, ExitFileNotFound);
 
     // 3. Constraint failed (max-size exceeded) -> ExitConstraintFailed (3)
-    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     CliResult resConstraint = parser.parseAndExecute({
         QStringLiteral("bentopack-cli"),
         QStringLiteral("--sheet"), m_tempDir.filePath(QStringLiteral("fail.png")),
         QStringLiteral("--max-size"), QStringLiteral("4"), QStringLiteral("4"),
-        sampleHero
+        m_sampleHero
     });
     QCOMPARE(resConstraint.exitCode, ExitConstraintFailed);
 }
 
 void TestCli::testJsonOutputMode()
 {
-    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     QString outSheet = m_tempDir.filePath(QStringLiteral("json_mode.png"));
 
     CliParser parser;
@@ -325,7 +374,7 @@ void TestCli::testJsonOutputMode()
         QStringLiteral("bentopack-cli"),
         QStringLiteral("--json"),
         QStringLiteral("--sheet"), outSheet,
-        sampleHero
+        m_sampleHero
     });
 
     QCOMPARE(res.exitCode, ExitSuccess);
@@ -382,9 +431,8 @@ void TestCli::testWatchDebouncedRepack()
     QString watchFolder = m_tempDir.filePath(QStringLiteral("watch_sprites"));
     QDir().mkpath(watchFolder);
 
-    QString sampleHero = QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png");
     QString frame1 = QDir(watchFolder).filePath(QStringLiteral("frame_01.png"));
-    QFile::copy(sampleHero, frame1);
+    QFile::copy(m_sampleHero, frame1);
 
     QString outSheet = m_tempDir.filePath(QStringLiteral("watch_atlas.png"));
     QString outData = m_tempDir.filePath(QStringLiteral("watch_atlas.json"));
@@ -412,7 +460,7 @@ void TestCli::testWatchDebouncedRepack()
 
     // Simulate file addition in watched directory
     QString frame2 = QDir(watchFolder).filePath(QStringLiteral("frame_02.png"));
-    QFile::copy(sampleHero, frame2);
+    QFile::copy(m_sampleHero, frame2);
 
     // Wait for QFileSystemWatcher and debounce timer (50ms debounce)
     QTest::qWait(200);

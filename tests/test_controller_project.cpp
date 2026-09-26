@@ -25,6 +25,7 @@ private slots:
 
     void testProjectControllerOpenJson();
     void testProjectControllerOpenGif();
+    void testProjectControllerOpenBento();
     void testProjectControllerOpenNonExistent();
     void testProjectControllerRecentFiles();
     void testProjectControllerBackgroundRemoval();
@@ -97,8 +98,8 @@ void TestControllerProject::testProjectControllerOpenJson()
 
 void TestControllerProject::testProjectControllerOpenGif()
 {
-    QString gifPath = m_sampleDir + QStringLiteral("/hero.webp");
-    if (!QFile::exists(gifPath)) gifPath = m_sampleDir + QStringLiteral("/hero.webp");
+    QString gifPath = m_sampleDir + QStringLiteral("/hero.gif");
+    if (!QFile::exists(gifPath)) gifPath = m_sampleDir + QStringLiteral("/ryu_hd.gif");
     if (!QFile::exists(gifPath)) {
         QSKIP("Sample file not present.");
     }
@@ -113,6 +114,25 @@ void TestControllerProject::testProjectControllerOpenGif()
     QVERIFY(ok);
     QCOMPARE(spyLoaded.count(), 1);
     QVERIFY(doc.frameCount() > 1);
+}
+
+void TestControllerProject::testProjectControllerOpenBento()
+{
+    QString bentoPath = m_sampleDir + QStringLiteral("/hero.bento");
+    if (!QFile::exists(bentoPath)) {
+        QSKIP("Sample file not present.");
+    }
+
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    ProjectController controller(&doc, &undoStack);
+
+    QSignalSpy spyLoaded(&controller, &ProjectController::fileLoaded);
+
+    bool ok = controller.openFile(bentoPath);
+    QVERIFY(ok);
+    QCOMPARE(spyLoaded.count(), 1);
+    QVERIFY(doc.frameCount() > 0);
 }
 
 void TestControllerProject::testProjectControllerOpenNonExistent()

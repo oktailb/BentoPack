@@ -29,11 +29,12 @@
 #include <QObject>
 #include <QTimer>
 #include <QList>
+#include "bentopackcore_export.h"
 
 /**
  * @brief Autonomous animation controller managing playback timing and frame progression.
  */
-class AnimationPlayer : public QObject
+class BENTOPACK_CORE_EXPORT AnimationPlayer : public QObject
 {
     Q_OBJECT
 
