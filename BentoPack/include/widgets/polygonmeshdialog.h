@@ -23,7 +23,10 @@
 #include <QDialog>
 #include <QPolygonF>
 #include <QList>
+#include <QFutureWatcher>
+#include <cstdint>
 #include "model/spritedocument.h"
+#include "commands/meshcommands.h"
 
 class QGraphicsView;
 class QGraphicsScene;
@@ -34,12 +37,15 @@ class QLabel;
 class QPushButton;
 class QGroupBox;
 class QDialogButtonBox;
+class QProgressBar;
+class QTimer;
 class QUndoStack;
 #include "bentopackwidgets_export.h"
 
 /**
  * @brief Interactive dialog for tuning 2D polygon and tight mesh parameters
- *        with live preview, wireframe rendering, and GPU overdraw reduction metrics.
+ *        with live preview, wireframe rendering, async background calculations,
+ *        and GPU overdraw reduction metrics.
  */
 class BENTOPACK_WIDGETS_EXPORT PolygonMeshDialog : public QDialog
 {
@@ -50,7 +56,7 @@ public:
                                QUndoStack *undoStack,
                                int targetIndex = 0,
                                QWidget *parent = nullptr);
-    ~PolygonMeshDialog() override = default;
+    ~PolygonMeshDialog() override;
 
     void retranslateUi();
 
@@ -65,14 +71,52 @@ private slots:
     void applyToSelection();
     void applyToAllFrames();
     void removeMesh();
+    void onPreviewFinished();
+    void onBatchFinished();
 
 private:
+    struct PreviewJobResult {
+        uint64_t jobId = 0;
+        int frameIndex = 0;
+        QPolygonF polygon;
+        QList<QPointF> vertices;
+        QList<int> triangles;
+        QImage image;
+    };
+
+    struct BatchJobResult {
+        QList<BentoPackCommands::MeshState> states;
+        bool isAllFrames = false;
+    };
+
     void setupUi();
+    void setProcessingState(bool processing, bool isBatch = false);
+    void requestPreviewUpdate();
+    void startBatchMesh(const QList<int> &indices, bool isAllFrames);
+    void renderScene(const QImage &img);
+    void updateMetrics(const QImage &img);
+
+    static void computeMesh(const QImage &img,
+                            double eps,
+                            double pad,
+                            int maxV,
+                            int alphaThresh,
+                            QPolygonF &outPoly,
+                            QList<QPointF> &outVerts,
+                            QList<int> &outTris);
+
     void computeMeshForFrame(int frameIdx, QPolygonF &outPoly, QList<QPointF> &outVerts, QList<int> &outTris);
 
     SpriteDocument *m_document = nullptr;
     QUndoStack     *m_undoStack = nullptr;
     int             m_targetIndex = 0;
+
+    // Async machinery
+    QTimer                                *m_debounceTimer = nullptr;
+    QFutureWatcher<PreviewJobResult>      m_previewWatcher;
+    QFutureWatcher<BatchJobResult>        m_batchWatcher;
+    uint64_t                              m_currentPreviewJobId = 0;
+    bool                                  m_isProcessing = false;
 
     // Current preview computed mesh
     QPolygonF       m_currentPolygon;
@@ -111,6 +155,7 @@ private:
     QPushButton    *m_btnApplySelection = nullptr;
     QPushButton    *m_btnApplyAll = nullptr;
     QPushButton    *m_btnRemoveMesh = nullptr;
+    QProgressBar   *m_progressBar = nullptr;
     QLabel         *m_lblFeedback = nullptr;
     QDialogButtonBox *m_btnBox = nullptr;
 

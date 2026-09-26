@@ -293,13 +293,13 @@ SpriteBox PolygonMerger::mergeSpriteBoxes(const SpriteBox &srcBox,
         QPolygonF polyA = srcBox.polygon;
         if (polyA.isEmpty() && !srcImage.isNull()) {
             QPolygonF raw = ContourTracer::traceContour(srcImage, 10);
-            polyA = PolygonSimplifier::simplify(raw, 1.5, 1.0, 32, srcImage.size());
+            polyA = PolygonSimplifier::simplify(raw, 1.5, 1.0, 32, srcImage.size(), srcImage, 10);
         }
 
         QPolygonF polyB = tgtBox.polygon;
         if (polyB.isEmpty() && !tgtImage.isNull()) {
             QPolygonF raw = ContourTracer::traceContour(tgtImage, 10);
-            polyB = PolygonSimplifier::simplify(raw, 1.5, 1.0, 32, tgtImage.size());
+            polyB = PolygonSimplifier::simplify(raw, 1.5, 1.0, 32, tgtImage.size(), tgtImage, 10);
         }
 
         QPoint offsetA = srcBox.rect.topLeft() - unitedRect.topLeft();

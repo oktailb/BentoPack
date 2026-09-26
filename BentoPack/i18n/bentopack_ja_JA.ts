@@ -3345,7 +3345,7 @@ Strict removal clears the pixel.</source>
 <context>
     <name>PolygonMeshDialog</name>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="251"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="288"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="573"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="638"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="703"/>
@@ -3353,17 +3353,17 @@ Strict removal clears the pixel.</source>
         <translation>2Dポリゴンメッシュ＆タイトパッキング</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="252"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="289"/>
         <source>Live Preview &amp; Wireframe</source>
         <translation>ライブプレビュー＆ワイヤーフレーム</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="253"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="290"/>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>ポリゴンとメッシュの簡素化</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="254"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="291"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="574"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="639"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="704"/>
@@ -3371,22 +3371,22 @@ Strict removal clears the pixel.</source>
         <translation>近似許容値 (ε)：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="255"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="292"/>
         <source>Alpha Threshold:</source>
         <translation>アルファしきい値：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="256"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="293"/>
         <source>Outward Padding:</source>
         <translation>外側パディング：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="257"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="294"/>
         <source>Max Vertices:</source>
         <translation>最大頂点数：</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="258"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="295"/>
         <source>Overdraw &amp; Performance Dashboard</source>
         <translation>オーバードローとパフォーマンス</translation>
     </message>
@@ -3407,27 +3407,27 @@ Strict removal clears the pixel.</source>
         <translation type="vanished">GPUオーバードロー削減：--</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="417"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="554"/>
         <source>Vertices: %1</source>
         <translation>頂点数：%1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="418"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="555"/>
         <source>Triangles: %1</source>
         <translation>三角形数：%1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="419"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="556"/>
         <source>Polygon Area: %1 px² (vs %2 px² box)</source>
         <translation>ポリゴン面積：%1 px²（ボックス：%2 px²）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="420"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="557"/>
         <source>GPU Overdraw Eliminated: %1%</source>
         <translation>GPUオーバードロー削減：%1%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="259"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="296"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="575"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="640"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="705"/>
@@ -3435,43 +3435,59 @@ Strict removal clears the pixel.</source>
         <translation>選択範囲に適用</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="260"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="297"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="400"/>
         <source>Apply to All Frames</source>
         <translation>全フレームに適用</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="261"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="298"/>
         <source>Remove Mesh (Reset to Rect)</source>
         <translation>メッシュを削除（矩形にリセット）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="264"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="301"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="425"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="400"/>
+        <source>Computing...</source>
+        <translation type="unfinished">計算中...</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="562"/>
         <source>Target Frame %1: Mesh already applied (%2 vertices, %3 tris)</source>
         <translation>対象フレーム %1：メッシュ適用済み（頂点数 %2、三角形数 %3）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="431"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="568"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="706"/>
         <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
         <translation>対象フレーム %1：矩形モード（メッシュ未適用）</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="487"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="607"/>
+        <source>Computing mesh: 0 / %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="635"/>
+        <source>Computing mesh: frame %1 / %2...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="665"/>
         <source>✓ Mesh applied to %1 frame(s)!</source>
         <translation>✓ %1 フレームにメッシュを適用しました！</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="528"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="663"/>
         <source>✓ Mesh applied to all %1 frames!</source>
         <translation>✓ 全 %1 フレームにメッシュを適用しました！</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="565"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="726"/>
         <source>✓ Tight mesh removed. Reverted to rectangle.</source>
         <translation>✓ メッシュを削除しました。矩形にリセットされました。</translation>
     </message>

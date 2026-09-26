@@ -33,6 +33,8 @@
 #include <QSlider>
 #include <QPushButton>
 #include <QDialogButtonBox>
+#include <QProgressBar>
+#include <QTimer>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
@@ -45,6 +47,8 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 #include <QSettings>
+#include <QtConcurrent/QtConcurrent>
+#include <QMetaObject>
 
 using namespace BentoPackGeometry;
 using namespace BentoPackCommands;
@@ -56,13 +60,35 @@ PolygonMeshDialog::PolygonMeshDialog(SpriteDocument *document,
     : QDialog(parent)
     , m_document(document)
     , m_undoStack(undoStack)
-    ,    m_targetIndex(targetIndex)
+    , m_targetIndex(targetIndex)
 {
     resize(820, 560);
 
+    m_debounceTimer = new QTimer(this);
+    m_debounceTimer->setSingleShot(true);
+    connect(m_debounceTimer, &QTimer::timeout, this, &PolygonMeshDialog::requestPreviewUpdate);
+
+    connect(&m_previewWatcher, &QFutureWatcher<PreviewJobResult>::finished,
+            this, &PolygonMeshDialog::onPreviewFinished);
+    connect(&m_batchWatcher, &QFutureWatcher<BatchJobResult>::finished,
+            this, &PolygonMeshDialog::onBatchFinished);
+
     setupUi();
     retranslateUi();
-    updatePreviewAndMetrics();
+    requestPreviewUpdate();
+}
+
+PolygonMeshDialog::~PolygonMeshDialog()
+{
+    if (m_debounceTimer) {
+        m_debounceTimer->stop();
+    }
+    if (m_previewWatcher.isRunning()) {
+        m_previewWatcher.waitForFinished();
+    }
+    if (m_batchWatcher.isRunning()) {
+        m_batchWatcher.waitForFinished();
+    }
 }
 
 void PolygonMeshDialog::setupUi()
@@ -183,6 +209,16 @@ void PolygonMeshDialog::setupUi()
     m_btnApplySelection->setStyleSheet(QStringLiteral("background-color: #0088cc; color: white; font-weight: bold; padding: 6px;"));
     m_btnApplyAll->setStyleSheet(QStringLiteral("font-weight: bold; padding: 6px;"));
 
+    // Calculation progress bar (activity indicator matching AtlasPackingDialog style)
+    m_progressBar = new QProgressBar(this);
+    m_progressBar->setFixedHeight(6);
+    m_progressBar->setTextVisible(false);
+    m_progressBar->setStyleSheet(QStringLiteral(
+        "QProgressBar { border: none; background: #2c3e50; border-radius: 2px; } "
+        "QProgressBar::chunk { background-color: #00bcd4; border-radius: 2px; }"
+    ));
+    m_progressBar->setVisible(false);
+
     m_lblFeedback = new QLabel(this);
     m_lblFeedback->setAlignment(Qt::AlignCenter);
     m_lblFeedback->setTextFormat(Qt::PlainText);
@@ -190,6 +226,7 @@ void PolygonMeshDialog::setupUi()
     controlsLayout->addWidget(m_btnApplySelection);
     controlsLayout->addWidget(m_btnApplyAll);
     controlsLayout->addWidget(m_btnRemoveMesh);
+    controlsLayout->addWidget(m_progressBar);
     controlsLayout->addWidget(m_lblFeedback);
     controlsLayout->addStretch();
 
@@ -199,7 +236,7 @@ void PolygonMeshDialog::setupUi()
 
     mainLayout->addLayout(controlsLayout, 2);
 
-    // Synchronize Sliders and SpinBoxes
+    // Synchronize Sliders and SpinBoxes with debounced async updates
     connect(m_toleranceSpin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, [this](double val) {
         m_toleranceSlider->blockSignals(true);
         m_toleranceSlider->setValue(static_cast<int>(std::round(val * 10.0)));
@@ -251,7 +288,7 @@ void PolygonMeshDialog::retranslateUi()
     setWindowTitle(tr("Tight Mesh & 2D Polygon Packing"));
     if (m_previewGroup) m_previewGroup->setTitle(tr("Live Preview & Wireframe"));
     if (m_paramsGroup) m_paramsGroup->setTitle(tr("Polygon & Mesh Simplification"));
-    if (m_lblTolerance) m_lblTolerance->setText(tr("Approximation Tolerance (\u03b5):"));
+    if (m_lblTolerance) m_lblTolerance->setText(tr("Approximation Tolerance (ε):"));
     if (m_lblAlpha) m_lblAlpha->setText(tr("Alpha Threshold:"));
     if (m_lblPadding) m_lblPadding->setText(tr("Outward Padding:"));
     if (m_lblMaxVertices) m_lblMaxVertices->setText(tr("Max Vertices:"));
@@ -270,7 +307,7 @@ void PolygonMeshDialog::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
-        updatePreviewAndMetrics();
+        requestPreviewUpdate();
     }
     QDialog::changeEvent(event);
 }
@@ -309,33 +346,87 @@ void PolygonMeshDialog::fitPreview()
     m_previewView->fitInView(targetRect, Qt::KeepAspectRatio);
 }
 
-void PolygonMeshDialog::computeMeshForFrame(int frameIdx, QPolygonF &outPoly, QList<QPointF> &outVerts, QList<int> &outTris)
+void PolygonMeshDialog::computeMesh(const QImage &img,
+                                    double eps,
+                                    double pad,
+                                    int maxV,
+                                    int alphaThresh,
+                                    QPolygonF &outPoly,
+                                    QList<QPointF> &outVerts,
+                                    QList<int> &outTris)
 {
     outPoly.clear();
     outVerts.clear();
     outTris.clear();
 
-    if (!m_document || frameIdx < 0 || frameIdx >= m_document->frameCount()) {
-        return;
-    }
-
-    QImage img = m_document->frame(frameIdx);
     if (img.isNull() || img.width() <= 0 || img.height() <= 0) {
         return;
     }
 
-    int alphaThresh = m_alphaSpin->value();
-    double eps = m_toleranceSpin->value();
-    double pad = m_paddingSpin->value();
-    int maxV = m_maxVerticesSpin->value();
-
     QPolygonF raw = ContourTracer::traceContour(img, alphaThresh);
-    outPoly = PolygonSimplifier::simplify(raw, eps, pad, maxV, img.size());
+    outPoly = PolygonSimplifier::simplify(raw, eps, pad, maxV, img.size(), img, alphaThresh);
     outVerts = outPoly.toList();
     outTris = Triangulator::triangulate(outPoly);
 }
 
+void PolygonMeshDialog::computeMeshForFrame(int frameIdx, QPolygonF &outPoly, QList<QPointF> &outVerts, QList<int> &outTris)
+{
+    if (!m_document || frameIdx < 0 || frameIdx >= m_document->frameCount()) {
+        outPoly.clear();
+        outVerts.clear();
+        outTris.clear();
+        return;
+    }
+
+    QImage img = m_document->frame(frameIdx);
+    computeMesh(img,
+                m_toleranceSpin->value(),
+                m_paddingSpin->value(),
+                m_maxVerticesSpin->value(),
+                m_alphaSpin->value(),
+                outPoly,
+                outVerts,
+                outTris);
+}
+
+void PolygonMeshDialog::setProcessingState(bool processing, bool isBatch)
+{
+    m_isProcessing = processing;
+
+    if (isBatch) {
+        if (m_btnApplySelection) m_btnApplySelection->setEnabled(!processing);
+        if (m_btnApplyAll) {
+            m_btnApplyAll->setEnabled(!processing);
+            m_btnApplyAll->setText(processing ? tr("Computing...") : tr("Apply to All Frames"));
+        }
+        if (m_btnRemoveMesh) m_btnRemoveMesh->setEnabled(!processing);
+        if (m_paramsGroup) m_paramsGroup->setEnabled(!processing);
+        if (m_btnBox && m_btnBox->button(QDialogButtonBox::Close)) {
+            m_btnBox->button(QDialogButtonBox::Close)->setEnabled(!processing);
+        }
+    }
+
+    if (m_progressBar) {
+        m_progressBar->setVisible(processing);
+        if (processing) {
+            if (!isBatch) {
+                // Indeterminate pulsing animation for preview computation
+                m_progressBar->setRange(0, 0);
+            }
+        } else {
+            m_progressBar->setRange(0, 100);
+            m_progressBar->setValue(100);
+        }
+    }
+}
+
 void PolygonMeshDialog::updatePreviewAndMetrics()
+{
+    // Debounce to prevent flooding background workers during fast slider drags
+    m_debounceTimer->start(60);
+}
+
+void PolygonMeshDialog::requestPreviewUpdate()
 {
     if (!m_document || m_document->isEmpty()) return;
 
@@ -343,10 +434,54 @@ void PolygonMeshDialog::updatePreviewAndMetrics()
         m_targetIndex = 0;
     }
 
-    computeMeshForFrame(m_targetIndex, m_currentPolygon, m_currentVertices, m_currentTriangles);
+    QImage img = m_document->frame(m_targetIndex);
+    if (img.isNull() || img.width() <= 0 || img.height() <= 0) {
+        return;
+    }
+
     saveSettings();
 
-    QImage img = m_document->frame(m_targetIndex);
+    int alphaThresh = m_alphaSpin->value();
+    double eps = m_toleranceSpin->value();
+    double pad = m_paddingSpin->value();
+    int maxV = m_maxVerticesSpin->value();
+    int targetIdx = m_targetIndex;
+
+    m_currentPreviewJobId++;
+    uint64_t jobId = m_currentPreviewJobId;
+
+    setProcessingState(true, false);
+
+    m_previewWatcher.setFuture(QtConcurrent::run([img, eps, pad, maxV, alphaThresh, targetIdx, jobId]() {
+        PreviewJobResult res;
+        res.jobId = jobId;
+        res.frameIndex = targetIdx;
+        res.image = img;
+        computeMesh(img, eps, pad, maxV, alphaThresh, res.polygon, res.vertices, res.triangles);
+        return res;
+    }));
+}
+
+void PolygonMeshDialog::onPreviewFinished()
+{
+    PreviewJobResult res = m_previewWatcher.result();
+    if (res.jobId != m_currentPreviewJobId) {
+        // Newer job in flight, discard outdated result
+        return;
+    }
+
+    setProcessingState(false, false);
+
+    m_currentPolygon = res.polygon;
+    m_currentVertices = res.vertices;
+    m_currentTriangles = res.triangles;
+
+    renderScene(res.image);
+    updateMetrics(res.image);
+}
+
+void PolygonMeshDialog::renderScene(const QImage &img)
+{
     m_previewScene->clear();
 
     // 1. Draw Checkerboard background
@@ -406,8 +541,10 @@ void PolygonMeshDialog::updatePreviewAndMetrics()
 
     // Zoom view to fit nicely with margin
     fitPreview();
+}
 
-    // Update Dashboard Labels
+void PolygonMeshDialog::updateMetrics(const QImage &img)
+{
     int vCount = m_currentPolygon.size();
     int tCount = m_currentTriangles.size() / 3;
     double polyArea = Triangulator::calculateArea(m_currentPolygon);
@@ -444,96 +581,120 @@ void PolygonMeshDialog::saveSettings()
     settings.setValue(QStringLiteral("PolygonMesh/MaxVertices"), m_maxVerticesSpin->value());
 }
 
+void PolygonMeshDialog::startBatchMesh(const QList<int> &indices, bool isAllFrames)
+{
+    if (!m_document || indices.isEmpty() || m_isProcessing) return;
+
+    QList<QPair<int, QImage>> workItems;
+    for (int idx : indices) {
+        if (idx >= 0 && idx < m_document->frameCount()) {
+            workItems.append(qMakePair(idx, m_document->frame(idx)));
+        }
+    }
+    if (workItems.isEmpty()) return;
+
+    saveSettings();
+
+    int alphaThresh = m_alphaSpin->value();
+    double eps = m_toleranceSpin->value();
+    double pad = m_paddingSpin->value();
+    int maxV = m_maxVerticesSpin->value();
+    int total = workItems.size();
+
+    setProcessingState(true, true);
+    m_progressBar->setRange(0, total);
+    m_progressBar->setValue(0);
+    m_lblFeedback->setText(tr("Computing mesh: 0 / %1...").arg(total));
+    m_lblFeedback->setStyleSheet(QStringLiteral("color: #00bcd4; font-size: 11px; font-weight: bold;"));
+
+    m_batchWatcher.setFuture(QtConcurrent::run([this, workItems, alphaThresh, eps, pad, maxV, isAllFrames]() {
+        BatchJobResult result;
+        result.isAllFrames = isAllFrames;
+        int totalItems = workItems.size();
+
+        for (int i = 0; i < totalItems; ++i) {
+            int idx = workItems[i].first;
+            const QImage &img = workItems[i].second;
+
+            MeshState st;
+            st.index = idx;
+            if (!img.isNull() && img.width() > 0 && img.height() > 0) {
+                computeMesh(img, eps, pad, maxV, alphaThresh, st.polygon, st.vertices, st.triangles);
+                st.hasPolygonMesh = (!st.polygon.isEmpty() && !st.triangles.isEmpty());
+            } else {
+                st.hasPolygonMesh = false;
+            }
+            result.states.append(st);
+
+            int current = i + 1;
+            QMetaObject::invokeMethod(this, [this, current, totalItems]() {
+                if (m_progressBar && m_isProcessing) {
+                    m_progressBar->setValue(current);
+                }
+                if (m_lblFeedback && m_isProcessing) {
+                    m_lblFeedback->setText(tr("Computing mesh: frame %1 / %2...").arg(current).arg(totalItems));
+                }
+            }, Qt::QueuedConnection);
+        }
+        return result;
+    }));
+}
+
+void PolygonMeshDialog::onBatchFinished()
+{
+    BatchJobResult result = m_batchWatcher.result();
+    setProcessingState(false, true);
+
+    if (m_undoStack) {
+        m_undoStack->push(new SetPolygonMeshCommand(m_document, result.states));
+    } else {
+        for (const MeshState &st : result.states) {
+            SpriteBox b = m_document->box(st.index);
+            b.hasPolygonMesh = st.hasPolygonMesh;
+            b.polygon = st.polygon;
+            b.vertices = st.vertices;
+            b.triangles = st.triangles;
+            m_document->setBox(st.index, b);
+        }
+    }
+
+    if (m_lblFeedback) {
+        if (result.isAllFrames) {
+            m_lblFeedback->setText(tr("✓ Mesh applied to all %1 frames!").arg(result.states.size()));
+        } else {
+            m_lblFeedback->setText(tr("✓ Mesh applied to %1 frame(s)!").arg(result.states.size()));
+        }
+        m_lblFeedback->setStyleSheet(QStringLiteral("color: #00FF88; font-weight: bold; background: rgba(0, 255, 136, 30); padding: 5px; border-radius: 4px; border: 1px solid #00FF88;"));
+    }
+
+    requestPreviewUpdate();
+}
+
 void PolygonMeshDialog::applyToSelection()
 {
-    if (!m_document) return;
+    if (!m_document || m_isProcessing) return;
 
     QList<int> sel = m_document->selectedFrameIndices();
     if (sel.isEmpty()) {
         sel.append(m_targetIndex);
     }
-
-    QList<MeshState> newStates;
-    for (int idx : sel) {
-        QPolygonF poly;
-        QList<QPointF> verts;
-        QList<int> tris;
-        computeMeshForFrame(idx, poly, verts, tris);
-
-        MeshState st;
-        st.index = idx;
-        st.hasPolygonMesh = (!poly.isEmpty() && !tris.isEmpty());
-        st.polygon = poly;
-        st.vertices = verts;
-        st.triangles = tris;
-        newStates.append(st);
-    }
-
-    if (m_undoStack) {
-        m_undoStack->push(new SetPolygonMeshCommand(m_document, newStates));
-    } else {
-        for (const MeshState &st : newStates) {
-            SpriteBox b = m_document->box(st.index);
-            b.hasPolygonMesh = st.hasPolygonMesh;
-            b.polygon = st.polygon;
-            b.vertices = st.vertices;
-            b.triangles = st.triangles;
-            m_document->setBox(st.index, b);
-        }
-    }
-
-    saveSettings();
-    if (m_lblFeedback) {
-        m_lblFeedback->setText(tr("✓ Mesh applied to %1 frame(s)!").arg(sel.size()));
-        m_lblFeedback->setStyleSheet(QStringLiteral("color: #00FF88; font-weight: bold; background: rgba(0, 255, 136, 30); padding: 5px; border-radius: 4px; border: 1px solid #00FF88;"));
-    }
-    updatePreviewAndMetrics();
+    startBatchMesh(sel, false);
 }
 
 void PolygonMeshDialog::applyToAllFrames()
 {
-    if (!m_document) return;
+    if (!m_document || m_isProcessing) return;
 
-    QList<MeshState> newStates;
-    for (int idx = 0; idx < m_document->frameCount(); ++idx) {
-        QPolygonF poly;
-        QList<QPointF> verts;
-        QList<int> tris;
-        computeMeshForFrame(idx, poly, verts, tris);
-
-        MeshState st;
-        st.index = idx;
-        st.hasPolygonMesh = (!poly.isEmpty() && !tris.isEmpty());
-        st.polygon = poly;
-        st.vertices = verts;
-        st.triangles = tris;
-        newStates.append(st);
+    QList<int> allIndices;
+    for (int i = 0; i < m_document->frameCount(); ++i) {
+        allIndices.append(i);
     }
-
-    if (m_undoStack) {
-        m_undoStack->push(new SetPolygonMeshCommand(m_document, newStates));
-    } else {
-        for (const MeshState &st : newStates) {
-            SpriteBox b = m_document->box(st.index);
-            b.hasPolygonMesh = st.hasPolygonMesh;
-            b.polygon = st.polygon;
-            b.vertices = st.vertices;
-            b.triangles = st.triangles;
-            m_document->setBox(st.index, b);
-        }
-    }
-
-    saveSettings();
-    if (m_lblFeedback) {
-        m_lblFeedback->setText(tr("✓ Mesh applied to all %1 frames!").arg(m_document->frameCount()));
-        m_lblFeedback->setStyleSheet(QStringLiteral("color: #00FF88; font-weight: bold; background: rgba(0, 255, 136, 30); padding: 5px; border-radius: 4px; border: 1px solid #00FF88;"));
-    }
-    updatePreviewAndMetrics();
+    startBatchMesh(allIndices, true);
 }
 
 void PolygonMeshDialog::removeMesh()
 {
-    if (!m_document) return;
+    if (!m_document || m_isProcessing) return;
 
     QList<int> sel = m_document->selectedFrameIndices();
     if (sel.isEmpty()) {
@@ -565,5 +726,5 @@ void PolygonMeshDialog::removeMesh()
         m_lblFeedback->setText(tr("✓ Tight mesh removed. Reverted to rectangle."));
         m_lblFeedback->setStyleSheet(QStringLiteral("color: #FFAA00; font-weight: bold; background: rgba(255, 170, 0, 30); padding: 5px; border-radius: 4px; border: 1px solid #FFAA00;"));
     }
-    updatePreviewAndMetrics();
+    requestPreviewUpdate();
 }

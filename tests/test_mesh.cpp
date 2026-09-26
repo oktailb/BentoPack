@@ -40,11 +40,13 @@ private slots:
     void testContourTracingEmpty();
     void testContourTracingSolidRect();
     void testContourTracingDiamond();
+    void testContourTracingAtlasBleedFiltering();
 
     // 2. Polygon Simplifier Tests
     void testPolygonSimplificationRDP();
     void testPolygonSimplificationVertexBudget();
     void testPolygonSimplificationPadding();
+    void testPolygonSimplificationNeverCrossesOpaque();
 
     // 3. Triangulator Tests
     void testTriangulationConvex();
@@ -145,6 +147,38 @@ void TestMesh::testContourTracingDiamond()
     QVERIFY(area > 0.0);
 }
 
+void TestMesh::testContourTracingAtlasBleedFiltering()
+{
+    // Create an image with a primary sprite subject and atlas neighbor bleed fragments
+    QImage img(100, 100, QImage::Format_ARGB32);
+    img.fill(Qt::transparent);
+
+    QPainter p(&img);
+    // 1. Primary sprite subject in center (area 40x60 = 2400)
+    p.fillRect(30, 20, 40, 60, Qt::white);
+
+    // 2. Stray atlas bleed from neighbor sprite touching top border y=0 (area 10x4 = 40)
+    p.fillRect(5, 0, 10, 4, Qt::white);
+
+    // 3. Stray atlas bleed from neighbor sprite touching bottom border y=100 (area 12x3 = 36)
+    p.fillRect(80, 97, 12, 3, Qt::white);
+    p.end();
+
+    QPolygonF contour = ContourTracer::traceContour(img, 128);
+    QVERIFY(!contour.isEmpty());
+
+    // The stray border bleeds must have been filtered out!
+    // The resulting contour bounding box must strictly belong to the primary subject (30,20 to 70,80)
+    QRectF bbox = contour.boundingRect();
+    QVERIFY(bbox.top() >= 19.0 && bbox.bottom() <= 81.0);
+    QVERIFY(bbox.left() >= 29.0 && bbox.right() <= 71.0);
+
+    // Also verify simplification on this contour with points along edges does not bloat
+    QPolygonF sim = PolygonSimplifier::simplify(contour, 0.5, 0.0, 8, img.size(), img, 128);
+    QVERIFY(sim.size() <= 8);
+    QVERIFY(sim.size() >= 4);
+}
+
 void TestMesh::testPolygonSimplificationRDP()
 {
     // Create a circular-like polygon with many points
@@ -205,6 +239,56 @@ void TestMesh::testPolygonSimplificationPadding()
     QVERIFY(b.top() >= 0);
     QVERIFY(b.right() <= frameBounds.width());
     QVERIFY(b.bottom() <= frameBounds.height());
+}
+
+void TestMesh::testPolygonSimplificationNeverCrossesOpaque()
+{
+    // Create an image with an L-shaped opaque region (concavity + convex corner)
+    QImage img(40, 40, QImage::Format_ARGB32);
+    img.fill(Qt::transparent);
+
+    QPainter p(&img);
+    p.fillRect(5, 5, 30, 10, Qt::white);  // horizontal bar
+    p.fillRect(5, 5, 10, 30, Qt::white);  // vertical bar
+    p.end();
+
+    QPolygonF raw = ContourTracer::traceContour(img, 20);
+    QVERIFY(!raw.isEmpty());
+
+    // Simplify down to max 12 vertices with padding 1.0
+    QPolygonF simplified = PolygonSimplifier::simplify(raw, 1.5, 1.0, 12, img.size(), img, 20);
+    QVERIFY(simplified.size() >= 3);
+    QVERIFY(simplified.size() <= 16);
+
+    // Verify: NEVER should a line between 2 successive points cross non-transparent pixels!
+    int n = simplified.size();
+    for (int i = 0; i < n; ++i) {
+        QPointF p1 = simplified[i];
+        QPointF p2 = simplified[(i + 1) % n];
+        double dx = p2.x() - p1.x();
+        double dy = p2.y() - p1.y();
+        double dist = std::hypot(dx, dy);
+        int steps = std::max(2, static_cast<int>(std::ceil(dist * 2.0)));
+        for (int s = 1; s < steps; ++s) {
+            double t = static_cast<double>(s) / steps;
+            int x = std::floor(p1.x() + t * dx);
+            int y = std::floor(p1.y() + t * dy);
+            if (x >= 0 && x < img.width() && y >= 0 && y < img.height()) {
+                QVERIFY2(qAlpha(img.pixel(x, y)) < 20, 
+                         QString("Edge from (%1,%2) to (%3,%4) crossed opaque pixel at (%5,%6)")
+                         .arg(p1.x()).arg(p1.y()).arg(p2.x()).arg(p2.y()).arg(x).arg(y).toUtf8().constData());
+            }
+        }
+    }
+
+    // Verify that all opaque pixels are enclosed inside the simplified polygon
+    for (int y = 0; y < img.height(); ++y) {
+        for (int x = 0; x < img.width(); ++x) {
+            if (qAlpha(img.pixel(x, y)) >= 20) {
+                QVERIFY(simplified.containsPoint(QPointF(x + 0.5, y + 0.5), Qt::OddEvenFill));
+            }
+        }
+    }
 }
 
 void TestMesh::testTriangulationConvex()

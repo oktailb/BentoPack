@@ -22,6 +22,7 @@
 
 #include <QPolygonF>
 #include <QSize>
+#include <QImage>
 #include "bentopackcore_export.h"
 
 namespace BentoPackGeometry {
@@ -46,7 +47,9 @@ public:
                               double epsilon = 1.5,
                               double padding = 1.0,
                               int maxVertices = 16,
-                              const QSize &bounds = QSize());
+                              const QSize &bounds = QSize(),
+                              const QImage &image = QImage(),
+                              int alphaThreshold = 10);
 };
 
 } // namespace BentoPackGeometry

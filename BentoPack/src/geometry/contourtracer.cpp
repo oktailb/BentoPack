@@ -62,8 +62,65 @@ QPolygonF ContourTracer::traceContour(const QImage &image, int alphaThreshold)
         return all.first();
     }
 
-    // Modernized: fuse all disjoint parts into a tight non-convex polygon
-    return PolygonMerger::mergeMultiplePolygons(all);
+    // 1. Separate outer contours from internal holes (holes have positive signedArea)
+    struct ContourInfo {
+        QPolygonF poly;
+        double area;
+        QRectF bbox;
+        bool touchesBorder;
+    };
+    QList<ContourInfo> outer;
+
+    int w = image.width();
+    int h = image.height();
+
+    for (const QPolygonF &poly : all) {
+        double signedArea = 0.0;
+        int n = poly.size();
+        for (int i = 0; i < n; ++i) {
+            int next = (i + 1) % n;
+            signedArea += poly[i].x() * poly[next].y() - poly[next].x() * poly[i].y();
+        }
+        if (signedArea < -0.5) {
+            QRectF b = poly.boundingRect();
+            bool touches = (b.left() <= 0.5 || b.top() <= 0.5 || b.right() >= w - 0.5 || b.bottom() >= h - 0.5);
+            outer.append({poly, std::abs(signedArea * 0.5), b, touches});
+        }
+    }
+
+    if (outer.isEmpty()) {
+        return all.first();
+    }
+
+    // Sort descending by area to identify the primary subject
+    std::sort(outer.begin(), outer.end(), [](const ContourInfo &a, const ContourInfo &b) {
+        return a.area > b.area;
+    });
+
+    double maxArea = outer.first().area;
+    QList<QPolygonF> kept;
+    kept.append(outer.first().poly);
+
+    for (int i = 1; i < outer.size(); ++i) {
+        const auto &ci = outer[i];
+        // Atlas bleed artifact heuristic:
+        // Discard if it touches the outer canvas border and is < 15% of the primary subject,
+        // or if it's an insignificant speck (< 2% of primary subject).
+        if (ci.touchesBorder && ci.area < 0.15 * maxArea) {
+            continue;
+        }
+        if (ci.area < 0.02 * maxArea) {
+            continue;
+        }
+        kept.append(ci.poly);
+    }
+
+    if (kept.size() == 1) {
+        return kept.first();
+    }
+
+    // Modernized: fuse disjoint parts into a tight non-convex polygon
+    return PolygonMerger::mergeMultiplePolygons(kept);
 }
 
 QList<QPolygonF> ContourTracer::traceAllContours(const QImage &image, int alphaThreshold)

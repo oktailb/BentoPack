@@ -3345,7 +3345,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
 <context>
     <name>PolygonMeshDialog</name>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="251"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="288"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="573"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="638"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="703"/>
@@ -3353,17 +3353,17 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Maillage polygonal 2D &amp; Découpage serré</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="252"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="289"/>
         <source>Live Preview &amp; Wireframe</source>
         <translation>Aperçu en direct &amp; Wireframe</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="253"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="290"/>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>Simplification du polygone &amp; maillage</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="254"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="291"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="574"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="639"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="704"/>
@@ -3371,22 +3371,22 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Tolérance d&apos;approximation (ε) :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="255"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="292"/>
         <source>Alpha Threshold:</source>
         <translation>Seuil Alpha :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="256"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="293"/>
         <source>Outward Padding:</source>
         <translation>Marge sortante (Padding) :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="257"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="294"/>
         <source>Max Vertices:</source>
         <translation>Sommets maximum :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="258"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="295"/>
         <source>Overdraw &amp; Performance Dashboard</source>
         <translation>Performances GPU &amp; Overdraw</translation>
     </message>
@@ -3407,27 +3407,27 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">Overdraw GPU économisé : --</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="417"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="554"/>
         <source>Vertices: %1</source>
         <translation>Sommets : %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="418"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="555"/>
         <source>Triangles: %1</source>
         <translation>Triangles : %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="419"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="556"/>
         <source>Polygon Area: %1 px² (vs %2 px² box)</source>
         <translation>Surface : %1 px² (vs %2 px² boîte)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="420"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="557"/>
         <source>GPU Overdraw Eliminated: %1%</source>
         <translation>Overdraw GPU éliminé : %1%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="259"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="296"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="575"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="640"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="705"/>
@@ -3435,43 +3435,59 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Appliquer à la sélection</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="260"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="297"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="400"/>
         <source>Apply to All Frames</source>
         <translation>Appliquer à toutes les frames</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="261"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="298"/>
         <source>Remove Mesh (Reset to Rect)</source>
         <translation>Supprimer le maillage (Rétablir rectangle)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="264"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="301"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="425"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="400"/>
+        <source>Computing...</source>
+        <translation type="unfinished">Calcul en cours...</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="562"/>
         <source>Target Frame %1: Mesh already applied (%2 vertices, %3 tris)</source>
         <translation>Frame cible %1 : Maillage déjà appliqué (%2 sommets, %3 triangles)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="431"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="568"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="706"/>
         <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
         <translation>Frame cible %1 : Mode rectangle (aucun maillage)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="487"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="607"/>
+        <source>Computing mesh: 0 / %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="635"/>
+        <source>Computing mesh: frame %1 / %2...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="665"/>
         <source>✓ Mesh applied to %1 frame(s)!</source>
         <translation>✓ Maillage appliqué à %1 frame(s) !</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="528"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="663"/>
         <source>✓ Mesh applied to all %1 frames!</source>
         <translation>✓ Maillage appliqué aux %1 frames !</translation>
     </message>
     <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="565"/>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="726"/>
         <source>✓ Tight mesh removed. Reverted to rectangle.</source>
         <translation>✓ Maillage supprimé. Rétabli en rectangle.</translation>
     </message>
