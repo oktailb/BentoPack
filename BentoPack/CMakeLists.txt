@@ -188,6 +188,9 @@ qt_add_translations(BentoPackCore
         ${BentoPackCore_INCLUDE}
     RESOURCE_PREFIX
         "/i18n"
+    LUPDATE_OPTIONS
+        -no-obsolete        # delete vanished entries
+        -locations none     # DELETE ALL <location> TAGS
 )
 
 set_source_files_properties(${CMAKE_SOURCE_DIR}/LICENSE PROPERTIES
