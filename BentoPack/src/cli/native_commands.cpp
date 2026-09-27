@@ -363,9 +363,12 @@ CliResult NativeCommands::executeBento(const QStringList &args)
         ExportOptions opts;
         if (exportFormat == QStringLiteral("godot") || exportFormat == QStringLiteral("godot4")) {
             opts.format = FORMAT_GODOT;
+        } else if (exportFormat == QStringLiteral("unity")) {
+            opts.format = FORMAT_UNITY;
         } else {
             opts.format = FORMAT_TEXTUREPACKER_JSON;
         }
+        opts.packOptions.algorithm = AtlasPacker::KeepLayout;
 
         ProjectController controller(&doc);
         if (!controller.exportData(exportOutput, opts, &err)) {

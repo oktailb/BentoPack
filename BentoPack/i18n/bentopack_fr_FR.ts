@@ -3586,7 +3586,7 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="388"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="753"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="761"/>
         <source>Loaded %1 successfully.</source>
         <translation>%1 chargé avec succès.</translation>
     </message>
@@ -3610,52 +3610,52 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Le document est vide.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="485"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="493"/>
         <source>No suitable exporter found for format: %1</source>
         <translation>Aucun exportateur trouvé pour le format : %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="491"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="499"/>
         <source>Saving %1...</source>
         <translation>Enregistrement de %1...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="501"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="509"/>
         <source>Saved %1 successfully.</source>
         <translation>%1 enregistré avec succès.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="637"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="645"/>
         <source>Removing background...</source>
         <translation>Suppression de l&apos;arrière-plan...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="661"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="669"/>
         <source>Background removed.</source>
         <translation>Arrière-plan supprimé.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="674"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="682"/>
         <source>Removing background in background...</source>
         <translation>Suppression de l&apos;arrière-plan en tâche de fond...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="741"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="749"/>
         <source>Open %1</source>
         <translation>Ouvrir %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="757"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="765"/>
         <source>Background removed successfully.</source>
         <translation>Arrière-plan supprimé avec succès.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="826"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="834"/>
         <source>Action executed</source>
         <translation>Action exécutée</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="828"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="836"/>
         <source>Project modified</source>
         <translation>Projet modifié</translation>
     </message>
@@ -3668,12 +3668,12 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation type="vanished">Action</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="844"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="852"/>
         <source>No active session workspace.</source>
         <translation>Aucun espace de session actif.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="871"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="879"/>
         <source>Checked out revision %1.</source>
         <translation>Restauration de la révision %1 effectuée.</translation>
     </message>
@@ -3937,12 +3937,12 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Échec de la découpe des sprites.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="688"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="696"/>
         <source>Failed to remove background from atlas.</source>
         <translation>Échec de la suppression du fond de l&apos;atlas.</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="700"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="708"/>
         <source>Failed to segment frames after background removal.</source>
         <translation>Échec de la découpe des frames après suppression du fond.</translation>
     </message>

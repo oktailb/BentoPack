@@ -161,13 +161,16 @@ L'adoption en studio et par les créateurs indépendants dépend de la suppressi
   - Bouton *"Ouvrir dans BentoPack"* dans l'inspecteur Godot sur les nœuds `AnimatedSprite2D`, `Sprite2D` et `SpriteFrames`.
 - **Publication :** Soumission officielle sur la [Godot Asset Library](https://godotengine.org/asset-library).
 
-#### 2. Écosystème Unity (`com.bentopack.importer`)
-- **Nature :** Package Unity Package Manager (UPM) en C#.
+#### 2. Écosystème Unity (`com.bentopack.importer`) — ✅ **TERMINÉ**
+- **Nature :** Package Unity Package Manager (UPM) en C# (`addons/unity/`).
 - **Fonctionnalités :**
-  - `ScriptedImporter` prenant en charge les fichiers `.bento` et les métadonnées JSON.
-  - Configuration automatique du `TextureImporter` en mode `Sprite (2D and UI)` avec filtrage Point.
-  - **Injection des maillages serrés M8 :** Appel à `Sprite.OverrideGeometry()` avec les sommets et triangles calculés par BentoPack (`SpriteMeshType.Tight`), économisant 60% à 80% de fillrate GPU.
-  - Génération automatique des `AnimationClip` avec courbes de frames cadencées au bon FPS.
+  - `ScriptedImporter` (`BentoImporter.cs`) prenant en charge les archives `.bento` avec décompression d'atlas texture et métadonnées JSON.
+  - Configuration automatique de la texture en mode `Sprite (2D and UI)` avec filtrage Point et wrap mode Clamp.
+  - **Injection des maillages serrés M8 :** Appel à `Sprite.OverrideGeometry()` via `BentoMeshBuilder.cs` avec conversion automatique des coordonnées locales unitaire (axe Y inversé et winding des triangles préservé), économisant 60% à 80% de fillrate GPU.
+  - Génération automatique des `AnimationClip` (`BentoAnimationBuilder.cs`) avec courbes de frames cadencées au bon FPS et loop time configurable.
+  - Menus contextuels dans l'Éditeur Unity (`BentoContextMenu.cs`) : ouverture directe dans BentoPack Studio et re-packing automatique via `BentoCliBridge.cs`.
+  - Composant runtime `BentoMeshSprite.cs` pour le playback avec synchronisation temps réel des hitboxes `PolygonCollider2D`.
+  - Suite de tests automatisée CLI (`tests/unity_tests/BentoUnityTests.csproj`, 4/4 tests validés avec 100% de réussite).
 - **Publication :** Hébergement OpenUPM et soumission sur l'Unity Asset Store (catégorie *2D Tools*).
 
 #### 3. Écosystème Unreal Engine 5 (`BentoPack UE5 Plugin`)

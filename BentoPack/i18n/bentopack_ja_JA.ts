@@ -3586,7 +3586,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="388"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="753"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="761"/>
         <source>Loaded %1 successfully.</source>
         <translation>%1 が正常に読み込まれました。</translation>
     </message>
@@ -3610,52 +3610,52 @@ Strict removal clears the pixel.</source>
         <translation>ドキュメントが空です。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="485"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="493"/>
         <source>No suitable exporter found for format: %1</source>
         <translation>フォーマット %1 に対応するエクスポーターが見つかりません</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="491"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="499"/>
         <source>Saving %1...</source>
         <translation>%1 を保存しています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="501"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="509"/>
         <source>Saved %1 successfully.</source>
         <translation>%1 が正常に保存されました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="637"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="645"/>
         <source>Removing background...</source>
         <translation>背景を削除しています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="661"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="669"/>
         <source>Background removed.</source>
         <translation>背景を削除しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="674"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="682"/>
         <source>Removing background in background...</source>
         <translation>バックグラウンドで背景を削除しています...</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="741"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="749"/>
         <source>Open %1</source>
         <translation>%1 を開く</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="757"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="765"/>
         <source>Background removed successfully.</source>
         <translation>背景の削除が正常に完了しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="826"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="834"/>
         <source>Action executed</source>
         <translation>アクションを実行しました</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="828"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="836"/>
         <source>Project modified</source>
         <translation>プロジェクトが変更されました</translation>
     </message>
@@ -3668,12 +3668,12 @@ Strict removal clears the pixel.</source>
         <translation type="vanished">アクション</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="844"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="852"/>
         <source>No active session workspace.</source>
         <translation>アクティブなセッションワークスペースがありません。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="871"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="879"/>
         <source>Checked out revision %1.</source>
         <translation>リビジョン %1 にチェックアウトしました。</translation>
     </message>
@@ -3935,12 +3935,12 @@ Strict removal clears the pixel.</source>
         <translation>スプライトフレームの検出に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="688"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="696"/>
         <source>Failed to remove background from atlas.</source>
         <translation>アトラスからの背景削除に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="700"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="708"/>
         <source>Failed to segment frames after background removal.</source>
         <translation>背景削除後のフレーム検出に失敗しました。</translation>
     </message>

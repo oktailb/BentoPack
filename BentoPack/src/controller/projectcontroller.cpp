@@ -480,7 +480,15 @@ bool ProjectController::exportData(const QString &filePath, const ExportOptions 
         return false;
     }
 
-    Extractor *extractor = ExtractorRegistry::instance().findEncoder(filePath);
+    Extractor *extractor = nullptr;
+    if (options.format == FORMAT_UNITY) {
+        extractor = ExtractorRegistry::instance().findExtractorById(QStringLiteral("unity"));
+    } else if (options.format == FORMAT_GODOT) {
+        extractor = ExtractorRegistry::instance().findExtractorById(QStringLiteral("godot"));
+    }
+    if (!extractor) {
+        extractor = ExtractorRegistry::instance().findEncoder(filePath);
+    }
     if (!extractor) {
         QString err = tr("No suitable exporter found for format: %1").arg(filePath);
         if (errorMsg) *errorMsg = err;
