@@ -2,12 +2,16 @@
 class_name BentoPackPlugin
 extends EditorPlugin
 
+const BentoI18n = preload("bento_i18n.gd")
+
 ## Main EditorPlugin entrypoint for the official BentoPack Godot 4 addon.
 
 var _importer: BentoImporter
 var _inspector_plugin: BentoPackInspectorPlugin
 var _dock: BentoPackDock
 var _context_menu_plugin: RefCounted
+var _menu_open_title: String = ""
+var _menu_cli_title: String = ""
 
 func _enter_tree() -> void:
 	# 1. Register .bento Import Plugin
@@ -28,8 +32,10 @@ func _enter_tree() -> void:
 		add_context_menu_plugin(EditorContextMenuPlugin.CONTEXT_SLOT_FILESYSTEM, _context_menu_plugin)
 
 	# 5. Add Custom Tool Menu Items
-	add_tool_menu_item("BentoPack: Open Desktop Editor", _on_open_editor_menu)
-	add_tool_menu_item("BentoPack: Show CLI Info", _on_show_cli_info)
+	_menu_open_title = BentoI18n.t("menu_open_editor")
+	_menu_cli_title = BentoI18n.t("menu_show_cli")
+	add_tool_menu_item(_menu_open_title, _on_open_editor_menu)
+	add_tool_menu_item(_menu_cli_title, _on_show_cli_info)
 
 	print("[BentoPack] Godot 4 Plugin successfully initialized.")
 
@@ -51,8 +57,10 @@ func _exit_tree() -> void:
 		_dock.queue_free()
 		_dock = null
 
-	remove_tool_menu_item("BentoPack: Open Desktop Editor")
-	remove_tool_menu_item("BentoPack: Show CLI Info")
+	if not _menu_open_title.is_empty():
+		remove_tool_menu_item(_menu_open_title)
+	if not _menu_cli_title.is_empty():
+		remove_tool_menu_item(_menu_cli_title)
 
 	print("[BentoPack] Godot 4 Plugin unloaded.")
 

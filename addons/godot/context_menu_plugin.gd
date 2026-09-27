@@ -2,6 +2,8 @@
 class_name BentoPackContextMenuPlugin
 extends EditorContextMenuPlugin
 
+const BentoI18n = preload("bento_i18n.gd")
+
 ## Editor Context Menu Plugin for BentoPack.
 ## Adds 1-click actions to the Godot FileSystem dock for images (.png, .webp, .jpg) and projects (.bento).
 
@@ -31,11 +33,11 @@ func _popup_menu(paths: PackedStringArray) -> void:
 				target_bento = p
 
 	if has_image:
-		add_context_menu_item("⚡ BentoPack: Auto-Slice & Générer Scène", _on_auto_slice.bind(target_image))
-		add_context_menu_item("🔧 BentoPack: Configurer dans le Dock", _on_open_in_dock.bind(target_image))
+		add_context_menu_item(BentoI18n.t("ctx_auto_slice"), _on_auto_slice.bind(target_image))
+		add_context_menu_item(BentoI18n.t("ctx_open_in_dock"), _on_open_in_dock.bind(target_image))
 
 	if has_bento:
-		add_context_menu_item("🎨 BentoPack: Ouvrir dans l'éditeur Desktop", _on_open_in_desktop.bind(target_bento))
+		add_context_menu_item(BentoI18n.t("ctx_open_desktop"), _on_open_in_desktop.bind(target_bento))
 
 func _on_auto_slice(arg1: Variant = null, arg2: Variant = null) -> void:
 	var path: String = ""

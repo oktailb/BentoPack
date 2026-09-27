@@ -2,6 +2,8 @@
 class_name BentoPackInspectorPlugin
 extends EditorInspectorPlugin
 
+const BentoI18n = preload("bento_i18n.gd")
+
 ## Custom Godot 4 inspector panel for 2D Sprite & Animation nodes.
 ## Adds quick-action buttons to open assets in BentoPack or trigger live re-packs.
 
@@ -32,14 +34,14 @@ func _parse_begin(object: Object) -> void:
 	vbox.add_theme_constant_override("separation", 4)
 
 	var title := Label.new()
-	title.text = "BentoPack 2D Toolkit"
+	title.text = BentoI18n.t("inspector_title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", Color(0.4, 0.7, 1.0))
 	vbox.add_child(title)
 
 	var btn_open := Button.new()
-	btn_open.text = "🎨 Open in BentoPack"
-	btn_open.tooltip_text = "Launch the BentoPack desktop application to edit this asset."
+	btn_open.text = BentoI18n.t("inspector_open_btn")
+	btn_open.tooltip_text = BentoI18n.t("inspector_open_tooltip")
 	btn_open.pressed.connect(_on_open_pressed.bind(object))
 	vbox.add_child(btn_open)
 
