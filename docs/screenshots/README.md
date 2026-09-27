@@ -12,5 +12,5 @@ Ce répertoire contient les captures d'écran référencées dans [`docs/USER_GU
 7. `07_atlas_packing_maxrects.webp` : Dialogue d'empaquetage MaxRects avec prévisualisation du packing dense et déduplication.
 8. `08_polygon_mesh_dialog.webp` : Boîte de dialogue de maillage polygonal avec fil de fer triangulé et métrique de réduction d'overdraw.
 9. `09_pixel_editor_dialog.webp` : Atelier d'édition pixel par pixel avec grille de pixels (zoom >= 400%), palettes rétro et barre d'outils.
-10. `10_git_history_dock.webp` : Dock d'historique de versions Git intégré montrant les commits et snapshots du projet `.ssp`.
+10. `10_git_history_dock.webp` : Dock d'historique de versions Git intégré montrant les commits et snapshots du projet `.bento`.
 11. `11_export_dialog.webp` : Boîte de dialogue d'exportation avec sélecteur de format (Godot, Unity, Unreal, JSON) et statistiques.

@@ -49,7 +49,7 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 * **Intelligent Preview Navigation:** Automatic optimal framing (*Fit In View*), 5000% razor-sharp pixel art wheel zoom, and pan controls.
 
 ### 🍱 Native `.bento` Project Architecture
-* **All-in-One Compressed Format:** `.bento` project files package project metadata, frame descriptors, and source assets into a structured ZIP archive (with full backward compatibility for opening and migrating legacy `.ssp` files).
+* **All-in-One Compressed Format:** `.bento` project files package project metadata, frame descriptors, and source assets into a structured ZIP archive.
 * **Atomic Transactions & Crash Recovery:** Atomic file writing with journaled crash-recovery safeguard prevents project corruption.
 * **Embedded Git Time-Travel:** Integrated non-destructive versioning engine powered by LibGit2. Browse commit history, inspect visual diffs, and revert to previous states without leaving the app.
 
@@ -60,7 +60,7 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 * **HMI Live Visualization & Controls:** Real-time wireframe view directly on the atlas canvas (cyan mesh lines, neon green boundary, and vertex handles). Toggleable in the View menu. Dedicated tuning dialog (`Ctrl+M` / right-click) with 400% zoomed interactive preview, slider controls, and live fillrate savings telemetry.
 * **Direct Canvas Vertex Editing:** Click-drag individual vertices, multi-select vertices with `Shift` or `Ctrl`, nudge with arrow keys, double-click edge to insert a vertex, and hit `Delete` to remove vertices with automatic re-triangulation.
 * **High-Density Tight Polygon Packing:** Compaction allowing bounding boxes to overlap without pixel collisions. Multi-threaded candidate evaluation with configurable thread count (up to hardware cores) and sub-20ms instant calculation.
-* **Reversible & Persistent:** Full `QUndoStack` integration (`SetPolygonMeshCommand`) and lossless `.ssp` project serialization.
+* **Reversible & Persistent:** Full `QUndoStack` integration (`SetPolygonMeshCommand`) and lossless `.bento` project serialization.
 
 ### 🖌️ Surgical Pixel-by-Pixel Editor (M4)
 * **High-Precision Canvas (`Ctrl+E`):** Fast, non-interpolated pixel art editor (`SmoothPixmapTransform = false`) for surgical touch-ups without switching to GIMP or Photoshop.
@@ -90,7 +90,7 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 
 ### ⚙️ Comprehensive Settings & Preferences Center
 * **Modular 6-Category Configuration:** Clean searchable preferences interface with responsive filtering.
-* **Startup & Automation:** Auto-reopen last active `.ssp` project and optional background check for newer GitHub releases.
+* **Startup & Automation:** Auto-reopen last active `.bento` project and optional background check for newer GitHub releases.
 * **Export & VRAM Defaults:** Pre-configure favorite target engines, texture format, packing algorithm, and Zstd level.
 * **Plugin Management:** Real-time inspection of loaded filter and extractor plugins with metadata, supported extensions, and hot-reload.
 * **Integrated Update Engine:** Direct GitHub releases API query, markdown release notes preview, and instant version comparison.
@@ -118,7 +118,7 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 * **CMake:** Version 3.20 or newer
 * **Qt 6:** Version 6.5 or newer (Core, Gui, Widgets, Multimedia, MultimediaWidgets, Concurrent, Test, LinguistTools)
 * **Ninja** or **Make** (recommended build generators)
-* *(Optional)* **LibGit2** (for embedded `.ssp` time-travel versioning)
+* *(Optional)* **LibGit2** (for embedded `.bento` time-travel versioning)
 
 ### Build Instructions
 
@@ -178,7 +178,7 @@ ctest --test-dir build --output-on-failure --verbose
 | Test Suite | Description |
 | :--- | :--- |
 | `test_core` | Frame data structures, color detection, and algorithm utilities |
-| `test_project` | `.ssp` serialization, atomic saves, journal recovery, and LibGit2 versioning |
+| `test_project` | `.bento` serialization, atomic saves, journal recovery, and LibGit2 versioning |
 | `test_extractors` | GIF, JSON, Godot 4 `.tres`, and Sprite Sheet detectors using sample assets |
 | `test_controllers` | Undo/Redo commands, frame merging, selection, and timeline controller logic |
 | `test_cli` | Headless CLI parser, TexturePacker & Aseprite emulation, Godot 4 UID/scene generation, native commands, and POSIX exit codes |
@@ -227,7 +227,7 @@ bentopack-cli slice --remove-bg --tolerance 15 --smart-crop --output-dir out/ sh
 # Apply procedural outline headless
 bentopack-cli filter --outline 2 red --output-dir out/ sprites/*.png
 
-# Inspect or export .bento / .ssp project metadata
+# Inspect or export .bento project metadata
 bentopack-cli bento --info project.bento
 ```
 
@@ -304,9 +304,9 @@ BentoPack bridges the gap between raw asset extraction/cleanup (historically han
 - [x] **M0 — Architecture & Decoupling:** Standalone stateless codecs, `SpriteDocument` single source of truth, autonomous controllers
 - [x] **M1 — Interactive Atlas Slicing:** 8 cosmetic handles, mouse-centered zoom, group drag, pixel-perfect nudge, alpha trim, frame merging
 - [x] **M2 — Timeline & Animation Manager:** Filmstrip ribbon, scrubber with milliseconds counter, loop modes (Loop, Once, Ping-Pong), auto-play
-- [x] **M5 — Native `.ssp` Project Format & Time-Travel:** ZIP container atomic saves, crash detection & recovery lock, LibGit2 continuous Git history dock
+- [x] **M5 — Native `.bento` Project Format & Time-Travel:** ZIP container atomic saves, crash detection & recovery lock, LibGit2 continuous Git history dock
 - [x] **M7 — Advanced Filter System & Cleanup:** Plugin registry (`FilterPlugin` / `FilterRegistry`), universal Undo (`ApplyFilterCommand`), live preview (`FilterDialogBase`), Despill/Anti-Halo (color clamping), Outline & Silhouettes, Color Swap (HSV shading)
-- [x] **M3 — Interactive Pivots & Alignment:** High-contrast double-ring reticle, interactive pivot drag in atlas & live preview, Shift+Click snapping, zero-jittering animation envelope stabilization, ground line, cardinal presets (Bottom-Center, Center, Top-Left, UI), batch application, optimal fit & 5000% zoom, engine offset export (Godot 4 margin Rect2 / JSON / .ssp)
+- [x] **M3 — Interactive Pivots & Alignment:** High-contrast double-ring reticle, interactive pivot drag in atlas & live preview, Shift+Click snapping, zero-jittering animation envelope stabilization, ground line, cardinal presets (Bottom-Center, Center, Top-Left, UI), batch application, optimal fit & 5000% zoom, engine offset export (Godot 4 margin Rect2 / JSON / .bento)
 - [x] **M6 — Advanced Bin-Packing:** MaxRects (5 heuristics: BestShortSideFit, BestAreaFit, BestLongSideFit, BottomLeft, ContactPoint), padding, 1-2px extrusion anti-bleeding, Power-Of-Two / AnySize, auto-alias visual frame deduplication
 - [x] **M-CLI — Headless Command-Line Interface:** `bentopack-cli` with multi-flavor dispatch (TexturePacker drop-in, Aseprite batch, Godot 4 pipeline, native slice/filter/ssp), POSIX codes, JSON output, automated benchmarks & regression tracking
 - [x] **M8 — Polygon & Tight Mesh Packing:** Watertight Marching Squares, Ramer-Douglas-Peucker boundary reduction with outward dilation, Ear-Clipping triangulation, interactive canvas vertex editor (drag, multi-select, insert, delete), multithreaded tight polygon nesting (configurable CPU threads), and multi-engine exports (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON)

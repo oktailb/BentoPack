@@ -13,7 +13,7 @@ Bienvenue dans le manuel d'utilisation officiel de **BentoPack**, l'atelier tout
 6. [Empaquetage d'Atlas MaxRects (Compacité Optimale)](#6-empaquetage-datlas-maxrects-compacité-optimale)
 7. [Empaquetage Polygonal & Maillages Serrés (Tight Mesh)](#7-empaquetage-polygonal--maillages-serrés-tight-mesh)
 8. [Atelier d'Édition Pixel par Pixel Chirurgicale](#8-atelier-dédition-pixel-par-pixel-chirurgicale)
-9. [Format de Projet Natif (`.bento` / `.ssp`) & Voyage dans le Temps Git](#9-format-de-projet-natif-bento--ssp--voyage-dans-le-temps-git)
+9. [Format de Projet Natif (`.bento`) & Voyage dans le Temps Git](#9-format-de-projet-natif-bento--ssp--voyage-dans-le-temps-git)
 10. [Exportations Multi-Moteurs (Godot, Unity, Unreal, JSON)](#10-exportations-multi-moteurs-godot-unity-unreal-json)
 11. [Automatisation en Ligne de Commande (`bentopack-cli`)](#11-automatisation-en-ligne-de-commande-bentopack-cli)
 12. [Mémento des Raccourcis Clavier](#12-mémento-des-raccourcis-clavier)
@@ -206,14 +206,14 @@ Corrigez rapidement un pixel mal placé, un artefact oublié ou harmonisez une c
 
 ---
 
-## 9. Format de Projet Natif (`.ssp`) & Voyage dans le Temps Git
+## 9. Format de Projet Natif (`.bento`) & Voyage dans le Temps Git
 
 Sauvegardez l'intégralité de votre travail (atlas original, découpes, pivots, animations, historique et métadonnées) dans un conteneur unifié et sécurisé.
 
 ![Historique Git Intégré et Time-Travel Dock](screenshots/10_git_history_dock.webp)
 
 ### Sécurité & Tolérance aux Pannes :
-- **Format `.bento` / `.ssp` (BentoPack Project) :** Archive ZIP compressée (moteur autonome `miniz`) contenant l'atlas haute fidélité, le fichier descripteur `project.json` et les snapshots.
+- **Format `.bento` (BentoPack Project) :** Archive ZIP compressée (moteur autonome `miniz`) contenant l'atlas haute fidélité, le fichier descripteur `project.json` et les snapshots.
 - **Écriture Atomique & Verrou de Concurrence :** Empêche la corruption en cas de coupure de courant ou d'accès simultané.
 - **Restauration Après Crash (*Crash Recovery*) :** Sauvegarde automatique périodique en arrière-plan permettant de récupérer vos travaux non enregistrés dès la réouverture.
 
@@ -278,8 +278,8 @@ bentopack-cli --watch --sheet dist/atlas.png --data dist/atlas.json src/sprites/
 | Raccourci | Action |
 |---|---|
 | `Ctrl + N` | Nouvelle animation / Réinitialiser le projet |
-| `Ctrl + O` | Ouvrir une image, une planche ou un projet `.ssp` |
-| `Ctrl + S` | Enregistrer le projet `.ssp` |
+| `Ctrl + O` | Ouvrir une image, une planche ou un projet `.bento` |
+| `Ctrl + S` | Enregistrer le projet `.bento` |
 | `Ctrl + Shift + S` | Enregistrer sous... |
 | `Ctrl + E` | Ouvrir l'Atelier d'Édition Pixel par Pixel |
 | `Ctrl + Shift + E` | Ouvrir la Boîte de Dialogue d'Exportation |
