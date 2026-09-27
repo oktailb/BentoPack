@@ -240,6 +240,8 @@ QWidget* SettingsDialog::createGeneralPage()
     m_comboLanguage->addItem(QStringLiteral("English"), QStringLiteral("en_US"));
     m_comboLanguage->addItem(QStringLiteral("日本語"), QStringLiteral("ja_JA"));
     m_comboLanguage->addItem(QStringLiteral("Portugese"), QStringLiteral("pt_BR"));
+    m_comboLanguage->addItem(QStringLiteral("简体中文"), QStringLiteral("zh_CN"));
+    m_comboLanguage->addItem(QStringLiteral("한국어"), QStringLiteral("ko_KR"));
     m_lblLangApp = new QLabel(tr("KEY_SETTINGS_LANG_APP"), m_grpLang);
     formLang->addRow(m_lblLangApp, m_comboLanguage);
 

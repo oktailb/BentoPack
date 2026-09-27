@@ -43,7 +43,9 @@ QStringList LocalizationManager::supportedLanguages()
         QStringLiteral("fr_FR"),
         QStringLiteral("en_US"),
         QStringLiteral("ja_JA"),
-        QStringLiteral("pt_BR")
+        QStringLiteral("pt_BR"),
+        QStringLiteral("zh_CN"),
+        QStringLiteral("ko_KR")
     };
 }
 
@@ -73,7 +75,11 @@ bool LocalizationManager::setLanguage(const QString &langCode)
     } else if (locale.startsWith(QStringLiteral("en"), Qt::CaseInsensitive)) {
         candidates << QStringLiteral("bentopack_en_US");
     } else if (locale.startsWith(QStringLiteral("pt"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_pt_BR");
+      candidates << QStringLiteral("bentopack_pt_BR");
+    } else if (locale.startsWith(QStringLiteral("zh"), Qt::CaseInsensitive)) {
+      candidates << QStringLiteral("bentopack_zh_CN");
+    } else if (locale.startsWith(QStringLiteral("ko"), Qt::CaseInsensitive)) {
+      candidates << QStringLiteral("bentopack_ko_KR");
     }
     candidates << QStringLiteral("bentopack_en_US"); // ultimate fallback
 
