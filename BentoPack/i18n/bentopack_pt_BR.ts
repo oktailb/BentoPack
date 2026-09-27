@@ -3084,7 +3084,7 @@ Instale o pacote:
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
-        <translation>Sistema (Padrão)</translation>
+        <translation>🌐 Sistema (Padrão)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_APP</source>

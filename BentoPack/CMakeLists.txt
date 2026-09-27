@@ -36,10 +36,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(${PROJECT_NAME}_TS_FILES
     i18n/bentopack_fr_FR.ts # Français
     i18n/bentopack_en_US.ts # English
+    i18n/bentopack_es_ES.ts # Spanish
     i18n/bentopack_ja_JA.ts # Japanese
     i18n/bentopack_pt_BR.ts # Brasilian Portugese
     i18n/bentopack_zh_CN.ts # Chinese
     i18n/bentopack_ko_KR.ts # Korean
+    i18n/bentopack_de_DE.ts # Korean
 )
 
 set(BentoPackCore_SRC

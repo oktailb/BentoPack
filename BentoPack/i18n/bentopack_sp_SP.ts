@@ -3070,7 +3070,7 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
-        <translation>🌐 System (Default)</translation>
+        <translation>System (Default)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_APP</source>

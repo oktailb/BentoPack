@@ -3084,7 +3084,7 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
-        <translation>系统 (默认)</translation>
+        <translation>🌐 系统 (默认)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_APP</source>

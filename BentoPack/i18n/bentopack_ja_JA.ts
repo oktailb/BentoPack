@@ -3068,7 +3068,7 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
-        <translation>システム (デフォルト)</translation>
+        <translation>🌐 システム (デフォルト)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_APP</source>

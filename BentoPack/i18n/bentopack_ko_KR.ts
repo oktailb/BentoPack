@@ -3084,7 +3084,7 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
-        <translation>시스템 (기본값)</translation>
+        <translation>🌐 시스템 (기본값)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_APP</source>
