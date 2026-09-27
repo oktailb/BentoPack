@@ -226,6 +226,42 @@
         <source>KEY_ACTION_SETTINGS</source>
         <translation>Preferências...</translation>
     </message>
+    <message>
+        <source>KEY_ABOUT_BUILD_WITH</source>
+        <translation type="vanished">Compilado com</translation>
+    </message>
+    <message>
+        <source>KEY_ABOUT_PLATFORM</source>
+        <translation type="vanished">Plataforma</translation>
+    </message>
+    <message>
+        <source>KEY_ABOUT_BRANCH</source>
+        <translation type="vanished">Branch</translation>
+    </message>
+    <message>
+        <source>KEY_ABOUT_COMMIT</source>
+        <translation type="vanished">Commit</translation>
+    </message>
+    <message>
+        <source>KEY_ABOUT_LAST_COMMIT_DATE</source>
+        <translation type="vanished">Data do Último Commit</translation>
+    </message>
+    <message>
+        <source>KEY_ABOUT_LAST_AUTHOR</source>
+        <translation type="vanished">Último Autor</translation>
+    </message>
+    <message>
+        <source>_compiler</source>
+        <translation type="vanished">_compiler</translation>
+    </message>
+    <message>
+        <source>_licence_agreement</source>
+        <translation type="vanished">_licence_agreement</translation>
+    </message>
+    <message>
+        <source>KEY_LICENCE_FILE_NOT_FOUND</source>
+        <translation type="vanished">Arquivo de licença não encontrado.</translation>
+    </message>
 </context>
 <context>
     <name>AnimationController</name>
@@ -512,6 +548,10 @@
         <source>Packed in %1x%2 (%3%)</source>
         <translation>Empacotado em %1x%2 (%3%)</translation>
     </message>
+    <message>
+        <source>Filter: Atlas Bin-Packing (MaxRects)</source>
+        <translation type="vanished">Filtro: Atlas Bin-Packing (MaxRects)</translation>
+    </message>
 </context>
 <context>
     <name>AtlasPackingFilter</name>
@@ -619,6 +659,109 @@
         <location filename="../../plugins/filters/backgroundremoval/backgroundremovalfilter.cpp" line="16"/>
         <source>Detects dominant background color and makes pixels transparent with automatic bounding box recalculation.</source>
         <translation>Detecta a cor de fundo dominante e torna os pixels transparentes com recálculo automático da caixa delimitadora.</translation>
+    </message>
+</context>
+<context>
+    <name>BentoPackWidgets::PolygonMeshDialog</name>
+    <message>
+        <source>Tight Mesh &amp; 2D Polygon Packing</source>
+        <translation type="vanished">Malha Poligonal 2D &amp; Empacotamento Compacto</translation>
+    </message>
+    <message>
+        <source>Live Preview &amp; Wireframe</source>
+        <translation type="vanished">Visualização ao Vivo &amp; Wireframe</translation>
+    </message>
+    <message>
+        <source>Polygon &amp; Mesh Simplification</source>
+        <translation type="vanished">Simplificação de Polígono &amp; Malha</translation>
+    </message>
+    <message>
+        <source>Approximation Tolerance (ε):</source>
+        <translation type="vanished">Tolerância de Aproximação (ε):</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation type="vanished">Limiar Alpha:</translation>
+    </message>
+    <message>
+        <source>Outward Padding:</source>
+        <translation type="vanished">Margem Externa (Padding):</translation>
+    </message>
+    <message>
+        <source>Max Vertices:</source>
+        <translation type="vanished">Máximo de Vértices:</translation>
+    </message>
+    <message>
+        <source>Overdraw &amp; Performance Dashboard</source>
+        <translation type="vanished">Desempenho GPU &amp; Overdraw</translation>
+    </message>
+    <message>
+        <source>Vertices: --</source>
+        <translation type="vanished">Vértices: --</translation>
+    </message>
+    <message>
+        <source>Triangles: --</source>
+        <translation type="vanished">Triângulos: --</translation>
+    </message>
+    <message>
+        <source>Polygon Area: --</source>
+        <translation type="vanished">Área do Polígono: --</translation>
+    </message>
+    <message>
+        <source>GPU Overdraw Saved: --</source>
+        <translation type="vanished">Overdraw GPU economizado: --</translation>
+    </message>
+    <message>
+        <source>Vertices: %1</source>
+        <translation type="vanished">Vértices: %1</translation>
+    </message>
+    <message>
+        <source>Triangles: %1</source>
+        <translation type="vanished">Triângulos: %1</translation>
+    </message>
+    <message>
+        <source>Polygon Area: %1 px² (vs %2 px² box)</source>
+        <translation type="vanished">Área: %1 px² (vs %2 px² retângulo)</translation>
+    </message>
+    <message>
+        <source>GPU Overdraw Eliminated: %1%</source>
+        <translation type="vanished">Overdraw GPU eliminado: %1%</translation>
+    </message>
+    <message>
+        <source>Apply to Selection</source>
+        <translation type="vanished">Aplicar à Seleção</translation>
+    </message>
+    <message>
+        <source>Apply to All Frames</source>
+        <translation type="vanished">Aplicar a Todos os Quadros</translation>
+    </message>
+    <message>
+        <source>Remove Mesh (Reset to Rect)</source>
+        <translation type="vanished">Remover Malha (Restaurar Retângulo)</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="vanished">Fechar</translation>
+    </message>
+    <message>
+        <source>Target Frame %1: Mesh already applied (%2 vertices, %3 tris)</source>
+        <translation type="vanished">Quadro alvo %1: Malha já aplicada (%2 vértices, %3 triângulos)</translation>
+    </message>
+    <message>
+        <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
+        <translation type="vanished">Quadro alvo %1: Modo retângulo (nenhuma malha aplicada)</translation>
+    </message>
+    <message>
+        <source>✓ Mesh applied to %1 frame(s)!</source>
+        <translation type="vanished">✓ Malha aplicada a %1 quadro(s)!</translation>
+    </message>
+    <message>
+        <source>✓ Mesh applied to all %1 frames!</source>
+        <translation type="vanished">✓ Malha aplicada a todos os %1 quadros!</translation>
+    </message>
+    <message>
+        <source>✓ Tight mesh removed. Reverted to rectangle.</source>
+        <translation type="vanished">✓ Malha compacta removida. Restaurado para retângulo.</translation>
     </message>
 </context>
 <context>
@@ -1307,7 +1450,7 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="478"/>
         <source>Saved %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 salvo com sucesso.</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="487"/>
@@ -1318,6 +1461,26 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../src/widgets/exportdialog.cpp" line="487"/>
         <source>An error occurred during export.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Packing Statistics (Live Estimation)</source>
+        <translation type="vanished">Estatísticas de Empacotamento (Estimativa ao Vivo)</translation>
+    </message>
+    <message>
+        <source>Godot 4 Resource (*.tres);;All Files (*.*)</source>
+        <translation type="vanished">Recurso Godot 4 (*.tres);;Todos os Arquivos (*.*)</translation>
+    </message>
+    <message>
+        <source>Unity 2D Sprite Mesh (*.unity.json);;JSON (*.json);;All Files (*.*)</source>
+        <translation type="vanished">Malha de Sprite Unity 2D (*.unity.json);;JSON (*.json);;Todos os Arquivos (*.*)</translation>
+    </message>
+    <message>
+        <source>Unreal Paper2D (*.paper2d.json);;JSON (*.json);;All Files (*.*)</source>
+        <translation type="vanished">Unreal Paper2D (*.paper2d.json);;JSON (*.json);;Todos os Arquivos (*.*)</translation>
+    </message>
+    <message>
+        <source>JSON SpriteSheet (*.json);;All Files (*.*)</source>
+        <translation type="vanished">SpriteSheet JSON (*.json);;Todos os Arquivos (*.*)</translation>
     </message>
 </context>
 <context>
@@ -1380,7 +1543,7 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="272"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <location filename="../src/widgets/filterdialogbase.cpp" line="275"/>
@@ -1432,7 +1595,7 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="32"/>
         <source>File not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arquivo não encontrado: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/gif/gifextractor.cpp" line="42"/>
@@ -1489,7 +1652,7 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../src/widgets/githistorydock.cpp" line="170"/>
         <location filename="../src/widgets/githistorydock.cpp" line="585"/>
         <source>KEY_DOCK_GIT_HISTORY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Histórico do Git</translation>
     </message>
     <message>
         <location filename="../src/widgets/githistorydock.cpp" line="191"/>
@@ -1605,7 +1768,7 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="377"/>
         <source>No frames in document to export.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nenhum quadro no documento para exportar.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="383"/>
@@ -1615,7 +1778,7 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="392"/>
         <source>Export file name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O nome do arquivo de exportação não pode estar vazio.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/godot/godotextractor.cpp" line="440"/>
@@ -1688,12 +1851,12 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="501"/>
         <source>No frames in document to export.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nenhum quadro no documento para exportar.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="513"/>
         <source>Export file name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O nome do arquivo de exportação não pode estar vazio.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="533"/>
@@ -1708,12 +1871,12 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="584"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Falha ao salvar a textura VRAM complementar: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="592"/>
         <source>Failed to save companion image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Falha ao salvar a imagem complementar: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="746"/>
@@ -1754,355 +1917,73 @@ A remoção estrita limpa o pixel.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="99"/>
-        <location filename="../src/mainwindow.cpp" line="720"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="555"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="620"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="685"/>
-        <source>KEY_UNTITLED_PROJECT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="32"/>
         <source>BentoPack</source>
-        <translation type="unfinished"></translation>
+        <translation>BentoPack</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="76"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="540"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="605"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="670"/>
-        <source>KEY_DOCK_PREVIEW</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="983"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="543"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="608"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="673"/>
+        <source>KEY_TOOL_SELECT</source>
+        <translation>Selecionar e Editar</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="121"/>
-        <source>KEY_TOOLTIP_FIRST_FRAME</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="986"/>
+        <source>KEY_TOOLTIP_TOOL_SELECT</source>
+        <translation>Selecionar, mover e redimensionar fatias</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="124"/>
-        <source>|◀</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="994"/>
+        <source>KEY_TOOL_ADD_SLICE</source>
+        <translation>+ Adicionar Fatia</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="131"/>
-        <source>KEY_TOOLTIP_PREV_FRAME</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="997"/>
+        <source>KEY_TOOLTIP_TOOL_ADD_SLICE</source>
+        <translation>Clique e arraste no atlas para desenhar uma nova fatia</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="134"/>
-        <source>◀</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="1002"/>
+        <source>KEY_TOOL_TRIM</source>
+        <translation>Ajustar aos Pixels</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="141"/>
-        <source>KEY_TOOLTIP_PLAY_PAUSE</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="1005"/>
+        <source>KEY_TOOLTIP_TOOL_TRIM</source>
+        <translation>Encolher a fatia selecionada para os pixels opacos</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="154"/>
-        <source>KEY_TOOLTIP_PAUSE</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="1010"/>
+        <source>KEY_TOOL_REMOVE_BG</source>
+        <translation>Remover Fundo</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="167"/>
-        <source>KEY_TOOLTIP_NEXT_FRAME</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="170"/>
-        <location filename="../src/mainwindow.ui" line="180"/>
-        <source>▶|</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="177"/>
-        <source>KEY_TOOLTIP_LAST_FRAME</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="187"/>
-        <source>KEY_TOOLTIP_LOOP_MODE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="207"/>
-        <source>KEY_TOOLTIP_PREVIEW_FIT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="210"/>
-        <source>⛶</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="217"/>
-        <source>KEY_TOOLTIP_PREVIEW_1X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="220"/>
-        <source>1:1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="253"/>
-        <source>0 frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="285"/>
-        <source>FPS:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="332"/>
-        <source> -&gt; Timing: 83.33ms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="341"/>
-        <source>KEY_GRP_PIVOT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="367"/>
-        <source>KEY_TOOLTIP_PIVOT_GROUND</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="370"/>
-        <source>⬇️ Sol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="377"/>
-        <source>KEY_TOOLTIP_PIVOT_CENTER</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="380"/>
-        <source>🎯 Centre</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="387"/>
-        <source>KEY_TOOLTIP_PIVOT_TOPLEFT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="390"/>
-        <source>↖️ UI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="410"/>
-        <source>KEY_TOOLTIP_SHOW_RETICLE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="413"/>
-        <source>🎯 Mire</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="430"/>
-        <source>Preset:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="438"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="165"/>
-        <source>KEY_PIVOT_TOPLEFT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="443"/>
-        <source>KEY_PIVOT_TOPCENTER</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="448"/>
-        <source>KEY_PIVOT_TOPRIGHT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="453"/>
-        <source>KEY_PIVOT_CENTERLEFT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="458"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="161"/>
-        <source>KEY_PIVOT_CENTER</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="463"/>
-        <source>KEY_PIVOT_CENTERRIGHT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="468"/>
-        <source>KEY_PIVOT_BOTTOMLEFT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="473"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="157"/>
-        <source>KEY_PIVOT_BOTTOMCENTER</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="478"/>
-        <source>KEY_PIVOT_BOTTOMRIGHT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="483"/>
-        <source>KEY_PIVOT_CUSTOM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="498"/>
-        <source>X:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="515"/>
-        <source>Y:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="539"/>
-        <source>KEY_TOOLTIP_APPLY_PIVOT_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="542"/>
-        <source>KEY_BTN_APPLY_PIVOT_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="549"/>
-        <source>KEY_TOOLTIP_APPLY_PIVOT_ALL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="552"/>
-        <source>KEY_BTN_APPLY_PIVOT_ALL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="568"/>
-        <location filename="../src/mainwindow.ui" line="603"/>
-        <source>KEY_DOCK_ANIMATIONS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="623"/>
-        <source>KEY_TOOLTIP_NEW_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="626"/>
-        <source>+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="633"/>
-        <source>KEY_TOOLTIP_NEW_FROM_SELECTION</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="636"/>
-        <source>+ Sel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="643"/>
-        <source>KEY_TOOLTIP_DUPLICATE_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="646"/>
-        <source>📋</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="653"/>
-        <source>KEY_TOOLTIP_REVERSE_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="656"/>
-        <source>⇄</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="663"/>
-        <source>KEY_TOOLTIP_DELETE_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="666"/>
-        <source>🗑</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="1013"/>
+        <source>KEY_TOOLTIP_TOOL_REMOVE_BG</source>
+        <translation>Remover automaticamente a cor de fundo e extrair sprites</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="685"/>
         <location filename="../src/mainwindow.cpp" line="332"/>
         <location filename="../src/mainwindow.cpp" line="917"/>
         <source>KEY_ANIM_COL_NAME</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="690"/>
         <location filename="../src/mainwindow.cpp" line="332"/>
         <location filename="../src/mainwindow.cpp" line="919"/>
         <source>KEY_ANIM_COL_FPS</source>
-        <translation type="unfinished">FPS</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="695"/>
-        <location filename="../src/mainwindow.cpp" line="332"/>
-        <source>KEY_ANIM_COL_MODE</source>
-        <translation type="unfinished">Modo</translation>
+        <translation>FPS</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="700"/>
         <location filename="../src/mainwindow.cpp" line="332"/>
         <location filename="../src/mainwindow.cpp" line="918"/>
         <source>KEY_ANIM_COL_FRAMES</source>
-        <translation type="unfinished">Quadros</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="705"/>
-        <location filename="../src/mainwindow.cpp" line="332"/>
-        <location filename="../src/mainwindow.cpp" line="920"/>
-        <source>KEY_ANIM_COL_DURATION</source>
-        <translation type="unfinished">Duração</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="715"/>
-        <source>KEY_DOCK_TIMELINE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="742"/>
-        <source>KEY_DOCK_ATLAS_FRAMES</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="841"/>
-        <location filename="../src/mainwindow.cpp" line="340"/>
-        <location filename="../src/mainwindow.cpp" line="911"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="539"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="604"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="669"/>
-        <source>KEY_TOOLBAR_MAIN</source>
-        <translation type="unfinished"></translation>
+        <translation>Quadros</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="879"/>
@@ -2110,51 +1991,43 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="602"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="667"/>
         <source>KEY_MENU_FILE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="895"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="538"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="603"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="668"/>
-        <source>KEY_MENU_VIEW</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivo</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="901"/>
         <source>KEY_MENU_HELP</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuda</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="912"/>
         <source>KEY_ACTION_NEW_PROJECT</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Novo Projeto</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="917"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="84"/>
         <source>KEY_ACTION_OPEN_PROJECT</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Abrir Projeto...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="922"/>
         <source>KEY_ACTION_LICENCE</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Licença</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="927"/>
         <source>KEY_ACTION_ABOUT</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;obre</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="932"/>
         <source>KEY_ACTION_START</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="937"/>
         <source>KEY_ACTION_STOP</source>
-        <translation type="unfinished"></translation>
+        <translation>Parar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="942"/>
@@ -2162,7 +2035,7 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="606"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="671"/>
         <source>KEY_ACTION_OPEN</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Abrir</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="947"/>
@@ -2171,192 +2044,79 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="607"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="672"/>
         <source>KEY_ACTION_SAVE</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salvar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="952"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="96"/>
         <source>KEY_ACTION_SAVE_PROJECT</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salvar Projeto</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="957"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="114"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="123"/>
         <source>KEY_ACTION_SAVE_PROJECT_AS</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar Projeto &amp;Como...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="962"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="173"/>
         <source>KEY_ACTION_EXPORT</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exportar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="967"/>
         <source>KEY_ACTION_EXPORT_AS</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar Como...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="972"/>
         <source>KEY_ACTION_EXIT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="983"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="543"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="608"/>
-        <location filename="../../tests/test_controller_atlas.cpp" line="673"/>
-        <source>KEY_TOOL_SELECT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="986"/>
-        <source>KEY_TOOLTIP_TOOL_SELECT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="994"/>
-        <source>KEY_TOOL_ADD_SLICE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="997"/>
-        <source>KEY_TOOLTIP_TOOL_ADD_SLICE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1002"/>
-        <source>KEY_TOOL_TRIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1005"/>
-        <source>KEY_TOOLTIP_TOOL_TRIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1010"/>
-        <source>KEY_TOOL_REMOVE_BG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1013"/>
-        <source>KEY_TOOLTIP_TOOL_REMOVE_BG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1018"/>
-        <source>KEY_ACTION_ZOOM_IN</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1021"/>
-        <source>KEY_TOOLTIP_ZOOM_IN</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1026"/>
-        <source>KEY_ACTION_ZOOM_OUT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1029"/>
-        <source>KEY_TOOLTIP_ZOOM_OUT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1034"/>
-        <source>KEY_ACTION_ZOOM_RESET</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1037"/>
-        <source>KEY_TOOLTIP_ZOOM_RESET</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1042"/>
-        <source>KEY_ACTION_RESET_LAYOUT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1045"/>
-        <source>KEY_TOOLTIP_RESET_LAYOUT</source>
-        <translation type="unfinished"></translation>
+        <translation>Sair</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="164"/>
         <location filename="../src/mainwindow.cpp" line="705"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="88"/>
         <source>KEY_MSG_LOAD_ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro de Carregamento</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="386"/>
+        <source>KEY_STATUS_READY_TO_START</source>
+        <translation>Pronto para iniciar</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="404"/>
+        <location filename="../src/mainwindow.cpp" line="968"/>
+        <source>KEY_STATUS_PROGRESS</source>
+        <translation>Progresso</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="255"/>
         <location filename="../src/mainwindow.cpp" line="482"/>
         <location filename="../src/mainwindow.cpp" line="971"/>
         <source>KEY_LABEL_TIMING</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="386"/>
-        <source>KEY_STATUS_READY_TO_START</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="404"/>
-        <location filename="../src/mainwindow.cpp" line="968"/>
-        <source>KEY_STATUS_PROGRESS</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="489"/>
         <location filename="../src/mainwindow.cpp" line="932"/>
         <source>KEY_MENU_EDIT</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Editar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="491"/>
         <location filename="../src/mainwindow.cpp" line="935"/>
         <source>KEY_ACTION_UNDO</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Desfazer</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="496"/>
         <location filename="../src/mainwindow.cpp" line="938"/>
         <source>KEY_ACTION_REDO</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="514"/>
-        <location filename="../src/mainwindow.cpp" line="954"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="302"/>
-        <source>KEY_ACTION_PIXEL_EDITOR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="520"/>
-        <location filename="../src/mainwindow.cpp" line="951"/>
-        <source>KEY_ACTION_POLYGON_MESH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="526"/>
-        <location filename="../src/mainwindow.cpp" line="960"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="291"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="130"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="222"/>
-        <source>KEY_CTX_MERGE_SLICES</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="535"/>
-        <location filename="../src/mainwindow.cpp" line="545"/>
-        <location filename="../src/mainwindow.cpp" line="945"/>
-        <location filename="../src/mainwindow.cpp" line="948"/>
-        <source>KEY_ACTION_SETTINGS</source>
-        <translation type="unfinished">Preferências...</translation>
+        <translation>&amp;Refazer</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="540"/>
@@ -2365,132 +2125,51 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="622"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="687"/>
         <source>KEY_MENU_FILTERS</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Filtros</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="559"/>
         <location filename="../src/mainwindow.cpp" line="929"/>
         <source>KEY_MENU_RECENT_PROJECTS</source>
-        <translation type="unfinished"></translation>
+        <translation>Projetos Recentes</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="563"/>
         <location filename="../src/mainwindow.cpp" line="926"/>
         <source>KEY_MENU_RECENT_FILES</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="606"/>
-        <location filename="../src/mainwindow.cpp" line="611"/>
-        <source>KEY_DOCK_GIT_HISTORY</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos Recentes</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="666"/>
         <source>KEY_ACTION_NO_RECENT_FILES</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum Arquivo Recente</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="671"/>
         <location filename="../src/mainwindow.cpp" line="698"/>
         <source>&amp;%1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;%1 %2</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="679"/>
         <source>KEY_ACTION_CLEAR_RECENT_FILES</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpar Arquivos Recentes</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="693"/>
         <source>KEY_ACTION_NO_RECENT_PROJECTS</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum projeto recente</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="711"/>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="739"/>
-        <source>KEY_UNKNOWN_DATE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="740"/>
-        <source>KEY_RECOVERY_PROMPT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="745"/>
-        <source>KEY_RECOVERY_TITLE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="753"/>
-        <source>KEY_RECOVERY_ERROR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="798"/>
-        <source>💡 Update available: %1 (Check Settings -&gt; Updates)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="821"/>
-        <source>KEY_UNSAVED_CHANGES_TITLE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="822"/>
-        <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="890"/>
-        <location filename="../src/mainwindow.cpp" line="957"/>
-        <source>KEY_ACTION_TOGGLE_POLYGON_MESH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="48"/>
-        <source>KEY_DIALOG_LICENCE_TITLE</source>
-        <translation type="unfinished">Licença</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="53"/>
-        <source>KEY_DIALOG_ABOUT_CLOSE</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Limpar projetos recentes</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="83"/>
         <location filename="../src/mainwindow_callbacks.cpp" line="122"/>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="96"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="114"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="152"/>
-        <source>KEY_MSG_NOTHING_TO_SAVE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="107"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="127"/>
-        <location filename="../src/mainwindow_callbacks.cpp" line="164"/>
-        <source>KEY_MSG_SAVE_ERROR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="141"/>
-        <source>KEY_DIALOG_OPEN_TITLE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="173"/>
-        <source>KEY_MSG_NOTHING_TO_EXPORT</source>
-        <translation type="unfinished"></translation>
+        <translation>BentoPack (*.bento);;Todos os Arquivos (*.*)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="225"/>
@@ -2501,7 +2180,7 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="609"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="674"/>
         <source>KEY_CTX_CREATE_ANIM</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar animação da seleção</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="234"/>
@@ -2509,17 +2188,17 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="610"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="675"/>
         <source>KEY_CTX_ADD_TO_ANIM</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar à Animação</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="245"/>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar à Animação Ativa &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="268"/>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
-        <translation type="unfinished"></translation>
+        <translation>(Nenhuma animação criada ainda)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="313"/>
@@ -2527,123 +2206,613 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="611"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="676"/>
         <source>KEY_CTX_SELECT_ALL</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecionar Tudo</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="325"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="242"/>
-        <source>KEY_CTX_INVERT_SEL</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow_animation.cpp" line="117"/>
+        <source>KEY_CTX_REVERSE_ANIM</source>
+        <translation>Reverter Animação</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_callbacks.cpp" line="332"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="143"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="236"/>
-        <source>KEY_CTX_ERASE_PIXELS</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow_animation.cpp" line="118"/>
+        <source>KEY_CTX_DELETE_ANIM</source>
+        <translation>Excluir Animação</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_atlas.cpp" line="115"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="204"/>
+        <source>KEY_CTX_TRIM_SLICE</source>
+        <translation>Ajustar aos Pixels</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="526"/>
+        <location filename="../src/mainwindow.cpp" line="960"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="291"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="130"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="222"/>
+        <source>KEY_CTX_MERGE_SLICES</source>
+        <translation>Mesclar Fatias</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_callbacks.cpp" line="341"/>
         <location filename="../src/mainwindow_atlas.cpp" line="138"/>
         <location filename="../src/mainwindow_atlas.cpp" line="230"/>
         <source>KEY_CTX_DELETE_FRAMES</source>
-        <translation type="unfinished"></translation>
+        <translation>Excluir Quadros Selecionados</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow_animation.cpp" line="116"/>
-        <source>KEY_CTX_DUPLICATE_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_animation.cpp" line="117"/>
-        <source>KEY_CTX_REVERSE_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_animation.cpp" line="118"/>
-        <source>KEY_CTX_DELETE_ANIM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_frames.cpp" line="33"/>
-        <source>KEY_STATUS_POPULATING</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_frames.cpp" line="39"/>
-        <location filename="../src/mainwindow_frames.cpp" line="76"/>
-        <source>KEY_FRAME_LABEL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_frames.cpp" line="65"/>
-        <source>KEY_STATUS_READY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="74"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="81"/>
-        <source>Atlas Bin-Packing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="75"/>
-        <source>Please open or import a sprite sheet with frames first.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="82"/>
-        <source>Atlas packing plugin not found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="115"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="204"/>
-        <source>KEY_CTX_TRIM_SLICE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="120"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="210"/>
-        <source>KEY_CTX_EDIT_PIXELS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow_atlas.cpp" line="125"/>
-        <location filename="../src/mainwindow_atlas.cpp" line="216"/>
-        <source>KEY_CTX_POLYGON_MESH</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow_callbacks.cpp" line="332"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="143"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="236"/>
+        <source>KEY_CTX_ERASE_PIXELS</source>
+        <translation>Apagar Pixels e Excluir Quadros</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_atlas.cpp" line="150"/>
         <location filename="../src/mainwindow_atlas.cpp" line="248"/>
         <source>KEY_CTX_REMOVE_BG</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover Fundo Automaticamente</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="325"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="242"/>
+        <source>KEY_CTX_INVERT_SEL</source>
+        <translation>Inverter Seleção</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="48"/>
+        <source>KEY_DIALOG_LICENCE_TITLE</source>
+        <translation>Licença</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="53"/>
+        <source>KEY_DIALOG_ABOUT_CLOSE</source>
+        <translation>Fechar</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="141"/>
+        <source>KEY_DIALOG_OPEN_TITLE</source>
+        <translation>Abrir Arquivo</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="96"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="114"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="152"/>
+        <source>KEY_MSG_NOTHING_TO_SAVE</source>
+        <translation>Nada para salvar.</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="107"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="127"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="164"/>
+        <source>KEY_MSG_SAVE_ERROR</source>
+        <translation>Erro ao Salvar</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_callbacks.cpp" line="173"/>
+        <source>KEY_MSG_NOTHING_TO_EXPORT</source>
+        <translation>Nada para exportar.</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_frames.cpp" line="33"/>
+        <source>KEY_STATUS_POPULATING</source>
+        <translation>Preenchendo lista de quadros...</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_frames.cpp" line="39"/>
+        <location filename="../src/mainwindow_frames.cpp" line="76"/>
+        <source>KEY_FRAME_LABEL</source>
+        <translation>Quadro %1</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_frames.cpp" line="65"/>
+        <source>KEY_STATUS_READY</source>
+        <translation>Pronto</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="895"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="538"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="603"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="668"/>
+        <source>KEY_MENU_VIEW</source>
+        <translation>E&amp;xibir</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1042"/>
+        <source>KEY_ACTION_RESET_LAYOUT</source>
+        <translation>Redefinir Layout</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1045"/>
+        <source>KEY_TOOLTIP_RESET_LAYOUT</source>
+        <translation>Restaurar layout padrão dos painéis</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="535"/>
+        <location filename="../src/mainwindow.cpp" line="545"/>
+        <location filename="../src/mainwindow.cpp" line="945"/>
+        <location filename="../src/mainwindow.cpp" line="948"/>
+        <source>KEY_ACTION_SETTINGS</source>
+        <translation>Preferências...</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1018"/>
+        <source>KEY_ACTION_ZOOM_IN</source>
+        <translation>Aumentar Zoom</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1021"/>
+        <source>KEY_TOOLTIP_ZOOM_IN</source>
+        <translation>Aumentar o zoom na visualização do atlas</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1026"/>
+        <source>KEY_ACTION_ZOOM_OUT</source>
+        <translation>Diminuir Zoom</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1029"/>
+        <source>KEY_TOOLTIP_ZOOM_OUT</source>
+        <translation>Diminuir o zoom na visualização do atlas</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1034"/>
+        <source>KEY_ACTION_ZOOM_RESET</source>
+        <translation>Redefinir Zoom</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1037"/>
+        <source>KEY_TOOLTIP_ZOOM_RESET</source>
+        <translation>Redefinir o zoom do atlas para 100%</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="76"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="540"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="605"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="670"/>
+        <source>KEY_DOCK_PREVIEW</source>
+        <translation>Pré-visualização da Animação</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="568"/>
+        <location filename="../src/mainwindow.ui" line="603"/>
+        <source>KEY_DOCK_ANIMATIONS</source>
+        <translation>Animações</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="715"/>
+        <source>KEY_DOCK_TIMELINE</source>
+        <translation>Linha do Tempo</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="742"/>
+        <source>KEY_DOCK_ATLAS_FRAMES</source>
+        <translation>Quadros do Atlas</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="606"/>
+        <location filename="../src/mainwindow.cpp" line="611"/>
+        <source>KEY_DOCK_GIT_HISTORY</source>
+        <translation>Histórico do Git</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="121"/>
+        <source>KEY_TOOLTIP_FIRST_FRAME</source>
+        <translation>Primeiro quadro</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="124"/>
+        <source>|◀</source>
+        <translation>|◀</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="131"/>
+        <source>KEY_TOOLTIP_PREV_FRAME</source>
+        <translation>Quadro anterior</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="134"/>
+        <source>◀</source>
+        <translation>◀</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="141"/>
+        <source>KEY_TOOLTIP_PLAY_PAUSE</source>
+        <translation>Reproduzir / Pausar</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="154"/>
+        <source>KEY_TOOLTIP_PAUSE</source>
+        <translation>Pausar</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="167"/>
+        <source>KEY_TOOLTIP_NEXT_FRAME</source>
+        <translation>Próximo quadro</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="170"/>
+        <location filename="../src/mainwindow.ui" line="180"/>
+        <source>▶|</source>
+        <translation>▶|</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="177"/>
+        <source>KEY_TOOLTIP_LAST_FRAME</source>
+        <translation>Último quadro</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="187"/>
+        <source>KEY_TOOLTIP_LOOP_MODE</source>
+        <translation>Modo de loop da reprodução da animação</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="210"/>
+        <source>⛶</source>
+        <translation>⛶</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="220"/>
+        <source>1:1</source>
+        <translation>1:1</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="253"/>
+        <source>0 frame</source>
+        <translation>0 quadros</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="285"/>
+        <source>FPS:</source>
+        <translation>FPS:</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="332"/>
+        <source> -&gt; Timing: 83.33ms</source>
+        <translation> -&gt; Tempo: 83.33ms</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="430"/>
+        <source>Preset:</source>
+        <translation>Predefinição:</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="498"/>
+        <source>X:</source>
+        <translation>X:</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="515"/>
+        <source>Y:</source>
+        <translation>Y:</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="623"/>
+        <source>KEY_TOOLTIP_NEW_ANIM</source>
+        <translation>Criar nova animação vazia</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="626"/>
+        <source>+</source>
+        <translation>+</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="633"/>
+        <source>KEY_TOOLTIP_NEW_FROM_SELECTION</source>
+        <translation>Criar animação a partir da seleção atual</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="636"/>
+        <source>+ Sel</source>
+        <translation>+ Sel</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="643"/>
+        <source>KEY_TOOLTIP_DUPLICATE_ANIM</source>
+        <translation>Duplicar a animação selecionada</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="646"/>
+        <source>📋</source>
+        <translation>📋</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="653"/>
+        <source>KEY_TOOLTIP_REVERSE_ANIM</source>
+        <translation>Reverter a ordem dos quadros da animação</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="656"/>
+        <source>⇄</source>
+        <translation>⇄</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="663"/>
+        <source>KEY_TOOLTIP_DELETE_ANIM</source>
+        <translation>Excluir a animação selecionada</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="666"/>
+        <source>🗑</source>
+        <translation>🗑</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="695"/>
+        <location filename="../src/mainwindow.cpp" line="332"/>
+        <source>KEY_ANIM_COL_MODE</source>
+        <translation>Modo</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="705"/>
+        <location filename="../src/mainwindow.cpp" line="332"/>
+        <location filename="../src/mainwindow.cpp" line="920"/>
+        <source>KEY_ANIM_COL_DURATION</source>
+        <translation>Duração</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_animation.cpp" line="116"/>
+        <source>KEY_CTX_DUPLICATE_ANIM</source>
+        <translation>Duplicar esta animação</translation>
+    </message>
+    <message>
+        <location filename="../src/controller/projectcontroller.cpp" line="99"/>
+        <location filename="../src/mainwindow.cpp" line="720"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="555"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="620"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="685"/>
+        <source>KEY_UNTITLED_PROJECT</source>
+        <translation>Projeto Sem Título</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="739"/>
+        <source>KEY_UNKNOWN_DATE</source>
+        <translation>Data desconhecida</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="740"/>
+        <source>KEY_RECOVERY_PROMPT</source>
+        <translation>Uma sessão de trabalho interrompida foi detectada:
+
+Projeto: %1
+Data: %2
+
+Deseja restaurar esta sessão?</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="745"/>
+        <source>KEY_RECOVERY_TITLE</source>
+        <translation>Recuperação de Falha</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="753"/>
+        <source>KEY_RECOVERY_ERROR</source>
+        <translation>Erro de Recuperação</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="798"/>
+        <source>💡 Update available: %1 (Check Settings -&gt; Updates)</source>
+        <translation>💡 Atualização disponível: %1 (Verifique as Preferências -&gt; Atualizações)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="821"/>
+        <source>KEY_UNSAVED_CHANGES_TITLE</source>
+        <translation>Alterações Não Salvas</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="822"/>
+        <source>KEY_UNSAVED_CHANGES_PROMPT</source>
+        <translation>O projeto atual &apos;%1&apos; tem alterações não salvas.
+Deseja salvá-las antes de prosseguir?</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="841"/>
+        <location filename="../src/mainwindow.cpp" line="340"/>
+        <location filename="../src/mainwindow.cpp" line="911"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="539"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="604"/>
+        <location filename="../../tests/test_controller_atlas.cpp" line="669"/>
+        <source>KEY_TOOLBAR_MAIN</source>
+        <translation>Barra de Ferramentas Principal</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="341"/>
+        <source>KEY_GRP_PIVOT</source>
+        <translation>Âncora e Pivô</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="367"/>
+        <source>KEY_TOOLTIP_PIVOT_GROUND</source>
+        <translation>Definir pivô no Chão (Centro-Inferior)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="377"/>
+        <source>KEY_TOOLTIP_PIVOT_CENTER</source>
+        <translation>Definir pivô no Centro</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="387"/>
+        <source>KEY_TOOLTIP_PIVOT_TOPLEFT</source>
+        <translation>Definir pivô no Superior-Esquerdo (UI)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="410"/>
+        <source>KEY_TOOLTIP_SHOW_RETICLE</source>
+        <translation>Mostrar/ocultar retícula do pivô e linha do chão</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="438"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="165"/>
+        <source>KEY_PIVOT_TOPLEFT</source>
+        <translation>Superior-Esquerdo</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="443"/>
+        <source>KEY_PIVOT_TOPCENTER</source>
+        <translation>Superior-Centro</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="448"/>
+        <source>KEY_PIVOT_TOPRIGHT</source>
+        <translation>Superior-Direito</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="453"/>
+        <source>KEY_PIVOT_CENTERLEFT</source>
+        <translation>Centro-Esquerdo</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="458"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="161"/>
+        <source>KEY_PIVOT_CENTER</source>
+        <translation>Centro</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="463"/>
+        <source>KEY_PIVOT_CENTERRIGHT</source>
+        <translation>Centro-Direito</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="468"/>
+        <source>KEY_PIVOT_BOTTOMLEFT</source>
+        <translation>Inferior-Esquerdo</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="473"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="157"/>
+        <source>KEY_PIVOT_BOTTOMCENTER</source>
+        <translation>Centro-Inferior</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="478"/>
+        <source>KEY_PIVOT_BOTTOMRIGHT</source>
+        <translation>Inferior-Direito</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="483"/>
+        <source>KEY_PIVOT_CUSTOM</source>
+        <translation>Personalizado</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="542"/>
+        <source>KEY_BTN_APPLY_PIVOT_ANIM</source>
+        <translation>Aplicar à Anim</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="539"/>
+        <source>KEY_TOOLTIP_APPLY_PIVOT_ANIM</source>
+        <translation>Aplicar este ponto de pivô a todos os quadros na animação atual</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="552"/>
+        <source>KEY_BTN_APPLY_PIVOT_ALL</source>
+        <translation>Aplicar a Todos</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="549"/>
+        <source>KEY_TOOLTIP_APPLY_PIVOT_ALL</source>
+        <translation>Aplicar este ponto de pivô a todos os quadros no projeto</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_atlas.cpp" line="74"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="81"/>
+        <source>Atlas Bin-Packing</source>
+        <translation>Empacotamento de Atlas</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_atlas.cpp" line="75"/>
+        <source>Please open or import a sprite sheet with frames first.</source>
+        <translation>Por favor, abra ou importe uma planilha de sprites com quadros primeiro.</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_atlas.cpp" line="82"/>
+        <source>Atlas packing plugin not found.</source>
+        <translation>Plugin de empacotamento do atlas não encontrado.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_atlas.cpp" line="156"/>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
-        <translation type="unfinished"></translation>
+        <translation>Âncora e Pivô</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_atlas.cpp" line="157"/>
         <source>KEY_PIVOT_GROUND_HINT</source>
-        <translation type="unfinished"></translation>
+        <translation>Chão</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_atlas.cpp" line="165"/>
         <source>KEY_PIVOT_UI_HINT</source>
-        <translation type="unfinished"></translation>
+        <translation>UI</translation>
     </message>
     <message>
         <location filename="../src/mainwindow_atlas.cpp" line="171"/>
         <source>KEY_CTX_MORE_PRESETS</source>
-        <translation type="unfinished"></translation>
+        <translation>Mais predefinições...</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="370"/>
+        <source>⬇️ Sol</source>
+        <translation>⬇️ Chão</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="380"/>
+        <source>🎯 Centre</source>
+        <translation>🎯 Centro</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="390"/>
+        <source>↖️ UI</source>
+        <translation>↖️ UI</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="413"/>
+        <source>🎯 Mire</source>
+        <translation>🎯 Retícula</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="207"/>
+        <source>KEY_TOOLTIP_PREVIEW_FIT</source>
+        <translation>Enquadramento ideal (Ajustar a animação à visualização)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="217"/>
+        <source>KEY_TOOLTIP_PREVIEW_1X</source>
+        <translation>Tamanho real 100%</translation>
     </message>
     <message>
         <location filename="../../tests/test_controller_atlas.cpp" line="750"/>
         <source>KEY_UNKNOWN_FEATURE</source>
-        <translation type="unfinished"></translation>
+        <translation>Recurso desconhecido</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="520"/>
+        <location filename="../src/mainwindow.cpp" line="951"/>
+        <source>KEY_ACTION_POLYGON_MESH</source>
+        <translation>Malha Justa 2D (Empacotamento de Polígonos)...</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="890"/>
+        <location filename="../src/mainwindow.cpp" line="957"/>
+        <source>KEY_ACTION_TOGGLE_POLYGON_MESH</source>
+        <translation>Mostrar Malhas Poligonais (Aramado)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_atlas.cpp" line="125"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="216"/>
+        <source>KEY_CTX_POLYGON_MESH</source>
+        <translation>Malha Justa 2D (Empacotamento de Polígonos)...</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="514"/>
+        <location filename="../src/mainwindow.cpp" line="954"/>
+        <location filename="../src/mainwindow_callbacks.cpp" line="302"/>
+        <source>KEY_ACTION_PIXEL_EDITOR</source>
+        <translation>Editor de Pixels (Sprite)...</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow_atlas.cpp" line="120"/>
+        <location filename="../src/mainwindow_atlas.cpp" line="210"/>
+        <source>KEY_CTX_EDIT_PIXELS</source>
+        <translation>Editar Pixels...</translation>
     </message>
 </context>
 <context>
@@ -2651,12 +2820,12 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="11"/>
         <source>Outline &amp; Silhouette Generator...</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerador de Contornos e Silhuetas...</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilter.cpp" line="16"/>
         <source>Adds a distinct outline (1-4 px) around sprites (sticker effect, visibility) or creates solid silhouettes (hit-flash).</source>
-        <translation type="unfinished"></translation>
+        <translation>Adiciona um contorno distinto (1-4 px) ao redor dos sprites (efeito adesivo, visibilidade) ou cria silhuetas sólidas (efeito de impacto).</translation>
     </message>
 </context>
 <context>
@@ -2664,88 +2833,88 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="23"/>
         <source>Outline &amp; Silhouette Generator</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerador de Contornos e Silhuetas</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="35"/>
         <source>Outline color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor do contorno:</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="44"/>
         <source>Pick...</source>
-        <translation type="unfinished">Escolher...</translation>
+        <translation>Escolher...</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="48"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation>Preto</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="49"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation>Branco</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="50"/>
         <source>Gold</source>
-        <translation type="unfinished"></translation>
+        <translation>Dourado</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="58"/>
         <source>Stroke thickness (1 to 4 px):</source>
-        <translation type="unfinished"></translation>
+        <translation>Espessura do traço (1 a 4 px):</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="75"/>
         <source>Connectivity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectividade:</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="79"/>
         <source>4-connected (Orthogonal crisp - Retro pixel art)</source>
-        <translation type="unfinished"></translation>
+        <translation>4-conectado (Ortogonal nítido - Pixel art retrô)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="80"/>
         <source>8-connected (Diagonal included - Smooth outline)</source>
-        <translation type="unfinished"></translation>
+        <translation>8-conectado (Inclui diagonal - Contorno suave)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="85"/>
         <source>Solid silhouette / Hit-flash (Fill sprite interior)</source>
-        <translation type="unfinished"></translation>
+        <translation>Silhueta sólida / Efeito de impacto (Preencher interior do sprite)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="89"/>
         <source>Apply to selected frames only</source>
-        <translation type="unfinished">Aplicar apenas aos quadros selecionados</translation>
+        <translation>Aplicar apenas aos quadros selecionados</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="94"/>
         <source>No frames selected: applies to entire atlas</source>
-        <translation type="unfinished">Nenhum quadro selecionado: aplica-se a todo o atlas</translation>
+        <translation>Nenhum quadro selecionado: aplica-se a todo o atlas</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="123"/>
         <source>Select Outline Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecionar Cor do Contorno</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="274"/>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="276"/>
         <source>Outline %1 px applied</source>
-        <translation type="unfinished"></translation>
+        <translation>Contorno de %1 px aplicado</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="274"/>
         <source>%1 frame(s) detected</source>
-        <translation type="unfinished">%1 quadro(s) detectado(s)</translation>
+        <translation>%1 quadro(s) detectado(s)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/outline/outlinefilterdialog.cpp" line="286"/>
         <source>Filter: Outline &amp; Silhouette</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtro: Contorno e Silhueta</translation>
     </message>
 </context>
 <context>
@@ -2753,42 +2922,42 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../src/widgets/pixelcanvas.cpp" line="291"/>
         <source>Clear Pixels</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpar Pixels</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixelcanvas.cpp" line="355"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Colar</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixelcanvas.cpp" line="385"/>
         <source>Flip Horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverter Horizontalmente</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixelcanvas.cpp" line="415"/>
         <source>Flip Vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverter Verticalmente</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixelcanvas.cpp" line="432"/>
         <source>Rotate 90°</source>
-        <translation type="unfinished"></translation>
+        <translation>Girar 90°</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixelcanvas.cpp" line="576"/>
         <source>Flood Fill</source>
-        <translation type="unfinished"></translation>
+        <translation>Preenchimento de Tinta</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixelcanvas.cpp" line="830"/>
         <source>Eraser</source>
-        <translation type="unfinished"></translation>
+        <translation>Borracha</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixelcanvas.cpp" line="830"/>
         <source>Pencil</source>
-        <translation type="unfinished"></translation>
+        <translation>Lápis</translation>
     </message>
 </context>
 <context>
@@ -2800,36 +2969,42 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="641"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="707"/>
         <source>Pixel Editor — BentoPack</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor de Pixels — BentoPack</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="126"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="691"/>
         <source>◀ Previous Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>◀ Quadro Anterior</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="127"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="692"/>
         <source>Navigate to previous frame (Page Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="131"/>
-        <source>Frame 1 / 1 (32x32 px)</source>
-        <translation type="unfinished"></translation>
+        <translation>Navegar para o quadro anterior (Page Up)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="136"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="695"/>
         <source>Next Frame ▶</source>
-        <translation type="unfinished"></translation>
+        <translation>Próximo Quadro ▶</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="137"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="696"/>
         <source>Navigate to next frame (Page Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Navegar para o próximo quadro (Page Down)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="131"/>
+        <source>Frame 1 / 1 (32x32 px)</source>
+        <translation>Quadro 1 / 1 (32x32 px)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="436"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="700"/>
+        <source>Frame %1 / %2  (%3x%4 px)</source>
+        <translation>Quadro %1 / %2  (%3x%4 px)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="167"/>
@@ -2838,236 +3013,230 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="642"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="708"/>
         <source>Pencil (1px continuous Bresenham) [P]</source>
-        <translation type="unfinished"></translation>
+        <translation>Lápis (Bresenham contínuo de 1px) [P]</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="168"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="709"/>
         <source>Eraser (1px clear to alpha 0) [E]</source>
-        <translation type="unfinished"></translation>
+        <translation>Borracha (1px limpo para alfa 0) [E]</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="169"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="710"/>
         <source>Eyedropper / Pipette (Alt+Click or [I])</source>
-        <translation type="unfinished"></translation>
+        <translation>Conta-gotas / Pipeta (Alt+Clique ou [I])</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="170"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="711"/>
         <source>Bucket Fill (Flood Fill 4-way) [G]</source>
-        <translation type="unfinished"></translation>
+        <translation>Lata de Tinta (Preenchimento em 4 direções) [G]</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="171"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="712"/>
         <source>Rectangular Marquee Selection [M]</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleção Retangular [M]</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="172"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="713"/>
         <source>Magic Wand (Color Selection) [W]</source>
-        <translation type="unfinished"></translation>
+        <translation>Varinha Mágica (Seleção de Cor) [W]</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="192"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="715"/>
         <source>Flip Horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverter Horizontalmente</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="193"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="716"/>
         <source>Flip Vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverter Verticalmente</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="194"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="717"/>
         <source>Rotate 90° Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Girar 90° no Sentido Horário</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="204"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="718"/>
         <source>Toggle Pixel Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Alternar Grade de Pixels</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="213"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="719"/>
         <source>Zoom In</source>
-        <translation type="unfinished"></translation>
+        <translation>Aumentar Zoom</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="214"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="720"/>
         <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminuir Zoom</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="215"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="721"/>
         <source>Fit to View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajustar à Tela</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="220"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="722"/>
         <source>Undo (Ctrl+Z)</source>
-        <translation type="unfinished"></translation>
+        <translation>Desfazer (Ctrl+Z)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="221"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="723"/>
         <source>Redo (Ctrl+Y)</source>
-        <translation type="unfinished"></translation>
+        <translation>Refazer (Ctrl+Y)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="235"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="726"/>
         <source>Active Colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Cores Ativas</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="241"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="727"/>
         <source>Primary Color (Left Click to change)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="248"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="729"/>
-        <source>Swap Colors (X)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor Primária (Clique esquerdo para alterar)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="254"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="728"/>
         <source>Secondary Color (Left Click to change)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor Secundária (Clique esquerdo para alterar)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="248"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="729"/>
+        <source>Swap Colors (X)</source>
+        <translation>Trocar Cores (X)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="263"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="730"/>
         <source>Palette:</source>
-        <translation type="unfinished"></translation>
+        <translation>Paleta:</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="267"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="735"/>
         <source>Sprite Colors (Auto)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cores do Sprite (Auto)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="268"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="736"/>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished"></translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="269"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="737"/>
         <source>SNES / Super Famicom (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES / Super Famicom (32)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="270"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="738"/>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="271"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="739"/>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="272"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="740"/>
         <source>Game Boy DMG (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Game Boy DMG (4)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="273"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="741"/>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="274"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="742"/>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished"></translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="292"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="747"/>
         <source>1:1 Scale Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Pré-visualização em Escala 1:1</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="313"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="386"/>
         <source>X: -- , Y: --</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="320"/>
-        <source>Zoom: 1600%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="324"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="754"/>
-        <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="328"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="755"/>
-        <source>Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="332"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="756"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="347"/>
-        <source>Select Primary Color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="355"/>
-        <source>Select Secondary Color</source>
-        <translation type="unfinished"></translation>
+        <translation>X: -- , Y: --</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="371"/>
         <source>X: %1 , Y: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>X: %1 , Y: %2</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="373"/>
         <source>Transparent [alpha: 0]</source>
-        <translation type="unfinished"></translation>
+        <translation>Transparente [alfa: 0]</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="320"/>
+        <source>Zoom: 1600%</source>
+        <translation>Zoom: 1600%</translation>
     </message>
     <message>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="392"/>
         <location filename="../src/widgets/pixeleditordialog.cpp" line="750"/>
         <source>Zoom: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="436"/>
-        <location filename="../src/widgets/pixeleditordialog.cpp" line="700"/>
-        <source>Frame %1 / %2  (%3x%4 px)</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="324"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="754"/>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="328"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="755"/>
+        <source>Apply</source>
+        <translation>Aplicar</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="332"/>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="756"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="347"/>
+        <source>Select Primary Color</source>
+        <translation>Selecionar Cor Primária</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/pixeleditordialog.cpp" line="355"/>
+        <source>Select Secondary Color</source>
+        <translation>Selecionar Cor Secundária</translation>
     </message>
 </context>
 <context>
@@ -3078,12 +3247,12 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="627"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="692"/>
         <source>Pixel Art Rescale...</source>
-        <translation type="unfinished"></translation>
+        <translation>Redimensionamento de Pixel Art...</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilter.cpp" line="16"/>
         <source>Rescales the atlas cleanly using Nearest-Neighbor (pixel-perfect) or Scale2x (smooth contours).</source>
-        <translation type="unfinished"></translation>
+        <translation>Redimensiona o atlas de forma limpa usando Vizinho Mais Próximo (pixel-perfect) ou Scale2x (contornos suaves).</translation>
     </message>
 </context>
 <context>
@@ -3091,72 +3260,72 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="20"/>
         <source>Pixel Art Rescale</source>
-        <translation type="unfinished"></translation>
+        <translation>Redimensionamento de Pixel Art</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="29"/>
         <source>Rescale Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parâmetros de Redimensionamento</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="35"/>
         <source>Scale Factor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fator de Escala:</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="37"/>
         <source>0.5x (Downscale 50%)</source>
-        <translation type="unfinished"></translation>
+        <translation>0.5x (Reduzir 50%)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="38"/>
         <source>2x (Double 200%)</source>
-        <translation type="unfinished"></translation>
+        <translation>2x (Dobrar 200%)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="39"/>
         <source>3x (Triple 300%)</source>
-        <translation type="unfinished"></translation>
+        <translation>3x (Triplicar 300%)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="40"/>
         <source>4x (Quadruple 400%)</source>
-        <translation type="unfinished"></translation>
+        <translation>4x (Quadruplicar 400%)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="47"/>
         <source>Resampling Engine:</source>
-        <translation type="unfinished"></translation>
+        <translation>Motor de Reamostragem:</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="49"/>
         <source>Nearest-Neighbor (Sharp / Pixel-Perfect)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vizinho Mais Próximo (Nítido / Pixel-Perfect)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="50"/>
         <source>Scale2x / AdvMAME2x (Smooth Contours)</source>
-        <translation type="unfinished"></translation>
+        <translation>Scale2x / AdvMAME2x (Contornos Suaves)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="88"/>
         <source>Atlas Dimensions: %1x%2 -&gt; %3x%4 px</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensões do Atlas: %1x%2 -&gt; %3x%4 px</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="284"/>
         <source>Rescaled %1x (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Redimensionado %1x (%2)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="285"/>
         <source>%1 frame(s) detected</source>
-        <translation type="unfinished">%1 quadro(s) detectado(s)</translation>
+        <translation>%1 quadro(s) detectado(s)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/pixelrescale/pixelrescalefilterdialog.cpp" line="294"/>
         <source>Filter: Pixel Art Rescale</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtro: Redimensionamento de Pixel Art</translation>
     </message>
 </context>
 <context>
@@ -3167,17 +3336,17 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="638"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="703"/>
         <source>Tight Mesh &amp; 2D Polygon Packing</source>
-        <translation type="unfinished"></translation>
+        <translation>Malha Justa e Empacotamento de Polígonos 2D</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="289"/>
         <source>Live Preview &amp; Wireframe</source>
-        <translation type="unfinished"></translation>
+        <translation>Pré-visualização ao Vivo e Aramado</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="290"/>
         <source>Polygon &amp; Mesh Simplification</source>
-        <translation type="unfinished"></translation>
+        <translation>Simplificação de Polígono e Malha</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="291"/>
@@ -3185,27 +3354,47 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="639"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="704"/>
         <source>Approximation Tolerance (ε):</source>
-        <translation type="unfinished"></translation>
+        <translation>Tolerância de Aproximação (ε):</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="292"/>
         <source>Alpha Threshold:</source>
-        <translation type="unfinished"></translation>
+        <translation>Limite de Alfa:</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="293"/>
         <source>Outward Padding:</source>
-        <translation type="unfinished"></translation>
+        <translation>Espaçamento Externo:</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="294"/>
         <source>Max Vertices:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vértices Máximos:</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="295"/>
         <source>Overdraw &amp; Performance Dashboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Painel de Desempenho e Overdraw</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="554"/>
+        <source>Vertices: %1</source>
+        <translation>Vértices: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="555"/>
+        <source>Triangles: %1</source>
+        <translation>Triângulos: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="556"/>
+        <source>Polygon Area: %1 px² (vs %2 px² box)</source>
+        <translation>Área do Polígono: %1 px² (vs caixa de %2 px²)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="557"/>
+        <source>GPU Overdraw Eliminated: %1%</source>
+        <translation>Overdraw de GPU Eliminado: %1%</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="296"/>
@@ -3213,102 +3402,79 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../../tests/test_controller_atlas.cpp" line="640"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="705"/>
         <source>Apply to Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar à Seleção</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="297"/>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="400"/>
         <source>Apply to All Frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar a Todos os Quadros</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="298"/>
         <source>Remove Mesh (Reset to Rect)</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover Malha (Redefinir para Retângulo)</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="301"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fechar</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="400"/>
         <source>Computing...</source>
-        <translation type="unfinished">Calculando...</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="554"/>
-        <source>Vertices: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="555"/>
-        <source>Triangles: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="556"/>
-        <source>Polygon Area: %1 px² (vs %2 px² box)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="557"/>
-        <source>GPU Overdraw Eliminated: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculando...</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="562"/>
         <source>Target Frame %1: Mesh already applied (%2 vertices, %3 tris)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quadro Alvo %1: Malha já aplicada (%2 vértices, %3 triângulos)</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="568"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="706"/>
         <source>Target Frame %1: Rectangle mode (no mesh applied)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quadro Alvo %1: Modo retângulo (nenhuma malha aplicada)</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="607"/>
         <source>Computing mesh: 0 / %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculando malha: 0 / %1...</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="635"/>
         <source>Computing mesh: frame %1 / %2...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/polygonmeshdialog.cpp" line="663"/>
-        <source>✓ Mesh applied to all %1 frames!</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculando malha: quadro %1 / %2...</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="665"/>
         <source>✓ Mesh applied to %1 frame(s)!</source>
-        <translation type="unfinished"></translation>
+        <translation>✓ Malha aplicada a %1 quadro(s)!</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/polygonmeshdialog.cpp" line="663"/>
+        <source>✓ Mesh applied to all %1 frames!</source>
+        <translation>✓ Malha aplicada a todos os %1 quadros!</translation>
     </message>
     <message>
         <location filename="../src/widgets/polygonmeshdialog.cpp" line="726"/>
         <source>✓ Tight mesh removed. Reverted to rectangle.</source>
-        <translation type="unfinished"></translation>
+        <translation>✓ Malha justa removida. Revertido para retângulo.</translation>
     </message>
 </context>
 <context>
     <name>ProjectController</name>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="128"/>
-        <source>New project</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/controller/projectcontroller.cpp" line="330"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="398"/>
+        <source>File does not exist: %1</source>
+        <translation>O arquivo não existe: %1</translation>
     </message>
     <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="134"/>
-        <source>New project created.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="143"/>
-        <source>Project file does not exist: %1</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/controller/projectcontroller.cpp" line="342"/>
+        <location filename="../src/controller/projectcontroller.cpp" line="422"/>
+        <source>No suitable codec found for file: %1</source>
+        <translation>Nenhum codec adequado encontrado para o arquivo: %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="151"/>
@@ -3316,196 +3482,339 @@ A remoção estrita limpa o pixel.</translation>
         <location filename="../src/controller/projectcontroller.cpp" line="254"/>
         <location filename="../src/controller/projectcontroller.cpp" line="349"/>
         <source>No active SpriteDocument.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum SpriteDocument ativo.</translation>
+    </message>
+    <message>
+        <location filename="../src/controller/projectcontroller.cpp" line="128"/>
+        <source>New project</source>
+        <translation>Novo projeto</translation>
+    </message>
+    <message>
+        <location filename="../src/controller/projectcontroller.cpp" line="134"/>
+        <source>New project created.</source>
+        <translation>Novo projeto criado.</translation>
+    </message>
+    <message>
+        <location filename="../src/controller/projectcontroller.cpp" line="143"/>
+        <source>Project file does not exist: %1</source>
+        <translation>O arquivo do projeto não existe: %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="158"/>
         <source>Opening project %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrindo projeto %1...</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="161"/>
         <source>Failed to open project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao abrir o projeto.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="169"/>
         <source>Failed to deserialize project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao desserializar o projeto.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="190"/>
         <source>Project loaded successfully: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeto carregado com sucesso: %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="200"/>
         <source>Project file path is empty. Use Save As.</source>
-        <translation type="unfinished"></translation>
+        <translation>O caminho do arquivo do projeto está vazio. Use Salvar Como.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="215"/>
         <source>Saving project %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvando projeto %1...</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="240"/>
         <source>Project saved successfully: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeto salvo com sucesso: %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="259"/>
         <source>Restoring session from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurando sessão de %1...</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="284"/>
         <source>Session recovered successfully.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="330"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="398"/>
-        <source>File does not exist: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controller/projectcontroller.cpp" line="342"/>
-        <location filename="../src/controller/projectcontroller.cpp" line="422"/>
-        <source>No suitable codec found for file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessão recuperada com sucesso.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="356"/>
         <source>Loading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregando %1...</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="373"/>
         <source>Import %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="388"/>
         <location filename="../src/controller/projectcontroller.cpp" line="761"/>
         <source>Loaded %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 carregado com sucesso.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="429"/>
         <source>Loading %1 in background...</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregando %1 em segundo plano...</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="472"/>
         <source>Export file path must have a valid file name: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>O caminho do arquivo de exportação deve ter um nome de arquivo válido: %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="478"/>
         <source>Document is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>O documento está vazio.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="493"/>
         <source>No suitable exporter found for format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum exportador adequado encontrado para o formato: %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="499"/>
         <source>Saving %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvando %1...</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="509"/>
         <source>Saved %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 salvo com sucesso.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="645"/>
         <source>Removing background...</source>
-        <translation type="unfinished"></translation>
+        <translation>Removendo fundo...</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="669"/>
         <source>Background removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fundo removido.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="682"/>
         <source>Removing background in background...</source>
-        <translation type="unfinished"></translation>
+        <translation>Removendo fundo em segundo plano...</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="749"/>
         <source>Open %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="765"/>
         <source>Background removed successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fundo removido com sucesso.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="834"/>
         <source>Action executed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ação executada</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="836"/>
         <source>Project modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeto modificado</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="852"/>
         <source>No active session workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum espaço de trabalho de sessão ativo.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="879"/>
         <source>Checked out revision %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Checkout feito na revisão %1.</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
+    <message numerus="yes">
+        <location filename="../src/commands/commands.cpp" line="31"/>
+        <source>Delete %n frame(s)</source>
+        <translation>
+            <numerusform>Excluir %n quadro</numerusform>
+            <numerusform>Excluir %n quadros</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/commands/commands.cpp" line="75"/>
+        <source>Erase Atlas Pixels for %n frame(s)</source>
+        <translation>
+            <numerusform>Apagar Pixels do Atlas para %n quadro</numerusform>
+            <numerusform>Apagar Pixels do Atlas para %n quadros</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="134"/>
+        <source>Merge Frame %1 into %2</source>
+        <translation>Mesclar Quadro %1 em %2</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="180"/>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Criar Animação &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="200"/>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Excluir Animação &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="221"/>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Reverter Animação &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="242"/>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Renomear Animação &apos;%1&apos; para &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="263"/>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Duplicar Animação &apos;%1&apos; como &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="284"/>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Reordenar Quadros na Animação &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="309"/>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Alterar Propriedades da Animação &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="349"/>
+        <source>Resize/Move Slice %1</source>
+        <translation>Redimensionar/Mover Fatia %1</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="371"/>
+        <source>Add Slice</source>
+        <translation>Adicionar Fatia</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="411"/>
+        <source>Remove Background</source>
+        <translation>Remover Fundo</translation>
+    </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="441"/>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="330"/>
         <source>Failed to decode image from: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao decodificar a imagem de: %1</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="451"/>
         <source>Failed to segment sprite frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao segmentar os quadros do sprite.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="696"/>
         <source>Failed to remove background from atlas.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao remover o fundo do atlas.</translation>
     </message>
     <message>
         <location filename="../src/controller/projectcontroller.cpp" line="708"/>
         <source>Failed to segment frames after background removal.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao segmentar os quadros após a remoção do fundo.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="62"/>
+        <source>Cannot open JSON file: %1</source>
+        <translation>Não é possível abrir o arquivo JSON: %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="77"/>
+        <source>JSON parse error: %1 at offset %2</source>
+        <translation>Erro de análise JSON: %1 no deslocamento %2</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="86"/>
+        <source>JSON root must be an object.</source>
+        <translation>A raiz do JSON deve ser um objeto.</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="47"/>
+        <source>Cleanup</source>
+        <translation>Limpeza</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="48"/>
+        <source>Colors</source>
+        <translation>Cores</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="49"/>
+        <source>Effects</source>
+        <translation>Efeitos</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="50"/>
+        <source>Geometry</source>
+        <translation>Geometria</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="71"/>
+        <source>No Atlas Loaded</source>
+        <translation>Nenhum Atlas Carregado</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/filtermenubuilder.cpp" line="72"/>
+        <source>Please open or import a sprite sheet first before applying a filter.</source>
+        <translation>Por favor, abra ou importe uma planilha de sprites primeiro antes de aplicar um filtro.</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="452"/>
+        <location filename="../src/commands/commands.cpp" line="476"/>
+        <source>KEY_CMD_CHANGE_PIVOT</source>
+        <translation>Mudar Pivô de Âncora</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="543"/>
+        <location filename="../src/commands/commands.cpp" line="563"/>
+        <source>Edit Frame %1 Pixels</source>
+        <translation>Editar Pixels do Quadro %1</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/commands.cpp" line="545"/>
+        <source>Edit Pixels (%1 Frames)</source>
+        <translation>Editar Pixels (%1 Quadros)</translation>
+    </message>
+    <message>
+        <location filename="../src/commands/meshcommands.cpp" line="31"/>
+        <source>Set Polygon Mesh</source>
+        <translation>Definir Malha Poligonal</translation>
     </message>
     <message>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="276"/>
         <source>Image file does not exist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>O arquivo de imagem não existe: %1</translation>
     </message>
     <message>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="286"/>
         <source>Failed to open file for reading: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao abrir o arquivo para leitura: %1</translation>
     </message>
     <message>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="328"/>
         <source>Failed to decode image from %1.
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao decodificar a imagem de %1.
+
+%2</translation>
     </message>
     <message>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="340"/>
@@ -3518,7 +3827,15 @@ To enable WebP support on Linux, install the corresponding package:
   • openSUSE:              sudo zypper install libqt6-qtimageformats
 
 On Windows / macOS, ensure Qt imageformats plugins (qwebp) are deployed with the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>O plugin de formato de imagem WebP não está instalado no seu ambiente Qt.
+
+Para ativar o suporte a WebP no Linux, instale o pacote correspondente:
+  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
+  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
+  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
+  • openSUSE:              sudo zypper install libqt6-qtimageformats
+
+No Windows / macOS, certifique-se de que os plugins de formatos de imagem do Qt (qwebp) sejam implantados com a aplicação.</translation>
     </message>
     <message>
         <location filename="../src/packer/vramtexturecompressor.cpp" line="351"/>
@@ -3529,160 +3846,28 @@ Install package:
   • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
   • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
   • openSUSE:              sudo zypper install libqt6-qtimageformats</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../src/commands/commands.cpp" line="31"/>
-        <source>Delete %n frame(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../src/commands/commands.cpp" line="75"/>
-        <source>Erase Atlas Pixels for %n frame(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="134"/>
-        <source>Merge Frame %1 into %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="180"/>
-        <source>Create Animation &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="200"/>
-        <source>Delete Animation &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="221"/>
-        <source>Reverse Animation &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="242"/>
-        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="263"/>
-        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="284"/>
-        <source>Reorder Frames in Animation &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="309"/>
-        <source>Change Properties for Animation &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="349"/>
-        <source>Resize/Move Slice %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="371"/>
-        <source>Add Slice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="411"/>
-        <source>Remove Background</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="452"/>
-        <location filename="../src/commands/commands.cpp" line="476"/>
-        <source>KEY_CMD_CHANGE_PIVOT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="543"/>
-        <location filename="../src/commands/commands.cpp" line="563"/>
-        <source>Edit Frame %1 Pixels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/commands.cpp" line="545"/>
-        <source>Edit Pixels (%1 Frames)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/project/projectmanager.cpp" line="207"/>
-        <source>Failed to decode project atlas: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/project/projectmanager.cpp" line="215"/>
-        <source>Project atlas image file not found in session: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/commands/meshcommands.cpp" line="31"/>
-        <source>Set Polygon Mesh</source>
-        <translation type="unfinished"></translation>
+        <translation>O formato de imagem %1 requer o plugin qt6-imageformats.
+
+Instale o pacote:
+  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
+  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
+  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
+  • openSUSE:              sudo zypper install libqt6-qtimageformats</translation>
     </message>
     <message>
         <location filename="../src/widgets/exportdialog.cpp" line="499"/>
         <source>No suitable exporter found for format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum exportador adequado encontrado para o formato: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filtermenubuilder.cpp" line="47"/>
-        <source>Cleanup</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/project/projectmanager.cpp" line="207"/>
+        <source>Failed to decode project atlas: %1</source>
+        <translation>Falha ao decodificar o atlas do projeto: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/filtermenubuilder.cpp" line="48"/>
-        <source>Colors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/filtermenubuilder.cpp" line="49"/>
-        <source>Effects</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/filtermenubuilder.cpp" line="50"/>
-        <source>Geometry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/filtermenubuilder.cpp" line="71"/>
-        <source>No Atlas Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/filtermenubuilder.cpp" line="72"/>
-        <source>Please open or import a sprite sheet first before applying a filter.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="62"/>
-        <source>Cannot open JSON file: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="77"/>
-        <source>JSON parse error: %1 at offset %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/extractors/json/jsonextractor.cpp" line="86"/>
-        <source>JSON root must be an object.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/project/projectmanager.cpp" line="215"/>
+        <source>Project atlas image file not found in session: %1</source>
+        <translation>Arquivo de imagem do atlas do projeto não encontrado na sessão: %1</translation>
     </message>
 </context>
 <context>
@@ -3692,35 +3877,35 @@ Install package:
         <location filename="../../tests/test_controller_atlas.cpp" line="645"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="711"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../tests/test_controller_atlas.cpp" line="581"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="646"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="712"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../../tests/test_controller_atlas.cpp" line="582"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="647"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="713"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Descartar</translation>
     </message>
     <message>
         <location filename="../../tests/test_controller_atlas.cpp" line="583"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="648"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="714"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar</translation>
     </message>
     <message>
         <location filename="../../tests/test_controller_atlas.cpp" line="584"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="649"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="715"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar</translation>
     </message>
 </context>
 <context>
@@ -3731,12 +3916,12 @@ Install package:
         <location filename="../../tests/test_controller_atlas.cpp" line="628"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="693"/>
         <source>Retro Palette &amp; Dithering...</source>
-        <translation type="unfinished"></translation>
+        <translation>Paleta Retrô e Dithering...</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilter.cpp" line="16"/>
         <source>Quantizes colors to authentic retro hardware palettes with optional ordered Bayer dithering.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantiza as cores para autênticas paletas de hardware retrô com dithering de matriz de Bayer ordenado opcional.</translation>
     </message>
 </context>
 <context>
@@ -3744,163 +3929,163 @@ Install package:
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="60"/>
         <source>Retro Palette &amp; Dithering</source>
-        <translation type="unfinished"></translation>
+        <translation>Paleta Retrô e Dithering</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="72"/>
         <source>Retro Hardware Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Paleta de Hardware Retrô</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="76"/>
         <source>Palette Preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Predefinição de Paleta:</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="78"/>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished"></translation>
+        <translation>Game Boy DMG (4 Verdes)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="79"/>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished"></translation>
+        <translation>Game Boy Pocket (4 Cinzas)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="80"/>
         <source>PICO-8 (16 Colors)</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 (16 Cores)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="81"/>
         <source>NES / Famicom (54 Colors)</source>
-        <translation type="unfinished"></translation>
+        <translation>NES / Famicom (54 Cores)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="82"/>
         <source>Commodore 64 (16 Colors)</source>
-        <translation type="unfinished"></translation>
+        <translation>Commodore 64 (16 Cores)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="83"/>
         <source>CGA Mode 1 (Cyan/Magenta/White)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Modo 1 (Ciano/Magenta/Branco)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="84"/>
         <source>CGA Mode 2 (Red/Green/Yellow)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Modo 2 (Vermelho/Verde/Amarelo)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="85"/>
         <source>Endesga 32 (32 Pixel Art Colors)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32 Cores de Pixel Art)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="86"/>
         <source>Custom / Imported Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Paleta Personalizada / Importada</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="90"/>
         <source>Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar...</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="91"/>
         <source>Import palette from .hex, .gpl, .pal or .png image</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar paleta de arquivo .hex, .gpl, .pal ou imagem .png</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="107"/>
         <source>Ordered Dithering (Bayer Matrix)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dithering Ordenado (Matriz de Bayer)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="110"/>
         <source>Dither Pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation>Padrão de Dither:</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="112"/>
         <source>None (Exact Nearest Match)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum (Correspondência Exata Mais Próxima)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="113"/>
         <source>Bayer 2x2 Matrix</source>
-        <translation type="unfinished"></translation>
+        <translation>Matriz Bayer 2x2</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="114"/>
         <source>Bayer 4x4 Matrix (Classic Retro)</source>
-        <translation type="unfinished"></translation>
+        <translation>Matriz Bayer 4x4 (Retrô Clássico)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="115"/>
         <source>Bayer 8x8 Matrix (Smooth Gradients)</source>
-        <translation type="unfinished"></translation>
+        <translation>Matriz Bayer 8x8 (Gradientes Suaves)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="121"/>
         <source>Dither Strength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Força do Dither:</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="138"/>
         <source>Target Scope</source>
-        <translation type="unfinished">Escopo de Destino</translation>
+        <translation>Escopo de Destino</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="141"/>
         <source>Apply to selected frames only</source>
-        <translation type="unfinished">Aplicar apenas aos quadros selecionados</translation>
+        <translation>Aplicar apenas aos quadros selecionados</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="146"/>
         <source>No frames selected: applies to entire atlas</source>
-        <translation type="unfinished">Nenhum quadro selecionado: aplica-se a todo o atlas</translation>
+        <translation>Nenhum quadro selecionado: aplica-se a todo o atlas</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="210"/>
         <source>Import Color Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar Paleta de Cores</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="212"/>
         <source>Palette Files (*.hex *.gpl *.pal *.png *.bmp);;All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos de Paleta (*.hex *.gpl *.pal *.png *.bmp);;Todos os Arquivos (*)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="219"/>
         <source>Import Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha na Importação</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="220"/>
         <source>No valid colors found in file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhuma cor válida encontrada no arquivo.</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="260"/>
         <source>%1 active color(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 cor(es) ativa(s)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="558"/>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="561"/>
         <source>Quantized (%1 colors, %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantizado (%1 cores, %2)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="559"/>
         <source>%1 frame(s) detected</source>
-        <translation type="unfinished">%1 quadro(s) detectado(s)</translation>
+        <translation>%1 quadro(s) detectado(s)</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/retropalette/retropalettefilterdialog.cpp" line="571"/>
         <source>Filter: Retro Palette &amp; Dithering</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtro: Paleta Retrô e Dithering</translation>
     </message>
 </context>
 <context>
@@ -3908,102 +4093,102 @@ Install package:
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="122"/>
         <source>Project file does not exist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>O arquivo do projeto não existe: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="127"/>
         <source>Failed to initialize session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao inicializar o diretório da sessão.</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="153"/>
         <source>Session directory does not exist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>O diretório da sessão não existe: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="293"/>
         <source>Unsaved Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeto Não Salvo</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="356"/>
         <source>Source directory does not exist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>O diretório de origem não existe: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="365"/>
         <source>Cannot create ZIP file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível criar o arquivo ZIP: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="371"/>
         <source>Error occurred while adding files to ZIP archive: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocorreu um erro ao adicionar arquivos ao arquivo ZIP: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="377"/>
         <source>Error occurred while writing ZIP file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocorreu um erro ao gravar o arquivo ZIP: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="392"/>
         <source>Failed to open ZIP archive: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao abrir o arquivo ZIP: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="448"/>
         <source>No active session workspace to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum espaço de trabalho de sessão ativo para salvar.</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="453"/>
         <source>Target path cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>O caminho de destino não pode estar vazio.</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="483"/>
         <source>Failed to overwrite existing file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao substituir o arquivo existente: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="490"/>
         <source>Failed to atomically rename %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao renomear atomicamente %1 para %2</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="760"/>
         <source>No active session workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum espaço de trabalho de sessão ativo.</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="767"/>
         <source>Failed to open repository.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao abrir o repositório.</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="773"/>
         <source>Invalid commit hash: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hash de commit inválido: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="780"/>
         <source>Commit not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Commit não encontrado: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="786"/>
         <source>Failed to set detached HEAD to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao definir o HEAD desconectado para %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="800"/>
         <source>Checkout tree failed with error code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A árvore de checkout falhou com o código de erro: %1</translation>
     </message>
     <message>
         <location filename="../src/project/sessionmanager.cpp" line="807"/>
         <source>Git integration is not compiled in.</source>
-        <translation type="unfinished"></translation>
+        <translation>A integração com o Git não está compilada.</translation>
     </message>
 </context>
 <context>
@@ -4015,31 +4200,37 @@ Install package:
         <location filename="../../tests/test_controller_atlas.cpp" line="617"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="682"/>
         <source>KEY_SETTINGS_TITLE</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferências</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="111"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1022"/>
         <source>KEY_SETTINGS_SEARCH_PLACEHOLDER</source>
-        <translation type="unfinished"></translation>
+        <translation>Pesquisar configurações...</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="121"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1023"/>
         <source>KEY_SETTINGS_CAT_GENERAL</source>
-        <translation type="unfinished"></translation>
+        <translation>Geral</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="137"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1027"/>
+        <source>KEY_SETTINGS_CAT_GIT</source>
+        <translation>Controle de Versão (Git)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="125"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1024"/>
         <source>KEY_SETTINGS_CAT_ATLAS</source>
-        <translation type="unfinished"></translation>
+        <translation>Exibição e Atlas</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="129"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1025"/>
         <source>Export &amp; VRAM</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportação e VRAM</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="133"/>
@@ -4047,85 +4238,79 @@ Install package:
         <location filename="../src/widgets/settingsdialog.cpp" line="1026"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1086"/>
         <source>Plugins &amp; Extensions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="137"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1027"/>
-        <source>KEY_SETTINGS_CAT_GIT</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins e Extensões</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="141"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1028"/>
         <source>Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizações</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="198"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1031"/>
         <source>KEY_SETTINGS_HDR_GENERAL</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurações Gerais</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="203"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1032"/>
         <source>KEY_SETTINGS_GRP_HISTORY</source>
-        <translation type="unfinished"></translation>
+        <translation>Histórico e Projeto</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="208"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1035"/>
         <source>KEY_SETTINGS_SUFFIX_ACTIONS</source>
-        <translation type="unfinished"></translation>
+        <translation> ações</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="209"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1033"/>
         <source>KEY_SETTINGS_UNDO_LIMIT</source>
-        <translation type="unfinished"></translation>
+        <translation>Limite de Desfazer/Refazer:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="214"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1034"/>
         <source>KEY_SETTINGS_MAX_RECENT_FILES</source>
-        <translation type="unfinished"></translation>
+        <translation>Máximo de arquivos recentes:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="219"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1037"/>
         <source>KEY_SETTINGS_GRP_EXTRACTION</source>
-        <translation type="unfinished"></translation>
+        <translation>Extração e Fundo</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="224"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1038"/>
         <source>KEY_SETTINGS_ALPHA_THRESHOLD</source>
-        <translation type="unfinished"></translation>
+        <translation>Limite de alfa padrão:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="229"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1039"/>
         <source>KEY_SETTINGS_BG_REMOVAL_TOL</source>
-        <translation type="unfinished"></translation>
+        <translation>Tolerância de remoção de fundo:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="234"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1041"/>
         <source>KEY_SETTINGS_GRP_LANGUAGE</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma da Interface</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="238"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1043"/>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Sistema (Padrão)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="243"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1042"/>
         <source>KEY_SETTINGS_LANG_APP</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma do aplicativo:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="247"/>
@@ -4134,387 +4319,387 @@ Install package:
         <location filename="../../tests/test_controller_atlas.cpp" line="621"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="686"/>
         <source>KEY_SETTINGS_LANG_HINT</source>
-        <translation type="unfinished"></translation>
+        <translation>As alterações de idioma são aplicadas imediatamente.</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="256"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1046"/>
         <source>Startup &amp; Behavior</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicialização e Comportamento</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="259"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1047"/>
         <source>Check automatically for updates on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificar automaticamente se há atualizações na inicialização</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="262"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1048"/>
         <source>Reopen last project on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Reabrir o último projeto na inicialização</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="277"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1051"/>
         <source>KEY_SETTINGS_HDR_GIT</source>
-        <translation type="unfinished"></translation>
+        <translation>Controle de Versão (Git)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="282"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1052"/>
         <source>KEY_SETTINGS_GRP_AUTHOR</source>
-        <translation type="unfinished"></translation>
+        <translation>Identidade do Autor (Commits Git)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="286"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1053"/>
         <source>KEY_SETTINGS_AUTHOR_INFO</source>
-        <translation type="unfinished"></translation>
+        <translation>Esta identidade é registrada como assinatura do autor em cada commit no histórico do projeto .bento.</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="294"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1056"/>
         <source>KEY_SETTINGS_AUTHOR_NAME_PLACEHOLDER</source>
-        <translation type="unfinished"></translation>
+        <translation>ex: João Silva</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="295"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1054"/>
         <source>KEY_SETTINGS_AUTHOR_NAME</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do autor:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="299"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1057"/>
         <source>KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER</source>
-        <translation type="unfinished"></translation>
+        <translation>ex: joao.silva@example.com</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="300"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1055"/>
         <source>KEY_SETTINGS_AUTHOR_EMAIL</source>
-        <translation type="unfinished"></translation>
+        <translation>Email do autor:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="305"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1058"/>
         <source>KEY_SETTINGS_DETECT_GIT</source>
-        <translation type="unfinished"></translation>
+        <translation>Detectar a partir da configuração do Git do sistema</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="314"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1059"/>
         <source>KEY_SETTINGS_GRP_GIT_ENGINE</source>
-        <translation type="unfinished"></translation>
+        <translation>Motor Git Integrado</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="319"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1062"/>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation type="unfinished"></translation>
+        <translation>Status: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 ativo&lt;/b&gt; (histórico e gerenciamento de branches operacionais)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="320"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1062"/>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation type="unfinished"></translation>
+        <translation>Status: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 não compilado&lt;/b&gt; (histórico do git desativado)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="327"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1064"/>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
-        <translation type="unfinished"></translation>
+        <translation>Cada ação de edição (recorte, renomeação, mesclagem de sprite, criação de animação) gera um commit incremental e atômico no repositório Git transparente do projeto .bento.</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="344"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1067"/>
         <source>KEY_SETTINGS_HDR_ATLAS</source>
-        <translation type="unfinished"></translation>
+        <translation>Exibição e Atlas</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="349"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1068"/>
         <source>KEY_SETTINGS_GRP_ZOOM</source>
-        <translation type="unfinished"></translation>
+        <translation>Navegação e Zoom</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="355"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1069"/>
         <source>KEY_SETTINGS_ZOOM_STEP</source>
-        <translation type="unfinished"></translation>
+        <translation>Fator de zoom (roda):</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="361"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1070"/>
         <source>KEY_SETTINGS_ZOOM_MIN</source>
-        <translation type="unfinished"></translation>
+        <translation>Nível de zoom mínimo:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="367"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1071"/>
         <source>KEY_SETTINGS_ZOOM_MAX</source>
-        <translation type="unfinished"></translation>
+        <translation>Nível de zoom máximo:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="373"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1072"/>
         <source>KEY_SETTINGS_FIT_PADDING</source>
-        <translation type="unfinished"></translation>
+        <translation>Espaçamento para ajuste da visualização:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="379"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1073"/>
         <source>KEY_SETTINGS_GRP_SLICING</source>
-        <translation type="unfinished"></translation>
+        <translation>Fatiamento Interativo</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="385"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1074"/>
         <source>KEY_SETTINGS_MIN_SLICE_SIZE</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho mínimo da caixa de fatia:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="399"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1077"/>
         <source>Export &amp; VRAM Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Padrões de Exportação e VRAM</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="403"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1078"/>
         <source>Default Export Configurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurações Padrão de Exportação</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="415"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="655"/>
         <source>(No export plugins loaded)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Nenhum plugin de exportação carregado)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/settingsdialog.cpp" line="454"/>
+        <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
+        <translation>&lt;b&gt;Dica:&lt;/b&gt; Texturas comprimidas pela GPU (KTX2 / Basis Universal) reduzem o uso da memória da GPU (VRAM) e a largura de banda nos dispositivos em tempo de execução.</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="418"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1079"/>
         <source>Default Target Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato de Destino Padrão:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="423"/>
         <source>PNG (Standard, Lossless)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG (Padrão, Sem Perdas)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="424"/>
         <source>WebP (Modern Web, High Compression)</source>
-        <translation type="unfinished"></translation>
+        <translation>WebP (Web Moderna, Alta Compressão)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="425"/>
         <source>KTX2 / Basis Universal (GPU Compressed VRAM)</source>
-        <translation type="unfinished"></translation>
+        <translation>KTX2 / Basis Universal (VRAM Comprimida pela GPU)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="426"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1080"/>
         <source>Default Texture Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato de Textura Padrão:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="431"/>
         <source>MaxRects (Best Fit)</source>
-        <translation type="unfinished"></translation>
+        <translation>MaxRects (Melhor Ajuste)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="432"/>
         <source>Shelf / Next-Fit (Fast)</source>
-        <translation type="unfinished"></translation>
+        <translation>Prateleira / Próximo Ajuste (Rápido)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="433"/>
         <source>Skyline (Efficient)</source>
-        <translation type="unfinished"></translation>
+        <translation>Skyline (Eficiente)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="434"/>
         <source>Polygonal Concave (Tightest Packing)</source>
-        <translation type="unfinished"></translation>
+        <translation>Poligonal Côncavo (Empacotamento Mais Justo)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="435"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1081"/>
         <source>Default Packing Algorithm:</source>
-        <translation type="unfinished"></translation>
+        <translation>Algoritmo de Empacotamento Padrão:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="439"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1083"/>
         <source>Enable Zstandard (Zstd) compression by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Ativar compressão Zstandard (Zstd) por padrão</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="445"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1082"/>
         <source>Zstd Compression Level:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="454"/>
-        <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nível de Compressão Zstd:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="476"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1087"/>
         <source>Open Plugins Folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir Pasta de Plugins...</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="480"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1088"/>
         <source>Reload Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Recarregar Plugins</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="490"/>
         <source>Filter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do Filtro</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="490"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Categoria</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="490"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
         <source>Identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificador</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="497"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1090"/>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtros</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
         <source>Extractor / Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Extrator / Codec</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
         <source>Extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Extensões</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="509"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1091"/>
         <source>Extractors &amp; Codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Extratores e Codecs</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="513"/>
         <source>Select a plugin above to view its details.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione um plugin acima para ver os detalhes.</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="518"/>
         <source>Plugin Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuração do Plugin</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="534"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1095"/>
         <source>Software Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizações de Software</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="539"/>
         <source>Current installed version: &lt;b&gt;v%1&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão atual instalada: &lt;b&gt;v%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="542"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1096"/>
         <source>Check for Updates Now</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificar Atualizações Agora</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="548"/>
         <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique em &apos;Verificar Atualizações Agora&apos; para consultar a versão mais recente no GitHub.</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="553"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1097"/>
         <source>Release Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informações da Versão</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="567"/>
         <location filename="../src/widgets/settingsdialog.cpp" line="1098"/>
         <source>Open Release Page on GitHub</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir a Página de Lançamento no GitHub</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="665"/>
         <source>Plugins reloaded successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins recarregados com sucesso.</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="734"/>
         <source>Checking for updates from GitHub...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificando atualizações no GitHub...</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="752"/>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Falha ao verificar atualizações: %1&lt;/span&gt;</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="762"/>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Resposta inválida do GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="786"/>
         <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Uma nova versão está disponível: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="792"/>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão mais recente: &lt;b&gt;%1&lt;/b&gt; (%2)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="795"/>
         <source>Released: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Lançado: %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="805"/>
         <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Você está usando a versão mais recente (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="998"/>
         <source>KEY_SETTINGS_RESET_TITLE</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar Padrões</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="999"/>
         <source>KEY_SETTINGS_RESET_CONFIRM</source>
-        <translation type="unfinished"></translation>
+        <translation>Deseja realmente redefinir todas as configurações para seus valores padrão?</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1102"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1105"/>
@@ -4522,7 +4707,7 @@ Install package:
         <location filename="../../tests/test_controller_atlas.cpp" line="651"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="717"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1108"/>
@@ -4530,12 +4715,12 @@ Install package:
         <location filename="../../tests/test_controller_atlas.cpp" line="652"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="718"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="1111"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar Padrões</translation>
     </message>
 </context>
 <context>
@@ -4543,47 +4728,47 @@ Install package:
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="26"/>
         <source>Loading image %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregando a imagem %1...</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="33"/>
         <source>File not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivo não encontrado: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="44"/>
         <source>Failed to decode image from: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao decodificar a imagem de: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="66"/>
         <source>Cannot export: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível exportar: a imagem do atlas do documento é nula.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="76"/>
         <source>Export file name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome do arquivo de exportação não pode estar vazio.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="90"/>
         <source>Failed to save image to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao salvar a imagem em: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="96"/>
         <source>Exported atlas image to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagem do atlas exportada para: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="116"/>
         <source>Segmenting sprite frames...</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmentando quadros de sprites...</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/spritesheet/spriteextractor.cpp" line="131"/>
         <source>Extracted %1 frames</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 quadros extraídos</translation>
     </message>
 </context>
 <context>
@@ -4591,17 +4776,17 @@ Install package:
     <message>
         <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="11"/>
         <source>Tight Polygon Packing (Nesting)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Empacotamento Poligonal Justo (Aninhamento)...</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="16"/>
         <source>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Empacota sprites de forma justa no atlas usando envelopes poligonais, sobrepondo caixas delimitadoras e detecção de colisão multithread.</translation>
     </message>
     <message>
         <location filename="../../plugins/filters/tightpolygonpacking/tightpolygonpackingfilter.cpp" line="30"/>
         <source>Tight Polygon Packing (Nesting)</source>
-        <translation type="unfinished"></translation>
+        <translation>Empacotamento Poligonal Justo (Aninhamento)</translation>
     </message>
 </context>
 <context>
@@ -4609,7 +4794,7 @@ Install package:
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="43"/>
         <source>KEY_TIMELINE_TITLE</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Linha do Tempo&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="53"/>
@@ -4618,54 +4803,55 @@ Install package:
         <location filename="../../tests/test_controller_atlas.cpp" line="618"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="683"/>
         <source>KEY_TIMELINE_ADD_SELECTION</source>
-        <translation type="unfinished"></translation>
+        <translation>+ Adicionar Seleção</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="54"/>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="295"/>
         <source>KEY_TIMELINE_ADD_SELECTION_TOOLTIP</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar quadros selecionados do atlas a esta animação</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="126"/>
         <source>KEY_TIMELINE_NO_ANIM</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Linha do Tempo&lt;/b&gt; (nenhuma animação selecionada)</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="135"/>
         <source>KEY_TIMELINE_ANIM_INFO</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Linha do Tempo: %1&lt;/b&gt; (%2 quadros)</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="142"/>
         <source>KEY_TIMELINE_DURATION_FPS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="183"/>
-        <source>KEY_TIMELINE_FRAME_TOOLTIP</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ms @ %2 FPS</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="201"/>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="233"/>
         <source>#%1 (F%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>#%1 (F%2)</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="183"/>
+        <source>KEY_TIMELINE_FRAME_TOOLTIP</source>
+        <translation>Passo #%1: Quadro Global %2 (%3 ms)
+Arraste e solte para reordenar</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="265"/>
         <source>KEY_TIMELINE_DUPLICATE_FRAME</source>
-        <translation type="unfinished"></translation>
+        <translation>Duplicar este quadro (prolongar a pausa)</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="266"/>
         <source>KEY_TIMELINE_REMOVE_FRAME</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover este quadro da sequência</translation>
     </message>
     <message>
         <location filename="../src/widgets/timelinefilmstripwidget.cpp" line="268"/>
         <source>KEY_TIMELINE_SELECT_IN_ATLAS</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecionar no Atlas</translation>
     </message>
 </context>
 <context>
@@ -4673,82 +4859,82 @@ Install package:
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="39"/>
         <source>Reading Unity 2D Sprite Mesh %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lendo a Malha de Sprite Unity 2D %1...</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="46"/>
         <source>Failed to open file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao abrir o arquivo: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="59"/>
         <source>Failed to parse Unity JSON: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao analisar o JSON do Unity: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="93"/>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagem do atlas de textura associada não encontrada para: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="106"/>
         <source>Failed to load texture atlas image: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao carregar a imagem do atlas de textura: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="195"/>
         <source>Imported %1 frames from Unity 2D Sprite Mesh</source>
-        <translation type="unfinished"></translation>
+        <translation>Importados %1 quadros da Malha de Sprite Unity 2D</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="205"/>
         <source>No frames in document to export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum quadro no documento para exportar.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="211"/>
         <source>Packing atlas for Unity...</source>
-        <translation type="unfinished"></translation>
+        <translation>Empacotando o atlas para o Unity...</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="223"/>
         <source>Export file name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome do arquivo de exportação não pode estar vazio.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="265"/>
         <source>Failed to pack frames for Unity export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao empacotar quadros para exportação do Unity.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="285"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao salvar a textura VRAM complementar: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="293"/>
         <source>Failed to save companion image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao salvar a imagem complementar: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="415"/>
         <source>Cannot write to Unity JSON file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível gravar no arquivo JSON do Unity: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.cpp" line="426"/>
         <source>Exported Unity Sprite Mesh: %1 and image %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Malha de Sprite Unity exportada: %1 e imagem %2</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.h" line="28"/>
         <source>Unity 2D Sprite Mesh (*.unity.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>Malha de Sprite 2D do Unity (*.unity.json)</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unity/unityextractor.h" line="29"/>
         <source>Exports Unity 2D Sprite Mesh with vertex &amp; triangle buffers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporta a Malha de Sprite 2D do Unity com buffers de vértices e triângulos.</translation>
     </message>
 </context>
 <context>
@@ -4756,82 +4942,82 @@ Install package:
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="39"/>
         <source>Reading Unreal Engine Paper2D atlas %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lendo o atlas do Unreal Engine Paper2D %1...</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="46"/>
         <source>Failed to open file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao abrir o arquivo: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="59"/>
         <source>Failed to parse Unreal JSON: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao analisar o JSON do Unreal: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="93"/>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagem do atlas de textura associada não encontrada para: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="106"/>
         <source>Failed to load texture atlas image: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao carregar a imagem do atlas de textura: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="202"/>
         <source>Imported %1 frames from Unreal Paper2D</source>
-        <translation type="unfinished"></translation>
+        <translation>Importados %1 quadros do Unreal Paper2D</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="212"/>
         <source>No frames in document to export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum quadro no documento para exportar.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="218"/>
         <source>Packing atlas for Unreal Engine Paper2D...</source>
-        <translation type="unfinished"></translation>
+        <translation>Empacotando o atlas para o Unreal Engine Paper2D...</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="230"/>
         <source>Export file name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome do arquivo de exportação não pode estar vazio.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="272"/>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao empacotar quadros para exportação do Unreal Paper2D.</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="292"/>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao salvar a textura VRAM complementar: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="300"/>
         <source>Failed to save companion image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao salvar a imagem complementar: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="428"/>
         <source>Cannot write to Unreal Paper2D JSON file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível gravar no arquivo JSON do Unreal Paper2D: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.cpp" line="439"/>
         <source>Exported Unreal Paper2D Sprite: %1 and image %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprite Unreal Paper2D exportado: %1 e imagem %2</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.h" line="28"/>
         <source>Unreal Engine Paper2D (*.paper2d.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>Unreal Engine Paper2D (*.paper2d.json)</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/unreal/unrealextractor.h" line="29"/>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporta os sprites do Unreal Engine Paper2D com RenderGeometry justo.</translation>
     </message>
 </context>
 <context>
@@ -4839,77 +5025,77 @@ Install package:
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="20"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="39"/>
-        <source>Base name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="46"/>
-        <source>Image Format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="72"/>
-        <source>Target application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="79"/>
-        <source>Atlas file</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportador JSON</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="86"/>
         <source>Replace existing atlas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="96"/>
-        <source>Atlas save strategy</source>
-        <translation type="unfinished"></translation>
+        <translation>Substituir o atlas existente</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="103"/>
         <source>Content</source>
-        <translation type="unfinished"></translation>
+        <translation>Conteúdo</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="72"/>
+        <source>Target application</source>
+        <translation>Aplicação de destino</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="39"/>
+        <source>Base name</source>
+        <translation>Nome base</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="46"/>
+        <source>Image Format</source>
+        <translation>Formato da Imagem</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="79"/>
+        <source>Atlas file</source>
+        <translation>Arquivo do atlas</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="96"/>
+        <source>Atlas save strategy</source>
+        <translation>Estratégia de salvamento do atlas</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="113"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.ui" line="127"/>
         <source>Atlas preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Pré-visualização do atlas</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="99"/>
         <source>Use original Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar o atlas original</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="100"/>
         <source>Generate same minimal Atlas for all animations</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerar o mesmo atlas mínimo para todas as animações</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="101"/>
         <source>Generate one Atlas per animation</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerar um atlas por animação</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="111"/>
         <source>Export</source>
-        <translation type="unfinished">Exportar</translation>
+        <translation>Exportar</translation>
     </message>
     <message>
         <location filename="../../plugins/extractors/json/jsonExtractordialog.cpp" line="114"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 </TS>
