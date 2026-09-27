@@ -11,7 +11,7 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
 
 ---
 
-![BentoPack Interface Demo](BentoPack.gif)
+![BentoPack Interface Demo](BentoPack.webp)
 
 ---
 
@@ -32,7 +32,7 @@ The UI and CLI are licensed under Apache 2.0. Specific engine integration plugin
   * **Atlas Bin-Packing (MaxRects) (`Ctrl+Shift+P`):** Multi-heuristic 2D box packing (Best Short Side Fit, Best Area Fit, Best Long Side Fit, Bottom Left, Contact Point).
   * **Tight Polygon Packing (Nesting) (`Ctrl+Shift+T`):** Multi-threaded high-density concave/convex polygon packing allowing bounding boxes to overlap.
 
-![Background Removal Demo](RemoveBackground.gif)
+![Background Removal Demo](RemoveBackground.webp)
 
 ### 🎬 Timeline & Animation Filmstrip
 * **Filmstrip Dock:** Intuitive bottom timeline with thumbnail filmstrip, scrub bar, and drag-and-drop frame reordering.
