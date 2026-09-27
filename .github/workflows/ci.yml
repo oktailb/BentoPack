@@ -150,7 +150,7 @@ jobs:
           cpu: 2
           prepare: |
             pkgman refresh
-            echo 1 | pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git qt6_base_devel qt6_tools_devel devel:libgit2 || \
+            echo 1 | pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git qt6_base_devel qt6_tools_devel devel:libgit2 devel:libwebp || \
             echo 1 | pkgman install -y cmd:cmake cmd:gcc cmd:ninja cmd:git qt6_base_devel qt6_tools_devel
           run: |
             cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
