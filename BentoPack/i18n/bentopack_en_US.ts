@@ -4459,7 +4459,7 @@ Install package:
     <name>SettingsDialog</name>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="53"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1020"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1021"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="552"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="617"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="682"/>
@@ -4468,117 +4468,117 @@ Install package:
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="111"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1021"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1022"/>
         <source>KEY_SETTINGS_SEARCH_PLACEHOLDER</source>
         <translation>Search settings...</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="121"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1022"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1023"/>
         <source>KEY_SETTINGS_CAT_GENERAL</source>
         <translation>General</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="137"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1026"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1027"/>
         <source>KEY_SETTINGS_CAT_GIT</source>
         <translation>Version Control (Git)</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="125"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1023"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1024"/>
         <source>KEY_SETTINGS_CAT_ATLAS</source>
         <translation>Display &amp; Atlas</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="129"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1024"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1025"/>
         <source>Export &amp; VRAM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="133"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="470"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1025"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1085"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="471"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1026"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1086"/>
         <source>Plugins &amp; Extensions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="141"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1027"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1028"/>
         <source>Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="198"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1030"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1031"/>
         <source>KEY_SETTINGS_HDR_GENERAL</source>
         <translation>General Settings</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="203"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1031"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1032"/>
         <source>KEY_SETTINGS_GRP_HISTORY</source>
         <translation>History &amp; Project</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="208"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1034"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1035"/>
         <source>KEY_SETTINGS_SUFFIX_ACTIONS</source>
         <translation> actions</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="209"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1032"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1033"/>
         <source>KEY_SETTINGS_UNDO_LIMIT</source>
         <translation>Undo/Redo limit:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="214"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1033"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1034"/>
         <source>KEY_SETTINGS_MAX_RECENT_FILES</source>
         <translation>Maximum recent files:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="219"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1036"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1037"/>
         <source>KEY_SETTINGS_GRP_EXTRACTION</source>
         <translation>Extraction &amp; Background</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="224"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1037"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1038"/>
         <source>KEY_SETTINGS_ALPHA_THRESHOLD</source>
         <translation>Default alpha threshold:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="229"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1038"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1039"/>
         <source>KEY_SETTINGS_BG_REMOVAL_TOL</source>
         <translation>Background removal tolerance:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="234"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1040"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1041"/>
         <source>KEY_SETTINGS_GRP_LANGUAGE</source>
         <translation>Interface Language</translation>
     </message>
     <message>
         <location filename="../src/widgets/settingsdialog.cpp" line="238"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1042"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1043"/>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
         <translation>System (Default)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="242"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1041"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="243"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1042"/>
         <source>KEY_SETTINGS_LANG_APP</source>
         <translation>Application language:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="246"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1043"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="247"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1044"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="556"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="621"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="686"/>
@@ -4586,387 +4586,387 @@ Install package:
         <translation>Language changes are applied immediately.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="255"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1045"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="256"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1046"/>
         <source>Startup &amp; Behavior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="258"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1046"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="259"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1047"/>
         <source>Check automatically for updates on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="261"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1047"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="262"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1048"/>
         <source>Reopen last project on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="276"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1050"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="277"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1051"/>
         <source>KEY_SETTINGS_HDR_GIT</source>
         <translation>Version Control (Git)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="281"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1051"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="282"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1052"/>
         <source>KEY_SETTINGS_GRP_AUTHOR</source>
         <translation>Author Identity (Git Commits)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="285"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1052"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="286"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1053"/>
         <source>KEY_SETTINGS_AUTHOR_INFO</source>
         <translation>This identity is recorded as author signature on each commit in the .bento project history.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="293"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1055"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="294"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1056"/>
         <source>KEY_SETTINGS_AUTHOR_NAME_PLACEHOLDER</source>
         <translation>e.g. John Doe</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="294"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1053"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="295"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1054"/>
         <source>KEY_SETTINGS_AUTHOR_NAME</source>
         <translation>Author name:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="298"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1056"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="299"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1057"/>
         <source>KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER</source>
         <translation>e.g. john.doe@example.com</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="299"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1054"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="300"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1055"/>
         <source>KEY_SETTINGS_AUTHOR_EMAIL</source>
         <translation>Author email:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="304"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1057"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="305"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1058"/>
         <source>KEY_SETTINGS_DETECT_GIT</source>
         <translation>Detect from system Git configuration</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="313"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1058"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="314"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1059"/>
         <source>KEY_SETTINGS_GRP_GIT_ENGINE</source>
         <translation>Integrated Git Engine</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="318"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1061"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="319"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1062"/>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
         <translation>Status: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 active&lt;/b&gt; (history and branch management operational)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="319"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1061"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="320"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1062"/>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
         <translation>Status: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 not compiled&lt;/b&gt; (git history disabled)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="326"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1063"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="327"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1064"/>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
         <translation>Each editing action (slicing, renaming, sprite merging, animation creation) generates an incremental and atomic commit in the transparent Git repository of the .bento project.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="343"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1066"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="344"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1067"/>
         <source>KEY_SETTINGS_HDR_ATLAS</source>
         <translation>Display &amp; Atlas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="348"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1067"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="349"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1068"/>
         <source>KEY_SETTINGS_GRP_ZOOM</source>
         <translation>Navigation &amp; Zoom</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="354"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1068"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="355"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1069"/>
         <source>KEY_SETTINGS_ZOOM_STEP</source>
         <translation>Zoom factor (wheel):</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="360"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1069"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="361"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1070"/>
         <source>KEY_SETTINGS_ZOOM_MIN</source>
         <translation>Minimum zoom level:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="366"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1070"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="367"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1071"/>
         <source>KEY_SETTINGS_ZOOM_MAX</source>
         <translation>Maximum zoom level:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="372"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1071"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="373"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1072"/>
         <source>KEY_SETTINGS_FIT_PADDING</source>
         <translation>Fit view padding:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="378"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1072"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="379"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1073"/>
         <source>KEY_SETTINGS_GRP_SLICING</source>
         <translation>Interactive Slicing</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="384"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1073"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="385"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1074"/>
         <source>KEY_SETTINGS_MIN_SLICE_SIZE</source>
         <translation>Minimum slice box size:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="398"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1076"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="399"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1077"/>
         <source>Export &amp; VRAM Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="402"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1077"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="403"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1078"/>
         <source>Default Export Configurations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="414"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="654"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="415"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="655"/>
         <source>(No export plugins loaded)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="453"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="454"/>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="417"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1078"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="418"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1079"/>
         <source>Default Target Format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="422"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="423"/>
         <source>PNG (Standard, Lossless)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="423"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="424"/>
         <source>WebP (Modern Web, High Compression)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="424"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="425"/>
         <source>KTX2 / Basis Universal (GPU Compressed VRAM)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="425"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1079"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="426"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1080"/>
         <source>Default Texture Format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="430"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="431"/>
         <source>MaxRects (Best Fit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="431"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="432"/>
         <source>Shelf / Next-Fit (Fast)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="432"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="433"/>
         <source>Skyline (Efficient)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="433"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="434"/>
         <source>Polygonal Concave (Tightest Packing)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="434"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1080"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="435"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1081"/>
         <source>Default Packing Algorithm:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="438"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1082"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="439"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1083"/>
         <source>Enable Zstandard (Zstd) compression by default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="444"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1081"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="445"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1082"/>
         <source>Zstd Compression Level:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="475"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1086"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="476"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1087"/>
         <source>Open Plugins Folder...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="479"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1087"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="480"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1088"/>
         <source>Reload Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="490"/>
         <source>Filter Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="490"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="489"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="490"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
         <source>Identifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="496"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1089"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="497"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1090"/>
         <source>Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
         <source>Extractor / Codec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="500"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="501"/>
         <source>Extensions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="508"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1090"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="509"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1091"/>
         <source>Extractors &amp; Codecs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="512"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="513"/>
         <source>Select a plugin above to view its details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="517"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="518"/>
         <source>Plugin Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="533"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1094"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="534"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1095"/>
         <source>Software Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="538"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="539"/>
         <source>Current installed version: &lt;b&gt;v%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="541"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1095"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="542"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1096"/>
         <source>Check for Updates Now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="547"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="548"/>
         <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="552"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1096"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="553"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1097"/>
         <source>Release Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="566"/>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1097"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="567"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1098"/>
         <source>Open Release Page on GitHub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="664"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="665"/>
         <source>Plugins reloaded successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="733"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="734"/>
         <source>Checking for updates from GitHub...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="751"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="752"/>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="761"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="762"/>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="785"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="786"/>
         <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="791"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="792"/>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="794"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="795"/>
         <source>Released: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="804"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="805"/>
         <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="997"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="998"/>
         <source>KEY_SETTINGS_RESET_TITLE</source>
         <translation>Restore Defaults</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="998"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="999"/>
         <source>KEY_SETTINGS_RESET_CONFIRM</source>
         <translation>Do you really want to reset all settings to their default values?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1101"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1102"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1104"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1105"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="586"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="651"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="717"/>
@@ -4974,7 +4974,7 @@ Install package:
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1107"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1108"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="587"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="652"/>
         <location filename="../../tests/test_controller_atlas.cpp" line="718"/>
@@ -4982,7 +4982,7 @@ Install package:
         <translation>Apply</translation>
     </message>
     <message>
-        <location filename="../src/widgets/settingsdialog.cpp" line="1110"/>
+        <location filename="../src/widgets/settingsdialog.cpp" line="1111"/>
         <source>Restore Defaults</source>
         <translation>Restore Defaults</translation>
     </message>

@@ -37,6 +37,7 @@ set(${PROJECT_NAME}_TS_FILES
     i18n/bentopack_fr_FR.ts # Français
     i18n/bentopack_en_US.ts # English
     i18n/bentopack_ja_JA.ts # Japanese
+    i18n/bentopack_pt_BR.ts # Brasilian Portugese
 )
 
 set(BentoPackCore_SRC
