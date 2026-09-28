@@ -60,6 +60,17 @@ jobs:
           name: godot-bentopack-addon
           path: build/dist/godot-bentopack-addon-*.zip
 
+      - name: Package Unity
+        run: |
+          cmake --build build --target package_unity_addon
+          ls -lah build/dist/com.bentopack.importer-*.tgz
+
+      - name: Upload Unity Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: com.bentopack.importer
+          path: build/dist/com.bentopack.importer-*.tgz
+
   windows:
     name: Windows (MinGW 64-bit)
     runs-on: windows-latest

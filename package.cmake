@@ -1,0 +1,44 @@
+
+set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_LIST_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+set(CPACK_PACKAGE_RELEASE 1)
+set(CPACK_PACKAGE_CONTACT "vincent.lecoq@gmail.com")
+set(CPACK_PACKAGE_VENDOR "Oktailb")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "BentoPack - High-density 2D sprite sheet and polygonal mesh studio")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
+
+# Linux CPack configuration
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_CONTACT}")
+set(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+set(CPACK_RPM_PACKAGE_LICENSE "Apache-2.0")
+set(CPACK_RPM_PACKAGE_GROUP "Applications/Graphics")
+
+# Windows CPack configuration
+set(CPACK_NSIS_DISPLAY_NAME "BentoPack Studio")
+set(CPACK_NSIS_PACKAGE_NAME "BentoPack Studio")
+set(CPACK_NSIS_MODIFY_PATH ON)
+
+# macOS CPack configuration
+set(CPACK_DMG_VOLUME_NAME "BentoPack Studio")
+set(CPACK_DMG_FORMAT "UDZO")
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(CPACK_GENERATOR "TGZ;RPM;DEB")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(CPACK_GENERATOR "ZIP;NSIS")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(CPACK_GENERATOR "DragNDrop;TGZ")
+else()
+    set(CPACK_GENERATOR "TGZ")
+endif()
+
+# CPack Component packaging for bentopack & bentopack-dev
+set(CPACK_COMPONENTS_ALL bentopack bentopack-dev)
+set(CPACK_COMPONENT_BENTOPACK_DISPLAY_NAME "BentoPack Application and Plugins")
+set(CPACK_COMPONENT_BENTOPACK-DEV_DISPLAY_NAME "BentoPack Development SDK (Headers & CMake)")
+set(CPACK_DEB_COMPONENT_INSTALL ON)
+set(CPACK_RPM_COMPONENT_INSTALL ON)
+
+include(CPack)

@@ -7,10 +7,7 @@ if(POLICY CMP0144)
     cmake_policy(SET CMP0144 NEW)
 endif()
 
-set(PROJECT_VERSION_MAJOR 0)
-set(PROJECT_VERSION_MINOR 11)
-set(PROJECT_VERSION_PATCH 0)
-set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+include(version.cmake)
 
 project(BentoPack       VERSION ${PROJECT_VERSION}
                         LANGUAGES C CXX
@@ -156,136 +153,7 @@ install(FILES
     COMPONENT bentopack-dev
 )
 
-if (WIN32)
-#    install(FILES ${CMAKE_CXX_COMPILER}/bin/*.dll
-
-#        DESTINATION .
-#    )
-endif()
-
-find_package(Doxygen QUIET OPTIONAL_COMPONENTS dot)
-if(DOXYGEN_FOUND)
-    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
-    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-
-    if(DOXYGEN_DOT_FOUND)
-        set(DOXYGEN_HAVE_DOT "YES")
-    else()
-        set(DOXYGEN_HAVE_DOT "NO")
-    endif()
-
-    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    add_custom_target(doxygen
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen..."
-        VERBATIM
-    )
-    add_custom_target(docs DEPENDS doxygen)
-    message(STATUS "Doxygen found: ${DOXYGEN_EXECUTABLE} (documentation target 'doxygen' / 'docs' available)")
-else()
-    message(STATUS "Doxygen not found. Documentation targets will not be built.")
-endif()
-
-# -------------------------------------------------------------------------
-# Godot 4 Addon Packaging Target
-# -------------------------------------------------------------------------
-set(GODOT_ADDON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/godot")
-set(GODOT_ADDON_STAGING_DIR "${CMAKE_CURRENT_BINARY_DIR}/addons_staging/godot/addons/bentopack")
-set(GODOT_ADDON_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/dist")
-set(GODOT_ADDON_ZIP "${GODOT_ADDON_DIST_DIR}/godot-bentopack-addon-${PROJECT_VERSION}.zip")
-
-add_custom_target(package_godot_addon
-    COMMAND ${CMAKE_COMMAND}
-        -DSRC_DIR="${GODOT_ADDON_SRC_DIR}"
-        -DSTAGING_DIR="${CMAKE_CURRENT_BINARY_DIR}/addons_staging/godot"
-        -DLICENSE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
-        -DOUTPUT_ZIP="${GODOT_ADDON_ZIP}"
-        -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_godot_addon.cmake"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-    COMMENT "Packaging Godot 4 Addon into ${GODOT_ADDON_ZIP}..."
-    VERBATIM
-)
-
-install(DIRECTORY addons/godot/
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/bentopack/addons/godot/addons/bentopack
-    COMPONENT bentopack
-    PATTERN "*.uid" EXCLUDE
-    PATTERN "*.import" EXCLUDE
-)
-
-
-if(UNIX AND NOT APPLE AND NOT HAIKU)
-    install(FILES BentoPack/res/linux/BentoPack.desktop
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
-        RENAME bentopack.desktop
-    )
-    install(FILES BentoPack/res/icons/bentopack.png
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps
-        RENAME bentopack.png
-    )
-    install(FILES
-        docs/man/bentopack.1 docs/man/bentopack-cli.1
-        DESTINATION ${CMAKE_INSTALL_MANDIR}/man1
-    )
-endif()
-
-if (HAIKU)
-    message("This is haiku")
-    install(FILES ${CMAKE_CURRENT_LIST_DIR}/LICENSE
-        DESTINATION data/licenses
-        RENAME "Apache License Version 2.0"
-    )
-    install(FILES ${CMAKE_CURRENT_LIST_DIR}/LICENSE
-        DESTINATION data/licenses
-        RENAME "Apache v2"
-    )
-    configure_file(
-        BentoPack/src/haiku.PackageInfo.in
-        generated/haiku.PackageInfo
-    )
-endif()
-
-set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_LIST_DIR}/LICENSE")
-set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-set(CPACK_PACKAGE_RELEASE 1)
-set(CPACK_PACKAGE_CONTACT "vincent.lecoq@gmail.com")
-set(CPACK_PACKAGE_VENDOR "Oktailb")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "BentoPack - High-density 2D sprite sheet and polygonal mesh studio")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
-
-# Linux CPack configuration
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_CONTACT}")
-set(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
-set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-set(CPACK_RPM_PACKAGE_LICENSE "Apache-2.0")
-set(CPACK_RPM_PACKAGE_GROUP "Applications/Graphics")
-
-# Windows CPack configuration
-set(CPACK_NSIS_DISPLAY_NAME "BentoPack Studio")
-set(CPACK_NSIS_PACKAGE_NAME "BentoPack Studio")
-set(CPACK_NSIS_MODIFY_PATH ON)
-
-# macOS CPack configuration
-set(CPACK_DMG_VOLUME_NAME "BentoPack Studio")
-set(CPACK_DMG_FORMAT "UDZO")
-
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(CPACK_GENERATOR "TGZ;RPM;DEB")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(CPACK_GENERATOR "ZIP;NSIS")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    set(CPACK_GENERATOR "DragNDrop;TGZ")
-else()
-    set(CPACK_GENERATOR "TGZ")
-endif()
-
-# CPack Component packaging for bentopack & bentopack-dev
-set(CPACK_COMPONENTS_ALL bentopack bentopack-dev)
-set(CPACK_COMPONENT_BENTOPACK_DISPLAY_NAME "BentoPack Application and Plugins")
-set(CPACK_COMPONENT_BENTOPACK-DEV_DISPLAY_NAME "BentoPack Development SDK (Headers & CMake)")
-set(CPACK_DEB_COMPONENT_INSTALL ON)
-set(CPACK_RPM_COMPONENT_INSTALL ON)
-
-include(CPack)
+add_subdirectory(docs)
+add_subdirectory(addons)
+include(install.cmake)
+include(package.cmake)
