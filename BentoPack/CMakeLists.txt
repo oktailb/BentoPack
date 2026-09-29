@@ -32,16 +32,25 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 1. Spécifiez les langues à supporter (code ISO 639-1 ou code Qt)
-set(${PROJECT_NAME}_TS_FILES
-    i18n/bentopack_fr_FR.ts # Français
-    i18n/bentopack_en_US.ts # English
-    i18n/bentopack_es_ES.ts # Spanish
-    i18n/bentopack_ja_JA.ts # Japanese
-    i18n/bentopack_pt_BR.ts # Brasilian Portugese
-    i18n/bentopack_zh_CN.ts # Chinese
-    i18n/bentopack_ko_KR.ts # Korean
-    i18n/bentopack_de_DE.ts # Korean
+# Find i18n files automaticaly
+file(GLOB_RECURSE ${PROJECT_NAME}_TS_FILES
+    LIST_DIRECTORIES false
+    RELATIVE_PATH
+    *.ts)
+list(TRANSFORM ${PROJECT_NAME}_TS_FILES REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/ "")
+set(${PROJECT_NAME}_I18N_NAMES ${${PROJECT_NAME}_TS_FILES})
+list(TRANSFORM ${PROJECT_NAME}_I18N_NAMES REPLACE "i18n/bentopack_" "QStringLiteral(\"")
+list(TRANSFORM ${PROJECT_NAME}_I18N_NAMES REPLACE ".ts" "\"),")
+list(APPEND ${PROJECT_NAME}_I18N_NAMES "QStringLiteral(\"system\")")
+list(JOIN ${PROJECT_NAME}_I18N_NAMES "\n    " I18N_NAMES_JOINED)
+set(I18N_NAMES_JOINED_SHORT ${I18N_NAMES_JOINED})
+list(TRANSFORM I18N_NAMES_JOINED_SHORT REPLACE "_[A-Z]*" "")
+
+configure_file(
+    src/i18n.h.in
+    generated/i18n.h
+    NEWLINE_STYLE UNIX
+    @ONLY
 )
 
 set(BentoPackCore_SRC
@@ -66,6 +75,7 @@ set(BentoPackCore_SRC
     src/version.h.in
     src/haiku.PackageInfo.in
     ${CMAKE_CURRENT_BINARY_DIR}/generated/version.h
+    ${CMAKE_CURRENT_BINARY_DIR}/generated/i18n.h
     src/cli/cliparser.cpp
     src/cli/clipackpipeline.cpp
     src/cli/native_commands.cpp

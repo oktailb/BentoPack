@@ -1,0 +1,29 @@
+#ifndef I18N_H
+#define I18N_H
+
+#include <QStringList>
+
+static QString getFlagEmoji(const QString& countryCode) {
+    if (countryCode.length() != 2) return QString();
+
+    // Magic offset for regional indicator 🇦 (U+1F1E6)
+    const char32_t offset = 0x1F1E6 - 'A';
+
+    char32_t ucs4[] = {
+        static_cast<char32_t>(countryCode[0].toUpper().unicode() + offset),
+        static_cast<char32_t>(countryCode[1].toUpper().unicode() + offset),
+        0 // Terminateur
+    };
+
+    return QString::fromUcs4(ucs4);
+}
+
+const QStringList supportedLanguagesList {
+    @I18N_NAMES_JOINED@
+};
+
+const QStringList supportedLocalesList {
+    @I18N_NAMES_JOINED_SHORT@
+};
+
+#endif // I18N_H

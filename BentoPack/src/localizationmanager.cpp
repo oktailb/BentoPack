@@ -24,6 +24,7 @@
 #include <QLibraryInfo>
 #include <QDir>
 #include <QDebug>
+#include "generated/i18n.h"
 
 LocalizationManager& LocalizationManager::instance()
 {
@@ -36,19 +37,9 @@ LocalizationManager::LocalizationManager()
 {
 }
 
-QStringList LocalizationManager::supportedLanguages()
+const QStringList LocalizationManager::supportedLanguages()
 {
-    return {
-        QStringLiteral("system"),
-        QStringLiteral("fr_FR"),
-        QStringLiteral("en_US"),
-        QStringLiteral("ja_JA"),
-        QStringLiteral("pt_BR"),
-        QStringLiteral("zh_CN"),
-        QStringLiteral("ko_KR"),
-        QStringLiteral("de_DE"),
-        QStringLiteral("es_ES")
-    };
+    return (supportedLanguagesList);
 }
 
 void LocalizationManager::init()
@@ -70,35 +61,19 @@ bool LocalizationManager::setLanguage(const QString &langCode)
 
     QStringList candidates;
     candidates << ("bentopack_" + locale);
-    if (locale.startsWith(QStringLiteral("fr"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_fr_FR");
-    } else if (locale.startsWith(QStringLiteral("ja"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_ja_JA");
-    } else if (locale.startsWith(QStringLiteral("en"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_en_US");
-    } else if (locale.startsWith(QStringLiteral("pt"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_pt_BR");
-    } else if (locale.startsWith(QStringLiteral("zh"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_zh_CN");
-    } else if (locale.startsWith(QStringLiteral("ko"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_ko_KR");
-      } else if (locale.startsWith(QStringLiteral("de"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_de_DE");
-      } else if (locale.startsWith(QStringLiteral("es"), Qt::CaseInsensitive)) {
-        candidates << QStringLiteral("bentopack_es_ES");
-    }
-    candidates << QStringLiteral("bentopack_en_US"); // ultimate fallback
 
     // Remove existing translators before loading the new catalogs
     QCoreApplication::removeTranslator(&m_appTranslator);
     QCoreApplication::removeTranslator(&m_qtTranslator);
 
     // Try loading Qt standard base translations (qtbase_fr.qm, qtbase_ja.qm, etc.)
-    QString qtBaseLocale = locale.startsWith(QStringLiteral("fr"), Qt::CaseInsensitive) ? QStringLiteral("fr")
-                         : (locale.startsWith(QStringLiteral("ja"), Qt::CaseInsensitive) ? QStringLiteral("ja")
-                         : QStringLiteral("en"));
-    if (m_qtTranslator.load(QStringLiteral("qtbase_") + qtBaseLocale, QLibraryInfo::path(QLibraryInfo::TranslationsPath)) ||
-        m_qtTranslator.load(QStringLiteral("qt_") + qtBaseLocale, QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
+    QLocale currentLocale(locale);
+    QString translationsPath = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+
+    // load(locale, filename, prefix, directory)
+    if (m_qtTranslator.load(currentLocale, QStringLiteral("qtbase"), QStringLiteral("_"), translationsPath) ||
+        m_qtTranslator.load(currentLocale, QStringLiteral("qt"), QStringLiteral("_"), translationsPath)) {
+
         QCoreApplication::installTranslator(&m_qtTranslator);
     }
 

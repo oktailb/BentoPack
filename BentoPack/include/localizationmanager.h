@@ -61,7 +61,7 @@ public:
     /**
      * @brief Returns list of supported language codes ("system", "fr_FR", "en_US", "ja_JA").
      */
-    static QStringList supportedLanguages();
+    static const QStringList supportedLanguages();
 
 signals:
     /**

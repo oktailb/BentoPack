@@ -24,6 +24,7 @@
 #include "filters/filterregistry.h"
 #include "extractor/extractorregistry.h"
 #include "generated/version.h"
+#include "generated/i18n.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -235,15 +236,31 @@ QWidget* SettingsDialog::createGeneralPage()
     QFormLayout *formLang = new QFormLayout(m_grpLang);
 
     m_comboLanguage = new QComboBox(m_grpLang);
-    m_comboLanguage->addItem(tr("KEY_SETTINGS_LANG_SYSTEM"), QStringLiteral("system"));
-    m_comboLanguage->addItem(QStringLiteral("🇩🇪 Deutsch"), QStringLiteral("de_DE"));
-    m_comboLanguage->addItem(QStringLiteral("🇬🇧 English"), QStringLiteral("en_US"));
-    m_comboLanguage->addItem(QStringLiteral("🇫🇷 Français"), QStringLiteral("fr_FR"));
-    m_comboLanguage->addItem(QStringLiteral("🇧🇷 Portugese"), QStringLiteral("pt_BR"));
-    m_comboLanguage->addItem(QStringLiteral("🇪🇸 Español"), QStringLiteral("es_ES"));
-    m_comboLanguage->addItem(QStringLiteral("🇯🇵 日本語"), QStringLiteral("ja_JA"));
-    m_comboLanguage->addItem(QStringLiteral("🇨🇳 简体中文"), QStringLiteral("zh_CN"));
-    m_comboLanguage->addItem(QStringLiteral("🇰🇷 한국어"), QStringLiteral("ko_KR"));
+    const QStringList languages = LocalizationManager::supportedLanguages();
+
+    for (const QString& langCode : languages) {
+      // Special case for system
+      if (langCode == QStringLiteral("system")) {
+        m_comboLanguage->addItem(tr("KEY_SETTINGS_LANG_SYSTEM"), langCode);
+        continue;
+      }
+
+      QLocale locale(langCode);
+
+      // 1. Retrieve native name
+      QString nativeName = locale.nativeLanguageName();
+      if (!nativeName.isEmpty()) {
+        nativeName[0] = nativeName[0].toUpper(); // Upper case first letter
+      }
+
+      // 2. Extract country name such as "FR" from "fr_FR"
+      QString countryCode = langCode.split(QLatin1Char('_')).last();
+      QString flagEmoji = getFlagEmoji(countryCode);
+
+      // 3. Add flag "🇫🇷 Français"
+      QString displayName = QStringLiteral("%1 %2").arg(flagEmoji, nativeName);
+      m_comboLanguage->addItem(displayName, langCode);
+    }
     m_lblLangApp = new QLabel(tr("KEY_SETTINGS_LANG_APP"), m_grpLang);
     formLang->addRow(m_lblLangApp, m_comboLanguage);
 
