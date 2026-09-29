@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: godot-bentopack-addon
-          path: build/dist/godot-bentopack-addon-*.zip
+          path: build/addons/dist/godot-bentopack-addon-*.zip
 
       - name: Package Unity
         run: |
@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: com.bentopack.importer
-          path: build/dist/com.bentopack.importer-*.tgz
+          path: build/addons/dist/com.bentopack.importer-*.tgz
 
   windows:
     name: Windows (MinGW 64-bit)
