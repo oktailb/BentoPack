@@ -52,7 +52,7 @@ jobs:
       - name: Package Godot Addon
         run: |
           cmake --build build --target package_godot_addon
-          ls -lah build/dist/godot-bentopack-addon-*.zip
+          ls -lah build/addons/dist/godot-bentopack-addon-*.zip
 
       - name: Upload Godot Addon Package
         uses: actions/upload-artifact@v4
@@ -63,7 +63,7 @@ jobs:
       - name: Package Unity
         run: |
           cmake --build build --target package_unity_addon
-          ls -lah build/dist/com.bentopack.importer-*.tgz
+          ls -lah build/addons/dist/com.bentopack.importer-*.tgz
 
       - name: Upload Unity Package
         uses: actions/upload-artifact@v4
