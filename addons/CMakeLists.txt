@@ -29,8 +29,6 @@ install(DIRECTORY addons/godot/
 
 message ("Godot Addon Configured")
 
-cmake_minimum_required(VERSION 3.20)
-
 # -------------------------------------------------------------------------
 # Unity 6 Addon Packaging Target
 # -------------------------------------------------------------------------
