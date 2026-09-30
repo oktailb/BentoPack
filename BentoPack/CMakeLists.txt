@@ -302,17 +302,15 @@ target_link_libraries(BentoPackWidgets PUBLIC
     Qt6::Widgets
 )
 
-install(TARGETS BentoPackCore BentoPackWidgets
-    EXPORT BentoPackTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT bentopack
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT bentopack-dev
+install(TARGETS BentoPackCore
+    EXPORT BentoPackCoreTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bentopack
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bentopack
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT bentopack
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT bentopack_dev
 )
-
 install(DIRECTORY include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bentopack
-    COMPONENT bentopack-dev
+    COMPONENT bentopack_dev
     FILES_MATCHING PATTERN "*.h"
 )
 

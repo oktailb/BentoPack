@@ -141,19 +141,19 @@ configure_package_config_file(
 )
 
 # Install CMake SDK export for bentopack-dev
-install(EXPORT BentoPackTargets
-    FILE BentoPackTargets.cmake
+install(EXPORT BentoPackCoreTargets
+    FILE BentoPackCoreTargets.cmake
     NAMESPACE BentoPack::
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/BentoPack"
-    COMPONENT bentopack-dev
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/BentoPack
+    COMPONENT bentopack_dev
 )
-
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/BentoPackConfig.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/BentoPackConfigVersion.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/BentoPack"
-    COMPONENT bentopack-dev
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/BentoPack
+    COMPONENT bentopack_dev
 )
+
 
 add_subdirectory(docs)
 add_subdirectory(addons)

@@ -57,12 +57,16 @@ else()
 endif()
 
 # CPack Component packaging for bentopack & bentopack-dev
-set(CPACK_COMPONENTS_ALL bentopack bentopack-dev)
+set(CPACK_COMPONENTS_ALL bentopack bentopack_dev)
 set(CPACK_COMPONENT_BENTOPACK_DISPLAY_NAME "BentoPack Application and Plugins")
 set(CPACK_COMPONENT_BENTOPACK-DEV_DISPLAY_NAME "BentoPack Development SDK (Headers & CMake)")
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_RPM_COMPONENT_INSTALL ON)
 # Pour NSIS : soit désactiver le component install pour avoir un setup .exe monolithique propre :
 set(CPACK_NSIS_COMPONENT_INSTALL OFF)
+
+# Préserver le nom avec tiret pour les paquets Linux deb/rpm si souhaité :
+set(CPACK_DEBIAN_BENTOPACK_DEV_PACKAGE_NAME "bentopack-dev")
+set(CPACK_RPM_BENTOPACK_DEV_PACKAGE_NAME "bentopack-dev")
 
 include(CPack)
