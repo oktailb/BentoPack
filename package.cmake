@@ -21,7 +21,7 @@ set(CPACK_NSIS_MODIFY_PATH ON)
 set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_LIST_DIR}/BentoPack/res/windows/BentoPack.ico")
 set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_LIST_DIR}/BentoPack/res/windows/BentoPack.ico")
 
-set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\bentopack.exe")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\bentopack.exe")
 set(CPACK_NSIS_MENU_LINKS
     "bin/bentopack.exe" "BentoPack Studio"
     "bin/bentopack-cli.exe" "BentoPack CLI"
