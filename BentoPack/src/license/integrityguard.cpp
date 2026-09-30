@@ -78,44 +78,35 @@ bool IntegrityGuard::isCommercialAuthentic()
 
 QRgb IntegrityGuard::transparentBackgroundColor()
 {
-    if (isCommercialAuthentic()) {
-        return CLEAN_COMMERCIAL_ALPHA0;
-    }
-    const bool isCli = (LicenseManager::toolType() == ToolType::CLI);
-    if (isTampered()) {
-        return isCli ? MAGIC_TAMPERED_CLI_ALPHA0 : MAGIC_TAMPERED_GUI_ALPHA0;
-    }
-    return isCli ? MAGIC_COMMUNITY_CLI_ALPHA0 : MAGIC_COMMUNITY_GUI_ALPHA0;
+    // Always return clean transparent 0x00000000 to prevent edge bleeding, halos,
+    // and block-compression artifacts in downstream game engines (Godot, Unity, Unreal)
+    return CLEAN_COMMERCIAL_ALPHA0;
 }
 
 void IntegrityGuard::applySteganographicWatermark(QImage &image)
 {
     if (image.isNull()) return;
 
-    if (isCommercialAuthentic()) {
-        return; // Clean commercial builds do not embed any watermark.
-    }
-
     const bool isCli = (LicenseManager::toolType() == ToolType::CLI);
-    const QRgb mark = isTampered()
-        ? (isCli ? MAGIC_TAMPERED_CLI_ALPHA0 : MAGIC_TAMPERED_GUI_ALPHA0)
-        : (isCli ? MAGIC_COMMUNITY_CLI_ALPHA0 : MAGIC_COMMUNITY_GUI_ALPHA0);
+    const QString toolStr = isCli ? QStringLiteral("CLI") : QStringLiteral("GUI");
 
-    // Ensure image is strictly non-premultiplied ARGB32 so RGB channels are preserved when Alpha == 0
-    if (image.format() != QImage::Format_ARGB32) {
-        image = image.convertToFormat(QImage::Format_ARGB32);
-    }
-
-    const int width = image.width();
-    const int height = image.height();
-
-    for (int y = 0; y < height; ++y) {
-        QRgb *scanline = reinterpret_cast<QRgb*>(image.scanLine(y));
-        for (int x = 0; x < width; ++x) {
-            if (qAlpha(scanline[x]) == 0) {
-                scanline[x] = mark;
-            }
-        }
+    if (isTampered()) {
+        image.setText(QStringLiteral("Generator"), QStringLiteral("BentoPack %1 (Tampered Build)").arg(toolStr));
+        image.setText(QStringLiteral("X-BentoPack-Integrity"), QStringLiteral("Tampered-Binary-Circumvention"));
+        image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
+        image.setText(QStringLiteral("X-BentoPack-Notice"),
+                      QStringLiteral("UNAUTHORIZED CIRCUMVENTED BUILD - Copyright Violation"));
+    } else if (isCommercialAuthentic()) {
+        image.setText(QStringLiteral("Generator"), QStringLiteral("BentoPack %1").arg(toolStr));
+        image.setText(QStringLiteral("X-BentoPack-Edition"), QStringLiteral("Commercial"));
+        image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
+    } else {
+        image.setText(QStringLiteral("Generator"), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
+        image.setText(QStringLiteral("X-BentoPack-Tool"), toolStr);
+        image.setText(QStringLiteral("X-BentoPack-Integrity"), QStringLiteral("Community-Forensic-Traceable"));
+        image.setText(QStringLiteral("X-BentoPack-License"), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
+        image.setText(QStringLiteral("X-BentoPack-Notice"),
+                      QStringLiteral("Evaluation & indie usage (<1M$ revenue exemption). Commercial seat license required above threshold."));
     }
 }
 

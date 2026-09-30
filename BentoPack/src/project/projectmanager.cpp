@@ -359,8 +359,8 @@ bool ProjectManager::saveProjectToSessionDir(const SpriteDocument &doc,
         if (canWriteWebp) {
             relativeAtlasPath = QStringLiteral("assets/atlas.webp");
             QString atlasFullPath = sDir.filePath(relativeAtlasPath);
-            // Save WebP in lossless mode (quality 100)
-            if (!doc.atlas().save(atlasFullPath, "WEBP", 100)) {
+            // Save WebP with high quality (quality 99 avoids Qt Windows VP8L decoder bug on opaque textures)
+            if (!doc.atlas().save(atlasFullPath, "WEBP", 99)) {
                 // If WebP saving failed, fallback to PNG
                 qWarning() << "[BentoPack] WebP writer failed. Falling back to PNG for project atlas archive.";
                 relativeAtlasPath = QStringLiteral("assets/atlas.png");

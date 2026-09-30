@@ -1075,28 +1075,24 @@ void TestCore::testIntegrityGuardAndForensicWatermarking()
             QCOMPARE(qAlpha(pTrans), 0);
             QCOMPARE(pTrans, BentoPack::IntegrityGuard::CLEAN_COMMERCIAL_ALPHA0);
         } else {
-            // Community: transparent pixels have Alpha == 0 but RGB channels contain:
-            // GUI: 'S','S','G' (0x00535347)
-            // CLI: 'S','S','C' (0x00535343)
-            QRgb expectedMark = (t == BentoPack::ToolType::CLI)
-                ? BentoPack::IntegrityGuard::MAGIC_COMMUNITY_CLI_ALPHA0
-                : BentoPack::IntegrityGuard::MAGIC_COMMUNITY_GUI_ALPHA0;
-
+            // Community: transparent pixels remain strictly clean 0x00000000 (no color bleed)
             QRgb pTrans = testImg.pixel(0, 0);
             QCOMPARE(qAlpha(pTrans), 0);
-            QCOMPARE(pTrans, expectedMark);
+            QCOMPARE(pTrans, BentoPack::IntegrityGuard::CLEAN_ALPHA0);
 
             // Center pixel remains opaque red untouched
             QRgb pCenter = testImg.pixel(8, 8);
             QCOMPARE(qAlpha(pCenter), 255);
             QCOMPARE(qRed(pCenter), 255);
 
-            // Test saving to PNG and reloading
+            // Test saving to PNG and reloading metadata
             QString tmpPng = QDir::temp().filePath(QStringLiteral("test_stego_%1.png").arg(t == BentoPack::ToolType::CLI ? "cli" : "gui"));
             QVERIFY(testImg.save(tmpPng, "PNG"));
             QImage reloaded(tmpPng);
             QVERIFY(!reloaded.isNull());
-            QCOMPARE(reloaded.pixel(0, 0), expectedMark);
+            QCOMPARE(reloaded.pixel(0, 0), BentoPack::IntegrityGuard::CLEAN_ALPHA0);
+            QCOMPARE(reloaded.text(QStringLiteral("X-BentoPack-Integrity")), QStringLiteral("Community-Forensic-Traceable"));
+            QCOMPARE(reloaded.text(QStringLiteral("X-BentoPack-Tool")), (t == BentoPack::ToolType::CLI ? QStringLiteral("CLI") : QStringLiteral("GUI")));
             QFile::remove(tmpPng);
         }
     }
@@ -1120,14 +1116,14 @@ void TestCore::testIntegrityGuardAndForensicWatermarking()
     for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
         BentoPack::LicenseManager::setToolType(t);
 
-        QRgb expectedTamperMark = (t == BentoPack::ToolType::CLI)
-            ? BentoPack::IntegrityGuard::MAGIC_TAMPERED_CLI_ALPHA0
-            : BentoPack::IntegrityGuard::MAGIC_TAMPERED_GUI_ALPHA0;
-
         QImage tamperedImg(10, 10, QImage::Format_ARGB32);
-        tamperedImg.fill(Qt::transparent);
+        tamperedImg.fill(BentoPack::IntegrityGuard::CLEAN_ALPHA0);
         BentoPack::IntegrityGuard::applySteganographicWatermark(tamperedImg);
-        QCOMPARE(tamperedImg.pixel(0, 0), expectedTamperMark);
+        // Pixels remain non-destructively clean 0x00000000
+        QCOMPARE(tamperedImg.pixel(0, 0), BentoPack::IntegrityGuard::CLEAN_ALPHA0);
+        // Forensic metadata flags circumvention
+        QCOMPARE(tamperedImg.text(QStringLiteral("X-BentoPack-Integrity")), QStringLiteral("Tampered-Binary-Circumvention"));
+        QVERIFY(tamperedImg.text(QStringLiteral("Generator")).contains(QStringLiteral("Tampered Build")));
 
         // Metadata under tampered mode
         QJsonObject tamperedMeta;

@@ -128,8 +128,11 @@ void TestConcurrencyAndSecurity::testSteganographicWatermarkCommunity()
 {
     BentoPack::IntegrityGuard::setSimulatedTampered(false);
 
+    // Verify transparent background color is clean 0x00000000
+    QCOMPARE(BentoPack::IntegrityGuard::transparentBackgroundColor(), BentoPack::IntegrityGuard::CLEAN_ALPHA0);
+
     QImage img(10, 10, QImage::Format_ARGB32);
-    img.fill(qRgba(0, 0, 0, 0)); // Alpha == 0
+    img.fill(BentoPack::IntegrityGuard::CLEAN_ALPHA0); // Alpha == 0, RGB == 0
     img.setPixel(5, 5, qRgb(255, 0, 0)); // Opaque pixel
 
     BentoPack::IntegrityGuard::applySteganographicWatermark(img);
@@ -137,13 +140,17 @@ void TestConcurrencyAndSecurity::testSteganographicWatermarkCommunity()
     // Opaque pixel must remain unmodified
     QCOMPARE(img.pixel(5, 5), qRgb(255, 0, 0));
 
-    // Transparent pixel (0, 0) should still have Alpha == 0 but embed watermark magic bytes
+    // Transparent pixel (0, 0) must remain strictly clean 0x00000000 (no color bleeding or compression artifacts)
     QRgb transparentPix = img.pixel(0, 0);
+    QCOMPARE(transparentPix, BentoPack::IntegrityGuard::CLEAN_ALPHA0);
     QCOMPARE(qAlpha(transparentPix), 0);
+    QCOMPARE(transparentPix & 0x00FFFFFF, 0x00000000U);
 
-    // Check magic bytes in Community mode (non-zero RGB channels)
+    // Forensic metadata must be present in image text chunks
+    QVERIFY(!img.text(QStringLiteral("Generator")).isEmpty());
     if (!BentoPack::IntegrityGuard::isCommercialAuthentic()) {
-        QCOMPARE(transparentPix & 0x00FFFFFF, BentoPack::IntegrityGuard::MAGIC_COMMUNITY_ALPHA0 & 0x00FFFFFF);
+        QCOMPARE(img.text(QStringLiteral("X-BentoPack-Integrity")), QStringLiteral("Community-Forensic-Traceable"));
+        QVERIFY(!img.text(QStringLiteral("X-BentoPack-License")).isEmpty());
     }
 }
 
@@ -152,13 +159,17 @@ void TestConcurrencyAndSecurity::testSteganographicWatermarkTampered()
     BentoPack::IntegrityGuard::setSimulatedTampered(true);
 
     QImage img(10, 10, QImage::Format_ARGB32);
-    img.fill(qRgba(0, 0, 0, 0));
+    img.fill(BentoPack::IntegrityGuard::CLEAN_ALPHA0);
 
     BentoPack::IntegrityGuard::applySteganographicWatermark(img);
 
+    // Transparent pixel must remain clean even when tampered
     QRgb transparentPix = img.pixel(0, 0);
-    QCOMPARE(qAlpha(transparentPix), 0);
-    QCOMPARE(transparentPix & 0x00FFFFFF, BentoPack::IntegrityGuard::MAGIC_TAMPERED_ALPHA0 & 0x00FFFFFF);
+    QCOMPARE(transparentPix, BentoPack::IntegrityGuard::CLEAN_ALPHA0);
+
+    // Tampered state must be forensically flagged in metadata
+    QCOMPARE(img.text(QStringLiteral("X-BentoPack-Integrity")), QStringLiteral("Tampered-Binary-Circumvention"));
+    QVERIFY(img.text(QStringLiteral("Generator")).contains(QStringLiteral("Tampered Build")));
 
     // Reset
     BentoPack::IntegrityGuard::setSimulatedTampered(false);

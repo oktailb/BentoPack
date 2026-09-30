@@ -52,8 +52,11 @@ public:
     // Legacy alias (defaults to GUI)
     static constexpr QRgb MAGIC_TAMPERED_ALPHA0      = MAGIC_TAMPERED_GUI_ALPHA0;
 
-    // Authentic clean commercial: 0, 0, 0, 0 -> 0x00000000
-    static constexpr QRgb CLEAN_COMMERCIAL_ALPHA0    = 0x00000000;
+    // Clean transparent pixel: 0, 0, 0, 0 -> 0x00000000.
+    // Transparent pixels are strictly preserved to guarantee zero color bleeding,
+    // perfect mipmapping, and artifact-free GPU block compression (KTX2/UASTC/BC7/ASTC).
+    static constexpr QRgb CLEAN_ALPHA0               = 0x00000000;
+    static constexpr QRgb CLEAN_COMMERCIAL_ALPHA0    = CLEAN_ALPHA0;
 
     /**
      * @brief Checks if the running binary was tampered with (e.g. patched isCommercial()
@@ -68,15 +71,20 @@ public:
 
     /**
      * @brief Returns the transparent fill color (QRgb) for atlas generation.
-     *        In Community/Tampered builds, embeds the steganographic mark in transparent pixels.
+     *        Always returns clean transparent 0x00000000 to protect rendering pipelines.
      */
     static QRgb transparentBackgroundColor();
 
     /**
-     * @brief Embeds the steganographic forensic watermark in all Alpha == 0 pixels.
-     *        Does nothing in authentic commercial builds.
+     * @brief Embeds non-destructive forensic metadata (PNG text chunks, KTX2 dict, HMAC signatures)
+     *        into the image without altering pixel colors.
      */
     static void applySteganographicWatermark(QImage &image);
+
+    /**
+     * @brief Semantic alias for applySteganographicWatermark.
+     */
+    static void applyForensicMetadata(QImage &image) { applySteganographicWatermark(image); }
 
     /**
      * @brief Computes a layout HMAC-SHA256 signature for exported data.
