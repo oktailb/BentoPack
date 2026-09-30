@@ -760,9 +760,12 @@ void AnimationController::updateScrubberState()
 
     if (m_frameIndicator) {
         if (total > 0) {
-            m_frameIndicator->setText(tr("KEY_FRAME_INDICATOR_FORMAT")
-                                          .arg(curr + 1)
-                                          .arg(total));
+            QString fmt = tr("KEY_FRAME_INDICATOR_FORMAT");
+            if (fmt.contains(QLatin1String("%1"))) {
+                m_frameIndicator->setText(fmt.arg(curr + 1).arg(total));
+            } else {
+                m_frameIndicator->setText(QStringLiteral("%1 / %2").arg(curr + 1).arg(total));
+            }
         } else {
             m_frameIndicator->setText(tr("KEY_NO_FRAMES"));
         }
