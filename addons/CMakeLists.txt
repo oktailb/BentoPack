@@ -56,3 +56,41 @@ install(DIRECTORY unity/
 )
 
 message ("Unity Addon Configured")
+
+# -------------------------------------------------------------------------
+# Unreal Engine 5 Plugin Packaging Target
+# -------------------------------------------------------------------------
+set(UNREAL_ADDON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/unreal")
+set(UNREAL_ADDON_STAGING_DIR "${CMAKE_CURRENT_BINARY_DIR}/addons_staging/unreal")
+set(UNREAL_ADDON_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/dist")
+set(UNREAL_ADDON_ZIP "${UNREAL_ADDON_DIST_DIR}/unreal-bentopack-plugin-${PROJECT_VERSION}.zip")
+
+add_custom_target(package_unreal_addon
+    COMMAND ${CMAKE_COMMAND}
+        -DSRC_DIR="${UNREAL_ADDON_SRC_DIR}"
+        -DSTAGING_DIR="${UNREAL_ADDON_STAGING_DIR}"
+        -DLICENSE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/LICENSE-ADDONS.md"
+        -DPACKAGE_VERSION="${PROJECT_VERSION}"
+        -DOUTPUT_ZIP="${UNREAL_ADDON_ZIP}"
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_unreal_addon.cmake"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    COMMENT "Packaging Unreal Engine 5 Plugin into ${UNREAL_ADDON_ZIP}..."
+    VERBATIM
+)
+
+install(DIRECTORY unreal/
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/bentopack/addons/unreal/BentoPack
+    COMPONENT bentopack
+    PATTERN "Intermediate" EXCLUDE
+    PATTERN "Binaries" EXCLUDE
+)
+
+message ("Unreal Engine 5 Addon Configured")
+
+# -------------------------------------------------------------------------
+# Meta-target to package all engine addons
+# -------------------------------------------------------------------------
+add_custom_target(package_all_addons
+    DEPENDS package_godot_addon package_unity_addon package_unreal_addon
+    COMMENT "Packaging all BentoPack engine plugins (Godot 4, Unity 6, Unreal Engine 5)..."
+)
