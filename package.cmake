@@ -18,9 +18,8 @@ set(CPACK_RPM_PACKAGE_GROUP "Applications/Graphics")
 set(CPACK_NSIS_DISPLAY_NAME "BentoPack Studio")
 set(CPACK_NSIS_PACKAGE_NAME "BentoPack Studio")
 set(CPACK_NSIS_MODIFY_PATH ON)
-file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/BentoPack/res/windows/BentoPack.ico" _nsis_icon)
-set(CPACK_NSIS_MUI_ICON "${_nsis_icon}")
-set(CPACK_NSIS_MUI_UNIICON "${_nsis_icon}")
+set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_LIST_DIR}/BentoPack/res/windows/BentoPack.ico")
+set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_LIST_DIR}/BentoPack/res/windows/BentoPack.ico")
 set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\bentopack.exe")
 set(CPACK_NSIS_MENU_LINKS
     "bin/bentopack.exe" "BentoPack Studio"
