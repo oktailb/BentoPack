@@ -1,3 +1,44 @@
+================================================================================
+BentoPack Dual-Licensing & Open-Core Notice
+================================================================================
+
+This repository is distributed under a dual-licensing / open-core architecture:
+
+1. OPEN SOURCE CORE COMPONENTS (Apache License, Version 2.0):
+   The fundamental packing algorithms, geometric slicing primitives, and core
+   data structures located in:
+     - BentoPack/src/core/
+     - BentoPack/include/core/
+     - BentoPack/src/project/
+     - BentoPack/include/project/
+   are licensed under the Apache License, Version 2.0 (reproduced below).
+
+2. SOURCE-AVAILABLE / PROPRIETARY COMPONENTS (BentoPack EULA):
+   The following modules, subsystems, and assets are NOT licensed under
+   Apache 2.0. They are governed exclusively by the BentoPack End-User License
+   Agreement (see plugins/LICENSE-PLUGINS.md):
+     - The Gatekeeper and License Management subsystem (BentoPack/include/license/,
+       BentoPack/src/license/, plugins/gatekeeper/);
+     - The Forensic Integrity and Copyright Management Information (CMI) engine
+       (IntegrityGuard, layout signature generators, and metadata injectors);
+     - All plugins, proprietary filters, tight polygon mesh packers, and engine
+       exporters located within the plugins/ directory;
+     - Pre-compiled binaries and official release packages (GUI and CLI).
+
+   Use of the Source-Available components is royalty-free for entities with
+   consolidated annual gross revenues below $1,000,000 USD. Commercial licenses
+   are mandatory above this threshold. Removal, alteration, or circumvention
+   of forensic CMI tags (X-BentoPack-*) is strictly prohibited and constitutes
+   a statutory violation under 17 U.S.C. § 1202, WIPO Copyright Treaty Art. 12,
+   and EU Directive 2009/24/EC.
+
+For complete terms governing Source-Available components, see:
+plugins/LICENSE-PLUGINS.md
+
+================================================================================
+Apache License, Version 2.0 (For Core Open-Source Components)
+================================================================================
+
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/

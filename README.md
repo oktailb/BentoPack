@@ -318,9 +318,18 @@ BentoPack bridges the gap between raw asset extraction/cleanup (historically han
 
 ---
 
-## 📄 License
+## 📄 Licensing & Dual-Distribution Model
 
-This project GUI and CLI are licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
-The plugins are licensed under defined [EULA](plugins/LICENSE-PLUGINS.md). Precompiled binaries are available for purchase on Stores.
+BentoPack operates under an **Open-Core & Source-Available** dual licensing architecture:
+
+* **Core Algorithmic Engine (Open Source — Apache License 2.0):**
+  The fundamental sprite-packing algorithms, geometric slicing primitives, and core data models are licensed under the permissive **Apache License 2.0**. See [LICENSE](LICENSE).
+* **Gatekeepers, Forensic Integrity & Proprietary Plugins (Source-Available — BentoPack EULA):**
+  The license gatekeepers (`plugins/gatekeeper/`, `BentoPack/src/license/`), the forensic integrity engine (`IntegrityGuard`), engine bridges, and proprietary plugins are governed by the [BentoPack EULA](plugins/LICENSE-PLUGINS.md).
+  - **Royalty-Free Tier:** Free for students, open-source contributors, and independent developers whose **consolidated annual gross revenue (including publisher/parent entities) is under $1,000,000 USD**.
+  - **Commercial Requirement:** Mandatory for entities or projects exceeding the $1,000,000 USD consolidated threshold.
+  - **Copyright Management Information (CMI):** Forensic metadata and layout signatures are protected under 17 U.S.C. § 1202 and international copyright treaties. Unauthorized stripping or circumvention is strictly prohibited.
+* **Convenience Binaries (Store Edition):**
+  Official pre-compiled binaries featuring 1-click zero-configuration installers and auto-updates are available for purchase on Steam, Itch.io, and Asset Stores for convenient desktop use.
 
 **Developer:** Vincent LECOQ
