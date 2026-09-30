@@ -180,5 +180,75 @@ namespace BentoPack.Editor
                 return false;
             }
         }
+
+        public const string RELEASES_URL = "https://github.com/oktailb/BentoPack/releases";
+
+        private static Process s_watchProcess = null;
+
+        public static bool IsWatchActive => s_watchProcess != null && !s_watchProcess.HasExited;
+        public static int WatchPid => IsWatchActive ? s_watchProcess.Id : -1;
+
+        public static bool StartWatchDaemon(string arguments, out int pid, out string error)
+        {
+            pid = -1;
+            error = "";
+
+            StopWatchDaemon();
+
+            string cli = FindCliPath();
+            if (string.IsNullOrEmpty(cli))
+            {
+                error = "bentopack-cli executable not found on PATH or in build directory.";
+                return false;
+            }
+
+            try
+            {
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = cli,
+                    Arguments = arguments,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                s_watchProcess = Process.Start(psi);
+                if (s_watchProcess != null && !s_watchProcess.HasExited)
+                {
+                    pid = s_watchProcess.Id;
+                    return true;
+                }
+                else
+                {
+                    error = "Failed to launch background daemon process.";
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+        }
+
+        public static void StopWatchDaemon()
+        {
+            if (s_watchProcess != null)
+            {
+                try
+                {
+                    if (!s_watchProcess.HasExited)
+                    {
+                        s_watchProcess.Kill();
+                    }
+                }
+                catch { }
+                finally
+                {
+                    s_watchProcess.Dispose();
+                    s_watchProcess = null;
+                }
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ Official Unity Package Manager (UPM) integration plugin for **BentoPack** — Na
   * Ready-to-use `AnimationClip` assets with frame curves sampled at exact FPS and loop settings.
 * **1-Click Project Window Context Menu**: Right-click on any `.bento` archive or sprite sheet (`.png`, `.webp`, `.jpg`) in Unity's Project Window to open directly in BentoPack Studio or re-pack instantly via CLI.
 * **Tight Mesh Sprite Player (`BentoMeshSprite`)**: Runtime component for frame-by-frame polygonal mesh animation with optional synchronized `PolygonCollider2D` hitbox tracing.
+* **Interactive Dashboard (`Window -> BentoPack Dashboard`)**: In-editor control center to pack raw texture atlases, configure Auto-Slice vs. Fixed Grid (Tile W/H), select packing algorithms (MaxRects / M8 Tight Polygon), and manage background watch daemons.
 * **Automatic CLI Bridge**: Communicates with `bentopack-cli` for automated packing and watch-mode workflows.
 
 ---

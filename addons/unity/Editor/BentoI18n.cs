@@ -545,6 +545,292 @@ namespace BentoPack.Editor
                 ["pt"] = "Malha Poligonal Justa (M8)",
                 ["es"] = "Malla Poligonal Ajustada (M8)",
                 ["de"] = "Eng anliegendes Polygon-Mesh (M8)"
+            },
+            ["dashboard_title"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Tableau de Bord BentoPack",
+                ["en"] = "BentoPack Dashboard",
+                ["ja"] = "BentoPack ダッシュボード",
+                ["zh"] = "BentoPack 仪表板",
+                ["ko"] = "BentoPack 대시보드",
+                ["pt"] = "Painel BentoPack",
+                ["es"] = "Panel BentoPack",
+                ["de"] = "BentoPack Dashboard"
+            },
+            ["source_atlas"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Atlas source ou Dossier",
+                ["en"] = "Source Atlas or Folder",
+                ["ja"] = "ソースアトラスまたはフォルダ",
+                ["zh"] = "源图集或文件夹",
+                ["ko"] = "소스 아틀라스 또는 폴더",
+                ["pt"] = "Atlas de Origem ou Pasta",
+                ["es"] = "Atlas de Origen o Carpeta",
+                ["de"] = "Quell-Atlas oder Ordner"
+            },
+            ["target_project"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Projet cible (.bento)",
+                ["en"] = "Target Project (.bento)",
+                ["ja"] = "ターゲットプロジェクト (.bento)",
+                ["zh"] = "目标工程 (.bento)",
+                ["ko"] = "대상 프로젝트 (.bento)",
+                ["pt"] = "Projeto de Destino (.bento)",
+                ["es"] = "Proyecto de Destino (.bento)",
+                ["de"] = "Ziel-Projekt (.bento)"
+            },
+            ["slice_label"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Mode de découpe",
+                ["en"] = "Slicing Mode",
+                ["ja"] = "スライスモード",
+                ["zh"] = "切片模式",
+                ["ko"] = "슬라이스 모드",
+                ["pt"] = "Modo de Fatiamento",
+                ["es"] = "Modo de Corte",
+                ["de"] = "Slice-Modus"
+            },
+            ["slice_mode_auto"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Découpe Auto (Transparence / Silhouettes)",
+                ["en"] = "Auto-Slice (Transparency / Silhouettes)",
+                ["ja"] = "自動スライス (透過 / シルエット)",
+                ["zh"] = "自动切片（透明度 / 轮廓）",
+                ["ko"] = "자동 슬라이스 (투명도 / 실루엣)",
+                ["pt"] = "Fatiamento Automático (Transparência / Silhuetas)",
+                ["es"] = "Corte Automático (Transparencia / Siluetas)",
+                ["de"] = "Auto-Slice (Transparenz / Silhouetten)"
+            },
+            ["slice_mode_grid"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Grille fixe (Tuiles régulières)",
+                ["en"] = "Fixed Grid (Regular Tiles)",
+                ["ja"] = "固定グリッド (均等タイル)",
+                ["zh"] = "固定网格（规则瓦片）",
+                ["ko"] = "고정 그리드 (균등 타일)",
+                ["pt"] = "Grade Fixa (Ladrilhos Regulares)",
+                ["es"] = "Cuadrícula Fija (Mosaicos Regulares)",
+                ["de"] = "Festes Raster (Reguläre Kacheln)"
+            },
+            ["slice_mode_files"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Images individuelles (Dossier)",
+                ["en"] = "Loose Images (Folder)",
+                ["ja"] = "個別画像 (フォルダ)",
+                ["zh"] = "单独图像（文件夹）",
+                ["ko"] = "개별 이미지 (폴더)",
+                ["pt"] = "Imagens Individuais (Pasta)",
+                ["es"] = "Imágenes Sueltas (Carpeta)",
+                ["de"] = "Einzelne Bilder (Ordner)"
+            },
+            ["packing_label"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Algorithme d'empaquetage",
+                ["en"] = "Packing Algorithm",
+                ["ja"] = "パッキングアルゴリズム",
+                ["zh"] = "打包算法",
+                ["ko"] = "패킹 알고리즘",
+                ["pt"] = "Algoritmo de Empacotamento",
+                ["es"] = "Algoritmo de Empaquetado",
+                ["de"] = "Packing-Algorithmus"
+            },
+            ["algo_maxrects"] = new Dictionary<string, string>
+            {
+                ["fr"] = "MaxRects (Optimal BSSF)",
+                ["en"] = "MaxRects (Optimal BSSF)",
+                ["ja"] = "MaxRects (最適 BSSF)",
+                ["zh"] = "MaxRects（最优 BSSF）",
+                ["ko"] = "MaxRects (최적 BSSF)",
+                ["pt"] = "MaxRects (Ideal BSSF)",
+                ["es"] = "MaxRects (Óptimo BSSF)",
+                ["de"] = "MaxRects (Optimal BSSF)"
+            },
+            ["algo_m8"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Maillage Serré M8 (Anti-Overdraw)",
+                ["en"] = "Tight Polygonal Mesh M8 (Anti-Overdraw)",
+                ["ja"] = "タイトポリゴンメッシュ M8 (オーバードロー削減)",
+                ["zh"] = "紧密多边形网格 M8（减少过度绘制）",
+                ["ko"] = "밀착 폴리곤 메시 M8 (오버드로우 절감)",
+                ["pt"] = "Malha Poligonal Justa M8 (Anti-Overdraw)",
+                ["es"] = "Malla Poligonal Ajustada M8 (Anti-Overdraw)",
+                ["de"] = "Enges Polygon-Mesh M8 (Overdraw-Reduktion)"
+            },
+            ["watcher_mode"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Démon Watcher (Re-pack automatique à chaque modification)",
+                ["en"] = "Watch Daemon (Auto-repack upon file changes)",
+                ["ja"] = "監視デーモン (ファイル変更時に自動再パック)",
+                ["zh"] = "监控守护进程（文件修改时自动重新打包）",
+                ["ko"] = "감시 데몬 (파일 변경 시 자동 재패킹)",
+                ["pt"] = "Daemon Watcher (Reempacotamento automático ao modificar)",
+                ["es"] = "Daemon Watcher (Reempaquetado automático al modificar)",
+                ["de"] = "Watch-Daemon (Automatisches Re-Packing bei Dateiänderung)"
+            },
+            ["process_btn"] = new Dictionary<string, string>
+            {
+                ["fr"] = "⚡ Traiter & Empaqueter l'Atlas",
+                ["en"] = "⚡ Process & Pack Atlas",
+                ["ja"] = "⚡ アトラスを処理してパック",
+                ["zh"] = "⚡ 处理并打包图集",
+                ["ko"] = "⚡ 아틀라스 처리 및 패킹",
+                ["pt"] = "⚡ Processar e Empacotar Atlas",
+                ["es"] = "⚡ Procesar y Empaquetar Atlas",
+                ["de"] = "⚡ Atlas verarbeiten & packen"
+            },
+            ["stop_watcher"] = new Dictionary<string, string>
+            {
+                ["fr"] = "⏹ Arrêter le Watcher",
+                ["en"] = "⏹ Stop Watcher",
+                ["ja"] = "⏹ 監視を停止",
+                ["zh"] = "⏹ 停止监控",
+                ["ko"] = "⏹ 감시 중지",
+                ["pt"] = "⏹ Parar Monitor",
+                ["es"] = "⏹ Detener Monitor",
+                ["de"] = "⏹ Watcher stoppen"
+            },
+            ["status_ready"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Prêt.",
+                ["en"] = "Ready.",
+                ["ja"] = "準備完了。",
+                ["zh"] = "就绪。",
+                ["ko"] = "준비 완료.",
+                ["pt"] = "Pronto.",
+                ["es"] = "Listo.",
+                ["de"] = "Bereit."
+            },
+            ["status_processing"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Traitement en cours avec bentopack-cli...",
+                ["en"] = "Processing with bentopack-cli...",
+                ["ja"] = "bentopack-cli で処理中...",
+                ["zh"] = "正在使用 bentopack-cli 处理...",
+                ["ko"] = "bentopack-cli로 처리 중...",
+                ["pt"] = "Processando com bentopack-cli...",
+                ["es"] = "Procesando con bentopack-cli...",
+                ["de"] = "Verarbeitung mit bentopack-cli..."
+            },
+            ["status_watcher_active"] = new Dictionary<string, string>
+            {
+                ["fr"] = "👁️ Démon Watcher actif (PID : {0})",
+                ["en"] = "👁️ Watch Daemon active (PID: {0})",
+                ["ja"] = "👁️ 監視デーモン稼働中 (PID : {0})",
+                ["zh"] = "👁️ 监控守护进程运行中 (PID : {0})",
+                ["ko"] = "👁️ 감시 데몬 실행 중 (PID : {0})",
+                ["pt"] = "👁️ Daemon Watcher ativo (PID: {0})",
+                ["es"] = "👁️ Daemon Watcher activo (PID: {0})",
+                ["de"] = "👁️ Watch-Daemon aktiv (PID: {0})"
+            },
+            ["status_watcher_stopped"] = new Dictionary<string, string>
+            {
+                ["fr"] = "⏹ Démon Watcher arrêté.",
+                ["en"] = "⏹ Watch Daemon stopped.",
+                ["ja"] = "⏹ 監視デーモンが停止しました。",
+                ["zh"] = "⏹ 监控守护进程已停止。",
+                ["ko"] = "⏹ 감시 데몬이 중지되었습니다.",
+                ["pt"] = "⏹ Daemon Watcher parado.",
+                ["es"] = "⏹ Daemon Watcher detenido.",
+                ["de"] = "⏹ Watch-Daemon gestoppt."
+            },
+            ["status_no_watcher"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Aucun démon watcher actif.",
+                ["en"] = "No active watch daemon.",
+                ["ja"] = "稼働中の監視デーモンはありません。",
+                ["zh"] = "没有正在运行的监控守护进程。",
+                ["ko"] = "실행 중인 감시 데몬이 없습니다.",
+                ["pt"] = "Nenhum daemon watcher ativo.",
+                ["es"] = "Ningún daemon watcher activo.",
+                ["de"] = "Kein aktiver Watch-Daemon."
+            },
+            ["status_success"] = new Dictionary<string, string>
+            {
+                ["fr"] = "✓ Empaquetage réussi de '{0}' !",
+                ["en"] = "✓ Successfully packed '{0}'!",
+                ["ja"] = "✓ '{0}' のパッキングが完了しました！",
+                ["zh"] = "✓ 成功打包 '{0}'！",
+                ["ko"] = "✓ '{0}' 패킹 성공!",
+                ["pt"] = "✓ '{0}' empacotado com sucesso!",
+                ["es"] = "✓ ¡'{0}' empaquetado con éxito!",
+                ["de"] = "✓ '{0}' erfolgreich gepackt!"
+            },
+            ["status_error"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Erreur lors du traitement : {0}",
+                ["en"] = "Error during processing: {0}",
+                ["ja"] = "処理エラー : {0}",
+                ["zh"] = "处理错误 : {0}",
+                ["ko"] = "처리 오류 : {0}",
+                ["pt"] = "Erro durante o processamento: {0}",
+                ["es"] = "Error durante el procesamiento: {0}",
+                ["de"] = "Fehler bei der Verarbeitung: {0}"
+            },
+            ["cli_ok"] = new Dictionary<string, string>
+            {
+                ["fr"] = "✓ CLI BentoPack : {0}",
+                ["en"] = "✓ BentoPack CLI: {0}",
+                ["ja"] = "✓ BentoPack CLI : {0}",
+                ["zh"] = "✓ BentoPack CLI : {0}",
+                ["ko"] = "✓ BentoPack CLI : {0}",
+                ["pt"] = "✓ BentoPack CLI: {0}",
+                ["es"] = "✓ BentoPack CLI: {0}",
+                ["de"] = "✓ BentoPack CLI: {0}"
+            },
+            ["cli_not_found"] = new Dictionary<string, string>
+            {
+                ["fr"] = "⚠️ CLI BentoPack introuvable",
+                ["en"] = "⚠️ BentoPack CLI not found",
+                ["ja"] = "⚠️ BentoPack CLI が見つかりません",
+                ["zh"] = "⚠️ 未找到 BentoPack CLI",
+                ["ko"] = "⚠️ BentoPack CLI를 찾을 수 없음",
+                ["pt"] = "⚠️ BentoPack CLI não encontrado",
+                ["es"] = "⚠️ BentoPack CLI no encontrado",
+                ["de"] = "⚠️ BentoPack CLI nicht gefunden"
+            },
+            ["download_cli"] = new Dictionary<string, string>
+            {
+                ["fr"] = "⬇ Télécharger la CLI",
+                ["en"] = "⬇ Download CLI",
+                ["ja"] = "⬇ CLI をダウンロード",
+                ["zh"] = "⬇ 下载 CLI",
+                ["ko"] = "⬇ CLI 다운로드",
+                ["pt"] = "⬇ Baixar CLI",
+                ["es"] = "⬇ Descargar CLI",
+                ["de"] = "⬇ CLI herunterladen"
+            },
+            ["open_gui"] = new Dictionary<string, string>
+            {
+                ["fr"] = "🖥 BentoPack Studio",
+                ["en"] = "🖥 BentoPack Studio",
+                ["ja"] = "🖥 BentoPack Studio",
+                ["zh"] = "🖥 BentoPack Studio",
+                ["ko"] = "🖥 BentoPack Studio",
+                ["pt"] = "🖥 BentoPack Studio",
+                ["es"] = "🖥 BentoPack Studio",
+                ["de"] = "🖥 BentoPack Studio"
+            },
+            ["error_specify_source"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Veuillez spécifier un fichier ou dossier source.",
+                ["en"] = "Please specify a source file or folder.",
+                ["ja"] = "ソースファイルまたはフォルダを指定してください。",
+                ["zh"] = "请指定源文件或文件夹。",
+                ["ko"] = "소스 파일 또는 폴더를 지정하세요.",
+                ["pt"] = "Por favor, especifique um arquivo ou pasta de origem.",
+                ["es"] = "Por favor, especifique un archivo o carpeta de origen.",
+                ["de"] = "Bitte geben Sie eine Quelldatei oder einen Quellordner an."
+            },
+            ["browse"] = new Dictionary<string, string>
+            {
+                ["fr"] = "Parcourir...",
+                ["en"] = "Browse...",
+                ["ja"] = "参照...",
+                ["zh"] = "浏览...",
+                ["ko"] = "찾아보기...",
+                ["pt"] = "Procurar...",
+                ["es"] = "Examinar...",
+                ["de"] = "Durchsuchen..."
             }
         };
     }

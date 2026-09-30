@@ -557,5 +557,105 @@ const TRANSLATIONS: Dictionary = {
 		"pt": "BentoPack : Exibir Informações da CLI",
 		"es": "BentoPack : Mostrar Información de la CLI",
 		"de": "BentoPack : CLI-Info anzeigen"
+	},
+	"controller_title": {
+		"en": "🍱 BentoMeshSprite Controller",
+		"fr": "🍱 Contrôleur BentoMeshSprite",
+		"ja": "🍱 BentoMeshSprite コントローラー",
+		"zh": "🍱 BentoMeshSprite 控制器",
+		"ko": "🍱 BentoMeshSprite 컨트롤러",
+		"pt": "🍱 Controlador BentoMeshSprite",
+		"es": "🍱 Controlador BentoMeshSprite",
+		"de": "🍱 BentoMeshSprite Controller"
+	},
+	"active_animation": {
+		"en": "Animation:",
+		"fr": "Animation :",
+		"ja": "アニメーション :",
+		"zh": "动画 :",
+		"ko": "애니메이션 :",
+		"pt": "Animação:",
+		"es": "Animación:",
+		"de": "Animation:"
+	},
+	"play": {
+		"en": "▶ Play",
+		"fr": "▶ Lecture",
+		"ja": "▶ 再生",
+		"zh": "▶ 播放",
+		"ko": "▶ 재생",
+		"pt": "▶ Reproduzir",
+		"es": "▶ Reproducir",
+		"de": "▶ Abspielen"
+	},
+	"pause": {
+		"en": "⏸ Pause",
+		"fr": "⏸ Pause",
+		"ja": "⏸ 一時停止",
+		"zh": "⏸ 暂停",
+		"ko": "⏸ 일시정지",
+		"pt": "⏸ Pausa",
+		"es": "⏸ Pausa",
+		"de": "⏸ Pause"
+	},
+	"stop": {
+		"en": "⏹ Stop",
+		"fr": "⏹ Arrêt",
+		"ja": "⏹ 停止",
+		"zh": "⏹ 停止",
+		"ko": "⏹ 정지",
+		"pt": "⏹ Parar",
+		"es": "⏹ Detener",
+		"de": "⏹ Stopp"
+	},
+	"prev_frame": {
+		"en": "⏮ Prev",
+		"fr": "⏮ Préc.",
+		"ja": "⏮ 前へ",
+		"zh": "⏮ 上一帧",
+		"ko": "⏮ 이전",
+		"pt": "⏮ Anterior",
+		"es": "⏮ Anterior",
+		"de": "⏮ Zurück"
+	},
+	"next_frame": {
+		"en": "⏭ Next",
+		"fr": "⏭ Suiv.",
+		"ja": "⏭ 次へ",
+		"zh": "⏭ 下一帧",
+		"ko": "⏭ 다음",
+		"pt": "⏭ Próximo",
+		"es": "⏭ Siguiente",
+		"de": "⏭ Vor"
+	},
+	"frame_label": {
+		"en": "Frame: %d / %d",
+		"fr": "Image : %d / %d",
+		"ja": "フレーム : %d / %d",
+		"zh": "帧 : %d / %d",
+		"ko": "프레임 : %d / %d",
+		"pt": "Quadro : %d / %d",
+		"es": "Fotograma : %d / %d",
+		"de": "Frame: %d / %d"
+	},
+	"hitbox_synced": {
+		"en": "🎯 Hitbox Synchronized (CollisionPolygon2D)",
+		"fr": "🎯 Hitbox Synchronisée (CollisionPolygon2D)",
+		"ja": "🎯 ヒットボックス同期中 (CollisionPolygon2D)",
+		"zh": "🎯 碰撞箱已同步 (CollisionPolygon2D)",
+		"ko": "🎯 히트박스 동기화됨 (CollisionPolygon2D)",
+		"pt": "🎯 Hitbox Sincronizada (CollisionPolygon2D)",
+		"es": "🎯 Hitbox Sincronizada (CollisionPolygon2D)",
+		"de": "🎯 Hitbox synchronisiert (CollisionPolygon2D)"
+	},
+	"tight_mesh_active": {
+		"en": "⚡ M8 Tight Polygonal Mesh (Anti-Overdraw)",
+		"fr": "⚡ Maillage Serré M8 (Anti-Overdraw)",
+		"ja": "⚡ タイトポリゴンメッシュ M8 (オーバードロー削減)",
+		"zh": "⚡ 紧密多边形网格 M8 (减少过度绘制)",
+		"ko": "⚡ 밀착 폴리곤 메시 M8 (오버드로우 절감)",
+		"pt": "⚡ Malha Poligonal Justa M8 (Anti-Overdraw)",
+		"es": "⚡ Malla Poligonal Ajustada M8 (Anti-Overdraw)",
+		"de": "⚡ Enges Polygon-Mesh M8 (Overdraw-Reduktion)"
 	}
 }
