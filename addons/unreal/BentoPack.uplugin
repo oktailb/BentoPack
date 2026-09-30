@@ -1,0 +1,35 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.11.0",
+	"FriendlyName": "BentoPack 2D Sprite & Tight Mesh Importer",
+	"Description": "Zero-configuration importer for BentoPack (.bento & .paper2d.json) archives. Automatically generates UPaperSprite assets with M8 tight polygonal render geometry (60-80% GPU overdraw reduction), dynamic collision polygons, and UPaperFlipbook animations.",
+	"Category": "2D",
+	"CreatedBy": "BentoPack Team",
+	"CreatedByURL": "https://github.com/oktailb/BentoPack",
+	"DocsURL": "https://github.com/oktailb/BentoPack/tree/main/addons/unreal",
+	"MarketplaceURL": "",
+	"SupportURL": "https://github.com/oktailb/BentoPack/issues",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "BentoPack",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "BentoPackEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "Paper2D",
+			"Enabled": true
+		}
+	]
+}
