@@ -80,7 +80,12 @@ func _build_ui() -> void:
 	header_hbox.add_child(lang_sel)
 
 	_open_gui_btn = Button.new()
-	_open_gui_btn.pressed.connect(func(): BentoPackCliBridge.open_in_editor("res://"))
+	_open_gui_btn.pressed.connect(func():
+		var target := _target_bento_edit.text.strip_edges() if _target_bento_edit != null else ""
+		if target.is_empty() and _source_path_edit != null:
+			target = _source_path_edit.text.strip_edges()
+		BentoPackCliBridge.open_in_editor(target)
+	)
 	header_hbox.add_child(_open_gui_btn)
 
 	main_vbox.add_child(header_hbox)

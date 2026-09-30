@@ -71,7 +71,7 @@ func open_dock_for_file(path: String) -> void:
 
 
 func _on_open_editor_menu() -> void:
-	BentoPackCliBridge.open_in_editor("res://")
+	BentoPackCliBridge.open_in_editor("")
 
 func _on_show_cli_info() -> void:
 	var cli_path := BentoPackCliBridge.find_cli_path()

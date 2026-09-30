@@ -119,19 +119,47 @@ static func find_gui_path() -> String:
 	return ""
 
 ## Opens a project or image in the BentoPack desktop editor.
-static func open_in_editor(file_path: String) -> Error:
+static func open_in_editor(file_path: String = "") -> Error:
 	var gui_path := find_gui_path()
 	if gui_path.is_empty():
 		push_warning("BentoPack: Could not locate BentoPack GUI binary.")
 		return ERR_FILE_NOT_FOUND
 
-	var global_target := ProjectSettings.globalize_path(file_path)
-	var pid := OS.create_process(gui_path, [global_target])
+	var args: Array[String] = []
+	if not file_path.is_empty() and file_path != "res://" and file_path != "res:/":
+		var global_target := ProjectSettings.globalize_path(file_path)
+		if FileAccess.file_exists(global_target):
+			args.append(global_target)
+		elif DirAccess.dir_exists_absolute(global_target):
+			var bento_file := _find_bento_in_dir(global_target)
+			if not bento_file.is_empty():
+				args.append(bento_file)
+			else:
+				print("[BentoPack] Launching Desktop Editor without file arguments (folder given: %s)." % file_path)
+		elif not global_target.get_extension().is_empty():
+			args.append(global_target)
+
+	var pid := OS.create_process(gui_path, args)
 	if pid < 0:
 		push_error("BentoPack: Failed to launch process: " + gui_path)
 		return ERR_CANT_CREATE
 
 	return OK
+
+static func _find_bento_in_dir(dir_path: String) -> String:
+	var dir := DirAccess.open(dir_path)
+	if dir != null:
+		dir.list_dir_begin()
+		var file_name := dir.get_next()
+		var bento_files: Array[String] = []
+		while not file_name.is_empty():
+			if not dir.current_is_dir() and file_name.to_lower().ends_with(".bento"):
+				bento_files.append(dir_path.path_join(file_name))
+			file_name = dir.get_next()
+		dir.list_dir_end()
+		if not bento_files.is_empty():
+			return bento_files[0]
+	return ""
 
 ## Runs a headless CLI command and returns exit code and stdout/stderr output.
 static func run_cli(args: Array[String]) -> Dictionary:
