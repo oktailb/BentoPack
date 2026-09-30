@@ -117,7 +117,11 @@ jobs:
         shell: msys2 {0}
         run: |
           cd build
-          cpack -G "ZIP;NSIS"
+          cpack -G "ZIP;NSIS" --verbose || {
+            echo "::error::CPack failed. Displaying NSISOutput.log:"
+            cat _CPack_Packages/win64/NSIS/NSISOutput.log 2>/dev/null || true
+            exit 1
+          }
           ls -lah BentoPack-*.*
 
       - name: Upload Windows Standalone Packages

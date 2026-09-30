@@ -20,7 +20,8 @@ set(CPACK_NSIS_PACKAGE_NAME "BentoPack Studio")
 set(CPACK_NSIS_MODIFY_PATH ON)
 set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_LIST_DIR}/BentoPack/res/windows/BentoPack.ico")
 set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_LIST_DIR}/BentoPack/res/windows/BentoPack.ico")
-set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\bentopack.exe")
+
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\bentopack.exe")
 set(CPACK_NSIS_MENU_LINKS
     "bin/bentopack.exe" "BentoPack Studio"
     "bin/bentopack-cli.exe" "BentoPack CLI"
@@ -61,5 +62,7 @@ set(CPACK_COMPONENT_BENTOPACK_DISPLAY_NAME "BentoPack Application and Plugins")
 set(CPACK_COMPONENT_BENTOPACK-DEV_DISPLAY_NAME "BentoPack Development SDK (Headers & CMake)")
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_RPM_COMPONENT_INSTALL ON)
+# Pour NSIS : soit désactiver le component install pour avoir un setup .exe monolithique propre :
+set(CPACK_NSIS_COMPONENT_INSTALL OFF)
 
 include(CPack)
