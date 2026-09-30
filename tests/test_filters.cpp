@@ -680,7 +680,7 @@ void TestFilters::testAboutDialogDarkModeAndPricing()
     QVERIFY(htmlEn.contains("Target:"));
 
     // Test dynamic multilingual pricing loading in Japanese
-    LocalizationManager::instance().setLanguage(QStringLiteral("ja_JA"));
+    LocalizationManager::instance().setLanguage(QStringLiteral("ja_JP"));
     AboutDialog dlgJa;
     QTabWidget *tabsJa = dlgJa.findChild<QTabWidget*>();
     QVERIFY(tabsJa != nullptr);
