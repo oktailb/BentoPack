@@ -24,17 +24,24 @@ public:
     // Plugin metadata
     QString id() const override { return QStringLiteral("gif_extractor"); }
     QString displayName() const override { return QStringLiteral("Animated GIF"); }
-    QString description() const override { return QStringLiteral("Animated GIF format with frame sequence extraction."); }
-    QVersionNumber version() const override { return QVersionNumber(1, 1, 0); }
+    QString description() const override { return QStringLiteral("Animated GIF format with frame sequence extraction and export."); }
+    QVersionNumber version() const override { return QVersionNumber(1, 2, 0); }
     QStringList supportedExtensions() const override {
         return { QStringLiteral("gif") };
     }
     Capabilities capabilities() const override {
-        return CanImport | SupportsAnimations;
+        return CanImport | CanExport | SupportsAnimations;
     }
 
     bool canDecode(const QString &filePath) const override;
     bool read(const QString &filePath, SpriteDocument &outDoc, ExtractorError *error = nullptr) override;
+    bool write(const QString &filePath, const SpriteDocument &inDoc, const ExportOptions &options, ExtractorError *error = nullptr) override;
+
+private:
+    bool writeSingleAnimation(const QString &targetFilePath,
+                              const SpriteDocument &doc,
+                              const SpriteAnimation &anim,
+                              ExtractorError *error);
 };
 
 #endif // GIFEXTRACTOR_H

@@ -3,6 +3,7 @@
 #include <QTemporaryDir>
 #include <QFileInfo>
 #include <QImage>
+#include <QImageReader>
 #include <QPainter>
 #include <QElapsedTimer>
 #include <QDebug>
@@ -28,6 +29,7 @@ private slots:
     void testJsonExtractorReadWrite();
     void testGodotExtractorReadWrite();
     void testGifExtractorRead();
+    void testGifExtractorWriteMultiAnimations();
     void testErrorHandlingNonExistentFile();
     void testErrorHandlingCorruptedData();
     void testExtractToImagesEquivalence();
@@ -89,6 +91,7 @@ void TestExtractors::testExtractorRegistryBasics()
     QString saveFilters = reg.saveFilterString();
     QVERIFY(saveFilters.contains(QStringLiteral("*.json")));
     QVERIFY(saveFilters.contains(QStringLiteral("*.tres")));
+    QVERIFY(saveFilters.contains(QStringLiteral("*.gif")));
 }
 
 void TestExtractors::testSpriteExtractorCapabilities()
@@ -263,6 +266,104 @@ void TestExtractors::testGifExtractorRead()
     QVERIFY(!doc.atlas().isNull());
     QVERIFY(doc.frameCount() > 1);
     QVERIFY(doc.hasAnimation(QStringLiteral("default")));
+}
+
+void TestExtractors::testGifExtractorWriteMultiAnimations()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    SpriteDocument doc;
+    doc.setFilePath(tempDir.filePath(QStringLiteral("myproject.bento")));
+
+    // Create 4 dummy frames with transparency and distinct shapes
+    QList<QImage> frames;
+    QList<SpriteBox> boxes;
+    for (int i = 0; i < 4; ++i) {
+        QImage img(32, 32, QImage::Format_RGBA8888);
+        img.fill(Qt::transparent);
+        QPainter p(&img);
+        p.setBrush(QColor(50 * i + 50, 100, 200));
+        p.drawRect(i * 4, i * 4, 16, 16);
+        p.end();
+
+        SpriteBox box(QRect(i * 32, 0, 32, 32));
+        box.index = i;
+        frames.append(img);
+        boxes.append(box);
+    }
+    // Define a polygon on box 0 cutting the frame in half diagonally
+    QPolygonF poly;
+    poly << QPointF(0, 0) << QPointF(32, 0) << QPointF(0, 32);
+    boxes[0].polygon = poly;
+    boxes[0].hasPolygonMesh = true;
+
+    doc.setFrames(frames, boxes);
+
+    // Add 3 animations:
+    // 1. "idle" : loop mode Loop, fps = 10 (100ms per frame)
+    doc.addAnimation(QStringLiteral("idle"), {0, 1}, 10, SpriteAnimation::Loop);
+
+    // 2. "attack" : loop mode Once, fps = 20 (50ms per frame)
+    doc.addAnimation(QStringLiteral("attack"), {1, 2, 3}, 20, SpriteAnimation::Once);
+
+    // 3. "walk" : loop mode PingPong, fps = 10, sequence {0, 1, 2} -> PingPong should produce {0, 1, 2, 1}
+    doc.addAnimation(QStringLiteral("walk"), {0, 1, 2}, 10, SpriteAnimation::PingPong);
+
+    GifExtractor extractor;
+    QVERIFY(extractor.capabilities().testFlag(Extractor::CanExport));
+
+    QString exportTarget = tempDir.filePath(QStringLiteral("myproject.gif"));
+    ExtractorError err;
+    bool ok = extractor.write(exportTarget, doc, ExportOptions{}, &err);
+    QVERIFY2(ok, qPrintable(err.toString()));
+
+    // Verify all 3 files exist: myproject_idle.gif, myproject_attack.gif, myproject_walk.gif
+    QString idleGif = tempDir.filePath(QStringLiteral("myproject_idle.gif"));
+    QString attackGif = tempDir.filePath(QStringLiteral("myproject_attack.gif"));
+    QString walkGif = tempDir.filePath(QStringLiteral("myproject_walk.gif"));
+
+    QVERIFY2(QFile::exists(idleGif), qPrintable(idleGif));
+    QVERIFY2(QFile::exists(attackGif), qPrintable(attackGif));
+    QVERIFY2(QFile::exists(walkGif), qPrintable(walkGif));
+
+    // Verify "idle" GIF content (and that frame 0 is clipped by polygon)
+    {
+        QImageReader reader(idleGif);
+        QVERIFY(reader.canRead());
+        QCOMPARE(reader.imageCount(), 2);
+        QImage f0 = reader.read();
+        QVERIFY(!f0.isNull());
+        int delay = reader.nextImageDelay();
+        QCOMPARE(delay, 100); // 10 fps -> 100 ms
+
+        // Pixel inside polygon (2, 2) should be opaque
+        QVERIFY(f0.pixelColor(2, 2).alpha() > 100);
+        // Pixel outside polygon (30, 30) should be transparent (clipped)
+        QCOMPARE(f0.pixelColor(30, 30).alpha(), 0);
+    }
+
+    // Verify "attack" GIF content
+    {
+        QImageReader reader(attackGif);
+        QVERIFY(reader.canRead());
+        QCOMPARE(reader.imageCount(), 3);
+        QImage f0 = reader.read();
+        QVERIFY(!f0.isNull());
+        int delay = reader.nextImageDelay();
+        QCOMPARE(delay, 50); // 20 fps -> 50 ms
+    }
+
+    // Verify "walk" PingPong GIF content (0, 1, 2 -> 0, 1, 2, 1 = 4 frames)
+    {
+        QImageReader reader(walkGif);
+        QVERIFY(reader.canRead());
+        QCOMPARE(reader.imageCount(), 4);
+        QImage f0 = reader.read();
+        QVERIFY(!f0.isNull());
+        int delay = reader.nextImageDelay();
+        QCOMPARE(delay, 100); // 10 fps -> 100 ms
+    }
 }
 
 void TestExtractors::testErrorHandlingNonExistentFile()

@@ -72,7 +72,7 @@ Les packages d'addons moteur et l'application autonome BentoPack sont entièreme
 | Plugin | Extensions | Import | Export | Spécificités & Rôle dans le Pipeline |
 |---|---|:---:|:---:|---|
 | **`spritesheet`** | `.png`, `.webp`, `.jpg`, `.jpeg`, `.bmp`, `.ktx2`, `.basis` | ✅ | ✅ | Découpe automatique par seuillage alpha & tolérance, smart crop, compression VRAM GPU matérielle (KTX2 UASTC/ETC1S, Basis). |
-| **`gif`** | `.gif` | ✅ | ❌ | Import de séquences animées avec timings (FPS) et décomposition des frames. |
+| **`gif`** | `.gif` | ✅ | ✅ | Import et export de séquences animées multi-animations (`projectname_animationname.gif`) avec timings FPS, loop modes (Loop, Once, Ping-Pong) et transparence. |
 | **`json`** | `.json` | ✅ | ✅ | Standard TexturePacker (Hash & Array) + Aseprite (`frameTags` convertis nativement en animations BentoPack avec leurs `loop_mode`). Interopérable d'emblée avec Phaser 3, PixiJS, Bevy, Raylib, Defold. |
 | **`godot`** | `.tres` | ✅ | ✅ | Format texte natif Godot 4.x (`SpriteFrames`) avec sous-ressources `AtlasTexture`, animations et atlas compagnon. |
 | **`unity`** | `.unity.json`, `.json` | ✅ | ✅ | Descripteur de maillage serré (*Tight Sprite Mesh*) injectant sommets, UVs et triangles dans `Sprite.OverrideGeometry`. |

@@ -6,8 +6,24 @@
 #include "packer/atlaspacker.h"
 #include <QImageReader>
 #include <QFileInfo>
+#include <QDir>
+#include <QFile>
+#include <QPainter>
 #include <QDebug>
 #include <cmath>
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
+#define MSF_GIF_IMPL
+#include "msf_gif.h"
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 GifExtractor::GifExtractor(QObject *parent)
     : Extractor(parent)
@@ -118,5 +134,216 @@ bool GifExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extract
     setProgress(100);
     setStatusMessage(tr("Extracted %1 GIF frames").arg(frameImages.size()));
     emit extractionFinished(frameImages.size());
+    return true;
+}
+
+bool GifExtractor::write(const QString &filePath, const SpriteDocument &inDoc, const ExportOptions &options, ExtractorError *error)
+{
+    Q_UNUSED(options);
+
+    if (inDoc.frameCount() == 0) {
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("No frames in document to export.");
+            error->filePath = filePath;
+        }
+        return false;
+    }
+
+    QFileInfo fi(filePath);
+    QDir dir = fi.dir();
+    if (!dir.exists()) {
+        dir.mkpath(QStringLiteral("."));
+    }
+
+    QString projectName = inDoc.projectName();
+    if (projectName.isEmpty() || projectName == QStringLiteral("untitled")) {
+        projectName = fi.completeBaseName();
+    }
+    if (projectName.isEmpty()) {
+        projectName = QStringLiteral("project");
+    }
+
+    // Récupérer la liste des animations à exporter
+    QList<SpriteAnimation> animationsToExport;
+    const auto &docAnims = inDoc.animations();
+    if (!docAnims.isEmpty()) {
+        animationsToExport = docAnims.values();
+    } else {
+        SpriteAnimation defAnim;
+        defAnim.name = QStringLiteral("default");
+        for (int i = 0; i < inDoc.frameCount(); ++i) {
+            defAnim.frameIndices.append(i);
+        }
+        defAnim.fps = 12;
+        defAnim.loop = true;
+        defAnim.loopMode = SpriteAnimation::Loop;
+        animationsToExport.append(defAnim);
+    }
+
+    int total = animationsToExport.size();
+    for (int i = 0; i < total; ++i) {
+        const SpriteAnimation &anim = animationsToExport.at(i);
+        setStatusMessage(tr("Exporting GIF animation %1 (%2/%3)...").arg(anim.name).arg(i + 1).arg(total));
+        setProgress(qRound(100.0 * i / total));
+
+        // Format requis : projectname_animationname.gif
+        QString outFileName = QStringLiteral("%1_%2.gif").arg(projectName, anim.name);
+        QString targetPath = dir.filePath(outFileName);
+
+        if (!writeSingleAnimation(targetPath, inDoc, anim, error)) {
+            return false;
+        }
+    }
+
+    setProgress(100);
+    setStatusMessage(tr("Exported %1 GIF animation(s) successfully.").arg(total));
+    return true;
+}
+
+bool GifExtractor::writeSingleAnimation(const QString &targetFilePath,
+                                        const SpriteDocument &doc,
+                                        const SpriteAnimation &anim,
+                                        ExtractorError *error)
+{
+    QList<int> frameSeq;
+    if (anim.frameIndices.isEmpty()) {
+        for (int i = 0; i < doc.frameCount(); ++i) {
+            frameSeq.append(i);
+        }
+    } else {
+        frameSeq = anim.frameIndices;
+    }
+
+    if (frameSeq.isEmpty()) {
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Animation %1 has no frames.").arg(anim.name);
+            error->filePath = targetFilePath;
+        }
+        return false;
+    }
+
+    // Gestion du mode PingPong : 0, 1, 2, ..., n-1, n-2, ..., 1
+    if (anim.loopMode == SpriteAnimation::PingPong && frameSeq.size() > 2) {
+        int originalCount = frameSeq.size();
+        for (int k = originalCount - 2; k >= 1; --k) {
+            frameSeq.append(frameSeq.at(k));
+        }
+    }
+
+    // Calcul de l'enveloppe de l'animation pour un alignement anti-jittering par pivot
+    QRect envelope = doc.computeAnimationEnvelope(anim.name);
+    int canvasW = envelope.width();
+    int canvasH = envelope.height();
+
+    // Fallback si l'enveloppe n'est pas calculable
+    if (canvasW <= 0 || canvasH <= 0) {
+        for (int idx : frameSeq) {
+            QImage f = doc.frame(idx);
+            if (!f.isNull()) {
+                if (f.width() > canvasW) canvasW = f.width();
+                if (f.height() > canvasH) canvasH = f.height();
+            }
+        }
+    }
+    if (canvasW <= 0) canvasW = 32;
+    if (canvasH <= 0) canvasH = 32;
+
+    // Calcul du timing en centièmes de seconde (1/100 s)
+    int fps = anim.fps > 0 ? anim.fps : 12;
+    int centiSeconds = qRound(100.0 / fps);
+    if (centiSeconds < 2) centiSeconds = 2; // Limite standard des visualiseurs GIF
+
+    // Configuration de msf_gif
+    // Loop mode : 0 = boucle infinie (Loop ou PingPong), 1 = jouer une fois (Once)
+    if (anim.loopMode == SpriteAnimation::Once) {
+        msf_gif_loop_count = 1;
+    } else {
+        msf_gif_loop_count = 0; // infini
+    }
+
+    // Activer la transparence GIF (alpha < 128 = transparent)
+    msf_gif_alpha_threshold = 128;
+    msf_gif_bgra_flag = 0;
+
+    MsfGifState state = {};
+    if (!msf_gif_begin(&state, canvasW, canvasH)) {
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Failed to initialize GIF encoder for %1.").arg(targetFilePath);
+            error->filePath = targetFilePath;
+        }
+        return false;
+    }
+
+    for (int idx : frameSeq) {
+        QImage canvas(canvasW, canvasH, QImage::Format_RGBA8888);
+        canvas.fill(Qt::transparent);
+
+        QImage frameImg = doc.polygonClippedFrame(idx);
+        if (frameImg.isNull()) {
+            frameImg = doc.frame(idx);
+        }
+        if (!frameImg.isNull()) {
+            QPainter painter(&canvas);
+            int drawX = 0;
+            int drawY = 0;
+            if (idx >= 0 && idx < doc.boxes().size()) {
+                const SpriteBox &b = doc.box(idx);
+                QPoint pivot = b.effectivePivot();
+                drawX = envelope.x() - pivot.x();
+                drawY = envelope.y() - pivot.y();
+            }
+            painter.drawImage(drawX, drawY, frameImg);
+            painter.end();
+        }
+
+        if (!msf_gif_frame(&state, const_cast<uint8_t*>(canvas.constBits()), centiSeconds, 16, canvas.bytesPerLine())) {
+            msf_gif_end(&state);
+            if (error) {
+                error->code = ExtractorError::WriteFailed;
+                error->message = tr("Failed to encode GIF frame in %1.").arg(targetFilePath);
+                error->filePath = targetFilePath;
+            }
+            return false;
+        }
+    }
+
+    MsfGifResult result = msf_gif_end(&state);
+    if (!result.data || result.dataSize == 0) {
+        msf_gif_free(result);
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("GIF encoding generated no data for %1.").arg(targetFilePath);
+            error->filePath = targetFilePath;
+        }
+        return false;
+    }
+
+    QFile file(targetFilePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        msf_gif_free(result);
+        if (error) {
+            error->code = ExtractorError::FileNotWritable;
+            error->message = tr("Cannot open destination file %1: %2").arg(targetFilePath, file.errorString());
+            error->filePath = targetFilePath;
+        }
+        return false;
+    }
+
+    qint64 written = file.write(reinterpret_cast<const char*>(result.data), static_cast<qint64>(result.dataSize));
+    file.close();
+    msf_gif_free(result);
+
+    if (written != static_cast<qint64>(result.dataSize)) {
+        if (error) {
+            error->code = ExtractorError::WriteFailed;
+            error->message = tr("Incomplete file write to %1.").arg(targetFilePath);
+            error->filePath = targetFilePath;
+        }
+        return false;
+    }
+
     return true;
 }

@@ -1097,6 +1097,42 @@ Strict removal clears the pixel.</source>
         <source>Extracted %1 GIF frames</source>
         <translation>%1개의 GIF 프레임 추출됨</translation>
     </message>
+    <message>
+        <source>No frames in document to export.</source>
+        <translation type="unfinished">내보낼 프레임이 문서에 없습니다.</translation>
+    </message>
+    <message>
+        <source>Exporting GIF animation %1 (%2/%3)...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exported %1 GIF animation(s) successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Animation %1 has no frames.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to initialize GIF encoder for %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to encode GIF frame in %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GIF encoding generated no data for %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open destination file %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incomplete file write to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GitCommitNodeItem</name>

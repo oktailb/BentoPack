@@ -112,7 +112,7 @@ QImage SpriteDocument::polygonClippedFrame(int index) const
     }
 
     const SpriteBox &b = m_boxes.at(index);
-    if (!b.hasPolygonMesh || b.polygon.size() < 3) {
+    if (b.polygon.size() < 3) {
         return baseImage;
     }
 
