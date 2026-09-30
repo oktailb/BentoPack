@@ -357,14 +357,7 @@ void MainWindow::setupErgonomicLayout()
     toolGroup->addAction(ui->actionToolAddSlice);
     ui->actionToolSelect->setChecked(true);
 
-    connect(ui->actionToolSelect, &QAction::triggered, this, &MainWindow::on_actionToolSelect_triggered);
-    connect(ui->actionToolAddSlice, &QAction::triggered, this, &MainWindow::on_actionToolAddSlice_triggered);
-    connect(ui->actionTrimSlice, &QAction::triggered, this, &MainWindow::on_actionTrimSlice_triggered);
     connect(ui->actionRemoveBg, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
-
-    connect(ui->actionZoomIn, &QAction::triggered, this, &MainWindow::on_actionZoomIn_triggered);
-    connect(ui->actionZoomOut, &QAction::triggered, this, &MainWindow::on_actionZoomOut_triggered);
-    connect(ui->actionZoomReset, &QAction::triggered, this, &MainWindow::on_actionZoomReset_triggered);
 
     // Setup Affichage (View) Menu with toggle actions for all docks
     setupViewMenuActions();
@@ -450,29 +443,8 @@ void MainWindow::setupUIConnections()
         }
     });
     connect(frameModel, &ArrangementModel::mergeRequested, this, &MainWindow::onMergeFrames);
-    connect(ui->framesList, &QListView::customContextMenuRequested,
-            this, &MainWindow::on_framesList_customContextMenuRequested);
-
-    // Animation list context menu
+    // Animation list context menu policy (slots are auto-connected by connectSlotsByName)
     ui->animationList->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->animationList, &QTreeWidget::customContextMenuRequested,
-            this, &MainWindow::on_animationList_customContextMenuRequested);
-
-    // Animation action buttons
-    connect(ui->btnNewAnim, &QToolButton::clicked, this, &MainWindow::on_btnNewAnim_clicked);
-    connect(ui->btnNewFromSelection, &QToolButton::clicked, this, &MainWindow::on_btnNewFromSelection_clicked);
-    connect(ui->btnDuplicateAnim, &QToolButton::clicked, this, &MainWindow::on_btnDuplicateAnim_clicked);
-    connect(ui->btnReverseAnim, &QToolButton::clicked, this, &MainWindow::on_btnReverseAnim_clicked);
-    connect(ui->btnDeleteAnim, &QToolButton::clicked, this, &MainWindow::on_btnDeleteAnim_clicked);
-
-    // Transport buttons
-    connect(ui->btnFirstFrame, &QToolButton::clicked, this, &MainWindow::on_btnFirstFrame_clicked);
-    connect(ui->btnPrevFrame, &QToolButton::clicked, this, &MainWindow::on_btnPrevFrame_clicked);
-    connect(ui->btnNextFrame, &QToolButton::clicked, this, &MainWindow::on_btnNextFrame_clicked);
-    connect(ui->btnLastFrame, &QToolButton::clicked, this, &MainWindow::on_btnLastFrame_clicked);
-    connect(ui->Play, &QPushButton::clicked, this, &MainWindow::on_Play_clicked);
-    connect(ui->Pause, &QPushButton::clicked, this, &MainWindow::on_Pause_clicked);
-    connect(ui->fps, &QSpinBox::valueChanged, this, &MainWindow::on_fps_valueChanged);
 
     // Enforce fixed widths to guarantee absolute position stability when timing changes
     ui->fpsLabel->setFixedWidth(28);

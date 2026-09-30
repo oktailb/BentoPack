@@ -68,7 +68,7 @@ void MainWindow::on_actionZoomReset_triggered()
     }
 }
 
-void MainWindow::on_actionPackAtlas_triggered()
+void MainWindow::openAtlasPackingDialog()
 {
     if (!m_document || m_document->atlas().isNull() || m_document->frameCount() == 0) {
         QMessageBox::information(this, tr("Atlas Bin-Packing"),

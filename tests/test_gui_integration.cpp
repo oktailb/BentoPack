@@ -6,6 +6,7 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QListWidget>
+#include <QToolButton>
 
 #include "mainwindow.h"
 #include "widgets/exportdialog.h"
@@ -141,7 +142,39 @@ void TestGuiIntegration::testMainWindowPlaybackTriggers()
     ac->togglePlayPause();
     QVERIFY(ac->isPlaying());
     ac->togglePlayPause();
+    ac->pause();
     QVERIFY(!ac->isPlaying());
+
+    // Transport buttons step test (verifies single-step without double-connection jump)
+    QToolButton *btnNext = mw.findChild<QToolButton*>(QStringLiteral("btnNextFrame"));
+    QToolButton *btnPrev = mw.findChild<QToolButton*>(QStringLiteral("btnPrevFrame"));
+    QToolButton *btnFirst = mw.findChild<QToolButton*>(QStringLiteral("btnFirstFrame"));
+    QToolButton *btnLast = mw.findChild<QToolButton*>(QStringLiteral("btnLastFrame"));
+    QVERIFY(btnNext != nullptr);
+    QVERIFY(btnPrev != nullptr);
+    QVERIFY(btnFirst != nullptr);
+    QVERIFY(btnLast != nullptr);
+
+    ac->player()->setSequence({0, 1, 2, 3}, 12);
+    ac->player()->seek(0);
+    QCOMPARE(ac->player()->currentSequenceIndex(), 0);
+
+    // Clicking btnNextFrame must advance by EXACTLY 1 frame (not 2)
+    btnNext->click();
+    QCOMPARE(ac->player()->currentSequenceIndex(), 1);
+
+    btnNext->click();
+    QCOMPARE(ac->player()->currentSequenceIndex(), 2);
+
+    // Clicking btnPrevFrame must retreat by EXACTLY 1 frame (not 2)
+    btnPrev->click();
+    QCOMPARE(ac->player()->currentSequenceIndex(), 1);
+
+    btnLast->click();
+    QCOMPARE(ac->player()->currentSequenceIndex(), 3);
+
+    btnFirst->click();
+    QCOMPARE(ac->player()->currentSequenceIndex(), 0);
 }
 
 void TestGuiIntegration::testExportDialogOptionsAndDefaults()
