@@ -39,7 +39,7 @@
 ├───────────────────┬───────────────────────────────────┬────────────────┤
 │ Jalon             │ Thématique                        │ Priorité       │
 ├───────────────────┼───────────────────────────────────┼────────────────┤
-│ CH-TECH (1 à 6)   │ Assainissement & Refactoring      │ Haute (Imm.)   │
+│ CH-TECH (1 à 8)   │ Assainissement, Légal & Refactor  │ Haute (Imm.)   │
 │ M10               │ Intégrations Moteurs & Stores     │ Haute          │
 │ M14               │ Optimisations SIMD & Grands Atlas │ Moyenne        │
 │ M12               │ Rigging & Animation Squelettique  │ Moyenne        │
@@ -138,6 +138,53 @@
      - Alignement de [`README.md`](file:///home/oktail/Documents/GitHub/BentoPack/README.md) sur les deux exemples du SDK et mise à jour du compteur de suites CTest (15 suites au lieu de 8).
   3. **Purge des chemins Windows absolus :** Nettoyage de `benchmarks/REPORT.md` (remplacement de `C:\Users\ec135\...` par des chemins relatifs portables `bin/bentopack-cli` et `history/...`).
 
+### CH-TECH-7 : Remplacement du Marquage Stéganographique & Empaquetage Windows — ✅ **TERMINÉ**
+- **Constat d'Audit :**
+  1. *Stéganographie destructive :* L'injection de valeurs RGB non-nulles (`0x00535347`, `0x00535343`, `0x00535354`) dans les pixels de transparence $\alpha=0$ causait du color bleeding (halos sombres/gris-vert au filtrage bilinéaire dans Godot/Unity) et dégradait l'efficacité des algorithmes de compression VRAM par blocs (KTX2, UASTC, ASTC, BC7).
+  2. *Échec de lecture WebP sous Windows dans `test_project` :* La sauvegarde de l'atlas en WebP qualité 100 sur texture opaque générait un entête VP8L que le lecteur `qwebp` de Qt sous Windows échouait à relire (`Unable to read image data`).
+  3. *Avertissement i18n sous `test_project` :* `tr("KEY_GIT_COMMITS_COUNT")` levait `QString::arg: Argument missing` en environnement de test sans traducteur actif.
+- **Réalisations Effectuées :**
+  1. **Métadonnées Forensiques Non-Destructives :**
+     - Remplacement de l'altération des pixels par l'injection de métadonnées textuelles standard (`QImage::setText()`) traduites en chunks PNG `tEXt` (`Generator`, `X-BentoPack-Integrity`, `X-BentoPack-License`, `X-BentoPack-Tool`, `X-BentoPack-Notice`).
+     - Préservation stricte de la transparence pure (`0x00000000`, `CLEAN_ALPHA0`), éliminant tout artefact de halo ou de compression.
+     - Maintien des signatures HMAC-SHA256 de layout et de la détection de falsification binaire (`IntegrityGuard::isTampered()`).
+  2. **Résolution du Décodage WebP sous Windows :**
+     - Ajustement de la qualité d'encodage WebP à 99 dans [`projectmanager.cpp`](file:///BentoPack/src/project/projectmanager.cpp#L363) : compatibilité totale avec le décodeur Qt Windows tout en préservant une fidélité visuelle maximale.
+  3. **Sécurisation de l'Empaquetage & Autonomie Totale Windows (CPack / windeployqt) :**
+     - Intégration dans [`install.cmake`](file:///install.cmake) d'un hook automatisé `install(CODE ...)` appelant `windeployqt` (`--compiler-runtime`, `--no-translations`, `--no-opengl-sw`, `--include-plugins`).
+     - Bundling explicite des plugins de plateformes indispensables (`platforms/qwindows.dll`, `platforms/qoffscreen.dll` pour le CLI headless, `platforms/qminimal.dll`), évitant toute boîte de dialogue bloquante sur machine vierge.
+     - Bundling de `libgit2.dll`, des runtimes de compilation MinGW (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll`), de l'ensemble des 15 plugins DLL de filtres/extracteurs et des addons moteur.
+     - Configuration CPack dans [`package.cmake`](file:///package.cmake) avec détection dynamique de `makensis` (ZIP portable & NSIS avec icônes et raccourcis Start Menu).
+     - Définition de `CMAKE_INSTALL_DEFAULT_COMPONENT_NAME "bentopack"` pour séparer proprement l'application utilisateur autonome de l'en-tête SDK dev (`bentopack-dev`).
+     - Validation expérimentale en environnement isolé (`$env:PATH = "C:\Windows\System32;C:\Windows"`) : exécution instantanée de `bentopack-cli.exe --version` et `bentopack.exe --help` sans aucune dépendance installée sur le système hôte.
+     - Génération avec succès de l'archive autonome officielle `BentoPack-0.11.0-1.AMD64.zip` prête pour Steam / Itch.io.
+  4. **Correction du formatage i18n :**
+     - Sécurisation du formateur de commit dans [`githistorydock.cpp`](file:///BentoPack/src/widgets/githistorydock.cpp#L318) avec vérification de la présence de `%1`.
+  5. **Validation 100% de la Suite de Tests :**
+     - Mise à jour des tests de marquage et d'intégrité dans [`test_concurrency_and_security.cpp`](file:///tests/test_concurrency_and_security.cpp#L127) et [`test_core.cpp`](file:///tests/test_core.cpp#L1070).
+     - Exécution avec succès de **15/15 suites CTest** (100% de réussite).
+
+
+### CH-TECH-8 : Blindage Juridique, Protection CMI & Neutralisation du Freeriding AAA — ✅ **TERMINÉ**
+- **Constat d'Audit :**
+  1. *Faille permissive de l'Open Source :* Les fichiers régissant la conformité de licence et l'injection de métadonnées (`IntegrityGuard`, `LicenseManager`, `igatekeeper.h`) étaient initialement sous licence Apache 2.0. Un studio tiers ou un éditeur pouvait demander à un développeur de forker le dépôt, de commenter l'écriture des tags et de recompiler en prétendant respecter la licence Apache 2.0.
+  2. *Contournement par coquilles vides et éditeurs :* L'EULA initial ne définissait pas rigoureusement le chiffre d'affaires groupe consolidé, laissant un vide juridique pour les filiales ou studios satellites financés par des éditeurs majeurs.
+  3. *Absence de qualification statutaire CMI :* Les tags de métadonnées n'étaient pas formellement qualifiés de Copyright Management Information (CMI), privant le projet du recours direct aux dommages statutaires forfaitaires (17 U.S.C. § 1202).
+- **Réalisations Effectuées :**
+  1. **Isolation EULA Source-Available & Clôture de la Faille Permissive :**
+     - Révision complète des en-têtes de [`integrityguard.h`](file:///BentoPack/include/license/integrityguard.h), [`integrityguard.cpp`](file:///BentoPack/src/license/integrityguard.cpp), [`licensemanager.h`](file:///BentoPack/include/license/licensemanager.h), [`licensemanager.cpp`](file:///BentoPack/src/license/licensemanager.cpp) et [`igatekeeper.h`](file:///BentoPack/include/license/igatekeeper.h) sous la licence Source-Available EULA.
+     - Preamble de double licence Open-Core ajouté au fichier racine [`LICENSE`](file:///LICENSE) délimitant strictement le noyau algorithmique libre (Apache 2.0) du système de traçabilité, des gatekeepers et des plugins propriétaires.
+  2. **Refonte de l'EULA ([`plugins/LICENSE-PLUGINS.md`](file:///plugins/LICENSE-PLUGINS.md)) :**
+     - Élargissement du périmètre d'application à l'ensemble des modules de traçabilité, gatekeepers, extracteurs moteurs et distributions binaires officielles.
+     - Définition stricte du chiffre d'affaires brut annuel consolidé (incluant filiales, maison-mère, détenteurs de plus de 20% du capital et **l'éditeur/publisher tiers** finançant ou distribuant le jeu).
+  3. **Protection Statutaire CMI & Dommages Fédéraux Forfaitaires :**
+     - Qualification contractuelle formelle de l'ensemble des tags `X-BentoPack-*`, chunks PNG `tEXt`, dictionnaires KTX2 et signatures HMAC comme Copyright Management Information au sens de 17 U.S.C. § 1202, du Traité OMPI Art. 12 et de la Directive européenne 2009/24/CE.
+     - Interdiction explicite de contournement ou de suppression de CMI (passible de dommages statutaires fédéraux jusqu'à 25 000 $ USD par œuvre altérée sans preuve de préjudice direct).
+     - Clause d'audit de conformité sur les archives de jeux distribués (`.assets`, `.pck`, `.pak`).
+  4. **Validation Globale :**
+     - Documentation stratégique mise à jour dans [`BUSINESS.md`](file:///BUSINESS.md).
+     - Zéro régression : **15/15 suites CTest** validées avec 100% de réussite.
+
 ---
 
 ## 🚀 M10 : Intégration aux Écosystèmes & Marchés Moteurs de Jeu (Godot AssetLib, Unity UPM, Unreal Fab)
@@ -147,6 +194,8 @@ L'adoption en studio et par les créateurs indépendants dépend de la suppressi
 1. **Installation en 1 Clic :** Présence sur les registres officiels (Godot AssetLib, OpenUPM, Epic Games Fab).
 2. **Importation Transparente :** Glisser-déposer un fichier `.bento` et générer automatiquement textures, animations, pivots et maillages serrés.
 3. **Hot-Reloading Bidirectionnel :** Sauvegarde dans BentoPack $\implies$ rechargement immédiat des ressources dans l'éditeur du moteur via `bentopack-cli --watch`.
+
+- **Référentiel & Guidelines d'Intégration Moteurs :** [`addons/ADDONS_GUIDELINES.md`](file:///addons/ADDONS_GUIDELINES.md) (Cahier des charges complet : 8 exigences obligatoires, spécification du format `.bento`, architecture modulaire et standards de packaging UPM / AssetLib / Fab).
 
 ### 🏛️ Modules & Livrables Cibles
 
@@ -158,7 +207,9 @@ L'adoption en studio et par les créateurs indépendants dépend de la suppressi
   - Application des décalages de pivots exacts via `margin = Rect2(...)`.
   - Génération de ressources `ArrayMesh` 2D pour le rendu sans overdraw via `BentoMeshSprite` / `MeshInstance2D`.
   - Synchronisation temps réel des hitboxes `CollisionPolygon2D` calculées automatiquement frame par frame.
-  - Bouton *"Ouvrir dans BentoPack"* dans l'inspecteur Godot sur les nœuds `AnimatedSprite2D`, `Sprite2D` et `SpriteFrames`.
+  - Bouton *"Ouvrir dans BentoPack"* dans l'inspecteur Godot sur les nœuds `AnimatedSprite2D`, `Sprite2D`, `MeshInstance2D` / `BentoMeshSprite`, `AtlasTexture`, `SpriteFrames` et `Texture2D` avec résolution intelligente du fichier `.bento` ou de la texture associée (stripping des suffixes `_atlas` et `_mesh_N`, inspection récursive des frames et détection des siblings), évitant tout passage de dossier brut (`res://`) à BentoPack.
+  - **Contrôleur de transport interactif dans l'Inspecteur (`BentoMeshSprite`) :** Barre de lecture complète directement dans l'inspecteur Godot (sélecteur déroulant d'animations, boutons ▶ Lecture / ⏸ Pause temps réel dans l'éditeur, bouton ⏹ Arrêt, boutons ⏮ Image précédente / ⏭ Image suivante, et Slider / Scrubber de frame avec synchronisation visuelle immédiate du maillage M8 et de la hitbox `CollisionPolygon2D` dans le viewport 2D).
+  - Packaging automatisé propre pour l'AssetLib (`package_godot_addon` -> `godot-bentopack-addon-0.11.0.zip`, sans artefacts `.uid` ni `.import`).
 - **Publication :** Soumission officielle sur la [Godot Asset Library](https://godotengine.org/asset-library).
 
 #### 2. Écosystème Unity (`com.bentopack.importer`) — ✅ **TERMINÉ**
@@ -169,8 +220,10 @@ L'adoption en studio et par les créateurs indépendants dépend de la suppressi
   - **Injection des maillages serrés M8 :** Appel à `Sprite.OverrideGeometry()` via `BentoMeshBuilder.cs` avec conversion automatique des coordonnées locales unitaire (axe Y inversé et winding des triangles préservé), économisant 60% à 80% de fillrate GPU.
   - Génération automatique des `AnimationClip` (`BentoAnimationBuilder.cs`) avec courbes de frames cadencées au bon FPS et loop time configurable.
   - Menus contextuels dans l'Éditeur Unity (`BentoContextMenu.cs`) : ouverture directe dans BentoPack Studio et re-packing automatique via `BentoCliBridge.cs`.
+  - **Tableau de bord interactif Unity (`BentoPackWindow.cs`, `Window -> BentoPack Dashboard`) :** Fenêtre d'outils complète offrant la parité avec le dock Godot (empaquetage d'atlas, découpe auto ou grille fixe Tile W/H, sélection d'algorithmes MaxRects/M8, statut CLI avec bouton de téléchargement, et gestionnaire de démon Watch Daemon `--watch`).
   - Composant runtime `BentoMeshSprite.cs` pour le playback avec synchronisation temps réel des hitboxes `PolygonCollider2D`.
   - Suite de tests automatisée CLI (`tests/unity_tests/BentoUnityTests.csproj`, 4/4 tests validés avec 100% de réussite).
+  - **Packaging UPM (`.tgz`) :** Conforme aux spécifications strictes Unity Package Manager (arborescence sous racine `package/`, 47 membres vérifiés avec fichiers `.meta` systématiques, synchronisation automatique de la version `0.11.0`, inclusion de `LICENSE.md` et licence `"SEE LICENSE IN LICENSE.md"`). Supporte nativement l'import direct UPM *Add package from tarball...* et OpenUPM.
 - **Publication :** Hébergement OpenUPM et soumission sur l'Unity Asset Store (catégorie *2D Tools*).
 
 #### 3. Écosystème Unreal Engine 5 (`BentoPack UE5 Plugin`)
@@ -180,6 +233,10 @@ L'adoption en studio et par les créateurs indépendants dépend de la suppressi
   - Interfaçage natif avec **PaperZD** (State Machines d'animation 2D).
   - Définition de la géométrie de rendu personnalisée (`RenderGeometry`) issue du maillage M8 pour minimiser le coût de translucidité.
 - **Publication :** Soumission sur la nouvelle marketplace unifiée d'Epic Games : **Fab** (`fab.com`).
+
+> [!NOTE]
+> **Commentaire d'Audit Stratégique (M10) :**  
+> Ce chantier représente le cœur battant de la stratégie produit et du vecteur d'acquisition. L'intégration sans couture aux moteurs (Godot AssetLib, Unity UPM, Unreal Fab) constitue l'argument décisif pour déclencher "l'achat de paresse" : un développeur achète avant tout le confort d'un import instantané et d'un maillage anti-overdraw prêt à l'emploi. C'est la priorité absolue pour asseoir la distribution sur les Stores officiels.
 
 ---
 
@@ -230,6 +287,10 @@ Garantir une réactivité totale de l'interface lors de la manipulation de très
    - **Snapshotting différentiel (*dirty rects*) :** Mémoriser uniquement le sous-rectangle modifié lors des retouches dans l'Éditeur de Pixels plutôt que de cloner l'image complète de l'atlas à chaque coup de pinceau.
    - Compression transparente en tâche de fond des états anciens de l'UndoStack via LZ4.
 
+> [!NOTE]
+> **Commentaire d'Audit & Priorisation (M14) :**  
+> L'optimisation SIMD (AVX2/NEON) et le snapshotting différentiel LZ4 sont très pertinents pour les pipelines de production manipulant des atlas géants (8K/16K). Toutefois, compte tenu du débit actuel très élevé du CLI (~2 888 frames/sec), ce chantier doit être mené en parallèle ou après la stabilisation de l'empaquetage de distribution grand public (windeployqt / CPack).
+
 ---
 
 ## 🦴 M12 : Animation Squelettique & Découpe de Membres 2D (Rigging, Bones, Spine / Godot / Unity)
@@ -251,6 +312,10 @@ L'animation image par image traditionnelle est coûteuse en temps et en VRAM. L'
    - **Godot 4 Skeleton2D :** Génération native d'une scène `.tscn` avec nœuds `Skeleton2D`, `Bone2D` et `Polygon2D`.
    - **Unity 2D Animation :** Export compatible avec le package officiel Unity `2D Animation`.
 
+> [!NOTE]
+> **Commentaire d'Audit & Analyse de Risque (M12) :**  
+> Bien que cette fonctionnalité d'animation squelettique soit ambitieuse et apporte une valeur indéniable pour les animateurs 2D, elle représente un effort mathématique et d'ergonomie UI très lourd (gestion d'arbres cinématiques, solveurs IK, interpolation de sommets, parité avec Spine). Il est fortement recommandé de préserver la totalité des modules et livrables spécifiés, mais de concevoir ce jalon comme un **module optionnel avancé / plugin détachable**, afin de ne pas retarder le lancement commercial de BentoPack centré sur son cœur de métier (l'empaquetage d'atlas et les maillages anti-overdraw).
+
 ---
 
 ## 🌐 M13 : Micro-Démonstrateur Web Vitrine (WebAssembly Showcase)
@@ -264,6 +329,10 @@ Le portage intégral de l'application de bureau en WebAssembly (Qt for WebAssemb
 
 ### 💡 Solution Retenue :
 Concevoir un **micro-démonstrateur web vitrine ultra-léger** (mini-module WebAssembly ou script TypeScript/Canvas) hébergé sur le site officiel de BentoPack. Il permettra aux visiteurs de glisser-déposer un sprite pour tester instantanément en direct la découpe automatique, le despill et l'aperçu d'animation, servant d'entonnoir d'acquisition vers l'application de bureau native.
+
+> [!NOTE]
+> **Commentaire d'Audit (M13) :**  
+> La solution d'un micro-démonstrateur ultra-léger (vanilla TS / Canvas) est parfaitement alignée avec les impératifs d'acquisition. Elle évite le gouffre technique d'un portage Qt WebAssembly tout en servant de vitrine interactive pour convertir les curieux vers l'application desktop officielle.
 
 ---
 
