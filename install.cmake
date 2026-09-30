@@ -1,8 +1,13 @@
 if (WIN32)
-#    install(FILES ${CMAKE_CXX_COMPILER}/bin/*.dll
-
-#        DESTINATION .
-#    )
+    # Bundle Qt imageformats plugins (e.g. qwebp.dll, qpng.dll) so .bento projects open out-of-the-box
+    set(_qt_imgfmt_src "${Qt6_DIR}/../../../plugins/imageformats")
+    if(EXISTS "${_qt_imgfmt_src}")
+        install(DIRECTORY "${_qt_imgfmt_src}"
+            DESTINATION "${CMAKE_INSTALL_BINDIR}"
+            COMPONENT bentopack
+            FILES_MATCHING PATTERN "*webp*" PATTERN "*png*" PATTERN "*ico*" PATTERN "*svg*"
+        )
+    endif()
 endif()
 
 if(UNIX AND NOT APPLE AND NOT HAIKU)

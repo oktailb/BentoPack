@@ -257,13 +257,24 @@ if(WIN32)
         COMMENT "Copying extractor and filter plugin DLLs to bin directory for test_filters"
     )
 
+    # Ensure Qt imageformats (e.g. qwebp.dll) are copied to bin/imageformats
+    set(_qt_imgfmt "${Qt6_DIR}/../../../plugins/imageformats")
+    if(EXISTS "${_qt_imgfmt}")
+        add_custom_command(
+            TARGET test_project POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/imageformats"
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${_qt_imgfmt}"
+                "${CMAKE_BINARY_DIR}/bin/imageformats"
+            COMMENT "Copying Qt imageformats plugins to bin/imageformats for tests"
+        )
+    endif()
+
     # Also prepend paths in CTest environment
     if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.22")
         set_tests_properties(${ALL_TEST_TARGETS}
             PROPERTIES ENVIRONMENT_MODIFICATION
-                "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin"
-                "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin/plugins/extractors"
-                "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin/plugins/filters"
+                "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin;PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin/plugins/extractors;PATH=path_list_prepend:${CMAKE_BINARY_DIR}/bin/plugins/filters"
         )
     endif()
 endif()
