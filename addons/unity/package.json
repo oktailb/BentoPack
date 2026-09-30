@@ -1,6 +1,6 @@
 {
   "name": "com.bentopack.importer",
-  "version": "1.0.0",
+  "version": "0.11.0",
   "displayName": "BentoPack 2D Sprite & Tight Mesh Importer",
   "description": "Zero-configuration importer for BentoPack (.bento & .unity.json) project archives. Automatically imports packed 2D sprite atlases, generates AnimationClips, and injects M8 tight polygonal meshes via Sprite.OverrideGeometry for 60-80% GPU overdraw reduction.",
   "unity": "2021.3",
@@ -27,5 +27,5 @@
     "url": "https://github.com/oktailb/BentoPack.git",
     "directory": "addons/unity"
   },
-  "license": "Apache-2.0"
+  "license": "SEE LICENSE IN LICENSE.md"
 }

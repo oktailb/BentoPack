@@ -31,6 +31,12 @@ Official Unity Package Manager (UPM) integration plugin for **BentoPack** — Na
 1. Clone or copy `addons/unity` into your Unity project's `Packages/` folder or a local directory.
 2. In Package Manager, select **Add package from disk...** and choose `addons/unity/package.json`.
 
+### Method 3: Tarball Package (`.tgz`)
+1. Download `com.bentopack.importer-<version>.tgz` from the BentoPack release artifacts.
+2. In Unity, open **Window -> Package Manager**.
+3. Click the **+** button in the top-left corner and select **Add package from tarball...**.
+4. Select the downloaded `com.bentopack.importer-<version>.tgz` file.
+
 ---
 
 ## 🛠️ Usage Workflow

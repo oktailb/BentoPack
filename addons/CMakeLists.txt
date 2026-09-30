@@ -33,15 +33,16 @@ message ("Godot Addon Configured")
 # Unity 6 Addon Packaging Target
 # -------------------------------------------------------------------------
 set(UNITY_ADDON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/unity")
-set(UNITY_ADDON_STAGING_DIR "${CMAKE_CURRENT_BINARY_DIR}/addons_staging/unity/bentopack")
+set(UNITY_ADDON_STAGING_DIR "${CMAKE_CURRENT_BINARY_DIR}/addons_staging/unity")
 set(UNITY_ADDON_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/dist")
 set(UNITY_ADDON_TGZ "${UNITY_ADDON_DIST_DIR}/com.bentopack.importer-${PROJECT_VERSION}.tgz")
 
 add_custom_target(package_unity_addon
     COMMAND ${CMAKE_COMMAND}
         -DSRC_DIR="${UNITY_ADDON_SRC_DIR}"
-        -DSTAGING_DIR="${CMAKE_CURRENT_BINARY_DIR}/addons_staging/unity"
+        -DSTAGING_DIR="${UNITY_ADDON_STAGING_DIR}"
         -DLICENSE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/LICENSE-ADDONS.md"
+        -DPACKAGE_VERSION="${PROJECT_VERSION}"
         -DOUTPUT_TGZ="${UNITY_ADDON_TGZ}"
         -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_unity_addon.cmake"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
@@ -50,7 +51,7 @@ add_custom_target(package_unity_addon
 )
 
 install(DIRECTORY unity/
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/bentopack/addons/unity/bentopack
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/bentopack/addons/unity/com.bentopack.importer
     COMPONENT bentopack
 )
 
