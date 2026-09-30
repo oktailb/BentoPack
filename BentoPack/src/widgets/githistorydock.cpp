@@ -315,7 +315,12 @@ void GitHistoryDock::refreshHistory()
     QList<GitCommitInfo> log = sm->gitLog();
     QString headHash = sm->gitHeadCommitHash();
 
-    m_lblStatus->setText(tr("KEY_GIT_COMMITS_COUNT").arg(log.size()));
+    QString commitsText = tr("KEY_GIT_COMMITS_COUNT");
+    if (commitsText.contains(QLatin1String("%1"))) {
+        m_lblStatus->setText(commitsText.arg(log.size()));
+    } else {
+        m_lblStatus->setText(QStringLiteral("%1 commit(s)").arg(log.size()));
+    }
 
     if (log.isEmpty()) {
         QGraphicsTextItem *emptyText = m_scene->addText(tr("KEY_GIT_EMPTY_HISTORY"));
