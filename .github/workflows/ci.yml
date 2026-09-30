@@ -94,6 +94,7 @@ jobs:
             mingw-w64-x86_64-qt6-tools
             mingw-w64-x86_64-qt6-imageformats
             mingw-w64-x86_64-libgit2
+            mingw-w64-x86_64-nsis
 
       - name: Configure CMake
         shell: msys2 {0}
@@ -111,6 +112,21 @@ jobs:
           QT_QPA_PLATFORM: offscreen
         run: |
           ctest --test-dir build --output-on-failure --verbose
+
+      - name: Build Standalone Packages (CPack ZIP & NSIS)
+        shell: msys2 {0}
+        run: |
+          cd build
+          cpack -G "ZIP;NSIS"
+          ls -lah BentoPack-*.*
+
+      - name: Upload Windows Standalone Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-standalone-packages
+          path: |
+            build/BentoPack-*.zip
+            build/BentoPack-*.exe
 
   macos:
     name: macOS (Apple Silicon Clang)

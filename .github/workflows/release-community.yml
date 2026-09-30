@@ -129,6 +129,7 @@ jobs:
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-qt6-base
             mingw-w64-x86_64-qt6-tools
+            mingw-w64-x86_64-qt6-imageformats
             mingw-w64-x86_64-libgit2
             mingw-w64-x86_64-nsis
             p7zip
@@ -150,27 +151,15 @@ jobs:
         run: |
           ctest --test-dir build --output-on-failure --verbose
 
-      - name: Deploy Qt Libraries and Create Portable ZIP
+      - name: Build Standalone Windows Packages (ZIP Portable & NSIS Installer)
         shell: msys2 {0}
         run: |
-          if [ -f build/bin/bentopack.exe ]; then
-            windeployqt --release --compiler-runtime build/bin/bentopack.exe
-          else
-            windeployqt --release --compiler-runtime build/bin/BentoPack.exe
-          fi
           mkdir -p dist
-          7z a dist/BentoPack-Windows-x64-Portable.zip ./build/bin/*
-
-      - name: Build NSIS Installer
-        shell: msys2 {0}
-        run: |
           cd build
-          cpack -G NSIS || true
-          if ls BentoPack*Setup.exe 1> /dev/null 2>&1; then
-            cp BentoPack*Setup.exe ../dist/
-          elif ls BentoPack*Setup.exe 1> /dev/null 2>&1; then
-            cp BentoPack*Setup.exe ../dist/
-          fi
+          cpack -G "ZIP;NSIS"
+          cp BentoPack-*.zip ../dist/
+          cp BentoPack-*.exe ../dist/ || true
+          ls -lah ../dist/
 
       - name: Upload Windows Packages
         uses: actions/upload-artifact@v4

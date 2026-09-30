@@ -20,7 +20,7 @@ add_custom_target(package_godot_addon
     VERBATIM
 )
 
-install(DIRECTORY addons/godot/
+install(DIRECTORY godot/
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/bentopack/addons/godot/addons/bentopack
     COMPONENT bentopack
     PATTERN "*.uid" EXCLUDE
@@ -45,11 +45,11 @@ add_custom_target(package_unity_addon
         -DOUTPUT_TGZ="${UNITY_ADDON_TGZ}"
         -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_unity_addon.cmake"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-    COMMENT "Packaging Godot 4 Addon into ${UNITY_ADDON_TGZ}..."
+    COMMENT "Packaging Unity Addon into ${UNITY_ADDON_TGZ}..."
     VERBATIM
 )
 
-install(DIRECTORY addons/unity/
+install(DIRECTORY unity/
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/bentopack/addons/unity/bentopack
     COMPONENT bentopack
 )

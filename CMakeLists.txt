@@ -16,6 +16,8 @@ project(BentoPack       VERSION ${PROJECT_VERSION}
 
 include("build.cmake")
 include(GNUInstallDirs)
+set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME "bentopack")
+
 
 find_package(Qt6 REQUIRED COMPONENTS
     Core

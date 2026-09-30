@@ -1,4 +1,3 @@
-
 set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_LIST_DIR}/LICENSE")
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
@@ -19,6 +18,18 @@ set(CPACK_RPM_PACKAGE_GROUP "Applications/Graphics")
 set(CPACK_NSIS_DISPLAY_NAME "BentoPack Studio")
 set(CPACK_NSIS_PACKAGE_NAME "BentoPack Studio")
 set(CPACK_NSIS_MODIFY_PATH ON)
+file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/BentoPack/res/windows/BentoPack.ico" _nsis_icon)
+set(CPACK_NSIS_MUI_ICON "${_nsis_icon}")
+set(CPACK_NSIS_MUI_UNIICON "${_nsis_icon}")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\bentopack.exe")
+set(CPACK_NSIS_MENU_LINKS
+    "bin/bentopack.exe" "BentoPack Studio"
+    "bin/bentopack-cli.exe" "BentoPack CLI"
+)
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+endif()
 
 # macOS CPack configuration
 set(CPACK_DMG_VOLUME_NAME "BentoPack Studio")
@@ -27,7 +38,18 @@ set(CPACK_DMG_FORMAT "UDZO")
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(CPACK_GENERATOR "TGZ;RPM;DEB")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(CPACK_GENERATOR "ZIP;NSIS")
+    find_program(MAKENSIS_EXECUTABLE makensis
+        HINTS
+            "C:/Program Files (x86)/NSIS"
+            "C:/Program Files/NSIS"
+            "$ENV{ProgramFiles\(x86\)}/NSIS"
+            "$ENV{ProgramFiles}/NSIS"
+    )
+    if(MAKENSIS_EXECUTABLE)
+        set(CPACK_GENERATOR "ZIP;NSIS")
+    else()
+        set(CPACK_GENERATOR "ZIP")
+    endif()
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(CPACK_GENERATOR "DragNDrop;TGZ")
 else()
