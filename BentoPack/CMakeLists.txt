@@ -284,7 +284,7 @@ target_link_libraries(BentoPackWidgets PUBLIC
     Qt6::Widgets
 )
 
-install(TARGETS BentoPackCore
+install(TARGETS BentoPackCore BentoPackWidgets
     EXPORT BentoPackCoreTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bentopack
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT bentopack

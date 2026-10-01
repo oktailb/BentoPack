@@ -151,6 +151,34 @@ jobs:
         run: |
           ctest --test-dir build --output-on-failure --verbose
 
+      - name: Deploy Windows Runtime Dependencies
+        shell: msys2 {0}
+        run: |
+          # 1. Run windeployqt6 on main executable to deploy Qt DLLs and plugins into build/bin
+          windeployqt6 --compiler-runtime --no-translations --no-opengl-sw \
+            --include-plugins qoffscreen,qminimal,qwindows,qwebp,qsvg,qico,qjpeg,qgif \
+            build/bin/bentopack.exe || true
+
+          # 2. Collect all recursive MSYS2 / MinGW runtime dependencies (ICU, PCRE2, zstd, double-conversion, libgit2, etc.)
+          for bin in build/bin/*.exe build/bin/*.dll build/bin/plugins/*/*.dll; do
+            if [ -f "$bin" ]; then
+              ldd "$bin" 2>/dev/null | grep -i '/mingw64/bin/.*\.dll' | awk '{print $3}' | while read -r dll; do
+                if [ -f "$dll" ]; then
+                  cp -u "$dll" build/bin/
+                fi
+              done
+            fi
+          done
+          ls -lah build/bin/
+
+      - name: Verify Standalone Execution (No MSYS2 in PATH)
+        shell: cmd
+        run: |
+          set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%CD%\build\bin
+          set QT_QPA_PLATFORM=offscreen
+          build\bin\bentopack-cli.exe --version
+          build\bin\bentopack.exe --version
+
       - name: Build Standalone Windows Packages (ZIP Portable & NSIS Installer)
         shell: msys2 {0}
         run: |
@@ -301,15 +329,15 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag_info.outputs.tag }}
-          name: BentoPack Community Edition ${{ steps.tag_info.outputs.tag }}
+          name: BentoPack ${{ steps.tag_info.outputs.tag }}
           body: |
-            ## BentoPack Community Edition (${{ steps.tag_info.outputs.tag }})
+            ## BentoPack ${{ steps.tag_info.outputs.tag }}
 
-            This is the official public release of **BentoPack Community Edition**.
+            Official release of **BentoPack**.
             
-            - **License:** Free for indie developers, students, open-source projects, and small teams (annual revenue < $1,000,000).
-            - **Compliance:** Standard discrete export metadata is included in generated sprite sheets and atlases.
-            - **Commercial & Enterprise:** For teams exceeding the revenue threshold or requiring untagged commercial builds, contact sales or use an active commercial license.
+            - **License:** 100% Free and Open Source under the permissive **Apache License, Version 2.0**.
+            - **Features:** Complete packing algorithms (MaxRects, tight polygon mesh, VRAM KTX2/Basis Universal compression), all format extractors (Godot, Unity, Unreal, GIF, JSON, SpriteSheet), and filters.
+            - **Deliverables:** Self-contained, portable binaries for Windows (portable ZIP & NSIS setup), Linux (AppImage, DEB, RPM, TGZ), macOS (DMG), and Haiku (HPKG).
           files: release_assets/*
           generate_release_notes: true
           draft: false
