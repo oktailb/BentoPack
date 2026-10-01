@@ -12,7 +12,7 @@ add_custom_target(package_godot_addon
     COMMAND ${CMAKE_COMMAND}
         -DSRC_DIR="${GODOT_ADDON_SRC_DIR}"
         -DSTAGING_DIR="${CMAKE_CURRENT_BINARY_DIR}/addons_staging/godot"
-        -DLICENSE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
+        -DLICENSE_FILE="${PROJECT_SOURCE_DIR}/LICENSE"
         -DOUTPUT_ZIP="${GODOT_ADDON_ZIP}"
         -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_godot_addon.cmake"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
@@ -41,7 +41,7 @@ add_custom_target(package_unity_addon
     COMMAND ${CMAKE_COMMAND}
         -DSRC_DIR="${UNITY_ADDON_SRC_DIR}"
         -DSTAGING_DIR="${UNITY_ADDON_STAGING_DIR}"
-        -DLICENSE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
+        -DLICENSE_FILE="${PROJECT_SOURCE_DIR}/LICENSE"
         -DPACKAGE_VERSION="${PROJECT_VERSION}"
         -DOUTPUT_TGZ="${UNITY_ADDON_TGZ}"
         -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_unity_addon.cmake"
@@ -69,7 +69,7 @@ add_custom_target(package_unreal_addon
     COMMAND ${CMAKE_COMMAND}
         -DSRC_DIR="${UNREAL_ADDON_SRC_DIR}"
         -DSTAGING_DIR="${UNREAL_ADDON_STAGING_DIR}"
-        -DLICENSE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
+        -DLICENSE_FILE="${PROJECT_SOURCE_DIR}/LICENSE"
         -DPACKAGE_VERSION="${PROJECT_VERSION}"
         -DOUTPUT_ZIP="${UNREAL_ADDON_ZIP}"
         -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_unreal_addon.cmake"

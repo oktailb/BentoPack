@@ -122,7 +122,7 @@ namespace BentoPack.Editor
                         else
                         {
                             // If direct in-memory LoadImage failed (e.g. WebP format which Unity does not support in LoadImage):
-                            // 1. First attempt direct loss-less image decompression (dwebp, python/PIL, convert, ffmpeg)
+                            // 1. First attempt direct loss-less image decompression (dwebp if available)
                             // This ensures the atlas is preserved 100% byte-for-byte WITHOUT any repacking or artifacts!
                             byte[] decodedPngBytes = TryDecompressWebpBytes(result.rawAtlasBytes);
                             if (decodedPngBytes != null && tex.LoadImage(decodedPngBytes))
@@ -171,7 +171,7 @@ namespace BentoPack.Editor
                             {
                                 Debug.LogWarning("[BentoPack] Failed to decode atlas texture from archive: " + texEntry.Name + 
                                     ". Unity does not natively decode WebP in memory. " +
-                                    "Ensure 'dwebp', 'python3', or 'bentopack-cli' is available, or export as PNG/Unity format from BentoPack Studio.");
+                                    "Ensure 'bentopack-cli' is available on PATH, or save atlases as PNG from BentoPack Studio.");
                             }
                         }
                     }
@@ -710,25 +710,8 @@ namespace BentoPack.Editor
             {
                 File.WriteAllBytes(tempWebp, webpBytes);
 
-                // Option A: dwebp
+                // Option: lightweight dwebp utility if available
                 if (RunShellTool("dwebp", $"\"{tempWebp}\" -o \"{tempPng}\"") && File.Exists(tempPng))
-                {
-                    return File.ReadAllBytes(tempPng);
-                }
-
-                // Option B: python3 with PIL
-                string pyCmd = $"-c \"import sys, PIL.Image; PIL.Image.open(sys.argv[1]).save(sys.argv[2], 'PNG')\" \"{tempWebp}\" \"{tempPng}\"";
-                if (RunShellTool("python3", pyCmd) && File.Exists(tempPng))
-                {
-                    return File.ReadAllBytes(tempPng);
-                }
-
-                // Option C: ImageMagick / ffmpeg
-                if (RunShellTool("convert", $"\"{tempWebp}\" \"{tempPng}\"") && File.Exists(tempPng))
-                {
-                    return File.ReadAllBytes(tempPng);
-                }
-                if (RunShellTool("ffmpeg", $"-y -i \"{tempWebp}\" \"{tempPng}\"") && File.Exists(tempPng))
                 {
                     return File.ReadAllBytes(tempPng);
                 }

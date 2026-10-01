@@ -31,6 +31,19 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
 endif()
 
+# Register official installation path in Windows Registry and ensure $INSTDIR\bin is in PATH
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+  WriteRegStr HKLM \\\"Software\\\\BentoPack Studio\\\" \\\"InstallLocation\\\" \\\"$INSTDIR\\\"
+  WriteRegStr HKLM \\\"Software\\\\BentoPack Studio\\\" \\\"Path\\\" \\\"$INSTDIR\\\\bin\\\"
+  Push \\\"$INSTDIR\\\\bin\\\"
+  Call AddToPath
+")
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+  DeleteRegKey HKLM \\\"Software\\\\BentoPack Studio\\\"
+  Push \\\"$INSTDIR\\\\bin\\\"
+  Call un.RemoveFromPath
+")
+
 # macOS CPack configuration
 set(CPACK_DMG_VOLUME_NAME "BentoPack Studio")
 set(CPACK_DMG_FORMAT "UDZO")

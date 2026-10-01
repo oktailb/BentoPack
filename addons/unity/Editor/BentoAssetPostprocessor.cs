@@ -230,21 +230,20 @@ namespace BentoPack.Editor
         public static string AutoDetectExternalSource(string bentoPath)
         {
             if (string.IsNullOrEmpty(bentoPath)) return null;
-            string fileName = Path.GetFileName(bentoPath);
 
-            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string[] searchPaths = new string[]
+            try
             {
-                "/home/oktail/Documents/GitHub/BentoPack/sample/" + fileName,
-                "/home/oktail/Documents/GitHub/BentoPack/" + fileName,
-                Path.Combine(homeDir, "Documents/GitHub/BentoPack/sample", fileName),
-                Path.Combine(homeDir, "Documents/GitHub/BentoPack", fileName)
-            };
+                string fullPath = Path.GetFullPath(bentoPath);
+                if (File.Exists(fullPath)) return fullPath;
 
-            foreach (var sp in searchPaths)
-            {
-                if (File.Exists(sp)) return sp;
+                string projectDir = Path.GetDirectoryName(Application.dataPath);
+                if (!string.IsNullOrEmpty(projectDir))
+                {
+                    string fromProject = Path.Combine(projectDir, bentoPath);
+                    if (File.Exists(fromProject)) return Path.GetFullPath(fromProject);
+                }
             }
+            catch { }
 
             return null;
         }
