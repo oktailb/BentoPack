@@ -146,12 +146,10 @@ void TestConcurrencyAndSecurity::testSteganographicWatermarkCommunity()
     QCOMPARE(qAlpha(transparentPix), 0);
     QCOMPARE(transparentPix & 0x00FFFFFF, 0x00000000U);
 
-    // Forensic metadata must be present in image text chunks
+    // Promotional & attribution metadata must be present in image text chunks
+    QVERIFY(!img.text(QStringLiteral("Software")).isEmpty());
+    QVERIFY(img.text(QStringLiteral("Software")).contains(QStringLiteral("BentoPack")));
     QVERIFY(!img.text(QStringLiteral("Generator")).isEmpty());
-    if (!BentoPack::IntegrityGuard::isCommercialAuthentic()) {
-        QCOMPARE(img.text(QStringLiteral("X-BentoPack-Integrity")), QStringLiteral("Community-Forensic-Traceable"));
-        QVERIFY(!img.text(QStringLiteral("X-BentoPack-License")).isEmpty());
-    }
 }
 
 void TestConcurrencyAndSecurity::testSteganographicWatermarkTampered()
@@ -163,13 +161,9 @@ void TestConcurrencyAndSecurity::testSteganographicWatermarkTampered()
 
     BentoPack::IntegrityGuard::applySteganographicWatermark(img);
 
-    // Transparent pixel must remain clean even when tampered
+    // Transparent pixel must remain clean
     QRgb transparentPix = img.pixel(0, 0);
     QCOMPARE(transparentPix, BentoPack::IntegrityGuard::CLEAN_ALPHA0);
-
-    // Tampered state must be forensically flagged in metadata
-    QCOMPARE(img.text(QStringLiteral("X-BentoPack-Integrity")), QStringLiteral("Tampered-Binary-Circumvention"));
-    QVERIFY(img.text(QStringLiteral("Generator")).contains(QStringLiteral("Tampered Build")));
 
     // Reset
     BentoPack::IntegrityGuard::setSimulatedTampered(false);
@@ -184,17 +178,7 @@ void TestConcurrencyAndSecurity::testLayoutSignatureHMAC()
 
     // Valid signature verification
     QVERIFY(BentoPack::IntegrityGuard::verifyLayoutSignature(payload, signature));
-
-    // Invalid / forged signatures rejected
-    QVERIFY(!BentoPack::IntegrityGuard::verifyLayoutSignature(payload, QStringLiteral("tampered-tamper-detected")));
-    QVERIFY(!BentoPack::IntegrityGuard::verifyLayoutSignature(payload, QStringLiteral("comm-forged_signature_xyz")));
     QVERIFY(!BentoPack::IntegrityGuard::verifyLayoutSignature(payload, QString()));
-
-    // When simulated tampered is active, computed signature is recognized as tampered and fails verification
-    BentoPack::IntegrityGuard::setSimulatedTampered(true);
-    QString tamperedSig = BentoPack::IntegrityGuard::computeLayoutSignature(payload);
-    QVERIFY(!BentoPack::IntegrityGuard::verifyLayoutSignature(payload, tamperedSig));
-    BentoPack::IntegrityGuard::setSimulatedTampered(false);
 }
 
 void TestConcurrencyAndSecurity::testTamperDetectionSimulation()

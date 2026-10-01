@@ -6,22 +6,6 @@ configure_file(
     generated/version.h
 )
 
-# Configuration de la licence & signature cryptographique commerciale
-set(COMMERCIAL_SIGNING_KEY "" CACHE STRING "Secret key for building official commercial releases")
-if(COMMERCIAL_SIGNING_KEY STREQUAL "")
-    set(BENTOPACK_COMMERCIAL_BUILD 0)
-    set(BENTOPACK_LICENSE_TOKEN "")
-    message(STATUS "Build target: BentoPack Community Edition")
-else()
-    set(BENTOPACK_COMMERCIAL_BUILD 1)
-    set(BENTOPACK_LICENSE_TOKEN "${COMMERCIAL_SIGNING_KEY}")
-    message(STATUS "Build target: BentoPack Commercial Edition (Token provided)")
-endif()
-
-configure_file(
-    src/license_config.h.in
-    generated/license_config.h
-)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -86,7 +70,6 @@ set(BentoPackCore_SRC
     src/geometry/polygonmerger.cpp
     src/license/licensemanager.cpp
     src/license/integrityguard.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/gatekeeper/commercialgatekeeper.cpp
     src/commands/meshcommands.cpp
 )
 
@@ -123,7 +106,6 @@ set(BentoPackCore_INCLUDE
     include/license/igatekeeper.h
     include/license/licensemanager.h
     include/license/integrityguard.h
-    ${CMAKE_SOURCE_DIR}/plugins/gatekeeper/commercialgatekeeper.h
     include/commands/meshcommands.h
 )
 

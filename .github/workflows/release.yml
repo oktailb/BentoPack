@@ -1,4 +1,4 @@
-name: Release Community Edition
+name: Release BentoPack
 
 on:
   push:

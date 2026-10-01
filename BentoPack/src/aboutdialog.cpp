@@ -1,21 +1,18 @@
-/**
- Licensed to the Apache Software Foundation (ASF) under one
- or more contributor license agreements.  See the NOTICE file
- distributed with this work for additional information
- regarding copyright ownership.  The ASF licenses this file
- to you under the Apache License, Version 2.0 (the
- "License"); you may not use this file except in compliance
- with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an
- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- KIND, either express or implied.  See the License for the
- specific language governing permissions and limitations
- under the License.
-*/
+﻿/**
+ * Copyright (c) 2026 Vincent LECOQ
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "aboutdialog.h"
 #include "generated/version.h"
@@ -78,13 +75,7 @@ void AboutDialog::changeEvent(QEvent *event)
         settingsButton->setText(tr("KEY_ACTION_SETTINGS"));
         closeButton->setText(tr("KEY_DIALOG_ABOUT_CLOSE"));
 
-        if (BentoPack::IntegrityGuard::isTampered()) {
-            editionNoticeLabel->setText(tr("KEY_EDITION_NOTICE_TAMPERED"));
-        } else if (BentoPack::LicenseManager::isCommercial()) {
-            editionNoticeLabel->setText(tr("KEY_EDITION_NOTICE_COMMERCIAL"));
-        } else {
-            editionNoticeLabel->setText(tr("KEY_EDITION_NOTICE_COMMUNITY"));
-        }
+        editionNoticeLabel->setText(QStringLiteral("Open Source - Apache License 2.0"));
 
         loadApplicationInfo();
         loadPricing();
@@ -158,28 +149,12 @@ void AboutDialog::setupUI()
   editionBadgeLabel = new QLabel(this);
   editionNoticeLabel = new QLabel(this);
 
-  if (BentoPack::IntegrityGuard::isTampered()) {
-      editionBadgeLabel->setText(QStringLiteral("⚠️ TAMPERED / CIRCUMVENTED BUILD"));
-      editionBadgeLabel->setStyleSheet(
-          QStringLiteral("background: #ef4444; color: #ffffff; font-weight: bold; "
-                         "border-radius: 4px; padding: 2px 8px; font-size: 11px;"));
-      editionNoticeLabel->setText(tr("KEY_EDITION_NOTICE_TAMPERED"));
-      editionNoticeLabel->setStyleSheet(QStringLiteral("color: #ef4444; font-size: 11px; font-weight: bold;"));
-  } else if (BentoPack::LicenseManager::isCommercial()) {
-      editionBadgeLabel->setText(QStringLiteral("★ COMMERCIAL EDITION"));
-      editionBadgeLabel->setStyleSheet(
-          QStringLiteral("background: #10b981; color: #ffffff; font-weight: bold; "
-                         "border-radius: 4px; padding: 2px 8px; font-size: 11px;"));
-      editionNoticeLabel->setText(tr("KEY_EDITION_NOTICE_COMMERCIAL"));
-      editionNoticeLabel->setStyleSheet(QStringLiteral("color: #10b981; font-size: 11px; font-weight: 500;"));
-  } else {
-      editionBadgeLabel->setText(QStringLiteral("COMMUNITY EDITION"));
-      editionBadgeLabel->setStyleSheet(
-          QStringLiteral("background: #3b82f6; color: #ffffff; font-weight: bold; "
-                         "border-radius: 4px; padding: 2px 8px; font-size: 11px;"));
-      editionNoticeLabel->setText(tr("KEY_EDITION_NOTICE_COMMUNITY"));
-      editionNoticeLabel->setStyleSheet(QStringLiteral("color: #3b82f6; font-size: 11px; font-weight: 500;"));
-  }
+  editionBadgeLabel->setText(QStringLiteral("APACHE 2.0 OPEN SOURCE"));
+  editionBadgeLabel->setStyleSheet(
+      QStringLiteral("background: #3b82f6; color: #ffffff; font-weight: bold; "
+                     "border-radius: 4px; padding: 2px 8px; font-size: 11px;"));
+  editionNoticeLabel->setText(QStringLiteral("Open Source - Apache License 2.0"));
+  editionNoticeLabel->setStyleSheet(QStringLiteral("color: %1; font-size: 11px; font-weight: 500;").arg(colors.textMuted));
 
   versionRow->addWidget(versionLabel);
   versionRow->addWidget(editionBadgeLabel);
@@ -443,9 +418,7 @@ void AboutDialog::loadPricing()
   QJsonObject rootObj = doc.isObject() ? doc.object() : QJsonObject();
   QJsonArray tiersArray = rootObj.value(QStringLiteral("tiers")).toArray();
 
-  QString currentEdition = BentoPack::IntegrityGuard::isTampered()
-      ? QStringLiteral("tampered")
-      : (BentoPack::LicenseManager::isCommercial() ? QStringLiteral("gui_seat") : QStringLiteral("community"));
+  QString currentEdition = QStringLiteral("store_edition");
 
   QString titleText = resolveI18nString(rootObj.value(QStringLiteral("title")), QStringLiteral("Grille Tarifaire"));
   QString disclaimerText = resolveI18nString(rootObj.value(QStringLiteral("disclaimer")));
@@ -523,15 +496,7 @@ void AboutDialog::loadPluginsInfo()
         tr("KEY_PLUGINS_CORE_TITLE"), tr("KEY_PLUGINS_CORE_DESC"),
         tr("KEY_PLUGINS_EXT_TITLE"), tr("KEY_PLUGINS_EXT_DESC"));
 
-  // Détermination du statut de licence des plugins
-  QString pluginLicenseBadge;
-  if (BentoPack::IntegrityGuard::isTampered()) {
-      pluginLicenseBadge = tr("KEY_PLUGINS_LIC_TAMPERED");
-  } else if (BentoPack::LicenseManager::isCommercial()) {
-      pluginLicenseBadge = tr("KEY_PLUGINS_LIC_COMMERCIAL");
-  } else {
-      pluginLicenseBadge = tr("KEY_PLUGINS_LIC_COMMUNITY");
-  }
+  QString pluginLicenseBadge = QStringLiteral("<span style='color: #10b981; font-weight: bold;'>Apache 2.0</span>");
 
   // Section Codecs d'Exportation
   html += QStringLiteral(

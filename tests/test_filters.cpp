@@ -598,11 +598,9 @@ void TestFilters::testAboutDialogDarkModeAndPricing()
     QTextEdit *pricingEditor = qobject_cast<QTextEdit*>(tabs->currentWidget());
     QVERIFY(pricingEditor != nullptr);
     QString pricingHtml = pricingEditor->toHtml();
-    QVERIFY(pricingHtml.contains("Community"));
+    QVERIFY(pricingHtml.contains("Open Source") || pricingHtml.contains("Apache"));
     QVERIFY(pricingHtml.contains("0"));
-    QVERIFY(pricingHtml.contains("29"));
-    QVERIFY(pricingHtml.contains("149"));
-    QVERIFY(pricingHtml.contains("499"));
+    QVERIFY(pricingHtml.contains("19"));
 
     // Verify plugins info
     tabs->setCurrentIndex(2); // Plugins & Statut
@@ -658,10 +656,9 @@ void TestFilters::testAboutDialogDarkModeAndPricing()
     QTextEdit *pricingFr = qobject_cast<QTextEdit*>(tabsFr->currentWidget());
     QVERIFY(pricingFr != nullptr);
     QString htmlFr = pricingFr->toHtml();
-    QVERIFY(htmlFr.contains("29 €"));
-    QVERIFY(htmlFr.contains("149 €"));
-    QVERIFY(htmlFr.contains("499 €"));
-    QVERIFY(htmlFr.contains("Gratuit"));
+    QVERIFY(htmlFr.contains("0 €"));
+    QVERIFY(htmlFr.contains("19 €"));
+    QVERIFY(htmlFr.contains("Gratuit") || htmlFr.contains("Apache"));
     QVERIFY(htmlFr.contains("Pour qui :"));
 
     // Test dynamic multilingual pricing loading in English
@@ -673,10 +670,9 @@ void TestFilters::testAboutDialogDarkModeAndPricing()
     QTextEdit *pricingEn = qobject_cast<QTextEdit*>(tabsEn->currentWidget());
     QVERIFY(pricingEn != nullptr);
     QString htmlEn = pricingEn->toHtml();
-    QVERIFY(htmlEn.contains("$29"));
-    QVERIFY(htmlEn.contains("$149"));
-    QVERIFY(htmlEn.contains("$499"));
-    QVERIFY(htmlEn.contains("Free"));
+    QVERIFY(htmlEn.contains("$0"));
+    QVERIFY(htmlEn.contains("$19"));
+    QVERIFY(htmlEn.contains("Free") || htmlEn.contains("Apache"));
     QVERIFY(htmlEn.contains("Target:"));
 
     // Test dynamic multilingual pricing loading in Japanese
@@ -688,10 +684,9 @@ void TestFilters::testAboutDialogDarkModeAndPricing()
     QTextEdit *pricingJa = qobject_cast<QTextEdit*>(tabsJa->currentWidget());
     QVERIFY(pricingJa != nullptr);
     QString htmlJa = pricingJa->toHtml();
-    QVERIFY(htmlJa.contains("2 990 円") || htmlJa.contains("2,990 円") || htmlJa.contains("3 400 円") || htmlJa.contains("3,400 円"));
-    QVERIFY(htmlJa.contains("14 900 円") || htmlJa.contains("14,900 円") || htmlJa.contains("18 000 円") || htmlJa.contains("18,000 円"));
-    QVERIFY(htmlJa.contains("59 000 円") || htmlJa.contains("59,000 円"));
-    QVERIFY(htmlJa.contains("無料"));
+    QVERIFY(htmlJa.contains("0 円"));
+    QVERIFY(htmlJa.contains("1 980 円") || htmlJa.contains("1,980 円") || htmlJa.contains("1980"));
+    QVERIFY(htmlJa.contains("無料") || htmlJa.contains("Apache"));
     QVERIFY(htmlJa.contains("対象:"));
 
     qApp->setPalette(origPalette);

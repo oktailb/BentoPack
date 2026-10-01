@@ -7,7 +7,7 @@
 [![CMake](https://img.shields.io/badge/CMake-3.20+-064F8C.svg?logo=cmake)](https://cmake.org/)
 
 > **BentoPack** is a fast, modular, and modern desktop application tailored for game developers, pixel artists, and 2D animators to pack, slice, arrange, and export high-density 2D sprite sheets, tight polygonal meshes, and animated textures.
-The UI and CLI are licensed under Apache 2.0. Specific engine integration plugins (Godot, Unity, Unreal) and advanced filters are located in the `/plugins` directory and are provided under a Source-Available License (free to compile for entities under $1M revenue). Pre-compiled binaries are available for purchase on Stores.
+The entire project (UI, CLI, core engine, plugins, filters, and engine exporters) is 100% Free and Open Source under the **Apache License 2.0**. Official pre-compiled, auto-updating binaries are available for purchase on Steam and Itch.io (19 €) for convenient 1-click desktop use.
 
 ---
 
@@ -318,18 +318,13 @@ BentoPack bridges the gap between raw asset extraction/cleanup (historically han
 
 ---
 
-## 📄 Licensing & Dual-Distribution Model
+## 📄 Licensing & Distribution Model
 
-BentoPack operates under an **Open-Core & Source-Available** dual licensing architecture:
+BentoPack is distributed as **100% Free and Open Source Software (FOSS)**:
 
-* **Core Algorithmic Engine (Open Source — Apache License 2.0):**
-  The fundamental sprite-packing algorithms, geometric slicing primitives, and core data models are licensed under the permissive **Apache License 2.0**. See [LICENSE](LICENSE).
-* **Gatekeepers, Forensic Integrity & Proprietary Plugins (Source-Available — BentoPack EULA):**
-  The license gatekeepers (`plugins/gatekeeper/`, `BentoPack/src/license/`), the forensic integrity engine (`IntegrityGuard`), engine bridges, and proprietary plugins are governed by the [BentoPack EULA](plugins/LICENSE-PLUGINS.md).
-  - **Royalty-Free Tier:** Free for students, open-source contributors, and independent developers whose **consolidated annual gross revenue (including publisher/parent entities) is under $1,000,000 USD**.
-  - **Commercial Requirement:** Mandatory for entities or projects exceeding the $1,000,000 USD consolidated threshold.
-  - **Copyright Management Information (CMI):** Forensic metadata and layout signatures are protected under 17 U.S.C. § 1202 and international copyright treaties. Unauthorized stripping or circumvention is strictly prohibited.
-* **Convenience Binaries (Store Edition):**
-  Official pre-compiled binaries featuring 1-click zero-configuration installers and auto-updates are available for purchase on Steam, Itch.io, and Asset Stores for convenient desktop use.
+* **Entire Codebase (Apache License 2.0):**
+  The entire application, CLI, algorithmic engine, filters, extractors, and engine addons are licensed under the permissive **Apache License 2.0**. You are free to compile, modify, inspect, and use BentoPack in any personal or commercial game project without royalty fees, revenue restrictions, or gatekeeper locks. See [LICENSE](file:///LICENSE).
+* **Official Binaries (Store Convenience — 19 €):**
+  For creators who prefer an out-of-the-box experience without building from source, official pre-compiled binaries featuring 1-click installers, code signing, and automatic updates are available on **Steam** and **Itch.io** (19 €). Purchases directly support ongoing open-source development.
 
 **Developer:** Vincent LECOQ

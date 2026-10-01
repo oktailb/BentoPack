@@ -950,112 +950,47 @@ void TestCore::testCommandChangePivot()
 
 void TestCore::testLicenseComplianceAndWatermarking()
 {
-    bool isComm = BentoPack::LicenseManager::isCommercial();
-
     // Test both GUI and CLI tool types
     for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
         BentoPack::LicenseManager::setToolType(t);
         const QString toolStr = (t == BentoPack::ToolType::CLI) ? QStringLiteral("CLI") : QStringLiteral("GUI");
 
-        if (isComm) {
-            // 1. Commercial Edition assertions
-            QCOMPARE(BentoPack::LicenseManager::edition(), BentoPack::Edition::Commercial);
-            QCOMPARE(BentoPack::LicenseManager::editionName(), QStringLiteral("Commercial Edition"));
+        // 1. Edition name is BentoPack
+        QCOMPARE(BentoPack::LicenseManager::editionName(), QStringLiteral("BentoPack"));
+        QCOMPARE(BentoPack::LicenseManager::isCommercial(), true);
+        QVERIFY(BentoPack::LicenseManager::isFeatureUnlocked(0));
 
-            // 2. Compliance metadata
-            QMap<QString, QString> meta = BentoPack::LicenseManager::complianceMetadata();
-            QCOMPARE(meta.value(QStringLiteral("Generator")), QStringLiteral("BentoPack %1").arg(toolStr));
-            QCOMPARE(meta.value(QStringLiteral("X-BentoPack-Tool")), toolStr);
-            QVERIFY(!meta.contains(QStringLiteral("X-BentoPack-License")));
+        // 2. Compliance metadata
+        QMap<QString, QString> meta = BentoPack::LicenseManager::complianceMetadata();
+        QVERIFY(meta.value(QStringLiteral("Software")).contains(QStringLiteral("BentoPack")));
 
-            // 3. Image watermarking (clean in commercial)
-            QImage testImg(32, 32, QImage::Format_ARGB32_Premultiplied);
-            testImg.fill(Qt::blue);
-            BentoPack::LicenseManager::applyWatermark(testImg);
-            QCOMPARE(testImg.text(QStringLiteral("Generator")), QStringLiteral("BentoPack %1").arg(toolStr));
-            QCOMPARE(testImg.text(QStringLiteral("X-BentoPack-Tool")), toolStr);
-            QVERIFY(testImg.text(QStringLiteral("X-BentoPack-License")).isEmpty());
+        // 3. Image watermarking
+        QImage testImg(32, 32, QImage::Format_ARGB32_Premultiplied);
+        testImg.fill(Qt::blue);
+        BentoPack::LicenseManager::applyWatermark(testImg);
+        QVERIFY(testImg.text(QStringLiteral("Software")).contains(QStringLiteral("BentoPack")));
+        QVERIFY(testImg.text(QStringLiteral("Generator")).contains(QStringLiteral("BentoPack")));
 
-            // 4. JSON metadata (clean in commercial)
-            QJsonObject jsonMeta;
-            jsonMeta["version"] = "1.0";
-            BentoPack::LicenseManager::applyWatermark(jsonMeta);
-            QCOMPARE(jsonMeta["app"].toString(), QStringLiteral("BentoPack %1").arg(toolStr));
-            QCOMPARE(jsonMeta["tool"].toString(), toolStr);
-            QVERIFY(!jsonMeta.contains(QStringLiteral("license")));
+        // 4. JSON metadata
+        QJsonObject jsonMeta;
+        jsonMeta["version"] = "1.0";
+        BentoPack::LicenseManager::applyWatermark(jsonMeta);
+        QVERIFY(jsonMeta["app"].toString().contains(QStringLiteral("BentoPack")));
+        QCOMPARE(jsonMeta["signature"].toString(), QStringLiteral("bentopack"));
 
-            // 5. Header comment
-            QString header = BentoPack::LicenseManager::watermarkHeaderComment();
-            QVERIFY(!header.contains(QStringLiteral("Community Edition")));
-        } else {
-            // 1. Community Edition assertions
-            QCOMPARE(BentoPack::LicenseManager::edition(), BentoPack::Edition::Community);
-            QCOMPARE(BentoPack::LicenseManager::editionName(), QStringLiteral("Community Edition"));
-
-            // 2. Compliance metadata dictionary
-            QMap<QString, QString> meta = BentoPack::LicenseManager::complianceMetadata();
-            QCOMPARE(meta.value(QStringLiteral("Generator")), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
-            QCOMPARE(meta.value(QStringLiteral("X-BentoPack-Tool")), toolStr);
-            QCOMPARE(meta.value(QStringLiteral("X-BentoPack-License")), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
-
-            // 3. Image watermarking (PNG tEXt chunk metadata)
-            QImage testImg(32, 32, QImage::Format_ARGB32_Premultiplied);
-            testImg.fill(Qt::blue);
-            BentoPack::LicenseManager::applyWatermark(testImg);
-            QCOMPARE(testImg.text(QStringLiteral("Generator")), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
-            QCOMPARE(testImg.text(QStringLiteral("X-BentoPack-Tool")), toolStr);
-            QCOMPARE(testImg.text(QStringLiteral("X-BentoPack-License")), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
-            QVERIFY(testImg.text(QStringLiteral("X-BentoPack-Notice")).contains(QStringLiteral("<1M$")));
-
-            // 4. JSON metadata watermarking
-            QJsonObject jsonMeta;
-            jsonMeta["version"] = "1.0";
-            BentoPack::LicenseManager::applyWatermark(jsonMeta);
-            QCOMPARE(jsonMeta["app"].toString(), QStringLiteral("BentoPack %1 Community Edition").arg(toolStr));
-            QCOMPARE(jsonMeta["tool"].toString(), toolStr);
-            QCOMPARE(jsonMeta["license"].toString(), QStringLiteral("Community-Exemption-Under-1M-%1").arg(toolStr));
-
-            // 5. Header comment
-            QString header = BentoPack::LicenseManager::watermarkHeaderComment();
-            QVERIFY(header.contains(QStringLiteral("Community Edition")));
-            if (t == BentoPack::ToolType::CLI) {
-                QVERIFY(header.contains(QStringLiteral("Commercial CLI Automation")));
-            } else {
-                QVERIFY(header.contains(QStringLiteral("Commercial seat license")));
-            }
-        }
+        // 5. Header comment
+        QString header = BentoPack::LicenseManager::watermarkHeaderComment();
+        QVERIFY(header.contains(QStringLiteral("BentoPack")));
     }
-
-    // 6. Test Gatekeeper Architecture & Challenge Handshake
-    class RogueGatekeeper : public BentoPack::ILicenseGatekeeper
-    {
-    public:
-        bool isCommercial() const override { return true; } // Spoofed!
-        QString editionName() const override { return QStringLiteral("Hacked Edition"); }
-        QByteArray signChallenge(const QByteArray &) const override { return QByteArray("garbage"); }
-        bool verifyChallenge(const QByteArray &, const QByteArray &) const override { return false; }
-        bool isFeatureUnlocked(quint32) const override { return true; }
-    };
-
-    // Rogue gatekeeper must be rejected due to challenge failure
-    BentoPack::LicenseManager::setGatekeeper(std::make_shared<RogueGatekeeper>());
-    QCOMPARE(BentoPack::LicenseManager::isCommercial(), false);
-    QCOMPARE(BentoPack::LicenseManager::editionName(), QStringLiteral("Community Edition"));
-
-    // Reset gatekeeper
-    BentoPack::LicenseManager::setGatekeeper(nullptr);
-    QCOMPARE(BentoPack::LicenseManager::isCommercial(), false);
 }
 
 void TestCore::testIntegrityGuardAndForensicWatermarking()
 {
-    bool isComm = BentoPack::LicenseManager::isCommercial();
-
     // 1. Initial integrity verification
-    QCOMPARE(BentoPack::IntegrityGuard::isCommercialAuthentic(), isComm);
+    QVERIFY(BentoPack::IntegrityGuard::isCommercialAuthentic());
     QVERIFY(!BentoPack::IntegrityGuard::isTampered());
 
-    // 2. Test steganographic Alpha == 0 pixel watermarking for GUI and CLI
+    // 2. Test attribution metadata tagging and clean alpha preservation
     for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
         BentoPack::LicenseManager::setToolType(t);
 
@@ -1069,79 +1004,34 @@ void TestCore::testIntegrityGuardAndForensicWatermarking()
 
         BentoPack::IntegrityGuard::applySteganographicWatermark(testImg);
 
-        if (isComm) {
-            // Commercial: transparent pixels remain clean 0x00000000
-            QRgb pTrans = testImg.pixel(0, 0);
-            QCOMPARE(qAlpha(pTrans), 0);
-            QCOMPARE(pTrans, BentoPack::IntegrityGuard::CLEAN_COMMERCIAL_ALPHA0);
-        } else {
-            // Community: transparent pixels remain strictly clean 0x00000000 (no color bleed)
-            QRgb pTrans = testImg.pixel(0, 0);
-            QCOMPARE(qAlpha(pTrans), 0);
-            QCOMPARE(pTrans, BentoPack::IntegrityGuard::CLEAN_ALPHA0);
+        // Transparent pixels remain strictly clean 0x00000000 (no color bleed)
+        QRgb pTrans = testImg.pixel(0, 0);
+        QCOMPARE(qAlpha(pTrans), 0);
+        QCOMPARE(pTrans, BentoPack::IntegrityGuard::CLEAN_ALPHA0);
 
-            // Center pixel remains opaque red untouched
-            QRgb pCenter = testImg.pixel(8, 8);
-            QCOMPARE(qAlpha(pCenter), 255);
-            QCOMPARE(qRed(pCenter), 255);
+        // Center pixel remains opaque red untouched
+        QRgb pCenter = testImg.pixel(8, 8);
+        QCOMPARE(qAlpha(pCenter), 255);
+        QCOMPARE(qRed(pCenter), 255);
 
-            // Test saving to PNG and reloading metadata
-            QString tmpPng = QDir::temp().filePath(QStringLiteral("test_stego_%1.png").arg(t == BentoPack::ToolType::CLI ? "cli" : "gui"));
-            QVERIFY(testImg.save(tmpPng, "PNG"));
-            QImage reloaded(tmpPng);
-            QVERIFY(!reloaded.isNull());
-            QCOMPARE(reloaded.pixel(0, 0), BentoPack::IntegrityGuard::CLEAN_ALPHA0);
-            QCOMPARE(reloaded.text(QStringLiteral("X-BentoPack-Integrity")), QStringLiteral("Community-Forensic-Traceable"));
-            QCOMPARE(reloaded.text(QStringLiteral("X-BentoPack-Tool")), (t == BentoPack::ToolType::CLI ? QStringLiteral("CLI") : QStringLiteral("GUI")));
-            QFile::remove(tmpPng);
-        }
+        // Test saving to PNG and reloading metadata
+        QString tmpPng = QDir::temp().filePath(QStringLiteral("test_stego_%1.png").arg(t == BentoPack::ToolType::CLI ? "cli" : "gui"));
+        QVERIFY(testImg.save(tmpPng, "PNG"));
+        QImage reloaded(tmpPng);
+        QVERIFY(!reloaded.isNull());
+        QCOMPARE(reloaded.pixel(0, 0), BentoPack::IntegrityGuard::CLEAN_ALPHA0);
+        QVERIFY(reloaded.text(QStringLiteral("Software")).contains(QStringLiteral("BentoPack")));
+        QFile::remove(tmpPng);
     }
 
     // 3. Test Layout Signatures
     QString payload = QStringLiteral("atlas.png:512x512:16");
     QString sig = BentoPack::IntegrityGuard::computeLayoutSignature(payload);
     QVERIFY(!sig.isEmpty());
-    if (isComm) {
-        QVERIFY(sig.startsWith(QStringLiteral("comm-")));
-    } else {
-        QCOMPARE(sig, QStringLiteral("community-unverified"));
-    }
     QVERIFY(BentoPack::IntegrityGuard::verifyLayoutSignature(payload, sig));
 
-    // 4. Test Simulated Tamper Detection for GUI and CLI
-    BentoPack::IntegrityGuard::setSimulatedTampered(true);
-    QVERIFY(BentoPack::IntegrityGuard::isTampered());
-    QVERIFY(!BentoPack::IntegrityGuard::isCommercialAuthentic());
-
-    for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
-        BentoPack::LicenseManager::setToolType(t);
-
-        QImage tamperedImg(10, 10, QImage::Format_ARGB32);
-        tamperedImg.fill(BentoPack::IntegrityGuard::CLEAN_ALPHA0);
-        BentoPack::IntegrityGuard::applySteganographicWatermark(tamperedImg);
-        // Pixels remain non-destructively clean 0x00000000
-        QCOMPARE(tamperedImg.pixel(0, 0), BentoPack::IntegrityGuard::CLEAN_ALPHA0);
-        // Forensic metadata flags circumvention
-        QCOMPARE(tamperedImg.text(QStringLiteral("X-BentoPack-Integrity")), QStringLiteral("Tampered-Binary-Circumvention"));
-        QVERIFY(tamperedImg.text(QStringLiteral("Generator")).contains(QStringLiteral("Tampered Build")));
-
-        // Metadata under tampered mode
-        QJsonObject tamperedMeta;
-        BentoPack::LicenseManager::applyWatermark(tamperedMeta);
-        QCOMPARE(tamperedMeta.value(QStringLiteral("integrity")).toString(),
-                 QStringLiteral("TAMPERED_CIRCUMVENTION_DETECTED"));
-        QCOMPARE(tamperedMeta.value(QStringLiteral("signature")).toString(),
-                 QStringLiteral("tampered-tamper-detected"));
-
-        // Header comment under tampered mode
-        QString tamperedHead = BentoPack::LicenseManager::watermarkHeaderComment();
-        QVERIFY(tamperedHead.contains(QStringLiteral("Tampered")));
-    }
-
-    // Reset simulated tamper state and default tool type
-    BentoPack::IntegrityGuard::setSimulatedTampered(false);
+    // Reset default tool type
     BentoPack::LicenseManager::setToolType(BentoPack::ToolType::GUI);
-    QVERIFY(!BentoPack::IntegrityGuard::isTampered());
 }
 
 #include <QGuiApplication>
