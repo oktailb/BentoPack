@@ -68,8 +68,6 @@ set(BentoPackCore_SRC
     src/geometry/polygonsimplifier.cpp
     src/geometry/triangulator.cpp
     src/geometry/polygonmerger.cpp
-    src/license/licensemanager.cpp
-    src/license/integrityguard.cpp
     src/commands/meshcommands.cpp
 )
 
@@ -103,9 +101,6 @@ set(BentoPackCore_INCLUDE
     include/geometry/polygonsimplifier.h
     include/geometry/triangulator.h
     include/geometry/polygonmerger.h
-    include/license/igatekeeper.h
-    include/license/licensemanager.h
-    include/license/integrityguard.h
     include/commands/meshcommands.h
 )
 
@@ -190,9 +185,6 @@ qt_add_translations(BentoPackCore
 set_source_files_properties(${CMAKE_SOURCE_DIR}/LICENSE PROPERTIES
     QT_RESOURCE_ALIAS "LICENSE"
 )
-set_source_files_properties(${CMAKE_SOURCE_DIR}/plugins/LICENSE-PLUGINS.md PROPERTIES
-    QT_RESOURCE_ALIAS "LICENSE-PLUGINS.md"
-)
 set_source_files_properties(res/pricing.json PROPERTIES
     QT_RESOURCE_ALIAS "pricing.json"
 )
@@ -201,7 +193,6 @@ qt6_add_resources(BentoPackCore "text"
     PREFIX "text"
     FILES
     ${CMAKE_SOURCE_DIR}/LICENSE
-    ${CMAKE_SOURCE_DIR}/plugins/LICENSE-PLUGINS.md
     about.txt
     res/pricing.json
 )
@@ -211,7 +202,6 @@ target_include_directories(BentoPackCore PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/zip>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/plugins/gatekeeper>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/bentopack>
 )
 

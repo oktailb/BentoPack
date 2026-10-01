@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,6 @@
 #include "aboutdialog.h"
 #include "generated/version.h"
 #include "widgets/settingsdialog.h"
-#include "license/licensemanager.h"
-#include "license/integrityguard.h"
 #include "extractor/extractorregistry.h"
 #include "filters/filterregistry.h"
 #include "localizationmanager.h"
@@ -618,14 +616,6 @@ void AboutDialog::loadLicense()
 {
   ThemeColors colors = getThemeColors();
 
-  QString pluginLicenseContent = readTextFile(QStringLiteral(":/text/LICENSE-PLUGINS.md"));
-  if (pluginLicenseContent.isEmpty()) {
-      pluginLicenseContent = readTextFile(QStringLiteral(":/text/LICENSE-PLUGINS"));
-  }
-  if (pluginLicenseContent.isEmpty()) {
-      pluginLicenseContent = readTextFile(QStringLiteral("../plugins/LICENSE-PLUGINS.md"));
-  }
-
   QString coreLicenseContent = readTextFile(QStringLiteral(":/text/LICENSE"));
   if (coreLicenseContent.isEmpty()) {
       coreLicenseContent = readTextFile(QStringLiteral(":/text/license.txt"));
@@ -633,16 +623,9 @@ void AboutDialog::loadLicense()
 
   QString licenseHtml = QString(
       "<div style='padding: 10px; font-family: sans-serif; font-size: 12px; color: %1;'>"
-      "  <div style='background: %2; border: 1px solid %3; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px;'>"
-      "    <h4 style='color: %4; margin-top: 0; margin-bottom: 6px;'>%5</h4>"
-      "    <p style='color: %6; font-size: 11px; margin: 0 0 10px 0;'>%7</p>"
-      "    <pre style='background: %8; border: 1px solid %3; border-radius: 6px; padding: 12px; color: %1; font-family: monospace; font-size: 11px; white-space: pre-wrap; word-wrap: break-word; margin: 0;'>%9</pre>"
-      "  </div>"
-      "  <hr>"
       "  <div style='background: %2; border: 1px solid %3; border-radius: 8px; padding: 14px 16px;'>"
-      "    <h4 style='color: %4; margin-top: 0; margin-bottom: 6px;'>%10</h4>"
-      "    <p style='color: %6; font-size: 11px; margin: 0 0 10px 0;'>%11</p>"
-      "    <pre style='background: %8; border: 1px solid %3; border-radius: 6px; padding: 12px; color: %1; font-family: monospace; font-size: 11px; white-space: pre-wrap; word-wrap: break-word; margin: 0;'>%12</pre>"
+      "    <h4 style='color: %4; margin-top: 0; margin-bottom: 10px;'>%5</h4>"
+      "    <pre style='background: %6; border: 1px solid %3; border-radius: 6px; padding: 12px; color: %1; font-family: monospace; font-size: 11px; white-space: pre-wrap; word-wrap: break-word; margin: 0;'>%7</pre>"
       "  </div>"
       "</div>"
   )
@@ -650,13 +633,8 @@ void AboutDialog::loadLicense()
   .arg(colors.cardBg)
   .arg(colors.cardBorder)
   .arg(colors.headingColor)
-  .arg(tr("KEY_LICENSE_PLUGINS_TITLE"))
-  .arg(colors.textMuted)
-  .arg(tr("KEY_LICENSE_PLUGINS_NOTICE"))
-  .arg(colors.paneBg)
-  .arg(pluginLicenseContent.toHtmlEscaped())
   .arg(tr("KEY_LICENSE_CORE_TITLE"))
-  .arg(tr("KEY_LICENSE_CORE_NOTICE"))
+  .arg(colors.paneBg)
   .arg(coreLicenseContent.toHtmlEscaped());
 
   licenseText->setHtml(licenseHtml);

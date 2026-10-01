@@ -85,11 +85,11 @@
     </message>
     <message>
         <source>KEY_PLUGINS_EXT_DESC</source>
-        <translation>ライセンス: &lt;b&gt;Plugin Source-Available License (EULA)&lt;/b&gt; — 年間売上100万ドル基準。基準未満は無償利用可能、超過時または公式バイナリは商用ライセンス必須。</translation>
+        <translation>ライセンス: &lt;b&gt;Apache 2.0&lt;</translation>
     </message>
     <message>
         <source>KEY_LICENSE_PLUGINS_TITLE</source>
-        <translation>プラグインおよび拡張機能: Plugin Source-Available License Agreement (EULA)</translation>
+        <translation>プラグインおよび拡張機能: Apache 2.0</translation>
     </message>
     <message>
         <source>KEY_LICENSE_PLUGINS_NOTICE</source>
@@ -98,22 +98,6 @@
     <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>コアエンジン: Apache License, Version 2.0 (オープンソースコア)</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_CORE_NOTICE</source>
-        <translation>このオープンソースライセンスはコアライブラリ &lt;code&gt;BentoPackCore&lt;/code&gt;（ビンパッキング、ドキュメントモデル、幾何計算）に適用されます。</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_TAMPERED</source>
-        <translation>&lt;span style=&apos;color: #ef4444; font-weight: bold;&apos;&gt;⚠️ 改ざん（EULA第4条3項違反）&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMERCIAL</source>
-        <translation>&lt;span style=&apos;color: #10b981; font-weight: bold;&apos;&gt;✓ 完全商用ライセンス（タグなし出力）&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMUNITY</source>
-        <translation>&lt;span style=&apos;color: #3b82f6; font-weight: bold;&apos;&gt;Source-Available（年間売上100万$未満 - 透かし有効）&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_DIALOG_ABOUT_CREDITS</source>

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 
 #include "packer/atlaspacker.h"
 #include "packer/tightpolygonpacker.h"
-#include "license/integrityguard.h"
 #include <QPainter>
 #include <cmath>
 #include <cstring>
@@ -182,9 +181,6 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
         break;
     }
 
-    if (res.success && !res.atlas.isNull()) {
-        BentoPack::IntegrityGuard::applySteganographicWatermark(res.atlas);
-    }
     return res;
 }
 
@@ -366,7 +362,7 @@ AtlasPackResult AtlasPacker::packMaxRects(const QList<QImage> &uniqueFrames, con
 
     // Render composite atlas
     QImage atlasImage(binW, binH, QImage::Format_ARGB32_Premultiplied);
-    atlasImage.fill(BentoPack::IntegrityGuard::transparentBackgroundColor());
+    atlasImage.fill(Qt::transparent);
 
     QPainter painter(&atlasImage);
     QList<QRect> uniqueSpriteRects;
@@ -488,7 +484,7 @@ AtlasPackResult AtlasPacker::packRow(const QList<QImage> &uniqueFrames, const QL
     }
 
     QImage atlasImage(finalWidth, finalHeight, QImage::Format_ARGB32_Premultiplied);
-    atlasImage.fill(BentoPack::IntegrityGuard::transparentBackgroundColor());
+    atlasImage.fill(Qt::transparent);
 
     QPainter painter(&atlasImage);
     for (int i = 0; i < uniqueFrames.size(); ++i) {
@@ -563,7 +559,7 @@ AtlasPackResult AtlasPacker::packGrid(const QList<QImage> &uniqueFrames, const Q
     }
 
     QImage atlasImage(finalWidth, finalHeight, QImage::Format_ARGB32_Premultiplied);
-    atlasImage.fill(BentoPack::IntegrityGuard::transparentBackgroundColor());
+    atlasImage.fill(Qt::transparent);
 
     QPainter painter(&atlasImage);
     QList<QRect> uniqueSpriteRects;

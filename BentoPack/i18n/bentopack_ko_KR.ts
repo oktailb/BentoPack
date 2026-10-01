@@ -85,7 +85,7 @@
     </message>
     <message>
         <source>KEY_PLUGINS_EXT_DESC</source>
-        <translation>라이선스: &lt;b&gt;플러그인 소스 사용 가능 라이선스(EULA)&lt;/b&gt; — 연간 총 수익 $1,000,000 USD 기준. 기준치 미만은 로열티 무료, 초과 시 상용 라이선스 필요.</translation>
+        <translation>라이선스: &lt;b&gt;플러그인 소스 사용 가능</translation>
     </message>
     <message>
         <source>KEY_LICENSE_PLUGINS_TITLE</source>
@@ -98,22 +98,6 @@
     <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>코어 엔진: Apache 라이선스, 버전 2.0 (오픈 소스 코어)</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_CORE_NOTICE</source>
-        <translation>이 허용적인 오픈 소스 라이선스는 핵심 라이브러리인 &lt;code&gt;BentoPackCore&lt;/code&gt;(빈 패킹, 문서 모델, 기하학)에 적용됩니다.</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_TAMPERED</source>
-        <translation>&lt;span style=&apos;color: #ef4444; font-weight: bold;&apos;&gt;⚠️ 변조됨 (EULA 위반 § 4.3)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMERCIAL</source>
-        <translation>&lt;span style=&apos;color: #10b981; font-weight: bold;&apos;&gt;✓ 전체 상용 라이선스 (태그 없는 내보내기)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMUNITY</source>
-        <translation>&lt;span style=&apos;color: #3b82f6; font-weight: bold;&apos;&gt;소스 사용 가능 (100만 달러 미만 - 워터마크 활성화됨)&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_DIALOG_ABOUT_CREDITS</source>

@@ -14,8 +14,6 @@
 #include "packer/maxrectspacker.h"
 #include "commands/commands.h"
 #include "config/appconfig.h"
-#include "license/licensemanager.h"
-#include "license/integrityguard.h"
 
 class TestCore : public QObject
 {
@@ -72,8 +70,6 @@ private slots:
     void testPivotPresetsCalculation();
     void testDocumentPivotMethods();
     void testCommandChangePivot();
-    void testLicenseComplianceAndWatermarking();
-    void testIntegrityGuardAndForensicWatermarking();
 };
 
 void TestCore::initTestCase()
@@ -946,92 +942,6 @@ void TestCore::testCommandChangePivot()
 
     undoStack.redo();
     QCOMPARE(doc.boxPivot(idx), newPivot);
-}
-
-void TestCore::testLicenseComplianceAndWatermarking()
-{
-    // Test both GUI and CLI tool types
-    for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
-        BentoPack::LicenseManager::setToolType(t);
-        const QString toolStr = (t == BentoPack::ToolType::CLI) ? QStringLiteral("CLI") : QStringLiteral("GUI");
-
-        // 1. Edition name is BentoPack
-        QCOMPARE(BentoPack::LicenseManager::editionName(), QStringLiteral("BentoPack"));
-        QCOMPARE(BentoPack::LicenseManager::isCommercial(), true);
-        QVERIFY(BentoPack::LicenseManager::isFeatureUnlocked(0));
-
-        // 2. Compliance metadata
-        QMap<QString, QString> meta = BentoPack::LicenseManager::complianceMetadata();
-        QVERIFY(meta.value(QStringLiteral("Software")).contains(QStringLiteral("BentoPack")));
-
-        // 3. Image watermarking
-        QImage testImg(32, 32, QImage::Format_ARGB32_Premultiplied);
-        testImg.fill(Qt::blue);
-        BentoPack::LicenseManager::applyWatermark(testImg);
-        QVERIFY(testImg.text(QStringLiteral("Software")).contains(QStringLiteral("BentoPack")));
-        QVERIFY(testImg.text(QStringLiteral("Generator")).contains(QStringLiteral("BentoPack")));
-
-        // 4. JSON metadata
-        QJsonObject jsonMeta;
-        jsonMeta["version"] = "1.0";
-        BentoPack::LicenseManager::applyWatermark(jsonMeta);
-        QVERIFY(jsonMeta["app"].toString().contains(QStringLiteral("BentoPack")));
-        QCOMPARE(jsonMeta["signature"].toString(), QStringLiteral("bentopack"));
-
-        // 5. Header comment
-        QString header = BentoPack::LicenseManager::watermarkHeaderComment();
-        QVERIFY(header.contains(QStringLiteral("BentoPack")));
-    }
-}
-
-void TestCore::testIntegrityGuardAndForensicWatermarking()
-{
-    // 1. Initial integrity verification
-    QVERIFY(BentoPack::IntegrityGuard::isCommercialAuthentic());
-    QVERIFY(!BentoPack::IntegrityGuard::isTampered());
-
-    // 2. Test attribution metadata tagging and clean alpha preservation
-    for (BentoPack::ToolType t : {BentoPack::ToolType::GUI, BentoPack::ToolType::CLI}) {
-        BentoPack::LicenseManager::setToolType(t);
-
-        QImage testImg(16, 16, QImage::Format_ARGB32);
-        testImg.fill(Qt::transparent); // initially 0x00000000
-        for (int y = 6; y < 10; ++y) {
-            for (int x = 6; x < 10; ++x) {
-                testImg.setPixelColor(x, y, QColor(255, 0, 0, 255));
-            }
-        }
-
-        BentoPack::IntegrityGuard::applySteganographicWatermark(testImg);
-
-        // Transparent pixels remain strictly clean 0x00000000 (no color bleed)
-        QRgb pTrans = testImg.pixel(0, 0);
-        QCOMPARE(qAlpha(pTrans), 0);
-        QCOMPARE(pTrans, BentoPack::IntegrityGuard::CLEAN_ALPHA0);
-
-        // Center pixel remains opaque red untouched
-        QRgb pCenter = testImg.pixel(8, 8);
-        QCOMPARE(qAlpha(pCenter), 255);
-        QCOMPARE(qRed(pCenter), 255);
-
-        // Test saving to PNG and reloading metadata
-        QString tmpPng = QDir::temp().filePath(QStringLiteral("test_stego_%1.png").arg(t == BentoPack::ToolType::CLI ? "cli" : "gui"));
-        QVERIFY(testImg.save(tmpPng, "PNG"));
-        QImage reloaded(tmpPng);
-        QVERIFY(!reloaded.isNull());
-        QCOMPARE(reloaded.pixel(0, 0), BentoPack::IntegrityGuard::CLEAN_ALPHA0);
-        QVERIFY(reloaded.text(QStringLiteral("Software")).contains(QStringLiteral("BentoPack")));
-        QFile::remove(tmpPng);
-    }
-
-    // 3. Test Layout Signatures
-    QString payload = QStringLiteral("atlas.png:512x512:16");
-    QString sig = BentoPack::IntegrityGuard::computeLayoutSignature(payload);
-    QVERIFY(!sig.isEmpty());
-    QVERIFY(BentoPack::IntegrityGuard::verifyLayoutSignature(payload, sig));
-
-    // Reset default tool type
-    BentoPack::LicenseManager::setToolType(BentoPack::ToolType::GUI);
 }
 
 #include <QGuiApplication>

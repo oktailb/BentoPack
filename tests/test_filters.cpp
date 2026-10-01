@@ -633,12 +633,11 @@ void TestFilters::testAboutDialogDarkModeAndPricing()
     dlg.render(&imgPlugins);
     QVERIFY(!imgPlugins.isNull());
 
-    // Verify Licence tab contains both Plugin EULA and Apache 2.0
+    // Verify Licence tab contains Apache 2.0
     tabs->setCurrentIndex(4); // Licence
     QTextEdit *licenseEditor = qobject_cast<QTextEdit*>(tabs->currentWidget());
     QVERIFY(licenseEditor != nullptr);
     QString licenseHtml = licenseEditor->toHtml();
-    QVERIFY(licenseHtml.contains("1,000,000") || licenseHtml.contains("1 000 000") || licenseHtml.contains("Revenue Threshold"));
     QVERIFY(licenseHtml.contains("Apache License") || licenseHtml.contains("Apache 2.0") || licenseHtml.contains("KEY_LICENSE_CORE_TITLE"));
 
     // Grab license tab

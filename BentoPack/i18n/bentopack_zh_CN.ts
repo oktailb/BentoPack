@@ -85,7 +85,7 @@
     </message>
     <message>
         <source>KEY_PLUGINS_EXT_DESC</source>
-        <translation>许可：&lt;b&gt;插件源码可用许可 (EULA)&lt;/b&gt; — 1,000,000 美元年度总收入阈值。低于该阈值免版税；超出则需商业许可。</translation>
+        <translation>许可：&lt;</translation>
     </message>
     <message>
         <source>KEY_LICENSE_PLUGINS_TITLE</source>
@@ -98,22 +98,6 @@
     <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>核心引擎：Apache 许可证，2.0 版本 (开源核心)</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_CORE_NOTICE</source>
-        <translation>此宽松开源许可约束核心库 &lt;code&gt;BentoPackCore&lt;/code&gt;（装箱算法、文档模型、几何计算）。</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_TAMPERED</source>
-        <translation>&lt;span style=&apos;color: #ef4444; font-weight: bold;&apos;&gt;⚠️ 篡改警告 (违反 EULA 第 4.3 条)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMERCIAL</source>
-        <translation>&lt;span style=&apos;color: #10b981; font-weight: bold;&apos;&gt;✓ 完整商业许可 (无标记导出)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMUNITY</source>
-        <translation>&lt;span style=&apos;color: #3b82f6; font-weight: bold;&apos;&gt;源码可用 (收入&lt;100万美元 - 带有水印)&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_DIALOG_ABOUT_CREDITS</source>

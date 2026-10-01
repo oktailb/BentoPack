@@ -85,11 +85,11 @@
     </message>
     <message>
         <source>KEY_PLUGINS_EXT_DESC</source>
-        <translation>Licence : &lt;b&gt;Plugin Source-Available License (EULA)&lt;/b&gt; — Seuil de 1 000 000 $ USD de CA annuel. Gratuit pour indies et hobbyistes sous le seuil ; licence commerciale obligatoire au-delà.</translation>
+        <translation>Licence : &lt;b&gt;Apache 2.0&lt;/b&gt;</translation>
     </message>
     <message>
         <source>KEY_LICENSE_PLUGINS_TITLE</source>
-        <translation>Plugins &amp; Extensions : Plugin Source-Available License Agreement (EULA)</translation>
+        <translation>Plugins &amp; Extensions : Apache 2.0</translation>
     </message>
     <message>
         <source>KEY_LICENSE_PLUGINS_NOTICE</source>
@@ -98,22 +98,6 @@
     <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>Noyau Moteur : Apache License, Version 2.0 (Socle Open-Source)</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_CORE_NOTICE</source>
-        <translation>Cette licence libre régit la bibliothèque centrale &lt;code&gt;BentoPackCore&lt;/code&gt; (bin-packing, modèle de document, géométrie).</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_TAMPERED</source>
-        <translation>&lt;span style=&apos;color: #ef4444; font-weight: bold;&apos;&gt;⚠️ Falsifié (Violation EULA § 4.3)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMERCIAL</source>
-        <translation>&lt;span style=&apos;color: #10b981; font-weight: bold;&apos;&gt;✓ Licence Commerciale Complète (Exports dé-tagués)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMUNITY</source>
-        <translation>&lt;span style=&apos;color: #3b82f6; font-weight: bold;&apos;&gt;Source-Available (&lt;1M$ USD - Filigrane actif)&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_DIALOG_ABOUT_CREDITS</source>

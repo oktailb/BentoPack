@@ -1,8 +1,6 @@
 # Install licenses and documentation
 install(FILES
     "${CMAKE_CURRENT_LIST_DIR}/LICENSE"
-    "${CMAKE_CURRENT_LIST_DIR}/plugins/LICENSE-PLUGINS.md"
-    "${CMAKE_CURRENT_LIST_DIR}/addons/LICENSE-ADDONS.md"
     "${CMAKE_CURRENT_LIST_DIR}/README.md"
     DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/doc/bentopack"
     COMPONENT bentopack

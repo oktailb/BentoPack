@@ -18,7 +18,6 @@
 #include "cli/clipackpipeline.h"
 #include "cli/native_commands.h"
 #include "cli/watch_daemon.h"
-#include "license/licensemanager.h"
 #include <QFileInfo>
 #include <QCoreApplication>
 #include <QDir>
@@ -39,8 +38,7 @@ namespace BentoPackCli {
 
 QString CliParser::versionText()
 {
-    return QStringLiteral("BentoPack CLI v1.0.0 (%1, Qt 6 - C++17 Headless Engine)")
-        .arg(BentoPack::LicenseManager::editionName());
+    return QStringLiteral("BentoPack CLI v1.0.0 (Qt 6 - C++17 Headless Engine)");
 }
 
 QString CliParser::helpText()

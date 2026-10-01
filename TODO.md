@@ -26,7 +26,6 @@
 | **M15** | **Refonte Drag & Drop Filmstrip** | Moyenne | `FilmstripListWidget` dédié, calcul linéaire du drop 1D, indicateur bleu contrasté, découplage transactionnel sans récursion destructrice. |
 | **M-CLI** | **Interface CLI & Compatibilité Moteurs** | Moyenne | `bentopack-cli` avec mode drop-in TexturePacker, Aseprite (`-b`) et export natif Godot 4 avec conservation des UIDs. |
 | **M-DEVOPS** | **Release CI Duale & Packaging Windows** | Moyenne | Pipelines `release-community.yml` et `release-commercial.yml`. Empaquetage autonome Windows NSIS/ZIP (`package.cmake`, windeployqt, runtimes MinGW). |
-| **CH-TECH (1-8)** | **Audit, Refactor & Protection Légale** | Haute | Scission `BentoPackCore` / `BentoPackWidgets`, rebranding intégral sans relique, suppression des doublons, refonte en 15 suites de tests modulaires CTest, hygiène Git (.gitignore), CMI statutaire et double licence EULA anti-freeriding AAA. |
 
 ---
 

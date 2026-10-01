@@ -20,7 +20,6 @@
 #include "config/appconfig.h"
 #include "localizationmanager.h"
 #include "cli/cliparser.h"
-#include "license/licensemanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -32,8 +31,6 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QCoreApplication::setOrganizationName(QStringLiteral("BentoPack"));
     QCoreApplication::setApplicationName(QStringLiteral("BentoPackCli"));
-
-    BentoPack::LicenseManager::setToolType(BentoPack::ToolType::CLI);
 
     // Initialize core configuration and localization
     AppConfig::instance().load();

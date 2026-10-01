@@ -17,7 +17,6 @@
 #include "include/mainwindow.h"
 #include "include/config/appconfig.h"
 #include "include/localizationmanager.h"
-#include "include/license/licensemanager.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -26,8 +25,6 @@ int main(int argc, char *argv[])
   a.setWindowIcon(QIcon(QStringLiteral(":/drawer/icons/bentopack.png")));
   QCoreApplication::setOrganizationName(QStringLiteral("BentoPack"));
   QCoreApplication::setApplicationName(QStringLiteral("BentoPack"));
-
-  BentoPack::LicenseManager::setToolType(BentoPack::ToolType::GUI);
 
   // Load configuration and initialize localization dynamically
   AppConfig::instance().load();

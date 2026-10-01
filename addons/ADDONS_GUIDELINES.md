@@ -131,7 +131,7 @@ addons/<moteur>/
 │   ├── BentoDragDrop      # Instanciation par glisser-déposer dans la vue Scène
 │   └── BentoI18n          # Dictionnaire et sélecteur multilingue
 ├── README.md              # Documentation d'installation et tutoriel
-├── LICENSE.md             # EULA Source-Available BentoPack
+├── LICENSE.md             # Addon License
 └── package.json / cfg     # Métadonnées officielles du package moteur
 ```
 
@@ -150,4 +150,4 @@ addons/<moteur>/
 ## 6. 🛡️ Règles Déontologiques & Respect de Licence
 
 1. **Intégrité des Métadonnées :** L'addon ne doit en aucun cas altérer ou contourner les mécanismes d'identification ou les tags stéganographiques incorporés par BentoPack.
-2. **Licence des Addons :** Les plugins d'intégration font partie des composants sous licence **BentoPack Source-Available / Commercial EULA** ([`addons/LICENSE-ADDONS.md`](file:///addons/LICENSE-ADDONS.md)). Ils sont gratuits sous le seuil de 1 000 000 $ USD de chiffre d'affaires et soumis à licence commerciale au-delà.
+2. **Licence des Addons :** Les plugins d'intégration font partie des composants sous licence **Apache 2.0** ([`LICENSE`](../LICENSE)).

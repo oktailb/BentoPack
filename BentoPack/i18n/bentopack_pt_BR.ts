@@ -85,11 +85,11 @@
     </message>
     <message>
         <source>KEY_PLUGINS_EXT_DESC</source>
-        <translation>Licença: &lt;b&gt;Plugin Source-Available License (EULA)&lt;/b&gt; — Limite de $1.000.000 USD de receita anual bruta. Gratuito abaixo do limite; licença comercial necessária acima.</translation>
+        <translation>Licença: &lt;b&gt;Apache 2.0&lt;</translation>
     </message>
     <message>
         <source>KEY_LICENSE_PLUGINS_TITLE</source>
-        <translation>Plugins e Extensões: Plugin Source-Available License Agreement (EULA)</translation>
+        <translation>Plugins e Extensões: Apache 2.0</translation>
     </message>
     <message>
         <source>KEY_LICENSE_PLUGINS_NOTICE</source>
@@ -98,26 +98,6 @@
     <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>Motor Principal: Licença Apache, Versão 2.0 (Núcleo Open-Source)</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_CORE_NOTICE</source>
-        <translation>Esta licença de código aberto permissiva rege a biblioteca central &lt;code&gt;BentoPackCore&lt;/code&gt; (bin-packing, modelo de documento, geometria).</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_TAMPERED</source>
-        <translation>&lt;span style=&apos;color: #ef4444; font-weight: bold;&apos;&gt;⚠️ Falsificado (Violação do EULA § 4.3)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMERCIAL</source>
-        <translation>&lt;span style=&apos;color: #10b981; font-weight: bold;&apos;&gt;✓ Licença Comercial Completa (Exportações sem marca)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_PLUGINS_LIC_COMMUNITY</source>
-        <translation>&lt;span style=&apos;color: #3b82f6; font-weight: bold;&apos;&gt;Source-Available (&lt;$1M USD - Marca d&apos;água ativa)&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>KEY_DIALOG_ABOUT_CREDITS</source>
-        <translation>Créditos</translation>
     </message>
     <message>
         <source>KEY_DIALOG_LICENCE_TITLE</source>

@@ -19,7 +19,6 @@
 #include "extractor/extractorregistry.h"
 #include "packer/vramtexturecompressor.h"
 #include "project/sessionmanager.h"
-#include "license/licensemanager.h"
 #include <QDir>
 #include <QFileInfo>
 #include <QDirIterator>
@@ -241,8 +240,6 @@ CliResult CliPackPipeline::execute(const QStringList &args)
         return CliResult::error(ExitSyntaxError, QStringLiteral("Must specify at least --sheet or --data."));
     }
 
-    BentoPack::LicenseManager::setToolType(BentoPack::ToolType::CLI);
-
     if (sheetPath.isEmpty() && !dataPath.isEmpty()) {
         QFileInfo dfi(dataPath);
         sheetPath = dfi.dir().filePath(dfi.completeBaseName() + QStringLiteral(".png"));
@@ -368,7 +365,6 @@ CliResult CliPackPipeline::execute(const QStringList &args)
             return CliResult::error(ExitIoError, QStringLiteral("Failed to compress VRAM atlas: ") + sheetPath + QStringLiteral(" (") + vErr + QStringLiteral(")"));
         }
     } else {
-        BentoPack::LicenseManager::applyWatermark(packRes.atlas);
         if (!packRes.atlas.save(sheetPath, "PNG")) {
             return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas sheet image: ") + sheetPath);
         }
