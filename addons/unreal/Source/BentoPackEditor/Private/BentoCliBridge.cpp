@@ -9,6 +9,8 @@ int32 FBentoCliBridge::WatchProcessId = -1;
 
 FString FBentoCliBridge::FindCliPath()
 {
+	const FString ExeName = PLATFORM_WINDOWS ? TEXT("bentopack-cli.exe") : TEXT("bentopack-cli");
+
 	// 1. Check environment variable override
 	FString EnvPath = FPlatformMisc::GetEnvironmentVariable(TEXT("BENTOPACK_CLI"));
 	if (!EnvPath.IsEmpty() && IFileManager::Get().FileExists(*EnvPath))
@@ -16,21 +18,67 @@ FString FBentoCliBridge::FindCliPath()
 		return EnvPath;
 	}
 
-	// 2. Search common development and build paths
-	TArray<FString> Candidates = {
-		FPaths::Combine(FPaths::ProjectDir(), TEXT("Binaries/BentoPack/bentopack-cli")),
-		FPaths::Combine(FPaths::ProjectDir(), TEXT("../build/bin/bentopack-cli")),
-		FPaths::Combine(FPaths::EngineDir(), TEXT("Binaries/ThirdParty/BentoPack/bentopack-cli")),
+	// 2. Official System and User PATH
+	FString PathEnv = FPlatformMisc::GetEnvironmentVariable(TEXT("PATH"));
+	if (!PathEnv.IsEmpty())
+	{
+		TArray<FString> PathDirs;
 #if PLATFORM_WINDOWS
-		TEXT("C:/Program Files/BentoPack/bentopack-cli.exe"),
-		TEXT("C:/BentoPack/bin/bentopack-cli.exe")
+		PathEnv.ParseIntoArray(PathDirs, TEXT(";"), true);
 #else
-		TEXT("/usr/local/bin/bentopack-cli"),
-		TEXT("/usr/bin/bentopack-cli")
+		PathEnv.ParseIntoArray(PathDirs, TEXT(":"), true);
 #endif
-	};
+		for (const FString& Dir : PathDirs)
+		{
+			FString Cand = FPaths::Combine(Dir.TrimStartAndEnd(), ExeName);
+			if (IFileManager::Get().FileExists(*Cand))
+			{
+				return Cand;
+			}
+		}
+	}
 
-	for (const FString& Cand : Candidates)
+	// 3. Official OS Installation Directories
+	TArray<FString> StandardPaths;
+#if PLATFORM_WINDOWS
+	FString ProgramFiles = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles"));
+	FString ProgramFilesX86 = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles(x86)"));
+	FString LocalAppData = FPlatformMisc::GetEnvironmentVariable(TEXT("LOCALAPPDATA"));
+
+	if (!ProgramFiles.IsEmpty())
+	{
+		StandardPaths.Add(FPaths::Combine(ProgramFiles, TEXT("BentoPack Studio/bin"), ExeName));
+		StandardPaths.Add(FPaths::Combine(ProgramFiles, TEXT("BentoPack Studio"), ExeName));
+		StandardPaths.Add(FPaths::Combine(ProgramFiles, TEXT("BentoPack/bin"), ExeName));
+		StandardPaths.Add(FPaths::Combine(ProgramFiles, TEXT("BentoPack"), ExeName));
+	}
+	if (!ProgramFilesX86.IsEmpty())
+	{
+		StandardPaths.Add(FPaths::Combine(ProgramFilesX86, TEXT("BentoPack Studio/bin"), ExeName));
+		StandardPaths.Add(FPaths::Combine(ProgramFilesX86, TEXT("BentoPack/bin"), ExeName));
+	}
+	if (!LocalAppData.IsEmpty())
+	{
+		StandardPaths.Add(FPaths::Combine(LocalAppData, TEXT("Programs/BentoPack Studio/bin"), ExeName));
+		StandardPaths.Add(FPaths::Combine(LocalAppData, TEXT("Programs/BentoPack/bin"), ExeName));
+	}
+#elif PLATFORM_MAC
+	StandardPaths.Add(TEXT("/Applications/BentoPack Studio.app/Contents/MacOS/bentopack-cli"));
+	StandardPaths.Add(TEXT("/Applications/BentoPack.app/Contents/MacOS/bentopack-cli"));
+	StandardPaths.Add(TEXT("/usr/local/bin/bentopack-cli"));
+	StandardPaths.Add(TEXT("/opt/homebrew/bin/bentopack-cli"));
+#else // Linux
+	FString Home = FPlatformMisc::GetEnvironmentVariable(TEXT("HOME"));
+	StandardPaths.Add(TEXT("/usr/bin/bentopack-cli"));
+	StandardPaths.Add(TEXT("/usr/local/bin/bentopack-cli"));
+	if (!Home.IsEmpty())
+	{
+		StandardPaths.Add(FPaths::Combine(Home, TEXT(".local/bin/bentopack-cli")));
+	}
+	StandardPaths.Add(TEXT("/opt/bentopack/bin/bentopack-cli"));
+#endif
+
+	for (const FString& Cand : StandardPaths)
 	{
 		FString FullPath = FPaths::ConvertRelativePathToFull(Cand);
 		if (IFileManager::Get().FileExists(*FullPath))
@@ -44,25 +92,76 @@ FString FBentoCliBridge::FindCliPath()
 
 FString FBentoCliBridge::FindGuiPath()
 {
+	const FString ExeName = PLATFORM_WINDOWS ? TEXT("bentopack.exe") : TEXT("bentopack");
+
+	// 1. Check environment variable override
 	FString EnvPath = FPlatformMisc::GetEnvironmentVariable(TEXT("BENTOPACK_GUI"));
 	if (!EnvPath.IsEmpty() && IFileManager::Get().FileExists(*EnvPath))
 	{
 		return EnvPath;
 	}
 
-	TArray<FString> Candidates = {
-		FPaths::Combine(FPaths::ProjectDir(), TEXT("Binaries/BentoPack/bentopack")),
-		FPaths::Combine(FPaths::ProjectDir(), TEXT("../build/bin/bentopack")),
+	// 2. Official System and User PATH
+	FString PathEnv = FPlatformMisc::GetEnvironmentVariable(TEXT("PATH"));
+	if (!PathEnv.IsEmpty())
+	{
+		TArray<FString> PathDirs;
 #if PLATFORM_WINDOWS
-		TEXT("C:/Program Files/BentoPack/bentopack.exe"),
-		TEXT("C:/BentoPack/bin/bentopack.exe")
+		PathEnv.ParseIntoArray(PathDirs, TEXT(";"), true);
 #else
-		TEXT("/usr/local/bin/bentopack"),
-		TEXT("/usr/bin/bentopack")
+		PathEnv.ParseIntoArray(PathDirs, TEXT(":"), true);
 #endif
-	};
+		for (const FString& Dir : PathDirs)
+		{
+			FString Cand = FPaths::Combine(Dir.TrimStartAndEnd(), ExeName);
+			if (IFileManager::Get().FileExists(*Cand))
+			{
+				return Cand;
+			}
+		}
+	}
 
-	for (const FString& Cand : Candidates)
+	// 3. Official OS Installation Directories
+	TArray<FString> StandardPaths;
+#if PLATFORM_WINDOWS
+	FString ProgramFiles = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles"));
+	FString ProgramFilesX86 = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles(x86)"));
+	FString LocalAppData = FPlatformMisc::GetEnvironmentVariable(TEXT("LOCALAPPDATA"));
+
+	if (!ProgramFiles.IsEmpty())
+	{
+		StandardPaths.Add(FPaths::Combine(ProgramFiles, TEXT("BentoPack Studio/bin"), ExeName));
+		StandardPaths.Add(FPaths::Combine(ProgramFiles, TEXT("BentoPack Studio"), ExeName));
+		StandardPaths.Add(FPaths::Combine(ProgramFiles, TEXT("BentoPack/bin"), ExeName));
+		StandardPaths.Add(FPaths::Combine(ProgramFiles, TEXT("BentoPack"), ExeName));
+	}
+	if (!ProgramFilesX86.IsEmpty())
+	{
+		StandardPaths.Add(FPaths::Combine(ProgramFilesX86, TEXT("BentoPack Studio/bin"), ExeName));
+		StandardPaths.Add(FPaths::Combine(ProgramFilesX86, TEXT("BentoPack/bin"), ExeName));
+	}
+	if (!LocalAppData.IsEmpty())
+	{
+		StandardPaths.Add(FPaths::Combine(LocalAppData, TEXT("Programs/BentoPack Studio/bin"), ExeName));
+		StandardPaths.Add(FPaths::Combine(LocalAppData, TEXT("Programs/BentoPack/bin"), ExeName));
+	}
+#elif PLATFORM_MAC
+	StandardPaths.Add(TEXT("/Applications/BentoPack Studio.app/Contents/MacOS/bentopack"));
+	StandardPaths.Add(TEXT("/Applications/BentoPack.app/Contents/MacOS/bentopack"));
+	StandardPaths.Add(TEXT("/usr/local/bin/bentopack"));
+	StandardPaths.Add(TEXT("/opt/homebrew/bin/bentopack"));
+#else // Linux
+	FString Home = FPlatformMisc::GetEnvironmentVariable(TEXT("HOME"));
+	StandardPaths.Add(TEXT("/usr/bin/bentopack"));
+	StandardPaths.Add(TEXT("/usr/local/bin/bentopack"));
+	if (!Home.IsEmpty())
+	{
+		StandardPaths.Add(FPaths::Combine(Home, TEXT(".local/bin/bentopack")));
+	}
+	StandardPaths.Add(TEXT("/opt/bentopack/bin/bentopack"));
+#endif
+
+	for (const FString& Cand : StandardPaths)
 	{
 		FString FullPath = FPaths::ConvertRelativePathToFull(Cand);
 		if (IFileManager::Get().FileExists(*FullPath))
