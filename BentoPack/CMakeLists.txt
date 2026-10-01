@@ -260,6 +260,9 @@ qt6_add_resources(BentoPackWidgets "images"
     icons/tool_trim.png
     icons/tool_remove_bg.png
     icons/bentopack.png
+    icons/bentopack.webp
+    icons/gallus_tech.webp
+    icons/gallus_tech.png
 )
 
 target_include_directories(BentoPackWidgets PUBLIC

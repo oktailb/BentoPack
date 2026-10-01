@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -73,6 +73,9 @@ private:
   QLabel *versionLabel;
   QLabel *editionBadgeLabel;
   QLabel *editionNoticeLabel;
+  QLabel *gallusLogoLabel;
+  QLabel *publisherLabel;
+  QLabel *publishedByCaption;
   QPushButton *closeButton;
   QPushButton *settingsButton;
 };

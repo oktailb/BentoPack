@@ -568,7 +568,7 @@ void TestFilters::testAboutDialogDarkModeAndPricing()
 {
     // Test instantiation with a dark palette (simulating dark theme)
     QPalette origPalette = qApp->palette();
-    QPalette darkPalette;
+    QPalette darkPalette = origPalette;
     darkPalette.setColor(QPalette::Window, QColor("#181920"));
     darkPalette.setColor(QPalette::WindowText, QColor("#e2e8f0"));
     darkPalette.setColor(QPalette::Base, QColor("#1f222d"));

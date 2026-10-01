@@ -58,9 +58,16 @@ void TestCli::initTestCase()
     FilterRegistry::instance().loadPlugins(binPlugins);
 
     m_sampleHero = m_tempDir.filePath(QStringLiteral("hero.png"));
+    bool heroImageLoaded = false;
     if (QFile::exists(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png"))) {
-        QFile::copy(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png"), m_sampleHero);
-    } else {
+        heroImageLoaded = QFile::copy(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.png"), m_sampleHero);
+    } else if (QFile::exists(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.webp"))) {
+        QImage img(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.webp"));
+        if (!img.isNull()) {
+            heroImageLoaded = img.save(m_sampleHero, "PNG");
+        }
+    }
+    if (!heroImageLoaded) {
         QImage img(140, 146, QImage::Format_ARGB32_Premultiplied);
         img.fill(Qt::transparent);
         QPainter p(&img);
@@ -71,7 +78,7 @@ void TestCli::initTestCase()
     }
 
     m_sampleJson = m_tempDir.filePath(QStringLiteral("hero.json"));
-    if (QFile::exists(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.json"))) {
+    if (heroImageLoaded && QFile::exists(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.json"))) {
         QFile::copy(QStringLiteral(SAMPLE_DIR) + QStringLiteral("/hero.json"), m_sampleJson);
     } else {
         m_sampleJson = m_tempDir.filePath(QStringLiteral("hero.json"));
@@ -476,7 +483,11 @@ void TestCli::testWatchDebouncedRepack()
 
 int main(int argc, char *argv[])
 {
+    std::setvbuf(stdout, nullptr, _IONBF, 0);
+    std::setvbuf(stderr, nullptr, _IONBF, 0);
     qputenv("QT_QPA_PLATFORM", "offscreen");
+    qputenv("QT_ASSUME_STDERR_HAS_CONSOLE", "1");
+    qputenv("QT_FORCE_STDERR_LOGGING", "1");
     QGuiApplication app(argc, argv);
     TestCli tc;
     return QTest::qExec(&tc, argc, argv);

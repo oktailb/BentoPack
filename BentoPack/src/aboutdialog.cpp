@@ -74,6 +74,9 @@ void AboutDialog::changeEvent(QEvent *event)
         closeButton->setText(tr("KEY_DIALOG_ABOUT_CLOSE"));
 
         editionNoticeLabel->setText(QStringLiteral("Open Source - Apache License 2.0"));
+        if (publishedByCaption) {
+            publishedByCaption->setText(tr("Éditeur du logiciel"));
+        }
 
         loadApplicationInfo();
         loadPricing();
@@ -165,6 +168,40 @@ void AboutDialog::setupUI()
   headerLayout->addWidget(iconLabel);
   headerLayout->addLayout(titleLayout);
   headerLayout->addStretch();
+
+  // Bloc éditeur GALLUS TECH
+  QHBoxLayout *publisherLayout = new QHBoxLayout();
+  publisherLayout->setSpacing(10);
+  publisherLayout->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+  QVBoxLayout *publisherTextLayout = new QVBoxLayout();
+  publisherTextLayout->setSpacing(2);
+  publisherTextLayout->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+  publishedByCaption = new QLabel(tr("Éditeur du logiciel"), this);
+  publishedByCaption->setStyleSheet(QStringLiteral("font-size: 11px; color: %1; font-weight: 500;").arg(colors.textMuted));
+  publishedByCaption->setAlignment(Qt::AlignRight);
+
+  publisherLabel = new QLabel(QStringLiteral("GALLUS TECH - ガルステック"), this);
+  publisherLabel->setStyleSheet(QStringLiteral("font-size: 13px; font-weight: bold; color: %1;").arg(colors.textColor));
+  publisherLabel->setAlignment(Qt::AlignRight);
+
+  publisherTextLayout->addWidget(publishedByCaption);
+  publisherTextLayout->addWidget(publisherLabel);
+
+  gallusLogoLabel = new QLabel(this);
+  QPixmap gallusPixmap(":/drawer/icons/gallus_tech.png");
+  if (gallusPixmap.isNull()) {
+      gallusPixmap.load(":/drawer/icons/gallus_tech.webp");
+  }
+  if (!gallusPixmap.isNull()) {
+      gallusLogoLabel->setPixmap(gallusPixmap.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+  }
+  gallusLogoLabel->setAlignment(Qt::AlignCenter);
+
+  publisherLayout->addLayout(publisherTextLayout);
+  publisherLayout->addWidget(gallusLogoLabel);
+  headerLayout->addLayout(publisherLayout);
 
   mainLayout->addLayout(headerLayout);
 
@@ -289,11 +326,33 @@ void AboutDialog::loadApplicationInfo()
 {
   ThemeColors colors = getThemeColors();
 
+  QPixmap gallusPixmap(":/drawer/icons/gallus_tech.png");
+  if (gallusPixmap.isNull()) {
+      gallusPixmap.load(":/drawer/icons/gallus_tech.webp");
+  }
+  if (!gallusPixmap.isNull()) {
+      aboutText->document()->addResource(QTextDocument::ImageResource, QUrl(QStringLiteral("gallus_logo")), gallusPixmap);
+  }
+
   QString aboutHtml = QString(
       "<div style='padding: 10px; font-family: sans-serif; color: %1;'>"
       "  <div style='text-align: center; margin-bottom: 20px;'>"
       "    <h3 style='color: %2; margin-bottom: 6px;'>BentoPack</h3>"
       "    <p style='color: %3; font-size: 13px; margin: 0;'>%4</p>"
+      "  </div>"
+      "  <div style='background: %5; border: 1px solid %6; border-radius: 8px; padding: 14px 16px; margin-bottom: 14px;'>"
+      "    <table style='width: 100%; border-collapse: collapse;'>"
+      "      <tr>"
+      "        <td style='width: 54px; vertical-align: middle; text-align: center;'>"
+      "          <img src='gallus_logo' height='48'/>"
+      "        </td>"
+      "        <td style='vertical-align: middle; padding-left: 14px;'>"
+      "          <div style='font-size: 11px; text-transform: uppercase; color: %3; font-weight: bold; letter-spacing: 0.5px;'>%7</div>"
+      "          <div style='font-size: 16px; font-weight: bold; color: %2; margin-top: 2px;'>GALLUS TECH - ガルステック</div>"
+      "          <div style='font-size: 12px; color: %3; margin-top: 2px;'>%8</div>"
+      "        </td>"
+      "      </tr>"
+      "    </table>"
       "  </div>"
       "  <div style='background: %5; border: 1px solid %6; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px;'>"
       "    <div style='margin-bottom: 6px;'><b>Tipeee :</b> <a style='color: #38bdf8;' href='https://en.tipeee.com/lecoq-vincent'>https://en.tipeee.com/lecoq-vincent</a></div>"
@@ -302,20 +361,20 @@ void AboutDialog::loadApplicationInfo()
       "  <div style='background: %5; border: 1px solid %6; border-radius: 8px; padding: 14px 16px; margin-bottom: 14px;'>"
       "    <h4 style='color: %2; margin-top: 0; margin-bottom: 8px;'>Environnement d'Exécution</h4>"
       "    <table style='width: 100%; border-collapse: collapse; font-size: 12px; color: %1;'>"
-      "      <tr><td style='padding: 3px 0; color: %3; width: 140px;'><b>Version :</b></td><td>%7</td></tr>"
-      "      <tr><td style='padding: 3px 0; color: %3;'><b>Date de build :</b></td><td>%8</td></tr>"
-      "      <tr><td style='padding: 3px 0; color: %3;'><b>Qt Runtime :</b></td><td>Qt %9</td></tr>"
-      "      <tr><td style='padding: 3px 0; color: %3;'><b>Compilateur :</b></td><td>%10 %11 (%12)</td></tr>"
-      "      <tr><td style='padding: 3px 0; color: %3;'><b>Système :</b></td><td>%13</td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3; width: 140px;'><b>Version :</b></td><td>%9</td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3;'><b>Date de build :</b></td><td>%10</td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3;'><b>Qt Runtime :</b></td><td>Qt %11</td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3;'><b>Compilateur :</b></td><td>%12 %13 (%14)</td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3;'><b>Système :</b></td><td>%15</td></tr>"
       "    </table>"
       "  </div>"
       "  <div style='background: %5; border: 1px solid %6; border-radius: 8px; padding: 14px 16px;'>"
-      "    <h4 style='color: %2; margin-top: 0; margin-bottom: 8px;'>%14</h4>"
+      "    <h4 style='color: %2; margin-top: 0; margin-bottom: 8px;'>%16</h4>"
       "    <table style='width: 100%; border-collapse: collapse; font-size: 12px; color: %1;'>"
-      "      <tr><td style='padding: 3px 0; color: %3; width: 140px;'><b>Branche :</b></td><td>%15</td></tr>"
-      "      <tr><td style='padding: 3px 0; color: %3;'><b>Commit :</b></td><td><code>%16</code></td></tr>"
-      "      <tr><td style='padding: 3px 0; color: %3;'><b>Date :</b></td><td>%17</td></tr>"
-      "      <tr><td style='padding: 3px 0; color: %3;'><b>Auteur :</b></td><td>%18</td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3; width: 140px;'><b>Branche :</b></td><td>%17</td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3;'><b>Commit :</b></td><td><code>%18</code></td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3;'><b>Date :</b></td><td>%19</td></tr>"
+      "      <tr><td style='padding: 3px 0; color: %3;'><b>Auteur :</b></td><td>%20</td></tr>"
       "    </table>"
       "  </div>"
       "</div>"
@@ -326,6 +385,8 @@ void AboutDialog::loadApplicationInfo()
   .arg(tr("KEY_ABOUT_PURPOSE"))
   .arg(colors.cardBg)
   .arg(colors.cardBorder)
+  .arg(tr("Éditeur du logiciel"))
+  .arg(tr("Studio d'outillage & technologies multimédia"))
   .arg(PROJECT_VERSION)
   .arg(PROJECT_BUILD_DATE)
   .arg(QT_VERSION_STR)
@@ -555,30 +616,51 @@ void AboutDialog::loadCredits()
 {
   ThemeColors colors = getThemeColors();
 
+  QPixmap gallusPixmap(":/drawer/icons/gallus_tech.png");
+  if (gallusPixmap.isNull()) {
+      gallusPixmap.load(":/drawer/icons/gallus_tech.webp");
+  }
+  if (!gallusPixmap.isNull()) {
+      creditsText->document()->addResource(QTextDocument::ImageResource, QUrl(QStringLiteral("gallus_logo")), gallusPixmap);
+  }
+
   QString creditsHtml = QString(
       "<div style='padding: 10px; font-family: sans-serif; color: %1;'>"
       "  <div style='text-align: center; margin-bottom: 20px;'>"
       "    <h3 style='color: %2; margin-bottom: 6px;'>%3</h3>"
       "  </div>"
       "  <div style='background: %4; border: 1px solid %5; border-radius: 8px; padding: 14px 16px; margin-bottom: 14px;'>"
-      "    <h4 style='color: %2; margin-top: 0; margin-bottom: 6px;'>%6</h4>"
-      "    <p style='margin: 0; font-size: 13px;'>%7</p>"
+      "    <table style='width: 100%; border-collapse: collapse;'>"
+      "      <tr>"
+      "        <td style='width: 48px; vertical-align: middle; text-align: center;'>"
+      "          <img src='gallus_logo' height='44'/>"
+      "        </td>"
+      "        <td style='vertical-align: middle; padding-left: 14px;'>"
+      "          <h4 style='color: %2; margin-top: 0; margin-bottom: 4px;'>%6</h4>"
+      "          <p style='margin: 0; font-size: 13px; font-weight: bold;'>GALLUS TECH - ガルステック</p>"
+      "        </td>"
+      "      </tr>"
+      "    </table>"
       "  </div>"
       "  <div style='background: %4; border: 1px solid %5; border-radius: 8px; padding: 14px 16px; margin-bottom: 14px;'>"
-      "    <h4 style='color: %2; margin-top: 0; margin-bottom: 8px;'>%8</h4>"
+      "    <h4 style='color: %2; margin-top: 0; margin-bottom: 6px;'>%7</h4>"
+      "    <p style='margin: 0; font-size: 13px;'>%8</p>"
+      "  </div>"
+      "  <div style='background: %4; border: 1px solid %5; border-radius: 8px; padding: 14px 16px; margin-bottom: 14px;'>"
+      "    <h4 style='color: %2; margin-top: 0; margin-bottom: 8px;'>%9</h4>"
       "    <ul style='margin: 0; padding-left: 18px; font-size: 12px; color: %1;'>"
-      "      <li style='margin-bottom: 4px;'><b>Qt Framework :</b> Version %9 (LGPLv3 / Commercial) <a style='color: #38bdf8;' href='https://www.qt.io'>https://www.qt.io</a></li>"
+      "      <li style='margin-bottom: 4px;'><b>Qt Framework :</b> Version %10 (LGPLv3 / Commercial) <a style='color: #38bdf8;' href='https://www.qt.io'>https://www.qt.io</a></li>"
       "      <li style='margin-bottom: 4px;'><b>LibGit2 :</b> Moteur Git natif pour l'historique et les snapshots de versions</li>"
       "      <li style='margin-bottom: 4px;'><b>Basis Universal :</b> Encodeur GPU / VRAM (Khronos KTX2 / UASTC / ETC1S)</li>"
       "      <li style='margin-bottom: 4px;'><b>Zstandard (zstd) :</b> Algorithme de super-compression de textures</li>"
       "      <li style='margin-bottom: 4px;'><b>Miniz :</b> Compression & décompression ZIP sans dépendance externe</li>"
-      "      <li style='margin-bottom: 4px;'><b>Compilateur C++ :</b> %10 %11 (%12)</li>"
-      "      <li style='margin-bottom: 4px;'><b>Système de build :</b> CMake %13</li>"
+      "      <li style='margin-bottom: 4px;'><b>Compilateur C++ :</b> %11 %12 (%13)</li>"
+      "      <li style='margin-bottom: 4px;'><b>Système de build :</b> CMake %14</li>"
       "    </ul>"
       "  </div>"
       "  <div style='background: %4; border: 1px solid %5; border-radius: 8px; padding: 14px 16px;'>"
-      "    <h4 style='color: %2; margin-top: 0; margin-bottom: 6px;'>%14</h4>"
-      "    <p style='margin: 0; font-size: 13px; color: %15;'>%16</p>"
+      "    <h4 style='color: %2; margin-top: 0; margin-bottom: 6px;'>%15</h4>"
+      "    <p style='margin: 0; font-size: 13px; color: %16;'>%17</p>"
       "  </div>"
       "</div>"
   )
@@ -587,6 +669,7 @@ void AboutDialog::loadCredits()
   .arg(tr("KEY_ABOUT_CREDITS_AND_GREETINGS"))
   .arg(colors.cardBg)
   .arg(colors.cardBorder)
+  .arg(tr("Éditeur du logiciel"))
   .arg(tr("_contributors"))
   .arg(GIT_AUTHORS)
   .arg(tr("_used_techno"))

@@ -27,5 +27,6 @@
     "url": "https://github.com/oktailb/BentoPack.git",
     "directory": "addons/unity"
   },
+  "icon": "icon.png",
   "license": "Apache-2.0"
 }
