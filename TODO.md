@@ -63,6 +63,10 @@ Les packages d'addons moteur et l'application autonome BentoPack sont entièreme
 4. **Boutiques Desktop (Store Convenience) :**
    - Lancement de la page Steam et de la boutique Itch.io pour la distribution binaire packagée de BentoPack Studio (Windows NSIS/ZIP, Linux AppImage/Tarball).
 
+> [!TIP]
+> **Kit Marketing & Listings Prêts à l'Emploi :**
+> L'ensemble des descriptions, spécifications techniques, tags et la checklist des captures d'écran (avec noms de fichiers et résolutions recommandées) sont centralisés dans [`docs/STORE_DESCRIPTIONS.md`](file:///docs/STORE_DESCRIPTIONS.md) et consultables interactivement via [`docs/STORE_DESCRIPTIONS.html`](file:///docs/STORE_DESCRIPTIONS.html).
+
 ---
 
 ## 🔌 2. Écosystème des Formats & Plugins Extracteurs (Évolutions Post-M10)
@@ -76,18 +80,26 @@ Les packages d'addons moteur et l'application autonome BentoPack sont entièreme
 | **`godot`** | `.tres` | ✅ | ✅ | Format texte natif Godot 4.x (`SpriteFrames`) avec sous-ressources `AtlasTexture`, animations et atlas compagnon. |
 | **`unity`** | `.unity.json`, `.json` | ✅ | ✅ | Descripteur de maillage serré (*Tight Sprite Mesh*) injectant sommets, UVs et triangles dans `Sprite.OverrideGeometry`. |
 | **`unreal`** | `.paper2d.json`, `.json` | ✅ | ✅ | Format dédié UE5 Paper2D / PaperZD avec géométrie de rendu polygonale M8 (`RenderGeometry`) et `CollisionGeometry`. |
+| **`libgdx_spine`** | `.atlas`, `.atlas.txt` | ✅ | ✅ | Format textuel clé-valeur standard LibGDX et Spine 2D (pages, régions, index d'animations, pivots, texture compagnon). |
+| **`aseprite`** | `.ase`, `.aseprite` | ✅ | ✅ | Import et export binaires directs Aseprite (.ase, .aseprite) : 32bpp RGBA, compression zlib, cels, tags d'animations convertis et préservés. |
 
 ### 🚀 Formats Cibles Post-M10 (Élargissement Industriel)
 
-1. **Format Texte LibGDX / Spine (`.atlas`) — Priorité Moyenne :**
+1. **Format Texte LibGDX / Spine (`.atlas`) — ✅ Terminé & Testé :**
    - **Enjeu :** Standard clé-valeur textuel ultra-répandu dans les frameworks indés et légers (Raylib, Bevy Rust, MonoGame, Defold, LibGDX).
    - **Avantage :** Parsing trivial sans dépendance JSON, interopérabilité directe avec les runtimes Spine officiels.
-   - **Complexité :** Faible (~150 lignes C++).
-2. **Format Binaire Natif Aseprite (`.ase` / `.aseprite`) — Priorité UX & Confort :**
+2. **Format Binaire Natif Aseprite (`.ase` / `.aseprite`) — ✅ Terminé & Testé :**
    - **Enjeu :** Ouvrir ou glisser-déposer directement un projet Aseprite dans BentoPack sans étape intermédiaire manuelle d'exportation vers JSON+PNG.
-   - **Avantage :** Argument produit majeur pour la communauté des pixel-artists.
-   - **Complexité :** Moyenne (décodage du format binaire ouvert Aseprite : calques, chunks d'images, tags, palettes).
-3. **Format Apple / Cocos2d-x (`.plist` XML) — Priorité Basse :**
+   - **Avantage :** Argument produit majeur pour la communauté des pixel-artists. Décodage binaire 100% natif Qt (zlib, palettes, calques, frames, tags d'animations convertis).
+3. **Refonte de la Boîte de Dialogue d'Export (`ExportDialog`) — ✅ Terminée & Testée :**
+   - **Workflow par étapes intuitives :**
+     - **Étape 1 (Destination & Nom) :** Dossier de sortie (`txtOutputDir` + bouton Parcourir), nom du projet/fichier (`txtBaseName`), aperçu temps réel du chemin de destination (`txtFilePath`).
+     - **Étape 2 (Format cible) :** Sélection du moteur / format d'export avec mise à jour automatique de l'extension et description d'usage.
+     - **Étape 3 (Options contextuelles dynamiques) :**
+       - Pour les formats Atlas (Godot, Unity, Unreal, LibGDX/Spine, JSON) : Algorithmes de packing, géométrie/marges, compression VRAM KTX2/Zstd et télémétrie GPU en direct.
+       - Pour le format GIF animé : Masquage total de l'atlas et de la VRAM, options de lecture (boucle, une fois, ping-pong), cadence FPS, seuil alpha et export multi-animations.
+       - Pour le format Aseprite natif : Masquage de l'atlas et de la VRAM, compression zlib des cels et tags d'animations.
+4. **Format Apple / Cocos2d-x (`.plist` XML) — Priorité Basse :**
    - **Enjeu :** Compatibilité avec les pipelines historiques de jeux mobiles 2D (Cocos2d-x, SpriteKit iOS).
    - **Complexité :** Faible (sérialisation XML de dictionnaires/rectangles).
 
