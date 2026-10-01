@@ -15,7 +15,7 @@ static func get_releases_url() -> String:
 	return RELEASES_URL
 
 
-## Locates the bentopack-cli (or legacy bentopack-cli) binary path.
+## Locates the bentopack-cli binary path.
 static func find_cli_path() -> String:
 	# 1. ProjectSettings override
 	for setting in [DEFAULT_SETTING_CLI_PATH, LEGACY_SETTING_CLI_PATH]:
@@ -24,97 +24,124 @@ static func find_cli_path() -> String:
 			if not custom_path.is_empty() and FileAccess.file_exists(custom_path):
 				return custom_path
 
-	# 2. Environment variable
+	# 2. Environment variable override
 	var env_cli := OS.get_environment("BENTOPACK_CLI")
 	if not env_cli.is_empty() and FileAccess.file_exists(env_cli):
 		return env_cli
 
-	# 3. Known relative build paths (development environments)
-	var possible_relative_paths := [
-		"../../build/bin/bentopack-cli",
-		"../../build/bin/bentopack-cli",
-		"../build/bin/bentopack-cli",
-		"../build/bin/bentopack-cli",
-		"build/bin/bentopack-cli",
-		"build/bin/bentopack-cli",
-		"bin/bentopack-cli",
-		"bin/bentopack-cli",
-	]
-	for rel in possible_relative_paths:
-		var global_path := ProjectSettings.globalize_path("res://" + rel)
-		if FileAccess.file_exists(global_path):
-			return global_path
+	var is_win := OS.get_name() == "Windows"
+	var exe_name := "bentopack-cli.exe" if is_win else "bentopack-cli"
 
-	# 4. Standard Linux / Unix locations
-	var standard_paths := [
-		"/usr/local/bin/bentopack-cli",
-		"/usr/bin/bentopack-cli",
-		"/opt/bentopack/bin/bentopack-cli",
-		"/usr/local/bin/bentopack-cli",
-		"/usr/bin/bentopack-cli",
-		"/opt/bentopack/bin/bentopack-cli",
-	]
+	# 3. Official System and User PATH
+	var path_env := OS.get_environment("PATH")
+	if not path_env.is_empty():
+		var sep := ";" if is_win else ":"
+		for dir in path_env.split(sep):
+			var cleaned := dir.strip_edges()
+			if cleaned.is_empty():
+				continue
+			var p := cleaned.path_join(exe_name)
+			if FileAccess.file_exists(p):
+				return p
+
+	# 4. Standard OS installation directories
+	var standard_paths: Array[String] = []
+	if is_win:
+		var pf := OS.get_environment("ProgramFiles")
+		var pfx86 := OS.get_environment("ProgramFiles(x86)")
+		var local_app := OS.get_environment("LOCALAPPDATA")
+		if not pf.is_empty():
+			standard_paths.append(pf.path_join("BentoPack Studio/bin/bentopack-cli.exe"))
+			standard_paths.append(pf.path_join("BentoPack Studio/bentopack-cli.exe"))
+			standard_paths.append(pf.path_join("BentoPack/bin/bentopack-cli.exe"))
+			standard_paths.append(pf.path_join("BentoPack/bentopack-cli.exe"))
+		if not pfx86.is_empty():
+			standard_paths.append(pfx86.path_join("BentoPack Studio/bin/bentopack-cli.exe"))
+			standard_paths.append(pfx86.path_join("BentoPack/bin/bentopack-cli.exe"))
+		if not local_app.is_empty():
+			standard_paths.append(local_app.path_join("Programs/BentoPack Studio/bin/bentopack-cli.exe"))
+			standard_paths.append(local_app.path_join("Programs/BentoPack/bin/bentopack-cli.exe"))
+	elif OS.get_name() == "macOS":
+		standard_paths.append("/Applications/BentoPack Studio.app/Contents/MacOS/bentopack-cli")
+		standard_paths.append("/Applications/BentoPack.app/Contents/MacOS/bentopack-cli")
+		standard_paths.append("/usr/local/bin/bentopack-cli")
+		standard_paths.append("/opt/homebrew/bin/bentopack-cli")
+	else: # Linux / BSD
+		var home := OS.get_environment("HOME")
+		standard_paths.append("/usr/bin/bentopack-cli")
+		standard_paths.append("/usr/local/bin/bentopack-cli")
+		if not home.is_empty():
+			standard_paths.append(home.path_join(".local/bin/bentopack-cli"))
+		standard_paths.append("/opt/bentopack/bin/bentopack-cli")
+
 	for sp in standard_paths:
 		if FileAccess.file_exists(sp):
 			return sp
 
-	# 5. Fallback: which bentopack-cli / bentopack-cli
-	for bin_name in ["bentopack-cli", "bentopack-cli"]:
-		var output := []
-		var exit_code := OS.execute("which", [bin_name], output)
-		if exit_code == 0 and not output.is_empty():
-			var found_path: String = output[0].strip_edges()
-			if FileAccess.file_exists(found_path):
-				return found_path
-
 	return ""
 
-## Locates the BentoPack (or legacy BentoPack) graphical editor executable.
+## Locates the BentoPack graphical editor executable.
 static func find_gui_path() -> String:
+	# 1. ProjectSettings override
 	for setting in [DEFAULT_SETTING_GUI_PATH, LEGACY_SETTING_GUI_PATH]:
 		if ProjectSettings.has_setting(setting):
 			var custom_path: String = ProjectSettings.get_setting(setting)
 			if not custom_path.is_empty() and FileAccess.file_exists(custom_path):
 				return custom_path
 
+	# 2. Environment variable override
 	var env_gui := OS.get_environment("BENTOPACK_GUI")
 	if not env_gui.is_empty() and FileAccess.file_exists(env_gui):
 		return env_gui
 
-	var possible_relative_paths := [
-		"../../build/bin/bentopack",
-		"../../build/bin/BentoPack",
-		"../build/bin/bentopack",
-		"../build/bin/BentoPack",
-		"build/bin/bentopack",
-		"build/bin/BentoPack",
-		"bin/bentopack",
-		"bin/BentoPack",
-	]
-	for rel in possible_relative_paths:
-		var global_path := ProjectSettings.globalize_path("res://" + rel)
-		if FileAccess.file_exists(global_path):
-			return global_path
+	var is_win := OS.get_name() == "Windows"
+	var exe_name := "bentopack.exe" if is_win else "bentopack"
 
-	var standard_paths := [
-		"/usr/local/bin/bentopack",
-		"/usr/bin/bentopack",
-		"/opt/bentopack/bin/bentopack",
-		"/usr/local/bin/BentoPack",
-		"/usr/bin/BentoPack",
-		"/opt/bentopack/bin/BentoPack",
-	]
+	# 3. Official System and User PATH
+	var path_env := OS.get_environment("PATH")
+	if not path_env.is_empty():
+		var sep := ";" if is_win else ":"
+		for dir in path_env.split(sep):
+			var cleaned := dir.strip_edges()
+			if cleaned.is_empty():
+				continue
+			var p := cleaned.path_join(exe_name)
+			if FileAccess.file_exists(p):
+				return p
+
+	# 4. Standard OS installation directories
+	var standard_paths: Array[String] = []
+	if is_win:
+		var pf := OS.get_environment("ProgramFiles")
+		var pfx86 := OS.get_environment("ProgramFiles(x86)")
+		var local_app := OS.get_environment("LOCALAPPDATA")
+		if not pf.is_empty():
+			standard_paths.append(pf.path_join("BentoPack Studio/bin/bentopack.exe"))
+			standard_paths.append(pf.path_join("BentoPack Studio/bentopack.exe"))
+			standard_paths.append(pf.path_join("BentoPack/bin/bentopack.exe"))
+			standard_paths.append(pf.path_join("BentoPack/bentopack.exe"))
+		if not pfx86.is_empty():
+			standard_paths.append(pfx86.path_join("BentoPack Studio/bin/bentopack.exe"))
+			standard_paths.append(pfx86.path_join("BentoPack/bin/bentopack.exe"))
+		if not local_app.is_empty():
+			standard_paths.append(local_app.path_join("Programs/BentoPack Studio/bin/bentopack.exe"))
+			standard_paths.append(local_app.path_join("Programs/BentoPack/bin/bentopack.exe"))
+	elif OS.get_name() == "macOS":
+		standard_paths.append("/Applications/BentoPack Studio.app/Contents/MacOS/bentopack")
+		standard_paths.append("/Applications/BentoPack.app/Contents/MacOS/bentopack")
+		standard_paths.append("/usr/local/bin/bentopack")
+		standard_paths.append("/opt/homebrew/bin/bentopack")
+	else: # Linux / BSD
+		var home := OS.get_environment("HOME")
+		standard_paths.append("/usr/bin/bentopack")
+		standard_paths.append("/usr/local/bin/bentopack")
+		if not home.is_empty():
+			standard_paths.append(home.path_join(".local/bin/bentopack"))
+		standard_paths.append("/opt/bentopack/bin/bentopack")
+
 	for sp in standard_paths:
 		if FileAccess.file_exists(sp):
 			return sp
-
-	for bin_name in ["bentopack", "BentoPack"]:
-		var output := []
-		var exit_code := OS.execute("which", [bin_name], output)
-		if exit_code == 0 and not output.is_empty():
-			var found_path: String = output[0].strip_edges()
-			if FileAccess.file_exists(found_path):
-				return found_path
 
 	return ""
 
