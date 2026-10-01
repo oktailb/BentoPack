@@ -7,6 +7,8 @@ set(ALL_EXTRACTOR_PLUGINS
     extractor_json
     extractor_gif
     extractor_spritesheet
+    extractor_libgdx_spine
+    extractor_aseprite
 )
 
 set(ALL_FILTER_PLUGINS
@@ -28,6 +30,8 @@ set(PLUGIN_INCLUDES
     ${CMAKE_SOURCE_DIR}/plugins/extractors/json
     ${CMAKE_SOURCE_DIR}/plugins/extractors/gif
     ${CMAKE_SOURCE_DIR}/plugins/extractors/spritesheet
+    ${CMAKE_SOURCE_DIR}/plugins/extractors/libgdx_spine
+    ${CMAKE_SOURCE_DIR}/plugins/extractors/aseprite
     ${CMAKE_SOURCE_DIR}/plugins/filters/backgroundremoval
     ${CMAKE_SOURCE_DIR}/plugins/filters/despill
     ${CMAKE_SOURCE_DIR}/plugins/filters/outline
@@ -231,6 +235,8 @@ if(WIN32)
             $<TARGET_FILE:extractor_json>
             $<TARGET_FILE:extractor_gif>
             $<TARGET_FILE:extractor_spritesheet>
+            $<TARGET_FILE:extractor_libgdx_spine>
+            $<TARGET_FILE:extractor_aseprite>
             "${CMAKE_BINARY_DIR}/bin"
         COMMENT "Copying extractor plugin DLLs to bin directory for tests"
     )
@@ -244,6 +250,8 @@ if(WIN32)
             $<TARGET_FILE:extractor_json>
             $<TARGET_FILE:extractor_gif>
             $<TARGET_FILE:extractor_spritesheet>
+            $<TARGET_FILE:extractor_libgdx_spine>
+            $<TARGET_FILE:extractor_aseprite>
             $<TARGET_FILE:filter_backgroundremoval>
             $<TARGET_FILE:filter_despill>
             $<TARGET_FILE:filter_outline>
