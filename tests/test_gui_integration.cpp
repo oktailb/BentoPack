@@ -7,6 +7,9 @@
 #include <QMenuBar>
 #include <QListWidget>
 #include <QToolButton>
+#include <QGroupBox>
+#include <QLineEdit>
+#include <QComboBox>
 
 #include "mainwindow.h"
 #include "widgets/exportdialog.h"
@@ -196,6 +199,69 @@ void TestGuiIntegration::testExportDialogOptionsAndDefaults()
 
     // File path reflection
     QVERIFY(dlg.exportFilePath().contains(QStringLiteral("test_export")));
+
+    // Verify contextual group visibility
+    auto *comboFormat = dlg.findChild<QComboBox*>(QStringLiteral("comboFormat"));
+    auto *grpGeometry = dlg.findChild<QGroupBox*>(QStringLiteral("grpGeometry"));
+    auto *grpVram = dlg.findChild<QGroupBox*>(QStringLiteral("grpVram"));
+    auto *grpStats = dlg.findChild<QGroupBox*>(QStringLiteral("grpStats"));
+    auto *grpGif = dlg.findChild<QGroupBox*>(QStringLiteral("grpGifOptions"));
+    auto *grpAse = dlg.findChild<QGroupBox*>(QStringLiteral("grpAsepriteOptions"));
+    auto *txtOutputDir = dlg.findChild<QLineEdit*>(QStringLiteral("txtOutputDir"));
+    auto *txtBaseName = dlg.findChild<QLineEdit*>(QStringLiteral("txtBaseName"));
+
+    QVERIFY(comboFormat != nullptr);
+    QVERIFY(grpGeometry != nullptr);
+    QVERIFY(grpVram != nullptr);
+    QVERIFY(grpStats != nullptr);
+    QVERIFY(grpGif != nullptr);
+    QVERIFY(grpAse != nullptr);
+    QVERIFY(txtOutputDir != nullptr);
+    QVERIFY(txtBaseName != nullptr);
+
+    // Initial state: for atlas formats, atlas/VRAM/stats are visible, GIF & Aseprite are hidden
+    int gifIdx = comboFormat->findData(QStringLiteral("gif_extractor"));
+    int aseIdx = comboFormat->findData(QStringLiteral("aseprite_extractor"));
+    int godotIdx = comboFormat->findData(QStringLiteral("godot_extractor"));
+
+    dlg.show();
+
+    if (godotIdx >= 0) {
+        comboFormat->setCurrentIndex(godotIdx);
+        QVERIFY(!grpGeometry->isHidden());
+        QVERIFY(!grpVram->isHidden());
+        QVERIFY(!grpStats->isHidden());
+        QVERIFY(grpGif->isHidden());
+        QVERIFY(grpAse->isHidden());
+    }
+
+    // Switch to Animated GIF format
+    if (gifIdx >= 0) {
+        comboFormat->setCurrentIndex(gifIdx);
+        QVERIFY(grpGeometry->isHidden());
+        QVERIFY(grpVram->isHidden());
+        QVERIFY(grpStats->isHidden());
+        QVERIFY(!grpGif->isHidden());
+        QVERIFY(grpAse->isHidden());
+        QVERIFY(dlg.exportFilePath().endsWith(QStringLiteral(".gif")));
+    }
+
+    // Switch to Native Aseprite format
+    if (aseIdx >= 0) {
+        comboFormat->setCurrentIndex(aseIdx);
+        QVERIFY(grpGeometry->isHidden());
+        QVERIFY(grpVram->isHidden());
+        QVERIFY(grpStats->isHidden());
+        QVERIFY(grpGif->isHidden());
+        QVERIFY(!grpAse->isHidden());
+        QVERIFY(dlg.exportFilePath().endsWith(QStringLiteral(".ase")) || dlg.exportFilePath().endsWith(QStringLiteral(".aseprite")));
+    }
+
+    // Test destination directory and project name updates
+    txtOutputDir->setText(QStringLiteral("C:/output_test"));
+    txtBaseName->setText(QStringLiteral("my_character"));
+    QVERIFY(dlg.exportFilePath().contains(QStringLiteral("my_character")));
+    QVERIFY(dlg.exportFilePath().contains(QStringLiteral("output_test")));
 }
 
 void TestGuiIntegration::testBranchSelectionDialog()

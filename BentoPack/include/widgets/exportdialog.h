@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +50,10 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 private slots:
-    void onBrowseClicked();
+    void onBrowseDirClicked();
+    void onBrowseFileClicked();
+    void updateComputedPath();
+    void updateContextualVisibility();
     void updateStats();
     void onFormatChanged(int index);
     void onTextureFormatChanged(int index);
@@ -64,6 +67,7 @@ private:
     ProjectController *m_controller = nullptr;
     QTimer *m_debounceTimer = nullptr;
     bool m_isExporting = false;
+    bool m_updatingPathInternally = false;
 };
 
 #endif // EXPORTDIALOG_H

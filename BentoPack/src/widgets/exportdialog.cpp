@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,38 +55,86 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
         }
     }
 
-    // Initialize default path
-    QString defaultExt = QStringLiteral(".tres");
-    if (ui->comboFormat->count() > 0) {
-        QString firstId = ui->comboFormat->itemData(0).toString();
-        Extractor *firstExt = ExtractorRegistry::instance().findExtractorById(firstId);
-        if (firstExt && !firstExt->supportedExtensions().isEmpty()) {
-            defaultExt = QStringLiteral(".") + firstExt->supportedExtensions().first();
+    // Determine initial directory, base name, and format
+    QString initialDir;
+    QString initialBaseName;
+
+    if (!defaultPath.isEmpty()) {
+        QFileInfo fi(defaultPath);
+        initialDir = fi.absolutePath();
+        initialBaseName = fi.completeBaseName();
+        if (initialBaseName.endsWith(QStringLiteral(".unity"), Qt::CaseInsensitive)) initialBaseName.chop(6);
+        if (initialBaseName.endsWith(QStringLiteral(".paper2d"), Qt::CaseInsensitive)) initialBaseName.chop(8);
+
+        // Match format by file extension
+        QString sfx = fi.suffix().toLower();
+        for (int i = 0; i < ui->comboFormat->count(); ++i) {
+            QString extId = ui->comboFormat->itemData(i).toString();
+            Extractor *ext = ExtractorRegistry::instance().findExtractorById(extId);
+            if (ext) {
+                for (const QString &extSfx : ext->supportedExtensions()) {
+                    if (extSfx.compare(sfx, Qt::CaseInsensitive) == 0) {
+                        ui->comboFormat->setCurrentIndex(i);
+                        break;
+                    }
+                }
+            }
+        }
+    } else if (m_document && !m_document->filePath().isEmpty()) {
+        QFileInfo fi(m_document->filePath());
+        initialDir = fi.absolutePath();
+        initialBaseName = fi.completeBaseName();
+    } else {
+        initialDir = QDir::currentPath();
+    }
+
+    if (initialBaseName.isEmpty()) {
+        if (m_document && !m_document->projectName().isEmpty() && m_document->projectName() != QStringLiteral("untitled")) {
+            initialBaseName = m_document->projectName();
+        } else {
+            initialBaseName = QStringLiteral("atlas");
         }
     }
 
-    if (!defaultPath.isEmpty()) {
-        ui->txtFilePath->setText(defaultPath);
-    } else if (m_document && !m_document->filePath().isEmpty()) {
-        QFileInfo fi(m_document->filePath());
-        QString baseName = fi.completeBaseName();
-        if (baseName.isEmpty()) baseName = QStringLiteral("atlas");
-        QString defExport = fi.dir().filePath(baseName + defaultExt);
-        ui->txtFilePath->setText(defExport);
-    } else {
-        QString defExport = QDir::current().filePath(QStringLiteral("atlas") + defaultExt);
-        ui->txtFilePath->setText(defExport);
+    // Initialize GIF FPS from document if available
+    if (m_document && !m_document->animations().isEmpty()) {
+        int firstFps = m_document->animations().first().fps;
+        if (firstFps > 0) {
+            ui->spinGifFps->setValue(firstFps);
+        }
     }
 
-    connect(ui->txtFilePath, &QLineEdit::textChanged, this, &ExportDialog::validateFilePath);
+    ui->txtOutputDir->setText(QDir::toNativeSeparators(initialDir));
+    ui->txtBaseName->setText(initialBaseName);
+
+    // Connect signals for destination fields
+    connect(ui->btnBrowseDir, &QPushButton::clicked, this, &ExportDialog::onBrowseDirClicked);
+    connect(ui->btnBrowse, &QPushButton::clicked, this, &ExportDialog::onBrowseFileClicked);
+    connect(ui->txtOutputDir, &QLineEdit::textChanged, this, &ExportDialog::updateComputedPath);
+    connect(ui->txtBaseName, &QLineEdit::textChanged, this, &ExportDialog::updateComputedPath);
+    connect(ui->txtFilePath, &QLineEdit::textChanged, this, [this](const QString &text) {
+        validateFilePath();
+        if (m_updatingPathInternally) return;
+        QString trimmed = text.trimmed();
+        if (!trimmed.isEmpty()) {
+            QFileInfo fi(trimmed);
+            if (!fi.completeBaseName().isEmpty()) {
+                m_updatingPathInternally = true;
+                if (!fi.path().isEmpty() && fi.path() != QStringLiteral(".")) {
+                    ui->txtOutputDir->setText(QDir::toNativeSeparators(fi.path()));
+                }
+                ui->txtBaseName->setText(fi.completeBaseName());
+                m_updatingPathInternally = false;
+            }
+        }
+    });
 
     // Configure debounce timer for live stats calculation
     m_debounceTimer->setSingleShot(true);
     m_debounceTimer->setInterval(60);
     connect(m_debounceTimer, &QTimer::timeout, this, &ExportDialog::updateStats);
 
-    // Connect signals to debounce timer
-    connect(ui->btnBrowse, &QPushButton::clicked, this, &ExportDialog::onBrowseClicked);
+    // Format & packing signals
     connect(ui->comboFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::onFormatChanged);
     connect(ui->comboAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), [this]() { m_debounceTimer->start(); });
     connect(ui->spinPadding, QOverload<int>::of(&QSpinBox::valueChanged), [this]() { m_debounceTimer->start(); });
@@ -104,6 +152,8 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
         ui->spinZstdLevel->setEnabled(checked && ui->comboTextureFormat->currentIndex() > 0);
         m_debounceTimer->start();
     });
+
+    // Load defaults from AppConfig
     const auto &expCfg = AppConfig::instance().exportSettings();
     if (!expCfg.defaultFormatId.isEmpty()) {
         int idx = ui->comboFormat->findData(expCfg.defaultFormatId);
@@ -120,6 +170,8 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
     ui->chkZstd->setChecked(expCfg.defaultZstd);
     ui->spinZstdLevel->setValue(expCfg.defaultZstdLevel);
 
+    updateComputedPath();
+    updateContextualVisibility();
     onTextureFormatChanged(ui->comboTextureFormat->currentIndex());
     validateFilePath();
     updateStats();
@@ -149,7 +201,18 @@ ExportOptions ExportDialog::exportOptions() const
         opts.format = FORMAT_UNREAL;
     }
 
-    // PackOptions
+    // Format-specific parameters
+    if (extId == QStringLiteral("gif_extractor")) {
+        opts.extraParams[QStringLiteral("gifLoopMode")] = ui->comboGifLoop->currentIndex();
+        opts.extraParams[QStringLiteral("gifFps")] = ui->spinGifFps->value();
+        opts.extraParams[QStringLiteral("gifAlphaThreshold")] = ui->spinGifAlphaThreshold->value();
+        opts.extraParams[QStringLiteral("gifAllAnimations")] = ui->chkGifAllAnimations->isChecked();
+    } else if (extId == QStringLiteral("aseprite_extractor")) {
+        opts.extraParams[QStringLiteral("asepriteCompress")] = ui->chkAsepriteCompress->isChecked();
+        opts.extraParams[QStringLiteral("asepriteExportTags")] = ui->chkAsepriteTags->isChecked();
+    }
+
+    // Atlas PackOptions
     AtlasPacker::PackOptions &pOpts = opts.packOptions;
 
     int algoIdx = ui->comboAlgorithm->currentIndex();
@@ -220,7 +283,29 @@ ExportOptions ExportDialog::exportOptions() const
     return opts;
 }
 
-void ExportDialog::onBrowseClicked()
+void ExportDialog::onBrowseDirClicked()
+{
+    QString currentDir = ui->txtOutputDir->text().trimmed();
+    if (currentDir.isEmpty() || !QDir(currentDir).exists()) {
+        currentDir = (m_document && !m_document->filePath().isEmpty())
+            ? QFileInfo(m_document->filePath()).absolutePath()
+            : QDir::currentPath();
+    }
+
+    QString chosenDir = QFileDialog::getExistingDirectory(
+        this,
+        tr("Select Export Directory"),
+        currentDir,
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+    );
+
+    if (!chosenDir.isEmpty()) {
+        ui->txtOutputDir->setText(QDir::toNativeSeparators(chosenDir));
+        updateComputedPath();
+    }
+}
+
+void ExportDialog::onBrowseFileClicked()
 {
     QString filter;
     QString extId = ui->comboFormat->currentData().toString();
@@ -236,40 +321,90 @@ void ExportDialog::onBrowseClicked()
         filter = tr("All Files (*.*)");
     }
 
-    QString initialPath = ui->txtFilePath->text();
-    if (initialPath.isEmpty() && m_document) {
-        initialPath = m_document->filePath();
-    }
-
+    QString initialPath = exportFilePath();
     QString chosen = QFileDialog::getSaveFileName(this, tr("Select Export Destination"), initialPath, filter);
     if (!chosen.isEmpty()) {
         QFileInfo fi(chosen);
-        if (fi.completeBaseName().trimmed().isEmpty()) {
-            QString defaultExt = (ext && !ext->supportedExtensions().isEmpty()) ? ext->supportedExtensions().first() : QStringLiteral("tres");
-            chosen = fi.dir().filePath(QStringLiteral("atlas.") + defaultExt);
-        }
-        ui->txtFilePath->setText(chosen);
+        ui->txtOutputDir->setText(QDir::toNativeSeparators(fi.absolutePath()));
+        ui->txtBaseName->setText(fi.completeBaseName());
+        updateComputedPath();
     }
+}
+
+void ExportDialog::updateComputedPath()
+{
+    if (m_updatingPathInternally) return;
+    m_updatingPathInternally = true;
+
+    QString dirPath = ui->txtOutputDir->text().trimmed();
+    if (dirPath.isEmpty()) {
+        dirPath = QDir::currentPath();
+    }
+    QString baseName = ui->txtBaseName->text().trimmed();
+    if (baseName.isEmpty()) {
+        baseName = QStringLiteral("atlas");
+    }
+
+    QString extId = ui->comboFormat->currentData().toString();
+    Extractor *ext = ExtractorRegistry::instance().findExtractorById(extId);
+    QString extension = (ext && !ext->supportedExtensions().isEmpty()) ? ext->supportedExtensions().first() : QStringLiteral("tres");
+    if (!extension.startsWith('.')) {
+        extension.prepend('.');
+    }
+
+    QDir dir(dirPath);
+    QString fullPath = dir.filePath(baseName + extension);
+    ui->txtFilePath->setText(QDir::toNativeSeparators(fullPath));
+
+    m_updatingPathInternally = false;
+    validateFilePath();
+}
+
+void ExportDialog::updateContextualVisibility()
+{
+    QString extId = ui->comboFormat->currentData().toString();
+    bool isGif = (extId == QStringLiteral("gif_extractor"));
+    bool isAseprite = (extId == QStringLiteral("aseprite_extractor"));
+    bool isAtlas = (!isGif && !isAseprite);
+
+    // Show/hide contextual groups
+    ui->grpGeometry->setVisible(isAtlas);
+    ui->grpVram->setVisible(isAtlas);
+    ui->grpStats->setVisible(isAtlas);
+    ui->grpGifOptions->setVisible(isGif);
+    ui->grpAsepriteOptions->setVisible(isAseprite);
+
+    // Contextual description
+    if (isGif) {
+        ui->lblFormatDesc->setText(tr("Generates animated multi-frame GIF files with frame timings, transparency, and looping options."));
+    } else if (isAseprite) {
+        ui->lblFormatDesc->setText(tr("Generates a native Aseprite binary project (.ase/.aseprite) preserving layers, cels, and animation tags."));
+    } else if (extId == QStringLiteral("godot_extractor")) {
+        ui->lblFormatDesc->setText(tr("Exports Godot 4 SpriteFrames resource (.tres) with atlas texture and animation metadata."));
+    } else if (extId == QStringLiteral("unity")) {
+        ui->lblFormatDesc->setText(tr("Exports Unity 2D Sprite Mesh metadata (.unity.json) with atlas texture."));
+    } else if (extId == QStringLiteral("unreal")) {
+        ui->lblFormatDesc->setText(tr("Exports Unreal Engine Paper2D sprite definitions (.paper2d.json) with atlas texture."));
+    } else if (extId == QStringLiteral("libgdx_spine_extractor")) {
+        ui->lblFormatDesc->setText(tr("Exports LibGDX / Spine atlas format (.atlas) with companion atlas image."));
+    } else if (extId == QStringLiteral("json_extractor")) {
+        ui->lblFormatDesc->setText(tr("Exports TexturePacker JSON / Aseprite JSON atlas format with sprite frames."));
+    } else {
+        ui->lblFormatDesc->setText(tr("Exports packed texture atlas and companion sprite definitions."));
+    }
+
+    if (isAtlas) {
+        m_debounceTimer->start();
+    }
+
+    adjustSize();
 }
 
 void ExportDialog::onFormatChanged(int index)
 {
-    QString current = ui->txtFilePath->text().trimmed();
-    if (!current.isEmpty()) {
-        QFileInfo fi(current);
-        QString base = fi.completeBaseName();
-        if (base.isEmpty()) base = QStringLiteral("atlas");
-        if (base.endsWith(QStringLiteral(".unity"), Qt::CaseInsensitive)) base.chop(6);
-        if (base.endsWith(QStringLiteral(".paper2d"), Qt::CaseInsensitive)) base.chop(8);
-
-        QString extId = ui->comboFormat->itemData(index).toString();
-        Extractor *ext = ExtractorRegistry::instance().findExtractorById(extId);
-        QString extension = (ext && !ext->supportedExtensions().isEmpty()) ? ext->supportedExtensions().first() : QStringLiteral("tres");
-        if (!extension.startsWith('.')) extension.prepend('.');
-
-        ui->txtFilePath->setText(fi.dir().filePath(base + extension));
-    }
-    m_debounceTimer->start();
+    Q_UNUSED(index);
+    updateComputedPath();
+    updateContextualVisibility();
 }
 
 void ExportDialog::onTextureFormatChanged(int index)
@@ -286,6 +421,12 @@ void ExportDialog::onTextureFormatChanged(int index)
 
 void ExportDialog::updateStats()
 {
+    QString extId = ui->comboFormat->currentData().toString();
+    bool isAtlas = (extId != QStringLiteral("gif_extractor") && extId != QStringLiteral("aseprite_extractor"));
+    if (!isAtlas) {
+        return;
+    }
+
     if (!m_document || m_document->frameCount() == 0) {
         ui->lblDimensions->setText(tr("Dimensions: --"));
         ui->lblEfficiency->setText(tr("Packing Efficiency: --"));
@@ -387,6 +528,7 @@ void ExportDialog::changeEvent(QEvent *event)
         if (QPushButton *cancelBtn = ui->buttonBox->button(QDialogButtonBox::Cancel)) {
             cancelBtn->setText(tr("Cancel"));
         }
+        updateContextualVisibility();
         updateStats();
     }
     QDialog::changeEvent(event);
@@ -413,6 +555,8 @@ void ExportDialog::setControlsEnabled(bool enabled)
     ui->grpFormat->setEnabled(enabled);
     ui->grpGeometry->setEnabled(enabled);
     ui->grpVram->setEnabled(enabled);
+    ui->grpGifOptions->setEnabled(enabled);
+    ui->grpAsepriteOptions->setEnabled(enabled);
     if (QPushButton *okBtn = ui->buttonBox->button(QDialogButtonBox::Ok)) {
         okBtn->setEnabled(enabled);
     }
@@ -453,7 +597,15 @@ void ExportDialog::accept()
     ui->progressBarExport->setVisible(true);
     ui->progressBarExport->setRange(0, 0); // Animated indeterminate progress
     ui->lblExportStatus->setVisible(true);
-    ui->lblExportStatus->setText(tr("Exporting and compressing textures (GPU VRAM / KTX2)..."));
+
+    QString extId = ui->comboFormat->currentData().toString();
+    if (extId == QStringLiteral("gif_extractor")) {
+        ui->lblExportStatus->setText(tr("Rendering and encoding animated GIF frames..."));
+    } else if (extId == QStringLiteral("aseprite_extractor")) {
+        ui->lblExportStatus->setText(tr("Encoding native Aseprite binary project..."));
+    } else {
+        ui->lblExportStatus->setText(tr("Exporting and compressing textures (GPU VRAM / KTX2)..."));
+    }
     m_isExporting = true;
 
     ExportOptions options = exportOptions();
@@ -506,4 +658,3 @@ void ExportDialog::accept()
 
     watcher->setFuture(future);
 }
-

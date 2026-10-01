@@ -151,8 +151,6 @@ bool GifExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extract
 
 bool GifExtractor::write(const QString &filePath, const SpriteDocument &inDoc, const ExportOptions &options, ExtractorError *error)
 {
-    Q_UNUSED(options);
-
     if (inDoc.frameCount() == 0) {
         if (error) {
             error->code = ExtractorError::WriteFailed;
@@ -176,11 +174,17 @@ bool GifExtractor::write(const QString &filePath, const SpriteDocument &inDoc, c
         projectName = QStringLiteral("project");
     }
 
+    bool exportAll = options.extraParams.value(QStringLiteral("gifAllAnimations"), true).toBool();
+
     // Récupérer la liste des animations à exporter
     QList<SpriteAnimation> animationsToExport;
     const auto &docAnims = inDoc.animations();
     if (!docAnims.isEmpty()) {
-        animationsToExport = docAnims.values();
+        if (exportAll) {
+            animationsToExport = docAnims.values();
+        } else {
+            animationsToExport.append(docAnims.first());
+        }
     } else {
         SpriteAnimation defAnim;
         defAnim.name = QStringLiteral("default");
@@ -199,11 +203,16 @@ bool GifExtractor::write(const QString &filePath, const SpriteDocument &inDoc, c
         setStatusMessage(tr("Exporting GIF animation %1 (%2/%3)...").arg(anim.name).arg(i + 1).arg(total));
         setProgress(qRound(100.0 * i / total));
 
-        // Format requis : projectname_animationname.gif
-        QString outFileName = QStringLiteral("%1_%2.gif").arg(projectName, anim.name);
-        QString targetPath = dir.filePath(outFileName);
+        QString targetPath;
+        if (!exportAll) {
+            targetPath = filePath;
+        } else {
+            // Format requis : projectname_animationname.gif
+            QString outFileName = QStringLiteral("%1_%2.gif").arg(projectName, anim.name);
+            targetPath = dir.filePath(outFileName);
+        }
 
-        if (!writeSingleAnimation(targetPath, inDoc, anim, error)) {
+        if (!writeSingleAnimation(targetPath, inDoc, anim, options, error)) {
             return false;
         }
     }
@@ -216,6 +225,7 @@ bool GifExtractor::write(const QString &filePath, const SpriteDocument &inDoc, c
 bool GifExtractor::writeSingleAnimation(const QString &targetFilePath,
                                         const SpriteDocument &doc,
                                         const SpriteAnimation &anim,
+                                        const ExportOptions &options,
                                         ExtractorError *error)
 {
     QList<int> frameSeq;
@@ -236,8 +246,12 @@ bool GifExtractor::writeSingleAnimation(const QString &targetFilePath,
         return false;
     }
 
+    // Loop mode override
+    int loopOverride = options.extraParams.value(QStringLiteral("gifLoopMode"), -1).toInt();
+
     // Gestion du mode PingPong : 0, 1, 2, ..., n-1, n-2, ..., 1
-    if (anim.loopMode == SpriteAnimation::PingPong && frameSeq.size() > 2) {
+    bool isPingPong = (anim.loopMode == SpriteAnimation::PingPong) || (loopOverride == 2);
+    if (isPingPong && frameSeq.size() > 2) {
         int originalCount = frameSeq.size();
         for (int k = originalCount - 2; k >= 1; --k) {
             frameSeq.append(frameSeq.at(k));
@@ -264,19 +278,27 @@ bool GifExtractor::writeSingleAnimation(const QString &targetFilePath,
 
     // Calcul du timing en centièmes de seconde (1/100 s)
     int fps = anim.fps > 0 ? anim.fps : 12;
+    if (options.extraParams.contains(QStringLiteral("gifFps"))) {
+        int customFps = options.extraParams.value(QStringLiteral("gifFps")).toInt();
+        if (customFps > 0) fps = customFps;
+    }
     int centiSeconds = qRound(100.0 / fps);
     if (centiSeconds < 2) centiSeconds = 2; // Limite standard des visualiseurs GIF
 
     // Configuration de msf_gif
-    // Loop mode : 0 = boucle infinie (Loop ou PingPong), 1 = jouer une fois (Once)
-    if (anim.loopMode == SpriteAnimation::Once) {
+    if (loopOverride == 1) {
+        msf_gif_loop_count = 1;
+    } else if (loopOverride == 0 || loopOverride == 2) {
+        msf_gif_loop_count = 0; // infini
+    } else if (anim.loopMode == SpriteAnimation::Once) {
         msf_gif_loop_count = 1;
     } else {
         msf_gif_loop_count = 0; // infini
     }
 
-    // Activer la transparence GIF (alpha < 128 = transparent)
-    msf_gif_alpha_threshold = 128;
+    // Activer la transparence GIF (alpha < threshold = transparent)
+    int alphaThreshold = options.extraParams.value(QStringLiteral("gifAlphaThreshold"), 128).toInt();
+    msf_gif_alpha_threshold = qBound(0, alphaThreshold, 255);
     msf_gif_bgra_flag = 0;
 
     MsfGifState state = {};

@@ -53,6 +53,7 @@ private:
     bool writeSingleAnimation(const QString &targetFilePath,
                               const SpriteDocument &doc,
                               const SpriteAnimation &anim,
+                              const ExportOptions &options,
                               ExtractorError *error);
 };
 

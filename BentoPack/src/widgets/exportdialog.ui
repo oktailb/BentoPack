@@ -6,36 +6,113 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>540</width>
-    <height>520</height>
+    <width>560</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Export Atlas &amp; Animations</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayoutMain">
    <property name="spacing">
+    <number>10</number>
+   </property>
+   <property name="leftMargin">
+    <number>12</number>
+   </property>
+   <property name="topMargin">
+    <number>12</number>
+   </property>
+   <property name="rightMargin">
+    <number>12</number>
+   </property>
+   <property name="bottomMargin">
     <number>12</number>
    </property>
    <item>
     <widget class="QGroupBox" name="grpDestination">
      <property name="title">
-      <string>Destination</string>
+      <string>Destination &amp; Project Name</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayoutDest">
-      <item>
-       <widget class="QLineEdit" name="txtFilePath">
-        <property name="placeholderText">
-         <string>Select export file path...</string>
+     <layout class="QGridLayout" name="gridLayoutDest">
+      <property name="horizontalSpacing">
+       <number>8</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblOutputDir">
+        <property name="text">
+         <string>Export Folder:</string>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="btnBrowse">
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="hLayoutDir">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="txtOutputDir">
+          <property name="placeholderText">
+           <string>Select destination directory...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnBrowseDir">
+          <property name="text">
+           <string>Browse...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblBaseName">
         <property name="text">
-         <string>Browse...</string>
+         <string>File / Project Name:</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="txtBaseName">
+        <property name="placeholderText">
+         <string>e.g. hero, sprites, atlas...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lblFullExportPath">
+        <property name="text">
+         <string>Output File:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="hLayoutFull">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="txtFilePath">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="placeholderText">
+           <string>Full export file path...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnBrowse">
+          <property name="text">
+           <string>Save As...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -43,56 +120,94 @@
    <item>
     <widget class="QGroupBox" name="grpFormat">
      <property name="title">
-      <string>Format &amp; Packing Algorithm</string>
+      <string>Target Format</string>
      </property>
-     <layout class="QFormLayout" name="formLayoutFormat">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     <layout class="QVBoxLayout" name="verticalLayoutFormat">
+      <property name="spacing">
+       <number>6</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblFormat">
+      <item>
+       <layout class="QHBoxLayout" name="hLayoutFormat">
+        <property name="spacing">
+         <number>8</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="lblFormat">
+          <property name="text">
+           <string>Export Format:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboFormat">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <item>
+           <property name="text">
+            <string>Godot 4 (*.tres + *.png)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>TexturePacker JSON (*.json + *.png)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Aseprite JSON (*.json + *.png)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Unity 2D Sprite Mesh (*.unity.json + *.png)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Unreal Engine Paper2D (*.paper2d.json + *.png)</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblFormatDesc">
         <property name="text">
-         <string>Export Format:</string>
+         <string>Generates game engine sprite resource and texture atlas.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboFormat">
-        <item>
-         <property name="text">
-          <string>Godot 4 (*.tres + *.png)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>TexturePacker JSON (*.json + *.png)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Aseprite JSON (*.json + *.png)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Unity 2D Sprite Mesh (*.unity.json + *.png)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Unreal Engine Paper2D (*.paper2d.json + *.png)</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0">
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpGeometry">
+     <property name="title">
+      <string>Layout &amp; Margins</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayoutGeometry">
+      <property name="horizontalSpacing">
+       <number>8</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="0">
        <widget class="QLabel" name="lblAlgorithm">
         <property name="text">
          <string>Packing Algorithm:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="1" colspan="3">
        <widget class="QComboBox" name="comboAlgorithm">
         <item>
          <property name="text">
@@ -141,23 +256,14 @@
         </item>
        </widget>
       </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="grpGeometry">
-     <property name="title">
-      <string>Layout &amp; Margins</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayoutGeometry">
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="lblPadding">
         <property name="text">
          <string>Inner Padding (px):</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="1" column="1">
        <widget class="QSpinBox" name="spinPadding">
         <property name="minimum">
          <number>0</number>
@@ -170,14 +276,14 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="1" column="2">
        <widget class="QLabel" name="lblExtrude">
         <property name="text">
          <string>Border Extrude (px):</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
+      <item row="1" column="3">
        <widget class="QSpinBox" name="spinExtrude">
         <property name="minimum">
          <number>0</number>
@@ -190,14 +296,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="lblBorderPadding">
         <property name="text">
          <string>Border Padding (px):</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="1">
        <widget class="QSpinBox" name="spinBorderPadding">
         <property name="minimum">
          <number>0</number>
@@ -210,7 +316,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
+      <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="chkPowerOfTwo">
         <property name="text">
          <string>Force Power of Two (2^n)</string>
@@ -220,14 +326,14 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="2">
+      <item row="3" column="2" colspan="2">
        <widget class="QCheckBox" name="chkForceSquare">
         <property name="text">
          <string>Force Square (1:1)</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="4" column="0" colspan="2">
        <widget class="QCheckBox" name="chkDeduplicate">
         <property name="text">
          <string>Deduplicate Identical Frames</string>
@@ -240,7 +346,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2" colspan="2">
+      <item row="4" column="2" colspan="2">
        <widget class="QCheckBox" name="chkTrim">
         <property name="text">
          <string>Trim Transparent Borders</string>
@@ -357,15 +463,18 @@
       <string>Packing &amp; VRAM Statistics (Live Estimation)</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayoutStats">
+      <property name="spacing">
+       <number>4</number>
+      </property>
       <item>
        <widget class="QLabel" name="lblDimensions">
-        <property name="text">
-         <string>Dimensions: --</string>
-        </property>
         <property name="font">
          <font>
           <bold>true</bold>
          </font>
+        </property>
+        <property name="text">
+         <string>Dimensions: --</string>
         </property>
        </widget>
       </item>
@@ -385,13 +494,155 @@
       </item>
       <item>
        <widget class="QLabel" name="lblVramSavings">
-        <property name="text">
-         <string>GPU VRAM: --</string>
-        </property>
         <property name="font">
          <font>
           <bold>true</bold>
          </font>
+        </property>
+        <property name="text">
+         <string>GPU VRAM: --</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpGifOptions">
+     <property name="title">
+      <string>Animated GIF Options</string>
+     </property>
+     <layout class="QFormLayout" name="formLayoutGif">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblGifLoop">
+        <property name="text">
+         <string>Playback Loop:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboGifLoop">
+        <item>
+         <property name="text">
+          <string>Infinite Loop</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Play Once</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ping-Pong (Forward-Backward)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblGifFps">
+        <property name="text">
+         <string>Frame Rate (FPS):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="spinGifFps">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>60</number>
+        </property>
+        <property name="value">
+         <number>12</number>
+        </property>
+        <property name="suffix">
+         <string> fps</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lblGifAlphaThreshold">
+        <property name="text">
+         <string>Alpha Threshold (0-255):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="spinGifAlphaThreshold">
+        <property name="toolTip">
+         <string>Pixels with alpha below this threshold will be completely transparent.</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="value">
+         <number>128</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="chkGifAllAnimations">
+        <property name="text">
+         <string>Export all animations as separate GIF files (&lt;project&gt;_&lt;anim&gt;.gif)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpAsepriteOptions">
+     <property name="title">
+      <string>Aseprite Binary Options</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayoutAseprite">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="chkAsepriteCompress">
+        <property name="text">
+         <string>Lossless cel pixel compression (Deflate / zlib)</string>
+        </property>
+        <property name="toolTip">
+         <string>Compresses cel pixel data using standard zlib compression for smaller file size.</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkAsepriteTags">
+        <property name="text">
+         <string>Export animation tags into file</string>
+        </property>
+        <property name="toolTip">
+         <string>Embeds project animation sequences as Aseprite tags (chunk 0x2018).</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblAsepriteInfo">
+        <property name="text">
+         <string>Generates native 32-bit RGBA Aseprite project (.ase/.aseprite) compatible with Aseprite v1.2+.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -406,7 +657,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>10</height>
+       <height>8</height>
       </size>
      </property>
     </spacer>
