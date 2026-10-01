@@ -389,7 +389,7 @@ namespace BentoPack.Editor
             string cli = FindCliPath();
             if (string.IsNullOrEmpty(cli))
             {
-                error = "bentopack-cli executable not found on PATH or in build directory.";
+                error = "bentopack-cli executable not found on PATH or in standard installation directories.";
                 return false;
             }
 
@@ -437,7 +437,7 @@ namespace BentoPack.Editor
             string cli = FindCliPath();
             if (string.IsNullOrEmpty(cli))
             {
-                error = "bentopack-cli executable not found on PATH or in build directory.";
+                error = "bentopack-cli executable not found on PATH or in standard installation directories.";
                 return false;
             }
 
