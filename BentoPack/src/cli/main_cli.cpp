@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@
 #include "config/appconfig.h"
 #include "localizationmanager.h"
 #include "cli/cliparser.h"
+#include "generated/version.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +32,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QCoreApplication::setOrganizationName(QStringLiteral("BentoPack"));
     QCoreApplication::setApplicationName(QStringLiteral("BentoPackCli"));
+    QCoreApplication::setApplicationVersion(QStringLiteral(PROJECT_VERSION));
 
     // Initialize core configuration and localization
     AppConfig::instance().load();

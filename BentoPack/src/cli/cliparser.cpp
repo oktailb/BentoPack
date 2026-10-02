@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,11 +34,14 @@ static BOOL WINAPI consoleCtrlHandler(DWORD signal) {
 }
 #endif
 
+#include "generated/version.h"
+
 namespace BentoPackCli {
 
 QString CliParser::versionText()
 {
-    return QStringLiteral("BentoPack CLI v1.0.0 (Qt 6 - C++17 Headless Engine)");
+    return QCoreApplication::translate("CliParser", "BentoPack CLI v%1 (Qt 6 - C++17 Headless Engine)")
+        .arg(QStringLiteral(PROJECT_VERSION));
 }
 
 QString CliParser::helpText()

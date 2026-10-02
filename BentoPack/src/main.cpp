@@ -17,8 +17,9 @@
 #include "include/mainwindow.h"
 #include "include/config/appconfig.h"
 #include "include/localizationmanager.h"
+#include "generated/version.h"
 #include <QApplication>
-#include <iostream>
+#include <QCommandLineParser>
 
 #if defined(Q_OS_WIN)
 #include <windows.h>
@@ -26,46 +27,45 @@
 
 int main(int argc, char *argv[])
 {
-  for (int i = 1; i < argc; ++i) {
-      QString arg = QString::fromLocal8Bit(argv[i]);
-      if (arg == QStringLiteral("--version") || arg == QStringLiteral("-v")) {
-#if defined(Q_OS_WIN)
-          if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-              (void)freopen("CONOUT$", "w", stdout);
-              (void)freopen("CONOUT$", "w", stderr);
-          }
-#endif
-          std::cout << "BentoPack Studio v1.0.0 (Qt 6 - GUI Engine)" << std::endl;
-          return 0;
-      }
-      if (arg == QStringLiteral("--help") || arg == QStringLiteral("-h")) {
-#if defined(Q_OS_WIN)
-          if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-              (void)freopen("CONOUT$", "w", stdout);
-              (void)freopen("CONOUT$", "w", stderr);
-          }
-#endif
-          std::cout << "Usage: bentopack [file.bento]\n"
-                    << "Options:\n"
-                    << "  -v, --version  Display version information\n"
-                    << "  -h, --help     Display this help text" << std::endl;
-          return 0;
-      }
-  }
-
   QApplication a(argc, argv);
   a.setWindowIcon(QIcon(QStringLiteral(":/drawer/icons/bentopack.png")));
   QCoreApplication::setOrganizationName(QStringLiteral("BentoPack"));
   QCoreApplication::setApplicationName(QStringLiteral("BentoPack"));
+  QCoreApplication::setApplicationVersion(QStringLiteral(PROJECT_VERSION));
 
   // Load configuration and initialize localization dynamically
   AppConfig::instance().load();
   LocalizationManager::instance().init();
 
+#if defined(Q_OS_WIN)
+  // Attach to parent console if running from terminal with help or version flags
+  for (int i = 1; i < argc; ++i) {
+      const QString arg = QString::fromLocal8Bit(argv[i]);
+      if (arg == QStringLiteral("--version") || arg == QStringLiteral("-v") ||
+          arg == QStringLiteral("--help") || arg == QStringLiteral("-h") ||
+          arg == QStringLiteral("-?")) {
+          if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+              (void)freopen("CONOUT$", "w", stdout);
+              (void)freopen("CONOUT$", "w", stderr);
+          }
+          break;
+      }
+  }
+#endif
+
+  QCommandLineParser parser;
+  parser.setApplicationDescription(QCoreApplication::translate("main", "BentoPack - 2D Sprite Sheet Packer & Game Engine Asset Pipeline"));
+  parser.addHelpOption();
+  parser.addVersionOption();
+  parser.addPositionalArgument(QStringLiteral("file"), QCoreApplication::translate("main", "Project file (.bento) to open"), QStringLiteral("[file]"));
+
+  parser.process(a);
+
   MainWindow w;
 
-  if (argc > 1) {
-      w.processFile(QString::fromLocal8Bit(argv[1]));
+  const QStringList positionalArgs = parser.positionalArguments();
+  if (!positionalArgs.isEmpty()) {
+      w.processFile(positionalArgs.first());
   }
 
   w.show();
