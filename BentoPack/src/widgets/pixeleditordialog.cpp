@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@
 #include <QSet>
 #include <QPainter>
 #include <QShortcut>
+#include <QSpacerItem>
 #include <algorithm>
 
 PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
@@ -62,21 +63,21 @@ void PixelEditorDialog::setupUi()
     mainLayout->setContentsMargins(8, 8, 8, 8);
     mainLayout->setSpacing(6);
 
-    // 1. Header Bar (Navigation & Info)
+    // 1. Header Bar (Navigation & Canvas Controls)
     mainLayout->addWidget(createHeaderBar());
 
     // 2. Central Area (Toolbar + Canvas + Palette Panel)
     QHBoxLayout *centerLayout = new QHBoxLayout();
     centerLayout->setSpacing(6);
 
-    // Left Toolbar
+    // Left Toolbar (2-column ergonomic palette)
     centerLayout->addWidget(createToolBar());
 
     // Canvas inside ScrollArea
     m_scrollArea = new QScrollArea(this);
     m_scrollArea->setWidgetResizable(false);
     m_scrollArea->setAlignment(Qt::AlignCenter);
-    m_scrollArea->setStyleSheet(QStringLiteral("QScrollArea { background-color: #1e1e24; border: 1px solid #3a3a44; border-radius: 4px; }"));
+    m_scrollArea->setStyleSheet(QStringLiteral("QScrollArea { background-color: #14151a; border: 1px solid #2d2e38; border-radius: 6px; }"));
 
     m_canvas = new PixelCanvas(this);
     m_scrollArea->setWidget(m_canvas);
@@ -98,20 +99,58 @@ void PixelEditorDialog::setupUi()
 
     connect(m_canvas, &PixelCanvas::primaryColorChanged, this, [this](const QColor &col) {
         if (m_primarySwatchBtn) {
-            m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #ffffff; border-radius: 4px;").arg(col.name()));
+            m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #ffffff; border-radius: 6px;").arg(col.name()));
+        }
+        if (m_primaryHexLabel) {
+            m_primaryHexLabel->setText(col.name().toUpper());
         }
     });
     connect(m_canvas, &PixelCanvas::secondaryColorChanged, this, [this](const QColor &col) {
         if (m_secondarySwatchBtn) {
-            m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #888888; border-radius: 4px;").arg(col.name()));
+            m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #71717a; border-radius: 6px;").arg(col.name()));
         }
     });
 
-    // Keyboard navigation shortcuts
-    QShortcut *prevShortcut = new QShortcut(QKeySequence(Qt::Key_PageUp), this);
-    connect(prevShortcut, &QShortcut::activated, this, &PixelEditorDialog::onPreviousFrame);
-    QShortcut *nextShortcut = new QShortcut(QKeySequence(Qt::Key_PageDown), this);
-    connect(nextShortcut, &QShortcut::activated, this, &PixelEditorDialog::onNextFrame);
+    // Ergonomic keyboard shortcuts
+    auto addShortcut = [this](const QKeySequence &seq, const auto &slot) {
+        QShortcut *sc = new QShortcut(seq, this);
+        connect(sc, &QShortcut::activated, this, slot);
+    };
+
+    // Tool switching
+    addShortcut(QKeySequence(Qt::Key_P), [this]() { m_btnPencil->click(); });
+    addShortcut(QKeySequence(Qt::Key_E), [this]() { m_btnEraser->click(); });
+    addShortcut(QKeySequence(Qt::Key_I), [this]() { m_btnEyedropper->click(); });
+    addShortcut(QKeySequence(Qt::Key_G), [this]() { m_btnBucket->click(); });
+    addShortcut(QKeySequence(Qt::Key_M), [this]() { m_btnSelectRect->click(); });
+    addShortcut(QKeySequence(Qt::Key_W), [this]() { m_btnSelectColor->click(); });
+
+    // Transforms & Actions
+    addShortcut(QKeySequence(Qt::Key_X), [this]() { m_canvas->swapColors(); });
+    addShortcut(QKeySequence(Qt::Key_H), [this]() { m_canvas->flipHorizontal(); });
+    addShortcut(QKeySequence(Qt::Key_V), [this]() { m_canvas->flipVertical(); });
+    addShortcut(QKeySequence(Qt::Key_R), [this]() { m_canvas->rotate90CW(); });
+    addShortcut(QKeySequence(Qt::Key_Delete), [this]() { m_canvas->clearSelection(); });
+    addShortcut(QKeySequence(Qt::Key_Backspace), [this]() { m_canvas->clearSelection(); });
+    addShortcut(QKeySequence(Qt::Key_Escape), [this]() { m_canvas->deselect(); });
+
+    // Zoom & Grid
+    addShortcut(QKeySequence(Qt::Key_Plus), [this]() { m_canvas->zoomIn(); });
+    addShortcut(QKeySequence(Qt::Key_Equal), [this]() { m_canvas->zoomIn(); });
+    addShortcut(QKeySequence(Qt::Key_Minus), [this]() { m_canvas->zoomOut(); });
+    addShortcut(QKeySequence(Qt::Key_0), [this]() { m_canvas->zoomFit(m_scrollArea->viewport()->size()); });
+    addShortcut(QKeySequence(Qt::Key_F), [this]() { m_canvas->zoomFit(m_scrollArea->viewport()->size()); });
+
+    // Frame navigation
+    addShortcut(QKeySequence(Qt::Key_PageUp), [this]() { onPreviousFrame(); });
+    addShortcut(QKeySequence(Qt::Key_BracketLeft), [this]() { onPreviousFrame(); });
+    addShortcut(QKeySequence(Qt::Key_PageDown), [this]() { onNextFrame(); });
+    addShortcut(QKeySequence(Qt::Key_BracketRight), [this]() { onNextFrame(); });
+
+    // Undo / Redo
+    addShortcut(QKeySequence(Qt::CTRL | Qt::Key_Z), [this]() { m_canvas->undo(); });
+    addShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y), [this]() { m_canvas->redo(); });
+    addShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Z), [this]() { m_canvas->redo(); });
 }
 
 QWidget* PixelEditorDialog::createHeaderBar()
@@ -119,21 +158,119 @@ QWidget* PixelEditorDialog::createHeaderBar()
     QWidget *bar = new QWidget(this);
     QHBoxLayout *layout = new QHBoxLayout(bar);
     layout->setContentsMargins(4, 2, 4, 2);
+    layout->setSpacing(6);
 
-    m_prevFrameBtn = new QPushButton(tr("◀ Previous Frame"), bar);
+    const QString navBtnStyle = QStringLiteral(
+        "QPushButton {"
+        "  background-color: #24252e;"
+        "  border: 1px solid #3c3d4a;"
+        "  border-radius: 6px;"
+        "  color: #e2e8f0;"
+        "  font-weight: bold;"
+        "  font-size: 13px;"
+        "}"
+        "QPushButton:hover { background-color: #31333f; border-color: #55576d; }"
+        "QPushButton:disabled { color: #55576d; background-color: #1a1b20; border-color: #2a2b34; }"
+    );
+
+    m_prevFrameBtn = new QPushButton(QStringLiteral("◀"), bar);
+    m_prevFrameBtn->setFixedSize(34, 28);
+    m_prevFrameBtn->setStyleSheet(navBtnStyle);
     m_prevFrameBtn->setToolTip(tr("Navigate to previous frame (Page Up)"));
     connect(m_prevFrameBtn, &QPushButton::clicked, this, &PixelEditorDialog::onPreviousFrame);
     layout->addWidget(m_prevFrameBtn);
 
     m_frameInfoLabel = new QLabel(tr("Frame 1 / 1 (32x32 px)"), bar);
     m_frameInfoLabel->setAlignment(Qt::AlignCenter);
-    m_frameInfoLabel->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 13px; color: #e0e0e0;"));
-    layout->addWidget(m_frameInfoLabel, 1);
+    m_frameInfoLabel->setStyleSheet(QStringLiteral(
+        "background-color: #202128;"
+        "border: 1px solid #383a48;"
+        "border-radius: 6px;"
+        "padding: 4px 14px;"
+        "font-weight: bold;"
+        "font-size: 12px;"
+        "color: #f1f5f9;"
+    ));
+    layout->addWidget(m_frameInfoLabel);
 
-    m_nextFrameBtn = new QPushButton(tr("Next Frame ▶"), bar);
+    m_nextFrameBtn = new QPushButton(QStringLiteral("▶"), bar);
+    m_nextFrameBtn->setFixedSize(34, 28);
+    m_nextFrameBtn->setStyleSheet(navBtnStyle);
     m_nextFrameBtn->setToolTip(tr("Navigate to next frame (Page Down)"));
     connect(m_nextFrameBtn, &QPushButton::clicked, this, &PixelEditorDialog::onNextFrame);
     layout->addWidget(m_nextFrameBtn);
+
+    layout->addStretch(1);
+
+    // View & Zoom controls
+    const QString viewBtnStyle = QStringLiteral(
+        "QToolButton {"
+        "  background-color: #24252e;"
+        "  border: 1px solid #3c3d4a;"
+        "  border-radius: 6px;"
+        "  color: #e2e8f0;"
+        "  font-weight: bold;"
+        "  font-size: 12px;"
+        "}"
+        "QToolButton:hover { background-color: #31333f; border-color: #55576d; }"
+        "QToolButton:checked { background-color: #1e3a5f; border: 1.5px solid #38bdf8; color: #38bdf8; }"
+        "QToolButton:pressed { background-color: #172a44; }"
+    );
+
+    m_btnGrid = new QToolButton(bar);
+    m_btnGrid->setText(QStringLiteral("# Grid"));
+    m_btnGrid->setToolTip(tr("Toggle Pixel Grid"));
+    m_btnGrid->setCheckable(true);
+    m_btnGrid->setChecked(true);
+    m_btnGrid->setFixedSize(68, 28);
+    m_btnGrid->setStyleSheet(viewBtnStyle);
+    connect(m_btnGrid, &QToolButton::toggled, this, [this](bool checked) {
+        m_canvas->setShowGrid(checked);
+    });
+    layout->addWidget(m_btnGrid);
+
+    QFrame *sep = new QFrame(bar);
+    sep->setFrameShape(QFrame::VLine);
+    sep->setStyleSheet(QStringLiteral("color: #383a48;"));
+    layout->addWidget(sep);
+
+    m_btnZoomOut = new QToolButton(bar);
+    m_btnZoomOut->setText(QStringLiteral("−"));
+    m_btnZoomOut->setToolTip(tr("Zoom Out"));
+    m_btnZoomOut->setFixedSize(28, 28);
+    m_btnZoomOut->setStyleSheet(viewBtnStyle);
+    connect(m_btnZoomOut, &QToolButton::clicked, this, [this]() { m_canvas->zoomOut(); });
+    layout->addWidget(m_btnZoomOut);
+
+    m_zoomLabel = new QLabel(tr("Zoom: 1600%"), bar);
+    m_zoomLabel->setAlignment(Qt::AlignCenter);
+    m_zoomLabel->setFixedWidth(92);
+    m_zoomLabel->setStyleSheet(QStringLiteral(
+        "background-color: #202128;"
+        "border: 1px solid #383a48;"
+        "border-radius: 6px;"
+        "padding: 4px 6px;"
+        "font-weight: bold;"
+        "font-size: 11px;"
+        "color: #38bdf8;"
+    ));
+    layout->addWidget(m_zoomLabel);
+
+    m_btnZoomIn = new QToolButton(bar);
+    m_btnZoomIn->setText(QStringLiteral("+"));
+    m_btnZoomIn->setToolTip(tr("Zoom In"));
+    m_btnZoomIn->setFixedSize(28, 28);
+    m_btnZoomIn->setStyleSheet(viewBtnStyle);
+    connect(m_btnZoomIn, &QToolButton::clicked, this, [this]() { m_canvas->zoomIn(); });
+    layout->addWidget(m_btnZoomIn);
+
+    m_btnFit = new QToolButton(bar);
+    m_btnFit->setText(QStringLiteral("⊡ Fit"));
+    m_btnFit->setToolTip(tr("Fit to View"));
+    m_btnFit->setFixedSize(56, 28);
+    m_btnFit->setStyleSheet(viewBtnStyle);
+    connect(m_btnFit, &QToolButton::clicked, this, [this]() { m_canvas->zoomFit(m_scrollArea->viewport()->size()); });
+    layout->addWidget(m_btnFit);
 
     return bar;
 }
@@ -141,81 +278,104 @@ QWidget* PixelEditorDialog::createHeaderBar()
 QWidget* PixelEditorDialog::createToolBar()
 {
     QWidget *panel = new QWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    panel->setFixedWidth(96);
+    QGridLayout *layout = new QGridLayout(panel);
     layout->setContentsMargins(2, 2, 2, 2);
     layout->setSpacing(4);
 
     m_toolGroup = new QButtonGroup(this);
     m_toolGroup->setExclusive(true);
 
-    auto addToolBtn = [this, layout](const QString &text, const QString &tooltip, PixelTool /*tool*/, int id, bool checked = false) -> QToolButton* {
+    const QString toolBtnStyle = QStringLiteral(
+        "QToolButton {"
+        "  background-color: #24252e;"
+        "  border: 1px solid #3a3b47;"
+        "  border-radius: 6px;"
+        "  color: #e2e8f0;"
+        "  font-size: 15px;"
+        "  font-weight: bold;"
+        "}"
+        "QToolButton:hover {"
+        "  background-color: #31333f;"
+        "  border-color: #525464;"
+        "}"
+        "QToolButton:checked {"
+        "  background-color: #1e3a5f;"
+        "  border: 1.5px solid #38bdf8;"
+        "  color: #38bdf8;"
+        "}"
+        "QToolButton:pressed {"
+        "  background-color: #172a44;"
+        "}"
+        "QToolButton:disabled {"
+        "  background-color: #1a1b20;"
+        "  border-color: #2a2b34;"
+        "  color: #4b4d5a;"
+        "}"
+    );
+
+    auto addToolBtn = [this, layout, &toolBtnStyle](const QString &text, const QString &tooltip, PixelTool /*tool*/, int id, int row, int col, bool checked = false) -> QToolButton* {
         QToolButton *btn = new QToolButton(this);
         btn->setText(text);
         btn->setToolTip(tooltip);
         btn->setCheckable(true);
         btn->setChecked(checked);
-        btn->setFixedSize(38, 36);
-        btn->setStyleSheet(QStringLiteral("QToolButton { font-size: 12px; font-weight: bold; }"));
+        btn->setFixedSize(42, 38);
+        btn->setStyleSheet(toolBtnStyle);
         m_toolGroup->addButton(btn, id);
-        layout->addWidget(btn);
+        layout->addWidget(btn, row, col);
         return btn;
     };
 
-    m_btnPencil = addToolBtn(QStringLiteral("✏"), tr("Pencil (1px continuous Bresenham) [P]"), PixelTool::Pencil, static_cast<int>(PixelTool::Pencil), true);
-    m_btnEraser = addToolBtn(QStringLiteral("🧹"), tr("Eraser (1px clear to alpha 0) [E]"), PixelTool::Eraser, static_cast<int>(PixelTool::Eraser));
-    m_btnEyedropper = addToolBtn(QStringLiteral("💧"), tr("Eyedropper / Pipette (Alt+Click or [I])"), PixelTool::Eyedropper, static_cast<int>(PixelTool::Eyedropper));
-    m_btnBucket = addToolBtn(QStringLiteral("🪣"), tr("Bucket Fill (Flood Fill 4-way) [G]"), PixelTool::BucketFill, static_cast<int>(PixelTool::BucketFill));
-    m_btnSelectRect = addToolBtn(QStringLiteral("⬚"), tr("Rectangular Marquee Selection [M]"), PixelTool::SelectRect, static_cast<int>(PixelTool::SelectRect));
-    m_btnSelectColor = addToolBtn(QStringLiteral("🪄"), tr("Magic Wand (Color Selection) [W]"), PixelTool::SelectColor, static_cast<int>(PixelTool::SelectColor));
+    m_btnPencil = addToolBtn(QStringLiteral("✏"), tr("Pencil (1px continuous Bresenham) [P]"), PixelTool::Pencil, static_cast<int>(PixelTool::Pencil), 0, 0, true);
+    m_btnEraser = addToolBtn(QStringLiteral("🧹"), tr("Eraser (1px clear to alpha 0) [E]"), PixelTool::Eraser, static_cast<int>(PixelTool::Eraser), 0, 1);
+    m_btnEyedropper = addToolBtn(QStringLiteral("💧"), tr("Eyedropper / Pipette (Alt+Click or [I])"), PixelTool::Eyedropper, static_cast<int>(PixelTool::Eyedropper), 1, 0);
+    m_btnBucket = addToolBtn(QStringLiteral("🪣"), tr("Bucket Fill (Flood Fill 4-way) [G]"), PixelTool::BucketFill, static_cast<int>(PixelTool::BucketFill), 1, 1);
+    m_btnSelectRect = addToolBtn(QStringLiteral("⬚"), tr("Rectangular Marquee Selection [M]"), PixelTool::SelectRect, static_cast<int>(PixelTool::SelectRect), 2, 0);
+    m_btnSelectColor = addToolBtn(QStringLiteral("🪄"), tr("Magic Wand (Color Selection) [W]"), PixelTool::SelectColor, static_cast<int>(PixelTool::SelectColor), 2, 1);
 
     connect(m_toolGroup, &QButtonGroup::idClicked, this, &PixelEditorDialog::onToolButtonClicked);
 
-    // Separator
+    // Separator 1
     QFrame *line1 = new QFrame(this);
     line1->setFrameShape(QFrame::HLine);
-    layout->addWidget(line1);
+    line1->setStyleSheet(QStringLiteral("color: #383a48;"));
+    layout->addWidget(line1, 3, 0, 1, 2);
 
-    // Quick Transform Buttons
-    auto addActionBtn = [this, layout](const QString &text, const QString &tooltip, const auto &slot) -> QToolButton* {
+    auto addActionBtn = [this, layout, &toolBtnStyle](const QString &text, const QString &tooltip, int row, int col, const auto &slot) -> QToolButton* {
         QToolButton *btn = new QToolButton(this);
         btn->setText(text);
         btn->setToolTip(tooltip);
-        btn->setFixedSize(38, 32);
+        btn->setFixedSize(42, 34);
+        btn->setStyleSheet(toolBtnStyle);
         connect(btn, &QToolButton::clicked, this, slot);
-        layout->addWidget(btn);
+        layout->addWidget(btn, row, col);
         return btn;
     };
 
-    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal"), [this]() { m_canvas->flipHorizontal(); });
-    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical"), [this]() { m_canvas->flipVertical(); });
-    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise"), [this]() { m_canvas->rotate90CW(); });
+    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal"), 4, 0, [this]() { m_canvas->flipHorizontal(); });
+    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical"), 4, 1, [this]() { m_canvas->flipVertical(); });
+    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise"), 5, 0, [this]() { m_canvas->rotate90CW(); });
+    m_btnClearSel = addActionBtn(QStringLiteral("✕"), tr("Clear Selection / Deselect (Del)"), 5, 1, [this]() {
+        if (m_canvas->hasSelection()) {
+            m_canvas->clearSelection();
+        } else {
+            m_canvas->deselect();
+        }
+    });
 
-    // Separator
+    // Separator 2
     QFrame *line2 = new QFrame(this);
     line2->setFrameShape(QFrame::HLine);
-    layout->addWidget(line2);
-
-    // Grid & Zoom controls
-    m_btnGrid = new QToolButton(this);
-    m_btnGrid->setText(QStringLiteral("#"));
-    m_btnGrid->setToolTip(tr("Toggle Pixel Grid"));
-    m_btnGrid->setCheckable(true);
-    m_btnGrid->setChecked(true);
-    m_btnGrid->setFixedSize(38, 32);
-    connect(m_btnGrid, &QToolButton::toggled, this, [this](bool checked) {
-        m_canvas->setShowGrid(checked);
-    });
-    layout->addWidget(m_btnGrid);
-
-    m_btnZoomIn = addActionBtn(QStringLiteral("+"), tr("Zoom In"), [this]() { m_canvas->zoomIn(); });
-    m_btnZoomOut = addActionBtn(QStringLiteral("-"), tr("Zoom Out"), [this]() { m_canvas->zoomOut(); });
-    m_btnFit = addActionBtn(QStringLiteral("⊡"), tr("Fit to View"), [this]() { m_canvas->zoomFit(m_scrollArea->viewport()->size()); });
-
-    layout->addStretch();
+    line2->setStyleSheet(QStringLiteral("color: #383a48;"));
+    layout->addWidget(line2, 6, 0, 1, 2);
 
     // Undo / Redo
-    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), [this]() { m_canvas->undo(); });
-    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), [this]() { m_canvas->redo(); });
+    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 7, 0, [this]() { m_canvas->undo(); });
+    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 7, 1, [this]() { m_canvas->redo(); });
+
+    // Spacer
+    layout->addItem(new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 8, 0, 1, 2);
 
     return panel;
 }
@@ -223,44 +383,97 @@ QWidget* PixelEditorDialog::createToolBar()
 QWidget* PixelEditorDialog::createPalettePanel()
 {
     QWidget *panel = new QWidget(this);
-    panel->setFixedWidth(230);
+    panel->setFixedWidth(244);
     QVBoxLayout *layout = new QVBoxLayout(panel);
     layout->setContentsMargins(4, 2, 4, 2);
-    layout->setSpacing(6);
+    layout->setSpacing(8);
 
     // 1. Active Color Box (Primary & Secondary swatches)
     m_colorsGroup = new QGroupBox(tr("Active Colors"), panel);
-    QHBoxLayout *colorsLayout = new QHBoxLayout(m_colorsGroup);
-    colorsLayout->setContentsMargins(6, 6, 6, 6);
+    m_colorsGroup->setStyleSheet(QStringLiteral(
+        "QGroupBox {"
+        "  font-weight: bold;"
+        "  font-size: 11px;"
+        "  color: #cbd5e1;"
+        "  border: 1px solid #383a48;"
+        "  border-radius: 6px;"
+        "  margin-top: 8px;"
+        "  padding-top: 10px;"
+        "}"
+        "QGroupBox::title {"
+        "  subcontrol-origin: margin;"
+        "  subcontrol-position: top left;"
+        "  left: 8px;"
+        "  padding: 0 4px;"
+        "}"
+    ));
+    QVBoxLayout *colorsMainLayout = new QVBoxLayout(m_colorsGroup);
+    colorsMainLayout->setContentsMargins(8, 8, 8, 8);
+    colorsMainLayout->setSpacing(6);
+
+    QHBoxLayout *swatchesRow = new QHBoxLayout();
+    swatchesRow->setSpacing(8);
 
     m_primarySwatchBtn = new QPushButton(m_colorsGroup);
-    m_primarySwatchBtn->setFixedSize(36, 36);
+    m_primarySwatchBtn->setFixedSize(44, 44);
     m_primarySwatchBtn->setToolTip(tr("Primary Color (Left Click to change)"));
-    m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #000000; border: 2px solid #ffffff; border-radius: 4px;"));
+    m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #000000; border: 2px solid #ffffff; border-radius: 6px;"));
     connect(m_primarySwatchBtn, &QPushButton::clicked, this, &PixelEditorDialog::onPrimarySwatchClicked);
-    colorsLayout->addWidget(m_primarySwatchBtn);
+    swatchesRow->addWidget(m_primarySwatchBtn);
 
     m_swapBtn = new QPushButton(QStringLiteral("⇄"), m_colorsGroup);
     m_swapBtn->setFixedSize(28, 28);
     m_swapBtn->setToolTip(tr("Swap Colors (X)"));
+    m_swapBtn->setStyleSheet(QStringLiteral(
+        "QPushButton {"
+        "  background-color: #262730;"
+        "  border: 1px solid #3c3d4a;"
+        "  border-radius: 14px;"
+        "  color: #e2e8f0;"
+        "  font-weight: bold;"
+        "  font-size: 12px;"
+        "}"
+        "QPushButton:hover { background-color: #333544; border-color: #38bdf8; }"
+    ));
     connect(m_swapBtn, &QPushButton::clicked, this, [this]() { m_canvas->swapColors(); });
-    colorsLayout->addWidget(m_swapBtn);
+    swatchesRow->addWidget(m_swapBtn);
 
     m_secondarySwatchBtn = new QPushButton(m_colorsGroup);
-    m_secondarySwatchBtn->setFixedSize(36, 36);
+    m_secondarySwatchBtn->setFixedSize(40, 40);
     m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Left Click to change)"));
-    m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #ffffff; border: 2px solid #888888; border-radius: 4px;"));
+    m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #ffffff; border: 2px solid #71717a; border-radius: 6px;"));
     connect(m_secondarySwatchBtn, &QPushButton::clicked, this, &PixelEditorDialog::onSecondarySwatchClicked);
-    colorsLayout->addWidget(m_secondarySwatchBtn);
+    swatchesRow->addWidget(m_secondarySwatchBtn);
 
-    colorsLayout->addStretch();
+    swatchesRow->addStretch();
+    colorsMainLayout->addLayout(swatchesRow);
+
+    m_primaryHexLabel = new QLabel(QStringLiteral("#000000"), m_colorsGroup);
+    m_primaryHexLabel->setAlignment(Qt::AlignLeft);
+    m_primaryHexLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px; font-weight: bold; color: #94a3b8; padding-left: 2px;"));
+    colorsMainLayout->addWidget(m_primaryHexLabel);
+
     layout->addWidget(m_colorsGroup);
 
     // 2. Palette Preset Selector
     m_palLabel = new QLabel(tr("Palette:"), panel);
+    m_palLabel->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 12px; color: #cbd5e1;"));
     layout->addWidget(m_palLabel);
 
     m_paletteCombo = new QComboBox(panel);
+    m_paletteCombo->setStyleSheet(QStringLiteral(
+        "QComboBox {"
+        "  background-color: #22232a;"
+        "  border: 1px solid #3e404b;"
+        "  border-radius: 6px;"
+        "  padding: 4px 8px;"
+        "  color: #f1f5f9;"
+        "  font-size: 12px;"
+        "  min-height: 22px;"
+        "}"
+        "QComboBox::drop-down { border: none; }"
+        "QComboBox QAbstractItemView { background-color: #22232a; color: #f1f5f9; selection-background-color: #1e3a5f; selection-color: #38bdf8; }"
+    ));
     m_paletteCombo->addItem(tr("Sprite Colors (Auto)"), SpriteColors);
     m_paletteCombo->addItem(tr("NES / Famicom (54)"), NES);
     m_paletteCombo->addItem(tr("SNES / Super Famicom (32)"), SNES);
@@ -275,25 +488,42 @@ QWidget* PixelEditorDialog::createPalettePanel()
     // 3. Swatches Grid inside ScrollArea
     QScrollArea *swatchScroll = new QScrollArea(panel);
     swatchScroll->setWidgetResizable(true);
-    swatchScroll->setFixedHeight(210);
-    swatchScroll->setStyleSheet(QStringLiteral("background-color: #25262c; border: 1px solid #3e404b; border-radius: 4px;"));
+    swatchScroll->setFixedHeight(216);
+    swatchScroll->setStyleSheet(QStringLiteral("background-color: #181920; border: 1px solid #2d2e38; border-radius: 6px;"));
 
     m_swatchesContainer = new QWidget(swatchScroll);
     m_swatchesLayout = new QGridLayout(m_swatchesContainer);
     m_swatchesLayout->setContentsMargins(4, 4, 4, 4);
-    m_swatchesLayout->setSpacing(3);
+    m_swatchesLayout->setSpacing(4);
     swatchScroll->setWidget(m_swatchesContainer);
     layout->addWidget(swatchScroll);
 
     // 4. Live Preview (1:1 scale)
     m_prevGroup = new QGroupBox(tr("1:1 Scale Preview"), panel);
+    m_prevGroup->setStyleSheet(QStringLiteral(
+        "QGroupBox {"
+        "  font-weight: bold;"
+        "  font-size: 11px;"
+        "  color: #cbd5e1;"
+        "  border: 1px solid #383a48;"
+        "  border-radius: 6px;"
+        "  margin-top: 8px;"
+        "  padding-top: 10px;"
+        "}"
+        "QGroupBox::title {"
+        "  subcontrol-origin: margin;"
+        "  subcontrol-position: top left;"
+        "  left: 8px;"
+        "  padding: 0 4px;"
+        "}"
+    ));
     QVBoxLayout *prevLayout = new QVBoxLayout(m_prevGroup);
     prevLayout->setContentsMargins(4, 4, 4, 4);
 
     m_previewLabel = new QLabel(m_prevGroup);
     m_previewLabel->setAlignment(Qt::AlignCenter);
-    m_previewLabel->setMinimumHeight(80);
-    m_previewLabel->setStyleSheet(QStringLiteral("background-color: #1e1e24; border: 1px dashed #4a4a58; border-radius: 4px;"));
+    m_previewLabel->setMinimumHeight(76);
+    m_previewLabel->setStyleSheet(QStringLiteral("background-color: #14151a; border: 1px solid #2d2e38; border-radius: 4px;"));
     prevLayout->addWidget(m_previewLabel);
     layout->addWidget(m_prevGroup);
 
@@ -306,28 +536,75 @@ QWidget* PixelEditorDialog::createBottomBar()
     QWidget *bar = new QWidget(this);
     QHBoxLayout *layout = new QHBoxLayout(bar);
     layout->setContentsMargins(4, 2, 4, 2);
+    layout->setSpacing(8);
 
     m_coordLabel = new QLabel(tr("X: -- , Y: --"), bar);
-    m_coordLabel->setFixedWidth(120);
+    m_coordLabel->setFixedWidth(100);
+    m_coordLabel->setAlignment(Qt::AlignCenter);
+    m_coordLabel->setStyleSheet(QStringLiteral(
+        "background-color: #202128;"
+        "border: 1px solid #333544;"
+        "border-radius: 4px;"
+        "padding: 3px 6px;"
+        "font-family: monospace;"
+        "font-size: 11px;"
+        "color: #94a3b8;"
+    ));
     layout->addWidget(m_coordLabel);
 
-    m_colorInfoLabel = new QLabel(QStringLiteral(""), bar);
-    layout->addWidget(m_colorInfoLabel, 1);
+    m_hoverColorSwatch = new QLabel(bar);
+    m_hoverColorSwatch->setFixedSize(18, 18);
+    m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid #475569; border-radius: 3px; background-color: transparent;"));
+    m_hoverColorSwatch->hide();
+    layout->addWidget(m_hoverColorSwatch);
 
-    m_zoomLabel = new QLabel(tr("Zoom: 1600%"), bar);
-    m_zoomLabel->setFixedWidth(100);
-    layout->addWidget(m_zoomLabel);
+    m_colorInfoLabel = new QLabel(QStringLiteral(""), bar);
+    m_colorInfoLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px; color: #cbd5e1;"));
+    layout->addWidget(m_colorInfoLabel);
+
+    layout->addStretch(1);
+
+    const QString btnSecondaryStyle = QStringLiteral(
+        "QPushButton {"
+        "  background-color: #262730;"
+        "  border: 1px solid #3c3d4a;"
+        "  border-radius: 6px;"
+        "  color: #e2e8f0;"
+        "  font-size: 12px;"
+        "  font-weight: 500;"
+        "  min-width: 80px;"
+        "  min-height: 28px;"
+        "}"
+        "QPushButton:hover { background-color: #333544; border-color: #55576d; }"
+        "QPushButton:pressed { background-color: #1a1b20; }"
+    );
 
     m_cancelBtn = new QPushButton(tr("Cancel"), bar);
+    m_cancelBtn->setStyleSheet(btnSecondaryStyle);
     connect(m_cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
     layout->addWidget(m_cancelBtn);
 
     m_applyBtn = new QPushButton(tr("Apply"), bar);
+    m_applyBtn->setStyleSheet(btnSecondaryStyle);
     connect(m_applyBtn, &QPushButton::clicked, this, &PixelEditorDialog::onApplyClicked);
     layout->addWidget(m_applyBtn);
 
     m_okBtn = new QPushButton(tr("OK"), bar);
     m_okBtn->setDefault(true);
+    m_okBtn->setStyleSheet(QStringLiteral(
+        "QPushButton {"
+        "  background-color: #2563eb;"
+        "  border: none;"
+        "  border-radius: 6px;"
+        "  color: #ffffff;"
+        "  font-size: 12px;"
+        "  font-weight: bold;"
+        "  min-width: 80px;"
+        "  min-height: 28px;"
+        "}"
+        "QPushButton:hover { background-color: #1d4ed8; }"
+        "QPushButton:pressed { background-color: #1e40af; }"
+    ));
     connect(m_okBtn, &QPushButton::clicked, this, &PixelEditorDialog::onOkClicked);
     layout->addWidget(m_okBtn);
 
@@ -367,8 +644,16 @@ void PixelEditorDialog::onCanvasPixelMoved(int x, int y, const QColor &color)
 {
     m_coordLabel->setText(tr("X: %1 , Y: %2").arg(x).arg(y));
     if (color.alpha() == 0) {
+        if (m_hoverColorSwatch) {
+            m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid #475569; border-radius: 3px; background-color: rgba(255,255,255,0.06);"));
+            m_hoverColorSwatch->show();
+        }
         m_colorInfoLabel->setText(tr("Transparent [alpha: 0]"));
     } else {
+        if (m_hoverColorSwatch) {
+            m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid #ffffff; border-radius: 3px; background-color: %1;").arg(color.name()));
+            m_hoverColorSwatch->show();
+        }
         m_colorInfoLabel->setText(QStringLiteral("%1  RGBA(%2, %3, %4, %5)")
                                   .arg(color.name().toUpper())
                                   .arg(color.red())
@@ -381,6 +666,7 @@ void PixelEditorDialog::onCanvasPixelMoved(int x, int y, const QColor &color)
 void PixelEditorDialog::onCanvasPixelLeft()
 {
     m_coordLabel->setText(tr("X: -- , Y: --"));
+    if (m_hoverColorSwatch) m_hoverColorSwatch->hide();
     m_colorInfoLabel->clear();
 }
 
@@ -516,18 +802,26 @@ void PixelEditorDialog::refreshPaletteSwatches()
         delete child;
     }
 
-    const int columns = 6;
+    const int columns = 7;
     for (int i = 0; i < m_currentPalette.size(); ++i) {
         QRgb rgb = m_currentPalette[i];
         QColor col(rgb);
 
         QPushButton *btn = new QPushButton(m_swatchesContainer);
-        btn->setFixedSize(24, 24);
+        btn->setFixedSize(26, 26);
         btn->setToolTip(QStringLiteral("%1\nRGB(%2, %3, %4)\nLeft-Click: Primary\nRight-Click: Secondary")
                         .arg(col.name().toUpper())
                         .arg(col.red()).arg(col.green()).arg(col.blue()));
-        btn->setStyleSheet(QStringLiteral("background-color: %1; border: 1px solid #1a1a20; border-radius: 2px;")
-                           .arg(col.name()));
+        btn->setStyleSheet(QStringLiteral(
+            "QPushButton {"
+            "  background-color: %1;"
+            "  border: 1px solid rgba(0, 0, 0, 0.45);"
+            "  border-radius: 4px;"
+            "}"
+            "QPushButton:hover {"
+            "  border: 2px solid #ffffff;"
+            "}"
+        ).arg(col.name()));
 
         // Left click sets primary color
         connect(btn, &QPushButton::clicked, this, [this, col]() {
@@ -685,11 +979,11 @@ void PixelEditorDialog::retranslateUi()
     setWindowTitle(tr("Pixel Editor — BentoPack"));
 
     if (m_prevFrameBtn) {
-        m_prevFrameBtn->setText(tr("◀ Previous Frame"));
+        m_prevFrameBtn->setText(QStringLiteral("◀"));
         m_prevFrameBtn->setToolTip(tr("Navigate to previous frame (Page Up)"));
     }
     if (m_nextFrameBtn) {
-        m_nextFrameBtn->setText(tr("Next Frame ▶"));
+        m_nextFrameBtn->setText(QStringLiteral("▶"));
         m_nextFrameBtn->setToolTip(tr("Navigate to next frame (Page Down)"));
     }
 
@@ -712,10 +1006,17 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnFlipH) m_btnFlipH->setToolTip(tr("Flip Horizontal"));
     if (m_btnFlipV) m_btnFlipV->setToolTip(tr("Flip Vertical"));
     if (m_btnRotate) m_btnRotate->setToolTip(tr("Rotate 90° Clockwise"));
-    if (m_btnGrid) m_btnGrid->setToolTip(tr("Toggle Pixel Grid"));
+    if (m_btnClearSel) m_btnClearSel->setToolTip(tr("Clear Selection / Deselect (Del)"));
+    if (m_btnGrid) {
+        m_btnGrid->setText(tr("# Grid"));
+        m_btnGrid->setToolTip(tr("Toggle Pixel Grid"));
+    }
     if (m_btnZoomIn) m_btnZoomIn->setToolTip(tr("Zoom In"));
     if (m_btnZoomOut) m_btnZoomOut->setToolTip(tr("Zoom Out"));
-    if (m_btnFit) m_btnFit->setToolTip(tr("Fit to View"));
+    if (m_btnFit) {
+        m_btnFit->setText(tr("⊡ Fit"));
+        m_btnFit->setToolTip(tr("Fit to View"));
+    }
     if (m_btnUndo) m_btnUndo->setToolTip(tr("Undo (Ctrl+Z)"));
     if (m_btnRedo) m_btnRedo->setToolTip(tr("Redo (Ctrl+Y)"));
 

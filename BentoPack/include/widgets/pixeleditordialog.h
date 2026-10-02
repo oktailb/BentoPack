@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -128,12 +128,14 @@ private:
     QToolButton*            m_btnFit = nullptr;
     QToolButton*            m_btnUndo = nullptr;
     QToolButton*            m_btnRedo = nullptr;
+    QToolButton*            m_btnClearSel = nullptr;
 
     // Palette & Colors
     QGroupBox*              m_colorsGroup = nullptr;
     QPushButton*            m_primarySwatchBtn = nullptr;
     QPushButton*            m_secondarySwatchBtn = nullptr;
     QPushButton*            m_swapBtn = nullptr;
+    QLabel*                 m_primaryHexLabel = nullptr;
     QLabel*                 m_palLabel = nullptr;
     QComboBox*              m_paletteCombo = nullptr;
     QWidget*                m_swatchesContainer = nullptr;
@@ -146,6 +148,7 @@ private:
 
     // Status & Buttons
     QLabel*                 m_coordLabel = nullptr;
+    QLabel*                 m_hoverColorSwatch = nullptr;
     QLabel*                 m_colorInfoLabel = nullptr;
     QLabel*                 m_zoomLabel = nullptr;
     QPushButton*            m_cancelBtn = nullptr;
