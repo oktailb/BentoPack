@@ -11,6 +11,7 @@
 #include "cli/watch_daemon.h"
 #include "extractor/extractorregistry.h"
 #include "filters/filterregistry.h"
+#include "generated/version.h"
 
 using namespace BentoPackCli;
 
@@ -138,7 +139,7 @@ void TestCli::testCliHelpAndVersion()
 
     CliResult resVersion = parser.parseAndExecute({ QStringLiteral("bentopack-cli"), QStringLiteral("-v") });
     QCOMPARE(resVersion.exitCode, ExitSuccess);
-    QVERIFY(resVersion.message.contains(QStringLiteral("v1.0.0")));
+    QVERIFY(resVersion.message.contains(QStringLiteral(PROJECT_VERSION)));
 }
 
 void TestCli::testTexturePackerFlavorPacking()
