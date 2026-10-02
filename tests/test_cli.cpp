@@ -443,7 +443,7 @@ void TestCli::testWatchDebouncedRepack()
     QDir().mkpath(watchFolder);
 
     QString frame1 = QDir(watchFolder).filePath(QStringLiteral("frame_01.png"));
-    QFile::copy(m_sampleHero, frame1);
+    QImage(32, 32, QImage::Format_RGBA8888).save(frame1);
 
     QString outSheet = m_tempDir.filePath(QStringLiteral("watch_atlas.png"));
     QString outData = m_tempDir.filePath(QStringLiteral("watch_atlas.json"));
@@ -471,12 +471,10 @@ void TestCli::testWatchDebouncedRepack()
 
     // Simulate file addition in watched directory
     QString frame2 = QDir(watchFolder).filePath(QStringLiteral("frame_02.png"));
-    QFile::copy(m_sampleHero, frame2);
+    QImage(32, 32, QImage::Format_RGBA8888).save(frame2);
 
-    // Wait for QFileSystemWatcher and debounce timer (50ms debounce)
-    QTest::qWait(200);
-
-    QVERIFY(repackCount >= 2);
+    // Wait for QFileSystemWatcher and debounce timer (event-driven with safe timeout)
+    QTRY_VERIFY_WITH_TIMEOUT(repackCount >= 2, 5000);
     daemon.releaseDirectoryLock();
 }
 
