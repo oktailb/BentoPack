@@ -152,6 +152,7 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
         ui->spinZstdLevel->setEnabled(checked && ui->comboTextureFormat->currentIndex() > 0);
         m_debounceTimer->start();
     });
+    connect(ui->spinZstdLevel, QOverload<int>::of(&QSpinBox::valueChanged), [this]() { m_debounceTimer->start(); });
 
     // Load defaults from AppConfig
     const auto &expCfg = AppConfig::instance().exportSettings();
@@ -452,13 +453,36 @@ void ExportDialog::updateStats()
         } else {
             quint64 vramBytes = VramTextureCompressor::estimateVramBytes(w, h, opts.vramOptions.format);
             double vramMb = static_cast<double>(vramBytes) / (1024.0 * 1024.0);
-            double savingsPct = (1.0 - static_cast<double>(vramBytes) / static_cast<double>(rgbaBytes)) * 100.0;
+            double vramSavingsPct = (1.0 - static_cast<double>(vramBytes) / static_cast<double>(rgbaBytes)) * 100.0;
             QString fmtName = (opts.vramOptions.format == VramFormat::KTX2_UASTC) ? QStringLiteral("UASTC 4x4") : QStringLiteral("ETC1S");
 
-            ui->lblVramSavings->setText(tr("GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA")
+            // Disk storage estimate based on format and Zstd supercompression level
+            double estDiskMb = vramMb;
+            if (opts.vramOptions.zstdSupercompression) {
+                // Zstandard compresses UASTC payloads by ~35-55% and ETC1S by ~60-80% depending on level
+                double zstdFactor = (opts.vramOptions.format == VramFormat::KTX2_UASTC)
+                    ? (0.65 - (opts.vramOptions.zstdLevel - 1) * 0.01)
+                    : (0.40 - (opts.vramOptions.zstdLevel - 1) * 0.008);
+                estDiskMb = vramMb * qBound(0.12, zstdFactor, 0.85);
+            }
+
+            QString diskStr;
+            if (estDiskMb < 1.0) {
+                diskStr = tr("~%1 KB on disk").arg(QString::number(estDiskMb * 1024.0, 'f', 0));
+            } else {
+                diskStr = tr("~%1 MB on disk").arg(QString::number(estDiskMb, 'f', 2));
+            }
+
+            QString zstdDesc = opts.vramOptions.zstdSupercompression
+                ? tr("+Zstd L%1").arg(opts.vramOptions.zstdLevel)
+                : tr("Raw");
+
+            ui->lblVramSavings->setText(tr("GPU VRAM: %1 MB (%2, -%3% hardware) | File: %4 (%5)")
                 .arg(QString::number(vramMb, 'f', 2))
                 .arg(fmtName)
-                .arg(QString::number(savingsPct, 'f', 1)));
+                .arg(QString::number(vramSavingsPct, 'f', 0))
+                .arg(zstdDesc)
+                .arg(diskStr));
         }
     };
 
