@@ -171,11 +171,7 @@ jobs:
           cp -u "$QT_PLUGINS_DIR"/iconengines/*.dll build/bin/iconengines/ 2>/dev/null || true
 
           # Create qt.conf in build/bin so Qt finds plugins relative to the executable
-          cat << 'EOF' > build/bin/qt.conf
-[Paths]
-Prefix = .
-Plugins = .
-EOF
+          printf '[Paths]\nPrefix = .\nPlugins = .\n' > build/bin/qt.conf
 
           # 2. Collect all recursive MSYS2 / MinGW runtime dependencies via ldd (3 passes for transitive deps)
           for i in 1 2 3; do
