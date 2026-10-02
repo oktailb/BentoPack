@@ -268,14 +268,18 @@ From raw pixel art and frame sequences to production-ready game engine assets, B
 
 ### 🔄 6. Seamless Multi-Engine Export & Live Watch Daemon
 Export perfectly formatted assets in a structured, step-by-step dialog:
-* **Godot 4.x:** Native .tres (SpriteFrames) with embedded AtlasTexture resources.
-* **Unity 2D:** Tight Sprite Mesh .unity.json metadata compatible with URP and Built-in pipelines.
+* **Godot 4.x:** Native .tres (SpriteFrames) with embedded AtlasTexture resources and companion ArrayMesh.
+* **Unity 2D:** Tight Sprite Mesh .unity.json metadata compatible with URP, HDRP, and Built-in pipelines (SpriteMeshType.Tight).
 * **Unreal Engine 5:** Dedicated .paper2d.json descriptors with render and collision polygonal geometry.
 * **LibGDX & Spine 2D:** Universal .atlas key-value text format.
 * **Aseprite Binary:** Native .ase / .aseprite project files preserving layers, cels, and animation tags.
 * **TexturePacker / JSON:** Universal standard for Phaser, PixiJS, Defold, Raylib, and Bevy.
 * **Animated GIF:** Optimized web and social media sequences with alpha transparency.
-* **Live Watch Daemon:** Save in BentoPack Studio and see your assets instantly update inside your active game engine editor!</div>
+* **Automated Headless Watch Daemon (`bentopack-cli --watch`):** Save frames in Aseprite, Photoshop, or Krita — BentoPack watches your source folder, debounces writes, and silently compiles updated atlases and meshes into your engine project folder in sub-20ms!
+
+### 🛡️ 7. Git Version Control & 100% Native Architecture
+* **Embedded Git Workspace:** Commit, branch, compare, and revert project revisions directly inside the editor without external tools (powered by LibGit2).
+* **Multi-Platform Native Performance:** Windows (10/11), Linux (Steam Deck verified, AppImage/deb/rpm), macOS (Apple Silicon native M1/M2/M3/M4 & Intel), and Haiku OS (.hpkg). Zero Electron bloat, 80ms cold startup!</div>
 
       <div class="field-title">Screenshots Checklist (Desktop Application)</div>
       <div class="screenshot-grid">

@@ -94,18 +94,19 @@ From raw pixel art and frame sequences to production-ready game engine assets, B
 
 ### 🔄 6. Seamless Multi-Engine Export & Live Watch Daemon
 Export perfectly formatted assets in a structured, step-by-step dialog:
-* **Godot 4.x:** Native `.tres` (`SpriteFrames`) with embedded `AtlasTexture` resources.
-* **Unity 2D:** Tight Sprite Mesh `.unity.json` metadata compatible with URP and Built-in pipelines.
+* **Godot 4.x:** Native `.tres` (`SpriteFrames`) with embedded `AtlasTexture` resources and companion `ArrayMesh`.
+* **Unity 2D:** Tight Sprite Mesh `.unity.json` metadata compatible with URP, HDRP, and Built-in pipelines (`SpriteMeshType.Tight`).
 * **Unreal Engine 5:** Dedicated `.paper2d.json` descriptors with render and collision polygonal geometry.
 * **LibGDX & Spine 2D:** Universal `.atlas` key-value text format.
 * **Aseprite Binary:** Native `.ase` / `.aseprite` project files preserving layers, cels, and animation tags.
 * **TexturePacker / JSON:** Universal standard for Phaser, PixiJS, Defold, Raylib, and Bevy.
 * **Animated GIF:** Optimized web and social media sequences with alpha transparency.
-* **Live Watch Daemon:** Save in BentoPack Studio and see your assets instantly update inside your active game engine editor!
+* **Automated Headless Watch Daemon (`bentopack-cli --watch`):** Save frames in Aseprite, Photoshop, or Krita — BentoPack watches your source folder, debounces writes, and silently compiles updated atlases and meshes into your engine project folder in sub-20ms!
 
 ### 🛡️ 7. Git Version Control & Headless CLI Automation
-* **Embedded Git Workspace:** Commit, branch, compare, and revert project revisions directly inside the editor without external tools.
+* **Embedded Git Workspace:** Commit, branch, compare, and revert project revisions directly inside the editor without external tools (powered by LibGit2).
 * **Robust Headless CLI:** Automate your studio's build pipeline with `bentopack-cli` across GitHub Actions, GitLab CI, or local build scripts.
+* **100% Native & Portable:** Zero Electron bloat, 80ms cold startup, runs standalone without installer clutter.
 ```
 
 ---
@@ -115,10 +116,10 @@ Export perfectly formatted assets in a structured, step-by-step dialog:
 ### Spécifications Système (Steam / itch.io)
 | Composant | Configuration Minimale | Configuration Recommandée |
 |---|---|---|
-| **Système d'exploitation** | Windows 10/11 (64-bit), macOS 12+, Ubuntu 22.04+ | Windows 11 (64-bit), macOS 14+, Linux récent |
-| **Processeur** | Intel / AMD Dual Core (2.0 GHz) ou Apple Silicon M1 | Intel / AMD Quad Core (3.0 GHz+) ou Apple Silicon M2/M3 |
+| **Système d'exploitation** | • **Windows :** 10 / 11 (64-bit)<br>• **Linux :** Ubuntu 22.04+, Fedora, Arch (SteamOS / Steam Deck compatible)<br>• **macOS :** macOS 12+ (Apple Silicon M1/M2/M3/M4 & Intel)<br>• **Haiku :** Haiku R1/beta4+ (paquet natif `.hpkg`) | • **Windows :** 11 (64-bit)<br>• **Linux :** Distribution récente (Wayland / X11)<br>• **macOS :** macOS 14+ Sonoma / Sequoia |
+| **Processeur** | Intel / AMD Dual Core (2.0 GHz) ou Apple Silicon M1 | Intel / AMD Quad Core (3.0 GHz+) ou Apple Silicon M2/M3/M4 |
 | **Mémoire Vive (RAM)** | 4 Go de mémoire | 8 Go de mémoire ou plus |
-| **Carte Graphique** | Compatible OpenGL 3.3 ou Vulkan 1.1 | GPU dédié avec 2 Go VRAM (NVIDIA / AMD) |
+| **Carte Graphique** | Compatible OpenGL 3.3 ou Vulkan 1.1 | GPU dédié avec 2 Go VRAM (NVIDIA / AMD / Apple GPU) |
 | **Stockage** | 150 Mo d'espace disque disponible | SSD rapide |
 
 ### Tags Populaires Recommandés
