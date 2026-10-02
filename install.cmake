@@ -89,29 +89,49 @@ if (WIN32)
         get_filename_component(_qt_bin_dir "${WINDEPLOYQT_EXECUTABLE}" DIRECTORY)
         message(STATUS "Found windeployqt tool: ${WINDEPLOYQT_EXECUTABLE}")
         install(CODE "
-            message(STATUS \"Deploying Qt runtime and dependencies via windeployqt...\")
-            file(TO_NATIVE_PATH \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\" _native_bin_dir)
-            file(TO_NATIVE_PATH \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/bentopack.exe\" _native_exe_path)
-            set(ENV{PATH} \"${_qt_bin_dir};\$ENV{PATH}\")
-            execute_process(
-                COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
-                    --compiler-runtime
-                    --no-translations
-                    --no-opengl-sw
-                    --include-plugins qoffscreen,qminimal,qwindows,qwebp,qsvg,qico,qjpeg,qgif
-                    --dir \"\${_native_bin_dir}\"
-                    \"\${_native_exe_path}\"
-                RESULT_VARIABLE _wdq_res
-            )
-            if(NOT _wdq_res EQUAL 0)
-                message(WARNING \"windeployqt exited with code \${_wdq_res}\")
+            if(EXISTS \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/platforms/qwindows.dll\" OR EXISTS \"${CMAKE_BINARY_DIR}/bin/platforms/qwindows.dll\")
+                message(STATUS \"Qt plugins already deployed in build directory. Skipping windeployqt.\")
+            else()
+                message(STATUS \"Deploying Qt runtime and dependencies via windeployqt...\")
+                file(TO_NATIVE_PATH \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\" _native_bin_dir)
+                file(TO_NATIVE_PATH \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/bentopack.exe\" _native_exe_path)
+                set(ENV{PATH} \"${_qt_bin_dir};\$ENV{PATH}\")
+                execute_process(
+                    COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
+                        --compiler-runtime
+                        --no-translations
+                        --no-opengl-sw
+                        --include-plugins qoffscreen,qminimal,qwindows,qwebp,qsvg,qico,qjpeg,qgif
+                        --dir \"\${_native_bin_dir}\"
+                        \"\${_native_exe_path}\"
+                    RESULT_VARIABLE _wdq_res
+                )
+                if(NOT _wdq_res EQUAL 0)
+                    message(WARNING \"windeployqt exited with code \${_wdq_res}\")
+                endif()
             endif()
         " COMPONENT bentopack)
     else()
-        message(WARNING \"Neither windeployqt nor windeployqt6 was found. Automatic Qt deployment disabled.\")
+        message(WARNING "Neither windeployqt nor windeployqt6 was found. Automatic Qt deployment disabled.")
     endif()
 
-    # 4. Bundle all runtime DLLs present in build output directory (MinGW runtimes, deployed Qt libs, libgit2, etc.)
+    # 4. Bundle all Qt plugins and qt.conf present in build output directory
+    install(CODE "
+        file(GLOB _plugin_subdirs LIST_DIRECTORIES true \"${CMAKE_BINARY_DIR}/bin/*\")
+        foreach(_item IN LISTS _plugin_subdirs)
+            if(IS_DIRECTORY \"\${_item}\")
+                get_filename_component(_name \"\${_item}\" NAME)
+                if(_name MATCHES \"^(platforms|imageformats|styles|iconengines)$\")
+                    file(COPY \"\${_item}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\")
+                endif()
+            endif()
+        endforeach()
+        if(EXISTS \"${CMAKE_BINARY_DIR}/bin/qt.conf\")
+            file(COPY \"${CMAKE_BINARY_DIR}/bin/qt.conf\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\")
+        endif()
+    " COMPONENT bentopack)
+
+    # 5. Bundle all runtime DLLs present in build output directory (MinGW runtimes, deployed Qt libs, libgit2, etc.)
     # Using install(DIRECTORY ... FILES_MATCHING) guarantees evaluation at install/package time rather than configure time.
     install(DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
         DESTINATION "${CMAKE_INSTALL_BINDIR}"

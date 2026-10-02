@@ -163,20 +163,39 @@ jobs:
       - name: Deploy Windows Runtime Dependencies
         shell: msys2 {0}
         run: |
-          # 1. Run windeployqt6 on main executable to deploy Qt DLLs and plugins into build/bin
-          windeployqt6 --compiler-runtime --no-translations --no-opengl-sw \
-            --include-plugins qoffscreen,qminimal,qwindows,qwebp,qsvg,qico,qjpeg,qgif \
-            build/bin/bentopack.exe || true
+          # 1. Copy required Qt6 plugins directly from MSYS2 Qt6 plugins directory
+          QT_PLUGINS_DIR="/mingw64/share/qt6/plugins"
+          if [ ! -d "$QT_PLUGINS_DIR" ]; then
+            QT_PLUGINS_DIR="$(qmake6 -query QT_INSTALL_PLUGINS 2>/dev/null || true)"
+          fi
 
-          # 2. Collect all recursive MSYS2 / MinGW runtime dependencies (ICU, PCRE2, zstd, double-conversion, libgit2, etc.)
-          for bin in build/bin/*.exe build/bin/*.dll build/bin/plugins/*/*.dll; do
-            if [ -f "$bin" ]; then
-              ldd "$bin" 2>/dev/null | grep -i '/mingw64/bin/.*\.dll' | awk '{print $3}' | while read -r dll; do
-                if [ -f "$dll" ]; then
-                  cp -u "$dll" build/bin/
-                fi
-              done
-            fi
+          mkdir -p build/bin/platforms build/bin/imageformats build/bin/styles build/bin/iconengines
+
+          cp -u "$QT_PLUGINS_DIR"/platforms/qwindows.dll build/bin/platforms/ 2>/dev/null || true
+          cp -u "$QT_PLUGINS_DIR"/platforms/qoffscreen.dll build/bin/platforms/ 2>/dev/null || true
+          cp -u "$QT_PLUGINS_DIR"/platforms/qminimal.dll build/bin/platforms/ 2>/dev/null || true
+          cp -u "$QT_PLUGINS_DIR"/imageformats/*.dll build/bin/imageformats/ 2>/dev/null || true
+          cp -u "$QT_PLUGINS_DIR"/styles/*.dll build/bin/styles/ 2>/dev/null || true
+          cp -u "$QT_PLUGINS_DIR"/iconengines/*.dll build/bin/iconengines/ 2>/dev/null || true
+
+          # Create qt.conf in build/bin so Qt finds plugins relative to the executable
+          cat << 'EOF' > build/bin/qt.conf
+[Paths]
+Prefix = .
+Plugins = .
+EOF
+
+          # 2. Collect all recursive MSYS2 / MinGW runtime dependencies via ldd (3 passes for transitive deps)
+          for i in 1 2 3; do
+            for bin in build/bin/*.exe build/bin/*.dll build/bin/*/*.dll; do
+              if [ -f "$bin" ]; then
+                ldd "$bin" 2>/dev/null | grep -i '/mingw64/bin/.*\.dll' | awk '{print $3}' | while read -r dll; do
+                  if [ -f "$dll" ]; then
+                    cp -u "$dll" build/bin/
+                  fi
+                done
+              fi
+            done
           done
           ls -lah build/bin/
 
