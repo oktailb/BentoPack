@@ -16,11 +16,13 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install System & Qt6 Dependencies
+      - name: Install System & Packaging Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             ninja-build \
+            rpm \
+            file \
             qt6-base-dev \
             qt6-tools-dev \
             qt6-tools-dev-tools \
@@ -37,7 +39,8 @@ jobs:
       - name: Configure CMake
         run: |
           cmake -B build -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr
 
       - name: Build
         run: |
@@ -49,10 +52,52 @@ jobs:
         run: |
           ctest --test-dir build --output-on-failure --verbose
 
-      - name: Package Godot Addon
+      - name: Build CPack Packages (DEB, RPM, TGZ)
         run: |
-          cmake --build build --target package_godot_addon
-          ls -lah build/addons/dist/godot-bentopack-addon-*.zip
+          cd build
+          cpack -G "DEB;RPM;TGZ"
+          ls -lah BentoPack-*.*
+
+      - name: Build AppImage
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: 1
+        run: |
+          DESTDIR=AppDir cmake --install build
+          mkdir -p AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
+          cp BentoPack/res/linux/bentopack.desktop AppDir/usr/share/applications/
+          cp BentoPack/res/icons/bentopack.png AppDir/usr/share/icons/hicolor/256x256/apps/
+          
+          wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+          
+          export QMAKE=/usr/lib/qt6/bin/qmake
+          ./linuxdeploy-x86_64.AppImage \
+            --appdir AppDir \
+            --desktop-file BentoPack/res/linux/bentopack.desktop \
+            --icon-file BentoPack/res/icons/bentopack.png \
+            --plugin qt \
+            --output appimage || true
+          
+          if ls BentoPack*.AppImage 1> /dev/null 2>&1; then
+            mv BentoPack*.AppImage build/
+          fi
+          ls -lah build/
+
+      - name: Upload Linux Application Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages
+          path: |
+            build/*.deb
+            build/*.rpm
+            build/*.tar.gz
+            build/*.AppImage
+
+      - name: Package Engine Addons (Godot, Unity, Unreal)
+        run: |
+          cmake --build build --target package_all_addons
+          ls -lah build/addons/dist/
 
       - name: Upload Godot Addon Package
         uses: actions/upload-artifact@v4
@@ -60,16 +105,17 @@ jobs:
           name: godot-bentopack-addon
           path: build/addons/dist/godot-bentopack-addon-*.zip
 
-      - name: Package Unity
-        run: |
-          cmake --build build --target package_unity_addon
-          ls -lah build/addons/dist/com.bentopack.importer-*.tgz
-
       - name: Upload Unity Package
         uses: actions/upload-artifact@v4
         with:
           name: com.bentopack.importer
           path: build/addons/dist/com.bentopack.importer-*.tgz
+
+      - name: Upload Unreal Engine Plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: unreal-bentopack-plugin
+          path: build/addons/dist/unreal-bentopack-plugin-*.zip
 
   windows:
     name: Windows (MinGW 64-bit)
@@ -113,6 +159,34 @@ jobs:
         run: |
           ctest --test-dir build --output-on-failure --verbose
 
+      - name: Deploy Windows Runtime Dependencies
+        shell: msys2 {0}
+        run: |
+          # 1. Run windeployqt6 on main executable to deploy Qt DLLs and plugins into build/bin
+          windeployqt6 --compiler-runtime --no-translations --no-opengl-sw \
+            --include-plugins qoffscreen,qminimal,qwindows,qwebp,qsvg,qico,qjpeg,qgif \
+            build/bin/bentopack.exe || true
+
+          # 2. Collect all recursive MSYS2 / MinGW runtime dependencies (ICU, PCRE2, zstd, double-conversion, libgit2, etc.)
+          for bin in build/bin/*.exe build/bin/*.dll build/bin/plugins/*/*.dll; do
+            if [ -f "$bin" ]; then
+              ldd "$bin" 2>/dev/null | grep -i '/mingw64/bin/.*\.dll' | awk '{print $3}' | while read -r dll; do
+                if [ -f "$dll" ]; then
+                  cp -u "$dll" build/bin/
+                fi
+              done
+            fi
+          done
+          ls -lah build/bin/
+
+      - name: Verify Standalone Execution (No MSYS2 in PATH)
+        shell: cmd
+        run: |
+          set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%CD%\build\bin
+          set QT_QPA_PLATFORM=offscreen
+          build\bin\bentopack-cli.exe --version
+          build\bin\bentopack.exe --version
+
       - name: Build Standalone Packages (CPack ZIP & NSIS)
         shell: msys2 {0}
         run: |
@@ -127,13 +201,13 @@ jobs:
       - name: Upload Windows Standalone Packages
         uses: actions/upload-artifact@v4
         with:
-          name: windows-standalone-packages
+          name: windows-packages
           path: |
             build/BentoPack-*.zip
             build/BentoPack-*.exe
 
-  macos:
-    name: macOS (Apple Silicon Clang)
+  macos-arm64:
+    name: macOS Apple Silicon (arm64)
     runs-on: macos-14
     steps:
       - name: Checkout Repository
@@ -149,6 +223,8 @@ jobs:
         run: |
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES="arm64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET="11.0" \
             -DCMAKE_PREFIX_PATH="$(brew --prefix qt@6);$(brew --prefix libgit2)"
 
       - name: Build
@@ -161,22 +237,124 @@ jobs:
         run: |
           ctest --test-dir build --output-on-failure --verbose
 
-  haiku:
-    name: Haiku OS (x86_64 VM)
-    runs-on: ubuntu-latest
-    timeout-minutes: 35
+      - name: Deploy Qt and Package DMG & ZIP
+        run: |
+          mkdir -p dist
+          APP_PATH="build/bin/bentopack.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH="build/bin/BentoPack.app"
+          fi
+          /opt/homebrew/opt/qt@6/bin/macdeployqt "$APP_PATH"
+          
+          # Create DMG via CPack or hdiutil
+          cd build
+          cpack -G DragNDrop || true
+          if ls *.dmg 1> /dev/null 2>&1; then
+            cp *.dmg ../dist/
+          else
+            hdiutil create -volname "BentoPack" -srcfolder "../$APP_PATH" -ov -format UDZO ../dist/BentoPack-macOS-arm64.dmg
+          fi
+          cd ..
+          
+          # Also package ZIP of the .app
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" dist/BentoPack-macOS-arm64.zip
+          ls -lah dist/
+
+      - name: Upload macOS Apple Silicon Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-arm64-packages
+          path: dist/*
+
+  macos-x86_64:
+    name: macOS Intel (x86_64, macOS 11+)
+    runs-on: macos-14
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Build and Test on Haiku VM
+      - name: Install Build Tools
+        run: |
+          brew install ninja
+
+      - name: Install Qt 6.6.3 (Universal with macOS 11.0+ deployment target)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.6.3'
+          arch: 'clang_64'
+          modules: 'qtimageformats'
+          cache: true
+
+      - name: Build static LibGit2 for x86_64 (macOS 11.0+)
+        run: |
+          git clone --depth 1 -b v1.8.1 https://github.com/libgit2/libgit2.git
+          cmake -B libgit2_build -S libgit2 -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES="x86_64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET="11.0" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DBUILD_TESTS=OFF \
+            -DCMAKE_INSTALL_PREFIX="$PWD/libgit2_install"
+          cmake --build libgit2_build --target install
+
+      - name: Configure CMake (x86_64, macOS 11.0 Target)
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES="x86_64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET="11.0" \
+            -DLIBGIT2_ROOT="$PWD/libgit2_install"
+
+      - name: Build
+        run: |
+          cmake --build build --parallel
+
+      - name: Run Tests (under Rosetta 2)
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          arch -x86_64 ctest --test-dir build --output-on-failure --verbose
+
+      - name: Deploy Qt and Package DMG & ZIP
+        run: |
+          mkdir -p dist
+          APP_PATH="build/bin/bentopack.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH="build/bin/BentoPack.app"
+          fi
+          macdeployqt "$APP_PATH"
+          
+          # Create DMG
+          hdiutil create -volname "BentoPack" -srcfolder "$APP_PATH" -ov -format UDZO dist/BentoPack-macOS-x86_64.dmg
+          
+          # Also package ZIP of the .app
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" dist/BentoPack-macOS-x86_64.zip
+          ls -lah dist/
+
+      - name: Upload macOS Intel Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-x86_64-packages
+          path: dist/*
+
+  haiku:
+    name: Haiku OS (x86_64 VM)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build and Package inside Haiku VM
         uses: vmactions/haiku-vm@v1
         with:
           usesh: true
           sync: rsync
-          copyback: false
+          copyback: true
           mem: 4096
           cpu: 2
           prepare: |
@@ -188,3 +366,16 @@ jobs:
             cmake --build build -j 2
             export QT_QPA_PLATFORM=offscreen
             ctest --test-dir build --output-on-failure --verbose --timeout 60
+
+            mkdir -p dist
+            cmake --install build --prefix haiku_pkg
+            PKG_VERSION=$(grep '^version' build/generated/haiku.PackageInfo | awk '{print $2}')
+            package create -i build/generated/haiku.PackageInfo -C haiku_pkg dist/BentoPack-${PKG_VERSION}-x86_64.hpkg
+            ls -lah dist/
+
+      - name: Upload Haiku Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: haiku-packages
+          path: dist/*.hpkg
+
