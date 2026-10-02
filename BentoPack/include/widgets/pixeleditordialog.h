@@ -31,6 +31,9 @@
 #include <QUndoStack>
 #include <QGroupBox>
 #include <QEvent>
+#include <QFutureWatcher>
+#include <QTimer>
+#include <QSet>
 
 class SpriteDocument;
 class PixelCanvas;
@@ -62,7 +65,7 @@ public:
                                QUndoStack *docUndoStack,
                                int initialFrameIndex = 0,
                                QWidget *parent = nullptr);
-    ~PixelEditorDialog() override = default;
+    ~PixelEditorDialog() override;
 
     static QVector<QRgb> getPresetPalette(PalettePreset preset);
 
@@ -74,6 +77,8 @@ private slots:
     void onPrimarySwatchClicked();
     void onSecondarySwatchClicked();
     void onCanvasImageChanged();
+    void onCanvasStrokeFinished();
+    void onPaletteExtractionFinished();
     void onCanvasPixelMoved(int x, int y, const QColor &color);
     void onCanvasPixelLeft();
     void onCanvasZoomChanged(double zoom);
@@ -91,6 +96,7 @@ private:
     void saveCurrentFrameToSession();
     void refreshPaletteSwatches();
     void populateSpriteColorsPalette();
+    void requestAsyncPaletteExtraction();
     void updateLivePreview();
 
     QWidget* createToolBar();
@@ -141,6 +147,11 @@ private:
     QWidget*                m_swatchesContainer = nullptr;
     QGridLayout*            m_swatchesLayout = nullptr;
     QVector<QRgb>           m_currentPalette;
+    QSet<QRgb>              m_knownPaletteColors;
+    QFutureWatcher<QVector<QRgb>> m_paletteWatcher;
+    QTimer                  m_paletteDebounceTimer;
+    bool                    m_paletteExtractionPending = false;
+    int                     m_paletteJobFrameIndex = -1;
 
     // Live Preview
     QGroupBox*              m_prevGroup = nullptr;

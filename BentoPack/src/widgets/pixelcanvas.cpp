@@ -855,6 +855,7 @@ void PixelCanvas::mouseReleaseEvent(QMouseEvent *event)
     if (m_isDrawing) {
         m_isDrawing = false;
         pushSnapshot(m_strokePreImage, (m_tool == PixelTool::Eraser) ? tr("Eraser") : tr("Pencil"));
+        emit strokeFinished();
     } else if (m_isSelecting && m_tool == PixelTool::SelectRect) {
         m_isSelecting = false;
         if (!m_selectionRect.isNull() && m_selectionRect.isValid()) {

@@ -29,6 +29,7 @@
 #include <QPainter>
 #include <QShortcut>
 #include <QSpacerItem>
+#include <QtConcurrent/QtConcurrent>
 #include <algorithm>
 
 PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
@@ -44,6 +45,10 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
     resize(1000, 680);
     setMinimumSize(800, 500);
 
+    m_paletteDebounceTimer.setSingleShot(true);
+    connect(&m_paletteDebounceTimer, &QTimer::timeout, this, &PixelEditorDialog::requestAsyncPaletteExtraction);
+    connect(&m_paletteWatcher, &QFutureWatcher<QVector<QRgb>>::finished, this, &PixelEditorDialog::onPaletteExtractionFinished);
+
     setupUi();
 
     if (m_document && m_document->frameCount() > 0) {
@@ -55,6 +60,13 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
 
     // Default palette is Sprite Colors
     onPalettePresetChanged(0);
+}
+
+PixelEditorDialog::~PixelEditorDialog()
+{
+    m_paletteDebounceTimer.stop();
+    m_paletteWatcher.cancel();
+    m_paletteWatcher.waitForFinished();
 }
 
 void PixelEditorDialog::setupUi()
@@ -93,6 +105,7 @@ void PixelEditorDialog::setupUi()
 
     // Connect canvas signals
     connect(m_canvas, &PixelCanvas::imageChanged, this, &PixelEditorDialog::onCanvasImageChanged);
+    connect(m_canvas, &PixelCanvas::strokeFinished, this, &PixelEditorDialog::onCanvasStrokeFinished);
     connect(m_canvas, &PixelCanvas::mousePixelMoved, this, &PixelEditorDialog::onCanvasPixelMoved);
     connect(m_canvas, &PixelCanvas::mousePixelLeft, this, &PixelEditorDialog::onCanvasPixelLeft);
     connect(m_canvas, &PixelCanvas::zoomChanged, this, &PixelEditorDialog::onCanvasZoomChanged);
@@ -639,8 +652,45 @@ void PixelEditorDialog::onSecondarySwatchClicked()
 void PixelEditorDialog::onCanvasImageChanged()
 {
     updateLivePreview();
-    if (m_paletteCombo && m_paletteCombo->currentIndex() == 0) {
-        populateSpriteColorsPalette();
+
+    if (!m_paletteCombo || m_paletteCombo->currentIndex() != SpriteColors) {
+        return;
+    }
+
+    if (m_canvas && m_canvas->isDrawing()) {
+        const QColor pCol = m_canvas->primaryColor();
+        const QColor sCol = m_canvas->secondaryColor();
+        const bool pKnown = (pCol.alpha() < 16) || m_knownPaletteColors.contains(qRgb(pCol.red(), pCol.green(), pCol.blue()));
+        const bool sKnown = (sCol.alpha() < 16) || m_knownPaletteColors.contains(qRgb(sCol.red(), sCol.green(), sCol.blue()));
+
+        // If the colors being drawn are already present in the palette, NO new color is being added!
+        // Avoid all unnecessary palette overhead so drawing remains at maximum FPS with zero freeze.
+        if (pKnown && sKnown) {
+            return;
+        }
+
+        // A new color is being painted, but the user is currently mid-stroke:
+        // Debounce so drawing stays 100% fluid without running heavy scans during drag.
+        m_paletteDebounceTimer.start(250);
+        return;
+    }
+
+    // For actions outside mid-stroke (e.g. Flood Fill, Paste, Clear, Undo, Redo):
+    // Debounce slightly (100ms) to coalesce rapid edits and run asynchronously.
+    m_paletteDebounceTimer.start(100);
+}
+
+void PixelEditorDialog::onCanvasStrokeFinished()
+{
+    if (!m_paletteCombo || m_paletteCombo->currentIndex() != SpriteColors) {
+        return;
+    }
+
+    // If the debounce timer was running (because a new color was painted during the stroke),
+    // trigger extraction now that the stroke has finished.
+    if (m_paletteDebounceTimer.isActive()) {
+        m_paletteDebounceTimer.stop();
+        requestAsyncPaletteExtraction();
     }
 }
 
@@ -738,8 +788,8 @@ void PixelEditorDialog::loadFrame(int index)
     updateNavigationButtons();
     updateLivePreview();
 
-    if (m_paletteCombo && m_paletteCombo->currentIndex() == 0) {
-        populateSpriteColorsPalette();
+    if (m_paletteCombo && m_paletteCombo->currentIndex() == SpriteColors) {
+        requestAsyncPaletteExtraction();
     }
 }
 
@@ -776,83 +826,135 @@ void PixelEditorDialog::onPalettePresetChanged(int index)
 {
     PalettePreset preset = static_cast<PalettePreset>(m_paletteCombo->itemData(index).toInt());
     if (preset == SpriteColors) {
-        populateSpriteColorsPalette();
+        requestAsyncPaletteExtraction();
     } else {
+        m_paletteDebounceTimer.stop();
+        m_paletteWatcher.cancel();
         m_currentPalette = getPresetPalette(preset);
+        m_knownPaletteColors = QSet<QRgb>(m_currentPalette.begin(), m_currentPalette.end());
         refreshPaletteSwatches();
     }
 }
 
 void PixelEditorDialog::populateSpriteColorsPalette()
 {
-    if (!m_canvas) return;
-    QImage img = m_canvas->image();
-    if (img.isNull()) return;
+    requestAsyncPaletteExtraction();
+}
 
-    const bool hasPoly = (m_document && m_currentFrameIndex >= 0 &&
+void PixelEditorDialog::requestAsyncPaletteExtraction()
+{
+    if (!m_canvas || !m_document || !m_paletteCombo || m_paletteCombo->currentIndex() != SpriteColors) {
+        return;
+    }
+
+    if (m_paletteWatcher.isRunning()) {
+        m_paletteExtractionPending = true;
+        return;
+    }
+    m_paletteExtractionPending = false;
+    m_paletteJobFrameIndex = m_currentFrameIndex;
+
+    const QImage imgCopy = m_canvas->image().copy();
+    if (imgCopy.isNull()) return;
+
+    const bool hasPoly = (m_currentFrameIndex >= 0 &&
                           m_currentFrameIndex < m_document->boxes().size() &&
                           m_document->box(m_currentFrameIndex).polygon.size() >= 3);
     const QPolygonF poly = hasPoly ? m_document->box(m_currentFrameIndex).polygon : QPolygonF();
 
-    QSet<QRgb> uniqueColors;
+    QFuture<QVector<QRgb>> future = QtConcurrent::run([imgCopy, poly, hasPoly]() -> QVector<QRgb> {
+        QSet<QRgb> uniqueColors;
+        const int w = imgCopy.width();
+        const int h = imgCopy.height();
 
-    for (int y = 0; y < img.height(); ++y) {
-        for (int x = 0; x < img.width(); ++x) {
-            // Respect polygonal découpage: ignore anything outside the polygon contour
-            if (hasPoly && !poly.containsPoint(QPointF(x + 0.5, y + 0.5), Qt::OddEvenFill)) {
-                continue;
-            }
-            QRgb rgb = img.pixel(x, y);
-            // Ignore transparent and nearly invisible compression/alpha fringe noise
-            if (qAlpha(rgb) >= 16) {
-                uniqueColors.insert(qRgb(qRed(rgb), qGreen(rgb), qBlue(rgb)));
-            }
-        }
-    }
-
-    // Fallback if image has only low-alpha pixels
-    if (uniqueColors.isEmpty()) {
-        for (int y = 0; y < img.height(); ++y) {
-            for (int x = 0; x < img.width(); ++x) {
+        for (int y = 0; y < h; ++y) {
+            for (int x = 0; x < w; ++x) {
+                // Respect polygonal découpage: ignore anything outside the polygon contour
                 if (hasPoly && !poly.containsPoint(QPointF(x + 0.5, y + 0.5), Qt::OddEvenFill)) {
                     continue;
                 }
-                QRgb rgb = img.pixel(x, y);
-                if (qAlpha(rgb) > 0) {
+                QRgb rgb = imgCopy.pixel(x, y);
+                // Ignore transparent and nearly invisible compression/alpha fringe noise
+                if (qAlpha(rgb) >= 16) {
                     uniqueColors.insert(qRgb(qRed(rgb), qGreen(rgb), qBlue(rgb)));
                 }
             }
         }
-    }
 
-    m_currentPalette = uniqueColors.values().toVector();
-
-    // Sort by HSL/HSV: neutrals first by brightness, then chromatic colors by hue and brightness
-    std::sort(m_currentPalette.begin(), m_currentPalette.end(), [](QRgb a, QRgb b) {
-        QColor ca(a);
-        QColor cb(b);
-        bool aNeutral = ca.saturation() < 24;
-        bool bNeutral = cb.saturation() < 24;
-        if (aNeutral != bNeutral) {
-            return aNeutral; // Grays/blacks/whites first
+        // Fallback if image has only low-alpha pixels
+        if (uniqueColors.isEmpty()) {
+            for (int y = 0; y < h; ++y) {
+                for (int x = 0; x < w; ++x) {
+                    if (hasPoly && !poly.containsPoint(QPointF(x + 0.5, y + 0.5), Qt::OddEvenFill)) {
+                        continue;
+                    }
+                    QRgb rgb = imgCopy.pixel(x, y);
+                    if (qAlpha(rgb) > 0) {
+                        uniqueColors.insert(qRgb(qRed(rgb), qGreen(rgb), qBlue(rgb)));
+                    }
+                }
+            }
         }
-        if (aNeutral) {
+
+        QVector<QRgb> palette = uniqueColors.values().toVector();
+
+        // Sort by HSL/HSV: neutrals first by brightness, then chromatic colors by hue and brightness
+        std::sort(palette.begin(), palette.end(), [](QRgb a, QRgb b) {
+            QColor ca(a);
+            QColor cb(b);
+            bool aNeutral = ca.saturation() < 24;
+            bool bNeutral = cb.saturation() < 24;
+            if (aNeutral != bNeutral) {
+                return aNeutral; // Grays/blacks/whites first
+            }
+            if (aNeutral) {
+                return ca.value() < cb.value();
+            }
+            if (std::abs(ca.hsvHue() - cb.hsvHue()) > 8) {
+                return ca.hsvHue() < cb.hsvHue();
+            }
+            if (std::abs(ca.saturation() - cb.saturation()) > 15) {
+                return ca.saturation() < cb.saturation();
+            }
             return ca.value() < cb.value();
-        }
-        if (std::abs(ca.hsvHue() - cb.hsvHue()) > 8) {
-            return ca.hsvHue() < cb.hsvHue();
-        }
-        if (std::abs(ca.saturation() - cb.saturation()) > 15) {
-            return ca.saturation() < cb.saturation();
-        }
-        return ca.value() < cb.value();
+        });
+
+        return palette;
     });
 
-    refreshPaletteSwatches();
+    m_paletteWatcher.setFuture(future);
+}
+
+void PixelEditorDialog::onPaletteExtractionFinished()
+{
+    if (m_paletteWatcher.isCanceled()) {
+        return;
+    }
+
+    if (m_paletteJobFrameIndex == m_currentFrameIndex) {
+        const QVector<QRgb> newPalette = m_paletteWatcher.result();
+        const QSet<QRgb> newSet(newPalette.begin(), newPalette.end());
+
+        // Only update UI buttons if there is an actual difference in colors
+        if (newSet != m_knownPaletteColors || newPalette.size() != m_currentPalette.size()) {
+            m_currentPalette = newPalette;
+            m_knownPaletteColors = newSet;
+            refreshPaletteSwatches();
+        }
+    }
+
+    if (m_paletteExtractionPending) {
+        m_paletteExtractionPending = false;
+        requestAsyncPaletteExtraction();
+    }
 }
 
 void PixelEditorDialog::refreshPaletteSwatches()
 {
+    if (m_swatchesContainer) {
+        m_swatchesContainer->setUpdatesEnabled(false);
+    }
+
     // Clear existing swatches
     QLayoutItem *child;
     while ((child = m_swatchesLayout->takeAt(0)) != nullptr) {
@@ -895,6 +997,10 @@ void PixelEditorDialog::refreshPaletteSwatches()
         int row = i / columns;
         int colIdx = i % columns;
         m_swatchesLayout->addWidget(btn, row, colIdx);
+    }
+
+    if (m_swatchesContainer) {
+        m_swatchesContainer->setUpdatesEnabled(true);
     }
 }
 

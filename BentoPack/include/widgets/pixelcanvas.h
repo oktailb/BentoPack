@@ -104,8 +104,11 @@ public:
     void applyPatch(const QRect &rect, const QImage &patch);
     void pushSnapshot(const QImage &oldImage, const QString &text);
 
+    bool isDrawing() const { return m_isDrawing; }
+
 signals:
     void imageChanged();
+    void strokeFinished();
     void primaryColorChanged(const QColor &color);
     void secondaryColorChanged(const QColor &color);
     void mousePixelMoved(int x, int y, const QColor &color);
