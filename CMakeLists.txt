@@ -29,6 +29,24 @@ find_package(Qt6 REQUIRED COMPONENTS
     Test
 )
 
+if(WIN32)
+    find_program(WINDEPLOYQT_EXECUTABLE
+        NAMES windeployqt6 windeployqt-qt6 windeployqt
+        HINTS
+            "${Qt6_DIR}/../../../bin"
+            "${Qt6_DIR}/bin"
+            "${Qt6Core_DIR}/../../../bin"
+            "${Qt6Core_DIR}/bin"
+            "${QT_HOST_PATH}/bin"
+            ENV MINGW_PREFIX
+            "C:/Qt/6.11.2/mingw_64/bin"
+    )
+    if(WINDEPLOYQT_EXECUTABLE)
+        get_filename_component(WINDEPLOYQT_DIR "${WINDEPLOYQT_EXECUTABLE}" DIRECTORY)
+        message(STATUS "Found windeployqt tool: ${WINDEPLOYQT_EXECUTABLE}")
+    endif()
+endif()
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)

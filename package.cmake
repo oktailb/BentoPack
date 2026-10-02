@@ -31,6 +31,14 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
 endif()
 
+set(CPACK_NSIS_CREATE_ICONS_EXTRA "
+  SetOutPath \\\"$INSTDIR\\\\bin\\\"
+  CreateShortCut \\\"$DESKTOP\\\\BentoPack Studio.lnk\\\" \\\"$INSTDIR\\\\bin\\\\bentopack.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\bin\\\\bentopack.exe\\\" 0
+")
+set(CPACK_NSIS_DELETE_ICONS_EXTRA "
+  Delete \\\"$DESKTOP\\\\BentoPack Studio.lnk\\\"
+")
+
 # Register official installation path in Windows Registry and ensure $INSTDIR\bin is in PATH
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
   WriteRegStr HKLM \\\"Software\\\\BentoPack Studio\\\" \\\"InstallLocation\\\" \\\"$INSTDIR\\\"

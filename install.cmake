@@ -86,11 +86,13 @@ if (WIN32)
     )
 
     if(WINDEPLOYQT_EXECUTABLE)
+        get_filename_component(_qt_bin_dir "${WINDEPLOYQT_EXECUTABLE}" DIRECTORY)
         message(STATUS "Found windeployqt tool: ${WINDEPLOYQT_EXECUTABLE}")
         install(CODE "
             message(STATUS \"Deploying Qt runtime and dependencies via windeployqt...\")
             file(TO_NATIVE_PATH \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\" _native_bin_dir)
             file(TO_NATIVE_PATH \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/bentopack.exe\" _native_exe_path)
+            set(ENV{PATH} \"${_qt_bin_dir};\$ENV{PATH}\")
             execute_process(
                 COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
                     --compiler-runtime
@@ -109,14 +111,22 @@ if (WIN32)
         message(WARNING \"Neither windeployqt nor windeployqt6 was found. Automatic Qt deployment disabled.\")
     endif()
 
-    # 4. Bundle any DLLs present in build output directory (MinGW runtimes, deployed Qt libs, libgit2, plugins)
-    file(GLOB _build_bin_dlls "${CMAKE_BINARY_DIR}/bin/*.dll")
-    if(_build_bin_dlls)
-        install(FILES ${_build_bin_dlls}
-            DESTINATION "${CMAKE_INSTALL_BINDIR}"
-            COMPONENT bentopack
-        )
-    endif()
+    # 4. Bundle all runtime DLLs present in build output directory (MinGW runtimes, deployed Qt libs, libgit2, etc.)
+    # Using install(DIRECTORY ... FILES_MATCHING) guarantees evaluation at install/package time rather than configure time.
+    install(DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
+        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        COMPONENT bentopack
+        FILES_MATCHING
+            PATTERN "*.dll"
+            PATTERN "plugins" EXCLUDE
+            PATTERN "platforms" EXCLUDE
+            PATTERN "imageformats" EXCLUDE
+            PATTERN "styles" EXCLUDE
+            PATTERN "iconengines" EXCLUDE
+            PATTERN "tls" EXCLUDE
+            PATTERN "networkinformation" EXCLUDE
+            PATTERN "generic" EXCLUDE
+    )
 endif()
 
 if(UNIX AND NOT APPLE AND NOT HAIKU)
