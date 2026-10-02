@@ -331,15 +331,13 @@ if(LibGit2_FOUND)
 endif()
 
 if(WIN32 AND WINDEPLOYQT_EXECUTABLE)
-    add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
+    add_custom_target(deploy_windows_qt
         COMMAND ${CMAKE_COMMAND} -E env "PATH=${WINDEPLOYQT_DIR};$ENV{PATH}"
             "${WINDEPLOYQT_EXECUTABLE}"
             --compiler-runtime
             --no-translations
             --no-opengl-sw
             --include-plugins qoffscreen,qminimal,qwindows,qwebp,qsvg,qico,qjpeg,qgif
-            --dir "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
             "$<TARGET_FILE:${PROJECT_NAME}>"
         COMMENT "Deploying Qt and MinGW runtime dependencies via windeployqt"
     )

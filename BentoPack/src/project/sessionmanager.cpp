@@ -580,8 +580,6 @@ bool SessionManager::gitCommit(const QString &message)
 
     git_oid parent_id;
     git_commit *parent_commit = nullptr;
-    const git_commit **parents = nullptr;
-    size_t parent_count = 0;
 
     if (git_reference_name_to_id(&parent_id, repo, "HEAD") == 0) {
         if (git_commit_lookup(&parent_commit, repo, &parent_id) == 0) {
@@ -595,8 +593,6 @@ bool SessionManager::gitCommit(const QString &message)
                 git_repository_free(repo);
                 return true;
             }
-            parents = const_cast<const git_commit**>(&parent_commit);
-            parent_count = 1;
         }
     }
 
@@ -608,18 +604,33 @@ bool SessionManager::gitCommit(const QString &message)
     }
 
     git_oid commit_id;
-    int commitResult = git_commit_create(
-        &commit_id,
-        repo,
-        "HEAD",
-        sig,
-        sig,
-        "UTF-8",
-        message.toUtf8().constData(),
-        tree,
-        parent_count,
-        parents
-    );
+    int commitResult = 0;
+    if (parent_commit) {
+        commitResult = git_commit_create_v(
+            &commit_id,
+            repo,
+            "HEAD",
+            sig,
+            sig,
+            "UTF-8",
+            message.toUtf8().constData(),
+            tree,
+            1,
+            parent_commit
+        );
+    } else {
+        commitResult = git_commit_create_v(
+            &commit_id,
+            repo,
+            "HEAD",
+            sig,
+            sig,
+            "UTF-8",
+            message.toUtf8().constData(),
+            tree,
+            0
+        );
+    }
 
     char oidStr[GIT_OID_HEXSZ + 1];
     git_oid_tostr(oidStr, sizeof(oidStr), &commit_id);
@@ -786,7 +797,8 @@ bool SessionManager::gitCheckout(const QString &commitHash, QString *errorMsg)
         return false;
     }
 
-    git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
+    git_checkout_options opts = {};
+    git_checkout_options_init(&opts, GIT_CHECKOUT_OPTIONS_VERSION);
     opts.checkout_strategy = GIT_CHECKOUT_FORCE;
     int checkoutErr = git_checkout_tree(repo, reinterpret_cast<const git_object*>(commit), &opts);
 

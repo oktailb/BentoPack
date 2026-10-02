@@ -129,6 +129,7 @@ jobs:
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-qt6-base
             mingw-w64-x86_64-qt6-tools
+            mingw-w64-x86_64-qt6-translations
             mingw-w64-x86_64-qt6-imageformats
             mingw-w64-x86_64-libgit2
             mingw-w64-x86_64-nsis
@@ -277,7 +278,7 @@ jobs:
 
       - name: Build static LibGit2 for x86_64 (macOS 11.0+)
         run: |
-          git clone --depth 1 -b v1.8.1 https://github.com/libgit2/libgit2.git
+          git clone --depth 1 -b v1.8.4 https://github.com/libgit2/libgit2.git
           cmake -B libgit2_build -S libgit2 -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_OSX_ARCHITECTURES="x86_64" \
