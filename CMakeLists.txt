@@ -7,6 +7,12 @@ if(POLICY CMP0144)
     cmake_policy(SET CMP0144 NEW)
 endif()
 
+if(APPLE AND CMAKE_OSX_ARCHITECTURES STREQUAL "x86_64")
+    # On Apple Silicon runner cross-compiling for x86_64, ignore /opt/homebrew (ARM64-only packages)
+    list(APPEND CMAKE_IGNORE_PREFIX_PATH "/opt/homebrew")
+    list(APPEND CMAKE_IGNORE_PATH "/opt/homebrew")
+endif()
+
 include(version.cmake)
 
 project(BentoPack       VERSION ${PROJECT_VERSION}

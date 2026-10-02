@@ -116,6 +116,10 @@ if(LibGit2_FOUND)
             set_property(TARGET LibGit2::LibGit2 APPEND PROPERTY
                 INTERFACE_LINK_LIBRARIES "rpcrt4;crypt32;ole32;ws2_32;secur32"
             )
+        elseif(APPLE)
+            set_property(TARGET LibGit2::LibGit2 APPEND PROPERTY
+                INTERFACE_LINK_LIBRARIES "-framework Security;-framework CoreFoundation;z;iconv"
+            )
         endif()
     endif()
 

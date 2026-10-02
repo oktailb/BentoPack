@@ -325,6 +325,7 @@ EOF
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_OSX_ARCHITECTURES="x86_64" \
             -DCMAKE_OSX_DEPLOYMENT_TARGET="11.0" \
+            -DCMAKE_IGNORE_PREFIX_PATH="/opt/homebrew" \
             -DLIBGIT2_ROOT="$PWD/libgit2_install"
 
       - name: Build
