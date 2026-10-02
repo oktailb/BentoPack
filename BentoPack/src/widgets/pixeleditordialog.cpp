@@ -45,9 +45,16 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
     resize(1000, 680);
     setMinimumSize(800, 500);
 
-    m_paletteDebounceTimer.setSingleShot(true);
-    connect(&m_paletteDebounceTimer, &QTimer::timeout, this, &PixelEditorDialog::requestAsyncPaletteExtraction);
-    connect(&m_paletteWatcher, &QFutureWatcher<QVector<QRgb>>::finished, this, &PixelEditorDialog::onPaletteExtractionFinished);
+    m_recentColors = {
+        QColor(0, 0, 0),
+        QColor(255, 255, 255),
+        QColor(239, 68, 68),
+        QColor(249, 115, 22),
+        QColor(234, 179, 8),
+        QColor(34, 197, 94),
+        QColor(59, 130, 246),
+        QColor(168, 85, 247)
+    };
 
     setupUi();
 
@@ -58,15 +65,8 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
         loadFrame(m_currentFrameIndex);
     }
 
-    // Default palette is Sprite Colors
+    // Default palette is Bento Standard (36)
     onPalettePresetChanged(0);
-}
-
-PixelEditorDialog::~PixelEditorDialog()
-{
-    m_paletteDebounceTimer.stop();
-    m_paletteWatcher.cancel();
-    m_paletteWatcher.waitForFinished();
 }
 
 void PixelEditorDialog::setupUi()
@@ -105,22 +105,25 @@ void PixelEditorDialog::setupUi()
 
     // Connect canvas signals
     connect(m_canvas, &PixelCanvas::imageChanged, this, &PixelEditorDialog::onCanvasImageChanged);
-    connect(m_canvas, &PixelCanvas::strokeFinished, this, &PixelEditorDialog::onCanvasStrokeFinished);
     connect(m_canvas, &PixelCanvas::mousePixelMoved, this, &PixelEditorDialog::onCanvasPixelMoved);
     connect(m_canvas, &PixelCanvas::mousePixelLeft, this, &PixelEditorDialog::onCanvasPixelLeft);
     connect(m_canvas, &PixelCanvas::zoomChanged, this, &PixelEditorDialog::onCanvasZoomChanged);
 
     connect(m_canvas, &PixelCanvas::primaryColorChanged, this, [this](const QColor &col) {
         if (m_primarySwatchBtn) {
-            m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #ffffff; border-radius: 6px;").arg(col.name()));
+            m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #374151; border-radius: 6px;").arg(col.name()));
         }
         if (m_primaryHexLabel) {
             m_primaryHexLabel->setText(col.name().toUpper());
         }
+        if (m_rgbLabel) {
+            m_rgbLabel->setText(QStringLiteral("RGB(%1,%2,%3)").arg(col.red()).arg(col.green()).arg(col.blue()));
+        }
+        addRecentColor(col);
     });
     connect(m_canvas, &PixelCanvas::secondaryColorChanged, this, [this](const QColor &col) {
         if (m_secondarySwatchBtn) {
-            m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #71717a; border-radius: 6px;").arg(col.name()));
+            m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #9ca3af; border-radius: 6px;").arg(col.name()));
         }
     });
 
@@ -402,8 +405,8 @@ QWidget* PixelEditorDialog::createPalettePanel()
     layout->setContentsMargins(4, 2, 4, 2);
     layout->setSpacing(8);
 
-    // 1. Active Color Box (Primary & Secondary swatches)
-    m_colorsGroup = new QGroupBox(tr("Active Colors"), panel);
+    // 1. Active Color Box & Direct Color Picker
+    m_colorsGroup = new QGroupBox(tr("Color Picker"), panel);
     m_colorsGroup->setStyleSheet(QStringLiteral(
         "QGroupBox {"
         "  font-weight: bold;"
@@ -431,7 +434,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     m_primarySwatchBtn = new QPushButton(m_colorsGroup);
     m_primarySwatchBtn->setFixedSize(44, 44);
-    m_primarySwatchBtn->setToolTip(tr("Primary Color (Left Click to change)"));
+    m_primarySwatchBtn->setToolTip(tr("Primary Color (Click to open Color Picker)"));
     m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #000000; border: 2px solid #374151; border-radius: 6px;"));
     connect(m_primarySwatchBtn, &QPushButton::clicked, this, &PixelEditorDialog::onPrimarySwatchClicked);
     swatchesRow->addWidget(m_primarySwatchBtn);
@@ -455,7 +458,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     m_secondarySwatchBtn = new QPushButton(m_colorsGroup);
     m_secondarySwatchBtn->setFixedSize(40, 40);
-    m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Left Click to change)"));
+    m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Click to open Color Picker)"));
     m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #ffffff; border: 2px solid #9ca3af; border-radius: 6px;"));
     connect(m_secondarySwatchBtn, &QPushButton::clicked, this, &PixelEditorDialog::onSecondarySwatchClicked);
     swatchesRow->addWidget(m_secondarySwatchBtn);
@@ -463,17 +466,72 @@ QWidget* PixelEditorDialog::createPalettePanel()
     swatchesRow->addStretch();
     colorsMainLayout->addLayout(swatchesRow);
 
+    QHBoxLayout *hexRow = new QHBoxLayout();
     m_primaryHexLabel = new QLabel(QStringLiteral("#000000"), m_colorsGroup);
-    m_primaryHexLabel->setAlignment(Qt::AlignLeft);
-    m_primaryHexLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px; font-weight: bold; color: #4b5563; padding-left: 2px;"));
-    colorsMainLayout->addWidget(m_primaryHexLabel);
+    m_primaryHexLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px; font-weight: bold; color: #1f2937;"));
+    hexRow->addWidget(m_primaryHexLabel);
+
+    m_rgbLabel = new QLabel(QStringLiteral("RGB(0, 0, 0)"), m_colorsGroup);
+    m_rgbLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 10px; color: #6b7280;"));
+    hexRow->addWidget(m_rgbLabel);
+    hexRow->addStretch();
+    colorsMainLayout->addLayout(hexRow);
+
+    // Direct color picker launcher button
+    m_btnPickColor = new QPushButton(tr("🎨 Pick Color..."), m_colorsGroup);
+    m_btnPickColor->setStyleSheet(QStringLiteral(
+        "QPushButton {"
+        "  background-color: #f9fafb;"
+        "  border: 1px solid #d1d5db;"
+        "  border-radius: 6px;"
+        "  color: #1f2937;"
+        "  font-size: 11px;"
+        "  font-weight: 600;"
+        "  padding: 6px 10px;"
+        "}"
+        "QPushButton:hover { background-color: #eff6ff; border-color: #2563eb; color: #2563eb; }"
+        "QPushButton:pressed { background-color: #dbeafe; }"
+    ));
+    connect(m_btnPickColor, &QPushButton::clicked, this, &PixelEditorDialog::onPickColorClicked);
+    colorsMainLayout->addWidget(m_btnPickColor);
+
+    // Recent colors
+    m_recentLabel = new QLabel(tr("Recent:"), m_colorsGroup);
+    m_recentLabel->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: bold; color: #6b7280; margin-top: 4px;"));
+    colorsMainLayout->addWidget(m_recentLabel);
+
+    m_recentContainer = new QWidget(m_colorsGroup);
+    m_recentLayout = new QHBoxLayout(m_recentContainer);
+    m_recentLayout->setContentsMargins(0, 0, 0, 0);
+    m_recentLayout->setSpacing(4);
+    refreshRecentSwatches();
+    colorsMainLayout->addWidget(m_recentContainer);
 
     layout->addWidget(m_colorsGroup);
 
-    // 2. Palette Preset Selector
-    m_palLabel = new QLabel(tr("Palette:"), panel);
-    m_palLabel->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 12px; color: #374151;"));
-    layout->addWidget(m_palLabel);
+    // 2. Palette Presets & Sample Frame button
+    QHBoxLayout *presetHeader = new QHBoxLayout();
+    m_palLabel = new QLabel(tr("Preset:"), panel);
+    m_palLabel->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; color: #374151;"));
+    presetHeader->addWidget(m_palLabel);
+
+    m_btnSampleFrame = new QPushButton(tr("Sample Frame"), panel);
+    m_btnSampleFrame->setToolTip(tr("Extract all unique colors from current sprite frame"));
+    m_btnSampleFrame->setStyleSheet(QStringLiteral(
+        "QPushButton {"
+        "  background-color: #ffffff;"
+        "  border: 1px solid #d1d5db;"
+        "  border-radius: 4px;"
+        "  color: #374151;"
+        "  font-size: 10px;"
+        "  font-weight: 500;"
+        "  padding: 2px 6px;"
+        "}"
+        "QPushButton:hover { background-color: #f3f4f6; border-color: #2563eb; color: #2563eb; }"
+    ));
+    connect(m_btnSampleFrame, &QPushButton::clicked, this, &PixelEditorDialog::onSampleFrameColorsClicked);
+    presetHeader->addWidget(m_btnSampleFrame);
+    layout->addLayout(presetHeader);
 
     m_paletteCombo = new QComboBox(panel);
     m_paletteCombo->setStyleSheet(QStringLiteral(
@@ -490,9 +548,9 @@ QWidget* PixelEditorDialog::createPalettePanel()
         "QComboBox::drop-down { border: none; }"
         "QComboBox QAbstractItemView { background-color: #ffffff; color: #1f2937; selection-background-color: #eff6ff; selection-color: #2563eb; }"
     ));
-    m_paletteCombo->addItem(tr("Sprite Colors (Auto)"), SpriteColors);
+    m_paletteCombo->addItem(tr("Bento Standard (36)"), Standard);
     m_paletteCombo->addItem(tr("NES / Famicom (54)"), NES);
-    m_paletteCombo->addItem(tr("SNES / Super Famicom (32)"), SNES);
+    m_paletteCombo->addItem(tr("SNES / 16-bit (32)"), SNES);
     m_paletteCombo->addItem(tr("Amiga OCS (32)"), Amiga);
     m_paletteCombo->addItem(tr("NEC PC-Engine (32)"), PCEngine);
     m_paletteCombo->addItem(tr("Game Boy DMG (4)"), GameBoy);
@@ -504,7 +562,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     // 3. Swatches Grid inside ScrollArea
     QScrollArea *swatchScroll = new QScrollArea(panel);
     swatchScroll->setWidgetResizable(true);
-    swatchScroll->setFixedHeight(216);
+    swatchScroll->setFixedHeight(170);
     swatchScroll->setStyleSheet(QStringLiteral("background-color: #ffffff; border: 1px solid #d1d5db; border-radius: 6px;"));
 
     m_swatchesContainer = new QWidget(swatchScroll);
@@ -633,65 +691,38 @@ void PixelEditorDialog::onToolButtonClicked(int id)
     m_canvas->setCurrentTool(static_cast<PixelTool>(id));
 }
 
+void PixelEditorDialog::onPickColorClicked()
+{
+    onPrimarySwatchClicked();
+}
+
 void PixelEditorDialog::onPrimarySwatchClicked()
 {
-    QColor col = QColorDialog::getColor(m_canvas->primaryColor(), this, tr("Select Primary Color"));
+    QColor initial = m_canvas ? m_canvas->primaryColor() : Qt::black;
+    QColor col = QColorDialog::getColor(initial, this, tr("Select Primary Color"), QColorDialog::ShowAlphaChannel);
     if (col.isValid()) {
-        m_canvas->setPrimaryColor(col);
+        if (m_canvas) {
+            m_canvas->setPrimaryColor(col);
+        }
+        addRecentColor(col);
     }
 }
 
 void PixelEditorDialog::onSecondarySwatchClicked()
 {
-    QColor col = QColorDialog::getColor(m_canvas->secondaryColor(), this, tr("Select Secondary Color"));
+    QColor initial = m_canvas ? m_canvas->secondaryColor() : Qt::white;
+    QColor col = QColorDialog::getColor(initial, this, tr("Select Secondary Color"), QColorDialog::ShowAlphaChannel);
     if (col.isValid()) {
-        m_canvas->setSecondaryColor(col);
+        if (m_canvas) {
+            m_canvas->setSecondaryColor(col);
+        }
+        addRecentColor(col);
     }
 }
 
 void PixelEditorDialog::onCanvasImageChanged()
 {
     updateLivePreview();
-
-    if (!m_paletteCombo || m_paletteCombo->currentIndex() != SpriteColors) {
-        return;
-    }
-
-    if (m_canvas && m_canvas->isDrawing()) {
-        const QColor pCol = m_canvas->primaryColor();
-        const QColor sCol = m_canvas->secondaryColor();
-        const bool pKnown = (pCol.alpha() < 16) || m_knownPaletteColors.contains(qRgb(pCol.red(), pCol.green(), pCol.blue()));
-        const bool sKnown = (sCol.alpha() < 16) || m_knownPaletteColors.contains(qRgb(sCol.red(), sCol.green(), sCol.blue()));
-
-        // If the colors being drawn are already present in the palette, NO new color is being added!
-        // Avoid all unnecessary palette overhead so drawing remains at maximum FPS with zero freeze.
-        if (pKnown && sKnown) {
-            return;
-        }
-
-        // A new color is being painted, but the user is currently mid-stroke:
-        // Debounce so drawing stays 100% fluid without running heavy scans during drag.
-        m_paletteDebounceTimer.start(250);
-        return;
-    }
-
-    // For actions outside mid-stroke (e.g. Flood Fill, Paste, Clear, Undo, Redo):
-    // Debounce slightly (100ms) to coalesce rapid edits and run asynchronously.
-    m_paletteDebounceTimer.start(100);
-}
-
-void PixelEditorDialog::onCanvasStrokeFinished()
-{
-    if (!m_paletteCombo || m_paletteCombo->currentIndex() != SpriteColors) {
-        return;
-    }
-
-    // If the debounce timer was running (because a new color was painted during the stroke),
-    // trigger extraction now that the stroke has finished.
-    if (m_paletteDebounceTimer.isActive()) {
-        m_paletteDebounceTimer.stop();
-        requestAsyncPaletteExtraction();
-    }
 }
 
 void PixelEditorDialog::onCanvasPixelMoved(int x, int y, const QColor &color)
@@ -732,23 +763,25 @@ void PixelEditorDialog::onCanvasZoomChanged(double zoom)
 void PixelEditorDialog::updateLivePreview()
 {
     if (!m_previewLabel || !m_canvas) return;
-    QImage img = m_canvas->image();
+    const QImage &img = m_canvas->image();
     if (img.isNull()) {
         m_previewLabel->clear();
         return;
     }
 
-    // Paint against mini checkerboard
+    static const QPixmap s_checker = []() {
+        QPixmap pm(16, 16);
+        QPainter cp(&pm);
+        cp.fillRect(0, 0, 8, 8, QColor(45, 45, 50));
+        cp.fillRect(8, 8, 8, 8, QColor(45, 45, 50));
+        cp.fillRect(8, 0, 8, 8, QColor(60, 60, 65));
+        cp.fillRect(0, 8, 8, 8, QColor(60, 60, 65));
+        return pm;
+    }();
+
     QPixmap px(img.size());
-    px.fill(Qt::transparent);
     QPainter p(&px);
-    const int ts = 4;
-    for (int y = 0; y < img.height(); y += ts) {
-        for (int x = 0; x < img.width(); x += ts) {
-            bool alt = ((x / ts) + (y / ts)) % 2 == 0;
-            p.fillRect(x, y, ts, ts, alt ? QColor(45, 45, 50) : QColor(60, 60, 65));
-        }
-    }
+    p.drawTiledPixmap(px.rect(), s_checker);
     p.drawImage(0, 0, img);
     p.end();
 
@@ -787,10 +820,6 @@ void PixelEditorDialog::loadFrame(int index)
 
     updateNavigationButtons();
     updateLivePreview();
-
-    if (m_paletteCombo && m_paletteCombo->currentIndex() == SpriteColors) {
-        requestAsyncPaletteExtraction();
-    }
 }
 
 void PixelEditorDialog::saveCurrentFrameToSession()
@@ -825,127 +854,119 @@ void PixelEditorDialog::updateNavigationButtons()
 void PixelEditorDialog::onPalettePresetChanged(int index)
 {
     PalettePreset preset = static_cast<PalettePreset>(m_paletteCombo->itemData(index).toInt());
-    if (preset == SpriteColors) {
-        requestAsyncPaletteExtraction();
-    } else {
-        m_paletteDebounceTimer.stop();
-        m_paletteWatcher.cancel();
-        m_currentPalette = getPresetPalette(preset);
-        m_knownPaletteColors = QSet<QRgb>(m_currentPalette.begin(), m_currentPalette.end());
-        refreshPaletteSwatches();
-    }
+    m_currentPalette = getPresetPalette(preset);
+    refreshPaletteSwatches();
 }
 
-void PixelEditorDialog::populateSpriteColorsPalette()
+void PixelEditorDialog::onSampleFrameColorsClicked()
 {
-    requestAsyncPaletteExtraction();
-}
+    if (!m_canvas) return;
+    QImage img = m_canvas->image();
+    if (img.isNull()) return;
 
-void PixelEditorDialog::requestAsyncPaletteExtraction()
-{
-    if (!m_canvas || !m_document || !m_paletteCombo || m_paletteCombo->currentIndex() != SpriteColors) {
-        return;
-    }
-
-    if (m_paletteWatcher.isRunning()) {
-        m_paletteExtractionPending = true;
-        return;
-    }
-    m_paletteExtractionPending = false;
-    m_paletteJobFrameIndex = m_currentFrameIndex;
-
-    const QImage imgCopy = m_canvas->image().copy();
-    if (imgCopy.isNull()) return;
-
-    const bool hasPoly = (m_currentFrameIndex >= 0 &&
+    const bool hasPoly = (m_document && m_currentFrameIndex >= 0 &&
                           m_currentFrameIndex < m_document->boxes().size() &&
                           m_document->box(m_currentFrameIndex).polygon.size() >= 3);
     const QPolygonF poly = hasPoly ? m_document->box(m_currentFrameIndex).polygon : QPolygonF();
 
-    QFuture<QVector<QRgb>> future = QtConcurrent::run([imgCopy, poly, hasPoly]() -> QVector<QRgb> {
-        QSet<QRgb> uniqueColors;
-        const int w = imgCopy.width();
-        const int h = imgCopy.height();
+    QSet<QRgb> uniqueColors;
+    const int w = img.width();
+    const int h = img.height();
 
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            if (hasPoly && !poly.containsPoint(QPointF(x + 0.5, y + 0.5), Qt::OddEvenFill)) {
+                continue;
+            }
+            QRgb rgb = img.pixel(x, y);
+            if (qAlpha(rgb) >= 16) {
+                uniqueColors.insert(qRgb(qRed(rgb), qGreen(rgb), qBlue(rgb)));
+            }
+        }
+    }
+
+    if (uniqueColors.isEmpty()) {
         for (int y = 0; y < h; ++y) {
             for (int x = 0; x < w; ++x) {
-                // Respect polygonal découpage: ignore anything outside the polygon contour
                 if (hasPoly && !poly.containsPoint(QPointF(x + 0.5, y + 0.5), Qt::OddEvenFill)) {
                     continue;
                 }
-                QRgb rgb = imgCopy.pixel(x, y);
-                // Ignore transparent and nearly invisible compression/alpha fringe noise
-                if (qAlpha(rgb) >= 16) {
+                QRgb rgb = img.pixel(x, y);
+                if (qAlpha(rgb) > 0) {
                     uniqueColors.insert(qRgb(qRed(rgb), qGreen(rgb), qBlue(rgb)));
                 }
             }
         }
+    }
 
-        // Fallback if image has only low-alpha pixels
-        if (uniqueColors.isEmpty()) {
-            for (int y = 0; y < h; ++y) {
-                for (int x = 0; x < w; ++x) {
-                    if (hasPoly && !poly.containsPoint(QPointF(x + 0.5, y + 0.5), Qt::OddEvenFill)) {
-                        continue;
-                    }
-                    QRgb rgb = imgCopy.pixel(x, y);
-                    if (qAlpha(rgb) > 0) {
-                        uniqueColors.insert(qRgb(qRed(rgb), qGreen(rgb), qBlue(rgb)));
-                    }
-                }
-            }
-        }
-
-        QVector<QRgb> palette = uniqueColors.values().toVector();
-
-        // Sort by HSL/HSV: neutrals first by brightness, then chromatic colors by hue and brightness
-        std::sort(palette.begin(), palette.end(), [](QRgb a, QRgb b) {
-            QColor ca(a);
-            QColor cb(b);
-            bool aNeutral = ca.saturation() < 24;
-            bool bNeutral = cb.saturation() < 24;
-            if (aNeutral != bNeutral) {
-                return aNeutral; // Grays/blacks/whites first
-            }
-            if (aNeutral) {
-                return ca.value() < cb.value();
-            }
-            if (std::abs(ca.hsvHue() - cb.hsvHue()) > 8) {
-                return ca.hsvHue() < cb.hsvHue();
-            }
-            if (std::abs(ca.saturation() - cb.saturation()) > 15) {
-                return ca.saturation() < cb.saturation();
-            }
-            return ca.value() < cb.value();
-        });
-
-        return palette;
+    m_currentPalette = uniqueColors.values().toVector();
+    std::sort(m_currentPalette.begin(), m_currentPalette.end(), [](QRgb a, QRgb b) {
+        QColor ca(a);
+        QColor cb(b);
+        bool aNeutral = ca.saturation() < 24;
+        bool bNeutral = cb.saturation() < 24;
+        if (aNeutral != bNeutral) return aNeutral;
+        if (aNeutral) return ca.value() < cb.value();
+        if (std::abs(ca.hsvHue() - cb.hsvHue()) > 8) return ca.hsvHue() < cb.hsvHue();
+        if (std::abs(ca.saturation() - cb.saturation()) > 15) return ca.saturation() < cb.saturation();
+        return ca.value() < cb.value();
     });
 
-    m_paletteWatcher.setFuture(future);
+    refreshPaletteSwatches();
 }
 
-void PixelEditorDialog::onPaletteExtractionFinished()
+void PixelEditorDialog::addRecentColor(const QColor &color)
 {
-    if (m_paletteWatcher.isCanceled()) {
-        return;
-    }
+    if (!color.isValid() || color.alpha() < 16) return;
+    QRgb rgb = qRgb(color.red(), color.green(), color.blue());
 
-    if (m_paletteJobFrameIndex == m_currentFrameIndex) {
-        const QVector<QRgb> newPalette = m_paletteWatcher.result();
-        const QSet<QRgb> newSet(newPalette.begin(), newPalette.end());
-
-        // Only update UI buttons if there is an actual difference in colors
-        if (newSet != m_knownPaletteColors || newPalette.size() != m_currentPalette.size()) {
-            m_currentPalette = newPalette;
-            m_knownPaletteColors = newSet;
-            refreshPaletteSwatches();
+    for (int i = 0; i < m_recentColors.size(); ++i) {
+        if (qRgb(m_recentColors[i].red(), m_recentColors[i].green(), m_recentColors[i].blue()) == rgb) {
+            m_recentColors.removeAt(i);
+            break;
         }
     }
+    m_recentColors.prepend(color);
+    while (m_recentColors.size() > 8) {
+        m_recentColors.removeLast();
+    }
+    refreshRecentSwatches();
+}
 
-    if (m_paletteExtractionPending) {
-        m_paletteExtractionPending = false;
-        requestAsyncPaletteExtraction();
+void PixelEditorDialog::refreshRecentSwatches()
+{
+    if (!m_recentLayout) return;
+
+    QLayoutItem *child;
+    while ((child = m_recentLayout->takeAt(0)) != nullptr) {
+        if (child->widget()) delete child->widget();
+        delete child;
+    }
+
+    for (const QColor &col : m_recentColors) {
+        QPushButton *btn = new QPushButton(m_recentContainer);
+        btn->setFixedSize(22, 22);
+        btn->setToolTip(QStringLiteral("%1\nLeft: Primary, Right: Secondary").arg(col.name().toUpper()));
+        btn->setStyleSheet(QStringLiteral(
+            "QPushButton {"
+            "  background-color: %1;"
+            "  border: 1px solid rgba(0, 0, 0, 0.25);"
+            "  border-radius: 4px;"
+            "}"
+            "QPushButton:hover {"
+            "  border: 2px solid #2563eb;"
+            "}"
+        ).arg(col.name()));
+
+        connect(btn, &QPushButton::clicked, this, [this, col]() {
+            if (m_canvas) m_canvas->setPrimaryColor(col);
+        });
+        btn->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(btn, &QPushButton::customContextMenuRequested, this, [this, col]() {
+            if (m_canvas) m_canvas->setSecondaryColor(col);
+        });
+
+        m_recentLayout->addWidget(btn);
     }
 }
 
@@ -1008,6 +1029,29 @@ QVector<QRgb> PixelEditorDialog::getPresetPalette(PalettePreset preset)
 {
     QVector<QRgb> pal;
     switch (preset) {
+    case Standard:
+        pal = {
+            // Row 1: Grayscale / Neutrals
+            qRgb(0, 0, 0),       qRgb(43, 43, 43),    qRgb(90, 90, 90),
+            qRgb(142, 142, 142), qRgb(196, 196, 196), qRgb(255, 255, 255),
+            // Row 2: Skin & Earth Tones
+            qRgb(58, 31, 29),    qRgb(107, 62, 46),   qRgb(160, 90, 63),
+            qRgb(199, 131, 99),  qRgb(224, 169, 139), qRgb(245, 211, 190),
+            // Row 3: Warm Reds & Oranges
+            qRgb(128, 12, 12),   qRgb(196, 27, 27),   qRgb(230, 74, 25),
+            qRgb(255, 112, 67),  qRgb(245, 124, 0),   qRgb(255, 183, 77),
+            // Row 4: Yellows & Greens
+            qRgb(251, 192, 45),  qRgb(255, 241, 118), qRgb(104, 159, 56),
+            qRgb(139, 195, 74),  qRgb(46, 125, 50),   qRgb(76, 175, 80),
+            // Row 5: Cyans & Blues
+            qRgb(0, 131, 143),   qRgb(0, 172, 193),   qRgb(2, 119, 189),
+            qRgb(3, 169, 244),   qRgb(21, 101, 192),  qRgb(63, 81, 181),
+            // Row 6: Purples, Magentas & Pinks
+            qRgb(74, 20, 140),   qRgb(123, 31, 162),  qRgb(171, 71, 188),
+            qRgb(173, 20, 87),   qRgb(233, 30, 99),   qRgb(244, 143, 177)
+        };
+        break;
+
     case NES:
         pal = {
             qRgb(124,124,124), qRgb(0,0,252),     qRgb(0,0,188),     qRgb(68,40,188),
@@ -1185,18 +1229,24 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnRedo) m_btnRedo->setToolTip(tr("Redo (Ctrl+Y)"));
 
     // Palette & Colors
-    if (m_colorsGroup) m_colorsGroup->setTitle(tr("Active Colors"));
-    if (m_primarySwatchBtn) m_primarySwatchBtn->setToolTip(tr("Primary Color (Left Click to change)"));
-    if (m_secondarySwatchBtn) m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Left Click to change)"));
+    if (m_colorsGroup) m_colorsGroup->setTitle(tr("Color Picker"));
+    if (m_primarySwatchBtn) m_primarySwatchBtn->setToolTip(tr("Primary Color (Click to open Color Picker)"));
+    if (m_secondarySwatchBtn) m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Click to open Color Picker)"));
     if (m_swapBtn) m_swapBtn->setToolTip(tr("Swap Colors (X)"));
-    if (m_palLabel) m_palLabel->setText(tr("Palette:"));
+    if (m_btnPickColor) m_btnPickColor->setText(tr("🎨 Pick Color..."));
+    if (m_recentLabel) m_recentLabel->setText(tr("Recent:"));
+    if (m_palLabel) m_palLabel->setText(tr("Preset:"));
+    if (m_btnSampleFrame) {
+        m_btnSampleFrame->setText(tr("Sample Frame"));
+        m_btnSampleFrame->setToolTip(tr("Extract all unique colors from current sprite frame"));
+    }
 
     if (m_paletteCombo) {
         int curIdx = m_paletteCombo->currentIndex();
         m_paletteCombo->blockSignals(true);
-        m_paletteCombo->setItemText(SpriteColors, tr("Sprite Colors (Auto)"));
+        m_paletteCombo->setItemText(Standard, tr("Bento Standard (36)"));
         m_paletteCombo->setItemText(NES, tr("NES / Famicom (54)"));
-        m_paletteCombo->setItemText(SNES, tr("SNES / Super Famicom (32)"));
+        m_paletteCombo->setItemText(SNES, tr("SNES / 16-bit (32)"));
         m_paletteCombo->setItemText(Amiga, tr("Amiga OCS (32)"));
         m_paletteCombo->setItemText(PCEngine, tr("NEC PC-Engine (32)"));
         m_paletteCombo->setItemText(GameBoy, tr("Game Boy DMG (4)"));

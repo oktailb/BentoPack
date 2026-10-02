@@ -31,9 +31,6 @@
 #include <QUndoStack>
 #include <QGroupBox>
 #include <QEvent>
-#include <QFutureWatcher>
-#include <QTimer>
-#include <QSet>
 
 class SpriteDocument;
 class PixelCanvas;
@@ -51,7 +48,8 @@ class BENTOPACK_WIDGETS_EXPORT PixelEditorDialog : public QDialog
 
 public:
     enum PalettePreset {
-        SpriteColors = 0,
+        Standard = 0,
+        SpriteColors = 0, // Compatible alias
         NES,
         SNES,
         Amiga,
@@ -65,7 +63,7 @@ public:
                                QUndoStack *docUndoStack,
                                int initialFrameIndex = 0,
                                QWidget *parent = nullptr);
-    ~PixelEditorDialog() override;
+    ~PixelEditorDialog() override = default;
 
     static QVector<QRgb> getPresetPalette(PalettePreset preset);
 
@@ -77,11 +75,11 @@ private slots:
     void onPrimarySwatchClicked();
     void onSecondarySwatchClicked();
     void onCanvasImageChanged();
-    void onCanvasStrokeFinished();
-    void onPaletteExtractionFinished();
     void onCanvasPixelMoved(int x, int y, const QColor &color);
     void onCanvasPixelLeft();
     void onCanvasZoomChanged(double zoom);
+    void onPickColorClicked();
+    void onSampleFrameColorsClicked();
     void onApplyClicked();
     void onOkClicked();
 
@@ -95,8 +93,8 @@ private:
     void loadFrame(int index);
     void saveCurrentFrameToSession();
     void refreshPaletteSwatches();
-    void populateSpriteColorsPalette();
-    void requestAsyncPaletteExtraction();
+    void refreshRecentSwatches();
+    void addRecentColor(const QColor &color);
     void updateLivePreview();
 
     QWidget* createToolBar();
@@ -141,17 +139,20 @@ private:
     QPushButton*            m_primarySwatchBtn = nullptr;
     QPushButton*            m_secondarySwatchBtn = nullptr;
     QPushButton*            m_swapBtn = nullptr;
+    QPushButton*            m_btnPickColor = nullptr;
     QLabel*                 m_primaryHexLabel = nullptr;
+    QLabel*                 m_rgbLabel = nullptr;
+    QLabel*                 m_recentLabel = nullptr;
+    QWidget*                m_recentContainer = nullptr;
+    QHBoxLayout*            m_recentLayout = nullptr;
+    QVector<QColor>         m_recentColors;
+
     QLabel*                 m_palLabel = nullptr;
     QComboBox*              m_paletteCombo = nullptr;
+    QPushButton*            m_btnSampleFrame = nullptr;
     QWidget*                m_swatchesContainer = nullptr;
     QGridLayout*            m_swatchesLayout = nullptr;
     QVector<QRgb>           m_currentPalette;
-    QSet<QRgb>              m_knownPaletteColors;
-    QFutureWatcher<QVector<QRgb>> m_paletteWatcher;
-    QTimer                  m_paletteDebounceTimer;
-    bool                    m_paletteExtractionPending = false;
-    int                     m_paletteJobFrameIndex = -1;
 
     // Live Preview
     QGroupBox*              m_prevGroup = nullptr;
