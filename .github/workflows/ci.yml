@@ -357,7 +357,7 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: |
-          arch -x86_64 ctest --test-dir build --output-on-failure --verbose
+          ctest --test-dir build --output-on-failure --verbose
 
       - name: Deploy Qt and Package DMG & ZIP
         run: |
