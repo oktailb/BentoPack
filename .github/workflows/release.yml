@@ -155,36 +155,61 @@ jobs:
       - name: Deploy Windows Runtime Dependencies
         shell: msys2 {0}
         run: |
-          # 1. Copy required Qt6 plugins directly from MSYS2 Qt6 plugins directory
+          set +e
+          set +o pipefail
+
+          # 1. Locate and copy required Qt6 plugins
           QT_PLUGINS_DIR="/mingw64/share/qt6/plugins"
+          if [ ! -d "$QT_PLUGINS_DIR" ]; then
+            QT_PLUGINS_DIR="/mingw64/lib/qt6/plugins"
+          fi
           if [ ! -d "$QT_PLUGINS_DIR" ]; then
             QT_PLUGINS_DIR="$(qmake6 -query QT_INSTALL_PLUGINS 2>/dev/null || true)"
           fi
+          echo "Using Qt plugins directory: $QT_PLUGINS_DIR"
 
           mkdir -p build/bin/platforms build/bin/imageformats build/bin/styles build/bin/iconengines
 
-          cp -u "$QT_PLUGINS_DIR"/platforms/qwindows.dll build/bin/platforms/ 2>/dev/null || true
-          cp -u "$QT_PLUGINS_DIR"/platforms/qoffscreen.dll build/bin/platforms/ 2>/dev/null || true
-          cp -u "$QT_PLUGINS_DIR"/platforms/qminimal.dll build/bin/platforms/ 2>/dev/null || true
-          cp -u "$QT_PLUGINS_DIR"/imageformats/*.dll build/bin/imageformats/ 2>/dev/null || true
-          cp -u "$QT_PLUGINS_DIR"/styles/*.dll build/bin/styles/ 2>/dev/null || true
-          cp -u "$QT_PLUGINS_DIR"/iconengines/*.dll build/bin/iconengines/ 2>/dev/null || true
+          if [ -d "$QT_PLUGINS_DIR" ]; then
+            cp -u "$QT_PLUGINS_DIR"/platforms/*.dll build/bin/platforms/ 2>/dev/null || true
+            cp -u "$QT_PLUGINS_DIR"/imageformats/*.dll build/bin/imageformats/ 2>/dev/null || true
+            cp -u "$QT_PLUGINS_DIR"/styles/*.dll build/bin/styles/ 2>/dev/null || true
+            cp -u "$QT_PLUGINS_DIR"/iconengines/*.dll build/bin/iconengines/ 2>/dev/null || true
+          fi
 
           # Create qt.conf in build/bin so Qt finds plugins relative to the executable
           printf '[Paths]\nPrefix = .\nPlugins = .\n' > build/bin/qt.conf
 
-          # 2. Collect all recursive MSYS2 / MinGW runtime dependencies via ldd (3 passes for transitive deps)
-          for i in 1 2 3; do
+          # 2. Directly copy core Qt6 and MinGW runtime libraries
+          cp -u /mingw64/bin/Qt6Core*.dll build/bin/ 2>/dev/null || true
+          cp -u /mingw64/bin/Qt6Gui*.dll build/bin/ 2>/dev/null || true
+          cp -u /mingw64/bin/Qt6Widgets*.dll build/bin/ 2>/dev/null || true
+          cp -u /mingw64/bin/Qt6Network*.dll build/bin/ 2>/dev/null || true
+          cp -u /mingw64/bin/Qt6Concurrent*.dll build/bin/ 2>/dev/null || true
+          cp -u /mingw64/bin/libgit2*.dll build/bin/ 2>/dev/null || true
+          cp -u /mingw64/bin/libstdc++-6.dll build/bin/ 2>/dev/null || true
+          cp -u /mingw64/bin/libgcc_s_seh-1.dll build/bin/ 2>/dev/null || true
+          cp -u /mingw64/bin/libwinpthread-1.dll build/bin/ 2>/dev/null || true
+
+          # 3. Collect all recursive MSYS2 / MinGW runtime dependencies via ldd (3 passes for transitive deps)
+          for pass in 1 2 3; do
             for bin in build/bin/*.exe build/bin/*.dll build/bin/*/*.dll; do
               if [ -f "$bin" ]; then
-                ldd "$bin" 2>/dev/null | grep -i '/mingw64/bin/.*\.dll' | awk '{print $3}' | while read -r dll; do
-                  if [ -f "$dll" ]; then
-                    cp -u "$dll" build/bin/
+                for token in $(ldd "$bin" 2>/dev/null | grep -i 'mingw' || true); do
+                  t="${token#(}"
+                  t="${t%)}"
+                  if [ ! -f "$t" ] && command -v cygpath >/dev/null 2>&1; then
+                    t="$(cygpath -u "$t" 2>/dev/null || echo "$t")"
+                  fi
+                  if [ -f "$t" ]; then
+                    cp -u "$t" build/bin/ 2>/dev/null || true
                   fi
                 done
               fi
             done
           done
+
+          set -e
           ls -lah build/bin/
 
       - name: Verify Standalone Execution (No MSYS2 in PATH)
