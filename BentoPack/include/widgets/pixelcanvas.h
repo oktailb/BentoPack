@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,6 +91,10 @@ public:
     void flipVertical();
     void rotate90CW();
 
+    // Polygon Mesh
+    void setPolygonMesh(const QPolygonF &polygon);
+    QPolygonF polygonMesh() const { return m_polygonMesh; }
+
     // Undo / Redo
     bool canUndo() const { return m_undoStack.canUndo(); }
     bool canRedo() const { return m_undoStack.canRedo(); }
@@ -134,6 +138,7 @@ private:
     void drawPixelGrid(QPainter &painter, const QRect &rect);
     void drawSelectionBorder(QPainter &painter);
     void drawFloatingStamp(QPainter &painter);
+    void drawPolygonMesh(QPainter &painter);
 
     void updateCanvasSize();
 
@@ -144,6 +149,9 @@ private:
     PixelTool       m_tool = PixelTool::Pencil;
     QColor          m_primaryColor = Qt::black;
     QColor          m_secondaryColor = Qt::transparent;
+
+    // Polygon Mesh
+    QPolygonF       m_polygonMesh;
 
     // Interaction state
     bool            m_isDrawing = false;

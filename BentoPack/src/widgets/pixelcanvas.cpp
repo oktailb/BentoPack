@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -685,6 +685,33 @@ void PixelCanvas::drawFloatingStamp(QPainter &painter)
     painter.restore();
 }
 
+void PixelCanvas::setPolygonMesh(const QPolygonF &polygon)
+{
+    m_polygonMesh = polygon;
+    update();
+}
+
+void PixelCanvas::drawPolygonMesh(QPainter &painter)
+{
+    if (m_polygonMesh.size() < 3 || m_image.isNull()) return;
+
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    QPolygonF widgetPoly;
+    for (const QPointF &pt : m_polygonMesh) {
+        widgetPoly << QPointF(pt.x() * m_zoom, pt.y() * m_zoom);
+    }
+
+    // Draw subtle bright green dashed outline matching BentoPack polygon contour
+    QPen pen(QColor(0, 220, 130, 210), 1.5, Qt::DashLine);
+    painter.setPen(pen);
+    painter.setBrush(QBrush(QColor(0, 220, 130, 20)));
+    painter.drawPolygon(widgetPoly);
+
+    painter.restore();
+}
+
 void PixelCanvas::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -706,7 +733,10 @@ void PixelCanvas::paintEvent(QPaintEvent *event)
     // 4. Pixel grid
     drawPixelGrid(painter, rect());
 
-    // 5. Selection bounds
+    // 5. Polygon mesh contour
+    drawPolygonMesh(painter);
+
+    // 6. Selection bounds
     drawSelectionBorder(painter);
 }
 
