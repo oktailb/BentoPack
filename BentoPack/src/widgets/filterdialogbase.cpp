@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,7 @@ FilterDialogBase::FilterDialogBase(SpriteDocument *doc, QUndoStack *undoStack, Q
     // Capture initial document state for guaranteed rollback on Cancel
     if (m_document) {
         m_initialAtlas = m_document->atlas();
-        m_initialFrames = m_document->frames();
+        m_initialFrames = m_document->polygonClippedFrames();
         m_initialBoxes = m_document->boxes();
         m_initialAnimations = m_document->animations();
     }

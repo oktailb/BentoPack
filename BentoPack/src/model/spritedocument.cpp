@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -133,6 +133,20 @@ QImage SpriteDocument::polygonClippedFrame(int index) const
     }
 
     return clipped;
+}
+
+QList<QImage> SpriteDocument::polygonClippedFrames() const
+{
+    QList<QImage> result;
+    result.reserve(m_frames.size());
+    for (int i = 0; i < m_frames.size(); ++i) {
+        if (i < m_boxes.size() && m_boxes[i].hasPolygonMesh && m_boxes[i].polygon.size() >= 3) {
+            result.append(polygonClippedFrame(i));
+        } else {
+            result.append(m_frames.at(i));
+        }
+    }
+    return result;
 }
 
 void SpriteDocument::setFrames(const QList<QImage> &frames, const QList<SpriteBox> &boxes)

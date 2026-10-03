@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -151,6 +151,7 @@ public:
     const QList<QImage>& frames() const { return m_frames; }
     QImage frame(int index) const;
     QImage polygonClippedFrame(int index) const;
+    QList<QImage> polygonClippedFrames() const;
     void setFrames(const QList<QImage> &frames, const QList<SpriteBox> &boxes);
     void addFrame(const QImage &image, const SpriteBox &box = SpriteBox());
     void insertFrame(int index, const QImage &image, const SpriteBox &box);

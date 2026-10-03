@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -330,6 +330,7 @@ public:
 
     EditSpritePixelsCommand(SpriteDocument *doc,
                             const QMap<int, QImage> &modifiedFrames,
+                            const QMap<int, QPolygonF> &modifiedPolygons = {},
                             QUndoCommand *parent = nullptr);
 
     EditSpritePixelsCommand(SpriteDocument *doc,
@@ -353,6 +354,9 @@ private:
     SpriteDocument*        m_doc;
     QMap<int, QImage>      m_oldFrames;
     QMap<int, QImage>      m_newFrames;
+    QMap<int, QPolygonF>   m_newPolygons;
+    QMap<int, SpriteBox>   m_oldBoxes;
+    QMap<int, SpriteBox>   m_newBoxes;
     QList<FramePatch>      m_framePatches;
     QImage                 m_oldAtlas;
     QImage                 m_newAtlas;

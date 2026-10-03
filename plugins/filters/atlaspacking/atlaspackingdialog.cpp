@@ -16,6 +16,8 @@
 
 #include "atlaspackingdialog.h"
 #include "commands/filtercommands.h"
+#include <QPainter>
+#include <QPen>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
@@ -390,6 +392,33 @@ void AtlasPackingDialog::applyPreview()
         AsyncPackJobResult res;
         res.jobId = jobId;
         res.opts = opts;
+
+        // Ensure all workingFrames with polygons are framed/clipped strictly to their polygon geometry
+        // so that Trim and Packing never see or process stray pixels from neighboring sprites
+        for (int i = 0; i < workingFrames.size(); ++i) {
+            if (i < workingBoxes.size() && workingBoxes[i].hasPolygonMesh && workingBoxes[i].polygon.size() >= 3) {
+                const SpriteBox &b = workingBoxes[i];
+                const QImage &baseImage = workingFrames[i];
+                if (!baseImage.isNull()) {
+                    QImage mask(baseImage.size(), QImage::Format_ARGB32_Premultiplied);
+                    mask.fill(Qt::transparent);
+                    {
+                        QPainter mp(&mask);
+                        mp.setRenderHint(QPainter::Antialiasing, false);
+                        mp.setBrush(Qt::white);
+                        mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+                        mp.drawPolygon(b.polygon);
+                    }
+                    QImage cleanImg = baseImage.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+                    {
+                        QPainter p(&cleanImg);
+                        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                        p.drawImage(0, 0, mask);
+                    }
+                    workingFrames[i] = cleanImg.convertToFormat(QImage::Format_ARGB32);
+                }
+            }
+        }
 
         // Optional Trim step (computed in background thread)
         if (trim) {

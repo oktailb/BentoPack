@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,29 +61,33 @@ std::vector<uint8_t> createDilatedMask(const QImage &img, const QPolygonF &poly,
     const int h = img.height();
     std::vector<uint8_t> rawMask(w * h, 0);
 
-    // 1. Mark all pixels that have non-zero alpha in the image so no sprite content is ever missed
-    for (int y = 0; y < h; ++y) {
-        const QRgb *line = reinterpret_cast<const QRgb *>(img.constScanLine(y));
-        for (int x = 0; x < w; ++x) {
-            if (qAlpha(line[x]) > 0) {
-                rawMask[y * w + x] = 1;
-            }
-        }
-    }
-
-    // 2. Also mark pixels inside polygon envelope (if defined) including 1px border stroke
-    if (!poly.isEmpty() && poly.size() >= 3) {
+    const bool hasPoly = (!poly.isEmpty() && poly.size() >= 3);
+    if (hasPoly) {
+        // When a polygon is defined, the sprite footprint is STRICTLY bounded by the polygon envelope.
+        // Pixels outside the polygon (e.g. from neighboring sprites in an already packed atlas)
+        // are NEVER part of this sprite and must be strictly excluded.
         QImage pImg(w, h, QImage::Format_ARGB32_Premultiplied);
         pImg.fill(Qt::transparent);
-        QPainter painter(&pImg);
-        painter.setRenderHint(QPainter::Antialiasing, false);
-        painter.setBrush(Qt::white);
-        painter.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
-        painter.drawPolygon(poly);
-        painter.end();
+        {
+            QPainter painter(&pImg);
+            painter.setRenderHint(QPainter::Antialiasing, false);
+            painter.setBrush(Qt::white);
+            painter.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+            painter.drawPolygon(poly);
+        }
 
         for (int y = 0; y < h; ++y) {
             const QRgb *line = reinterpret_cast<const QRgb *>(pImg.constScanLine(y));
+            for (int x = 0; x < w; ++x) {
+                if (qAlpha(line[x]) > 0) {
+                    rawMask[y * w + x] = 1;
+                }
+            }
+        }
+    } else {
+        // No polygon defined: fall back to alpha of the image
+        for (int y = 0; y < h; ++y) {
+            const QRgb *line = reinterpret_cast<const QRgb *>(img.constScanLine(y));
             for (int x = 0; x < w; ++x) {
                 if (qAlpha(line[x]) > 0) {
                     rawMask[y * w + x] = 1;
@@ -267,15 +271,37 @@ AtlasPackResult TightPolygonPacker::pack(const QList<QImage> &uniqueFrames,
     }
 
     QtConcurrent::blockingMap(&threadPool, frameIndices, [&](int i) {
-        const QImage &img = uniqueFrames[i];
+        const QImage &srcImg = uniqueFrames[i];
         QPolygonF poly = (i < uniquePolygons.size()) ? uniquePolygons[i] : QPolygonF();
         SpriteToPack &s = sprites[i];
         s.origIndex = i;
-        s.image = img;
+
+        // Clip image strictly to polygon envelope so only pixels inside the polygon are kept
+        if (!poly.isEmpty() && poly.size() >= 3 && !srcImg.isNull()) {
+            QImage mask(srcImg.size(), QImage::Format_ARGB32_Premultiplied);
+            mask.fill(Qt::transparent);
+            {
+                QPainter mp(&mask);
+                mp.setRenderHint(QPainter::Antialiasing, false);
+                mp.setBrush(Qt::white);
+                mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+                mp.drawPolygon(poly);
+            }
+            QImage cleanImg = srcImg.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+            {
+                QPainter p(&cleanImg);
+                p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                p.drawImage(0, 0, mask);
+            }
+            s.image = cleanImg.convertToFormat(QImage::Format_ARGB32);
+        } else {
+            s.image = srcImg;
+        }
+
         s.polygon = poly;
-        s.w = img.width();
-        s.h = img.height();
-        s.mask = createDilatedMask(img, poly, effectivePad);
+        s.w = s.image.width();
+        s.h = s.image.height();
+        s.mask = createDilatedMask(s.image, poly, effectivePad);
         buildSpans(s);
     });
 

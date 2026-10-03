@@ -151,8 +151,9 @@ add_test(NAME test_mesh COMMAND test_mesh)
 
 # 7. test_pixel_editor
 add_executable(test_pixel_editor test_pixel_editor.cpp)
+target_include_directories(test_pixel_editor PRIVATE ${PLUGIN_INCLUDES})
 target_compile_definitions(test_pixel_editor PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
-target_link_libraries(test_pixel_editor PRIVATE BentoPackWidgets BentoPackCore Qt6::Test)
+target_link_libraries(test_pixel_editor PRIVATE BentoPackWidgets BentoPackCore ${ALL_FILTER_PLUGINS} Qt6::Test)
 set_target_properties(test_pixel_editor PROPERTIES WIN32_EXECUTABLE FALSE)
 if (MINGW)
     target_link_options(test_pixel_editor PRIVATE -mconsole)

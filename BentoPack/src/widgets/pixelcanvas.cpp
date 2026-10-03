@@ -67,9 +67,13 @@ static QRect computeDirtyRect(const QImage &img1, const QImage &img2)
 class PixelCanvasUndoCommand : public QUndoCommand
 {
 public:
-    PixelCanvasUndoCommand(PixelCanvas *canvas, const QImage &oldImg, const QImage &newImg, const QString &text, QUndoCommand *parent = nullptr)
+    PixelCanvasUndoCommand(PixelCanvas *canvas, const QImage &oldImg, const QImage &newImg,
+                           const QPolygonF &oldPoly, const QPolygonF &newPoly,
+                           const QString &text, QUndoCommand *parent = nullptr)
         : QUndoCommand(text, parent)
         , m_canvas(canvas)
+        , m_oldPoly(oldPoly)
+        , m_newPoly(newPoly)
         , m_firstExecution(true)
     {
         m_dirtyRect = computeDirtyRect(oldImg, newImg);
@@ -94,14 +98,32 @@ public:
         }
     }
 
-    bool isEmpty() const { return m_isEmpty; }
+    bool isEmpty() const {
+        return m_isEmpty && (m_oldPoly == m_newPoly);
+    }
+
+    void setCustomUndoRedo(const std::function<void()> &undoFunc, const std::function<void()> &redoFunc) {
+        m_customUndo = undoFunc;
+        m_customRedo = redoFunc;
+    }
 
     void undo() override {
-        if (!m_canvas || m_isEmpty) return;
-        if (m_isFullImage) {
-            m_canvas->setImage(m_oldImage);
-        } else {
-            m_canvas->applyPatch(m_dirtyRect, m_oldPatch);
+        if (m_customUndo) {
+            m_customUndo();
+            return;
+        }
+        QUndoCommand::undo();
+        if (!m_canvas) return;
+        if (!m_isEmpty) {
+            if (m_isFullImage) {
+                m_canvas->setImage(m_oldImage);
+            } else {
+                m_canvas->applyPatch(m_dirtyRect, m_oldPatch);
+            }
+        }
+        if (m_oldPoly != m_newPoly) {
+            m_canvas->setPolygonMesh(m_oldPoly);
+            emit m_canvas->polygonMeshChanged(m_oldPoly);
         }
     }
 
@@ -110,11 +132,22 @@ public:
             m_firstExecution = false;
             return;
         }
-        if (!m_canvas || m_isEmpty) return;
-        if (m_isFullImage) {
-            m_canvas->setImage(m_newImage);
-        } else {
-            m_canvas->applyPatch(m_dirtyRect, m_newPatch);
+        if (m_customRedo) {
+            m_customRedo();
+            return;
+        }
+        QUndoCommand::redo();
+        if (!m_canvas) return;
+        if (!m_isEmpty) {
+            if (m_isFullImage) {
+                m_canvas->setImage(m_newImage);
+            } else {
+                m_canvas->applyPatch(m_dirtyRect, m_newPatch);
+            }
+        }
+        if (m_oldPoly != m_newPoly) {
+            m_canvas->setPolygonMesh(m_newPoly);
+            emit m_canvas->polygonMeshChanged(m_newPoly);
         }
     }
 
@@ -125,10 +158,23 @@ private:
     QImage       m_newPatch;
     QImage       m_oldImage;
     QImage       m_newImage;
+    QPolygonF    m_oldPoly;
+    QPolygonF    m_newPoly;
+    std::function<void()> m_customUndo;
+    std::function<void()> m_customRedo;
     bool         m_isFullImage = false;
     bool         m_isEmpty = false;
     bool         m_firstExecution = true;
 };
+}
+
+void PixelCanvas::setCommandCustomUndoRedo(QUndoCommand *cmd,
+                                          const std::function<void()> &undoFunc,
+                                          const std::function<void()> &redoFunc)
+{
+    if (auto *pcmd = dynamic_cast<PixelCanvasUndoCommand*>(cmd)) {
+        pcmd->setCustomUndoRedo(undoFunc, redoFunc);
+    }
 }
 
 PixelCanvas::PixelCanvas(QWidget *parent)
@@ -149,9 +195,246 @@ void PixelCanvas::setImage(const QImage &image)
         m_image = image.convertToFormat(QImage::Format_ARGB32);
     }
     deselect();
+    updatePolygonMask();
     updateCanvasSize();
+    updateOnionSkinComposite();
     emit imageChanged();
     update();
+}
+
+void PixelCanvas::setOnionSkinEnabled(bool enabled)
+{
+    if (m_onionSkinEnabled != enabled) {
+        m_onionSkinEnabled = enabled;
+        updateOnionSkinComposite();
+    }
+}
+
+void PixelCanvas::setOnionSkinLayers(const QVector<OnionSkinLayer> &layers)
+{
+    m_onionSkinLayers = layers;
+    updateOnionSkinComposite();
+}
+
+void PixelCanvas::setOnionSkinOpacity(int percent)
+{
+    int clamped = std::clamp(percent, 0, 100);
+    if (m_onionSkinOpacityPercent != clamped) {
+        m_onionSkinOpacityPercent = clamped;
+        updateOnionSkinComposite();
+    }
+}
+
+void PixelCanvas::setOnionSkinEffect(OnionSkinEffect effect)
+{
+    if (m_onionSkinEffect != effect) {
+        m_onionSkinEffect = effect;
+        updateOnionSkinComposite();
+    }
+}
+
+QImage PixelCanvas::processOnionSkinLayer(const QImage &src, int relativeOffset, int opacityPercent, OnionSkinEffect effect, const QSize &targetSize)
+{
+    if (src.isNull() || targetSize.isEmpty() || opacityPercent <= 0) {
+        return QImage();
+    }
+
+    QImage srcArgb = (src.format() == QImage::Format_ARGB32 || src.format() == QImage::Format_ARGB32_Premultiplied)
+                     ? src : src.convertToFormat(QImage::Format_ARGB32);
+
+    QSize actualSize = targetSize.isEmpty() ? srcArgb.size() : targetSize;
+    QImage out(actualSize, QImage::Format_ARGB32);
+    out.fill(Qt::transparent);
+
+    int dist = std::max(1, std::abs(relativeOffset));
+    double falloff = 1.0;
+    if (dist == 2) {
+        falloff = 0.65;
+    } else if (dist >= 3) {
+        falloff = 0.40;
+    }
+
+    double effOpacity = std::clamp((opacityPercent / 100.0) * falloff, 0.0, 1.0);
+    if (effOpacity <= 0.001) {
+        return out;
+    }
+
+    int copyW = std::min(actualSize.width(), srcArgb.width());
+    int copyH = std::min(actualSize.height(), srcArgb.height());
+
+    switch (effect) {
+    case OnionSkinEffect::TintedBlueRed: {
+        // Past (offset < 0): Electric Sky Blue (0, 160, 255); Future: Vivid Red (255, 60, 60)
+        QRgb tint = (relativeOffset < 0) ? qRgb(0, 160, 255) : qRgb(255, 60, 60);
+        int tintR = qRed(tint);
+        int tintG = qGreen(tint);
+        int tintB = qBlue(tint);
+
+        for (int y = 0; y < copyH; ++y) {
+            const QRgb *srcLine = reinterpret_cast<const QRgb*>(srcArgb.constScanLine(y));
+            QRgb *dstLine = reinterpret_cast<QRgb*>(out.scanLine(y));
+            for (int x = 0; x < copyW; ++x) {
+                int srcA = qAlpha(srcLine[x]);
+                if (srcA == 0) continue;
+                int lum = qGray(srcLine[x]);
+                int r = std::clamp((tintR * (lum + 128)) / 384, 0, 255);
+                int g = std::clamp((tintG * (lum + 128)) / 384, 0, 255);
+                int b = std::clamp((tintB * (lum + 128)) / 384, 0, 255);
+                int a = std::clamp(static_cast<int>(std::round(srcA * effOpacity)), 0, 255);
+                dstLine[x] = qRgba(r, g, b, a);
+            }
+        }
+        break;
+    }
+
+    case OnionSkinEffect::EdgeDetection: {
+        // Border / Contour 1px only
+        QRgb tint = (relativeOffset < 0) ? qRgb(0, 220, 255) : qRgb(255, 80, 80);
+        int tintR = qRed(tint);
+        int tintG = qGreen(tint);
+        int tintB = qBlue(tint);
+
+        for (int y = 0; y < copyH; ++y) {
+            QRgb *dstLine = reinterpret_cast<QRgb*>(out.scanLine(y));
+            for (int x = 0; x < copyW; ++x) {
+                int srcA = qAlpha(srcArgb.pixel(x, y));
+                if (srcA <= 20) continue;
+
+                // 4-connected boundary check
+                bool isBorder = (x == 0 || x == srcArgb.width() - 1 || y == 0 || y == srcArgb.height() - 1);
+                if (!isBorder) {
+                    if (qAlpha(srcArgb.pixel(x - 1, y)) <= 20 ||
+                        qAlpha(srcArgb.pixel(x + 1, y)) <= 20 ||
+                        qAlpha(srcArgb.pixel(x, y - 1)) <= 20 ||
+                        qAlpha(srcArgb.pixel(x, y + 1)) <= 20) {
+                        isBorder = true;
+                    }
+                }
+
+                if (isBorder) {
+                    int a = std::clamp(static_cast<int>(std::round(255 * effOpacity)), 0, 255);
+                    dstLine[x] = qRgba(tintR, tintG, tintB, a);
+                }
+            }
+        }
+        break;
+    }
+
+    case OnionSkinEffect::ChannelR: {
+        for (int y = 0; y < copyH; ++y) {
+            const QRgb *srcLine = reinterpret_cast<const QRgb*>(srcArgb.constScanLine(y));
+            QRgb *dstLine = reinterpret_cast<QRgb*>(out.scanLine(y));
+            for (int x = 0; x < copyW; ++x) {
+                int srcA = qAlpha(srcLine[x]);
+                if (srcA == 0) continue;
+                int r = qRed(srcLine[x]);
+                int a = std::clamp(static_cast<int>(std::round(srcA * effOpacity)), 0, 255);
+                dstLine[x] = qRgba(r, 0, 0, a);
+            }
+        }
+        break;
+    }
+
+    case OnionSkinEffect::ChannelG: {
+        for (int y = 0; y < copyH; ++y) {
+            const QRgb *srcLine = reinterpret_cast<const QRgb*>(srcArgb.constScanLine(y));
+            QRgb *dstLine = reinterpret_cast<QRgb*>(out.scanLine(y));
+            for (int x = 0; x < copyW; ++x) {
+                int srcA = qAlpha(srcLine[x]);
+                if (srcA == 0) continue;
+                int g = qGreen(srcLine[x]);
+                int a = std::clamp(static_cast<int>(std::round(srcA * effOpacity)), 0, 255);
+                dstLine[x] = qRgba(0, g, 0, a);
+            }
+        }
+        break;
+    }
+
+    case OnionSkinEffect::ChannelB: {
+        for (int y = 0; y < copyH; ++y) {
+            const QRgb *srcLine = reinterpret_cast<const QRgb*>(srcArgb.constScanLine(y));
+            QRgb *dstLine = reinterpret_cast<QRgb*>(out.scanLine(y));
+            for (int x = 0; x < copyW; ++x) {
+                int srcA = qAlpha(srcLine[x]);
+                if (srcA == 0) continue;
+                int b = qBlue(srcLine[x]);
+                int a = std::clamp(static_cast<int>(std::round(srcA * effOpacity)), 0, 255);
+                dstLine[x] = qRgba(0, 0, b, a);
+            }
+        }
+        break;
+    }
+
+    case OnionSkinEffect::Silhouette: {
+        for (int y = 0; y < copyH; ++y) {
+            const QRgb *srcLine = reinterpret_cast<const QRgb*>(srcArgb.constScanLine(y));
+            QRgb *dstLine = reinterpret_cast<QRgb*>(out.scanLine(y));
+            for (int x = 0; x < copyW; ++x) {
+                int srcA = qAlpha(srcLine[x]);
+                if (srcA == 0) continue;
+                int a = std::clamp(static_cast<int>(std::round(srcA * effOpacity * 0.85)), 0, 255);
+                dstLine[x] = qRgba(225, 230, 240, a);
+            }
+        }
+        break;
+    }
+
+    case OnionSkinEffect::TrueColor: {
+        for (int y = 0; y < copyH; ++y) {
+            const QRgb *srcLine = reinterpret_cast<const QRgb*>(srcArgb.constScanLine(y));
+            QRgb *dstLine = reinterpret_cast<QRgb*>(out.scanLine(y));
+            for (int x = 0; x < copyW; ++x) {
+                int srcA = qAlpha(srcLine[x]);
+                if (srcA == 0) continue;
+                int a = std::clamp(static_cast<int>(std::round(srcA * effOpacity)), 0, 255);
+                dstLine[x] = qRgba(qRed(srcLine[x]), qGreen(srcLine[x]), qBlue(srcLine[x]), a);
+            }
+        }
+        break;
+    }
+    }
+
+    return out;
+}
+
+void PixelCanvas::updateOnionSkinComposite()
+{
+    if (!m_onionSkinEnabled || m_image.isNull() || m_onionSkinLayers.isEmpty() || m_onionSkinOpacityPercent <= 0) {
+        m_onionSkinComposite = QImage();
+        update();
+        return;
+    }
+
+    QImage composite(canvasSize(), QImage::Format_ARGB32);
+    composite.fill(Qt::transparent);
+
+    // Sort layers: draw furthest first (dist=3, then 2, then 1 so closer layers overlay nicely)
+    QVector<OnionSkinLayer> sorted = m_onionSkinLayers;
+    std::sort(sorted.begin(), sorted.end(), [](const OnionSkinLayer &a, const OnionSkinLayer &b) {
+        return std::abs(a.relativeOffset) > std::abs(b.relativeOffset);
+    });
+
+    QPainter painter(&composite);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+    for (const auto &layer : sorted) {
+        if (layer.image.isNull() || layer.relativeOffset == 0) continue;
+        QImage processed = processOnionSkinLayer(layer.image, layer.relativeOffset, m_onionSkinOpacityPercent, m_onionSkinEffect, layer.image.size());
+        if (!processed.isNull()) {
+            painter.drawImage(layer.alignmentOffset, processed);
+        }
+    }
+    painter.end();
+
+    m_onionSkinComposite = composite;
+    update();
+}
+
+void PixelCanvas::drawOnionSkins(QPainter &painter)
+{
+    if (!m_onionSkinEnabled || m_onionSkinComposite.isNull()) return;
+    QRect targetRect(0, 0, width(), height());
+    painter.drawImage(targetRect, m_onionSkinComposite);
 }
 
 QImage PixelCanvas::image() const
@@ -220,9 +503,10 @@ void PixelCanvas::zoomOut()
 
 void PixelCanvas::zoomFit(const QSize &viewportSize)
 {
-    if (m_image.isNull() || viewportSize.width() <= 0 || viewportSize.height() <= 0) return;
-    double scaleX = static_cast<double>(viewportSize.width() - 32) / std::max(1, m_image.width());
-    double scaleY = static_cast<double>(viewportSize.height() - 32) / std::max(1, m_image.height());
+    QSize sz = canvasSize();
+    if (sz.isEmpty() || viewportSize.width() <= 0 || viewportSize.height() <= 0) return;
+    double scaleX = static_cast<double>(viewportSize.width() - 32) / std::max(1, sz.width());
+    double scaleY = static_cast<double>(viewportSize.height() - 32) / std::max(1, sz.height());
     double best = std::floor(std::min(scaleX, scaleY));
     setZoom(std::clamp(best, 1.0, 32.0));
 }
@@ -269,7 +553,7 @@ void PixelCanvas::clearSelection()
     if (hasSelection()) {
         for (int y = m_selectionRect.top(); y <= m_selectionRect.bottom(); ++y) {
             for (int x = m_selectionRect.left(); x <= m_selectionRect.right(); ++x) {
-                if (isPixelInside(x, y) && isPixelSelected(x, y)) {
+                if (isPixelEditable(x, y)) {
                     if (qAlpha(m_image.pixel(x, y)) != 0) {
                         m_image.setPixelColor(x, y, Qt::transparent);
                         anyChanged = true;
@@ -278,14 +562,24 @@ void PixelCanvas::clearSelection()
             }
         }
     } else {
-        if (!m_image.isNull()) {
-            m_image.fill(Qt::transparent);
-            anyChanged = true;
+        for (int y = 0; y < m_image.height(); ++y) {
+            for (int x = 0; x < m_image.width(); ++x) {
+                if (isPixelEditable(x, y)) {
+                    if (qAlpha(m_image.pixel(x, y)) != 0) {
+                        m_image.setPixelColor(x, y, Qt::transparent);
+                        anyChanged = true;
+                    }
+                }
+            }
         }
     }
 
     if (anyChanged) {
-        pushSnapshot(oldImg, tr("Clear Pixels"));
+        m_lastActionData = CanvasActionData();
+        m_lastActionData.action = CanvasAction::Clear;
+        m_lastActionData.hasSelection = hasSelection();
+        m_lastActionData.selectionRect = m_selectionRect;
+        pushSnapshot(oldImg, tr("Clear Pixels"), QPolygonF(), CanvasAction::Clear);
         emit imageChanged();
         update();
     }
@@ -342,14 +636,49 @@ void PixelCanvas::commitFloatingSelection()
     if (!m_hasFloating) return;
 
     QImage oldImg = m_image;
-    QPainter p(&m_image);
-    p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    p.drawImage(m_floatingPixelPos, m_floatingImage);
-    p.end();
+    if (!m_allowEditingOutsidePolygon && hasPolygonMesh()) {
+        int fw = m_floatingImage.width();
+        int fh = m_floatingImage.height();
+        for (int y = 0; y < fh; ++y) {
+            for (int x = 0; x < fw; ++x) {
+                int tx = m_floatingPixelPos.x() + x;
+                int ty = m_floatingPixelPos.y() + y;
+                if (isPixelEditable(tx, ty)) {
+                    QColor srcCol = m_floatingImage.pixelColor(x, y);
+                    if (srcCol.alpha() > 0) {
+                        if (srcCol.alpha() == 255) {
+                            m_image.setPixelColor(tx, ty, srcCol);
+                        } else {
+                            QColor dstCol = m_image.pixelColor(tx, ty);
+                            int a = srcCol.alpha();
+                            int invA = 255 - a;
+                            int outA = a + (dstCol.alpha() * invA) / 255;
+                            if (outA > 0) {
+                                int r = (srcCol.red() * a + dstCol.red() * dstCol.alpha() * invA / 255) / outA;
+                                int g = (srcCol.green() * a + dstCol.green() * dstCol.alpha() * invA / 255) / outA;
+                                int b = (srcCol.blue() * a + dstCol.blue() * dstCol.alpha() * invA / 255) / outA;
+                                m_image.setPixelColor(tx, ty, QColor(r, g, b, outA));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        QPainter p(&m_image);
+        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        p.drawImage(m_floatingPixelPos, m_floatingImage);
+        p.end();
+    }
 
+    m_lastActionData = CanvasActionData();
+    m_lastActionData.action = CanvasAction::Paste;
+    m_lastActionData.hasSelection = hasSelection();
+    m_lastActionData.selectionRect = m_selectionRect;
+    m_lastActionData.pos = m_floatingPixelPos;
     m_hasFloating = false;
     m_floatingImage = QImage();
-    pushSnapshot(oldImg, tr("Paste"));
+    pushSnapshot(oldImg, tr("Paste"), QPolygonF(), CanvasAction::Paste);
     emit imageChanged();
     update();
 }
@@ -359,6 +688,7 @@ void PixelCanvas::flipHorizontal()
     commitFloatingSelection();
     if (m_image.isNull()) return;
     QImage oldImg = m_image;
+    QPolygonF oldPoly = m_polygonMesh;
 
     if (hasSelection()) {
         QRect r = m_selectionRect.intersected(m_image.rect());
@@ -371,15 +701,39 @@ void PixelCanvas::flipHorizontal()
                 m_image.setPixelColor(rightX, y, temp);
             }
         }
+        if (!m_allowEditingOutsidePolygon && hasPolygonMesh() && !m_polygonMask.isEmpty()) {
+            for (int y = r.top(); y <= r.bottom(); ++y) {
+                for (int x = r.left(); x <= r.right(); ++x) {
+                    if (!isPixelInsidePolygon(x, y)) {
+                        m_image.setPixelColor(x, y, oldImg.pixelColor(x, y));
+                    }
+                }
+            }
+        }
     } else {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
         m_image = m_image.flipped(Qt::Horizontal);
 #else
         m_image = m_image.mirrored(true, false);
 #endif
+        if (hasPolygonMesh()) {
+            QPolygonF flippedPoly;
+            flippedPoly.reserve(m_polygonMesh.size());
+            double w = m_image.width();
+            for (const QPointF &pt : m_polygonMesh) {
+                flippedPoly.append(QPointF(w - pt.x(), pt.y()));
+            }
+            m_polygonMesh = flippedPoly;
+            updatePolygonMask();
+            emit polygonMeshChanged(m_polygonMesh);
+        }
     }
 
-    pushSnapshot(oldImg, tr("Flip Horizontal"));
+    m_lastActionData = CanvasActionData();
+    m_lastActionData.action = CanvasAction::FlipHorizontal;
+    m_lastActionData.hasSelection = hasSelection();
+    m_lastActionData.selectionRect = m_selectionRect;
+    pushSnapshot(oldImg, tr("Flip Horizontal"), oldPoly, CanvasAction::FlipHorizontal);
     emit imageChanged();
     update();
 }
@@ -389,6 +743,7 @@ void PixelCanvas::flipVertical()
     commitFloatingSelection();
     if (m_image.isNull()) return;
     QImage oldImg = m_image;
+    QPolygonF oldPoly = m_polygonMesh;
 
     if (hasSelection()) {
         QRect r = m_selectionRect.intersected(m_image.rect());
@@ -401,15 +756,39 @@ void PixelCanvas::flipVertical()
                 m_image.setPixelColor(x, botY, temp);
             }
         }
+        if (!m_allowEditingOutsidePolygon && hasPolygonMesh() && !m_polygonMask.isEmpty()) {
+            for (int y = r.top(); y <= r.bottom(); ++y) {
+                for (int x = r.left(); x <= r.right(); ++x) {
+                    if (!isPixelInsidePolygon(x, y)) {
+                        m_image.setPixelColor(x, y, oldImg.pixelColor(x, y));
+                    }
+                }
+            }
+        }
     } else {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
         m_image = m_image.flipped(Qt::Vertical);
 #else
         m_image = m_image.mirrored(false, true);
 #endif
+        if (hasPolygonMesh()) {
+            QPolygonF flippedPoly;
+            flippedPoly.reserve(m_polygonMesh.size());
+            double h = m_image.height();
+            for (const QPointF &pt : m_polygonMesh) {
+                flippedPoly.append(QPointF(pt.x(), h - pt.y()));
+            }
+            m_polygonMesh = flippedPoly;
+            updatePolygonMask();
+            emit polygonMeshChanged(m_polygonMesh);
+        }
     }
 
-    pushSnapshot(oldImg, tr("Flip Vertical"));
+    m_lastActionData = CanvasActionData();
+    m_lastActionData.action = CanvasAction::FlipVertical;
+    m_lastActionData.hasSelection = hasSelection();
+    m_lastActionData.selectionRect = m_selectionRect;
+    pushSnapshot(oldImg, tr("Flip Vertical"), oldPoly, CanvasAction::FlipVertical);
     emit imageChanged();
     update();
 }
@@ -419,25 +798,64 @@ void PixelCanvas::rotate90CW()
     commitFloatingSelection();
     if (m_image.isNull()) return;
     QImage oldImg = m_image;
+    QPolygonF oldPoly = m_polygonMesh;
+    int oldH = m_image.height();
 
     QTransform t;
     t.rotate(90.0);
     m_image = m_image.transformed(t).convertToFormat(QImage::Format_ARGB32);
 
+    if (hasPolygonMesh()) {
+        QPolygonF rotatedPoly;
+        rotatedPoly.reserve(m_polygonMesh.size());
+        for (const QPointF &pt : m_polygonMesh) {
+            // Clockwise 90° rotation: x' = oldH - y, y' = x
+            rotatedPoly.append(QPointF(static_cast<double>(oldH) - pt.y(), pt.x()));
+        }
+        m_polygonMesh = rotatedPoly;
+        updatePolygonMask();
+        emit polygonMeshChanged(m_polygonMesh);
+    }
+
     deselect();
+    if (m_canvasSize.isValid() && !m_canvasSize.isEmpty()) {
+        m_canvasSize = m_canvasSize.expandedTo(m_image.size());
+    }
     updateCanvasSize();
-    pushSnapshot(oldImg, tr("Rotate 90°"));
+    m_lastActionData = CanvasActionData();
+    m_lastActionData.action = CanvasAction::Rotate90CW;
+    m_lastActionData.hasSelection = hasSelection();
+    m_lastActionData.selectionRect = m_selectionRect;
+    pushSnapshot(oldImg, tr("Rotate 90°"), oldPoly, CanvasAction::Rotate90CW);
     emit imageChanged();
     update();
 }
 
-void PixelCanvas::pushSnapshot(const QImage &oldImage, const QString &text)
+void PixelCanvas::pushSnapshot(const QImage &oldImage, const QString &text, const QPolygonF &oldPolygon, CanvasAction action)
 {
-    auto *cmd = new PixelCanvasUndoCommand(this, oldImage, m_image, text);
+    if (action == CanvasAction::FloodFill && (m_lastActionData.action != CanvasAction::FloodFill || !m_lastActionData.color.isValid())) {
+        m_lastActionData = CanvasActionData();
+        m_lastActionData.action = CanvasAction::FloodFill;
+        m_lastActionData.hasSelection = hasSelection();
+        m_lastActionData.selectionRect = m_selectionRect;
+        for (int y = 0; y < m_image.height(); ++y) {
+            for (int x = 0; x < m_image.width(); ++x) {
+                if (oldImage.isNull() || m_image.pixel(x, y) != oldImage.pixel(x, y)) {
+                    m_lastActionData.pos = QPoint(x, y);
+                    m_lastActionData.color = QColor(m_image.pixel(x, y));
+                    break;
+                }
+            }
+            if (m_lastActionData.color.isValid()) break;
+        }
+    }
+    QPolygonF oldP = oldPolygon.isEmpty() ? m_polygonMesh : oldPolygon;
+    auto *cmd = new PixelCanvasUndoCommand(this, oldImage, m_image, oldP, m_polygonMesh, text);
     if (cmd->isEmpty()) {
         delete cmd;
         return;
     }
+    emit modificationPushed(oldImage, m_image, oldP, m_polygonMesh, action, cmd);
     m_undoStack.push(cmd);
 }
 
@@ -457,38 +875,65 @@ void PixelCanvas::applyPatch(const QRect &rect, const QImage &patch)
     update(widgetDirty);
 }
 
+QSize PixelCanvas::canvasSize() const
+{
+    if (m_canvasSize.isValid() && !m_canvasSize.isEmpty()) {
+        return m_canvasSize;
+    }
+    return m_image.isNull() ? QSize(32, 32) : m_image.size();
+}
+
+void PixelCanvas::setCanvasEnvelope(const QSize &canvasSize, const QPoint &imageOffset, const QPoint &pivotPos)
+{
+    m_canvasSize = canvasSize;
+    m_imageOffset = imageOffset;
+    m_pivotPos = pivotPos;
+    updateCanvasSize();
+    updateOnionSkinComposite();
+    update();
+}
+
+void PixelCanvas::setShowPivot(bool show)
+{
+    if (m_showPivot != show) {
+        m_showPivot = show;
+        update();
+    }
+}
+
 void PixelCanvas::updateCanvasSize()
 {
-    if (m_image.isNull()) {
+    QSize sz = canvasSize();
+    if (sz.isEmpty()) {
         setFixedSize(64, 64);
         return;
     }
-    int w = std::max(1, static_cast<int>(std::round(m_image.width() * m_zoom)));
-    int h = std::max(1, static_cast<int>(std::round(m_image.height() * m_zoom)));
+    int w = std::max(1, static_cast<int>(std::round(sz.width() * m_zoom)));
+    int h = std::max(1, static_cast<int>(std::round(sz.height() * m_zoom)));
     setFixedSize(w, h);
 }
 
 QPoint PixelCanvas::widgetToPixel(const QPoint &widgetPos) const
 {
     if (m_zoom <= 0.0) return QPoint(-1, -1);
-    int px = static_cast<int>(std::floor(widgetPos.x() / m_zoom));
-    int py = static_cast<int>(std::floor(widgetPos.y() / m_zoom));
+    int px = static_cast<int>(std::floor(widgetPos.x() / m_zoom)) - m_imageOffset.x();
+    int py = static_cast<int>(std::floor(widgetPos.y() / m_zoom)) - m_imageOffset.y();
     return QPoint(px, py);
 }
 
 QPoint PixelCanvas::pixelToWidget(const QPoint &pixelPos) const
 {
-    return QPoint(static_cast<int>(std::floor(pixelPos.x() * m_zoom)),
-                  static_cast<int>(std::floor(pixelPos.y() * m_zoom)));
+    return QPoint(static_cast<int>(std::floor((pixelPos.x() + m_imageOffset.x()) * m_zoom)),
+                  static_cast<int>(std::floor((pixelPos.y() + m_imageOffset.y()) * m_zoom)));
 }
 
 QRect PixelCanvas::pixelToWidget(const QRect &pixelRect) const
 {
     if (m_zoom <= 0.0 || pixelRect.isEmpty()) return QRect();
-    int x1 = static_cast<int>(std::floor(pixelRect.left() * m_zoom));
-    int y1 = static_cast<int>(std::floor(pixelRect.top() * m_zoom));
-    int x2 = static_cast<int>(std::ceil((pixelRect.right() + 1) * m_zoom));
-    int y2 = static_cast<int>(std::ceil((pixelRect.bottom() + 1) * m_zoom));
+    int x1 = static_cast<int>(std::floor((pixelRect.left() + m_imageOffset.x()) * m_zoom));
+    int y1 = static_cast<int>(std::floor((pixelRect.top() + m_imageOffset.y()) * m_zoom));
+    int x2 = static_cast<int>(std::ceil((pixelRect.right() + 1 + m_imageOffset.x()) * m_zoom));
+    int y2 = static_cast<int>(std::ceil((pixelRect.bottom() + 1 + m_imageOffset.y()) * m_zoom));
     return QRect(x1, y1, x2 - x1, y2 - y1);
 }
 
@@ -507,6 +952,27 @@ bool PixelCanvas::isPixelSelected(int x, int y) const
     return (idx >= 0 && idx < m_selectionMask.size()) ? m_selectionMask[idx] : false;
 }
 
+bool PixelCanvas::isPixelInsidePolygon(int x, int y) const
+{
+    if (!hasPolygonMesh()) return true;
+    if (x < 0 || x >= m_image.width() || y < 0 || y >= m_image.height()) return false;
+    if (m_polygonMask.isEmpty()) {
+        return m_polygonMesh.containsPoint(QPointF(x + 0.5, y + 0.5), Qt::OddEvenFill);
+    }
+    int idx = y * m_image.width() + x;
+    return (idx >= 0 && idx < m_polygonMask.size()) ? m_polygonMask[idx] : false;
+}
+
+bool PixelCanvas::isPixelEditable(int x, int y) const
+{
+    if (!isPixelInside(x, y)) return false;
+    if (!isPixelSelected(x, y)) return false;
+    if (!m_allowEditingOutsidePolygon && hasPolygonMesh()) {
+        if (!isPixelInsidePolygon(x, y)) return false;
+    }
+    return true;
+}
+
 void PixelCanvas::drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor &color)
 {
     int dx = std::abs(x1 - x0);
@@ -516,7 +982,7 @@ void PixelCanvas::drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor
     int err = dx - dy;
 
     while (true) {
-        if (isPixelInside(x0, y0) && isPixelSelected(x0, y0)) {
+        if (isPixelEditable(x0, y0)) {
             m_image.setPixelColor(x0, y0, color);
         }
         if (x0 == x1 && y0 == y1) break;
@@ -534,7 +1000,7 @@ void PixelCanvas::drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor
 
 void PixelCanvas::applyFloodFill(int startX, int startY, const QColor &replacementColor)
 {
-    if (!isPixelInside(startX, startY) || !isPixelSelected(startX, startY)) return;
+    if (!isPixelEditable(startX, startY)) return;
     QRgb targetRgb = m_image.pixel(startX, startY);
     QRgb replaceRgb = replacementColor.rgba();
     if (targetRgb == replaceRgb) return;
@@ -562,7 +1028,7 @@ void PixelCanvas::applyFloodFill(int startX, int startY, const QColor &replaceme
             int ny = y + dy[i];
             if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
                 int idx = ny * w + nx;
-                if (!visited[idx] && isPixelSelected(nx, ny) && m_image.pixel(nx, ny) == targetRgb) {
+                if (!visited[idx] && isPixelEditable(nx, ny) && m_image.pixel(nx, ny) == targetRgb) {
                     visited[idx] = true;
                     queue.enqueue(QPoint(nx, ny));
                 }
@@ -570,7 +1036,13 @@ void PixelCanvas::applyFloodFill(int startX, int startY, const QColor &replaceme
         }
     }
 
-    pushSnapshot(oldImg, tr("Flood Fill"));
+    m_lastActionData = CanvasActionData();
+    m_lastActionData.action = CanvasAction::FloodFill;
+    m_lastActionData.pos = QPoint(startX, startY);
+    m_lastActionData.color = replacementColor;
+    m_lastActionData.hasSelection = hasSelection();
+    m_lastActionData.selectionRect = m_selectionRect;
+    pushSnapshot(oldImg, tr("Flood Fill"), QPolygonF(), CanvasAction::FloodFill);
     emit imageChanged();
     update();
 }
@@ -688,7 +1160,44 @@ void PixelCanvas::drawFloatingStamp(QPainter &painter)
 void PixelCanvas::setPolygonMesh(const QPolygonF &polygon)
 {
     m_polygonMesh = polygon;
+    updatePolygonMask();
     update();
+}
+
+void PixelCanvas::setAllowEditingOutsidePolygon(bool allow)
+{
+    if (m_allowEditingOutsidePolygon != allow) {
+        m_allowEditingOutsidePolygon = allow;
+        update();
+    }
+}
+
+void PixelCanvas::updatePolygonMask()
+{
+    m_polygonMask.clear();
+    if (m_polygonMesh.size() < 3 || m_image.isNull()) return;
+
+    int w = m_image.width();
+    int h = m_image.height();
+    if (w <= 0 || h <= 0) return;
+
+    QImage mask(w, h, QImage::Format_Alpha8);
+    mask.fill(0);
+    {
+        QPainter mp(&mask);
+        mp.setRenderHint(QPainter::Antialiasing, false);
+        mp.setBrush(Qt::white);
+        mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+        mp.drawPolygon(m_polygonMesh);
+    }
+
+    m_polygonMask.resize(w * h);
+    for (int y = 0; y < h; ++y) {
+        const uchar *scan = mask.constScanLine(y);
+        for (int x = 0; x < w; ++x) {
+            m_polygonMask[y * w + x] = (scan[x] > 0);
+        }
+    }
 }
 
 void PixelCanvas::drawPolygonMesh(QPainter &painter)
@@ -723,9 +1232,23 @@ void PixelCanvas::paintEvent(QPaintEvent *event)
     // 1. Checkerboard
     drawCheckerboard(painter, rect());
 
-    // 2. Sprite image
-    QRect targetRect(0, 0, width(), height());
+    // 1b. Onion Skin layers (rendered directly under the active sprite)
+    drawOnionSkins(painter);
+
+    // 2. Active frame sprite image and local overlays
+    painter.save();
+    painter.translate(m_imageOffset.x() * m_zoom, m_imageOffset.y() * m_zoom);
+
+    QRect targetRect(0, 0,
+                     static_cast<int>(std::round(m_image.width() * m_zoom)),
+                     static_cast<int>(std::round(m_image.height() * m_zoom)));
     painter.drawImage(targetRect, m_image);
+
+    // If canvas envelope is larger than active frame, draw subtle frame boundary
+    if (m_canvasSize.isValid() && !m_canvasSize.isEmpty() && m_canvasSize != m_image.size()) {
+        painter.setPen(QPen(QColor(100, 116, 139, 140), 1.0, Qt::DashLine));
+        painter.drawRect(targetRect.adjusted(0, 0, -1, -1));
+    }
 
     // 3. Floating pasted stamp
     drawFloatingStamp(painter);
@@ -738,21 +1261,69 @@ void PixelCanvas::paintEvent(QPaintEvent *event)
 
     // 6. Selection bounds
     drawSelectionBorder(painter);
+
+    painter.restore();
+
+    // 7. Pivot Anchor Marker
+    if (m_showPivot) {
+        drawPivotMarker(painter);
+    }
+}
+
+void PixelCanvas::drawPivotMarker(QPainter &painter)
+{
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    double cx = m_pivotPos.x() * m_zoom;
+    double cy = m_pivotPos.y() * m_zoom;
+
+    const double radius = 5.0;
+    const double arm = 9.0;
+
+    // Outer dark halo for contrast
+    QPen darkPen(QColor(15, 23, 42, 210), 2.6, Qt::SolidLine, Qt::RoundCap);
+    painter.setPen(darkPen);
+    painter.setBrush(Qt::NoBrush);
+    painter.drawEllipse(QPointF(cx, cy), radius, radius);
+    painter.drawLine(QPointF(cx - arm, cy), QPointF(cx + arm, cy));
+    painter.drawLine(QPointF(cx, cy - arm), QPointF(cx, cy + arm));
+
+    // Vibrant sky blue core (#38bdf8)
+    QPen corePen(QColor(56, 189, 248, 255), 1.2, Qt::SolidLine, Qt::RoundCap);
+    painter.setPen(corePen);
+    painter.drawEllipse(QPointF(cx, cy), radius, radius);
+    painter.drawLine(QPointF(cx - arm, cy), QPointF(cx + arm, cy));
+    painter.drawLine(QPointF(cx, cy - arm), QPointF(cx, cy + arm));
+
+    // Crisp white center dot
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QColor(255, 255, 255, 255));
+    painter.drawEllipse(QPointF(cx, cy), 1.5, 1.5);
+
+    painter.restore();
 }
 
 void PixelCanvas::mousePressEvent(QMouseEvent *event)
 {
+    // Pan mode: Middle button or Space + Left button
+    if (event->button() == Qt::MiddleButton || (m_isSpacePressed && event->button() == Qt::LeftButton)) {
+        m_isPanning = true;
+        m_lastPanGlobalPos = event->globalPosition().toPoint();
+        setCursor(Qt::ClosedHandCursor);
+        event->accept();
+        return;
+    }
+
     QPoint pixelPos = widgetToPixel(event->pos());
 
-    if (event->button() == Qt::MiddleButton || (event->modifiers() & Qt::AltModifier && event->button() == Qt::LeftButton && m_tool != PixelTool::Eyedropper)) {
+    if (event->modifiers() & Qt::AltModifier && event->button() == Qt::LeftButton && m_tool != PixelTool::Eyedropper) {
         // Quick eyedropper on Alt+click
-        if (event->modifiers() & Qt::AltModifier) {
-            if (isPixelInside(pixelPos.x(), pixelPos.y())) {
-                QColor picked = m_image.pixelColor(pixelPos.x(), pixelPos.y());
-                setPrimaryColor(picked);
-            }
-            return;
+        if (isPixelInside(pixelPos.x(), pixelPos.y())) {
+            QColor picked = m_image.pixelColor(pixelPos.x(), pixelPos.y());
+            setPrimaryColor(picked);
         }
+        return;
     }
 
     // Check if clicking inside floating stamp
@@ -773,12 +1344,14 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
 
     if (m_tool == PixelTool::Pencil || m_tool == PixelTool::Eraser) {
         m_isDrawing = true;
+        m_currentStroke.clear();
         QColor drawColor;
         if (m_tool == PixelTool::Eraser) {
             drawColor = (m_activeButton == Qt::RightButton) ? m_secondaryColor : Qt::transparent;
         } else {
             drawColor = (m_activeButton == Qt::RightButton) ? m_secondaryColor : m_primaryColor;
         }
+        m_currentStroke.append({pixelPos, pixelPos, drawColor});
         drawBresenhamLine(pixelPos.x(), pixelPos.y(), pixelPos.x(), pixelPos.y(), drawColor);
         emit imageChanged();
         update();
@@ -808,11 +1381,22 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
 
 void PixelCanvas::mouseMoveEvent(QMouseEvent *event)
 {
+    if (m_isPanning) {
+        QPoint currentGlobal = event->globalPosition().toPoint();
+        QPoint delta = currentGlobal - m_lastPanGlobalPos;
+        m_lastPanGlobalPos = currentGlobal;
+        emit panRequested(delta.x(), delta.y());
+        event->accept();
+        return;
+    }
+
     QPoint pixelPos = widgetToPixel(event->pos());
 
     if (isPixelInside(pixelPos.x(), pixelPos.y())) {
         QColor col = m_image.pixelColor(pixelPos.x(), pixelPos.y());
         emit mousePixelMoved(pixelPos.x(), pixelPos.y(), col);
+    } else {
+        emit mousePixelLeft();
     }
 
     if (m_isDraggingFloating && m_hasFloating) {
@@ -829,6 +1413,7 @@ void PixelCanvas::mouseMoveEvent(QMouseEvent *event)
             } else {
                 drawColor = (m_activeButton == Qt::RightButton) ? m_secondaryColor : m_primaryColor;
             }
+            m_currentStroke.append({m_lastPixelPos, pixelPos, drawColor});
             drawBresenhamLine(m_lastPixelPos.x(), m_lastPixelPos.y(), pixelPos.x(), pixelPos.y(), drawColor);
             m_lastPixelPos = pixelPos;
             emit imageChanged();
@@ -846,7 +1431,17 @@ void PixelCanvas::mouseMoveEvent(QMouseEvent *event)
 
 void PixelCanvas::mouseReleaseEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event);
+    if (m_isPanning && (event->button() == Qt::MiddleButton || event->button() == Qt::LeftButton)) {
+        m_isPanning = false;
+        if (m_isSpacePressed) {
+            setCursor(Qt::OpenHandCursor);
+        } else {
+            unsetCursor();
+        }
+        event->accept();
+        return;
+    }
+
     if (m_isDraggingFloating) {
         m_isDraggingFloating = false;
         return;
@@ -854,7 +1449,13 @@ void PixelCanvas::mouseReleaseEvent(QMouseEvent *event)
 
     if (m_isDrawing) {
         m_isDrawing = false;
-        pushSnapshot(m_strokePreImage, (m_tool == PixelTool::Eraser) ? tr("Eraser") : tr("Pencil"));
+        m_lastActionData = CanvasActionData();
+        m_lastActionData.action = (m_tool == PixelTool::Eraser) ? CanvasAction::Eraser : CanvasAction::Pencil;
+        m_lastActionData.hasSelection = hasSelection();
+        m_lastActionData.selectionRect = m_selectionRect;
+        m_lastActionData.stroke = m_currentStroke;
+        pushSnapshot(m_strokePreImage, (m_tool == PixelTool::Eraser) ? tr("Eraser") : tr("Pencil"),
+                     QPolygonF(), (m_tool == PixelTool::Eraser) ? CanvasAction::Eraser : CanvasAction::Pencil);
         emit strokeFinished();
     } else if (m_isSelecting && m_tool == PixelTool::SelectRect) {
         m_isSelecting = false;
@@ -888,6 +1489,15 @@ void PixelCanvas::wheelEvent(QWheelEvent *event)
 
 void PixelCanvas::keyPressEvent(QKeyEvent *event)
 {
+    if (event->key() == Qt::Key_Space && !event->isAutoRepeat()) {
+        m_isSpacePressed = true;
+        if (!m_isPanning) {
+            setCursor(Qt::OpenHandCursor);
+        }
+        event->accept();
+        return;
+    }
+
     if (event->key() == Qt::Key_X) {
         swapColors();
         event->accept();
@@ -948,8 +1558,24 @@ void PixelCanvas::keyPressEvent(QKeyEvent *event)
     QWidget::keyPressEvent(event);
 }
 
+void PixelCanvas::keyReleaseEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Space && !event->isAutoRepeat()) {
+        m_isSpacePressed = false;
+        if (!m_isPanning) {
+            unsetCursor();
+        }
+        event->accept();
+        return;
+    }
+    QWidget::keyReleaseEvent(event);
+}
+
 void PixelCanvas::leaveEvent(QEvent *event)
 {
+    if (!m_isPanning && !m_isSpacePressed) {
+        unsetCursor();
+    }
     emit mousePixelLeft();
     QWidget::leaveEvent(event);
 }

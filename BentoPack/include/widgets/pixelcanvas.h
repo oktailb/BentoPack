@@ -24,6 +24,7 @@
 #include <QRect>
 #include <QVector>
 #include <QUndoStack>
+#include <functional>
 
 enum class PixelTool {
     Pencil,
@@ -32,6 +33,49 @@ enum class PixelTool {
     BucketFill,
     SelectRect,
     SelectColor
+};
+
+enum class OnionSkinEffect {
+    TintedBlueRed = 0,   ///< Past: Blue/Cyan, Future: Red/Coral
+    EdgeDetection,       ///< 1px contour / border detection only
+    ChannelR,            ///< Red channel monochrome
+    ChannelG,            ///< Green channel monochrome
+    ChannelB,            ///< Blue channel monochrome
+    Silhouette,          ///< Neutral flat silhouette
+    TrueColor            ///< Original colors with translucency
+};
+
+enum class CanvasAction {
+    Generic,
+    Pencil,
+    Eraser,
+    FloodFill,
+    Clear,
+    Paste,
+    FlipHorizontal,
+    FlipVertical,
+    Rotate90CW
+};
+
+struct StrokeSegment {
+    QPoint p1;
+    QPoint p2;
+    QColor color;
+};
+
+struct CanvasActionData {
+    CanvasAction action = CanvasAction::Generic;
+    QPoint pos;                 ///< Seed/start point for FloodFill
+    QColor color;               ///< Tool/replacement color
+    QRect selectionRect;
+    bool hasSelection = false;
+    QVector<StrokeSegment> stroke;
+};
+
+struct OnionSkinLayer {
+    QImage image;
+    int relativeOffset = 0; ///< Relative offset: e.g. -3, -2, -1, +1, +2, +3
+    QPoint alignmentOffset = QPoint(0, 0); ///< Alignment offset based on animation pivot points (currentPivot - layerPivot)
 };
 
 #include "bentopackwidgets_export.h"
@@ -90,10 +134,47 @@ public:
     void flipHorizontal();
     void flipVertical();
     void rotate90CW();
+    void applyFloodFill(int startX, int startY, const QColor &replacementColor);
 
-    // Polygon Mesh
+    CanvasActionData lastActionData() const { return m_lastActionData; }
+
+    // Polygon Mesh & Restriction
     void setPolygonMesh(const QPolygonF &polygon);
     QPolygonF polygonMesh() const { return m_polygonMesh; }
+    bool hasPolygonMesh() const { return m_polygonMesh.size() >= 3; }
+
+    bool allowEditingOutsidePolygon() const { return m_allowEditingOutsidePolygon; }
+    void setAllowEditingOutsidePolygon(bool allow);
+
+    bool isPixelInsidePolygon(int x, int y) const;
+    bool isPixelEditable(int x, int y) const;
+
+    // Canvas Envelope & Pivot
+    void setCanvasEnvelope(const QSize &canvasSize, const QPoint &imageOffset, const QPoint &pivotPos);
+    QSize canvasSize() const;
+    QPoint imageOffset() const { return m_imageOffset; }
+    QPoint pivotPos() const { return m_pivotPos; }
+    bool showPivot() const { return m_showPivot; }
+    void setShowPivot(bool show);
+
+    // Onion Skinning
+    bool isOnionSkinEnabled() const { return m_onionSkinEnabled; }
+    void setOnionSkinEnabled(bool enabled);
+
+    void setOnionSkinLayers(const QVector<OnionSkinLayer> &layers);
+    QVector<OnionSkinLayer> onionSkinLayers() const { return m_onionSkinLayers; }
+
+    int onionSkinOpacity() const { return m_onionSkinOpacityPercent; }
+    void setOnionSkinOpacity(int percent); // 0 to 100
+
+    OnionSkinEffect onionSkinEffect() const { return m_onionSkinEffect; }
+    void setOnionSkinEffect(OnionSkinEffect effect);
+
+    QImage onionSkinComposite() const { return m_onionSkinComposite; }
+
+    static QImage processOnionSkinLayer(const QImage &src, int relativeOffset, int opacityPercent, OnionSkinEffect effect, const QSize &targetSize);
+
+    friend class PixelCanvasUndoCommand;
 
     // Undo / Redo
     bool canUndo() const { return m_undoStack.canUndo(); }
@@ -102,12 +183,19 @@ public:
     void redo() { commitFloatingSelection(); m_undoStack.redo(); }
     QUndoStack* undoStack() { return &m_undoStack; }
     void applyPatch(const QRect &rect, const QImage &patch);
-    void pushSnapshot(const QImage &oldImage, const QString &text);
+    void pushSnapshot(const QImage &oldImage, const QString &text, const QPolygonF &oldPolygon = QPolygonF(), CanvasAction action = CanvasAction::Generic);
+    void setCommandCustomUndoRedo(QUndoCommand *cmd,
+                                  const std::function<void()> &undoFunc,
+                                  const std::function<void()> &redoFunc);
 
     bool isDrawing() const { return m_isDrawing; }
 
 signals:
     void imageChanged();
+    void polygonMeshChanged(const QPolygonF &polygon);
+    void modificationPushed(const QImage &oldImage, const QImage &newImage,
+                            const QPolygonF &oldPolygon, const QPolygonF &newPolygon,
+                            CanvasAction action, QUndoCommand *parentCommand);
     void strokeFinished();
     void primaryColorChanged(const QColor &color);
     void secondaryColorChanged(const QColor &color);
@@ -115,6 +203,7 @@ signals:
     void mousePixelLeft();
     void selectionStateChanged(bool hasSelection);
     void zoomChanged(double zoom);
+    void panRequested(int dx, int dy);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -123,6 +212,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
 private:
@@ -134,7 +224,6 @@ private:
     bool isPixelSelected(int x, int y) const;
 
     void drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor &color);
-    void applyFloodFill(int startX, int startY, const QColor &replacementColor);
     void applyColorSelection(int targetX, int targetY);
 
     void drawCheckerboard(QPainter &painter, const QRect &rect);
@@ -142,30 +231,50 @@ private:
     void drawSelectionBorder(QPainter &painter);
     void drawFloatingStamp(QPainter &painter);
     void drawPolygonMesh(QPainter &painter);
+    void drawOnionSkins(QPainter &painter);
+    void drawPivotMarker(QPainter &painter);
 
     void updateCanvasSize();
+    void updateOnionSkinComposite();
 
 private:
     QImage          m_image;
+    QSize           m_canvasSize;
+    QPoint          m_imageOffset = QPoint(0, 0);
+    QPoint          m_pivotPos = QPoint(0, 0);
+    bool            m_showPivot = true;
     double          m_zoom = 16.0;
     bool            m_showGrid = true;
     PixelTool       m_tool = PixelTool::Pencil;
     QColor          m_primaryColor = Qt::black;
     QColor          m_secondaryColor = Qt::transparent;
 
+    // Onion Skinning
+    bool                    m_onionSkinEnabled = true;
+    int                     m_onionSkinOpacityPercent = 50;
+    OnionSkinEffect         m_onionSkinEffect = OnionSkinEffect::TintedBlueRed;
+    QVector<OnionSkinLayer> m_onionSkinLayers;
+    QImage                  m_onionSkinComposite;
+
     // Polygon Mesh
     QPolygonF       m_polygonMesh;
+    bool            m_allowEditingOutsidePolygon = true;
+    QVector<bool>   m_polygonMask;
+    void updatePolygonMask();
 
     // Interaction state
     bool            m_isDrawing = false;
     bool            m_isSelecting = false;
     bool            m_isDraggingFloating = false;
     bool            m_isPanning = false;
+    bool            m_isSpacePressed = false;
     QPoint          m_lastPixelPos = QPoint(-1, -1);
     QPoint          m_dragStartPixel = QPoint(-1, -1);
-    QPoint          m_lastPanMousePos;
+    QPoint          m_lastPanGlobalPos;
     Qt::MouseButton m_activeButton = Qt::NoButton;
     QImage          m_strokePreImage;
+    CanvasActionData m_lastActionData;
+    QVector<StrokeSegment> m_currentStroke;
 
     // Selection
     QRect           m_selectionRect;

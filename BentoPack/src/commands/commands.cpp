@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
  */
 
 #include "commands/commands.h"
+#include "geometry/triangulator.h"
 #include <algorithm>
 #include <QPainter>
 
@@ -504,16 +505,18 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                                                  int frameIndex,
                                                  const QImage &newFrame,
                                                  QUndoCommand *parent)
-    : EditSpritePixelsCommand(doc, QMap<int, QImage>{{frameIndex, newFrame}}, parent)
+    : EditSpritePixelsCommand(doc, QMap<int, QImage>{{frameIndex, newFrame}}, {}, parent)
 {
 }
 
 EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                                                  const QMap<int, QImage> &modifiedFrames,
+                                                 const QMap<int, QPolygonF> &modifiedPolygons,
                                                  QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_doc(doc)
     , m_newFrames(modifiedFrames)
+    , m_newPolygons(modifiedPolygons)
 {
     if (m_doc) {
         for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
@@ -531,6 +534,36 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                         fp.newPatch = it.value();
                         m_framePatches.append(fp);
                     }
+                }
+            }
+        }
+
+        // Store old and new SpriteBoxes for polygon / rect size changes
+        for (auto it = m_newPolygons.constBegin(); it != m_newPolygons.constEnd(); ++it) {
+            int idx = it.key();
+            if (idx >= 0 && idx < m_doc->boxes().size()) {
+                SpriteBox oldB = m_doc->box(idx);
+                m_oldBoxes[idx] = oldB;
+                SpriteBox newB = oldB;
+                newB.polygon = it.value();
+                newB.hasPolygonMesh = (newB.polygon.size() >= 3);
+                newB.vertices = newB.polygon.toList();
+                newB.triangles = BentoPackGeometry::Triangulator::triangulate(newB.polygon);
+                if (m_newFrames.contains(idx)) {
+                    newB.rect.setSize(m_newFrames[idx].size());
+                }
+                m_newBoxes[idx] = newB;
+            }
+        }
+        for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
+            int idx = it.key();
+            if (!m_newBoxes.contains(idx) && idx >= 0 && idx < m_doc->boxes().size()) {
+                if (m_doc->box(idx).rect.size() != it.value().size()) {
+                    SpriteBox oldB = m_doc->box(idx);
+                    m_oldBoxes[idx] = oldB;
+                    SpriteBox newB = oldB;
+                    newB.rect.setSize(it.value().size());
+                    m_newBoxes[idx] = newB;
                 }
             }
         }
@@ -572,6 +605,9 @@ void EditSpritePixelsCommand::redo()
     for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
         m_doc->replaceFrame(it.key(), it.value());
     }
+    for (auto it = m_newBoxes.constBegin(); it != m_newBoxes.constEnd(); ++it) {
+        m_doc->setBox(it.key(), it.value());
+    }
 }
 
 void EditSpritePixelsCommand::undo()
@@ -585,6 +621,9 @@ void EditSpritePixelsCommand::undo()
     }
     for (auto it = m_oldFrames.constBegin(); it != m_oldFrames.constEnd(); ++it) {
         m_doc->replaceFrame(it.key(), it.value());
+    }
+    for (auto it = m_oldBoxes.constBegin(); it != m_oldBoxes.constEnd(); ++it) {
+        m_doc->setBox(it.key(), it.value());
     }
 }
 

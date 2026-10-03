@@ -31,9 +31,12 @@
 #include <QUndoStack>
 #include <QGroupBox>
 #include <QEvent>
+#include <QSlider>
+#include <QCheckBox>
 
 class SpriteDocument;
 class PixelCanvas;
+enum class CanvasAction;
 #include "bentopackwidgets_export.h"
 
 /**
@@ -63,13 +66,36 @@ public:
                                QUndoStack *docUndoStack,
                                int initialFrameIndex = 0,
                                QWidget *parent = nullptr);
-    ~PixelEditorDialog() override = default;
+    ~PixelEditorDialog() override;
 
     static QVector<QRgb> getPresetPalette(PalettePreset preset);
 
-private slots:
+    QString activeAnimationName() const { return m_activeAnimName; }
+    QList<int> activeSequence() const { return m_activeSequence; }
+    int currentFrameIndex() const { return m_currentFrameIndex; }
+    QComboBox* animationCombo() const { return m_animCombo; }
+    PixelCanvas* canvas() const { return m_canvas; }
+    QPoint visualPivotPos() const;
+    QCheckBox* allowOutsidePolygonCheckBox() const { return m_allowOutsidePolyCheck; }
+    bool isEditingOutsidePolygonAllowed() const;
+    QCheckBox* applyToAllFramesCheckBox() const { return m_applyToAllFramesCheck; }
+    bool isApplyToAllFramesEnabled() const { return m_applyToAllFramesCheck && m_applyToAllFramesCheck->isChecked(); }
+    void setApplyToAllFrames(bool enabled);
+    bool hasAtlasCollision() const;
+    QLabel* collisionAlertLabel() const { return m_lblCollisionWarning; }
+    QPushButton* repackButton() const { return m_btnRepackAtlas; }
+    QPolygonF sessionModifiedPolygon(int frameIndex) const;
+    QMap<int, QImage> sessionModifiedFrames() const { return m_sessionModifiedFrames; }
+    QMap<int, QPolygonF> sessionModifiedPolygons() const { return m_sessionModifiedPolygons; }
+    bool openAtlasPackingDialog(bool nonInteractive = false);
+    bool performAtlasRepack(const QMap<int, QImage> &modifiedFrames, const QMap<int, QPolygonF> &modifiedPolygons);
+
+public slots:
     void onPreviousFrame();
     void onNextFrame();
+    void loadFrame(int index);
+
+private slots:
     void onToolButtonClicked(int id);
     void onPalettePresetChanged(int index);
     void onPrimarySwatchClicked();
@@ -82,20 +108,41 @@ private slots:
     void onSampleFrameColorsClicked();
     void onApplyClicked();
     void onOkClicked();
+    void onOnionSkinToggled(bool enabled);
+    void onOnionSkinPastChanged(int val);
+    void onOnionSkinFutureChanged(int val);
+    void onOnionSkinOpacityChanged(int val);
+    void onOnionSkinEffectChanged(int index);
+    void onAnimationFilterChanged(int index);
+    void onAllowOutsidePolygonToggled(bool checked);
+    void onCanvasModificationPushed(const QImage &oldImage, const QImage &newImage,
+                                    const QPolygonF &oldPolygon, const QPolygonF &newPolygon,
+                                    CanvasAction action, QUndoCommand *parentCommand);
+
+public:
+    void restoreFrameBackup(int frameIndex, const QImage &img, const QPolygonF &poly);
+    void onMultiFrameUndoRedoDone();
 
 protected:
     void changeEvent(QEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
     void setupUi();
     void retranslateUi();
     void updateNavigationButtons();
-    void loadFrame(int index);
+    void populateAnimationCombo();
     void saveCurrentFrameToSession();
+    bool applyChanges();
+    bool checkAtlasPolygonCollision(QString *outDetails = nullptr, QList<int> *outCollidingIndices = nullptr) const;
+    void updateCollisionWarningUI();
     void refreshPaletteSwatches();
     void refreshRecentSwatches();
     void addRecentColor(const QColor &color);
     void updateLivePreview();
+    void updateOnionSkinLayers();
+    void computeAnimationEnvelope(QSize &outSize, QPoint &outPivot, QPoint &outFrameOffset) const;
 
     QWidget* createToolBar();
     QWidget* createPalettePanel();
@@ -107,6 +154,13 @@ private:
     QUndoStack*             m_docUndoStack = nullptr;
     int                     m_currentFrameIndex = 0;
     QMap<int, QImage>       m_sessionModifiedFrames;
+    QMap<int, QPolygonF>    m_sessionModifiedPolygons;
+
+    // Animation Scoping
+    QLabel*                 m_animLabel = nullptr;
+    QComboBox*              m_animCombo = nullptr;
+    QString                 m_activeAnimName;
+    QList<int>              m_activeSequence;
 
     // UI Widgets
     PixelCanvas*            m_canvas = nullptr;
@@ -114,6 +168,8 @@ private:
     QLabel*                 m_frameInfoLabel = nullptr;
     QPushButton*            m_prevFrameBtn = nullptr;
     QPushButton*            m_nextFrameBtn = nullptr;
+    bool                    m_initialZoomDone = false;
+    bool                    m_firstShowFitDone = false;
 
     // Tools
     QButtonGroup*           m_toolGroup = nullptr;
@@ -127,6 +183,9 @@ private:
     QToolButton*            m_btnFlipV = nullptr;
     QToolButton*            m_btnRotate = nullptr;
     QToolButton*            m_btnGrid = nullptr;
+    QToolButton*            m_btnShowPivot = nullptr;
+    QCheckBox*              m_allowOutsidePolyCheck = nullptr;
+    QCheckBox*              m_applyToAllFramesCheck = nullptr;
     QToolButton*            m_btnZoomIn = nullptr;
     QToolButton*            m_btnZoomOut = nullptr;
     QToolButton*            m_btnFit = nullptr;
@@ -158,10 +217,27 @@ private:
     QGroupBox*              m_prevGroup = nullptr;
     QLabel*                 m_previewLabel = nullptr;
 
+    // Onion Skinning
+    QGroupBox*              m_onionSkinGroup = nullptr;
+    QCheckBox*              m_onionSkinCheck = nullptr;
+    QLabel*                 m_lblPastTitle = nullptr;
+    QSlider*                m_sliderPastFrames = nullptr;
+    QLabel*                 m_lblPastFrames = nullptr;
+    QLabel*                 m_lblFutureTitle = nullptr;
+    QSlider*                m_sliderFutureFrames = nullptr;
+    QLabel*                 m_lblFutureFrames = nullptr;
+    QLabel*                 m_lblOpacityTitle = nullptr;
+    QSlider*                m_sliderOpacity = nullptr;
+    QLabel*                 m_lblOpacity = nullptr;
+    QLabel*                 m_lblEffect = nullptr;
+    QComboBox*              m_comboEffect = nullptr;
+
     // Status & Buttons
     QLabel*                 m_coordLabel = nullptr;
     QLabel*                 m_hoverColorSwatch = nullptr;
     QLabel*                 m_colorInfoLabel = nullptr;
+    QLabel*                 m_lblCollisionWarning = nullptr;
+    QPushButton*            m_btnRepackAtlas = nullptr;
     QLabel*                 m_zoomLabel = nullptr;
     QPushButton*            m_cancelBtn = nullptr;
     QPushButton*            m_applyBtn = nullptr;

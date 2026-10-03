@@ -117,15 +117,45 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
         return result;
     }
 
+    // Ensure all frames with polygons are framed/clipped strictly to their polygon geometry.
+    // If the atlas was already packed polygonally, the raw frame rectangles contain pixels of neighboring sprites.
+    // Clipping ensures only pixels strictly inside the polygon are processed and packed.
+    QList<QImage> cleanFrames;
+    cleanFrames.reserve(frames.size());
+    for (int i = 0; i < frames.size(); ++i) {
+        const QImage &img = frames.at(i);
+        if (i < polygons.size() && polygons.at(i).size() >= 3 && !img.isNull()) {
+            const QPolygonF &poly = polygons.at(i);
+            QImage mask(img.size(), QImage::Format_ARGB32_Premultiplied);
+            mask.fill(Qt::transparent);
+            {
+                QPainter mp(&mask);
+                mp.setRenderHint(QPainter::Antialiasing, false);
+                mp.setBrush(Qt::white);
+                mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+                mp.drawPolygon(poly);
+            }
+            QImage clipped = img.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+            {
+                QPainter p(&clipped);
+                p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                p.drawImage(0, 0, mask);
+            }
+            cleanFrames.append(clipped.convertToFormat(QImage::Format_ARGB32));
+        } else {
+            cleanFrames.append(img);
+        }
+    }
+
     // Deduplication step (Auto-Aliasing)
     QList<QImage> uniqueFrames;
     QList<QPolygonF> uniquePolygons;
     QList<int> mapping;
-    mapping.reserve(frames.size());
+    mapping.reserve(cleanFrames.size());
 
     if (options.deduplicate) {
-        for (int i = 0; i < frames.size(); ++i) {
-            const QImage &img = frames.at(i);
+        for (int i = 0; i < cleanFrames.size(); ++i) {
+            const QImage &img = cleanFrames.at(i);
             int matchedIndex = -1;
 
             for (int u = 0; u < uniqueFrames.size(); ++u) {
@@ -148,9 +178,9 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
             }
         }
     } else {
-        uniqueFrames = frames;
+        uniqueFrames = cleanFrames;
         uniquePolygons = polygons;
-        for (int i = 0; i < frames.size(); ++i) {
+        for (int i = 0; i < cleanFrames.size(); ++i) {
             mapping.append(i);
         }
     }
