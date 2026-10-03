@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -174,6 +174,21 @@ void AnimationController::attachLoopModeComboBox(QComboBox *combo)
         auto mode = static_cast<SpriteAnimation::LoopMode>(m_loopModeCombo->itemData(idx).toInt());
         setLoopMode(mode);
     });
+}
+
+void AnimationController::retranslateUi()
+{
+    if (m_loopModeCombo) {
+        int currentIdx = m_loopModeCombo->currentIndex();
+        m_loopModeCombo->blockSignals(true);
+        m_loopModeCombo->setItemText(0, tr("KEY_LOOP_MODE_LOOP"));
+        m_loopModeCombo->setItemText(1, tr("KEY_LOOP_MODE_ONCE"));
+        m_loopModeCombo->setItemText(2, tr("KEY_LOOP_MODE_PINGPONG"));
+        m_loopModeCombo->setCurrentIndex(currentIdx);
+        m_loopModeCombo->blockSignals(false);
+    }
+    syncAnimationList();
+    updateScrubberState();
 }
 
 void AnimationController::play()

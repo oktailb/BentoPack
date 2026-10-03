@@ -24,18 +24,6 @@
         <translation>대상:</translation>
     </message>
     <message>
-        <source>KEY_EDITION_NOTICE_COMMUNITY</source>
-        <translation>인디 크리에이터 및 연 매출 $1,000,000 미만 팀 무료</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_COMMERCIAL</source>
-        <translation>활성 상용 라이선스 - 워터마크 없는 깔끔한 내보내기</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_TAMPERED</source>
-        <translation>위조 경고: 비공식 수정 바이너리</translation>
-    </message>
-    <message>
         <source>KEY_PLUGINS_SECTION_TITLE</source>
         <translation>아키텍처 및 플러그인 상태</translation>
     </message>
@@ -88,14 +76,6 @@
         <translation>라이선스: &lt;b&gt;플러그인 소스 사용 가능</translation>
     </message>
     <message>
-        <source>KEY_LICENSE_PLUGINS_TITLE</source>
-        <translation>플러그인 및 확장: 플러그인 소스 사용 가능 라이선스 계약(EULA)</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_PLUGINS_NOTICE</source>
-        <translation>이 라이선스는 내보내기 플러그인 및 필터(&lt;code&gt;plugins/&lt;/code&gt; 디렉토리)의 소스 코드에 적용됩니다. 연간 총 수익 $1,000,000 USD 미만은 로열티가 면제됩니다.</translation>
-    </message>
-    <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>코어 엔진: Apache 라이선스, 버전 2.0 (오픈 소스 코어)</translation>
     </message>
@@ -112,8 +92,16 @@
         <translation>닫기</translation>
     </message>
     <message>
+        <source>Éditeur du logiciel</source>
+        <translation>소프트웨어 배포사</translation>
+    </message>
+    <message>
         <source>KEY_ABOUT_PURPOSE</source>
         <translation>스프라이트 추출 및 애니메이션을 위한 강력한 도구</translation>
+    </message>
+    <message>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <translation>툴링 및 멀티미디어 기술 스튜디오</translation>
     </message>
     <message>
         <source>KEY_ABOUT_GIT_INFO</source>
@@ -197,6 +185,53 @@
     <message>
         <source>KEY_NO_FRAMES</source>
         <translation>0 / 0</translation>
+    </message>
+</context>
+<context>
+    <name>AsepriteExtractor</name>
+    <message>
+        <source>Reading Aseprite project binary...</source>
+        <translation>Aseprite 프로젝트 바이너리 읽는 중...</translation>
+    </message>
+    <message>
+        <source>Cannot open Aseprite file: %1</source>
+        <translation>Aseprite 파일을 열 수 없습니다: %1</translation>
+    </message>
+    <message>
+        <source>File is too small to be a valid Aseprite file.</source>
+        <translation>파일이 너무 작아 유효한 Aseprite 파일이 아닙니다.</translation>
+    </message>
+    <message>
+        <source>Invalid Aseprite magic header (expected 0xA5E0, got 0x%1)</source>
+        <translation>유효하지 않은 Aseprite 매직 헤더(예상값 0xA5E0, 실제값 0x%1)</translation>
+    </message>
+    <message>
+        <source>Invalid canvas dimensions or zero frames in Aseprite header.</source>
+        <translation>Aseprite 헤더의 캔버스 크기가 잘못되었거나 프레임 수가 0입니다.</translation>
+    </message>
+    <message>
+        <source>Failed to decode any frames from Aseprite file.</source>
+        <translation>Aseprite 파일에서 프레임을 디코딩하지 못했습니다.</translation>
+    </message>
+    <message>
+        <source>Aseprite project imported successfully (%1 frames).</source>
+        <translation>Aseprite 프로젝트를 성공적으로 가져왔습니다(%1개 프레임).</translation>
+    </message>
+    <message>
+        <source>Exporting native Aseprite project binary...</source>
+        <translation>네이티브 Aseprite 프로젝트 바이너리 내보내는 중...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprite frames to export to Aseprite.</source>
+        <translation>문서에 Aseprite로 내보낼 스프라이트 프레임이 없습니다.</translation>
+    </message>
+    <message>
+        <source>Cannot create output Aseprite file: %1</source>
+        <translation>출력 Aseprite 파일을 생성할 수 없습니다: %1</translation>
+    </message>
+    <message>
+        <source>Exported Aseprite project successfully (%1 frames).</source>
+        <translation>Aseprite 프로젝트를 성공적으로 내보냈습니다(%1개 프레임).</translation>
     </message>
 </context>
 <context>
@@ -480,6 +515,13 @@ Choose which branch to restore:</source>
     </message>
 </context>
 <context>
+    <name>CliParser</name>
+    <message>
+        <source>BentoPack CLI v%1 (Qt 6 - C++17 Headless Engine)</source>
+        <translation>BentoPack CLI v%1 (Qt 6 - C++17 헤드리스 엔진)</translation>
+    </message>
+</context>
+<context>
     <name>ColorAdjustFilter</name>
     <message>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
@@ -694,20 +736,8 @@ Strict removal clears the pixel.</source>
         <translation>아틀라스 및 애니메이션 내보내기</translation>
     </message>
     <message>
-        <source>Destination</source>
-        <translation>대상</translation>
-    </message>
-    <message>
-        <source>Select export file path...</source>
-        <translation>내보낼 파일 경로 선택...</translation>
-    </message>
-    <message>
         <source>Browse...</source>
         <translation>찾아보기...</translation>
-    </message>
-    <message>
-        <source>Format &amp; Packing Algorithm</source>
-        <translation>포맷 및 패킹 알고리즘</translation>
     </message>
     <message>
         <source>Export Format:</source>
@@ -776,6 +806,46 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Layout &amp; Margins</source>
         <translation>레이아웃 및 여백</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Project Name</source>
+        <translation>대상 및 프로젝트 이름</translation>
+    </message>
+    <message>
+        <source>Export Folder:</source>
+        <translation>내보내기 폴더:</translation>
+    </message>
+    <message>
+        <source>Select destination directory...</source>
+        <translation>대상 디렉터리 선택...</translation>
+    </message>
+    <message>
+        <source>File / Project Name:</source>
+        <translation>파일 / 프로젝트 이름:</translation>
+    </message>
+    <message>
+        <source>e.g. hero, sprites, atlas...</source>
+        <translation>예: hero, sprites, atlas...</translation>
+    </message>
+    <message>
+        <source>Output File:</source>
+        <translation>출력 파일:</translation>
+    </message>
+    <message>
+        <source>Full export file path...</source>
+        <translation>전체 내보내기 파일 경로...</translation>
+    </message>
+    <message>
+        <source>Save As...</source>
+        <translation>다른 이름으로 저장...</translation>
+    </message>
+    <message>
+        <source>Target Format</source>
+        <translation>대상 형식</translation>
+    </message>
+    <message>
+        <source>Generates game engine sprite resource and texture atlas.</source>
+        <translation>게임 엔진 스프라이트 리소스와 텍스처 아틀라스를 생성합니다.</translation>
     </message>
     <message>
         <source>Inner Padding (px):</source>
@@ -870,6 +940,70 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: --</translation>
     </message>
     <message>
+        <source>Animated GIF Options</source>
+        <translation>애니메이션 GIF 옵션</translation>
+    </message>
+    <message>
+        <source>Playback Loop:</source>
+        <translation>재생 루프:</translation>
+    </message>
+    <message>
+        <source>Infinite Loop</source>
+        <translation>무한 루프</translation>
+    </message>
+    <message>
+        <source>Play Once</source>
+        <translation>한 번만 재생</translation>
+    </message>
+    <message>
+        <source>Ping-Pong (Forward-Backward)</source>
+        <translation>핑퐁 (왕복 재생)</translation>
+    </message>
+    <message>
+        <source>Frame Rate (FPS):</source>
+        <translation>프레임 레이트 (FPS):</translation>
+    </message>
+    <message>
+        <source> fps</source>
+        <translation> fps</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold (0-255):</source>
+        <translation>알파 임계값 (0-255):</translation>
+    </message>
+    <message>
+        <source>Pixels with alpha below this threshold will be completely transparent.</source>
+        <translation>이 임계값보다 낮은 알파를 가진 픽셀은 완전히 투명해집니다.</translation>
+    </message>
+    <message>
+        <source>Export all animations as separate GIF files (&lt;project&gt;_&lt;anim&gt;.gif)</source>
+        <translation>모든 애니메이션을 개별 GIF 파일로 내보내기 (&lt;프로젝트&gt;_&lt;애니메이션&gt;.gif)</translation>
+    </message>
+    <message>
+        <source>Aseprite Binary Options</source>
+        <translation>Aseprite 바이너리 옵션</translation>
+    </message>
+    <message>
+        <source>Lossless cel pixel compression (Deflate / zlib)</source>
+        <translation>무손실 셀 픽셀 압축 (Deflate / zlib)</translation>
+    </message>
+    <message>
+        <source>Compresses cel pixel data using standard zlib compression for smaller file size.</source>
+        <translation>더 작은 파일 크기를 위해 표준 zlib 압축을 사용하여 셀 픽셀 데이터를 압축합니다.</translation>
+    </message>
+    <message>
+        <source>Export animation tags into file</source>
+        <translation>애니메이션 태그를 파일에 내보내기</translation>
+    </message>
+    <message>
+        <source>Embeds project animation sequences as Aseprite tags (chunk 0x2018).</source>
+        <translation>프로젝트 애니메이션 시퀀스를 Aseprite 태그(청크 0x2018)로 포함합니다.</translation>
+    </message>
+    <message>
+        <source>Generates native 32-bit RGBA Aseprite project (.ase/.aseprite) compatible with Aseprite v1.2+.</source>
+        <translation>Aseprite v1.2 이상과 호환되는 네이티브 32비트 RGBA Aseprite 프로젝트(.ase/.aseprite)를 생성합니다.</translation>
+    </message>
+    <message>
         <source>Exporting &amp; compressing textures...</source>
         <translation>텍스처 내보내기 및 압축 중...</translation>
     </message>
@@ -890,6 +1024,10 @@ Strict removal clears the pixel.</source>
         <translation>내보내기</translation>
     </message>
     <message>
+        <source>Select Export Directory</source>
+        <translation>내보내기 디렉터리 선택</translation>
+    </message>
+    <message>
         <source>All Files</source>
         <translation>모든 파일</translation>
     </message>
@@ -902,6 +1040,38 @@ Strict removal clears the pixel.</source>
         <translation>내보내기 대상 선택</translation>
     </message>
     <message>
+        <source>Generates animated multi-frame GIF files with frame timings, transparency, and looping options.</source>
+        <translation>프레임 타이밍, 투명도 및 루프 옵션이 포함된 다중 프레임 애니메이션 GIF 파일을 생성합니다.</translation>
+    </message>
+    <message>
+        <source>Generates a native Aseprite binary project (.ase/.aseprite) preserving layers, cels, and animation tags.</source>
+        <translation>레이어, 셀 및 애니메이션 태그를 보존하는 네이티브 Aseprite 바이너리 프로젝트(.ase/.aseprite)를 생성합니다.</translation>
+    </message>
+    <message>
+        <source>Exports Godot 4 SpriteFrames resource (.tres) with atlas texture and animation metadata.</source>
+        <translation>아틀라스 텍스처 및 애니메이션 메타데이터가 포함된 Godot 4 SpriteFrames 리소스(.tres)를 내보냅니다.</translation>
+    </message>
+    <message>
+        <source>Exports Unity 2D Sprite Mesh metadata (.unity.json) with atlas texture.</source>
+        <translation>아틀라스 텍스처가 포함된 Unity 2D 스프라이트 메시 메타데이터(.unity.json)를 내보냅니다.</translation>
+    </message>
+    <message>
+        <source>Exports Unreal Engine Paper2D sprite definitions (.paper2d.json) with atlas texture.</source>
+        <translation>아틀라스 텍스처가 포함된 Unreal Engine Paper2D 스프라이트 정의(.paper2d.json)를 내보냅니다.</translation>
+    </message>
+    <message>
+        <source>Exports LibGDX / Spine atlas format (.atlas) with companion atlas image.</source>
+        <translation>연결된 아틀라스 이미지와 함께 LibGDX / Spine 아틀라스 형식(.atlas)을 내보냅니다.</translation>
+    </message>
+    <message>
+        <source>Exports TexturePacker JSON / Aseprite JSON atlas format with sprite frames.</source>
+        <translation>스프라이트 프레임이 포함된 TexturePacker JSON / Aseprite JSON 아틀라스 형식을 내보냅니다.</translation>
+    </message>
+    <message>
+        <source>Exports packed texture atlas and companion sprite definitions.</source>
+        <translation>패킹된 텍스처 아틀라스 및 관련 스프라이트 정의를 내보냅니다.</translation>
+    </message>
+    <message>
         <source>Frames: 0</source>
         <translation>프레임: 0</translation>
     </message>
@@ -910,8 +1080,24 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: %1 MB (표준 RGBA8888, GPU에서 비압축)</translation>
     </message>
     <message>
-        <source>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</source>
-        <translation>GPU VRAM: %1 MB (%2) — 절약: RGBA 대비 -%3%</translation>
+        <source>~%1 KB on disk</source>
+        <translation>디스크 용량: 약 %1 KB</translation>
+    </message>
+    <message>
+        <source>~%1 MB on disk</source>
+        <translation>디스크 용량: 약 %1 MB</translation>
+    </message>
+    <message>
+        <source>+Zstd L%1</source>
+        <translation>+Zstd 레벨 %1</translation>
+    </message>
+    <message>
+        <source>Raw</source>
+        <translation>원시 데이터 (Raw)</translation>
+    </message>
+    <message>
+        <source>GPU VRAM: %1 MB (%2, -%3% hardware) | File: %4 (%5)</source>
+        <translation>GPU VRAM: %1 MB (%2, 하드웨어 -%3%) | 파일: %4 (%5)</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -960,6 +1146,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Please specify a valid file name before exporting.</source>
         <translation>내보내기 전에 유효한 파일 이름을 지정하세요.</translation>
+    </message>
+    <message>
+        <source>Rendering and encoding animated GIF frames...</source>
+        <translation>애니메이션 GIF 프레임 렌더링 및 인코딩 중...</translation>
+    </message>
+    <message>
+        <source>Encoding native Aseprite binary project...</source>
+        <translation>네이티브 Aseprite 바이너리 프로젝트 인코딩 중...</translation>
     </message>
     <message>
         <source>Exporting and compressing textures (GPU VRAM / KTX2)...</source>
@@ -1083,39 +1277,39 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>No frames in document to export.</source>
-        <translation type="unfinished">내보낼 프레임이 문서에 없습니다.</translation>
+        <translation>문서에 내보낼 프레임이 없습니다.</translation>
     </message>
     <message>
         <source>Exporting GIF animation %1 (%2/%3)...</source>
-        <translation type="unfinished"></translation>
+        <translation>GIF 애니메이션 %1 내보내는 중 (%2/%3)...</translation>
     </message>
     <message>
         <source>Exported %1 GIF animation(s) successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1개의 GIF 애니메이션을 성공적으로 내보냈습니다.</translation>
     </message>
     <message>
         <source>Animation %1 has no frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>애니메이션 %1에 프레임이 없습니다.</translation>
     </message>
     <message>
         <source>Failed to initialize GIF encoder for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1의 GIF 인코더 초기화 실패.</translation>
     </message>
     <message>
         <source>Failed to encode GIF frame in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에서 GIF 프레임을 인코딩하지 못했습니다.</translation>
     </message>
     <message>
         <source>GIF encoding generated no data for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에 대한 GIF 인코딩 데이터가 생성되지 않았습니다.</translation>
     </message>
     <message>
         <source>Cannot open destination file %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>대상 파일 %1을(를) 열 수 없습니다: %2</translation>
     </message>
     <message>
         <source>Incomplete file write to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에 파일 쓰기가 완료되지 않았습니다.</translation>
     </message>
 </context>
 <context>
@@ -1342,6 +1536,53 @@ Strict removal clears the pixel.</source>
     <message>
         <source>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</source>
         <translation>TexturePacker, Aseprite, Phaser 및 PixiJS와 호환되는 JSON 아틀라스 설명자 내보내기.</translation>
+    </message>
+</context>
+<context>
+    <name>LibGdxExtractor</name>
+    <message>
+        <source>Atlas file is empty.</source>
+        <translation>아틀라스 파일이 비어 있습니다.</translation>
+    </message>
+    <message>
+        <source>Reading LibGDX/Spine Atlas...</source>
+        <translation>LibGDX/Spine 아틀라스 읽는 중...</translation>
+    </message>
+    <message>
+        <source>Cannot open atlas file: %1</source>
+        <translation>아틀라스 파일을 열 수 없습니다: %1</translation>
+    </message>
+    <message>
+        <source>Failed to parse atlas file.</source>
+        <translation>아틀라스 파일 구문 분석 실패.</translation>
+    </message>
+    <message>
+        <source>Failed to load companion atlas image: %1</source>
+        <translation>연결된 아틀라스 이미지를 로드하지 못했습니다: %1</translation>
+    </message>
+    <message>
+        <source>LibGDX/Spine Atlas loaded successfully.</source>
+        <translation>LibGDX/Spine 아틀라스를 성공적으로 로드했습니다.</translation>
+    </message>
+    <message>
+        <source>Exporting LibGDX/Spine Atlas...</source>
+        <translation>LibGDX/Spine 아틀라스 내보내는 중...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprites to export.</source>
+        <translation>문서에 내보낼 스프라이트가 없습니다.</translation>
+    </message>
+    <message>
+        <source>Failed to save companion atlas image: %1</source>
+        <translation>연결된 아틀라스 이미지를 저장하지 못했습니다: %1</translation>
+    </message>
+    <message>
+        <source>Cannot create output atlas file: %1</source>
+        <translation>출력 아틀라스 파일을 생성할 수 없습니다: %1</translation>
+    </message>
+    <message>
+        <source>Exported LibGDX/Spine Atlas successfully.</source>
+        <translation>LibGDX/Spine 아틀라스를 성공적으로 내보냈습니다.</translation>
     </message>
 </context>
 <context>
@@ -2109,16 +2350,8 @@ Strict removal clears the pixel.</source>
         <translation>픽셀 편집기 — BentoPack</translation>
     </message>
     <message>
-        <source>◀ Previous Frame</source>
-        <translation>◀ 이전 프레임</translation>
-    </message>
-    <message>
         <source>Navigate to previous frame (Page Up)</source>
         <translation>이전 프레임으로 이동 (Page Up)</translation>
-    </message>
-    <message>
-        <source>Next Frame ▶</source>
-        <translation>다음 프레임 ▶</translation>
     </message>
     <message>
         <source>Navigate to next frame (Page Down)</source>
@@ -2193,36 +2426,12 @@ Strict removal clears the pixel.</source>
         <translation>다시 실행 (Ctrl+Y)</translation>
     </message>
     <message>
-        <source>Active Colors</source>
-        <translation>활성 색상</translation>
-    </message>
-    <message>
-        <source>Primary Color (Left Click to change)</source>
-        <translation>기본 색상 (좌클릭하여 변경)</translation>
-    </message>
-    <message>
-        <source>Secondary Color (Left Click to change)</source>
-        <translation>보조 색상 (좌클릭하여 변경)</translation>
-    </message>
-    <message>
         <source>Swap Colors (X)</source>
         <translation>색상 전환 (X)</translation>
     </message>
     <message>
-        <source>Palette:</source>
-        <translation>팔레트:</translation>
-    </message>
-    <message>
-        <source>Sprite Colors (Auto)</source>
-        <translation>스프라이트 색상 (자동)</translation>
-    </message>
-    <message>
         <source>NES / Famicom (54)</source>
         <translation>NES / Famicom (54)</translation>
-    </message>
-    <message>
-        <source>SNES / Super Famicom (32)</source>
-        <translation>SNES / Super Famicom (32)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
@@ -2243,6 +2452,26 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Commodore 64 (16)</source>
         <translation>Commodore 64 (16)</translation>
+    </message>
+    <message>
+        <source>-1</source>
+        <translation>-1</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <source>Effect Intensity:</source>
+        <translation>효과 강도:</translation>
+    </message>
+    <message>
+        <source>50%</source>
+        <translation>50%</translation>
+    </message>
+    <message>
+        <source>Effect mode:</source>
+        <translation>효과 모드:</translation>
     </message>
     <message>
         <source>1:1 Scale Preview</source>
@@ -2273,6 +2502,138 @@ Strict removal clears the pixel.</source>
         <translation>취소</translation>
     </message>
     <message>
+        <source>Animation:</source>
+        <translation>애니메이션:</translation>
+    </message>
+    <message>
+        <source>Show / Hide Pivot Anchor Marker</source>
+        <translation>피벗 앵커 표시기 표시/숨기기</translation>
+    </message>
+    <message>
+        <source>Edit outside polygon</source>
+        <translation>폴리곤 외부 편집 허용</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Default: off when polygon exists)</source>
+        <translation>폴리곤 경계 외부의 픽셀 편집 허용 (기본값: 폴리곤이 있을 때 꺼짐)</translation>
+    </message>
+    <message>
+        <source>Apply to all frames</source>
+        <translation>모든 프레임에 적용</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</source>
+        <translation>피벗 기준으로 정렬된 모든 프레임에 편집(그리기, 뒤집기, 채우기 등) 적용</translation>
+    </message>
+    <message>
+        <source>Clear Selection / Deselect (Del)</source>
+        <translation>선택 영역 지우기 / 선택 취소 (Del)</translation>
+    </message>
+    <message>
+        <source>Color Picker</source>
+        <translation>색상 선택기</translation>
+    </message>
+    <message>
+        <source>Primary Color (Click to open Color Picker)</source>
+        <translation>기본 색상 (클릭하여 색상 선택기 열기)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Click to open Color Picker)</source>
+        <translation>보조 색상 (클릭하여 색상 선택기 열기)</translation>
+    </message>
+    <message>
+        <source>🎨 Pick Color...</source>
+        <translation>🎨 색상 선택...</translation>
+    </message>
+    <message>
+        <source>Recent:</source>
+        <translation>최근 색상:</translation>
+    </message>
+    <message>
+        <source>Preset:</source>
+        <translation>프리셋:</translation>
+    </message>
+    <message>
+        <source>Sample Frame</source>
+        <translation>프레임 색상 추출</translation>
+    </message>
+    <message>
+        <source>Extract all unique colors from current sprite frame</source>
+        <translation>현재 스프라이트 프레임에서 모든 고유 색상을 추출합니다</translation>
+    </message>
+    <message>
+        <source>Bento Standard (36)</source>
+        <translation>Bento 표준 (36)</translation>
+    </message>
+    <message>
+        <source>SNES / 16-bit (32)</source>
+        <translation>SNES / 16비트 (32)</translation>
+    </message>
+    <message>
+        <source>Onion Skinning</source>
+        <translation>어니언 스키닝</translation>
+    </message>
+    <message>
+        <source>Enable Onion Skin</source>
+        <translation>어니언 스킨 활성화</translation>
+    </message>
+    <message>
+        <source>Past:</source>
+        <translation>이전 프레임:</translation>
+    </message>
+    <message>
+        <source>Past frames to display (-3 to 0)</source>
+        <translation>표시할 이전 프레임 수 (-3 ~ 0)</translation>
+    </message>
+    <message>
+        <source>Future:</source>
+        <translation>다음 프레임:</translation>
+    </message>
+    <message>
+        <source>Future frames to display (0 to +3)</source>
+        <translation>표시할 다음 프레임 수 (0 ~ +3)</translation>
+    </message>
+    <message>
+        <source>Global opacity intensity with distance falloff (0% to 100%)</source>
+        <translation>거리 감소에 따른 전체 불투명도 강도 (0% ~ 100%)</translation>
+    </message>
+    <message>
+        <source>Tinted (Blue/Red)</source>
+        <translation>색상 구분 (파랑/빨강)</translation>
+    </message>
+    <message>
+        <source>Border Detection (Edge)</source>
+        <translation>외곽선 감지 (에지)</translation>
+    </message>
+    <message>
+        <source>Red Channel (R)</source>
+        <translation>빨강 채널 (R)</translation>
+    </message>
+    <message>
+        <source>Green Channel (G)</source>
+        <translation>초록 채널 (G)</translation>
+    </message>
+    <message>
+        <source>Blue Channel (B)</source>
+        <translation>파랑 채널 (B)</translation>
+    </message>
+    <message>
+        <source>Monochrome Silhouette</source>
+        <translation>단색 실루엣</translation>
+    </message>
+    <message>
+        <source>True Color (Ghost)</source>
+        <translation>트루 컬러 (고스트)</translation>
+    </message>
+    <message>
+        <source>Repack Atlas...</source>
+        <translation>아틀라스 재패킹...</translation>
+    </message>
+    <message>
+        <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
+        <translation>대화형 아틀라스 패킹 창을 열어 스프라이트 충돌을 해결합니다</translation>
+    </message>
+    <message>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
@@ -2287,6 +2648,90 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Select Secondary Color</source>
         <translation>보조 색상 선택</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
+        <translation>폴리곤 경계 외부 편집 허용 (체크 해제 시: 폴리곤 외부 편집 비활성화)</translation>
+    </message>
+    <message>
+        <source>No polygon mesh defined for this frame</source>
+        <translation>이 프레임에 정의된 폴리곤 메시가 없습니다</translation>
+    </message>
+    <message>
+        <source>%1: Frame %2 / %3  [Global #%4] (%5x%6 px)</source>
+        <translation>%1: 프레임 %2 / %3  [전체 #%4] (%5x%6 px)</translation>
+    </message>
+    <message>
+        <source>All Frames (%1)</source>
+        <translation>모든 프레임 (%1)</translation>
+    </message>
+    <message>
+        <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
+        <translation>• 프레임 %1(%2)이(가) 프레임 %3(%4)과 충돌합니다</translation>
+    </message>
+    <message>
+        <source>polygon</source>
+        <translation>폴리곤</translation>
+    </message>
+    <message>
+        <source>box</source>
+        <translation>상자</translation>
+    </message>
+    <message>
+        <source>⚠️ Atlas collision: repack required on validation</source>
+        <translation>⚠️ 아틀라스 충돌: 확인 시 재패킹이 필요합니다</translation>
+    </message>
+    <message>
+        <source>Atlas Packing</source>
+        <translation>아틀라스 패킹</translation>
+    </message>
+    <message>
+        <source>Atlas packing plugin not found. Changes were saved without repacking.</source>
+        <translation>아틀라스 패킹 플러그인을 찾을 수 없습니다. 재패킹 없이 변경사항이 저장되었습니다.</translation>
+    </message>
+    <message>
+        <source>Atlas Collision Detected</source>
+        <translation>아틀라스 충돌 감지됨</translation>
+    </message>
+    <message>
+        <source>Polygon or frame modifications cause collision with other sprites in the atlas:
+
+%1
+
+An atlas repack must be performed upon validation to resolve overlapping frames.
+
+Would you like to repack the atlas now?</source>
+        <translation>폴리곤 또는 프레임 수정으로 인해 아틀라스의 다른 스프라이트와 충돌이 발생했습니다:
+
+%1
+
+겹치는 프레임을 해결하려면 확인 시 아틀라스 재패킹을 수행해야 합니다.
+
+지금 아틀라스를 재패킹하시겠습니까?</translation>
+    </message>
+    <message>
+        <source>Repack Atlas Now</source>
+        <translation>지금 아틀라스 재패킹</translation>
+    </message>
+    <message>
+        <source>Validate Without Repacking</source>
+        <translation>재패킹 없이 확인</translation>
+    </message>
+    <message>
+        <source>Filter navigation and onion skinning to animation</source>
+        <translation>탐색 및 어니언 스키닝을 해당 애니메이션으로 필터링</translation>
+    </message>
+    <message>
+        <source># Grid</source>
+        <translation># 그리드</translation>
+    </message>
+    <message>
+        <source>Pivot</source>
+        <translation>피벗</translation>
+    </message>
+    <message>
+        <source>⊡ Fit</source>
+        <translation>⊡ 맞춤</translation>
     </message>
 </context>
 <context>
@@ -3696,6 +4141,33 @@ Install package:
     <message>
         <source>Cancel</source>
         <translation>취소</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Usage: bentopack [options] [file.bento]
+
+BentoPack - 2D Sprite Sheet Packer &amp; Game Engine Asset Pipeline
+
+Options:
+  -h, --help     Displays help on commandline options.
+  -v, --version  Displays version information.
+
+Arguments:
+  file           Project file (.bento) to open.
+</source>
+        <translation>사용법: bentopack [옵션] [파일.bento]
+
+BentoPack - 2D 스프라이트 시트 패커 및 게임 엔진 에셋 파이프라인
+
+옵션:
+  -h, --help     명령줄 옵션 도움말을 표시합니다.
+  -v, --version  버전 정보를 표시합니다.
+
+인수:
+  file           열 프로젝트 파일(.bento).
+</translation>
     </message>
 </context>
 </TS>

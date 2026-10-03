@@ -24,18 +24,6 @@
         <translation>Público-alvo:</translation>
     </message>
     <message>
-        <source>KEY_EDITION_NOTICE_COMMUNITY</source>
-        <translation>Gratuito para criadores independentes e equipes &lt; $1.000.000 ARR</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_COMMERCIAL</source>
-        <translation>Licença comercial ativa - Exportações limpas sem marca d&apos;água</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_TAMPERED</source>
-        <translation>Alerta de falsificação: Binário modificado não oficial</translation>
-    </message>
-    <message>
         <source>KEY_PLUGINS_SECTION_TITLE</source>
         <translation>Arquitetura e Status dos Plugins</translation>
     </message>
@@ -88,14 +76,6 @@
         <translation>Licença: &lt;b&gt;Apache 2.0&lt;</translation>
     </message>
     <message>
-        <source>KEY_LICENSE_PLUGINS_TITLE</source>
-        <translation>Plugins e Extensões: Apache 2.0</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_PLUGINS_NOTICE</source>
-        <translation>Esta licença rege o código-fonte de plugins de exportação e filtros (diretório &lt;code&gt;plugins/&lt;/code&gt;). Isento de royalties abaixo de $1.000.000 USD de receita anual bruta.</translation>
-    </message>
-    <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>Motor Principal: Licença Apache, Versão 2.0 (Núcleo Open-Source)</translation>
     </message>
@@ -104,12 +84,24 @@
         <translation>Licença</translation>
     </message>
     <message>
+        <source>KEY_DIALOG_ABOUT_CREDITS</source>
+        <translation>Créditos</translation>
+    </message>
+    <message>
         <source>KEY_DIALOG_ABOUT_CLOSE</source>
         <translation>Fechar</translation>
     </message>
     <message>
+        <source>Éditeur du logiciel</source>
+        <translation>Editor do software</translation>
+    </message>
+    <message>
         <source>KEY_ABOUT_PURPOSE</source>
         <translation>Uma ferramenta poderosa para extração e animação de sprites</translation>
+    </message>
+    <message>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <translation>Estúdio de ferramentas e tecnologias multimídia</translation>
     </message>
     <message>
         <source>KEY_ABOUT_GIT_INFO</source>
@@ -193,6 +185,53 @@
     <message>
         <source>KEY_NO_FRAMES</source>
         <translation>0 / 0</translation>
+    </message>
+</context>
+<context>
+    <name>AsepriteExtractor</name>
+    <message>
+        <source>Reading Aseprite project binary...</source>
+        <translation>Lendo binário do projeto Aseprite...</translation>
+    </message>
+    <message>
+        <source>Cannot open Aseprite file: %1</source>
+        <translation>Não foi possível abrir o arquivo Aseprite: %1</translation>
+    </message>
+    <message>
+        <source>File is too small to be a valid Aseprite file.</source>
+        <translation>O arquivo é muito pequeno para ser um arquivo Aseprite válido.</translation>
+    </message>
+    <message>
+        <source>Invalid Aseprite magic header (expected 0xA5E0, got 0x%1)</source>
+        <translation>Cabeçalho mágico Aseprite inválido (esperado 0xA5E0, obtido 0x%1)</translation>
+    </message>
+    <message>
+        <source>Invalid canvas dimensions or zero frames in Aseprite header.</source>
+        <translation>Dimensões de tela inválidas ou zero frames no cabeçalho do Aseprite.</translation>
+    </message>
+    <message>
+        <source>Failed to decode any frames from Aseprite file.</source>
+        <translation>Falha ao decodificar frames do arquivo Aseprite.</translation>
+    </message>
+    <message>
+        <source>Aseprite project imported successfully (%1 frames).</source>
+        <translation>Projeto Aseprite importado com sucesso (%1 frames).</translation>
+    </message>
+    <message>
+        <source>Exporting native Aseprite project binary...</source>
+        <translation>Exportando binário nativo do projeto Aseprite...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprite frames to export to Aseprite.</source>
+        <translation>O documento não contém frames de sprites para exportar para o Aseprite.</translation>
+    </message>
+    <message>
+        <source>Cannot create output Aseprite file: %1</source>
+        <translation>Não foi possível criar o arquivo Aseprite de saída: %1</translation>
+    </message>
+    <message>
+        <source>Exported Aseprite project successfully (%1 frames).</source>
+        <translation>Projeto Aseprite exportado com sucesso (%1 frames).</translation>
     </message>
 </context>
 <context>
@@ -476,6 +515,13 @@ Escolha qual branch restaurar:</translation>
     </message>
 </context>
 <context>
+    <name>CliParser</name>
+    <message>
+        <source>BentoPack CLI v%1 (Qt 6 - C++17 Headless Engine)</source>
+        <translation>BentoPack CLI v%1 (Motor headless Qt 6 - C++17)</translation>
+    </message>
+</context>
+<context>
     <name>ColorAdjustFilter</name>
     <message>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
@@ -690,20 +736,8 @@ A remoção estrita limpa o pixel.</translation>
         <translation>Exportar Atlas e Animações</translation>
     </message>
     <message>
-        <source>Destination</source>
-        <translation>Destino</translation>
-    </message>
-    <message>
-        <source>Select export file path...</source>
-        <translation>Selecione o caminho do arquivo de exportação...</translation>
-    </message>
-    <message>
         <source>Browse...</source>
         <translation>Procurar...</translation>
-    </message>
-    <message>
-        <source>Format &amp; Packing Algorithm</source>
-        <translation>Formato e Algoritmo de Empacotamento</translation>
     </message>
     <message>
         <source>Export Format:</source>
@@ -772,6 +806,46 @@ A remoção estrita limpa o pixel.</translation>
     <message>
         <source>Layout &amp; Margins</source>
         <translation>Layout e Margens</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Project Name</source>
+        <translation>Destino e Nome do Projeto</translation>
+    </message>
+    <message>
+        <source>Export Folder:</source>
+        <translation>Pasta de exportação:</translation>
+    </message>
+    <message>
+        <source>Select destination directory...</source>
+        <translation>Selecionar diretório de destino...</translation>
+    </message>
+    <message>
+        <source>File / Project Name:</source>
+        <translation>Nome do arquivo / projeto:</translation>
+    </message>
+    <message>
+        <source>e.g. hero, sprites, atlas...</source>
+        <translation>ex: hero, sprites, atlas...</translation>
+    </message>
+    <message>
+        <source>Output File:</source>
+        <translation>Arquivo de saída:</translation>
+    </message>
+    <message>
+        <source>Full export file path...</source>
+        <translation>Caminho completo do arquivo de exportação...</translation>
+    </message>
+    <message>
+        <source>Save As...</source>
+        <translation>Salvar como...</translation>
+    </message>
+    <message>
+        <source>Target Format</source>
+        <translation>Formato de destino</translation>
+    </message>
+    <message>
+        <source>Generates game engine sprite resource and texture atlas.</source>
+        <translation>Gera recursos de sprites para engines de jogos e atlas de texturas.</translation>
     </message>
     <message>
         <source>Inner Padding (px):</source>
@@ -866,6 +940,70 @@ A remoção estrita limpa o pixel.</translation>
         <translation>VRAM da GPU: --</translation>
     </message>
     <message>
+        <source>Animated GIF Options</source>
+        <translation>Opções de GIF Animado</translation>
+    </message>
+    <message>
+        <source>Playback Loop:</source>
+        <translation>Loop de reprodução:</translation>
+    </message>
+    <message>
+        <source>Infinite Loop</source>
+        <translation>Loop infinito</translation>
+    </message>
+    <message>
+        <source>Play Once</source>
+        <translation>Reproduzir uma vez</translation>
+    </message>
+    <message>
+        <source>Ping-Pong (Forward-Backward)</source>
+        <translation>Pingue-pongue (Ida e volta)</translation>
+    </message>
+    <message>
+        <source>Frame Rate (FPS):</source>
+        <translation>Taxa de quadros (FPS):</translation>
+    </message>
+    <message>
+        <source> fps</source>
+        <translation> fps</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold (0-255):</source>
+        <translation>Limiar alfa (0-255):</translation>
+    </message>
+    <message>
+        <source>Pixels with alpha below this threshold will be completely transparent.</source>
+        <translation>Pixels com alfa abaixo deste limiar serão totalmente transparentes.</translation>
+    </message>
+    <message>
+        <source>Export all animations as separate GIF files (&lt;project&gt;_&lt;anim&gt;.gif)</source>
+        <translation>Exportar todas as animações como arquivos GIF separados (&lt;projeto&gt;_&lt;anim&gt;.gif)</translation>
+    </message>
+    <message>
+        <source>Aseprite Binary Options</source>
+        <translation>Opções de Binário do Aseprite</translation>
+    </message>
+    <message>
+        <source>Lossless cel pixel compression (Deflate / zlib)</source>
+        <translation>Compressão de pixels de cels sem perdas (Deflate / zlib)</translation>
+    </message>
+    <message>
+        <source>Compresses cel pixel data using standard zlib compression for smaller file size.</source>
+        <translation>Comprime os dados de pixels das cels usando zlib padrão para um arquivo menor.</translation>
+    </message>
+    <message>
+        <source>Export animation tags into file</source>
+        <translation>Exportar tags de animação para o arquivo</translation>
+    </message>
+    <message>
+        <source>Embeds project animation sequences as Aseprite tags (chunk 0x2018).</source>
+        <translation>Incorpora sequências de animação do projeto como tags Aseprite (chunk 0x2018).</translation>
+    </message>
+    <message>
+        <source>Generates native 32-bit RGBA Aseprite project (.ase/.aseprite) compatible with Aseprite v1.2+.</source>
+        <translation>Gera um projeto nativo Aseprite RGBA de 32 bits (.ase/.aseprite) compatível com Aseprite v1.2+.</translation>
+    </message>
+    <message>
         <source>Exporting &amp; compressing textures...</source>
         <translation>Exportando e comprimindo texturas...</translation>
     </message>
@@ -887,455 +1025,564 @@ A remoção estrita limpa o pixel.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>Select Export Directory</source>
+        <translation>Selecionar diretório de exportação</translation>
     </message>
     <message>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Todos os arquivos</translation>
     </message>
     <message>
         <source>All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Todos os arquivos (*.*)</translation>
     </message>
     <message>
         <source>Select Export Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecionar destino de exportação</translation>
+    </message>
+    <message>
+        <source>Generates animated multi-frame GIF files with frame timings, transparency, and looping options.</source>
+        <translation>Gera arquivos GIF animados com tempos de frames, transparência e opções de loop.</translation>
+    </message>
+    <message>
+        <source>Generates a native Aseprite binary project (.ase/.aseprite) preserving layers, cels, and animation tags.</source>
+        <translation>Gera um projeto binário nativo do Aseprite (.ase/.aseprite) preservando camadas, cels e tags de animação.</translation>
+    </message>
+    <message>
+        <source>Exports Godot 4 SpriteFrames resource (.tres) with atlas texture and animation metadata.</source>
+        <translation>Exporta o recurso SpriteFrames do Godot 4 (.tres) com textura de atlas e metadados de animação.</translation>
+    </message>
+    <message>
+        <source>Exports Unity 2D Sprite Mesh metadata (.unity.json) with atlas texture.</source>
+        <translation>Exporta metadados do Unity 2D Sprite Mesh (.unity.json) com textura de atlas.</translation>
+    </message>
+    <message>
+        <source>Exports Unreal Engine Paper2D sprite definitions (.paper2d.json) with atlas texture.</source>
+        <translation>Exporta definições de sprites Paper2D da Unreal Engine (.paper2d.json) com textura de atlas.</translation>
+    </message>
+    <message>
+        <source>Exports LibGDX / Spine atlas format (.atlas) with companion atlas image.</source>
+        <translation>Exporta o formato de atlas LibGDX / Spine (.atlas) com imagem de atlas correspondente.</translation>
+    </message>
+    <message>
+        <source>Exports TexturePacker JSON / Aseprite JSON atlas format with sprite frames.</source>
+        <translation>Exporta o formato de atlas TexturePacker JSON / Aseprite JSON com frames de sprites.</translation>
+    </message>
+    <message>
+        <source>Exports packed texture atlas and companion sprite definitions.</source>
+        <translation>Exporta o atlas de texturas empacotado e as definições de sprites associadas.</translation>
     </message>
     <message>
         <source>Frames: 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Frames: 0</translation>
     </message>
     <message>
         <source>GPU VRAM: %1 MB (Standard RGBA8888, uncompressed on GPU)</source>
-        <translation type="unfinished"></translation>
+        <translation>VRAM GPU: %1 MB (RGBA8888 padrão, não comprimido na GPU)</translation>
     </message>
     <message>
-        <source>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</source>
-        <translation type="unfinished"></translation>
+        <source>~%1 KB on disk</source>
+        <translation>~%1 KB em disco</translation>
+    </message>
+    <message>
+        <source>~%1 MB on disk</source>
+        <translation>~%1 MB em disco</translation>
+    </message>
+    <message>
+        <source>+Zstd L%1</source>
+        <translation>+Zstd N%1</translation>
+    </message>
+    <message>
+        <source>Raw</source>
+        <translation>Bruto</translation>
+    </message>
+    <message>
+        <source>GPU VRAM: %1 MB (%2, -%3% hardware) | File: %4 (%5)</source>
+        <translation>VRAM GPU: %1 MB (%2, -%3% hardware) | Arquivo: %4 (%5)</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensões: %1 x %2 px (Atlas atual)</translation>
     </message>
     <message>
         <source>Packing Efficiency: Preserved as-is (WYSIWYG)</source>
-        <translation type="unfinished"></translation>
+        <translation>Eficiência de empacotamento: Preservada como está (WYSIWYG)</translation>
     </message>
     <message>
         <source>Frames: %1 total</source>
-        <translation type="unfinished"></translation>
+        <translation>Frames: %1 no total</translation>
     </message>
     <message>
         <source>Dimensions: No current atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensões: Nenhum atlas atual</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensões: %1 x %2 px</translation>
     </message>
     <message>
         <source>Packing Efficiency: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Eficiência de empacotamento: %1%</translation>
     </message>
     <message>
         <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation type="unfinished"></translation>
+        <translation>Frames: %1 no total (%2 únicos, %3 duplicados economizados)</translation>
     </message>
     <message>
         <source>Frames: %1 total (all unique)</source>
-        <translation type="unfinished"></translation>
+        <translation>Frames: %1 no total (todos únicos)</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensões: Não cabe nos limites máximos!</translation>
     </message>
     <message>
         <source>Packing Efficiency: 0%</source>
-        <translation type="unfinished"></translation>
+        <translation>Eficiência de empacotamento: 0%</translation>
     </message>
     <message>
         <source>Frames: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Frames: %1</translation>
     </message>
     <message>
         <source>Please specify a valid file name before exporting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Especifique um nome de arquivo válido antes de exportar.</translation>
+    </message>
+    <message>
+        <source>Rendering and encoding animated GIF frames...</source>
+        <translation>Renderizando e codificando frames do GIF animado...</translation>
+    </message>
+    <message>
+        <source>Encoding native Aseprite binary project...</source>
+        <translation>Codificando projeto binário nativo do Aseprite...</translation>
     </message>
     <message>
         <source>Exporting and compressing textures (GPU VRAM / KTX2)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportando e comprimindo texturas (GPU VRAM / KTX2)...</translation>
     </message>
     <message>
         <source>Export completed successfully!</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportação concluída com sucesso!</translation>
     </message>
     <message>
         <source>Saved %1 successfully.</source>
-        <translation type="unfinished">%1 salvo com sucesso.</translation>
+        <translation>%1 salvo com sucesso.</translation>
     </message>
     <message>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro de exportação</translation>
     </message>
     <message>
         <source>An error occurred during export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocorreu um erro durante a exportação.</translation>
     </message>
 </context>
 <context>
     <name>Extractor</name>
     <message>
         <source>Export is not supported by this format (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>A exportação não é suportada por este formato (%1)</translation>
     </message>
 </context>
 <context>
     <name>FilterDialogBase</name>
     <message>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Pré-visualização em tempo real</translation>
     </message>
     <message>
         <source>Update atlas and frames in real-time while adjusting parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizar atlas e frames em tempo real ao ajustar parâmetros</translation>
     </message>
     <message>
         <source>Auto-detect Sprite Boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Detecção automática de caixas de sprites</translation>
     </message>
     <message>
         <source>Automatically recalculate sprite bounding boxes after filtering</source>
-        <translation type="unfinished"></translation>
+        <translation>Recalcular automaticamente as caixas delimitadoras dos sprites após filtragem</translation>
     </message>
     <message>
         <source>Reset Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar padrões</translation>
     </message>
     <message>
         <source>Restore recommended default values for this filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar os valores padrão recomendados para este filtro</translation>
     </message>
     <message>
         <source>%1 initial frame(s)</source>
-        <translation type="unfinished">%1 quadro(s) inicial(is)</translation>
+        <translation>%1 frame(s) inicial(is)</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
     <name>FilterRegistry</name>
     <message>
         <source>Cleanup &amp; Extraction</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpeza e Extração</translation>
     </message>
     <message>
         <source>Effects &amp; Outlines</source>
-        <translation type="unfinished"></translation>
+        <translation>Efeitos e Contornos</translation>
     </message>
     <message>
         <source>Colors &amp; Palettes</source>
-        <translation type="unfinished"></translation>
+        <translation>Cores e Paletas</translation>
     </message>
     <message>
         <source>Geometry &amp; Transform</source>
-        <translation type="unfinished"></translation>
+        <translation>Geometria e Transformação</translation>
     </message>
 </context>
 <context>
     <name>GifExtractor</name>
     <message>
         <source>Reading GIF frames from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lendo frames GIF de %1...</translation>
     </message>
     <message>
         <source>File not found: %1</source>
-        <translation type="unfinished">Arquivo não encontrado: %1</translation>
+        <translation>Arquivo não encontrado: %1</translation>
     </message>
     <message>
         <source>Unable to read GIF format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível ler o formato GIF: %1</translation>
     </message>
     <message>
         <source>No valid frames could be decoded from GIF: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum frame válido pôde ser decodificado do GIF: %1</translation>
     </message>
     <message>
         <source>Assembling GIF atlas...</source>
-        <translation type="unfinished"></translation>
+        <translation>Montando atlas GIF...</translation>
     </message>
     <message>
         <source>Failed to pack GIF frames into texture atlas.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao empacotar frames GIF no atlas de texturas.</translation>
     </message>
     <message>
         <source>Extracted %1 GIF frames</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 frames GIF extraídos</translation>
     </message>
     <message>
         <source>No frames in document to export.</source>
-        <translation type="unfinished">Nenhum quadro no documento para exportar.</translation>
+        <translation>Nenhum frame no documento para exportar.</translation>
     </message>
     <message>
         <source>Exporting GIF animation %1 (%2/%3)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportando animação GIF %1 (%2/%3)...</translation>
     </message>
     <message>
         <source>Exported %1 GIF animation(s) successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 animação(ões) GIF exportada(s) com sucesso.</translation>
     </message>
     <message>
         <source>Animation %1 has no frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>A animação %1 não tem frames.</translation>
     </message>
     <message>
         <source>Failed to initialize GIF encoder for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao inicializar o codificador GIF para %1.</translation>
     </message>
     <message>
         <source>Failed to encode GIF frame in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao codificar o frame GIF em %1.</translation>
     </message>
     <message>
         <source>GIF encoding generated no data for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>A codificação GIF não gerou dados para %1.</translation>
     </message>
     <message>
         <source>Cannot open destination file %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível abrir o arquivo de destino %1: %2</translation>
     </message>
     <message>
         <source>Incomplete file write to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravação incompleta no arquivo %1.</translation>
     </message>
 </context>
 <context>
     <name>GitCommitNodeItem</name>
     <message>
         <source>KEY_GIT_TIP_MSG</source>
-        <translation type="unfinished"></translation>
+        <translation>Mensagem: %1</translation>
     </message>
     <message>
         <source>KEY_GIT_TIP_AUTHOR</source>
-        <translation type="unfinished"></translation>
+        <translation>Autor: %1</translation>
     </message>
     <message>
         <source>KEY_GIT_TIP_DATE</source>
-        <translation type="unfinished"></translation>
+        <translation>Data: %1</translation>
     </message>
     <message>
         <source>KEY_GIT_TIP_RESTORE_HINT</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique duas vezes para restaurar esta versão</translation>
     </message>
 </context>
 <context>
     <name>GitHistoryDock</name>
     <message>
         <source>KEY_DOCK_GIT_HISTORY</source>
-        <translation type="unfinished">Histórico do Git</translation>
+        <translation>Histórico Git</translation>
     </message>
     <message>
         <source>KEY_GIT_REFRESH_TOOLTIP</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizar histórico de revisões</translation>
     </message>
     <message>
         <source>KEY_GIT_RETURN_PRESENT</source>
-        <translation type="unfinished"></translation>
+        <translation>Voltar ao Presente</translation>
     </message>
     <message>
         <source>KEY_GIT_RETURN_PRESENT_TOOLTIP</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar versão mais recente (HEAD da branch)</translation>
     </message>
     <message>
         <source>KEY_GIT_DISABLED_BANNER</source>
-        <translation type="unfinished"></translation>
+        <translation>A integração com o Git não está ativada nesta versão.
+(libgit2 não foi encontrada na compilação)</translation>
     </message>
     <message>
         <source>KEY_GIT_HDR_COMMIT</source>
-        <translation type="unfinished"></translation>
+        <translation>Commit:</translation>
     </message>
     <message>
         <source>KEY_GIT_HDR_DATE</source>
-        <translation type="unfinished"></translation>
+        <translation>Data:</translation>
     </message>
     <message>
         <source>KEY_GIT_HDR_AUTHOR</source>
-        <translation type="unfinished"></translation>
+        <translation>Autor:</translation>
     </message>
     <message>
         <source>KEY_GIT_HDR_ACTION</source>
-        <translation type="unfinished"></translation>
+        <translation>Ação:</translation>
     </message>
     <message>
         <source>KEY_GIT_BTN_RESTORE</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar esta revisão</translation>
     </message>
     <message>
         <source>KEY_GIT_NO_ACTIVE_PROJECT</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum projeto ativo</translation>
     </message>
     <message>
         <source>KEY_GIT_COMMITS_COUNT</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 commit(s)</translation>
     </message>
     <message>
         <source>KEY_GIT_EMPTY_HISTORY</source>
-        <translation type="unfinished"></translation>
+        <translation>O histórico Git está vazio para este projeto.</translation>
     </message>
     <message>
         <source>KEY_GIT_NO_SELECTION</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum commit selecionado.
+Clique em um nó para ver os detalhes.</translation>
     </message>
 </context>
 <context>
     <name>GodotExtractor</name>
     <message>
         <source>Reading Godot SpriteFrames resource...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lendo recurso SpriteFrames do Godot...</translation>
     </message>
     <message>
         <source>Cannot open Godot resource file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível abrir o arquivo de recurso do Godot: %1</translation>
     </message>
     <message>
         <source>File is not a valid Godot SpriteFrames resource: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>O arquivo não é um recurso SpriteFrames válido do Godot: %1</translation>
     </message>
     <message>
         <source>Referenced texture atlas image not found for: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagem de atlas referenciada não encontrada para: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao carregar imagem do atlas de texturas: %1</translation>
     </message>
     <message>
         <source>Extracted %1 frames and %2 animations from Godot resource.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 frames e %2 animações extraídas do recurso Godot.</translation>
     </message>
     <message>
         <source>No frames in document to export.</source>
-        <translation type="unfinished">Nenhum quadro no documento para exportar.</translation>
+        <translation>Nenhum frame no documento para exportar.</translation>
     </message>
     <message>
         <source>Packing atlas for Godot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Empacotando atlas para Godot...</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation type="unfinished">O nome do arquivo de exportação não pode estar vazio.</translation>
+        <translation>O nome do arquivo de exportação não pode estar vazio.</translation>
     </message>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao empacotar frames para exportação ao Godot.</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao gravar textura VRAM de atlas do Godot: %1 (%2)</translation>
     </message>
     <message>
         <source>Failed to write Godot atlas image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao gravar imagem de atlas do Godot: %1</translation>
     </message>
     <message>
         <source>Cannot write to Godot resource file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível gravar no arquivo de recurso do Godot: %1</translation>
     </message>
     <message>
         <source>Exported Godot resource: %1 and image %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Recurso Godot %1 e imagem %2 exportados</translation>
     </message>
     <message>
         <source>Preserve existing Godot 4 UID (uid://...) on re-export</source>
-        <translation type="unfinished"></translation>
+        <translation>Preservar UID existente do Godot 4 (uid://...) ao reexportar</translation>
     </message>
     <message>
         <source>Auto-generate AnimatedSprite2D scene (.tscn) companion file</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerar automaticamente arquivo de cena associado AnimatedSprite2D (.tscn)</translation>
     </message>
     <message>
         <source>Godot Engine 4.x SpriteFrames exporter with AtlasTexture regions and collision mesh generation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportador SpriteFrames do Godot Engine 4.x com regiões AtlasTexture e malhas de colisão.</translation>
     </message>
 </context>
 <context>
     <name>JsonExtractor</name>
     <message>
         <source>Reading JSON sprite atlas %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lendo atlas de sprites JSON %1...</translation>
     </message>
     <message>
         <source>Associated atlas image not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagem associada ao atlas não encontrada: %1</translation>
     </message>
     <message>
         <source>Failed to decode atlas image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao decodificar a imagem do atlas: %1</translation>
     </message>
     <message>
         <source>No frames could be extracted from JSON: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum frame pôde ser extraído do JSON: %1</translation>
     </message>
     <message>
         <source>Imported %1 frames, %2 animations from JSON</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 frames, %2 animações importadas do JSON</translation>
     </message>
     <message>
         <source>No frames in document to export.</source>
-        <translation type="unfinished">Nenhum quadro no documento para exportar.</translation>
+        <translation>Nenhum frame no documento para exportar.</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation type="unfinished">O nome do arquivo de exportação não pode estar vazio.</translation>
+        <translation>O nome do arquivo de exportação não pode estar vazio.</translation>
     </message>
     <message>
         <source>Packing atlas for JSON export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Empacotando atlas para exportação JSON...</translation>
     </message>
     <message>
         <source>Failed to pack frames for JSON export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao empacotar frames para exportação JSON.</translation>
     </message>
     <message>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
-        <translation type="unfinished">Falha ao salvar a textura VRAM complementar: %1 (%2)</translation>
+        <translation>Falha ao salvar textura VRAM associada: %1 (%2)</translation>
     </message>
     <message>
         <source>Failed to save companion image: %1</source>
-        <translation type="unfinished">Falha ao salvar a imagem complementar: %1</translation>
+        <translation>Falha ao salvar imagem associada: %1</translation>
     </message>
     <message>
         <source>Cannot write to JSON file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível gravar no arquivo JSON: %1</translation>
     </message>
     <message>
         <source>Exported JSON descriptor %1 and image %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Descritor JSON %1 e imagem %2 exportados</translation>
     </message>
     <message>
         <source>Default JSON Structure:</source>
-        <translation type="unfinished"></translation>
+        <translation>Estrutura JSON padrão:</translation>
     </message>
     <message>
         <source>Hash Object (TexturePacker Hash)</source>
-        <translation type="unfinished"></translation>
+        <translation>Objeto Hash (TexturePacker Hash)</translation>
     </message>
     <message>
         <source>Array List (TexturePacker Array / Aseprite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de matrizes (TexturePacker Array / Aseprite)</translation>
     </message>
     <message>
         <source>Include animation frameTags in metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>Incluir frameTags de animação nos metadados</translation>
     </message>
     <message>
         <source>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportador de descritores de atlas JSON compatível com TexturePacker, Aseprite, Phaser e PixiJS.</translation>
+    </message>
+</context>
+<context>
+    <name>LibGdxExtractor</name>
+    <message>
+        <source>Atlas file is empty.</source>
+        <translation>O arquivo do atlas está vazio.</translation>
+    </message>
+    <message>
+        <source>Reading LibGDX/Spine Atlas...</source>
+        <translation>Lendo atlas LibGDX/Spine...</translation>
+    </message>
+    <message>
+        <source>Cannot open atlas file: %1</source>
+        <translation>Não foi possível abrir o arquivo do atlas: %1</translation>
+    </message>
+    <message>
+        <source>Failed to parse atlas file.</source>
+        <translation>Falha ao analisar o arquivo do atlas.</translation>
+    </message>
+    <message>
+        <source>Failed to load companion atlas image: %1</source>
+        <translation>Falha ao carregar a imagem de atlas correspondente: %1</translation>
+    </message>
+    <message>
+        <source>LibGDX/Spine Atlas loaded successfully.</source>
+        <translation>Atlas LibGDX/Spine carregado com sucesso.</translation>
+    </message>
+    <message>
+        <source>Exporting LibGDX/Spine Atlas...</source>
+        <translation>Exportando atlas LibGDX/Spine...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprites to export.</source>
+        <translation>O documento não contém sprites para exportar.</translation>
+    </message>
+    <message>
+        <source>Failed to save companion atlas image: %1</source>
+        <translation>Falha ao salvar a imagem de atlas correspondente: %1</translation>
+    </message>
+    <message>
+        <source>Cannot create output atlas file: %1</source>
+        <translation>Não foi possível criar o arquivo do atlas de saída: %1</translation>
+    </message>
+    <message>
+        <source>Exported LibGDX/Spine Atlas successfully.</source>
+        <translation>Atlas LibGDX/Spine exportado com sucesso.</translation>
     </message>
 </context>
 <context>
@@ -2103,16 +2350,8 @@ Deseja salvá-las antes de prosseguir?</translation>
         <translation>Editor de Pixels — BentoPack</translation>
     </message>
     <message>
-        <source>◀ Previous Frame</source>
-        <translation>◀ Quadro Anterior</translation>
-    </message>
-    <message>
         <source>Navigate to previous frame (Page Up)</source>
         <translation>Navegar para o quadro anterior (Page Up)</translation>
-    </message>
-    <message>
-        <source>Next Frame ▶</source>
-        <translation>Próximo Quadro ▶</translation>
     </message>
     <message>
         <source>Navigate to next frame (Page Down)</source>
@@ -2187,36 +2426,12 @@ Deseja salvá-las antes de prosseguir?</translation>
         <translation>Refazer (Ctrl+Y)</translation>
     </message>
     <message>
-        <source>Active Colors</source>
-        <translation>Cores Ativas</translation>
-    </message>
-    <message>
-        <source>Primary Color (Left Click to change)</source>
-        <translation>Cor Primária (Clique esquerdo para alterar)</translation>
-    </message>
-    <message>
-        <source>Secondary Color (Left Click to change)</source>
-        <translation>Cor Secundária (Clique esquerdo para alterar)</translation>
-    </message>
-    <message>
         <source>Swap Colors (X)</source>
         <translation>Trocar Cores (X)</translation>
     </message>
     <message>
-        <source>Palette:</source>
-        <translation>Paleta:</translation>
-    </message>
-    <message>
-        <source>Sprite Colors (Auto)</source>
-        <translation>Cores do Sprite (Auto)</translation>
-    </message>
-    <message>
         <source>NES / Famicom (54)</source>
         <translation>NES / Famicom (54)</translation>
-    </message>
-    <message>
-        <source>SNES / Super Famicom (32)</source>
-        <translation>SNES / Super Famicom (32)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
@@ -2237,6 +2452,26 @@ Deseja salvá-las antes de prosseguir?</translation>
     <message>
         <source>Commodore 64 (16)</source>
         <translation>Commodore 64 (16)</translation>
+    </message>
+    <message>
+        <source>-1</source>
+        <translation>-1</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <source>Effect Intensity:</source>
+        <translation>Intensidade do efeito:</translation>
+    </message>
+    <message>
+        <source>50%</source>
+        <translation>50%</translation>
+    </message>
+    <message>
+        <source>Effect mode:</source>
+        <translation>Modo de efeito:</translation>
     </message>
     <message>
         <source>1:1 Scale Preview</source>
@@ -2267,6 +2502,138 @@ Deseja salvá-las antes de prosseguir?</translation>
         <translation>Cancelar</translation>
     </message>
     <message>
+        <source>Animation:</source>
+        <translation>Animação:</translation>
+    </message>
+    <message>
+        <source>Show / Hide Pivot Anchor Marker</source>
+        <translation>Exibir / Ocultar marcador de pivô</translation>
+    </message>
+    <message>
+        <source>Edit outside polygon</source>
+        <translation>Editar fora do polígono</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Default: off when polygon exists)</source>
+        <translation>Permitir edição de pixels fora dos limites do polígono (Padrão: desligado quando há polígono)</translation>
+    </message>
+    <message>
+        <source>Apply to all frames</source>
+        <translation>Aplicar a todos os frames</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</source>
+        <translation>Aplicar edições (desenho, espelhamento, preenchimento etc.) a todos os frames alinhados pelo pivô</translation>
+    </message>
+    <message>
+        <source>Clear Selection / Deselect (Del)</source>
+        <translation>Limpar seleção / Desmarcar (Del)</translation>
+    </message>
+    <message>
+        <source>Color Picker</source>
+        <translation>Seletor de Cor</translation>
+    </message>
+    <message>
+        <source>Primary Color (Click to open Color Picker)</source>
+        <translation>Cor primária (Clique para abrir o seletor)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Click to open Color Picker)</source>
+        <translation>Cor secundária (Clique para abrir o seletor)</translation>
+    </message>
+    <message>
+        <source>🎨 Pick Color...</source>
+        <translation>🎨 Escolher cor...</translation>
+    </message>
+    <message>
+        <source>Recent:</source>
+        <translation>Recentes:</translation>
+    </message>
+    <message>
+        <source>Preset:</source>
+        <translation>Predefinição:</translation>
+    </message>
+    <message>
+        <source>Sample Frame</source>
+        <translation>Amostrar frame</translation>
+    </message>
+    <message>
+        <source>Extract all unique colors from current sprite frame</source>
+        <translation>Extrair todas as cores exclusivas do frame atual do sprite</translation>
+    </message>
+    <message>
+        <source>Bento Standard (36)</source>
+        <translation>Bento Padrão (36)</translation>
+    </message>
+    <message>
+        <source>SNES / 16-bit (32)</source>
+        <translation>SNES / 16 bits (32)</translation>
+    </message>
+    <message>
+        <source>Onion Skinning</source>
+        <translation>Papel vegetal (Onion Skinning)</translation>
+    </message>
+    <message>
+        <source>Enable Onion Skin</source>
+        <translation>Ativar papel vegetal</translation>
+    </message>
+    <message>
+        <source>Past:</source>
+        <translation>Passadas:</translation>
+    </message>
+    <message>
+        <source>Past frames to display (-3 to 0)</source>
+        <translation>Frames anteriores para exibir (-3 a 0)</translation>
+    </message>
+    <message>
+        <source>Future:</source>
+        <translation>Futuras:</translation>
+    </message>
+    <message>
+        <source>Future frames to display (0 to +3)</source>
+        <translation>Frames futuros para exibir (0 a +3)</translation>
+    </message>
+    <message>
+        <source>Global opacity intensity with distance falloff (0% to 100%)</source>
+        <translation>Opacidade global com atenuação por distância (0% a 100%)</translation>
+    </message>
+    <message>
+        <source>Tinted (Blue/Red)</source>
+        <translation>Colorido (Azul/Vermelho)</translation>
+    </message>
+    <message>
+        <source>Border Detection (Edge)</source>
+        <translation>Detecção de contornos (Bordas)</translation>
+    </message>
+    <message>
+        <source>Red Channel (R)</source>
+        <translation>Canal vermelho (R)</translation>
+    </message>
+    <message>
+        <source>Green Channel (G)</source>
+        <translation>Canal verde (G)</translation>
+    </message>
+    <message>
+        <source>Blue Channel (B)</source>
+        <translation>Canal azul (B)</translation>
+    </message>
+    <message>
+        <source>Monochrome Silhouette</source>
+        <translation>Silhueta monocromática</translation>
+    </message>
+    <message>
+        <source>True Color (Ghost)</source>
+        <translation>Cores reais (Fantasma)</translation>
+    </message>
+    <message>
+        <source>Repack Atlas...</source>
+        <translation>Reempacotar atlas...</translation>
+    </message>
+    <message>
+        <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
+        <translation>Abrir diálogo interativo de empacotamento para resolver colisões</translation>
+    </message>
+    <message>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
@@ -2281,6 +2648,90 @@ Deseja salvá-las antes de prosseguir?</translation>
     <message>
         <source>Select Secondary Color</source>
         <translation>Selecionar Cor Secundária</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
+        <translation>Permitir edição fora do polígono (Desmarcado: edição fora do polígono desativada)</translation>
+    </message>
+    <message>
+        <source>No polygon mesh defined for this frame</source>
+        <translation>Nenhuma malha poligonal definida para este frame</translation>
+    </message>
+    <message>
+        <source>%1: Frame %2 / %3  [Global #%4] (%5x%6 px)</source>
+        <translation>%1: Frame %2 / %3  [Global #%4] (%5x%6 px)</translation>
+    </message>
+    <message>
+        <source>All Frames (%1)</source>
+        <translation>Todos os frames (%1)</translation>
+    </message>
+    <message>
+        <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
+        <translation>• O frame %1 (%2) colide com o frame %3 (%4)</translation>
+    </message>
+    <message>
+        <source>polygon</source>
+        <translation>polígono</translation>
+    </message>
+    <message>
+        <source>box</source>
+        <translation>caixa</translation>
+    </message>
+    <message>
+        <source>⚠️ Atlas collision: repack required on validation</source>
+        <translation>⚠️ Colisão no atlas: reempacotamento necessário na validação</translation>
+    </message>
+    <message>
+        <source>Atlas Packing</source>
+        <translation>Empacotamento de atlas</translation>
+    </message>
+    <message>
+        <source>Atlas packing plugin not found. Changes were saved without repacking.</source>
+        <translation>Plugin de empacotamento não encontrado. Alterações salvas sem reempacotar.</translation>
+    </message>
+    <message>
+        <source>Atlas Collision Detected</source>
+        <translation>Colisão no atlas detectada</translation>
+    </message>
+    <message>
+        <source>Polygon or frame modifications cause collision with other sprites in the atlas:
+
+%1
+
+An atlas repack must be performed upon validation to resolve overlapping frames.
+
+Would you like to repack the atlas now?</source>
+        <translation>Modificações no polígono ou frame causam colisão com outros sprites no atlas:
+
+%1
+
+Um reempacotamento deve ser realizado para resolver a sobreposição de frames.
+
+Deseja reempacotar o atlas agora?</translation>
+    </message>
+    <message>
+        <source>Repack Atlas Now</source>
+        <translation>Reempacotar atlas agora</translation>
+    </message>
+    <message>
+        <source>Validate Without Repacking</source>
+        <translation>Validar sem reempacotar</translation>
+    </message>
+    <message>
+        <source>Filter navigation and onion skinning to animation</source>
+        <translation>Filtrar navegação e papel vegetal para a animação</translation>
+    </message>
+    <message>
+        <source># Grid</source>
+        <translation># Grade</translation>
+    </message>
+    <message>
+        <source>Pivot</source>
+        <translation>Pivô</translation>
+    </message>
+    <message>
+        <source>⊡ Fit</source>
+        <translation>⊡ Ajustar</translation>
     </message>
 </context>
 <context>
@@ -3692,6 +4143,33 @@ Arraste e solte para reordenar</translation>
     <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Usage: bentopack [options] [file.bento]
+
+BentoPack - 2D Sprite Sheet Packer &amp; Game Engine Asset Pipeline
+
+Options:
+  -h, --help     Displays help on commandline options.
+  -v, --version  Displays version information.
+
+Arguments:
+  file           Project file (.bento) to open.
+</source>
+        <translation>Uso: bentopack [opções] [arquivo.bento]
+
+BentoPack - Empacotador de spritesheets 2D e pipeline para engines
+
+Opções:
+  -h, --help     Exibe ajuda na linha de comando.
+  -v, --version  Exibe informações de versão.
+
+Argumentos:
+  arquivo        Arquivo de projeto (.bento) para abrir.
+</translation>
     </message>
 </context>
 </TS>

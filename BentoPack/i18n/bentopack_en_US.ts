@@ -24,18 +24,6 @@
         <translation>Target:</translation>
     </message>
     <message>
-        <source>KEY_EDITION_NOTICE_COMMUNITY</source>
-        <translation>Free for indie creators &amp; teams &lt; $1,000,000 ARR</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_COMMERCIAL</source>
-        <translation>Active commercial license - Clean exports without watermark</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_TAMPERED</source>
-        <translation>Counterfeit alert: Unofficial modified binary</translation>
-    </message>
-    <message>
         <source>KEY_PLUGINS_SECTION_TITLE</source>
         <translation>Architecture &amp; Plugin Status</translation>
     </message>
@@ -88,14 +76,6 @@
         <translation>License: &lt;b&gt;Apache 2.0&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>KEY_LICENSE_PLUGINS_TITLE</source>
-        <translation>Plugins &amp; Extensions: Apache 2.0</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_PLUGINS_NOTICE</source>
-        <translation>This license governs the source code of exporter plugins and filters (directory &lt;code&gt;plugins/&lt;/code&gt;). Royalty-free under $1,000,000 USD gross annual revenue.</translation>
-    </message>
-    <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>Core Engine: Apache License, Version 2.0 (Open-Source Core)</translation>
     </message>
@@ -112,8 +92,16 @@
         <translation>Close</translation>
     </message>
     <message>
+        <source>Éditeur du logiciel</source>
+        <translation>Software Publisher</translation>
+    </message>
+    <message>
         <source>KEY_ABOUT_PURPOSE</source>
         <translation>A powerful tool for sprite extraction and animation</translation>
+    </message>
+    <message>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <translation>Tooling &amp; multimedia technology studio</translation>
     </message>
     <message>
         <source>KEY_ABOUT_GIT_INFO</source>
@@ -197,6 +185,53 @@
     <message>
         <source>KEY_NO_FRAMES</source>
         <translation>0 / 0</translation>
+    </message>
+</context>
+<context>
+    <name>AsepriteExtractor</name>
+    <message>
+        <source>Reading Aseprite project binary...</source>
+        <translation>Reading Aseprite project binary...</translation>
+    </message>
+    <message>
+        <source>Cannot open Aseprite file: %1</source>
+        <translation>Cannot open Aseprite file: %1</translation>
+    </message>
+    <message>
+        <source>File is too small to be a valid Aseprite file.</source>
+        <translation>File is too small to be a valid Aseprite file.</translation>
+    </message>
+    <message>
+        <source>Invalid Aseprite magic header (expected 0xA5E0, got 0x%1)</source>
+        <translation>Invalid Aseprite magic header (expected 0xA5E0, got 0x%1)</translation>
+    </message>
+    <message>
+        <source>Invalid canvas dimensions or zero frames in Aseprite header.</source>
+        <translation>Invalid canvas dimensions or zero frames in Aseprite header.</translation>
+    </message>
+    <message>
+        <source>Failed to decode any frames from Aseprite file.</source>
+        <translation>Failed to decode any frames from Aseprite file.</translation>
+    </message>
+    <message>
+        <source>Aseprite project imported successfully (%1 frames).</source>
+        <translation>Aseprite project imported successfully (%1 frames).</translation>
+    </message>
+    <message>
+        <source>Exporting native Aseprite project binary...</source>
+        <translation>Exporting native Aseprite project binary...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprite frames to export to Aseprite.</source>
+        <translation>Document contains no sprite frames to export to Aseprite.</translation>
+    </message>
+    <message>
+        <source>Cannot create output Aseprite file: %1</source>
+        <translation>Cannot create output Aseprite file: %1</translation>
+    </message>
+    <message>
+        <source>Exported Aseprite project successfully (%1 frames).</source>
+        <translation>Exported Aseprite project successfully (%1 frames).</translation>
     </message>
 </context>
 <context>
@@ -480,6 +515,13 @@ Choose which branch to restore:</translation>
     </message>
 </context>
 <context>
+    <name>CliParser</name>
+    <message>
+        <source>BentoPack CLI v%1 (Qt 6 - C++17 Headless Engine)</source>
+        <translation>BentoPack CLI v%1 (Qt 6 - C++17 Headless Engine)</translation>
+    </message>
+</context>
+<context>
     <name>ColorAdjustFilter</name>
     <message>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
@@ -694,20 +736,8 @@ Strict removal clears the pixel.</translation>
         <translation>Export Atlas &amp; Animations</translation>
     </message>
     <message>
-        <source>Destination</source>
-        <translation>Destination</translation>
-    </message>
-    <message>
-        <source>Select export file path...</source>
-        <translation>Select export file path...</translation>
-    </message>
-    <message>
         <source>Browse...</source>
         <translation>Browse...</translation>
-    </message>
-    <message>
-        <source>Format &amp; Packing Algorithm</source>
-        <translation>Format &amp; Packing Algorithm</translation>
     </message>
     <message>
         <source>Export Format:</source>
@@ -776,6 +806,46 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Layout &amp; Margins</source>
         <translation>Layout &amp; Margins</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Project Name</source>
+        <translation>Destination &amp; Project Name</translation>
+    </message>
+    <message>
+        <source>Export Folder:</source>
+        <translation>Export Folder:</translation>
+    </message>
+    <message>
+        <source>Select destination directory...</source>
+        <translation>Select destination directory...</translation>
+    </message>
+    <message>
+        <source>File / Project Name:</source>
+        <translation>File / Project Name:</translation>
+    </message>
+    <message>
+        <source>e.g. hero, sprites, atlas...</source>
+        <translation>e.g. hero, sprites, atlas...</translation>
+    </message>
+    <message>
+        <source>Output File:</source>
+        <translation>Output File:</translation>
+    </message>
+    <message>
+        <source>Full export file path...</source>
+        <translation>Full export file path...</translation>
+    </message>
+    <message>
+        <source>Save As...</source>
+        <translation>Save As...</translation>
+    </message>
+    <message>
+        <source>Target Format</source>
+        <translation>Target Format</translation>
+    </message>
+    <message>
+        <source>Generates game engine sprite resource and texture atlas.</source>
+        <translation>Generates game engine sprite resource and texture atlas.</translation>
     </message>
     <message>
         <source>Inner Padding (px):</source>
@@ -870,8 +940,72 @@ Strict removal clears the pixel.</translation>
         <translation>GPU VRAM: --</translation>
     </message>
     <message>
+        <source>Animated GIF Options</source>
+        <translation>Animated GIF Options</translation>
+    </message>
+    <message>
+        <source>Playback Loop:</source>
+        <translation>Playback Loop:</translation>
+    </message>
+    <message>
+        <source>Infinite Loop</source>
+        <translation>Infinite Loop</translation>
+    </message>
+    <message>
+        <source>Play Once</source>
+        <translation>Play Once</translation>
+    </message>
+    <message>
+        <source>Ping-Pong (Forward-Backward)</source>
+        <translation>Ping-Pong (Forward-Backward)</translation>
+    </message>
+    <message>
+        <source>Frame Rate (FPS):</source>
+        <translation>Frame Rate (FPS):</translation>
+    </message>
+    <message>
+        <source> fps</source>
+        <translation> fps</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold (0-255):</source>
+        <translation>Alpha Threshold (0-255):</translation>
+    </message>
+    <message>
+        <source>Pixels with alpha below this threshold will be completely transparent.</source>
+        <translation>Pixels with alpha below this threshold will be completely transparent.</translation>
+    </message>
+    <message>
+        <source>Export all animations as separate GIF files (&lt;project&gt;_&lt;anim&gt;.gif)</source>
+        <translation>Export all animations as separate GIF files (&lt;project&gt;_&lt;anim&gt;.gif)</translation>
+    </message>
+    <message>
+        <source>Aseprite Binary Options</source>
+        <translation>Aseprite Binary Options</translation>
+    </message>
+    <message>
+        <source>Lossless cel pixel compression (Deflate / zlib)</source>
+        <translation>Lossless cel pixel compression (Deflate / zlib)</translation>
+    </message>
+    <message>
+        <source>Compresses cel pixel data using standard zlib compression for smaller file size.</source>
+        <translation>Compresses cel pixel data using standard zlib compression for smaller file size.</translation>
+    </message>
+    <message>
+        <source>Export animation tags into file</source>
+        <translation>Export animation tags into file</translation>
+    </message>
+    <message>
+        <source>Embeds project animation sequences as Aseprite tags (chunk 0x2018).</source>
+        <translation>Embeds project animation sequences as Aseprite tags (chunk 0x2018).</translation>
+    </message>
+    <message>
+        <source>Generates native 32-bit RGBA Aseprite project (.ase/.aseprite) compatible with Aseprite v1.2+.</source>
+        <translation>Generates native 32-bit RGBA Aseprite project (.ase/.aseprite) compatible with Aseprite v1.2+.</translation>
+    </message>
+    <message>
         <source>Exporting &amp; compressing textures...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporting &amp; compressing textures...</translation>
     </message>
     <message>
         <source>Dimensions: --</source>
@@ -890,16 +1024,52 @@ Strict removal clears the pixel.</translation>
         <translation>Export</translation>
     </message>
     <message>
+        <source>Select Export Directory</source>
+        <translation>Select Export Directory</translation>
+    </message>
+    <message>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>All Files</translation>
     </message>
     <message>
         <source>All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>All Files (*.*)</translation>
     </message>
     <message>
         <source>Select Export Destination</source>
         <translation>Select Export Destination</translation>
+    </message>
+    <message>
+        <source>Generates animated multi-frame GIF files with frame timings, transparency, and looping options.</source>
+        <translation>Generates animated multi-frame GIF files with frame timings, transparency, and looping options.</translation>
+    </message>
+    <message>
+        <source>Generates a native Aseprite binary project (.ase/.aseprite) preserving layers, cels, and animation tags.</source>
+        <translation>Generates a native Aseprite binary project (.ase/.aseprite) preserving layers, cels, and animation tags.</translation>
+    </message>
+    <message>
+        <source>Exports Godot 4 SpriteFrames resource (.tres) with atlas texture and animation metadata.</source>
+        <translation>Exports Godot 4 SpriteFrames resource (.tres) with atlas texture and animation metadata.</translation>
+    </message>
+    <message>
+        <source>Exports Unity 2D Sprite Mesh metadata (.unity.json) with atlas texture.</source>
+        <translation>Exports Unity 2D Sprite Mesh metadata (.unity.json) with atlas texture.</translation>
+    </message>
+    <message>
+        <source>Exports Unreal Engine Paper2D sprite definitions (.paper2d.json) with atlas texture.</source>
+        <translation>Exports Unreal Engine Paper2D sprite definitions (.paper2d.json) with atlas texture.</translation>
+    </message>
+    <message>
+        <source>Exports LibGDX / Spine atlas format (.atlas) with companion atlas image.</source>
+        <translation>Exports LibGDX / Spine atlas format (.atlas) with companion atlas image.</translation>
+    </message>
+    <message>
+        <source>Exports TexturePacker JSON / Aseprite JSON atlas format with sprite frames.</source>
+        <translation>Exports TexturePacker JSON / Aseprite JSON atlas format with sprite frames.</translation>
+    </message>
+    <message>
+        <source>Exports packed texture atlas and companion sprite definitions.</source>
+        <translation>Exports packed texture atlas and companion sprite definitions.</translation>
     </message>
     <message>
         <source>Frames: 0</source>
@@ -910,8 +1080,24 @@ Strict removal clears the pixel.</translation>
         <translation>GPU VRAM: %1 MB (Standard RGBA8888, uncompressed on GPU)</translation>
     </message>
     <message>
-        <source>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</source>
-        <translation>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</translation>
+        <source>~%1 KB on disk</source>
+        <translation>~%1 KB on disk</translation>
+    </message>
+    <message>
+        <source>~%1 MB on disk</source>
+        <translation>~%1 MB on disk</translation>
+    </message>
+    <message>
+        <source>+Zstd L%1</source>
+        <translation>+Zstd L%1</translation>
+    </message>
+    <message>
+        <source>Raw</source>
+        <translation>Raw</translation>
+    </message>
+    <message>
+        <source>GPU VRAM: %1 MB (%2, -%3% hardware) | File: %4 (%5)</source>
+        <translation>GPU VRAM: %1 MB (%2, -%3% hardware) | File: %4 (%5)</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -962,24 +1148,32 @@ Strict removal clears the pixel.</translation>
         <translation>Please specify a valid file name before exporting.</translation>
     </message>
     <message>
+        <source>Rendering and encoding animated GIF frames...</source>
+        <translation>Rendering and encoding animated GIF frames...</translation>
+    </message>
+    <message>
+        <source>Encoding native Aseprite binary project...</source>
+        <translation>Encoding native Aseprite binary project...</translation>
+    </message>
+    <message>
         <source>Exporting and compressing textures (GPU VRAM / KTX2)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporting and compressing textures (GPU VRAM / KTX2)...</translation>
     </message>
     <message>
         <source>Export completed successfully!</source>
-        <translation type="unfinished"></translation>
+        <translation>Export completed successfully!</translation>
     </message>
     <message>
         <source>Saved %1 successfully.</source>
-        <translation type="unfinished">Saved %1 successfully.</translation>
+        <translation>Saved %1 successfully.</translation>
     </message>
     <message>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Export Error</translation>
     </message>
     <message>
         <source>An error occurred during export.</source>
-        <translation type="unfinished"></translation>
+        <translation>An error occurred during export.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1083,39 +1277,39 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source>No frames in document to export.</source>
-        <translation type="unfinished">No frames in document to export.</translation>
+        <translation>No frames in document to export.</translation>
     </message>
     <message>
         <source>Exporting GIF animation %1 (%2/%3)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporting GIF animation %1 (%2/%3)...</translation>
     </message>
     <message>
         <source>Exported %1 GIF animation(s) successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exported %1 GIF animation(s) successfully.</translation>
     </message>
     <message>
         <source>Animation %1 has no frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>Animation %1 has no frames.</translation>
     </message>
     <message>
         <source>Failed to initialize GIF encoder for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to initialize GIF encoder for %1.</translation>
     </message>
     <message>
         <source>Failed to encode GIF frame in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to encode GIF frame in %1.</translation>
     </message>
     <message>
         <source>GIF encoding generated no data for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>GIF encoding generated no data for %1.</translation>
     </message>
     <message>
         <source>Cannot open destination file %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open destination file %1: %2</translation>
     </message>
     <message>
         <source>Incomplete file write to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Incomplete file write to %1.</translation>
     </message>
 </context>
 <context>
@@ -1258,15 +1452,15 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <source>Preserve existing Godot 4 UID (uid://...) on re-export</source>
-        <translation type="unfinished"></translation>
+        <translation>Preserve existing Godot 4 UID (uid://...) on re-export</translation>
     </message>
     <message>
         <source>Auto-generate AnimatedSprite2D scene (.tscn) companion file</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto-generate AnimatedSprite2D scene (.tscn) companion file</translation>
     </message>
     <message>
         <source>Godot Engine 4.x SpriteFrames exporter with AtlasTexture regions and collision mesh generation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Godot Engine 4.x SpriteFrames exporter with AtlasTexture regions and collision mesh generation.</translation>
     </message>
 </context>
 <context>
@@ -1325,23 +1519,70 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <source>Default JSON Structure:</source>
-        <translation type="unfinished"></translation>
+        <translation>Default JSON Structure:</translation>
     </message>
     <message>
         <source>Hash Object (TexturePacker Hash)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hash Object (TexturePacker Hash)</translation>
     </message>
     <message>
         <source>Array List (TexturePacker Array / Aseprite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Array List (TexturePacker Array / Aseprite)</translation>
     </message>
     <message>
         <source>Include animation frameTags in metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>Include animation frameTags in metadata</translation>
     </message>
     <message>
         <source>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</translation>
+    </message>
+</context>
+<context>
+    <name>LibGdxExtractor</name>
+    <message>
+        <source>Atlas file is empty.</source>
+        <translation>Atlas file is empty.</translation>
+    </message>
+    <message>
+        <source>Reading LibGDX/Spine Atlas...</source>
+        <translation>Reading LibGDX/Spine Atlas...</translation>
+    </message>
+    <message>
+        <source>Cannot open atlas file: %1</source>
+        <translation>Cannot open atlas file: %1</translation>
+    </message>
+    <message>
+        <source>Failed to parse atlas file.</source>
+        <translation>Failed to parse atlas file.</translation>
+    </message>
+    <message>
+        <source>Failed to load companion atlas image: %1</source>
+        <translation>Failed to load companion atlas image: %1</translation>
+    </message>
+    <message>
+        <source>LibGDX/Spine Atlas loaded successfully.</source>
+        <translation>LibGDX/Spine Atlas loaded successfully.</translation>
+    </message>
+    <message>
+        <source>Exporting LibGDX/Spine Atlas...</source>
+        <translation>Exporting LibGDX/Spine Atlas...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprites to export.</source>
+        <translation>Document contains no sprites to export.</translation>
+    </message>
+    <message>
+        <source>Failed to save companion atlas image: %1</source>
+        <translation>Failed to save companion atlas image: %1</translation>
+    </message>
+    <message>
+        <source>Cannot create output atlas file: %1</source>
+        <translation>Cannot create output atlas file: %1</translation>
+    </message>
+    <message>
+        <source>Exported LibGDX/Spine Atlas successfully.</source>
+        <translation>Exported LibGDX/Spine Atlas successfully.</translation>
     </message>
 </context>
 <context>
@@ -1516,7 +1757,7 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>BentoPack (*.bento);;All Files (*.*)</translation>
     </message>
     <message>
         <source>KEY_CTX_CREATE_ANIM</source>
@@ -1817,7 +2058,7 @@ Do you want to restore this session?</translation>
     </message>
     <message>
         <source>💡 Update available: %1 (Check Settings -&gt; Updates)</source>
-        <translation type="unfinished"></translation>
+        <translation>💡 Update available: %1 (Check Settings -&gt; Updates)</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_TITLE</source>
@@ -1918,7 +2159,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <source>Atlas packing plugin not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Atlas packing plugin not found.</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -2109,16 +2350,8 @@ Do you want to save them before proceeding?</translation>
         <translation>Pixel Editor — BentoPack</translation>
     </message>
     <message>
-        <source>◀ Previous Frame</source>
-        <translation>◀ Previous Frame</translation>
-    </message>
-    <message>
         <source>Navigate to previous frame (Page Up)</source>
         <translation>Navigate to previous frame (Page Up)</translation>
-    </message>
-    <message>
-        <source>Next Frame ▶</source>
-        <translation>Next Frame ▶</translation>
     </message>
     <message>
         <source>Navigate to next frame (Page Down)</source>
@@ -2193,36 +2426,12 @@ Do you want to save them before proceeding?</translation>
         <translation>Redo (Ctrl+Y)</translation>
     </message>
     <message>
-        <source>Active Colors</source>
-        <translation>Active Colors</translation>
-    </message>
-    <message>
-        <source>Primary Color (Left Click to change)</source>
-        <translation>Primary Color (Left Click to change)</translation>
-    </message>
-    <message>
-        <source>Secondary Color (Left Click to change)</source>
-        <translation>Secondary Color (Left Click to change)</translation>
-    </message>
-    <message>
         <source>Swap Colors (X)</source>
         <translation>Swap Colors (X)</translation>
     </message>
     <message>
-        <source>Palette:</source>
-        <translation>Palette:</translation>
-    </message>
-    <message>
-        <source>Sprite Colors (Auto)</source>
-        <translation>Sprite Colors (Auto)</translation>
-    </message>
-    <message>
         <source>NES / Famicom (54)</source>
         <translation>NES / Famicom (54)</translation>
-    </message>
-    <message>
-        <source>SNES / Super Famicom (32)</source>
-        <translation>SNES / Super Famicom (32)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
@@ -2243,6 +2452,26 @@ Do you want to save them before proceeding?</translation>
     <message>
         <source>Commodore 64 (16)</source>
         <translation>Commodore 64 (16)</translation>
+    </message>
+    <message>
+        <source>-1</source>
+        <translation>-1</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <source>Effect Intensity:</source>
+        <translation>Effect Intensity:</translation>
+    </message>
+    <message>
+        <source>50%</source>
+        <translation>50%</translation>
+    </message>
+    <message>
+        <source>Effect mode:</source>
+        <translation>Effect mode:</translation>
     </message>
     <message>
         <source>1:1 Scale Preview</source>
@@ -2273,6 +2502,138 @@ Do you want to save them before proceeding?</translation>
         <translation>Cancel</translation>
     </message>
     <message>
+        <source>Animation:</source>
+        <translation>Animation:</translation>
+    </message>
+    <message>
+        <source>Show / Hide Pivot Anchor Marker</source>
+        <translation>Show / Hide Pivot Anchor Marker</translation>
+    </message>
+    <message>
+        <source>Edit outside polygon</source>
+        <translation>Edit outside polygon</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Default: off when polygon exists)</source>
+        <translation>Allow editing pixels outside polygon boundaries (Default: off when polygon exists)</translation>
+    </message>
+    <message>
+        <source>Apply to all frames</source>
+        <translation>Apply to all frames</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</source>
+        <translation>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</translation>
+    </message>
+    <message>
+        <source>Clear Selection / Deselect (Del)</source>
+        <translation>Clear Selection / Deselect (Del)</translation>
+    </message>
+    <message>
+        <source>Color Picker</source>
+        <translation>Color Picker</translation>
+    </message>
+    <message>
+        <source>Primary Color (Click to open Color Picker)</source>
+        <translation>Primary Color (Click to open Color Picker)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Click to open Color Picker)</source>
+        <translation>Secondary Color (Click to open Color Picker)</translation>
+    </message>
+    <message>
+        <source>🎨 Pick Color...</source>
+        <translation>🎨 Pick Color...</translation>
+    </message>
+    <message>
+        <source>Recent:</source>
+        <translation>Recent:</translation>
+    </message>
+    <message>
+        <source>Preset:</source>
+        <translation>Preset:</translation>
+    </message>
+    <message>
+        <source>Sample Frame</source>
+        <translation>Sample Frame</translation>
+    </message>
+    <message>
+        <source>Extract all unique colors from current sprite frame</source>
+        <translation>Extract all unique colors from current sprite frame</translation>
+    </message>
+    <message>
+        <source>Bento Standard (36)</source>
+        <translation>Bento Standard (36)</translation>
+    </message>
+    <message>
+        <source>SNES / 16-bit (32)</source>
+        <translation>SNES / 16-bit (32)</translation>
+    </message>
+    <message>
+        <source>Onion Skinning</source>
+        <translation>Onion Skinning</translation>
+    </message>
+    <message>
+        <source>Enable Onion Skin</source>
+        <translation>Enable Onion Skin</translation>
+    </message>
+    <message>
+        <source>Past:</source>
+        <translation>Past:</translation>
+    </message>
+    <message>
+        <source>Past frames to display (-3 to 0)</source>
+        <translation>Past frames to display (-3 to 0)</translation>
+    </message>
+    <message>
+        <source>Future:</source>
+        <translation>Future:</translation>
+    </message>
+    <message>
+        <source>Future frames to display (0 to +3)</source>
+        <translation>Future frames to display (0 to +3)</translation>
+    </message>
+    <message>
+        <source>Global opacity intensity with distance falloff (0% to 100%)</source>
+        <translation>Global opacity intensity with distance falloff (0% to 100%)</translation>
+    </message>
+    <message>
+        <source>Tinted (Blue/Red)</source>
+        <translation>Tinted (Blue/Red)</translation>
+    </message>
+    <message>
+        <source>Border Detection (Edge)</source>
+        <translation>Border Detection (Edge)</translation>
+    </message>
+    <message>
+        <source>Red Channel (R)</source>
+        <translation>Red Channel (R)</translation>
+    </message>
+    <message>
+        <source>Green Channel (G)</source>
+        <translation>Green Channel (G)</translation>
+    </message>
+    <message>
+        <source>Blue Channel (B)</source>
+        <translation>Blue Channel (B)</translation>
+    </message>
+    <message>
+        <source>Monochrome Silhouette</source>
+        <translation>Monochrome Silhouette</translation>
+    </message>
+    <message>
+        <source>True Color (Ghost)</source>
+        <translation>True Color (Ghost)</translation>
+    </message>
+    <message>
+        <source>Repack Atlas...</source>
+        <translation>Repack Atlas...</translation>
+    </message>
+    <message>
+        <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
+        <translation>Open interactive Atlas Packing dialog to resolve sprite collisions</translation>
+    </message>
+    <message>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
@@ -2287,6 +2648,90 @@ Do you want to save them before proceeding?</translation>
     <message>
         <source>Select Secondary Color</source>
         <translation>Select Secondary Color</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
+        <translation>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</translation>
+    </message>
+    <message>
+        <source>No polygon mesh defined for this frame</source>
+        <translation>No polygon mesh defined for this frame</translation>
+    </message>
+    <message>
+        <source>%1: Frame %2 / %3  [Global #%4] (%5x%6 px)</source>
+        <translation>%1: Frame %2 / %3  [Global #%4] (%5x%6 px)</translation>
+    </message>
+    <message>
+        <source>All Frames (%1)</source>
+        <translation>All Frames (%1)</translation>
+    </message>
+    <message>
+        <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
+        <translation>• Frame %1 (%2) collides with Frame %3 (%4)</translation>
+    </message>
+    <message>
+        <source>polygon</source>
+        <translation>polygon</translation>
+    </message>
+    <message>
+        <source>box</source>
+        <translation>box</translation>
+    </message>
+    <message>
+        <source>⚠️ Atlas collision: repack required on validation</source>
+        <translation>⚠️ Atlas collision: repack required on validation</translation>
+    </message>
+    <message>
+        <source>Atlas Packing</source>
+        <translation>Atlas Packing</translation>
+    </message>
+    <message>
+        <source>Atlas packing plugin not found. Changes were saved without repacking.</source>
+        <translation>Atlas packing plugin not found. Changes were saved without repacking.</translation>
+    </message>
+    <message>
+        <source>Atlas Collision Detected</source>
+        <translation>Atlas Collision Detected</translation>
+    </message>
+    <message>
+        <source>Polygon or frame modifications cause collision with other sprites in the atlas:
+
+%1
+
+An atlas repack must be performed upon validation to resolve overlapping frames.
+
+Would you like to repack the atlas now?</source>
+        <translation>Polygon or frame modifications cause collision with other sprites in the atlas:
+
+%1
+
+An atlas repack must be performed upon validation to resolve overlapping frames.
+
+Would you like to repack the atlas now?</translation>
+    </message>
+    <message>
+        <source>Repack Atlas Now</source>
+        <translation>Repack Atlas Now</translation>
+    </message>
+    <message>
+        <source>Validate Without Repacking</source>
+        <translation>Validate Without Repacking</translation>
+    </message>
+    <message>
+        <source>Filter navigation and onion skinning to animation</source>
+        <translation>Filter navigation and onion skinning to animation</translation>
+    </message>
+    <message>
+        <source># Grid</source>
+        <translation># Grid</translation>
+    </message>
+    <message>
+        <source>Pivot</source>
+        <translation>Pivot</translation>
+    </message>
+    <message>
+        <source>⊡ Fit</source>
+        <translation>⊡ Fit</translation>
     </message>
 </context>
 <context>
@@ -2427,7 +2872,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <source>Computing...</source>
-        <translation type="unfinished">Computing...</translation>
+        <translation>Computing...</translation>
     </message>
     <message>
         <source>Target Frame %1: Mesh already applied (%2 vertices, %3 tris)</source>
@@ -2439,11 +2884,11 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <source>Computing mesh: 0 / %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Computing mesh: 0 / %1...</translation>
     </message>
     <message>
         <source>Computing mesh: frame %1 / %2...</source>
-        <translation type="unfinished"></translation>
+        <translation>Computing mesh: frame %1 / %2...</translation>
     </message>
     <message>
         <source>✓ Mesh applied to %1 frame(s)!</source>
@@ -2733,7 +3178,9 @@ Do you want to save them before proceeding?</translation>
         <source>Failed to decode image from %1.
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to decode image from %1.
+
+%2</translation>
     </message>
     <message>
         <source>The WebP image format plugin is not installed in your Qt environment.
@@ -2745,7 +3192,15 @@ To enable WebP support on Linux, install the corresponding package:
   • openSUSE:              sudo zypper install libqt6-qtimageformats
 
 On Windows / macOS, ensure Qt imageformats plugins (qwebp) are deployed with the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>The WebP image format plugin is not installed in your Qt environment.
+
+To enable WebP support on Linux, install the corresponding package:
+  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
+  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
+  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
+  • openSUSE:              sudo zypper install libqt6-qtimageformats
+
+On Windows / macOS, ensure Qt imageformats plugins (qwebp) are deployed with the application.</translation>
     </message>
     <message>
         <source>The %1 image format requires the Qt6 imageformats plugin.
@@ -2755,19 +3210,25 @@ Install package:
   • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
   • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
   • openSUSE:              sudo zypper install libqt6-qtimageformats</source>
-        <translation type="unfinished"></translation>
+        <translation>The %1 image format requires the Qt6 imageformats plugin.
+
+Install package:
+  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
+  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
+  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
+  • openSUSE:              sudo zypper install libqt6-qtimageformats</translation>
     </message>
     <message>
         <source>No suitable exporter found for format: %1</source>
-        <translation type="unfinished">No suitable exporter found for format: %1</translation>
+        <translation>No suitable exporter found for format: %1</translation>
     </message>
     <message>
         <source>Failed to decode project atlas: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to decode project atlas: %1</translation>
     </message>
     <message>
         <source>Project atlas image file not found in session: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Project atlas image file not found in session: %1</translation>
     </message>
 </context>
 <context>
@@ -3042,15 +3503,15 @@ Install package:
     </message>
     <message>
         <source>Export &amp; VRAM</source>
-        <translation type="unfinished"></translation>
+        <translation>Export &amp; VRAM</translation>
     </message>
     <message>
         <source>Plugins &amp; Extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins &amp; Extensions</translation>
     </message>
     <message>
         <source>Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Updates</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_GENERAL</source>
@@ -3102,15 +3563,15 @@ Install package:
     </message>
     <message>
         <source>Startup &amp; Behavior</source>
-        <translation type="unfinished"></translation>
+        <translation>Startup &amp; Behavior</translation>
     </message>
     <message>
         <source>Check automatically for updates on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Check automatically for updates on startup</translation>
     </message>
     <message>
         <source>Reopen last project on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Reopen last project on startup</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_GIT</source>
@@ -3194,171 +3655,171 @@ Install package:
     </message>
     <message>
         <source>Export &amp; VRAM Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Export &amp; VRAM Defaults</translation>
     </message>
     <message>
         <source>Default Export Configurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Default Export Configurations</translation>
     </message>
     <message>
         <source>(No export plugins loaded)</source>
-        <translation type="unfinished"></translation>
+        <translation>(No export plugins loaded)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</translation>
     </message>
     <message>
         <source>Default Target Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Default Target Format:</translation>
     </message>
     <message>
         <source>PNG (Standard, Lossless)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG (Standard, Lossless)</translation>
     </message>
     <message>
         <source>WebP (Modern Web, High Compression)</source>
-        <translation type="unfinished"></translation>
+        <translation>WebP (Modern Web, High Compression)</translation>
     </message>
     <message>
         <source>KTX2 / Basis Universal (GPU Compressed VRAM)</source>
-        <translation type="unfinished"></translation>
+        <translation>KTX2 / Basis Universal (GPU Compressed VRAM)</translation>
     </message>
     <message>
         <source>Default Texture Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Default Texture Format:</translation>
     </message>
     <message>
         <source>MaxRects (Best Fit)</source>
-        <translation type="unfinished"></translation>
+        <translation>MaxRects (Best Fit)</translation>
     </message>
     <message>
         <source>Shelf / Next-Fit (Fast)</source>
-        <translation type="unfinished"></translation>
+        <translation>Shelf / Next-Fit (Fast)</translation>
     </message>
     <message>
         <source>Skyline (Efficient)</source>
-        <translation type="unfinished"></translation>
+        <translation>Skyline (Efficient)</translation>
     </message>
     <message>
         <source>Polygonal Concave (Tightest Packing)</source>
-        <translation type="unfinished"></translation>
+        <translation>Polygonal Concave (Tightest Packing)</translation>
     </message>
     <message>
         <source>Default Packing Algorithm:</source>
-        <translation type="unfinished"></translation>
+        <translation>Default Packing Algorithm:</translation>
     </message>
     <message>
         <source>Enable Zstandard (Zstd) compression by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Enable Zstandard (Zstd) compression by default</translation>
     </message>
     <message>
         <source>Zstd Compression Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zstd Compression Level:</translation>
     </message>
     <message>
         <source>Open Plugins Folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Plugins Folder...</translation>
     </message>
     <message>
         <source>Reload Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Reload Plugins</translation>
     </message>
     <message>
         <source>Filter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Filter Name</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Category</translation>
     </message>
     <message>
         <source>Identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifier</translation>
     </message>
     <message>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Filters</translation>
     </message>
     <message>
         <source>Extractor / Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Extractor / Codec</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <source>Extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Extensions</translation>
     </message>
     <message>
         <source>Extractors &amp; Codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Extractors &amp; Codecs</translation>
     </message>
     <message>
         <source>Select a plugin above to view its details.</source>
-        <translation type="unfinished"></translation>
+        <translation>Select a plugin above to view its details.</translation>
     </message>
     <message>
         <source>Plugin Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin Configuration</translation>
     </message>
     <message>
         <source>Software Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Software Updates</translation>
     </message>
     <message>
         <source>Current installed version: &lt;b&gt;v%1&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Current installed version: &lt;b&gt;v%1&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Check for Updates Now</source>
-        <translation type="unfinished"></translation>
+        <translation>Check for Updates Now</translation>
     </message>
     <message>
         <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
-        <translation type="unfinished"></translation>
+        <translation>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Release Information</translation>
     </message>
     <message>
         <source>Open Release Page on GitHub</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Release Page on GitHub</translation>
     </message>
     <message>
         <source>Plugins reloaded successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins reloaded successfully.</translation>
     </message>
     <message>
         <source>Checking for updates from GitHub...</source>
-        <translation type="unfinished"></translation>
+        <translation>Checking for updates from GitHub...</translation>
     </message>
     <message>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</translation>
     </message>
     <message>
         <source>Released: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Released: %1</translation>
     </message>
     <message>
         <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
@@ -3428,15 +3889,15 @@ Install package:
     <name>TightPolygonPackingFilter</name>
     <message>
         <source>Tight Polygon Packing (Nesting)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tight Polygon Packing (Nesting)...</translation>
     </message>
     <message>
         <source>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</translation>
     </message>
     <message>
         <source>Tight Polygon Packing (Nesting)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tight Polygon Packing (Nesting)</translation>
     </message>
 </context>
 <context>
@@ -3682,6 +4143,33 @@ Drag and drop to reorder</translation>
     <message>
         <source>Cancel</source>
         <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Usage: bentopack [options] [file.bento]
+
+BentoPack - 2D Sprite Sheet Packer &amp; Game Engine Asset Pipeline
+
+Options:
+  -h, --help     Displays help on commandline options.
+  -v, --version  Displays version information.
+
+Arguments:
+  file           Project file (.bento) to open.
+</source>
+        <translation>Usage: bentopack [options] [file.bento]
+
+BentoPack - 2D Sprite Sheet Packer &amp; Game Engine Asset Pipeline
+
+Options:
+  -h, --help     Displays help on commandline options.
+  -v, --version  Displays version information.
+
+Arguments:
+  file           Project file (.bento) to open.
+</translation>
     </message>
 </context>
 </TS>

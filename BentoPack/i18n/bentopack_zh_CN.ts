@@ -24,18 +24,6 @@
         <translation>目标受众：</translation>
     </message>
     <message>
-        <source>KEY_EDITION_NOTICE_COMMUNITY</source>
-        <translation>对独立创作者及年收入低于 1,000,000 美元的团队免费</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_COMMERCIAL</source>
-        <translation>商业许可已激活 - 无水印纯净导出</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_TAMPERED</source>
-        <translation>盗版警告：非官方修改的二进制文件</translation>
-    </message>
-    <message>
         <source>KEY_PLUGINS_SECTION_TITLE</source>
         <translation>架构与插件状态</translation>
     </message>
@@ -88,14 +76,6 @@
         <translation>许可：&lt;</translation>
     </message>
     <message>
-        <source>KEY_LICENSE_PLUGINS_TITLE</source>
-        <translation>插件与扩展：插件源码可用许可协议 (EULA)</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_PLUGINS_NOTICE</source>
-        <translation>此许可约束导出插件与滤镜的源代码（位于 &lt;code&gt;plugins/&lt;/code&gt; 目录）。年度总收入低于 1,000,000 美元免版税。</translation>
-    </message>
-    <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>核心引擎：Apache 许可证，2.0 版本 (开源核心)</translation>
     </message>
@@ -112,8 +92,16 @@
         <translation>关闭</translation>
     </message>
     <message>
+        <source>Éditeur du logiciel</source>
+        <translation>软件发布方</translation>
+    </message>
+    <message>
         <source>KEY_ABOUT_PURPOSE</source>
         <translation>一款强大的精灵提取与动画制作工具</translation>
+    </message>
+    <message>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <translation>工具与多媒体技术工作室</translation>
     </message>
     <message>
         <source>KEY_ABOUT_GIT_INFO</source>
@@ -197,6 +185,53 @@
     <message>
         <source>KEY_NO_FRAMES</source>
         <translation>0 / 0</translation>
+    </message>
+</context>
+<context>
+    <name>AsepriteExtractor</name>
+    <message>
+        <source>Reading Aseprite project binary...</source>
+        <translation>正在读取 Aseprite 项目二进制文件...</translation>
+    </message>
+    <message>
+        <source>Cannot open Aseprite file: %1</source>
+        <translation>无法打开 Aseprite 文件：%1</translation>
+    </message>
+    <message>
+        <source>File is too small to be a valid Aseprite file.</source>
+        <translation>文件太小，不是有效的 Aseprite 文件。</translation>
+    </message>
+    <message>
+        <source>Invalid Aseprite magic header (expected 0xA5E0, got 0x%1)</source>
+        <translation>无效的 Aseprite 魔数头（应为 0xA5E0，实际为 0x%1）</translation>
+    </message>
+    <message>
+        <source>Invalid canvas dimensions or zero frames in Aseprite header.</source>
+        <translation>Aseprite 头中的画布尺寸无效或帧数为零。</translation>
+    </message>
+    <message>
+        <source>Failed to decode any frames from Aseprite file.</source>
+        <translation>未能从 Aseprite 文件中解码任何帧。</translation>
+    </message>
+    <message>
+        <source>Aseprite project imported successfully (%1 frames).</source>
+        <translation>成功导入 Aseprite 项目（%1 帧）。</translation>
+    </message>
+    <message>
+        <source>Exporting native Aseprite project binary...</source>
+        <translation>正在导出原生 Aseprite 项目二进制文件...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprite frames to export to Aseprite.</source>
+        <translation>文档中没有可导出到 Aseprite 的精灵帧。</translation>
+    </message>
+    <message>
+        <source>Cannot create output Aseprite file: %1</source>
+        <translation>无法创建输出 Aseprite 文件：%1</translation>
+    </message>
+    <message>
+        <source>Exported Aseprite project successfully (%1 frames).</source>
+        <translation>成功导出 Aseprite 项目（%1 帧）。</translation>
     </message>
 </context>
 <context>
@@ -480,6 +515,13 @@ Choose which branch to restore:</source>
     </message>
 </context>
 <context>
+    <name>CliParser</name>
+    <message>
+        <source>BentoPack CLI v%1 (Qt 6 - C++17 Headless Engine)</source>
+        <translation>BentoPack CLI v%1 (Qt 6 - C++17 无头引擎)</translation>
+    </message>
+</context>
+<context>
     <name>ColorAdjustFilter</name>
     <message>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
@@ -694,20 +736,8 @@ Strict removal clears the pixel.</source>
         <translation>导出图集与动画</translation>
     </message>
     <message>
-        <source>Destination</source>
-        <translation>目标路径</translation>
-    </message>
-    <message>
-        <source>Select export file path...</source>
-        <translation>选择导出文件路径...</translation>
-    </message>
-    <message>
         <source>Browse...</source>
         <translation>浏览...</translation>
-    </message>
-    <message>
-        <source>Format &amp; Packing Algorithm</source>
-        <translation>格式与打包算法</translation>
     </message>
     <message>
         <source>Export Format:</source>
@@ -776,6 +806,46 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Layout &amp; Margins</source>
         <translation>布局与边距</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Project Name</source>
+        <translation>目标路径与项目名称</translation>
+    </message>
+    <message>
+        <source>Export Folder:</source>
+        <translation>导出文件夹：</translation>
+    </message>
+    <message>
+        <source>Select destination directory...</source>
+        <translation>选择目标目录...</translation>
+    </message>
+    <message>
+        <source>File / Project Name:</source>
+        <translation>文件 / 项目名称：</translation>
+    </message>
+    <message>
+        <source>e.g. hero, sprites, atlas...</source>
+        <translation>例如 hero, sprites, atlas...</translation>
+    </message>
+    <message>
+        <source>Output File:</source>
+        <translation>输出文件：</translation>
+    </message>
+    <message>
+        <source>Full export file path...</source>
+        <translation>完整导出文件路径...</translation>
+    </message>
+    <message>
+        <source>Save As...</source>
+        <translation>另存为...</translation>
+    </message>
+    <message>
+        <source>Target Format</source>
+        <translation>目标格式</translation>
+    </message>
+    <message>
+        <source>Generates game engine sprite resource and texture atlas.</source>
+        <translation>生成游戏引擎精灵资源和纹理图集。</translation>
     </message>
     <message>
         <source>Inner Padding (px):</source>
@@ -870,6 +940,70 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: --</translation>
     </message>
     <message>
+        <source>Animated GIF Options</source>
+        <translation>动态 GIF 选项</translation>
+    </message>
+    <message>
+        <source>Playback Loop:</source>
+        <translation>循环播放：</translation>
+    </message>
+    <message>
+        <source>Infinite Loop</source>
+        <translation>无限循环</translation>
+    </message>
+    <message>
+        <source>Play Once</source>
+        <translation>播放一次</translation>
+    </message>
+    <message>
+        <source>Ping-Pong (Forward-Backward)</source>
+        <translation>乒乓模式（往返播放）</translation>
+    </message>
+    <message>
+        <source>Frame Rate (FPS):</source>
+        <translation>帧率 (FPS)：</translation>
+    </message>
+    <message>
+        <source> fps</source>
+        <translation> fps</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold (0-255):</source>
+        <translation>Alpha 阈值 (0-255)：</translation>
+    </message>
+    <message>
+        <source>Pixels with alpha below this threshold will be completely transparent.</source>
+        <translation>低于此阈值的像素将完全透明。</translation>
+    </message>
+    <message>
+        <source>Export all animations as separate GIF files (&lt;project&gt;_&lt;anim&gt;.gif)</source>
+        <translation>将所有动画导出为单独的 GIF 文件 (&lt;project&gt;_&lt;anim&gt;.gif)</translation>
+    </message>
+    <message>
+        <source>Aseprite Binary Options</source>
+        <translation>Aseprite 二进制选项</translation>
+    </message>
+    <message>
+        <source>Lossless cel pixel compression (Deflate / zlib)</source>
+        <translation>无损单元格像素压缩 (Deflate / zlib)</translation>
+    </message>
+    <message>
+        <source>Compresses cel pixel data using standard zlib compression for smaller file size.</source>
+        <translation>使用标准 zlib 压缩单元格像素数据以减小文件体积。</translation>
+    </message>
+    <message>
+        <source>Export animation tags into file</source>
+        <translation>将动画标签导出到文件中</translation>
+    </message>
+    <message>
+        <source>Embeds project animation sequences as Aseprite tags (chunk 0x2018).</source>
+        <translation>将项目动画序列嵌入为 Aseprite 标签（块 0x2018）。</translation>
+    </message>
+    <message>
+        <source>Generates native 32-bit RGBA Aseprite project (.ase/.aseprite) compatible with Aseprite v1.2+.</source>
+        <translation>生成兼容 Aseprite v1.2+ 的原生 32 位 RGBA Aseprite 项目 (.ase/.aseprite)。</translation>
+    </message>
+    <message>
         <source>Exporting &amp; compressing textures...</source>
         <translation>正在导出并压缩纹理...</translation>
     </message>
@@ -890,6 +1024,10 @@ Strict removal clears the pixel.</source>
         <translation>导出</translation>
     </message>
     <message>
+        <source>Select Export Directory</source>
+        <translation>选择导出目录</translation>
+    </message>
+    <message>
         <source>All Files</source>
         <translation>所有文件</translation>
     </message>
@@ -902,6 +1040,38 @@ Strict removal clears the pixel.</source>
         <translation>选择导出目标</translation>
     </message>
     <message>
+        <source>Generates animated multi-frame GIF files with frame timings, transparency, and looping options.</source>
+        <translation>生成带有帧定时、透明度和循环选项的多帧动态 GIF 文件。</translation>
+    </message>
+    <message>
+        <source>Generates a native Aseprite binary project (.ase/.aseprite) preserving layers, cels, and animation tags.</source>
+        <translation>生成保留图层、单元格和动画标签的原生 Aseprite 二进制项目 (.ase/.aseprite)。</translation>
+    </message>
+    <message>
+        <source>Exports Godot 4 SpriteFrames resource (.tres) with atlas texture and animation metadata.</source>
+        <translation>导出包含图集纹理和动画元数据的 Godot 4 SpriteFrames 资源 (.tres)。</translation>
+    </message>
+    <message>
+        <source>Exports Unity 2D Sprite Mesh metadata (.unity.json) with atlas texture.</source>
+        <translation>导出包含图集纹理的 Unity 2D 精灵网格元数据 (.unity.json)。</translation>
+    </message>
+    <message>
+        <source>Exports Unreal Engine Paper2D sprite definitions (.paper2d.json) with atlas texture.</source>
+        <translation>导出包含图集纹理的 Unreal Engine Paper2D 精灵定义 (.paper2d.json)。</translation>
+    </message>
+    <message>
+        <source>Exports LibGDX / Spine atlas format (.atlas) with companion atlas image.</source>
+        <translation>导出包含关联图集图像的 LibGDX / Spine 图集格式 (.atlas)。</translation>
+    </message>
+    <message>
+        <source>Exports TexturePacker JSON / Aseprite JSON atlas format with sprite frames.</source>
+        <translation>导出包含精灵帧的 TexturePacker JSON / Aseprite JSON 图集格式。</translation>
+    </message>
+    <message>
+        <source>Exports packed texture atlas and companion sprite definitions.</source>
+        <translation>导出打包的纹理图集及关联的精灵定义。</translation>
+    </message>
+    <message>
         <source>Frames: 0</source>
         <translation>帧数：0</translation>
     </message>
@@ -910,8 +1080,24 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: %1 MB (标准 RGBA8888，在 GPU 上未压缩)</translation>
     </message>
     <message>
-        <source>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</source>
-        <translation>GPU VRAM: %1 MB (%2) — 节省：相比 RGBA 减少了 %3%</translation>
+        <source>~%1 KB on disk</source>
+        <translation>磁盘占用：约 %1 KB</translation>
+    </message>
+    <message>
+        <source>~%1 MB on disk</source>
+        <translation>磁盘占用：约 %1 MB</translation>
+    </message>
+    <message>
+        <source>+Zstd L%1</source>
+        <translation>+Zstd 等级 %1</translation>
+    </message>
+    <message>
+        <source>Raw</source>
+        <translation>原始未压缩</translation>
+    </message>
+    <message>
+        <source>GPU VRAM: %1 MB (%2, -%3% hardware) | File: %4 (%5)</source>
+        <translation>GPU 显存：%1 MB (%2, 硬件节省 -%3%) | 文件：%4 (%5)</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -960,6 +1146,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Please specify a valid file name before exporting.</source>
         <translation>导出前请指定一个有效的文件名。</translation>
+    </message>
+    <message>
+        <source>Rendering and encoding animated GIF frames...</source>
+        <translation>正在渲染并编码动态 GIF 帧...</translation>
+    </message>
+    <message>
+        <source>Encoding native Aseprite binary project...</source>
+        <translation>正在编码原生 Aseprite 二进制项目...</translation>
     </message>
     <message>
         <source>Exporting and compressing textures (GPU VRAM / KTX2)...</source>
@@ -1083,39 +1277,39 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>No frames in document to export.</source>
-        <translation type="unfinished">文档中没有要导出的帧。</translation>
+        <translation>文档中没有可导出的帧。</translation>
     </message>
     <message>
         <source>Exporting GIF animation %1 (%2/%3)...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在导出 GIF 动画 %1 (%2/%3)...</translation>
     </message>
     <message>
         <source>Exported %1 GIF animation(s) successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>成功导出 %1 个 GIF 动画。</translation>
     </message>
     <message>
         <source>Animation %1 has no frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>动画 %1 没有帧。</translation>
     </message>
     <message>
         <source>Failed to initialize GIF encoder for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>未能为 %1 初始化 GIF 编码器。</translation>
     </message>
     <message>
         <source>Failed to encode GIF frame in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>在 %1 中编码 GIF 帧失败。</translation>
     </message>
     <message>
         <source>GIF encoding generated no data for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 的 GIF 编码未生成任何数据。</translation>
     </message>
     <message>
         <source>Cannot open destination file %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开目标文件 %1：%2</translation>
     </message>
     <message>
         <source>Incomplete file write to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>向 %1 写入文件不完整。</translation>
     </message>
 </context>
 <context>
@@ -1342,6 +1536,53 @@ Strict removal clears the pixel.</source>
     <message>
         <source>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</source>
         <translation>兼容 TexturePacker、Aseprite、Phaser 和 PixiJS 的 JSON 图集描述文件导出器。</translation>
+    </message>
+</context>
+<context>
+    <name>LibGdxExtractor</name>
+    <message>
+        <source>Atlas file is empty.</source>
+        <translation>图集文件为空。</translation>
+    </message>
+    <message>
+        <source>Reading LibGDX/Spine Atlas...</source>
+        <translation>正在读取 LibGDX/Spine 图集...</translation>
+    </message>
+    <message>
+        <source>Cannot open atlas file: %1</source>
+        <translation>无法打开图集文件：%1</translation>
+    </message>
+    <message>
+        <source>Failed to parse atlas file.</source>
+        <translation>解析图集文件失败。</translation>
+    </message>
+    <message>
+        <source>Failed to load companion atlas image: %1</source>
+        <translation>未能加载关联的图集图像：%1</translation>
+    </message>
+    <message>
+        <source>LibGDX/Spine Atlas loaded successfully.</source>
+        <translation>LibGDX/Spine 图集加载成功。</translation>
+    </message>
+    <message>
+        <source>Exporting LibGDX/Spine Atlas...</source>
+        <translation>正在导出 LibGDX/Spine 图集...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprites to export.</source>
+        <translation>文档中没有可导出的精灵。</translation>
+    </message>
+    <message>
+        <source>Failed to save companion atlas image: %1</source>
+        <translation>未能保存关联的图集图像：%1</translation>
+    </message>
+    <message>
+        <source>Cannot create output atlas file: %1</source>
+        <translation>无法创建输出图集文件：%1</translation>
+    </message>
+    <message>
+        <source>Exported LibGDX/Spine Atlas successfully.</source>
+        <translation>LibGDX/Spine 图集导出成功。</translation>
     </message>
 </context>
 <context>
@@ -2109,16 +2350,8 @@ Strict removal clears the pixel.</source>
         <translation>像素编辑器 — BentoPack</translation>
     </message>
     <message>
-        <source>◀ Previous Frame</source>
-        <translation>◀ 上一帧</translation>
-    </message>
-    <message>
         <source>Navigate to previous frame (Page Up)</source>
         <translation>导航到上一帧 (Page Up)</translation>
-    </message>
-    <message>
-        <source>Next Frame ▶</source>
-        <translation>下一帧 ▶</translation>
     </message>
     <message>
         <source>Navigate to next frame (Page Down)</source>
@@ -2193,36 +2426,12 @@ Strict removal clears the pixel.</source>
         <translation>重做 (Ctrl+Y)</translation>
     </message>
     <message>
-        <source>Active Colors</source>
-        <translation>活动颜色</translation>
-    </message>
-    <message>
-        <source>Primary Color (Left Click to change)</source>
-        <translation>主色 (左键单击更改)</translation>
-    </message>
-    <message>
-        <source>Secondary Color (Left Click to change)</source>
-        <translation>次色 (左键单击更改)</translation>
-    </message>
-    <message>
         <source>Swap Colors (X)</source>
         <translation>交换颜色 (X)</translation>
     </message>
     <message>
-        <source>Palette:</source>
-        <translation>调色板：</translation>
-    </message>
-    <message>
-        <source>Sprite Colors (Auto)</source>
-        <translation>精灵颜色 (自动)</translation>
-    </message>
-    <message>
         <source>NES / Famicom (54)</source>
         <translation>NES / Famicom (54)</translation>
-    </message>
-    <message>
-        <source>SNES / Super Famicom (32)</source>
-        <translation>SNES / Super Famicom (32)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
@@ -2243,6 +2452,26 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Commodore 64 (16)</source>
         <translation>Commodore 64 (16)</translation>
+    </message>
+    <message>
+        <source>-1</source>
+        <translation>-1</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <source>Effect Intensity:</source>
+        <translation>效果强度：</translation>
+    </message>
+    <message>
+        <source>50%</source>
+        <translation>50%</translation>
+    </message>
+    <message>
+        <source>Effect mode:</source>
+        <translation>效果模式：</translation>
     </message>
     <message>
         <source>1:1 Scale Preview</source>
@@ -2273,6 +2502,138 @@ Strict removal clears the pixel.</source>
         <translation>取消</translation>
     </message>
     <message>
+        <source>Animation:</source>
+        <translation>动画：</translation>
+    </message>
+    <message>
+        <source>Show / Hide Pivot Anchor Marker</source>
+        <translation>显示 / 隐藏轴心锚点标记</translation>
+    </message>
+    <message>
+        <source>Edit outside polygon</source>
+        <translation>允许在多边形外部编辑</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Default: off when polygon exists)</source>
+        <translation>允许编辑多边形边界之外的像素（默认值：存在多边形时关闭）</translation>
+    </message>
+    <message>
+        <source>Apply to all frames</source>
+        <translation>应用于所有帧</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</source>
+        <translation>将编辑（绘制、翻转、填充等）按轴心对齐应用于所有帧</translation>
+    </message>
+    <message>
+        <source>Clear Selection / Deselect (Del)</source>
+        <translation>清除选择 / 取消选择 (Del)</translation>
+    </message>
+    <message>
+        <source>Color Picker</source>
+        <translation>颜色选择器</translation>
+    </message>
+    <message>
+        <source>Primary Color (Click to open Color Picker)</source>
+        <translation>主要颜色（点击打开拾色器）</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Click to open Color Picker)</source>
+        <translation>次要颜色（点击打开拾色器）</translation>
+    </message>
+    <message>
+        <source>🎨 Pick Color...</source>
+        <translation>🎨 挑选颜色...</translation>
+    </message>
+    <message>
+        <source>Recent:</source>
+        <translation>最近使用：</translation>
+    </message>
+    <message>
+        <source>Preset:</source>
+        <translation>预设：</translation>
+    </message>
+    <message>
+        <source>Sample Frame</source>
+        <translation>帧色板采样</translation>
+    </message>
+    <message>
+        <source>Extract all unique colors from current sprite frame</source>
+        <translation>从当前精灵帧中提取所有不重复的颜色</translation>
+    </message>
+    <message>
+        <source>Bento Standard (36)</source>
+        <translation>Bento 标准调色板 (36)</translation>
+    </message>
+    <message>
+        <source>SNES / 16-bit (32)</source>
+        <translation>SNES / 16位经典 (32)</translation>
+    </message>
+    <message>
+        <source>Onion Skinning</source>
+        <translation>洋葱皮 (Onion Skinning)</translation>
+    </message>
+    <message>
+        <source>Enable Onion Skin</source>
+        <translation>启用洋葱皮</translation>
+    </message>
+    <message>
+        <source>Past:</source>
+        <translation>过去帧：</translation>
+    </message>
+    <message>
+        <source>Past frames to display (-3 to 0)</source>
+        <translation>显示的过去帧数量（-3 到 0）</translation>
+    </message>
+    <message>
+        <source>Future:</source>
+        <translation>未来帧：</translation>
+    </message>
+    <message>
+        <source>Future frames to display (0 to +3)</source>
+        <translation>显示的未来帧数量（0 到 +3）</translation>
+    </message>
+    <message>
+        <source>Global opacity intensity with distance falloff (0% to 100%)</source>
+        <translation>随距离衰减的全局不透明度（0% 到 100%）</translation>
+    </message>
+    <message>
+        <source>Tinted (Blue/Red)</source>
+        <translation>色相着色（蓝/红）</translation>
+    </message>
+    <message>
+        <source>Border Detection (Edge)</source>
+        <translation>边缘轮廓检测</translation>
+    </message>
+    <message>
+        <source>Red Channel (R)</source>
+        <translation>红色通道 (R)</translation>
+    </message>
+    <message>
+        <source>Green Channel (G)</source>
+        <translation>绿色通道 (G)</translation>
+    </message>
+    <message>
+        <source>Blue Channel (B)</source>
+        <translation>蓝色通道 (B)</translation>
+    </message>
+    <message>
+        <source>Monochrome Silhouette</source>
+        <translation>单色剪影</translation>
+    </message>
+    <message>
+        <source>True Color (Ghost)</source>
+        <translation>真实色彩（幽灵残影）</translation>
+    </message>
+    <message>
+        <source>Repack Atlas...</source>
+        <translation>重新打包图集...</translation>
+    </message>
+    <message>
+        <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
+        <translation>打开交互式图集打包对话框以解决精灵重叠冲突</translation>
+    </message>
+    <message>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
@@ -2287,6 +2648,90 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Select Secondary Color</source>
         <translation>选择次色</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
+        <translation>允许编辑多边形边界之外的像素（未勾选：禁用外部编辑）</translation>
+    </message>
+    <message>
+        <source>No polygon mesh defined for this frame</source>
+        <translation>当前帧未定义多边形网格</translation>
+    </message>
+    <message>
+        <source>%1: Frame %2 / %3  [Global #%4] (%5x%6 px)</source>
+        <translation>%1: 帧 %2 / %3  [全局 #%4] (%5x%6 px)</translation>
+    </message>
+    <message>
+        <source>All Frames (%1)</source>
+        <translation>所有帧 (%1)</translation>
+    </message>
+    <message>
+        <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
+        <translation>• 帧 %1 (%2) 与帧 %3 (%4) 发生重叠冲突</translation>
+    </message>
+    <message>
+        <source>polygon</source>
+        <translation>多边形</translation>
+    </message>
+    <message>
+        <source>box</source>
+        <translation>矩形框</translation>
+    </message>
+    <message>
+        <source>⚠️ Atlas collision: repack required on validation</source>
+        <translation>⚠️ 图集冲突：确认保存时需要重新打包</translation>
+    </message>
+    <message>
+        <source>Atlas Packing</source>
+        <translation>图集打包</translation>
+    </message>
+    <message>
+        <source>Atlas packing plugin not found. Changes were saved without repacking.</source>
+        <translation>未找到图集打包插件。修改已保存，但未重新打包。</translation>
+    </message>
+    <message>
+        <source>Atlas Collision Detected</source>
+        <translation>检测到图集冲突</translation>
+    </message>
+    <message>
+        <source>Polygon or frame modifications cause collision with other sprites in the atlas:
+
+%1
+
+An atlas repack must be performed upon validation to resolve overlapping frames.
+
+Would you like to repack the atlas now?</source>
+        <translation>多边形或帧的修改导致与图集中的其他精灵重叠冲突：
+
+%1
+
+必须在确认时执行图集重新打包以解决重叠帧。
+
+您想现在重新打包图集吗？</translation>
+    </message>
+    <message>
+        <source>Repack Atlas Now</source>
+        <translation>立即重新打包图集</translation>
+    </message>
+    <message>
+        <source>Validate Without Repacking</source>
+        <translation>不重新打包直接确认</translation>
+    </message>
+    <message>
+        <source>Filter navigation and onion skinning to animation</source>
+        <translation>将导航和洋葱皮限制在当前动画</translation>
+    </message>
+    <message>
+        <source># Grid</source>
+        <translation># 网格</translation>
+    </message>
+    <message>
+        <source>Pivot</source>
+        <translation>轴心</translation>
+    </message>
+    <message>
+        <source>⊡ Fit</source>
+        <translation>⊡ 适应画布</translation>
     </message>
 </context>
 <context>
@@ -3696,6 +4141,33 @@ Install package:
     <message>
         <source>Cancel</source>
         <translation>取消</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Usage: bentopack [options] [file.bento]
+
+BentoPack - 2D Sprite Sheet Packer &amp; Game Engine Asset Pipeline
+
+Options:
+  -h, --help     Displays help on commandline options.
+  -v, --version  Displays version information.
+
+Arguments:
+  file           Project file (.bento) to open.
+</source>
+        <translation>用法: bentopack [选项] [file.bento]
+
+BentoPack - 2D 精灵表打包工具与游戏引擎资产管线
+
+选项:
+  -h, --help     显示命令行选项帮助。
+  -v, --version  显示版本信息。
+
+参数:
+  file           要打开的项目文件 (.bento)。
+</translation>
     </message>
 </context>
 </TS>

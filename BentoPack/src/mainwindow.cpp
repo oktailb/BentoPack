@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -951,12 +951,15 @@ void MainWindow::retranslateUi()
     // Window title
     updateWindowTitle();
 
-    // Child docks
+    // Child docks & controllers
     if (m_gitDock) {
         m_gitDock->retranslateUi();
     }
     if (m_timelineWidget) {
         m_timelineWidget->retranslateUi();
+    }
+    if (m_animationController) {
+        m_animationController->retranslateUi();
     }
 }
 

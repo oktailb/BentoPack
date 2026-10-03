@@ -24,18 +24,6 @@
         <translation>対象:</translation>
     </message>
     <message>
-        <source>KEY_EDITION_NOTICE_COMMUNITY</source>
-        <translation>インディー開発者および年間売上100万ドル未満のチーム向け無料</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_COMMERCIAL</source>
-        <translation>商用ライセンス有効 - 透かしなしのクリーンな出力</translation>
-    </message>
-    <message>
-        <source>KEY_EDITION_NOTICE_TAMPERED</source>
-        <translation>偽造警告: 非公式の変更されたバイナリ</translation>
-    </message>
-    <message>
         <source>KEY_PLUGINS_SECTION_TITLE</source>
         <translation>アーキテクチャとプラグイン状態</translation>
     </message>
@@ -88,14 +76,6 @@
         <translation>ライセンス: &lt;b&gt;Apache 2.0&lt;</translation>
     </message>
     <message>
-        <source>KEY_LICENSE_PLUGINS_TITLE</source>
-        <translation>プラグインおよび拡張機能: Apache 2.0</translation>
-    </message>
-    <message>
-        <source>KEY_LICENSE_PLUGINS_NOTICE</source>
-        <translation>このライセンスはエクスポートプラグインおよびフィルターのソースコード（&lt;code&gt;plugins/&lt;/code&gt; ディレクトリ）に適用されます。年間売上100万ドル未満は無償です。</translation>
-    </message>
-    <message>
         <source>KEY_LICENSE_CORE_TITLE</source>
         <translation>コアエンジン: Apache License, Version 2.0 (オープンソースコア)</translation>
     </message>
@@ -112,8 +92,16 @@
         <translation>閉じる</translation>
     </message>
     <message>
+        <source>Éditeur du logiciel</source>
+        <translation>ソフトウェア発行元</translation>
+    </message>
+    <message>
         <source>KEY_ABOUT_PURPOSE</source>
         <translation>スプライトを抽出してアニメーション化する強力なツール</translation>
+    </message>
+    <message>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <translation>ツール＆マルチメディア技術スタジオ</translation>
     </message>
     <message>
         <source>KEY_ABOUT_GIT_INFO</source>
@@ -197,6 +185,53 @@
     <message>
         <source>KEY_NO_FRAMES</source>
         <translation>0 / 0</translation>
+    </message>
+</context>
+<context>
+    <name>AsepriteExtractor</name>
+    <message>
+        <source>Reading Aseprite project binary...</source>
+        <translation>Aseprite プロジェクトバイナリを読み込み中...</translation>
+    </message>
+    <message>
+        <source>Cannot open Aseprite file: %1</source>
+        <translation>Aseprite ファイルを開けません: %1</translation>
+    </message>
+    <message>
+        <source>File is too small to be a valid Aseprite file.</source>
+        <translation>ファイルサイズが小さすぎるため有効な Aseprite ファイルではありません。</translation>
+    </message>
+    <message>
+        <source>Invalid Aseprite magic header (expected 0xA5E0, got 0x%1)</source>
+        <translation>無効な Aseprite マジックヘッダーです (期待値 0xA5E0, 取得値 0x%1)</translation>
+    </message>
+    <message>
+        <source>Invalid canvas dimensions or zero frames in Aseprite header.</source>
+        <translation>Aseprite ヘッダーのキャンバスサイズが無効か、フレーム数がゼロです。</translation>
+    </message>
+    <message>
+        <source>Failed to decode any frames from Aseprite file.</source>
+        <translation>Aseprite ファイルからフレームをデコードできませんでした。</translation>
+    </message>
+    <message>
+        <source>Aseprite project imported successfully (%1 frames).</source>
+        <translation>Aseprite プロジェクトが正常にインポートされました (%1 フレーム)。</translation>
+    </message>
+    <message>
+        <source>Exporting native Aseprite project binary...</source>
+        <translation>ネイティブ Aseprite プロジェクトバイナリをエクスポート中...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprite frames to export to Aseprite.</source>
+        <translation>ドキュメントに Aseprite にエクスポートするスプライトフレームがありません。</translation>
+    </message>
+    <message>
+        <source>Cannot create output Aseprite file: %1</source>
+        <translation>出力 Aseprite ファイルを作成できません: %1</translation>
+    </message>
+    <message>
+        <source>Exported Aseprite project successfully (%1 frames).</source>
+        <translation>Aseprite プロジェクトが正常にエクスポートされました (%1 フレーム)。</translation>
     </message>
 </context>
 <context>
@@ -480,6 +515,13 @@ Choose which branch to restore:</source>
     </message>
 </context>
 <context>
+    <name>CliParser</name>
+    <message>
+        <source>BentoPack CLI v%1 (Qt 6 - C++17 Headless Engine)</source>
+        <translation>BentoPack CLI v%1 (Qt 6 - C++17 ヘッドレスエンジン)</translation>
+    </message>
+</context>
+<context>
     <name>ColorAdjustFilter</name>
     <message>
         <source>Color Adjustment (HSV &amp; Contrast)...</source>
@@ -694,20 +736,8 @@ Strict removal clears the pixel.</source>
         <translation>アトラスとアニメーションのエクスポート</translation>
     </message>
     <message>
-        <source>Destination</source>
-        <translation>出力先</translation>
-    </message>
-    <message>
-        <source>Select export file path...</source>
-        <translation>エクスポート先のファイルパスを選択...</translation>
-    </message>
-    <message>
         <source>Browse...</source>
         <translation>参照...</translation>
-    </message>
-    <message>
-        <source>Format &amp; Packing Algorithm</source>
-        <translation>フォーマットとパッキングアルゴリズム</translation>
     </message>
     <message>
         <source>Export Format:</source>
@@ -776,6 +806,46 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Layout &amp; Margins</source>
         <translation>配置と余白</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Project Name</source>
+        <translation>出力先とプロジェクト名</translation>
+    </message>
+    <message>
+        <source>Export Folder:</source>
+        <translation>エクスポート先フォルダー:</translation>
+    </message>
+    <message>
+        <source>Select destination directory...</source>
+        <translation>保存先ディレクトリを選択...</translation>
+    </message>
+    <message>
+        <source>File / Project Name:</source>
+        <translation>ファイル / プロジェクト名:</translation>
+    </message>
+    <message>
+        <source>e.g. hero, sprites, atlas...</source>
+        <translation>例: hero, sprites, atlas...</translation>
+    </message>
+    <message>
+        <source>Output File:</source>
+        <translation>出力ファイル:</translation>
+    </message>
+    <message>
+        <source>Full export file path...</source>
+        <translation>エクスポートファイルの完全パス...</translation>
+    </message>
+    <message>
+        <source>Save As...</source>
+        <translation>名前を付けて保存...</translation>
+    </message>
+    <message>
+        <source>Target Format</source>
+        <translation>対象フォーマット</translation>
+    </message>
+    <message>
+        <source>Generates game engine sprite resource and texture atlas.</source>
+        <translation>ゲームエンジン向けスプライトリソースとテクスチャアトラスを生成します。</translation>
     </message>
     <message>
         <source>Inner Padding (px):</source>
@@ -870,8 +940,72 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: --</translation>
     </message>
     <message>
+        <source>Animated GIF Options</source>
+        <translation>アニメーション GIF オプション</translation>
+    </message>
+    <message>
+        <source>Playback Loop:</source>
+        <translation>ループ再生:</translation>
+    </message>
+    <message>
+        <source>Infinite Loop</source>
+        <translation>無限ループ</translation>
+    </message>
+    <message>
+        <source>Play Once</source>
+        <translation>1回のみ再生</translation>
+    </message>
+    <message>
+        <source>Ping-Pong (Forward-Backward)</source>
+        <translation>ピンポン (往復再生)</translation>
+    </message>
+    <message>
+        <source>Frame Rate (FPS):</source>
+        <translation>フレームレート (FPS):</translation>
+    </message>
+    <message>
+        <source> fps</source>
+        <translation> fps</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold (0-255):</source>
+        <translation>アルファ閾値 (0-255):</translation>
+    </message>
+    <message>
+        <source>Pixels with alpha below this threshold will be completely transparent.</source>
+        <translation>この閾値未満のアルファ値を持つピクセルは完全に透明になります。</translation>
+    </message>
+    <message>
+        <source>Export all animations as separate GIF files (&lt;project&gt;_&lt;anim&gt;.gif)</source>
+        <translation>すべてのアニメーションを個別の GIF ファイルとしてエクスポート (&lt;project&gt;_&lt;anim&gt;.gif)</translation>
+    </message>
+    <message>
+        <source>Aseprite Binary Options</source>
+        <translation>Aseprite バイナリオプション</translation>
+    </message>
+    <message>
+        <source>Lossless cel pixel compression (Deflate / zlib)</source>
+        <translation>可逆セルピクセル圧縮 (Deflate / zlib)</translation>
+    </message>
+    <message>
+        <source>Compresses cel pixel data using standard zlib compression for smaller file size.</source>
+        <translation>標準の zlib 圧縮を使用してセルピクセルデータを圧縮し、ファイルサイズを削減します。</translation>
+    </message>
+    <message>
+        <source>Export animation tags into file</source>
+        <translation>アニメーションタグをファイルにエクスポート</translation>
+    </message>
+    <message>
+        <source>Embeds project animation sequences as Aseprite tags (chunk 0x2018).</source>
+        <translation>プロジェクトのアニメーションシーケンスを Aseprite タグ (チャンク 0x2018) として埋め込みます。</translation>
+    </message>
+    <message>
+        <source>Generates native 32-bit RGBA Aseprite project (.ase/.aseprite) compatible with Aseprite v1.2+.</source>
+        <translation>Aseprite v1.2 以降と互換性のあるネイティブ 32 ビット RGBA Aseprite プロジェクト (.ase/.aseprite) を生成します。</translation>
+    </message>
+    <message>
         <source>Exporting &amp; compressing textures...</source>
-        <translation type="unfinished"></translation>
+        <translation>テクスチャをエクスポート＆圧縮中...</translation>
     </message>
     <message>
         <source>Dimensions: --</source>
@@ -890,16 +1024,52 @@ Strict removal clears the pixel.</source>
         <translation>エクスポート</translation>
     </message>
     <message>
+        <source>Select Export Directory</source>
+        <translation>エクスポート先ディレクトリを選択</translation>
+    </message>
+    <message>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのファイル</translation>
     </message>
     <message>
         <source>All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのファイル (*.*)</translation>
     </message>
     <message>
         <source>Select Export Destination</source>
         <translation>エクスポート先の選択</translation>
+    </message>
+    <message>
+        <source>Generates animated multi-frame GIF files with frame timings, transparency, and looping options.</source>
+        <translation>フレームタイミング、透明度、ループオプションを備えたマルチフレームアニメーション GIF を生成します。</translation>
+    </message>
+    <message>
+        <source>Generates a native Aseprite binary project (.ase/.aseprite) preserving layers, cels, and animation tags.</source>
+        <translation>レイヤー、セル、アニメーションタグを保持したネイティブ Aseprite バイナリプロジェクト (.ase/.aseprite) を生成します。</translation>
+    </message>
+    <message>
+        <source>Exports Godot 4 SpriteFrames resource (.tres) with atlas texture and animation metadata.</source>
+        <translation>アトラステクスチャとアニメーションメタデータを含む Godot 4 SpriteFrames リソース (.tres) をエクスポートします。</translation>
+    </message>
+    <message>
+        <source>Exports Unity 2D Sprite Mesh metadata (.unity.json) with atlas texture.</source>
+        <translation>アトラステクスチャを含む Unity 2D スプライトメッシュメタデータ (.unity.json) をエクスポートします。</translation>
+    </message>
+    <message>
+        <source>Exports Unreal Engine Paper2D sprite definitions (.paper2d.json) with atlas texture.</source>
+        <translation>アトラステクスチャを含む Unreal Engine Paper2D スプライト定義 (.paper2d.json) をエクスポートします。</translation>
+    </message>
+    <message>
+        <source>Exports LibGDX / Spine atlas format (.atlas) with companion atlas image.</source>
+        <translation>関連アトラス画像を含む LibGDX / Spine アトラス形式 (.atlas) をエクスポートします。</translation>
+    </message>
+    <message>
+        <source>Exports TexturePacker JSON / Aseprite JSON atlas format with sprite frames.</source>
+        <translation>スプライトフレームを含む TexturePacker JSON / Aseprite JSON アトラス形式をエクスポートします。</translation>
+    </message>
+    <message>
+        <source>Exports packed texture atlas and companion sprite definitions.</source>
+        <translation>パックされたテクスチャアトラスと関連スプライト定義をエクスポートします。</translation>
     </message>
     <message>
         <source>Frames: 0</source>
@@ -910,8 +1080,24 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: %1 MB (標準 RGBA8888、GPU 上で非圧縮)</translation>
     </message>
     <message>
-        <source>GPU VRAM: %1 MB (%2) — Savings: -%3% vs RGBA</source>
-        <translation>GPU VRAM: %1 MB (%2) — 削減率: -%3% (対 RGBA)</translation>
+        <source>~%1 KB on disk</source>
+        <translation>ディスク上: 約 %1 KB</translation>
+    </message>
+    <message>
+        <source>~%1 MB on disk</source>
+        <translation>ディスク上: 約 %1 MB</translation>
+    </message>
+    <message>
+        <source>+Zstd L%1</source>
+        <translation>+Zstd L%1</translation>
+    </message>
+    <message>
+        <source>Raw</source>
+        <translation>生データ (Raw)</translation>
+    </message>
+    <message>
+        <source>GPU VRAM: %1 MB (%2, -%3% hardware) | File: %4 (%5)</source>
+        <translation>GPU VRAM: %1 MB (%2, ハードウェア節約 -%3%) | ファイル: %4 (%5)</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -962,24 +1148,32 @@ Strict removal clears the pixel.</source>
         <translation>エクスポートする前に有効なファイル名を指定してください。</translation>
     </message>
     <message>
+        <source>Rendering and encoding animated GIF frames...</source>
+        <translation>アニメーション GIF フレームのレンダリングおよびエンコード中...</translation>
+    </message>
+    <message>
+        <source>Encoding native Aseprite binary project...</source>
+        <translation>ネイティブ Aseprite バイナリプロジェクトをエンコード中...</translation>
+    </message>
+    <message>
         <source>Exporting and compressing textures (GPU VRAM / KTX2)...</source>
-        <translation type="unfinished"></translation>
+        <translation>テクスチャをエクスポートおよび圧縮中 (GPU VRAM / KTX2)...</translation>
     </message>
     <message>
         <source>Export completed successfully!</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポートが正常に完了しました！</translation>
     </message>
     <message>
         <source>Saved %1 successfully.</source>
-        <translation type="unfinished">%1 が正常に保存されました。</translation>
+        <translation>%1 を正常に保存しました。</translation>
     </message>
     <message>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポートエラー</translation>
     </message>
     <message>
         <source>An error occurred during export.</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポート中にエラーが発生しました。</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1083,39 +1277,39 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>No frames in document to export.</source>
-        <translation type="unfinished"></translation>
+        <translation>ドキュメントにエクスポートするフレームがありません。</translation>
     </message>
     <message>
         <source>Exporting GIF animation %1 (%2/%3)...</source>
-        <translation type="unfinished"></translation>
+        <translation>GIF アニメーション %1 をエクスポート中 (%2/%3)...</translation>
     </message>
     <message>
         <source>Exported %1 GIF animation(s) successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 個の GIF アニメーションが正常にエクスポートされました。</translation>
     </message>
     <message>
         <source>Animation %1 has no frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>アニメーション %1 にはフレームがありません。</translation>
     </message>
     <message>
         <source>Failed to initialize GIF encoder for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 の GIF エンコーダーの初期化に失敗しました。</translation>
     </message>
     <message>
         <source>Failed to encode GIF frame in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 の GIF フレームのエンコードに失敗しました。</translation>
     </message>
     <message>
         <source>GIF encoding generated no data for %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 の GIF エンコードでデータが生成されませんでした。</translation>
     </message>
     <message>
         <source>Cannot open destination file %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>保存先ファイル %1 を開けません: %2</translation>
     </message>
     <message>
         <source>Incomplete file write to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 への書き込みが不完全です。</translation>
     </message>
 </context>
 <context>
@@ -1258,15 +1452,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Preserve existing Godot 4 UID (uid://...) on re-export</source>
-        <translation type="unfinished"></translation>
+        <translation>再エクスポート時に既存の Godot 4 UID (uid://...) を保持する</translation>
     </message>
     <message>
         <source>Auto-generate AnimatedSprite2D scene (.tscn) companion file</source>
-        <translation type="unfinished"></translation>
+        <translation>AnimatedSprite2D シーン付随ファイル (.tscn) を自動生成する</translation>
     </message>
     <message>
         <source>Godot Engine 4.x SpriteFrames exporter with AtlasTexture regions and collision mesh generation.</source>
-        <translation type="unfinished"></translation>
+        <translation>AtlasTexture 領域および衝突メッシュ生成機能を備えた Godot Engine 4.x SpriteFrames エクスポーター。</translation>
     </message>
 </context>
 <context>
@@ -1325,23 +1519,70 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Default JSON Structure:</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトのJSON構造:</translation>
     </message>
     <message>
         <source>Hash Object (TexturePacker Hash)</source>
-        <translation type="unfinished"></translation>
+        <translation>ハッシュオブジェクト (TexturePacker Hash)</translation>
     </message>
     <message>
         <source>Array List (TexturePacker Array / Aseprite)</source>
-        <translation type="unfinished"></translation>
+        <translation>配列リスト (TexturePacker Array / Aseprite)</translation>
     </message>
     <message>
         <source>Include animation frameTags in metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>メタデータにアニメーションの frameTags を含める</translation>
     </message>
     <message>
         <source>JSON Atlas descriptor exporter compatible with TexturePacker, Aseprite, Phaser, and PixiJS.</source>
-        <translation type="unfinished"></translation>
+        <translation>TexturePacker、Aseprite、Phaser、PixiJS と互換性のある JSON アトラス記述ファイルエクスポーター。</translation>
+    </message>
+</context>
+<context>
+    <name>LibGdxExtractor</name>
+    <message>
+        <source>Atlas file is empty.</source>
+        <translation>アトラスファイルが空です。</translation>
+    </message>
+    <message>
+        <source>Reading LibGDX/Spine Atlas...</source>
+        <translation>LibGDX/Spine アトラスを読み込み中...</translation>
+    </message>
+    <message>
+        <source>Cannot open atlas file: %1</source>
+        <translation>アトラスファイルを開けません: %1</translation>
+    </message>
+    <message>
+        <source>Failed to parse atlas file.</source>
+        <translation>アトラスファイルの解析に失敗しました。</translation>
+    </message>
+    <message>
+        <source>Failed to load companion atlas image: %1</source>
+        <translation>関連付けられたアトラス画像の読み込みに失敗しました: %1</translation>
+    </message>
+    <message>
+        <source>LibGDX/Spine Atlas loaded successfully.</source>
+        <translation>LibGDX/Spine アトラスが正常に読み込まれました。</translation>
+    </message>
+    <message>
+        <source>Exporting LibGDX/Spine Atlas...</source>
+        <translation>LibGDX/Spine アトラスをエクスポート中...</translation>
+    </message>
+    <message>
+        <source>Document contains no sprites to export.</source>
+        <translation>ドキュメントにエクスポートするスプライトが含まれていません。</translation>
+    </message>
+    <message>
+        <source>Failed to save companion atlas image: %1</source>
+        <translation>関連付けられたアトラス画像の保存に失敗しました: %1</translation>
+    </message>
+    <message>
+        <source>Cannot create output atlas file: %1</source>
+        <translation>出力アトラスファイルを作成できません: %1</translation>
+    </message>
+    <message>
+        <source>Exported LibGDX/Spine Atlas successfully.</source>
+        <translation>LibGDX/Spine アトラスが正常にエクスポートされました。</translation>
     </message>
 </context>
 <context>
@@ -1576,7 +1817,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>BentoPack (*.bento);;すべてのファイル (*.*)</translation>
     </message>
     <message>
         <source>KEY_DIALOG_OPEN_TITLE</source>
@@ -1817,7 +2058,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>💡 Update available: %1 (Check Settings -&gt; Updates)</source>
-        <translation type="unfinished"></translation>
+        <translation>💡 アップデート利用可能: %1 (設定 -&gt; アップデートを確認)</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_TITLE</source>
@@ -1918,7 +2159,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Atlas packing plugin not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>アトラスパッキングプラグインが見つかりません。</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -2109,16 +2350,8 @@ Strict removal clears the pixel.</source>
         <translation>ピクセルエディタ — BentoPack</translation>
     </message>
     <message>
-        <source>◀ Previous Frame</source>
-        <translation>◀ 前のフレーム</translation>
-    </message>
-    <message>
         <source>Navigate to previous frame (Page Up)</source>
         <translation>前のフレームに移動 (Page Up)</translation>
-    </message>
-    <message>
-        <source>Next Frame ▶</source>
-        <translation>次のフレーム ▶</translation>
     </message>
     <message>
         <source>Navigate to next frame (Page Down)</source>
@@ -2193,36 +2426,12 @@ Strict removal clears the pixel.</source>
         <translation>やり直す (Ctrl+Y)</translation>
     </message>
     <message>
-        <source>Active Colors</source>
-        <translation>アクティブカラー</translation>
-    </message>
-    <message>
-        <source>Primary Color (Left Click to change)</source>
-        <translation>前景色（左クリックで変更）</translation>
-    </message>
-    <message>
-        <source>Secondary Color (Left Click to change)</source>
-        <translation>背景色（左クリックで変更）</translation>
-    </message>
-    <message>
         <source>Swap Colors (X)</source>
         <translation>カラー入れ替え (X)</translation>
     </message>
     <message>
-        <source>Palette:</source>
-        <translation>パレット：</translation>
-    </message>
-    <message>
-        <source>Sprite Colors (Auto)</source>
-        <translation>スプライトの色（自動）</translation>
-    </message>
-    <message>
         <source>NES / Famicom (54)</source>
         <translation>ファミコン / NES (54)</translation>
-    </message>
-    <message>
-        <source>SNES / Super Famicom (32)</source>
-        <translation>スーパーファミコン / SNES (32)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
@@ -2243,6 +2452,26 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Commodore 64 (16)</source>
         <translation>コモドール64 (16)</translation>
+    </message>
+    <message>
+        <source>-1</source>
+        <translation>-1</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <source>Effect Intensity:</source>
+        <translation>エフェクト強度:</translation>
+    </message>
+    <message>
+        <source>50%</source>
+        <translation>50%</translation>
+    </message>
+    <message>
+        <source>Effect mode:</source>
+        <translation>エフェクトモード:</translation>
     </message>
     <message>
         <source>1:1 Scale Preview</source>
@@ -2273,6 +2502,138 @@ Strict removal clears the pixel.</source>
         <translation>キャンセル</translation>
     </message>
     <message>
+        <source>Animation:</source>
+        <translation>アニメーション:</translation>
+    </message>
+    <message>
+        <source>Show / Hide Pivot Anchor Marker</source>
+        <translation>ピボットアンカーマーカーの表示/非表示</translation>
+    </message>
+    <message>
+        <source>Edit outside polygon</source>
+        <translation>ポリゴン外を編集</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Default: off when polygon exists)</source>
+        <translation>ポリゴン境界外のピクセル編集を許可します (デフォルト: ポリゴン存在時は無効)</translation>
+    </message>
+    <message>
+        <source>Apply to all frames</source>
+        <translation>すべてのフレームに適用</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</source>
+        <translation>ピボットで整列されたすべてのフレームに編集 (描画、反転、塗りつぶしなど) を適用</translation>
+    </message>
+    <message>
+        <source>Clear Selection / Deselect (Del)</source>
+        <translation>選択範囲の消去 / 選択解除 (Del)</translation>
+    </message>
+    <message>
+        <source>Color Picker</source>
+        <translation>カラーピッカー</translation>
+    </message>
+    <message>
+        <source>Primary Color (Click to open Color Picker)</source>
+        <translation>メインカラー (クリックしてカラーピッカーを開く)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Click to open Color Picker)</source>
+        <translation>サブカラー (クリックしてカラーピッカーを開く)</translation>
+    </message>
+    <message>
+        <source>🎨 Pick Color...</source>
+        <translation>🎨 色を選択...</translation>
+    </message>
+    <message>
+        <source>Recent:</source>
+        <translation>最近の色:</translation>
+    </message>
+    <message>
+        <source>Preset:</source>
+        <translation>プリセット:</translation>
+    </message>
+    <message>
+        <source>Sample Frame</source>
+        <translation>フレームから抽出</translation>
+    </message>
+    <message>
+        <source>Extract all unique colors from current sprite frame</source>
+        <translation>現在のスプライトフレームからすべての一意な色を抽出します</translation>
+    </message>
+    <message>
+        <source>Bento Standard (36)</source>
+        <translation>Bento スタンダード (36)</translation>
+    </message>
+    <message>
+        <source>SNES / 16-bit (32)</source>
+        <translation>SNES / 16ビット (32)</translation>
+    </message>
+    <message>
+        <source>Onion Skinning</source>
+        <translation>オニオンスキン</translation>
+    </message>
+    <message>
+        <source>Enable Onion Skin</source>
+        <translation>オニオンスキンを有効化</translation>
+    </message>
+    <message>
+        <source>Past:</source>
+        <translation>過去フレーム:</translation>
+    </message>
+    <message>
+        <source>Past frames to display (-3 to 0)</source>
+        <translation>表示する過去のフレーム数 (-3 〜 0)</translation>
+    </message>
+    <message>
+        <source>Future:</source>
+        <translation>未来フレーム:</translation>
+    </message>
+    <message>
+        <source>Future frames to display (0 to +3)</source>
+        <translation>表示する未来のフレーム数 (0 〜 +3)</translation>
+    </message>
+    <message>
+        <source>Global opacity intensity with distance falloff (0% to 100%)</source>
+        <translation>距離に応じた減衰を伴う全体不透明度 (0% 〜 100%)</translation>
+    </message>
+    <message>
+        <source>Tinted (Blue/Red)</source>
+        <translation>色分け (青/赤)</translation>
+    </message>
+    <message>
+        <source>Border Detection (Edge)</source>
+        <translation>輪郭検出 (エッジ)</translation>
+    </message>
+    <message>
+        <source>Red Channel (R)</source>
+        <translation>赤チャンネル (R)</translation>
+    </message>
+    <message>
+        <source>Green Channel (G)</source>
+        <translation>緑チャンネル (G)</translation>
+    </message>
+    <message>
+        <source>Blue Channel (B)</source>
+        <translation>青チャンネル (B)</translation>
+    </message>
+    <message>
+        <source>Monochrome Silhouette</source>
+        <translation>モノクロシルエット</translation>
+    </message>
+    <message>
+        <source>True Color (Ghost)</source>
+        <translation>トゥルーカラー (ゴースト)</translation>
+    </message>
+    <message>
+        <source>Repack Atlas...</source>
+        <translation>アトラスを再パック...</translation>
+    </message>
+    <message>
+        <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
+        <translation>インタラクティブなアトラスパッキングダイアログを開き、重なりを解決します</translation>
+    </message>
+    <message>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
@@ -2287,6 +2648,90 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Select Secondary Color</source>
         <translation>背景色を選択</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
+        <translation>ポリゴン境界外のピクセル編集を許可します (オフ: ポリゴン外の編集は無効)</translation>
+    </message>
+    <message>
+        <source>No polygon mesh defined for this frame</source>
+        <translation>このフレームにはポリゴンメッシュが定義されていません</translation>
+    </message>
+    <message>
+        <source>%1: Frame %2 / %3  [Global #%4] (%5x%6 px)</source>
+        <translation>%1: フレーム %2 / %3  [全体 #%4] (%5x%6 px)</translation>
+    </message>
+    <message>
+        <source>All Frames (%1)</source>
+        <translation>すべてのフレーム (%1)</translation>
+    </message>
+    <message>
+        <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
+        <translation>• フレーム %1 (%2) がフレーム %3 (%4) と衝突しています</translation>
+    </message>
+    <message>
+        <source>polygon</source>
+        <translation>ポリゴン</translation>
+    </message>
+    <message>
+        <source>box</source>
+        <translation>ボックス</translation>
+    </message>
+    <message>
+        <source>⚠️ Atlas collision: repack required on validation</source>
+        <translation>⚠️ アトラス衝突: 検証時に再パックが必要です</translation>
+    </message>
+    <message>
+        <source>Atlas Packing</source>
+        <translation>アトラスパッキング</translation>
+    </message>
+    <message>
+        <source>Atlas packing plugin not found. Changes were saved without repacking.</source>
+        <translation>アトラスパッキングプラグインが見つかりません。再パックせずに変更を保存しました。</translation>
+    </message>
+    <message>
+        <source>Atlas Collision Detected</source>
+        <translation>アトラスの衝突が検出されました</translation>
+    </message>
+    <message>
+        <source>Polygon or frame modifications cause collision with other sprites in the atlas:
+
+%1
+
+An atlas repack must be performed upon validation to resolve overlapping frames.
+
+Would you like to repack the atlas now?</source>
+        <translation>ポリゴンまたはフレームの変更により、アトラス内の他のスプライトと衝突しています:
+
+%1
+
+フレームの重なりを解消するには、検証時にアトラスの再パックを行う必要があります。
+
+今すぐアトラスを再パックしますか？</translation>
+    </message>
+    <message>
+        <source>Repack Atlas Now</source>
+        <translation>今すぐアトラスを再パック</translation>
+    </message>
+    <message>
+        <source>Validate Without Repacking</source>
+        <translation>再パックせずに検証</translation>
+    </message>
+    <message>
+        <source>Filter navigation and onion skinning to animation</source>
+        <translation>ナビゲーションとオニオンスキンを現在のアニメーションに絞り込む</translation>
+    </message>
+    <message>
+        <source># Grid</source>
+        <translation># グリッド</translation>
+    </message>
+    <message>
+        <source>Pivot</source>
+        <translation>ピボット</translation>
+    </message>
+    <message>
+        <source>⊡ Fit</source>
+        <translation>⊡ 全体表示</translation>
     </message>
 </context>
 <context>
@@ -2427,7 +2872,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Computing...</source>
-        <translation type="unfinished">計算中...</translation>
+        <translation>計算中...</translation>
     </message>
     <message>
         <source>Target Frame %1: Mesh already applied (%2 vertices, %3 tris)</source>
@@ -2439,11 +2884,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Computing mesh: 0 / %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>メッシュを計算中: 0 / %1...</translation>
     </message>
     <message>
         <source>Computing mesh: frame %1 / %2...</source>
-        <translation type="unfinished"></translation>
+        <translation>メッシュを計算中: フレーム %1 / %2...</translation>
     </message>
     <message>
         <source>✓ Mesh applied to %1 frame(s)!</source>
@@ -2731,7 +3176,9 @@ Strict removal clears the pixel.</source>
         <source>Failed to decode image from %1.
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 から画像をデコードできませんでした。
+
+%2</translation>
     </message>
     <message>
         <source>The WebP image format plugin is not installed in your Qt environment.
@@ -2743,7 +3190,15 @@ To enable WebP support on Linux, install the corresponding package:
   • openSUSE:              sudo zypper install libqt6-qtimageformats
 
 On Windows / macOS, ensure Qt imageformats plugins (qwebp) are deployed with the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>WebP 画像形式プラグインが Qt 環境にインストールされていません。
+
+Linux で WebP サポートを有効にするには、対応するパッケージをインストールしてください:
+  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
+  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
+  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
+  • openSUSE:              sudo zypper install libqt6-qtimageformats
+
+Windows / macOS では、Qt imageformats プラグイン (qwebp) がアプリに同梱されていることを確認してください。</translation>
     </message>
     <message>
         <source>The %1 image format requires the Qt6 imageformats plugin.
@@ -2753,19 +3208,25 @@ Install package:
   • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
   • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
   • openSUSE:              sudo zypper install libqt6-qtimageformats</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 画像フォーマットには Qt6 imageformats プラグインが必要です。
+
+パッケージのインストール:
+  • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
+  • Ubuntu / Debian:       sudo apt install qt6-image-formats-plugins
+  • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
+  • openSUSE:              sudo zypper install libqt6-qtimageformats</translation>
     </message>
     <message>
         <source>No suitable exporter found for format: %1</source>
-        <translation type="unfinished">フォーマット %1 に対応するエクスポーターが見つかりません</translation>
+        <translation>フォーマット %1 に適したエクスポーターが見つかりません</translation>
     </message>
     <message>
         <source>Failed to decode project atlas: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>プロジェクトアトラスのデコードに失敗しました: %1</translation>
     </message>
     <message>
         <source>Project atlas image file not found in session: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>セッション内にプロジェクトアトラス画像ファイルが見つかりません: %1</translation>
     </message>
 </context>
 <context>
@@ -3040,15 +3501,15 @@ Install package:
     </message>
     <message>
         <source>Export &amp; VRAM</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポート＆VRAM</translation>
     </message>
     <message>
         <source>Plugins &amp; Extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグイン＆拡張機能</translation>
     </message>
     <message>
         <source>Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>アップデート</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_GENERAL</source>
@@ -3100,15 +3561,15 @@ Install package:
     </message>
     <message>
         <source>Startup &amp; Behavior</source>
-        <translation type="unfinished"></translation>
+        <translation>起動と動作設定</translation>
     </message>
     <message>
         <source>Check automatically for updates on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>起動時に自動でアップデートを確認する</translation>
     </message>
     <message>
         <source>Reopen last project on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>起動時に前回のプロジェクトを再度開く</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_GIT</source>
@@ -3192,171 +3653,171 @@ Install package:
     </message>
     <message>
         <source>Export &amp; VRAM Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポート＆VRAM のデフォルト</translation>
     </message>
     <message>
         <source>Default Export Configurations</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトのエクスポート構成</translation>
     </message>
     <message>
         <source>(No export plugins loaded)</source>
-        <translation type="unfinished"></translation>
+        <translation>(エクスポートプラグインが読み込まれていません)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;ヒント:&lt;/b&gt; GPU 圧縮テクスチャ (KTX2 / Basis Universal) は、実行時デバイスの GPU メモリ使用量 (VRAM) と帯域幅を削減します。</translation>
     </message>
     <message>
         <source>Default Target Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルト対象フォーマット:</translation>
     </message>
     <message>
         <source>PNG (Standard, Lossless)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG (標準、可逆圧縮)</translation>
     </message>
     <message>
         <source>WebP (Modern Web, High Compression)</source>
-        <translation type="unfinished"></translation>
+        <translation>WebP (モダンWeb、高圧縮)</translation>
     </message>
     <message>
         <source>KTX2 / Basis Universal (GPU Compressed VRAM)</source>
-        <translation type="unfinished"></translation>
+        <translation>KTX2 / Basis Universal (GPU 圧縮 VRAM)</translation>
     </message>
     <message>
         <source>Default Texture Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトのテクスチャ形式:</translation>
     </message>
     <message>
         <source>MaxRects (Best Fit)</source>
-        <translation type="unfinished"></translation>
+        <translation>MaxRects (最適フィット)</translation>
     </message>
     <message>
         <source>Shelf / Next-Fit (Fast)</source>
-        <translation type="unfinished"></translation>
+        <translation>シェルフ / ネクストフィット (高速)</translation>
     </message>
     <message>
         <source>Skyline (Efficient)</source>
-        <translation type="unfinished"></translation>
+        <translation>スカイライン (高効率)</translation>
     </message>
     <message>
         <source>Polygonal Concave (Tightest Packing)</source>
-        <translation type="unfinished"></translation>
+        <translation>凹多角形 (最高密度パッキング)</translation>
     </message>
     <message>
         <source>Default Packing Algorithm:</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトのパッキングアルゴリズム:</translation>
     </message>
     <message>
         <source>Enable Zstandard (Zstd) compression by default</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトで Zstandard (Zstd) 圧縮を有効にする</translation>
     </message>
     <message>
         <source>Zstd Compression Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zstd 圧縮レベル:</translation>
     </message>
     <message>
         <source>Open Plugins Folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインフォルダーを開く...</translation>
     </message>
     <message>
         <source>Reload Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインを再読み込み</translation>
     </message>
     <message>
         <source>Filter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルター名</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>カテゴリ</translation>
     </message>
     <message>
         <source>Identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>識別子</translation>
     </message>
     <message>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルター</translation>
     </message>
     <message>
         <source>Extractor / Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>エクストラクター / コーデック</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>バージョン</translation>
     </message>
     <message>
         <source>Extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>拡張機能</translation>
     </message>
     <message>
         <source>Extractors &amp; Codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>エクストラクター＆コーデック</translation>
     </message>
     <message>
         <source>Select a plugin above to view its details.</source>
-        <translation type="unfinished"></translation>
+        <translation>詳細を表示するには上のプラグインを選択してください。</translation>
     </message>
     <message>
         <source>Plugin Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグイン設定</translation>
     </message>
     <message>
         <source>Software Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>ソフトウェアアップデート</translation>
     </message>
     <message>
         <source>Current installed version: &lt;b&gt;v%1&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>現在インストールされているバージョン: &lt;b&gt;v%1&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Check for Updates Now</source>
-        <translation type="unfinished"></translation>
+        <translation>今すぐアップデートを確認</translation>
     </message>
     <message>
         <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
-        <translation type="unfinished"></translation>
+        <translation>「今すぐアップデートを確認」をクリックして、GitHub の最新リリースを照会します。</translation>
     </message>
     <message>
         <source>Release Information</source>
-        <translation type="unfinished"></translation>
+        <translation>リリース情報</translation>
     </message>
     <message>
         <source>Open Release Page on GitHub</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHub のリリース ページを開く</translation>
     </message>
     <message>
         <source>Plugins reloaded successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインが正常に再読み込みされました。</translation>
     </message>
     <message>
         <source>Checking for updates from GitHub...</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHub からアップデートを確認中...</translation>
     </message>
     <message>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;アップデートの確認に失敗しました: %1&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;GitHub からの無効な応答です。&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;新しいバージョンが利用可能です: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>最新バージョン: &lt;b&gt;%1&lt;/b&gt; (%2)</translation>
     </message>
     <message>
         <source>Released: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>リリース日: %1</translation>
     </message>
     <message>
         <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;最新バージョン (v%1) を使用しています。&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
@@ -3426,15 +3887,15 @@ Install package:
     <name>TightPolygonPackingFilter</name>
     <message>
         <source>Tight Polygon Packing (Nesting)...</source>
-        <translation type="unfinished"></translation>
+        <translation>タイトポリゴンパッキング (ネスティング)...</translation>
     </message>
     <message>
         <source>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</source>
-        <translation type="unfinished"></translation>
+        <translation>タイトなポリゴン包絡線とマルチスレッド衝突検出を使用して、スプライトをアトラス内に高密度にパッキングします。</translation>
     </message>
     <message>
         <source>Tight Polygon Packing (Nesting)</source>
-        <translation type="unfinished"></translation>
+        <translation>タイトポリゴンパッキング (ネスティング)</translation>
     </message>
 </context>
 <context>
@@ -3680,6 +4141,33 @@ Install package:
     <message>
         <source>Cancel</source>
         <translation>キャンセル</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Usage: bentopack [options] [file.bento]
+
+BentoPack - 2D Sprite Sheet Packer &amp; Game Engine Asset Pipeline
+
+Options:
+  -h, --help     Displays help on commandline options.
+  -v, --version  Displays version information.
+
+Arguments:
+  file           Project file (.bento) to open.
+</source>
+        <translation>使用法: bentopack [オプション] [file.bento]
+
+BentoPack - 2Dスプライトシートパッカー＆ゲームエンジンアセットパイプライン
+
+オプション:
+  -h, --help     コマンドラインヘルプを表示します。
+  -v, --version  バージョン情報を表示します。
+
+引数:
+  file           開くプロジェクトファイル (.bento)。
+</translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,6 +107,7 @@ public:
     void attachTimelineWidget(TimelineFilmstripWidget *timeline);
     void attachScrubberSlider(QSlider *slider, QLabel *frameIndicator = nullptr);
     void attachLoopModeComboBox(QComboBox *combo);
+    void retranslateUi();
 
     // Zoom & Pan
     double zoomFactor() const { return m_zoomFactor; }

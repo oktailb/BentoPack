@@ -319,6 +319,8 @@ void PixelEditorDialog::setupUi()
     addShortcut(QKeySequence(Qt::CTRL | Qt::Key_Z), [this]() { m_canvas->undo(); });
     addShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y), [this]() { m_canvas->redo(); });
     addShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Z), [this]() { m_canvas->redo(); });
+
+    retranslateUi();
 }
 
 QWidget* PixelEditorDialog::createHeaderBar()
@@ -430,7 +432,7 @@ QWidget* PixelEditorDialog::createHeaderBar()
     layout->addWidget(m_btnGrid);
 
     m_btnShowPivot = new QToolButton(bar);
-    m_btnShowPivot->setText(QStringLiteral("⌖ Pivot"));
+    m_btnShowPivot->setText(QStringLiteral("⌖ ") + tr("Pivot"));
     m_btnShowPivot->setToolTip(tr("Show / Hide Pivot Anchor Marker"));
     m_btnShowPivot->setCheckable(true);
     m_btnShowPivot->setChecked(true);
@@ -504,7 +506,7 @@ QWidget* PixelEditorDialog::createHeaderBar()
     layout->addWidget(m_btnZoomIn);
 
     m_btnFit = new QToolButton(bar);
-    m_btnFit->setText(QStringLiteral("⊡ Fit"));
+    m_btnFit->setText(tr("⊡ Fit"));
     m_btnFit->setToolTip(tr("Fit to View"));
     m_btnFit->setFixedSize(56, 28);
     m_btnFit->setStyleSheet(viewBtnStyle);
