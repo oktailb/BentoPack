@@ -3,11 +3,14 @@
 #include <QPainter>
 #include <QUndoStack>
 #include <QApplication>
+#include <QDir>
 
 #include "model/spritedocument.h"
 #include "commands/commands.h"
+#include "geometry/triangulator.h"
 #include "widgets/pixelcanvas.h"
 #include "widgets/pixeleditordialog.h"
+#include "filters/filterregistry.h"
 
 class TestPixelEditor : public QObject
 {
@@ -48,10 +51,31 @@ private slots:
 
     // 7. Dirty Rects & COW Tests
     void testPixelCanvasDirtyRectUndoRedo();
+
+    // 8. Onion Skinning & Ergonomics Tests
+    void testOnionSkinTintedAndFalloff();
+    void testOnionSkinEdgeDetection();
+    void testOnionSkinChannelsAndSilhouette();
+    void testOnionSkinCanvasComposition();
+    void testOnionSkinPivotAlignment();
+    void testOnionSkinPolygonClipping();
+    void testSpaceAndMiddleMousePanning();
+    void testAnimationScopedNavigation();
+    void testZoomPreservedAcrossFrameNavigation();
+    void testPivotStrictlyStationaryAcrossAnimation();
+    void testPolygonRestrictionCheckboxAndEditing();
+    void testPolygonFollowsFlipAndRotate();
+    void testAtlasPolygonCollisionAndRepack();
+    void testApplyToAllFramesRelativePivot();
 };
 
 void TestPixelEditor::initTestCase()
 {
+    QString appDir = QCoreApplication::applicationDirPath();
+    QString binPlugins = QDir(appDir).filePath(QStringLiteral("plugins"));
+    FilterRegistry::instance().loadPlugins(binPlugins);
+    FilterRegistry::instance().loadPlugins(appDir);
+    FilterRegistry::instance().initDefaultFilters();
 }
 
 void TestPixelEditor::cleanupTestCase()
@@ -547,6 +571,870 @@ void TestPixelEditor::testPixelCanvasDirtyRectUndoRedo()
     int countBefore = canvas.undoStack()->count();
     canvas.pushSnapshot(canvas.image(), QStringLiteral("No-op"));
     QCOMPARE(canvas.undoStack()->count(), countBefore); // Should not push command!
+}
+
+void TestPixelEditor::testOnionSkinTintedAndFalloff()
+{
+    // Create a 16x16 white square sprite
+    QImage src(16, 16, QImage::Format_ARGB32);
+    src.fill(Qt::white);
+
+    // 1. Past frame (offset -1) at 50% opacity
+    QImage pastImg1 = PixelCanvas::processOnionSkinLayer(src, -1, 50, OnionSkinEffect::TintedBlueRed, QSize(16, 16));
+    QVERIFY(!pastImg1.isNull());
+    QRgb p1 = pastImg1.pixel(8, 8);
+    // Tinted blue: Blue component should dominate red
+    QVERIFY(qBlue(p1) > qRed(p1));
+    // Opacity: distance 1 has falloff 1.0 => alpha around 255 * 0.50 = 127
+    QVERIFY(qAlpha(p1) >= 120 && qAlpha(p1) <= 135);
+
+    // 2. Distant past frame (offset -3) at 50% opacity
+    QImage pastImg3 = PixelCanvas::processOnionSkinLayer(src, -3, 50, OnionSkinEffect::TintedBlueRed, QSize(16, 16));
+    QVERIFY(!pastImg3.isNull());
+    QRgb p3 = pastImg3.pixel(8, 8);
+    // Opacity with falloff 0.40 => alpha around 255 * 0.50 * 0.40 = 51
+    QVERIFY(qAlpha(p3) < qAlpha(p1));
+    QVERIFY(qAlpha(p3) >= 45 && qAlpha(p3) <= 58);
+
+    // 3. Future frame (offset +1) at 50% opacity
+    QImage futureImg1 = PixelCanvas::processOnionSkinLayer(src, 1, 50, OnionSkinEffect::TintedBlueRed, QSize(16, 16));
+    QVERIFY(!futureImg1.isNull());
+    QRgb f1 = futureImg1.pixel(8, 8);
+    // Tinted red: Red component should dominate blue
+    QVERIFY(qRed(f1) > qBlue(f1));
+}
+
+void TestPixelEditor::testOnionSkinEdgeDetection()
+{
+    // Create a 10x10 transparent image with an opaque 4x4 square in the center (from 3,3 to 6,6)
+    QImage src(10, 10, QImage::Format_ARGB32);
+    src.fill(Qt::transparent);
+    for (int y = 3; y <= 6; ++y) {
+        for (int x = 3; x <= 6; ++x) {
+            src.setPixelColor(x, y, Qt::white);
+        }
+    }
+
+    QImage edgeImg = PixelCanvas::processOnionSkinLayer(src, -1, 100, OnionSkinEffect::EdgeDetection, QSize(10, 10));
+    QVERIFY(!edgeImg.isNull());
+
+    // (3,3) is an edge pixel (adjacent to transparent) => should be non-transparent
+    QVERIFY(qAlpha(edgeImg.pixel(3, 3)) > 0);
+    // (4,4) is an interior pixel (all 4 neighbors are opaque white) => should be transparent!
+    QCOMPARE(qAlpha(edgeImg.pixel(4, 4)), 0);
+    // (0,0) is outside the sprite => transparent
+    QCOMPARE(qAlpha(edgeImg.pixel(0, 0)), 0);
+}
+
+void TestPixelEditor::testOnionSkinChannelsAndSilhouette()
+{
+    // Create an image with a specific color (R=200, G=150, B=100)
+    QImage src(8, 8, QImage::Format_ARGB32);
+    src.fill(qRgba(200, 150, 100, 255));
+
+    // Channel R
+    QImage rImg = PixelCanvas::processOnionSkinLayer(src, -1, 100, OnionSkinEffect::ChannelR, QSize(8, 8));
+    QRgb rRgb = rImg.pixel(4, 4);
+    QCOMPARE(qRed(rRgb), 200);
+    QCOMPARE(qGreen(rRgb), 0);
+    QCOMPARE(qBlue(rRgb), 0);
+
+    // Channel G
+    QImage gImg = PixelCanvas::processOnionSkinLayer(src, -1, 100, OnionSkinEffect::ChannelG, QSize(8, 8));
+    QRgb gRgb = gImg.pixel(4, 4);
+    QCOMPARE(qRed(gRgb), 0);
+    QCOMPARE(qGreen(gRgb), 150);
+    QCOMPARE(qBlue(gRgb), 0);
+
+    // Channel B
+    QImage bImg = PixelCanvas::processOnionSkinLayer(src, -1, 100, OnionSkinEffect::ChannelB, QSize(8, 8));
+    QRgb bRgb = bImg.pixel(4, 4);
+    QCOMPARE(qRed(bRgb), 0);
+    QCOMPARE(qGreen(bRgb), 0);
+    QCOMPARE(qBlue(bRgb), 100);
+
+    // Silhouette
+    QImage silImg = PixelCanvas::processOnionSkinLayer(src, -1, 100, OnionSkinEffect::Silhouette, QSize(8, 8));
+    QRgb silRgb = silImg.pixel(4, 4);
+    QCOMPARE(qRed(silRgb), 225);
+    QCOMPARE(qGreen(silRgb), 230);
+    QCOMPARE(qBlue(silRgb), 240);
+
+    // TrueColor
+    QImage tcImg = PixelCanvas::processOnionSkinLayer(src, -1, 80, OnionSkinEffect::TrueColor, QSize(8, 8));
+    QRgb tcRgb = tcImg.pixel(4, 4);
+    QCOMPARE(qRed(tcRgb), 200);
+    QCOMPARE(qGreen(tcRgb), 150);
+    QCOMPARE(qBlue(tcRgb), 100);
+    QVERIFY(qAlpha(tcRgb) > 190 && qAlpha(tcRgb) <= 205);
+}
+
+void TestPixelEditor::testOnionSkinCanvasComposition()
+{
+    PixelCanvas canvas;
+    QImage currentImg(16, 16, QImage::Format_ARGB32);
+    currentImg.fill(Qt::transparent);
+    canvas.setImage(currentImg);
+
+    QImage prevImg(16, 16, QImage::Format_ARGB32);
+    prevImg.fill(Qt::white);
+    QImage nextImg(16, 16, QImage::Format_ARGB32);
+    nextImg.fill(Qt::white);
+
+    QVector<OnionSkinLayer> layers;
+    layers.append({prevImg, -1});
+    layers.append({nextImg, 1});
+
+    canvas.setOnionSkinLayers(layers);
+    canvas.setOnionSkinOpacity(60);
+    canvas.setOnionSkinEffect(OnionSkinEffect::TintedBlueRed);
+    canvas.setOnionSkinEnabled(true);
+
+    QCOMPARE(canvas.onionSkinLayers().size(), 2);
+    QCOMPARE(canvas.onionSkinOpacity(), 60);
+    QCOMPARE(canvas.onionSkinEffect(), OnionSkinEffect::TintedBlueRed);
+    QVERIFY(canvas.isOnionSkinEnabled());
+}
+
+void TestPixelEditor::testOnionSkinPivotAlignment()
+{
+    // Test that onion skin layer composite renders layer offset according to pivot alignment
+    PixelCanvas canvas;
+    QImage curImg(20, 20, QImage::Format_ARGB32);
+    curImg.fill(Qt::transparent);
+    canvas.setImage(curImg);
+
+    // Create a 10x10 past layer image with a 2x2 white mark at (0, 0)
+    QImage pastImg(10, 10, QImage::Format_ARGB32);
+    pastImg.fill(Qt::transparent);
+    for (int y = 0; y < 2; ++y) {
+        for (int x = 0; x < 2; ++x) {
+            pastImg.setPixelColor(x, y, QColor(255, 255, 255, 255));
+        }
+    }
+
+    // Align offset = (5, 5) -> the 2x2 mark should now be at (5..6, 5..6) on the composite
+    OnionSkinLayer layer;
+    layer.image = pastImg;
+    layer.relativeOffset = -1;
+    layer.alignmentOffset = QPoint(5, 5);
+
+    canvas.setOnionSkinLayers({layer});
+    canvas.setOnionSkinOpacity(100);
+    canvas.setOnionSkinEffect(OnionSkinEffect::TrueColor);
+    canvas.setOnionSkinEnabled(true);
+
+    const QImage &comp = canvas.onionSkinComposite();
+    QVERIFY(!comp.isNull());
+    QCOMPARE(comp.size(), QSize(20, 20));
+
+    // Pixel at (0, 0) should be transparent
+    QCOMPARE(qAlpha(comp.pixel(0, 0)), 0);
+
+    // Pixel at (5, 5) should have the rendered mark with full alpha
+    QRgb markRgb = comp.pixel(5, 5);
+    QCOMPARE(qAlpha(markRgb), 255);
+    QCOMPARE(qRed(markRgb), 255);
+    QCOMPARE(qGreen(markRgb), 255);
+    QCOMPARE(qBlue(markRgb), 255);
+}
+
+void TestPixelEditor::testOnionSkinPolygonClipping()
+{
+    SpriteDocument doc;
+    QImage img1(16, 16, QImage::Format_ARGB32);
+    img1.fill(Qt::white);
+    QImage img2(16, 16, QImage::Format_ARGB32);
+    img2.fill(Qt::white);
+
+    SpriteBox box1(QRect(0, 0, 16, 16));
+    SpriteBox box2(QRect(0, 0, 16, 16));
+
+    // Polygon for box1: triangle (0,0), (8,0), (0,8)
+    box1.polygon = QPolygonF({QPointF(0, 0), QPointF(8, 0), QPointF(0, 8)});
+    box1.hasPolygonMesh = true;
+
+    doc.setFrames({img1, img2}, {box1, box2});
+
+    // Verify polygonClippedFrame on frame 0
+    QImage clipped0 = doc.polygonClippedFrame(0);
+    QVERIFY(!clipped0.isNull());
+    // Point (1, 1) inside polygon should be opaque
+    QVERIFY(qAlpha(clipped0.pixel(1, 1)) > 0);
+    // Point (12, 12) outside triangle polygon should be transparent
+    QCOMPARE(qAlpha(clipped0.pixel(12, 12)), 0);
+
+    // Frame 1 has no polygon, so it should be unmodified
+    QImage clipped1 = doc.polygonClippedFrame(1);
+    QCOMPARE(qAlpha(clipped1.pixel(12, 12)), 255);
+}
+
+void TestPixelEditor::testSpaceAndMiddleMousePanning()
+{
+    PixelCanvas canvas;
+    QImage img(32, 32, QImage::Format_ARGB32);
+    img.fill(Qt::white);
+    canvas.setImage(img);
+
+    int panDx = 0;
+    int panDy = 0;
+    QObject::connect(&canvas, &PixelCanvas::panRequested, [&panDx, &panDy](int dx, int dy) {
+        panDx += dx;
+        panDy += dy;
+    });
+
+    // 1. Press Space key
+    QKeyEvent spacePress(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    QApplication::sendEvent(&canvas, &spacePress);
+
+    // 2. Left click + drag with Space held
+    QMouseEvent pressEv(QEvent::MouseButtonPress, QPointF(10, 10), QPointF(100, 100), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(&canvas, &pressEv);
+
+    QMouseEvent moveEv(QEvent::MouseMove, QPointF(25, 30), QPointF(115, 120), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(&canvas, &moveEv);
+
+    QCOMPARE(panDx, 15);
+    QCOMPARE(panDy, 20);
+
+    QMouseEvent releaseEv(QEvent::MouseButtonRelease, QPointF(25, 30), QPointF(115, 120), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(&canvas, &releaseEv);
+
+    // 3. Release Space key
+    QKeyEvent spaceRelease(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier);
+    QApplication::sendEvent(&canvas, &spaceRelease);
+}
+
+void TestPixelEditor::testAnimationScopedNavigation()
+{
+    SpriteDocument doc;
+    QList<QImage> frames;
+    QList<SpriteBox> boxes;
+    for (int i = 0; i < 6; ++i) {
+        QImage img(16, 16, QImage::Format_ARGB32);
+        img.fill(qRgb(i * 40, 50, 60));
+        frames.append(img);
+        boxes.append(SpriteBox(QRect(0, 0, 16, 16)));
+    }
+    doc.setFrames(frames, boxes);
+
+    // Create 2 animations:
+    // "walk": frames [1, 3, 5]
+    // "idle": frames [0, 2, 4]
+    doc.addAnimation(QStringLiteral("walk"), {1, 3, 5});
+    doc.addAnimation(QStringLiteral("idle"), {0, 2, 4});
+
+    QUndoStack undoStack;
+
+    // 1. Open editor starting on frame 3 (belongs to "walk")
+    {
+        PixelEditorDialog dlg(&doc, &undoStack, 3);
+        QCOMPARE(dlg.currentFrameIndex(), 3);
+        QCOMPARE(dlg.activeAnimationName(), QStringLiteral("walk"));
+        QCOMPARE(dlg.activeSequence(), QList<int>({1, 3, 5}));
+
+        // Combo should have "All Frames", "walk", "idle"
+        QVERIFY(dlg.animationCombo() != nullptr);
+        QCOMPARE(dlg.animationCombo()->count(), 3);
+
+        // Next frame in "walk": should go to 5
+        QKeyEvent pgDown(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier);
+        QApplication::sendEvent(&dlg, &pgDown);
+        QCOMPARE(dlg.currentFrameIndex(), 5);
+
+        // Next again: at end of "walk", should stay at 5
+        QApplication::sendEvent(&dlg, &pgDown);
+        QCOMPARE(dlg.currentFrameIndex(), 5);
+
+        // Previous frame in "walk": should go back to 3
+        QKeyEvent pgUp(QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier);
+        QApplication::sendEvent(&dlg, &pgUp);
+        QCOMPARE(dlg.currentFrameIndex(), 3);
+
+        // Previous again: should go to 1
+        QApplication::sendEvent(&dlg, &pgUp);
+        QCOMPARE(dlg.currentFrameIndex(), 1);
+
+        // Previous again: at start of "walk", should stay at 1
+        QApplication::sendEvent(&dlg, &pgUp);
+        QCOMPARE(dlg.currentFrameIndex(), 1);
+
+        // 2. Switch combo to "idle"
+        int idleIdx = dlg.animationCombo()->findData(QStringLiteral("idle"));
+        QVERIFY(idleIdx >= 0);
+        dlg.animationCombo()->setCurrentIndex(idleIdx);
+        // Current frame was 1 (not in idle), so switching jumps to first frame of idle: 0
+        QCOMPARE(dlg.currentFrameIndex(), 0);
+        QCOMPARE(dlg.activeAnimationName(), QStringLiteral("idle"));
+        QCOMPARE(dlg.activeSequence(), QList<int>({0, 2, 4}));
+
+        // Navigate forward in "idle"
+        QApplication::sendEvent(&dlg, &pgDown);
+        QCOMPARE(dlg.currentFrameIndex(), 2);
+        QApplication::sendEvent(&dlg, &pgDown);
+        QCOMPARE(dlg.currentFrameIndex(), 4);
+
+        // 3. Switch combo to "All Frames" (index 0)
+        dlg.animationCombo()->setCurrentIndex(0);
+        QCOMPARE(dlg.activeAnimationName(), QString());
+        QVERIFY(dlg.activeSequence().isEmpty());
+
+        // Global navigation: from 4, previous goes to 3
+        QApplication::sendEvent(&dlg, &pgUp);
+        QCOMPARE(dlg.currentFrameIndex(), 3);
+    }
+}
+
+void TestPixelEditor::testZoomPreservedAcrossFrameNavigation()
+{
+    SpriteDocument doc;
+    QImage img0(32, 32, QImage::Format_ARGB32);
+    img0.fill(Qt::red);
+    QImage img1(24, 30, QImage::Format_ARGB32);
+    img1.fill(Qt::green);
+    QImage img2(40, 48, QImage::Format_ARGB32);
+    img2.fill(Qt::blue);
+
+    SpriteBox box0(QRect(0, 0, 32, 32));
+    box0.pivot = QPoint(16, 32);
+    box0.hasCustomPivot = true;
+
+    SpriteBox box1(QRect(0, 0, 24, 30));
+    box1.pivot = QPoint(12, 30);
+    box1.hasCustomPivot = true;
+
+    SpriteBox box2(QRect(0, 0, 40, 48));
+    box2.pivot = QPoint(20, 48);
+    box2.hasCustomPivot = true;
+
+    doc.setFrames({img0, img1, img2}, {box0, box1, box2});
+
+    PixelEditorDialog dlg(&doc, nullptr, 0);
+    QVERIFY(dlg.canvas() != nullptr);
+
+    // Set custom zoom to 22.0x
+    dlg.canvas()->setZoom(22.0);
+    QCOMPARE(dlg.canvas()->zoom(), 22.0);
+
+    // Navigate to frame 1 (which has different dimensions 24x30)
+    QKeyEvent pgDown(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier);
+    QApplication::sendEvent(&dlg, &pgDown);
+    QCOMPARE(dlg.currentFrameIndex(), 1);
+
+    // Zoom must be preserved at 22.0x (auto-zoom on frame switch disabled)
+    QCOMPARE(dlg.canvas()->zoom(), 22.0);
+
+    // Navigate to frame 2 (dimensions 40x48)
+    QApplication::sendEvent(&dlg, &pgDown);
+    QCOMPARE(dlg.currentFrameIndex(), 2);
+    QCOMPARE(dlg.canvas()->zoom(), 22.0);
+
+    // Navigate back to frame 1
+    QKeyEvent pgUp(QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier);
+    QApplication::sendEvent(&dlg, &pgUp);
+    QCOMPARE(dlg.currentFrameIndex(), 1);
+    QCOMPARE(dlg.canvas()->zoom(), 22.0);
+}
+
+void TestPixelEditor::testPivotStrictlyStationaryAcrossAnimation()
+{
+    SpriteDocument doc;
+    // 3 frames with different dimensions and different pivots
+    QImage img0(32, 32, QImage::Format_ARGB32);
+    img0.fill(Qt::red);
+    QImage img1(24, 30, QImage::Format_ARGB32);
+    img1.fill(Qt::green);
+    QImage img2(40, 48, QImage::Format_ARGB32);
+    img2.fill(Qt::blue);
+
+    SpriteBox box0(QRect(0, 0, 32, 32));
+    box0.pivot = QPoint(16, 32); // BottomCenter
+    box0.hasCustomPivot = true;
+
+    SpriteBox box1(QRect(0, 0, 24, 30));
+    box1.pivot = QPoint(12, 30); // BottomCenter
+    box1.hasCustomPivot = true;
+
+    SpriteBox box2(QRect(0, 0, 40, 48));
+    box2.pivot = QPoint(20, 48); // BottomCenter
+    box2.hasCustomPivot = true;
+
+    doc.setFrames({img0, img1, img2}, {box0, box1, box2});
+    doc.addAnimation(QStringLiteral("run"), {0, 1, 2});
+
+    PixelEditorDialog dlg(&doc, nullptr, 0);
+    QVERIFY(dlg.canvas() != nullptr);
+
+    // Initial frame 0
+    QCOMPARE(dlg.currentFrameIndex(), 0);
+    QPoint initialPivotPos = dlg.visualPivotPos();
+    QVERIFY(!initialPivotPos.isNull());
+
+    // Canvas size must be identical across the whole animation sequence
+    QSize initialCanvasSize = dlg.canvas()->size();
+
+    // Navigate to frame 1 (PageDown)
+    QKeyEvent pgDown(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier);
+    QApplication::sendEvent(&dlg, &pgDown);
+    QCOMPARE(dlg.currentFrameIndex(), 1);
+
+    // Canvas widget size must remain identical
+    QCOMPARE(dlg.canvas()->size(), initialCanvasSize);
+    // Visual pivot coordinates in interface MUST BE STRICTLY IDENTICAL!
+    QCOMPARE(dlg.visualPivotPos(), initialPivotPos);
+
+    // Navigate to frame 2 (PageDown)
+    QApplication::sendEvent(&dlg, &pgDown);
+    QCOMPARE(dlg.currentFrameIndex(), 2);
+    QCOMPARE(dlg.canvas()->size(), initialCanvasSize);
+    QCOMPARE(dlg.visualPivotPos(), initialPivotPos);
+
+    // Navigate back to frame 0
+    QKeyEvent pgUp(QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier);
+    QApplication::sendEvent(&dlg, &pgUp);
+    QApplication::sendEvent(&dlg, &pgUp);
+    QCOMPARE(dlg.currentFrameIndex(), 0);
+    QCOMPARE(dlg.visualPivotPos(), initialPivotPos);
+
+    // Even if zoom changes, within that zoom level, navigating frames must keep the pivot strictly identical
+    dlg.canvas()->setZoom(20.0);
+    QPoint pivotAtZoom20 = dlg.visualPivotPos();
+    QSize canvasSizeAtZoom20 = dlg.canvas()->size();
+
+    QApplication::sendEvent(&dlg, &pgDown);
+    QCOMPARE(dlg.currentFrameIndex(), 1);
+    QCOMPARE(dlg.canvas()->size(), canvasSizeAtZoom20);
+    QCOMPARE(dlg.visualPivotPos(), pivotAtZoom20);
+
+    QApplication::sendEvent(&dlg, &pgDown);
+    QCOMPARE(dlg.currentFrameIndex(), 2);
+    QCOMPARE(dlg.canvas()->size(), canvasSizeAtZoom20);
+    QCOMPARE(dlg.visualPivotPos(), pivotAtZoom20);
+}
+
+void TestPixelEditor::testPolygonRestrictionCheckboxAndEditing()
+{
+    SpriteDocument doc;
+    QImage img(32, 32, QImage::Format_ARGB32);
+    img.fill(Qt::transparent);
+
+    // Frame 0: Has a diamond polygon: (16, 4) -> (28, 16) -> (16, 28) -> (4, 16)
+    SpriteBox box0(QRect(0, 0, 32, 32));
+    box0.hasPolygonMesh = true;
+    box0.polygon = QPolygonF({QPointF(16, 4), QPointF(28, 16), QPointF(16, 28), QPointF(4, 16)});
+
+    // Frame 1: No polygon mesh
+    SpriteBox box1(QRect(0, 0, 32, 32));
+    box1.hasPolygonMesh = false;
+    box1.polygon = QPolygonF();
+
+    doc.setFrames({img, img}, {box0, box1});
+
+    PixelEditorDialog dlg(&doc, nullptr, 0);
+    QVERIFY(dlg.canvas() != nullptr);
+    QVERIFY(dlg.allowOutsidePolygonCheckBox() != nullptr);
+
+    // 1. Frame 0 has a polygon: checkbox must be enabled and UNCHECKED by default
+    QVERIFY(dlg.allowOutsidePolygonCheckBox()->isEnabled());
+    QCOMPARE(dlg.allowOutsidePolygonCheckBox()->isChecked(), false);
+    QCOMPARE(dlg.isEditingOutsidePolygonAllowed(), false);
+    QCOMPARE(dlg.canvas()->allowEditingOutsidePolygon(), false);
+
+    auto pixelToWidgetPt = [&](int px, int py) -> QPointF {
+        double z = dlg.canvas()->zoom();
+        QPoint off = dlg.canvas()->imageOffset();
+        return QPointF((px + off.x() + 0.5) * z, (py + off.y() + 0.5) * z);
+    };
+
+    // 2. Try drawing with pencil outside polygon (at 2, 2, which is outside the diamond)
+    dlg.canvas()->setCurrentTool(PixelTool::Pencil);
+    dlg.canvas()->setPrimaryColor(Qt::red);
+
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonPress, pixelToWidgetPt(2, 2), Qt::LeftButton);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonRelease, pixelToWidgetPt(2, 2), Qt::LeftButton);
+
+    // Pixel at (2, 2) MUST REMAIN TRANSPARENT (editing outside has no effect!)
+    QCOMPARE(dlg.canvas()->image().pixelColor(2, 2).alpha(), 0);
+
+    // 3. Draw with pencil INSIDE polygon (at 16, 16, center of diamond)
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonPress, pixelToWidgetPt(16, 16), Qt::LeftButton);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonRelease, pixelToWidgetPt(16, 16), Qt::LeftButton);
+
+    // Pixel at (16, 16) MUST BE RED
+    QCOMPARE(dlg.canvas()->image().pixelColor(16, 16), QColor(Qt::red));
+
+    // 4. Flood fill starting outside polygon (at 1, 1): should have no effect
+    dlg.canvas()->setCurrentTool(PixelTool::BucketFill);
+    dlg.canvas()->setPrimaryColor(Qt::blue);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonPress, pixelToWidgetPt(1, 1), Qt::LeftButton);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonRelease, pixelToWidgetPt(1, 1), Qt::LeftButton);
+
+    // Pixel at (1, 1) still transparent
+    QCOMPARE(dlg.canvas()->image().pixelColor(1, 1).alpha(), 0);
+
+    // 5. Now CHECK the checkbox to allow editing outside polygon
+    dlg.allowOutsidePolygonCheckBox()->setChecked(true);
+    QCOMPARE(dlg.isEditingOutsidePolygonAllowed(), true);
+    QCOMPARE(dlg.canvas()->allowEditingOutsidePolygon(), true);
+
+    // Draw at (2, 2) again: now it MUST draw successfully!
+    dlg.canvas()->setCurrentTool(PixelTool::Pencil);
+    dlg.canvas()->setPrimaryColor(Qt::green);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonPress, pixelToWidgetPt(2, 2), Qt::LeftButton);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonRelease, pixelToWidgetPt(2, 2), Qt::LeftButton);
+
+    QCOMPARE(dlg.canvas()->image().pixelColor(2, 2), QColor(Qt::green));
+
+    // 6. Navigate to Frame 1 (no polygon): checkbox must be disabled
+    QKeyEvent pgDown(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier);
+    QApplication::sendEvent(&dlg, &pgDown);
+    QCOMPARE(dlg.currentFrameIndex(), 1);
+    QCOMPARE(dlg.allowOutsidePolygonCheckBox()->isEnabled(), false);
+    QCOMPARE(dlg.isEditingOutsidePolygonAllowed(), true); // editing unrestricted
+}
+
+void TestPixelEditor::testPolygonFollowsFlipAndRotate()
+{
+    PixelCanvas canvas;
+    QImage img(20, 30, QImage::Format_ARGB32);
+    img.fill(Qt::transparent);
+
+    // Initial polygon: triangle (0, 0), (10, 0), (0, 20)
+    QPolygonF poly;
+    poly << QPointF(0, 0) << QPointF(10, 0) << QPointF(0, 20);
+
+    canvas.setImage(img);
+    canvas.setPolygonMesh(poly);
+    QVERIFY(canvas.hasPolygonMesh());
+    QCOMPARE(canvas.polygonMesh(), poly);
+
+    // 1. Flip Horizontal: width is 20 -> x' = 20 - x
+    canvas.flipHorizontal();
+    QPolygonF polyFlipH = canvas.polygonMesh();
+    QCOMPARE(polyFlipH.size(), 3);
+    QCOMPARE(polyFlipH[0], QPointF(20, 0));
+    QCOMPARE(polyFlipH[1], QPointF(10, 0));
+    QCOMPARE(polyFlipH[2], QPointF(20, 20));
+
+    // Undo restore
+    canvas.undo();
+    QCOMPARE(canvas.polygonMesh(), poly);
+
+    // 2. Flip Vertical: height is 30 -> y' = 30 - y
+    canvas.flipVertical();
+    QPolygonF polyFlipV = canvas.polygonMesh();
+    QCOMPARE(polyFlipV.size(), 3);
+    QCOMPARE(polyFlipV[0], QPointF(0, 30));
+    QCOMPARE(polyFlipV[1], QPointF(10, 30));
+    QCOMPARE(polyFlipV[2], QPointF(0, 10));
+
+    // Undo restore
+    canvas.undo();
+    QCOMPARE(canvas.polygonMesh(), poly);
+
+    // 3. Rotate 90° Clockwise: oldH is 30 -> (x', y') = (30 - y, x), new size 30x20
+    canvas.rotate90CW();
+    QPolygonF polyRot = canvas.polygonMesh();
+    QCOMPARE(polyRot.size(), 3);
+    QCOMPARE(polyRot[0], QPointF(30, 0));
+    QCOMPARE(polyRot[1], QPointF(30, 10));
+    QCOMPARE(polyRot[2], QPointF(10, 0));
+    QCOMPARE(canvas.image().size(), QSize(30, 20));
+
+    // Undo restore
+    canvas.undo();
+    QCOMPARE(canvas.polygonMesh(), poly);
+    QCOMPARE(canvas.image().size(), QSize(20, 30));
+}
+
+void TestPixelEditor::testAtlasPolygonCollisionAndRepack()
+{
+    SpriteDocument doc;
+    QImage atlas(100, 50, QImage::Format_ARGB32);
+    atlas.fill(Qt::transparent);
+    doc.setAtlas(atlas);
+
+    // Frame 0: 32x32 at atlas (0, 0)
+    // Polygon in local coords: (0, 0), (20, 0), (0, 30) -> atlas coords [0..20, 0..30]
+    QImage f0(32, 32, QImage::Format_ARGB32);
+    f0.fill(Qt::blue);
+    SpriteBox b0(QRect(0, 0, 32, 32));
+    b0.polygon << QPointF(0, 0) << QPointF(20, 0) << QPointF(0, 30);
+    b0.hasPolygonMesh = true;
+    b0.vertices = b0.polygon.toList();
+    b0.triangles = BentoPackGeometry::Triangulator::triangulate(b0.polygon);
+    doc.addFrame(f0, b0);
+
+    // Frame 1: 32x32 at atlas (15, 0)
+    // Polygon in local coords: (10, 0), (30, 0), (30, 30) -> atlas coords [25..45, 0..30]
+    // Initially: Frame 0 atlas [0..20], Frame 1 atlas [25..45] -> NO COLLISION
+    QImage f1(32, 32, QImage::Format_ARGB32);
+    f1.fill(Qt::red);
+    SpriteBox b1(QRect(15, 0, 32, 32));
+    b1.polygon << QPointF(10, 0) << QPointF(30, 0) << QPointF(30, 30);
+    b1.hasPolygonMesh = true;
+    b1.vertices = b1.polygon.toList();
+    b1.triangles = BentoPackGeometry::Triangulator::triangulate(b1.polygon);
+    doc.addFrame(f1, b1);
+
+    QUndoStack undoStack;
+    PixelEditorDialog dlg(&doc, &undoStack, 0);
+    dlg.show();
+
+    // Initially: No collision detected
+    QCOMPARE(dlg.hasAtlasCollision(), false);
+    QCOMPARE(dlg.collisionAlertLabel()->isVisible(), false);
+
+    // Now flip Frame 0 horizontally: width is 32
+    // Local polygon points become: (32, 0), (12, 0), (32, 30)
+    // In atlas space (offset 0): x range is now [12..32]
+    // Frame 1 in atlas space is [25..45]
+    // OVERLAP between [25..32]!
+    dlg.canvas()->flipHorizontal();
+
+    // Collision should now be detected!
+    QCOMPARE(dlg.hasAtlasCollision(), true);
+    QCOMPARE(dlg.collisionAlertLabel()->isVisible(), true);
+    QCOMPARE(dlg.repackButton()->isVisible(), true);
+    QVERIFY(!dlg.collisionAlertLabel()->toolTip().isEmpty());
+
+    // Execute repack via the pre-existing dialog (non-interactive mode for automated testing)
+    bool repackSuccess = dlg.openAtlasPackingDialog(true);
+    QVERIFY(repackSuccess);
+
+    // After repack, the two frames are packed into non-colliding locations
+    QCOMPARE(doc.boxes().size(), 2);
+    QVERIFY(!doc.atlas().isNull());
+    QVERIFY(doc.box(0).hasPolygonMesh);
+    QVERIFY(doc.box(1).hasPolygonMesh);
+
+    // Verify after repack they no longer collide
+    QPolygonF poly0Atlas = doc.box(0).polygon.translated(doc.box(0).rect.topLeft());
+    QPolygonF poly1Atlas = doc.box(1).polygon.translated(doc.box(1).rect.topLeft());
+    QPolygonF intersection = poly0Atlas.intersected(poly1Atlas);
+
+    double isectArea = 0.0;
+    for (int p = 0; p < intersection.size(); ++p) {
+        const QPointF &p1 = intersection[p];
+        const QPointF &p2 = intersection[(p + 1) % intersection.size()];
+        isectArea += (p1.x() * p2.y() - p2.x() * p1.y());
+    }
+    isectArea = std::abs(isectArea) * 0.5;
+    QVERIFY(isectArea < 0.1); // No overlap!
+}
+
+void TestPixelEditor::testApplyToAllFramesRelativePivot()
+{
+    SpriteDocument doc;
+    QImage atlas(128, 64, QImage::Format_ARGB32);
+    atlas.fill(Qt::transparent);
+    doc.setAtlas(atlas);
+
+    // Frame 0: 32x32, filled with blue, custom pivot at (16, 16)
+    QImage f0(32, 32, QImage::Format_ARGB32);
+    f0.fill(Qt::blue);
+    SpriteBox b0(QRect(0, 0, 32, 32));
+    b0.hasCustomPivot = true;
+    b0.pivot = QPoint(16, 16);
+    doc.addFrame(f0, b0);
+
+    // Frame 1: 48x48, filled with green, custom pivot at (24, 30)
+    QImage f1(48, 48, QImage::Format_ARGB32);
+    f1.fill(Qt::green);
+    SpriteBox b1(QRect(32, 0, 48, 48));
+    b1.hasCustomPivot = true;
+    b1.pivot = QPoint(24, 30);
+    // Add a triangle polygon mesh for frame 1: (0, 0), (48, 0), (24, 48)
+    b1.hasPolygonMesh = true;
+    b1.polygon << QPointF(0, 0) << QPointF(48, 0) << QPointF(24, 48);
+    b1.vertices = b1.polygon.toList();
+    b1.triangles = BentoPackGeometry::Triangulator::triangulate(b1.polygon);
+    doc.addFrame(f1, b1);
+
+    // Frame 2: 32x32, filled with yellow, custom pivot at (10, 10)
+    QImage f2(32, 32, QImage::Format_ARGB32);
+    f2.fill(Qt::yellow);
+    SpriteBox b2(QRect(80, 0, 32, 32));
+    b2.hasCustomPivot = true;
+    b2.pivot = QPoint(10, 10);
+    doc.addFrame(f2, b2);
+
+    QUndoStack undoStack;
+    PixelEditorDialog dlg(&doc, &undoStack, 0);
+
+    // 1. Verify checkbox exists and is unchecked by default
+    QVERIFY(dlg.applyToAllFramesCheckBox() != nullptr);
+    QCOMPARE(dlg.isApplyToAllFramesEnabled(), false);
+    QCOMPARE(dlg.applyToAllFramesCheckBox()->isChecked(), false);
+
+    // 2. Modify Frame 0 with checkbox unchecked: only Frame 0 should be modified
+    dlg.canvas()->setPrimaryColor(Qt::red);
+    // Draw a pixel on Frame 0 at (18, 16)
+    QImage oldImg0 = dlg.canvas()->image();
+    QImage newImg0 = oldImg0;
+    newImg0.setPixelColor(18, 16, Qt::red);
+    dlg.canvas()->setImage(newImg0);
+    dlg.canvas()->pushSnapshot(oldImg0, QStringLiteral("Pencil"), QPolygonF(), CanvasAction::Pencil);
+
+    // Frame 1 in sessionModifiedFrames should not exist yet
+    QVERIFY(!dlg.sessionModifiedFrames().contains(1));
+
+    // 3. Now check "Apply to all frames"
+    dlg.setApplyToAllFrames(true);
+    QCOMPARE(dlg.isApplyToAllFramesEnabled(), true);
+
+    // Draw on Frame 0 at (16 + 2, 16 + 5) = (18, 21) in magenta
+    // Offset relative to Frame 0 pivot (16, 16) is dx = +2, dy = +5
+    oldImg0 = dlg.canvas()->image();
+    newImg0 = oldImg0;
+    newImg0.setPixelColor(18, 21, Qt::magenta);
+    dlg.canvas()->setImage(newImg0);
+    dlg.canvas()->pushSnapshot(oldImg0, QStringLiteral("Pencil"), QPolygonF(), CanvasAction::Pencil);
+
+    // Verify Frame 0 has magenta at (18, 21)
+    QCOMPARE(dlg.canvas()->image().pixelColor(18, 21), QColor(Qt::magenta));
+
+    // Verify Frame 1 received the magenta pixel relative to its pivot (24, 30)!
+    // Target position: (24 + 2, 30 + 5) = (26, 35)
+    QVERIFY(dlg.sessionModifiedFrames().contains(1));
+    QImage modifiedF1 = dlg.sessionModifiedFrames().value(1);
+    QCOMPARE(modifiedF1.pixelColor(26, 35), QColor(Qt::magenta));
+    // Verify other pixels in Frame 1 remain green
+    QCOMPARE(modifiedF1.pixelColor(0, 0), QColor(Qt::green));
+
+    // Verify Frame 2 received the magenta pixel relative to its pivot (10, 10)!
+    // Target position: (10 + 2, 10 + 5) = (12, 15)
+    QVERIFY(dlg.sessionModifiedFrames().contains(2));
+    QImage modifiedF2 = dlg.sessionModifiedFrames().value(2);
+    QCOMPARE(modifiedF2.pixelColor(12, 15), QColor(Qt::magenta));
+    QCOMPARE(modifiedF2.pixelColor(0, 0), QColor(Qt::yellow));
+
+    // 4. Test Multi-frame Undo and Redo
+    dlg.canvas()->undo();
+    // Frame 0 magenta pixel should be reverted (back to blue)
+    QCOMPARE(dlg.canvas()->image().pixelColor(18, 21), QColor(Qt::blue));
+    // Frame 1 and Frame 2 should also be reverted
+    QCOMPARE(dlg.sessionModifiedFrames().value(1).pixelColor(26, 35), QColor(Qt::green));
+    QCOMPARE(dlg.sessionModifiedFrames().value(2).pixelColor(12, 15), QColor(Qt::yellow));
+
+    // Redo
+    dlg.canvas()->redo();
+    QCOMPARE(dlg.canvas()->image().pixelColor(18, 21), QColor(Qt::magenta));
+    QCOMPARE(dlg.sessionModifiedFrames().value(1).pixelColor(26, 35), QColor(Qt::magenta));
+    QCOMPARE(dlg.sessionModifiedFrames().value(2).pixelColor(12, 15), QColor(Qt::magenta));
+
+    // 5. Test Flip Horizontal across all frames
+    dlg.canvas()->flipHorizontal();
+    // Frame 0 is 32 wide: (18, 21) flipped becomes (32 - 1 - 18, 21) = (13, 21)
+    QCOMPARE(dlg.canvas()->image().pixelColor(13, 21), QColor(Qt::magenta));
+
+    // Frame 1 is 48 wide: (26, 35) flipped becomes (48 - 1 - 26, 35) = (21, 35)
+    QImage flippedF1 = dlg.sessionModifiedFrames().value(1);
+    QCOMPARE(flippedF1.pixelColor(21, 35), QColor(Qt::magenta));
+    // And polygon of Frame 1 is flipped: w - pt.x()
+    QPolygonF poly1Flipped = dlg.sessionModifiedPolygons().value(1);
+    QCOMPARE(poly1Flipped.size(), 3);
+    QCOMPARE(poly1Flipped[0], QPointF(48 - 0, 0));
+    QCOMPARE(poly1Flipped[1], QPointF(48 - 48, 0));
+    QCOMPARE(poly1Flipped[2], QPointF(48 - 24, 48));
+
+    // 6. Test Flood Fill across all frames
+    // 6. Test Flood Fill across all frames (command-level execution, not pixel-diff copy!)
+    // On Frame 0: draw a small 5x5 box of red with a black border around pivot (16, 16)
+    // and flood-fill inside at (16, 16) with Qt::white.
+    // Frame 0 will only change inside the small 5x5 box.
+    // Frame 1 is 48x48 filled with green inside a large triangle polygon.
+    // Because flood-fill executes at the command level relative to target pivot (24, 30),
+    // Frame 1 floods its local green color across its entire connected polygon region!
+    {
+        QImage f0Img = dlg.canvas()->image();
+        // Draw black border around [14..18] x [14..18]
+        for (int i = 14; i <= 18; ++i) {
+            f0Img.setPixelColor(i, 14, Qt::black);
+            f0Img.setPixelColor(i, 18, Qt::black);
+            f0Img.setPixelColor(14, i, Qt::black);
+            f0Img.setPixelColor(18, i, Qt::black);
+        }
+        // Fill inside [15..17] x [15..17] with red
+        for (int y = 15; y <= 17; ++y) {
+            for (int x = 15; x <= 17; ++x) {
+                f0Img.setPixelColor(x, y, Qt::red);
+            }
+        }
+        dlg.canvas()->setImage(f0Img);
+    }
+
+    // Now invoke bucket flood fill at pivot (16, 16) with white
+    dlg.canvas()->applyFloodFill(16, 16, Qt::white);
+
+    // Frame 0: (16, 16) is white, but pixels outside the black border (e.g. at (16, 10)) are NOT white
+    QCOMPARE(dlg.canvas()->image().pixelColor(16, 16), QColor(Qt::white));
+    QVERIFY(dlg.canvas()->image().pixelColor(16, 10) != QColor(Qt::white));
+
+    // Frame 1: target pivot is (24, 30). Local color was green.
+    // Command-level flood fill must flood Frame 1's connected green pixels across its polygon!
+    QVERIFY(dlg.sessionModifiedFrames().contains(1));
+    QImage floodedF1 = dlg.sessionModifiedFrames().value(1);
+    // (24, 30) is white
+    QCOMPARE(floodedF1.pixelColor(24, 30), QColor(Qt::white));
+    // Pixel (24, 10) on Frame 1 is inside the polygon and was green:
+    // It MUST be flooded white, proving Frame 1's flooding depended on Frame 1's local pixels and shape!
+    QCOMPARE(floodedF1.pixelColor(24, 10), QColor(Qt::white));
+
+    // 6.5. Test Multi-frame Undo/Redo across frame navigation
+    // Navigate to Frame 1: undo stack must NOT be cleared!
+    dlg.onNextFrame();
+    QCOMPARE(dlg.currentFrameIndex(), 1);
+    QCOMPARE(dlg.canvas()->image().pixelColor(24, 30), QColor(Qt::white));
+    QVERIFY(dlg.canvas()->undoStack() != nullptr);
+    QVERIFY(dlg.canvas()->undoStack()->canUndo());
+
+    // Undo from Frame 1
+    dlg.canvas()->undo();
+    // Frame 1 on-canvas should be reverted immediately
+    QVERIFY(dlg.canvas()->image().pixelColor(24, 30) != QColor(Qt::white));
+    // Frame 0 in session memory should also be reverted
+    QVERIFY(dlg.sessionModifiedFrames().value(0).pixelColor(16, 16) != QColor(Qt::white));
+
+    // Navigate to Frame 0 to verify on-canvas
+    dlg.onPreviousFrame();
+    QCOMPARE(dlg.currentFrameIndex(), 0);
+    QVERIFY(dlg.canvas()->image().pixelColor(16, 16) != QColor(Qt::white));
+
+    // Redo from Frame 0
+    dlg.canvas()->redo();
+    QCOMPARE(dlg.canvas()->image().pixelColor(16, 16), QColor(Qt::white));
+    QCOMPARE(dlg.sessionModifiedFrames().value(1).pixelColor(24, 30), QColor(Qt::white));
+
+    // Undo again to leave clean
+    dlg.canvas()->undo();
+
+    // 7. Test Animation Scope Filter
+    doc.addAnimation(QStringLiteral("walk"), {0, 1}); // Frame 2 is NOT part of this animation
+
+    // Re-create dialog on frame 0 to populate animation combo
+    PixelEditorDialog dlgAnim(&doc, &undoStack, 0);
+    dlgAnim.setApplyToAllFrames(true);
+
+    // Select the "walk" animation in combo
+    int walkIdx = dlgAnim.animationCombo()->findData(QStringLiteral("walk"));
+    QVERIFY(walkIdx >= 0);
+    dlgAnim.animationCombo()->setCurrentIndex(walkIdx);
+    QCOMPARE(dlgAnim.activeSequence(), QList<int>({0, 1}));
+
+    // Draw on Frame 0 with animation filter active
+    oldImg0 = dlgAnim.canvas()->image();
+    newImg0 = oldImg0;
+    newImg0.setPixelColor(16, 16, Qt::cyan);
+    dlgAnim.canvas()->setImage(newImg0);
+    dlgAnim.canvas()->pushSnapshot(oldImg0, QStringLiteral("Pencil"), QPolygonF(), CanvasAction::Pencil);
+
+    // Frame 1 is in "walk" -> must be modified
+    QVERIFY(dlgAnim.sessionModifiedFrames().contains(1));
+    QCOMPARE(dlgAnim.sessionModifiedFrames().value(1).pixelColor(24, 30), QColor(Qt::cyan));
+
+    // Frame 2 is NOT in "walk" -> must NOT be modified
+    QVERIFY(!dlgAnim.sessionModifiedFrames().contains(2));
 }
 
 int main(int argc, char *argv[])

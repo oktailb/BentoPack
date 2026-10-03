@@ -74,6 +74,7 @@ private slots:
     void testGodotExtractorCompanionTres();
     void testAtlasPackingDialogPreservesPolygons();
     void testPolygonClippedFrame();
+    void testPolygonalRepackEliminatesNeighborArtifacts();
 
     // 9. Modernized Polygon Merger Tests
     void testPolygonMergerTouching();
@@ -864,6 +865,65 @@ void TestMesh::testPolygonClippedFrame()
     QCOMPARE(clipped.pixelColor(35, 35).alpha(), 0);
     // Green pixels inside the polygon are fully preserved
     QCOMPARE(clipped.pixelColor(5, 5), QColor(0, 255, 0, 255));
+}
+
+void TestMesh::testPolygonalRepackEliminatesNeighborArtifacts()
+{
+    SpriteDocument doc;
+    // 40x40 frame:
+    // Green triangle (0,0)-(30,0)-(0,30) inside polygon
+    // Red pixels at (35, 35) outside polygon (simulating neighbor sprite slice)
+    QImage img(40, 40, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    {
+        QPainter p(&img);
+        p.setPen(Qt::NoPen);
+        p.setBrush(QColor(0, 255, 0, 255));
+        QPolygonF poly;
+        poly << QPointF(0, 0) << QPointF(30, 0) << QPointF(0, 30);
+        p.drawPolygon(poly);
+        p.fillRect(32, 32, 8, 8, QColor(255, 0, 0, 255));
+    }
+
+    SpriteBox box(QRect(0, 0, 40, 40));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(30, 0) << QPointF(0, 30);
+    box.triangles = { 0, 1, 2 };
+    doc.addFrame(img, box);
+
+    // Repack using TightPolygon
+    AtlasPacker::PackOptions opts;
+    opts.algorithm = AtlasPacker::TightPolygon;
+    opts.padding = 2;
+
+    AtlasPackResult res = AtlasPacker::pack(doc.frames(), opts, { box.polygon });
+    QVERIFY(res.success);
+    QVERIFY(!res.atlas.isNull());
+
+    // Check every pixel of the generated atlas:
+    // No red pixels (255, 0, 0) should exist ANYWHERE on the atlas!
+    int redPixelCount = 0;
+    for (int y = 0; y < res.atlas.height(); ++y) {
+        for (int x = 0; x < res.atlas.width(); ++x) {
+            QColor c = res.atlas.pixelColor(x, y);
+            if (c.red() > 200 && c.green() < 50 && c.alpha() > 100) {
+                redPixelCount++;
+            }
+        }
+    }
+    QCOMPARE(redPixelCount, 0);
+
+    // Green pixels inside the polygon must still be present and intact
+    int greenPixelCount = 0;
+    for (int y = 0; y < res.atlas.height(); ++y) {
+        for (int x = 0; x < res.atlas.width(); ++x) {
+            QColor c = res.atlas.pixelColor(x, y);
+            if (c.green() > 200 && c.red() < 50 && c.alpha() > 100) {
+                greenPixelCount++;
+            }
+        }
+    }
+    QVERIFY(greenPixelCount > 100);
 }
 
 void TestMesh::testPolygonMergerTouching()
