@@ -3042,16 +3042,14 @@ Would you like to repack the atlas now?</translation>
     <name>QObject</name>
     <message numerus="yes">
         <source>Delete %n frame(s)</source>
-        <translation type="unfinished">
-            <numerusform>Thao tác: 
-            </numerusform>
+        <translation>
+            <numerusform>Xóa %n khung hình</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>Erase Atlas Pixels for %n frame(s)</source>
-        <translation type="unfinished">
-            <numerusform>Thao tác: 
-            </numerusform>
+        <translation>
+            <numerusform>Xóa pixel atlas cho %n khung hình</numerusform>
         </translation>
     </message>
     <message>

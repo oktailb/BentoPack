@@ -1,4 +1,5 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
 <TS version="2.1" language="pl_PL">
 <context>
     <name>AboutDialog</name>
@@ -96,10 +97,10 @@
     </message>
     <message>
         <source>KEY_ABOUT_PURPOSE</source>
-        <translation>Zaawansowane narzędzie do wyodrębniania i animacji sprite'ów</translation>
+        <translation>Zaawansowane narzędzie do wyodrębniania i animacji sprite&apos;ów</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Studio narzędzi i technologii multimedialnych</translation>
     </message>
     <message>
@@ -222,7 +223,7 @@
     </message>
     <message>
         <source>Document contains no sprite frames to export to Aseprite.</source>
-        <translation>Dokument nie zawiera klatek sprite'ów do wyeksportowania do Aseprite.</translation>
+        <translation>Dokument nie zawiera klatek sprite&apos;ów do wyeksportowania do Aseprite.</translation>
     </message>
     <message>
         <source>Cannot create output Aseprite file: %1</source>
@@ -240,8 +241,8 @@
         <translation>Pakowanie atlasu (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Gotowy — dostosuj parametry i kliknij 'Oblicz pakowanie'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Gotowy — dostosuj parametry i kliknij &apos;Oblicz pakowanie&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -289,7 +290,7 @@
     </message>
     <message>
         <source>Inner margin between adjacent sprites</source>
-        <translation>Wewnętrzny margines między sąsiednimi sprite'ami</translation>
+        <translation>Wewnętrzny margines między sąsiednimi sprite&apos;ami</translation>
     </message>
     <message>
         <source>Inner Padding:</source>
@@ -381,7 +382,7 @@
     </message>
     <message>
         <source>Error: Cannot fit sprites in atlas</source>
-        <translation>Błąd: Nie można zmieścić sprite'ów w atlasie</translation>
+        <translation>Błąd: Nie można zmieścić sprite&apos;ów w atlasie</translation>
     </message>
     <message>
         <source>%1 x %2 px</source>
@@ -408,7 +409,7 @@
     </message>
     <message>
         <source>Repacks sprites into a compact atlas using MaxRects, Power of Two, and animation-safe deduplication.</source>
-        <translation>Przepakowuje sprite'y do zwartego atlasu przy użyciu algorytmu MaxRects, potęg dwójki i bezpiecznej deduplikacji animacji.</translation>
+        <translation>Przepakowuje sprite&apos;y do zwartego atlasu przy użyciu algorytmu MaxRects, potęg dwójki i bezpiecznej deduplikacji animacji.</translation>
     </message>
 </context>
 <context>
@@ -458,7 +459,7 @@
     </message>
     <message>
         <source>Automatically shrink-wrap bounding boxes around opaque sprite pixels</source>
-        <translation>Automatycznie dopasuj ramki otaczające do nieprzezroczystych pikseli sprite'a</translation>
+        <translation>Automatycznie dopasuj ramki otaczające do nieprzezroczystych pikseli sprite&apos;a</translation>
     </message>
     <message>
         <source>Overlap threshold:</source>
@@ -844,7 +845,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Generates game engine sprite resource and texture atlas.</source>
-        <translation>Generuje zasób sprite'ów i atlas tekstur dla silnika gry.</translation>
+        <translation>Generuje zasób sprite&apos;ów i atlas tekstur dla silnika gry.</translation>
     </message>
     <message>
         <source>Inner Padding (px):</source>
@@ -1056,7 +1057,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Exports Unreal Engine Paper2D sprite definitions (.paper2d.json) with atlas texture.</source>
-        <translation>Eksportuje definicje sprite'ów Unreal Engine Paper2D (.paper2d.json) z teksturą atlasu.</translation>
+        <translation>Eksportuje definicje sprite&apos;ów Unreal Engine Paper2D (.paper2d.json) z teksturą atlasu.</translation>
     </message>
     <message>
         <source>Exports LibGDX / Spine atlas format (.atlas) with companion atlas image.</source>
@@ -1064,11 +1065,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Exports TexturePacker JSON / Aseprite JSON atlas format with sprite frames.</source>
-        <translation>Eksportuje format atlasu JSON TexturePacker / Aseprite z klatkami sprite'ów.</translation>
+        <translation>Eksportuje format atlasu JSON TexturePacker / Aseprite z klatkami sprite&apos;ów.</translation>
     </message>
     <message>
         <source>Exports packed texture atlas and companion sprite definitions.</source>
-        <translation>Eksportuje upakowany atlas tekstur i definicje sprite'ów.</translation>
+        <translation>Eksportuje upakowany atlas tekstur i definicje sprite&apos;ów.</translation>
     </message>
     <message>
         <source>Frames: 0</source>
@@ -1198,11 +1199,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Auto-detect Sprite Boxes</source>
-        <translation>Autowykrywanie ramek sprite'ów</translation>
+        <translation>Autowykrywanie ramek sprite&apos;ów</translation>
     </message>
     <message>
         <source>Automatically recalculate sprite bounding boxes after filtering</source>
-        <translation>Automatycznie przeliczaj ramki otaczające sprite'ów po filtrowaniu</translation>
+        <translation>Automatycznie przeliczaj ramki otaczające sprite&apos;ów po filtrowaniu</translation>
     </message>
     <message>
         <source>Reset Defaults</source>
@@ -1466,7 +1467,7 @@ Kliknij węzeł, aby wyświetlić szczegóły.</translation>
     <name>JsonExtractor</name>
     <message>
         <source>Reading JSON sprite atlas %1...</source>
-        <translation>Odczytywanie atlasu sprite'ów JSON %1...</translation>
+        <translation>Odczytywanie atlasu sprite&apos;ów JSON %1...</translation>
     </message>
     <message>
         <source>Associated atlas image not found: %1</source>
@@ -1569,7 +1570,7 @@ Kliknij węzeł, aby wyświetlić szczegóły.</translation>
     </message>
     <message>
         <source>Document contains no sprites to export.</source>
-        <translation>Dokument nie zawiera sprite'ów do wyeksportowania.</translation>
+        <translation>Dokument nie zawiera sprite&apos;ów do wyeksportowania.</translation>
     </message>
     <message>
         <source>Failed to save companion atlas image: %1</source>
@@ -1620,7 +1621,7 @@ Kliknij węzeł, aby wyświetlić szczegóły.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_TOOL_REMOVE_BG</source>
-        <translation>Automatycznie usuń kolor tła i wyodrębnij sprite'y</translation>
+        <translation>Automatycznie usuń kolor tła i wyodrębnij sprite&apos;y</translation>
     </message>
     <message>
         <source>KEY_ANIM_COL_NAME</source>
@@ -1768,7 +1769,7 @@ Kliknij węzeł, aby wyświetlić szczegóły.</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Dodaj do aktywnej animacji "%1"</translation>
+        <translation>Dodaj do aktywnej animacji &quot;%1&quot;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2065,7 +2066,7 @@ Czy chcesz odzyskać tę sesję?</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Bieżący projekt "%1" zawiera niezapisane zmiany.
+        <translation>Bieżący projekt &quot;%1&quot; zawiera niezapisane zmiany.
 Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
@@ -2154,7 +2155,7 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
         <source>Please open or import a sprite sheet with frames first.</source>
-        <translation>Najpierw otwórz lub zaimportuj arkusz sprite'ów z klatkami.</translation>
+        <translation>Najpierw otwórz lub zaimportuj arkusz sprite&apos;ów z klatkami.</translation>
     </message>
     <message>
         <source>Atlas packing plugin not found.</source>
@@ -2233,7 +2234,7 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
         <source>Adds a distinct outline (1-4 px) around sprites (sticker effect, visibility) or creates solid silhouettes (hit-flash).</source>
-        <translation>Dodaje wyrazisty kontur (1-4 px) wokół sprite'ów (efekt naklejki, widoczność) lub tworzy pełne sylwetki (błysk trafienia).</translation>
+        <translation>Dodaje wyrazisty kontur (1-4 px) wokół sprite&apos;ów (efekt naklejki, widoczność) lub tworzy pełne sylwetki (błysk trafienia).</translation>
     </message>
 </context>
 <context>
@@ -2280,7 +2281,7 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
         <source>Solid silhouette / Hit-flash (Fill sprite interior)</source>
-        <translation>Pełna sylwetka / Błysk trafienia (Wypełnij wnętrze sprite'a)</translation>
+        <translation>Pełna sylwetka / Błysk trafienia (Wypełnij wnętrze sprite&apos;a)</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -2630,7 +2631,7 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
-        <translation>Otwórz okno pakowania atlasu, aby rozwiązać kolizje sprite'ów</translation>
+        <translation>Otwórz okno pakowania atlasu, aby rozwiązać kolizje sprite&apos;ów</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -2700,7 +2701,7 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
 An atlas repack must be performed upon validation to resolve overlapping frames.
 
 Would you like to repack the atlas now?</source>
-        <translation>Modyfikacje wielokąta lub klatki powodują kolizję z innymi sprite'ami w atlasie:
+        <translation>Modyfikacje wielokąta lub klatki powodują kolizję z innymi sprite&apos;ami w atlasie:
 
 %1
 
@@ -3041,43 +3042,51 @@ Czy chcesz przepakować atlas teraz?</translation>
     <name>QObject</name>
     <message numerus="yes">
         <source>Delete %n frame(s)</source>
-        <translation><numerusform>Usuń %n klatkę</numerusform><numerusform>Usuń %n klatki</numerusform><numerusform>Usuń %n klatek</numerusform></translation>
+        <translation>
+            <numerusform>Usuń %n klatkę</numerusform>
+            <numerusform>Usuń %n klatki</numerusform>
+            <numerusform>Usuń %n klatek</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Erase Atlas Pixels for %n frame(s)</source>
-        <translation><numerusform>Wymaż piksele atlasu dla %n klatki</numerusform><numerusform>Wymaż piksele atlasu dla %n klatek</numerusform><numerusform>Wymaż piksele atlasu dla %n klatek</numerusform></translation>
+        <translation>
+            <numerusform>Wymaż piksele atlasu dla %n klatki</numerusform>
+            <numerusform>Wymaż piksele atlasu dla %n klatek</numerusform>
+            <numerusform>Wymaż piksele atlasu dla %n klatek</numerusform>
+        </translation>
     </message>
     <message>
         <source>Merge Frame %1 into %2</source>
         <translation>Scal klatkę %1 z %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Utwórz animację '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Utwórz animację &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Usuń animację '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Usuń animację &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Odwróć animację '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Odwróć animację &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Zmień nazwę animacji '%1' na '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Zmień nazwę animacji &apos;%1&apos; na &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Zduplikuj animację '%1' jako '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Zduplikuj animację &apos;%1&apos; jako &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Zmień kolejność klatek w animacji '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Zmień kolejność klatek w animacji &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Zmień właściwości animacji '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Zmień właściwości animacji &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -3097,7 +3106,7 @@ Czy chcesz przepakować atlas teraz?</translation>
     </message>
     <message>
         <source>Failed to segment sprite frames.</source>
-        <translation>Nie udało się podzielić klatek sprite'ów.</translation>
+        <translation>Nie udało się podzielić klatek sprite&apos;ów.</translation>
     </message>
     <message>
         <source>Failed to remove background from atlas.</source>
@@ -3141,7 +3150,7 @@ Czy chcesz przepakować atlas teraz?</translation>
     </message>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
-        <translation>Przed zastosowaniem filtra otwórz lub zaimportuj najpierw arkusz sprite'ów.</translation>
+        <translation>Przed zastosowaniem filtra otwórz lub zaimportuj najpierw arkusz sprite&apos;ów.</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>
@@ -3604,15 +3613,15 @@ Zainstaluj pakiet:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Status: &lt;b style='color:#27ae60;'&gt;LibGit2 aktywne&lt;/b&gt; (obsługa historii i gałęzi włączona)</translation>
+        <translation>Status: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 aktywne&lt;/b&gt; (obsługa historii i gałęzi włączona)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Status: &lt;b style='color:#e74c3c;'&gt;LibGit2 niewkompilowane&lt;/b&gt; (historia git wyłączona)</translation>
+        <translation>Status: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 niewkompilowane&lt;/b&gt; (historia git wyłączona)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
-        <translation>Każda operacja edycji (przycinanie, zmiana nazwy, łączenie sprite'ów, tworzenie animacji) tworzy przyrostowy commit w repozytorium projektu .bento.</translation>
+        <translation>Każda operacja edycji (przycinanie, zmiana nazwy, łączenie sprite&apos;ów, tworzenie animacji) tworzy przyrostowy commit w repozytorium projektu .bento.</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_ATLAS</source>
@@ -3771,8 +3780,8 @@ Zainstaluj pakiet:
         <translation>Sprawdź aktualizacje teraz</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Kliknij 'Sprawdź aktualizacje teraz', aby sprawdzić najnowsze wydanie na GitHubie.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Kliknij &apos;Sprawdź aktualizacje teraz&apos;, aby sprawdzić najnowsze wydanie na GitHubie.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -3791,16 +3800,16 @@ Zainstaluj pakiet:
         <translation>Sprawdzanie aktualizacji na GitHubie...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Nie udało się sprawdzić aktualizacji: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Nie udało się sprawdzić aktualizacji: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Nieprawidłowa odpowiedź z GitHuba.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Nieprawidłowa odpowiedź z GitHuba.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Dostępna jest nowa wersja: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Dostępna jest nowa wersja: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -3811,8 +3820,8 @@ Zainstaluj pakiet:
         <translation>Wydano: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;Używasz najnowszej wersji (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Używasz najnowszej wersji (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
@@ -3871,7 +3880,7 @@ Zainstaluj pakiet:
     </message>
     <message>
         <source>Segmenting sprite frames...</source>
-        <translation>Segmentowanie klatek sprite'ów...</translation>
+        <translation>Segmentowanie klatek sprite&apos;ów...</translation>
     </message>
     <message>
         <source>Extracted %1 frames</source>
@@ -3886,7 +3895,7 @@ Zainstaluj pakiet:
     </message>
     <message>
         <source>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</source>
-        <translation>Pakuje sprite'y ciasno w atlasie za pomocą wielokątnych obwiedni, nachodzących na siebie ramek i wielowątkowego wykrywania kolizji.</translation>
+        <translation>Pakuje sprite&apos;y ciasno w atlasie za pomocą wielokątnych obwiedni, nachodzących na siebie ramek i wielowątkowego wykrywania kolizji.</translation>
     </message>
     <message>
         <source>Tight Polygon Packing (Nesting)</source>
@@ -4073,7 +4082,7 @@ Delete, aby usunąć</translation>
     </message>
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
-        <translation>Eksportuje sprite'y Unreal Engine Paper2D ze zwartą geometrią renderowania RenderGeometry.</translation>
+        <translation>Eksportuje sprite&apos;y Unreal Engine Paper2D ze zwartą geometrią renderowania RenderGeometry.</translation>
     </message>
 </context>
 <context>
@@ -4155,7 +4164,7 @@ Arguments:
 </source>
         <translation>Użycie: bentopack [opcje] [plik.bento]
 
-BentoPack - Paker arkuszy sprite'ów 2D i pipeline zasobów dla silników gier
+BentoPack - Paker arkuszy sprite&apos;ów 2D i pipeline zasobów dla silników gier
 
 Opcje:
   -h, --help     Wyświetla pomoc dotyczącą opcji wiersza poleceń.

@@ -1,4 +1,5 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
 <TS version="2.1" language="id_ID">
 <context>
     <name>AboutDialog</name>
@@ -99,7 +100,7 @@
         <translation>Alat canggih untuk ekstraksi dan animasi sprite</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Studio Alat &amp; Teknologi Multimedia</translation>
     </message>
     <message>
@@ -240,8 +241,8 @@
         <translation>Pengemasan Atlas (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Siap — Sesuaikan parameter lalu klik 'Hitung Pengemasan'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Siap — Sesuaikan parameter lalu klik &apos;Hitung Pengemasan&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -1768,7 +1769,7 @@ Klik simpul untuk melihat detailnya.</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Tambahkan ke animasi aktif "%1"</translation>
+        <translation>Tambahkan ke animasi aktif &quot;%1&quot;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2065,7 +2066,7 @@ Apakah Anda ingin memulihkan sesi ini?</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Proyek saat ini "%1" memiliki perubahan yang belum disimpan.
+        <translation>Proyek saat ini &quot;%1&quot; memiliki perubahan yang belum disimpan.
 Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     </message>
     <message>
@@ -3041,43 +3042,47 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
     <name>QObject</name>
     <message numerus="yes">
         <source>Delete %n frame(s)</source>
-        <translation><numerusform>Hapus %n bingkai</numerusform></translation>
+        <translation>
+            <numerusform>Hapus %n bingkai</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Erase Atlas Pixels for %n frame(s)</source>
-        <translation><numerusform>Hapus piksel atlas untuk %n bingkai</numerusform></translation>
+        <translation>
+            <numerusform>Hapus piksel atlas untuk %n bingkai</numerusform>
+        </translation>
     </message>
     <message>
         <source>Merge Frame %1 into %2</source>
         <translation>Gabungkan Bingkai %1 ke %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Buat Animasi '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Buat Animasi &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Hapus Animasi '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Hapus Animasi &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Balikkan Animasi '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Balikkan Animasi &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Ganti Nama Animasi '%1' menjadi '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Ganti Nama Animasi &apos;%1&apos; menjadi &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Duplikat Animasi '%1' sebagai '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Duplikat Animasi &apos;%1&apos; sebagai &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Susun Ulang Bingkai di Animasi '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Susun Ulang Bingkai di Animasi &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Ubah Properti untuk Animasi '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Ubah Properti untuk Animasi &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -3604,11 +3609,11 @@ Pasang paket:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Status: &lt;b style='color:#27ae60;'&gt;LibGit2 aktif&lt;/b&gt; (manajemen riwayat dan cabang beroperasi)</translation>
+        <translation>Status: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 aktif&lt;/b&gt; (manajemen riwayat dan cabang beroperasi)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Status: &lt;b style='color:#e74c3c;'&gt;LibGit2 tidak dikompilasi&lt;/b&gt; (riwayat git dinonaktifkan)</translation>
+        <translation>Status: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 tidak dikompilasi&lt;/b&gt; (riwayat git dinonaktifkan)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -3771,8 +3776,8 @@ Pasang paket:
         <translation>Periksa Pembaruan Sekarang</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Klik 'Periksa Pembaruan Sekarang' untuk melihat rilis terbaru di GitHub.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Klik &apos;Periksa Pembaruan Sekarang&apos; untuk melihat rilis terbaru di GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -3791,16 +3796,16 @@ Pasang paket:
         <translation>Memeriksa pembaruan dari GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Gagal memeriksa pembaruan: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Gagal memeriksa pembaruan: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Tanggapan tidak valid dari GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Tanggapan tidak valid dari GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Versi baru tersedia: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Versi baru tersedia: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -3811,8 +3816,8 @@ Pasang paket:
         <translation>Dirilis: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;Anda menggunakan versi terbaru (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Anda menggunakan versi terbaru (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>

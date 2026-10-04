@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -233,12 +233,13 @@ QWidget* SettingsDialog::createGeneralPage()
     QFormLayout *formLang = new QFormLayout(m_grpLang);
 
     m_comboLanguage = new QComboBox(m_grpLang);
+    m_comboLanguage->addItem(tr("KEY_SETTINGS_LANG_SYSTEM"), QStringLiteral("system"));
+
     const QStringList languages = LocalizationManager::supportedLanguages();
 
     for (const QString& langCode : languages) {
-      // Special case for system
+      // Skip system as it is already added at the top
       if (langCode == QStringLiteral("system")) {
-        m_comboLanguage->addItem(tr("KEY_SETTINGS_LANG_SYSTEM"), langCode);
         continue;
       }
 
@@ -1058,7 +1059,12 @@ void SettingsDialog::retranslateUi()
 
     if (m_grpLang) m_grpLang->setTitle(tr("KEY_SETTINGS_GRP_LANGUAGE"));
     if (m_lblLangApp) m_lblLangApp->setText(tr("KEY_SETTINGS_LANG_APP"));
-    if (m_comboLanguage) m_comboLanguage->setItemText(0, tr("KEY_SETTINGS_LANG_SYSTEM"));
+    if (m_comboLanguage) {
+        int sysIdx = m_comboLanguage->findData(QStringLiteral("system"));
+        if (sysIdx >= 0) {
+            m_comboLanguage->setItemText(sysIdx, tr("KEY_SETTINGS_LANG_SYSTEM"));
+        }
+    }
     if (m_lblLangHint) m_lblLangHint->setText(tr("KEY_SETTINGS_LANG_HINT"));
 
     if (m_grpStartup) m_grpStartup->setTitle(tr("Startup & Behavior"));

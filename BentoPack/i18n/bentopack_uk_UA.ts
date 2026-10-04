@@ -1,4 +1,5 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
 <TS version="2.1" language="uk_UA">
 <context>
     <name>AboutDialog</name>
@@ -99,7 +100,7 @@
         <translation>Потужний інструмент для видобування спрайтів та створення анімацій</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Студія інструментів та мультимедійних технологій</translation>
     </message>
     <message>
@@ -240,8 +241,8 @@
         <translation>Пакування атласу (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Готово — налаштуйте параметри та натисніть 'Обчислити пакування'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Готово — налаштуйте параметри та натисніть &apos;Обчислити пакування&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -325,7 +326,7 @@
     </message>
     <message>
         <source>Auto-Aliasing (Merge identical frames without breaking animations)</source>
-        <translation>Авто-псевдоніми (об'єднання однакових кадрів без порушення анімацій)</translation>
+        <translation>Авто-псевдоніми (об&apos;єднання однакових кадрів без порушення анімацій)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -419,7 +420,7 @@
     </message>
     <message>
         <source>KEY_CMD_MERGE_SLICES</source>
-        <translation>Об'єднати %1 рамок</translation>
+        <translation>Об&apos;єднати %1 рамок</translation>
     </message>
     <message>
         <source>KEY_CMD_MOVE_SLICES</source>
@@ -687,7 +688,7 @@ Choose which branch to restore:</source>
     </message>
     <message>
         <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>М'яке обмеження кольору (рекомендовано — зберігає тонкі краї)</translation>
+        <translation>М&apos;яке обмеження кольору (рекомендовано — зберігає тонкі краї)</translation>
     </message>
     <message>
         <source>Strict removal (Alpha = 0)</source>
@@ -696,7 +697,7 @@ Choose which branch to restore:</source>
     <message>
         <source>Soft clamping replaces fringe hue with interior neighbor color.
 Strict removal clears the pixel.</source>
-        <translation>М'яке обмеження замінює відтінок облямівки кольором сусідніх пікселів.
+        <translation>М&apos;яке обмеження замінює відтінок облямівки кольором сусідніх пікселів.
 Суворе видалення очищає піксель.</translation>
     </message>
     <message>
@@ -820,7 +821,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>File / Project Name:</source>
-        <translation>Ім'я файлу / проекту:</translation>
+        <translation>Ім&apos;я файлу / проекту:</translation>
     </message>
     <message>
         <source>e.g. hero, sprites, atlas...</source>
@@ -1144,7 +1145,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Please specify a valid file name before exporting.</source>
-        <translation>Будь ласка, вкажіть коректне ім'я файлу перед експортом.</translation>
+        <translation>Будь ласка, вкажіть коректне ім&apos;я файлу перед експортом.</translation>
     </message>
     <message>
         <source>Rendering and encoding animated GIF frames...</source>
@@ -1407,7 +1408,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Referenced texture atlas image not found for: %1</source>
-        <translation>Пов'язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Пов&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1</source>
@@ -1427,7 +1428,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
@@ -1470,7 +1471,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Associated atlas image not found: %1</source>
-        <translation>Зв'язане зображення атласу не знайдено: %1</translation>
+        <translation>Зв&apos;язане зображення атласу не знайдено: %1</translation>
     </message>
     <message>
         <source>Failed to decode atlas image: %1</source>
@@ -1490,7 +1491,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Packing atlas for JSON export...</source>
@@ -1522,7 +1523,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Hash Object (TexturePacker Hash)</source>
-        <translation>Об'єкт хешу (TexturePacker Hash)</translation>
+        <translation>Об&apos;єкт хешу (TexturePacker Hash)</translation>
     </message>
     <message>
         <source>Array List (TexturePacker Array / Aseprite)</source>
@@ -1768,7 +1769,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Додати до активної анімації "%1"</translation>
+        <translation>Додати до активної анімації &quot;%1&quot;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -1792,7 +1793,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_MERGE_SLICES</source>
-        <translation>Об'єднати рамки</translation>
+        <translation>Об&apos;єднати рамки</translation>
     </message>
     <message>
         <source>KEY_CTX_DELETE_FRAMES</source>
@@ -2065,7 +2066,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Поточний проект "%1" містить незбережені зміни.
+        <translation>Поточний проект &quot;%1&quot; містить незбережені зміни.
 Бажаєте зберегти їх перед продовженням?</translation>
     </message>
     <message>
@@ -2268,15 +2269,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Connectivity:</source>
-        <translation>Зв'язність:</translation>
+        <translation>Зв&apos;язність:</translation>
     </message>
     <message>
         <source>4-connected (Orthogonal crisp - Retro pixel art)</source>
-        <translation>4-зв'язна (ортогональна чітка — ретро піксель-арт)</translation>
+        <translation>4-зв&apos;язна (ортогональна чітка — ретро піксель-арт)</translation>
     </message>
     <message>
         <source>8-connected (Diagonal included - Smooth outline)</source>
-        <translation>8-зв'язна (з діагоналями — плавний контур)</translation>
+        <translation>8-зв&apos;язна (з діагоналями — плавний контур)</translation>
     </message>
     <message>
         <source>Solid silhouette / Hit-flash (Fill sprite interior)</source>
@@ -2946,7 +2947,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Project file path is empty. Use Save As.</source>
-        <translation>Шлях до файлу проекту порожній. Використовуйте "Зберегти як".</translation>
+        <translation>Шлях до файлу проекту порожній. Використовуйте &quot;Зберегти як&quot;.</translation>
     </message>
     <message>
         <source>Saving project %1...</source>
@@ -2982,7 +2983,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
-        <translation>Шлях експорту повинен мати коректне ім'я файлу: %1</translation>
+        <translation>Шлях експорту повинен мати коректне ім&apos;я файлу: %1</translation>
     </message>
     <message>
         <source>Document is empty.</source>
@@ -3041,43 +3042,51 @@ Would you like to repack the atlas now?</source>
     <name>QObject</name>
     <message numerus="yes">
         <source>Delete %n frame(s)</source>
-        <translation><numerusform>Видалити %n кадр</numerusform><numerusform>Видалити %n кадри</numerusform><numerusform>Видалити %n кадрів</numerusform></translation>
+        <translation>
+            <numerusform>Видалити %n кадр</numerusform>
+            <numerusform>Видалити %n кадри</numerusform>
+            <numerusform>Видалити %n кадрів</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Erase Atlas Pixels for %n frame(s)</source>
-        <translation><numerusform>Стерти пікселі атласу для %n кадру</numerusform><numerusform>Стерти пікселі атласу для %n кадрів</numerusform><numerusform>Стерти пікселі атласу для %n кадрів</numerusform></translation>
+        <translation>
+            <numerusform>Стерти пікселі атласу для %n кадру</numerusform>
+            <numerusform>Стерти пікселі атласу для %n кадрів</numerusform>
+            <numerusform>Стерти пікселі атласу для %n кадрів</numerusform>
+        </translation>
     </message>
     <message>
         <source>Merge Frame %1 into %2</source>
-        <translation>Об'єднати кадр %1 у %2</translation>
+        <translation>Об&apos;єднати кадр %1 у %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Створити анімацію '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Створити анімацію &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Видалити анімацію '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Видалити анімацію &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Зворотний порядок анімації '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Зворотний порядок анімації &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Перейменувати анімацію '%1' на '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Перейменувати анімацію &apos;%1&apos; на &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Дублювати анімацію '%1' як '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Дублювати анімацію &apos;%1&apos; як &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Змінити порядок кадрів в анімації '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Змінити порядок кадрів в анімації &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Змінити властивості анімації '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Змінити властивості анімації &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -3117,7 +3126,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>JSON root must be an object.</source>
-        <translation>Корінь JSON повинен бути об'єктом.</translation>
+        <translation>Корінь JSON повинен бути об&apos;єктом.</translation>
     </message>
     <message>
         <source>Cleanup</source>
@@ -3584,7 +3593,7 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_NAME</source>
-        <translation>Ім'я автора:</translation>
+        <translation>Ім&apos;я автора:</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER</source>
@@ -3604,15 +3613,15 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Стан: &lt;b style='color:#27ae60;'&gt;LibGit2 активовано&lt;/b&gt; (керування історією та гілками працює нормально)</translation>
+        <translation>Стан: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 активовано&lt;/b&gt; (керування історією та гілками працює нормально)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Стан: &lt;b style='color:#e74c3c;'&gt;LibGit2 не скомпільовано&lt;/b&gt; (історію Git вимкнено)</translation>
+        <translation>Стан: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 не скомпільовано&lt;/b&gt; (історію Git вимкнено)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
-        <translation>Кожна дія редагування (обрізка, перейменування, об'єднання спрайтів, створення анімацій) створює інкрементний коміт у сховищі проекту .bento.</translation>
+        <translation>Кожна дія редагування (обрізка, перейменування, об&apos;єднання спрайтів, створення анімацій) створює інкрементний коміт у сховищі проекту .bento.</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_ATLAS</source>
@@ -3660,7 +3669,7 @@ Install package:
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
-        <translation>&lt;b&gt;Порада:&lt;/b&gt; Текстури, стиснуті для GPU (KTX2 / Basis Universal), зменшують використання пам'яті GPU (VRAM) та пропускну здатність на цільових пристроях.</translation>
+        <translation>&lt;b&gt;Порада:&lt;/b&gt; Текстури, стиснуті для GPU (KTX2 / Basis Universal), зменшують використання пам&apos;яті GPU (VRAM) та пропускну здатність на цільових пристроях.</translation>
     </message>
     <message>
         <source>Default Target Format:</source>
@@ -3771,8 +3780,8 @@ Install package:
         <translation>Перевірити оновлення зараз</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Натисніть 'Перевірити оновлення зараз', щоб отримати останній випуск на GitHub.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Натисніть &apos;Перевірити оновлення зараз&apos;, щоб отримати останній випуск на GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -3791,16 +3800,16 @@ Install package:
         <translation>Перевірка оновлень на GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Не вдалося перевірити оновлення: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Не вдалося перевірити оновлення: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Некоректна відповідь від GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Некоректна відповідь від GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Доступна нова версія: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Доступна нова версія: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -3811,8 +3820,8 @@ Install package:
         <translation>Дата випуску: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;Ви використовуєте останню версію (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Ви використовуєте останню версію (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
@@ -3859,7 +3868,7 @@ Install package:
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to save image to: %1</source>
@@ -3958,7 +3967,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Зв'язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Зв&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
@@ -3978,7 +3987,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unity export.</source>
@@ -4025,7 +4034,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Зв'язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Зв&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
@@ -4045,7 +4054,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
@@ -4096,7 +4105,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Base name</source>
-        <translation>Базове ім'я</translation>
+        <translation>Базове ім&apos;я</translation>
     </message>
     <message>
         <source>Image Format</source>
