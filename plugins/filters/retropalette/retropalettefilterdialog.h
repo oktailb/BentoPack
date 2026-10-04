@@ -18,6 +18,7 @@
 #define RETROPALETTEFILTERDIALOG_H
 
 #include "widgets/filterdialogbase.h"
+#include "image/colorpalettepresets.h"
 #include <QVector>
 #include <QColor>
 
@@ -38,15 +39,19 @@ class RetroPaletteFilterDialog : public FilterDialogBase
 
 public:
     enum Preset {
-        GameBoyDMG = 0,
-        GameBoyPocket = 1,
-        Pico8 = 2,
-        NES = 3,
-        Commodore64 = 4,
-        CGAMode1 = 5,
-        CGAMode2 = 6,
-        Endesga32 = 7,
-        Custom = 8
+        Standard = ColorPalettePresets::Standard,
+        GameBoyDMG = ColorPalettePresets::GameBoyDMG,
+        GameBoyPocket = ColorPalettePresets::GameBoyPocket,
+        Pico8 = ColorPalettePresets::Pico8,
+        NES = ColorPalettePresets::NES,
+        SNES = ColorPalettePresets::SNES,
+        Commodore64 = ColorPalettePresets::Commodore64,
+        Amiga = ColorPalettePresets::Amiga,
+        PCEngine = ColorPalettePresets::PCEngine,
+        CGAMode1 = ColorPalettePresets::CGAMode1,
+        CGAMode2 = ColorPalettePresets::CGAMode2,
+        Endesga32 = ColorPalettePresets::Endesga32,
+        Custom = ColorPalettePresets::Custom
     };
 
     enum DitherMatrix {

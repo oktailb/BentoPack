@@ -584,6 +584,140 @@ Wybierz gałąź do przywrócenia:</translation>
     </message>
 </context>
 <context>
+    <name>ColorPalettePresets</name>
+    <message>
+        <source>Bento Standard (36)</source>
+        <translation type="unfinished">Bento Standard (36)</translation>
+    </message>
+    <message>
+        <source>Game Boy DMG (4 Greens)</source>
+        <translation type="unfinished">Game Boy DMG (4 odcienie zieleni)</translation>
+    </message>
+    <message>
+        <source>Game Boy Pocket (4 Grays)</source>
+        <translation type="unfinished">Game Boy Pocket (4 odcienie szarości)</translation>
+    </message>
+    <message>
+        <source>NES / Famicom (54)</source>
+        <translation type="unfinished">NES / Famicom (54)</translation>
+    </message>
+    <message>
+        <source>SNES / 16-bit (32)</source>
+        <translation type="unfinished">SNES / 16-bit (32)</translation>
+    </message>
+    <message>
+        <source>PICO-8 (16)</source>
+        <translation type="unfinished">PICO-8 (16)</translation>
+    </message>
+    <message>
+        <source>Commodore 64 (16)</source>
+        <translation type="unfinished">Commodore 64 (16)</translation>
+    </message>
+    <message>
+        <source>Amiga OCS (32)</source>
+        <translation type="unfinished">Amiga OCS (32)</translation>
+    </message>
+    <message>
+        <source>NEC PC-Engine (32)</source>
+        <translation type="unfinished">NEC PC-Engine (32)</translation>
+    </message>
+    <message>
+        <source>CGA Mode 1 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CGA Mode 2 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Endesga 32 (32)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Imported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to decode image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file for reading.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No valid colors found in palette file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ColorPickerWidget</name>
+    <message>
+        <source>🎡 Wheel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⊞ 2D Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🎛️ Sliders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Val:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Harmonies:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Triadic (Triangle)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Complementary (Opposite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analogous (Adjacent)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Split-Complementary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tetradic (Square)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Monochromatic (Shades)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current selected color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous color (click to restore)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base Color: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Harmony %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ColorSwapFilter</name>
     <message>
         <source>Color Swap (Alt-Skins)...</source>
@@ -2426,8 +2560,24 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Ponów (Ctrl+Y)</translation>
     </message>
     <message>
+        <source>Primary Color (Click to open Pro Color Picker)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Swap Colors (X)</source>
         <translation>Zamień kolory (X)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Click to open Pro Color Picker)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⛶ Pop-out...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Full Pro Color Picker Dialog</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2440,10 +2590,6 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     <message>
         <source>NEC PC-Engine (32)</source>
         <translation>NEC PC-Engine (32)</translation>
-    </message>
-    <message>
-        <source>Game Boy DMG (4)</source>
-        <translation>Game Boy DMG (4)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
@@ -2530,20 +2676,8 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Odznacz (Del)</translation>
     </message>
     <message>
-        <source>Color Picker</source>
-        <translation>Próbnik kolorów</translation>
-    </message>
-    <message>
-        <source>Primary Color (Click to open Color Picker)</source>
-        <translation>Kolor podstawowy (Kliknij, aby otworzyć próbnik)</translation>
-    </message>
-    <message>
-        <source>Secondary Color (Click to open Color Picker)</source>
-        <translation>Kolor dodatkowy (Kliknij, aby otworzyć próbnik)</translation>
-    </message>
-    <message>
-        <source>🎨 Pick Color...</source>
-        <translation>🎨 Wybierz kolor...</translation>
+        <source>Color Studio &amp;&amp; Harmonies</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2566,8 +2700,28 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Bento Standard (36)</translation>
     </message>
     <message>
+        <source>Game Boy DMG (4 Greens)</source>
+        <translation type="unfinished">Game Boy DMG (4 odcienie zieleni)</translation>
+    </message>
+    <message>
+        <source>Game Boy Pocket (4 Grays)</source>
+        <translation type="unfinished">Game Boy Pocket (4 odcienie szarości)</translation>
+    </message>
+    <message>
         <source>SNES / 16-bit (32)</source>
         <translation>SNES / 16-bit (32)</translation>
+    </message>
+    <message>
+        <source>CGA Mode 1 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CGA Mode 2 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Endesga 32 (32)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Onion Skinning</source>
@@ -2901,6 +3055,13 @@ Czy chcesz przepakować atlas teraz?</translation>
     <message>
         <source>✓ Tight mesh removed. Reverted to rectangle.</source>
         <translation>✓ Ciasna siatka usunięta. Przywrócono prostokąt.</translation>
+    </message>
+</context>
+<context>
+    <name>ProColorPickerDialog</name>
+    <message>
+        <source>Color Picker — Professional</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

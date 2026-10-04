@@ -50,6 +50,7 @@ set(BentoPackCore_SRC
     src/extractor/extractorregistry.cpp
     src/config/appconfig.cpp
     src/image/spritedetector.cpp
+    src/image/colorpalettepresets.cpp
     src/project/sessionmanager.cpp
     src/project/projectmanager.cpp
     src/filters/filterregistry.cpp
@@ -84,6 +85,7 @@ set(BentoPackCore_INCLUDE
     include/commands/commands.h
     include/commands/filtercommands.h
     include/image/spritedetector.h
+    include/image/colorpalettepresets.h
     include/project/sessionmanager.h
     include/project/projectmanager.h
     include/filters/filterplugin.h
@@ -126,6 +128,7 @@ set(BentoPackWidgets_SRC
     src/widgets/polygonmeshdialog.cpp
     src/widgets/pixelcanvas.cpp
     src/widgets/pixeleditordialog.cpp
+    src/widgets/colorpickerwidget.cpp
     src/widgets/branchselectiondialog.cpp
 )
 
@@ -153,6 +156,7 @@ set(BentoPackWidgets_INCLUDE
     include/widgets/polygonmeshdialog.h
     include/widgets/pixelcanvas.h
     include/widgets/pixeleditordialog.h
+    include/widgets/colorpickerwidget.h
 )
 
 # 1. BentoPackCore: Pure headless library (Qt6::Core, Qt6::Gui, Qt6::Concurrent, Qt6::Network - ZERO Qt6::Widgets)

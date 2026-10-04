@@ -10,6 +10,8 @@
 #include "geometry/triangulator.h"
 #include "widgets/pixelcanvas.h"
 #include "widgets/pixeleditordialog.h"
+#include "image/colorpalettepresets.h"
+#include "widgets/colorpickerwidget.h"
 #include "filters/filterregistry.h"
 
 class TestPixelEditor : public QObject
@@ -67,6 +69,7 @@ private slots:
     void testPolygonFollowsFlipAndRotate();
     void testAtlasPolygonCollisionAndRepack();
     void testApplyToAllFramesRelativePivot();
+    void testProColorPickerAndHarmonies();
 };
 
 void TestPixelEditor::initTestCase()
@@ -477,22 +480,29 @@ void TestPixelEditor::testRetroPalettesAuthenticity()
 {
     PixelEditorDialog dlg(nullptr, nullptr);
 
-    // Palettes are initialized in constructor
-    // NES: 54 colors
-    // SNES: 32 colors
-    // Amiga: 32 colors
-    // PC-Engine: 32 colors
-    // Game Boy: 4 colors
-    // Pico-8: 16 colors
-    // Commodore 64: 16 colors
-    // Verify preset values via switch logic
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::NES).size(), 54);
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::SNES).size(), 32);
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Amiga).size(), 32);
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::PCEngine).size(), 32);
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::GameBoy).size(), 4);
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Pico8).size(), 16);
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Commodore64).size(), 16);
+    // Verify ColorPalettePresets canonical sizes and single source of truth
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Standard).size(), 36);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::NES).size(), 54);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::SNES).size(), 32);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Amiga).size(), 32);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::PCEngine).size(), 32);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::GameBoyDMG).size(), 4);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::GameBoyPocket).size(), 4);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Pico8).size(), 16);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Commodore64).size(), 16);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::CGAMode1).size(), 4);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::CGAMode2).size(), 4);
+    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Endesga32).size(), 32);
+
+    // Verify PixelEditorDialog forwards directly to ColorPalettePresets without duplicate tables
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Standard), ColorPalettePresets::getPresetPalette(ColorPalettePresets::Standard));
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::NES), ColorPalettePresets::getPresetPalette(ColorPalettePresets::NES));
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::SNES), ColorPalettePresets::getPresetPalette(ColorPalettePresets::SNES));
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Amiga), ColorPalettePresets::getPresetPalette(ColorPalettePresets::Amiga));
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::PCEngine), ColorPalettePresets::getPresetPalette(ColorPalettePresets::PCEngine));
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::GameBoy), ColorPalettePresets::getPresetPalette(ColorPalettePresets::GameBoyDMG));
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Pico8), ColorPalettePresets::getPresetPalette(ColorPalettePresets::Pico8));
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Commodore64), ColorPalettePresets::getPresetPalette(ColorPalettePresets::Commodore64));
 }
 
 void TestPixelEditor::testDynamicSpriteColorExtraction()
@@ -1435,6 +1445,72 @@ void TestPixelEditor::testApplyToAllFramesRelativePivot()
 
     // Frame 2 is NOT in "walk" -> must NOT be modified
     QVERIFY(!dlgAnim.sessionModifiedFrames().contains(2));
+}
+
+void TestPixelEditor::testProColorPickerAndHarmonies()
+{
+    // 1. Color Wheel & Harmony calculation
+    ColorWheelWidget wheel;
+    QColor baseRed = QColor::fromHsv(0, 200, 220); // Pure red with saturation and brightness
+    wheel.setColor(baseRed);
+    QCOMPARE(wheel.color(), baseRed);
+
+    // Complementary: opposite hue (+180° = Cyan)
+    wheel.setHarmonyRule(ColorHarmonyRule::Complementary);
+    auto comp = wheel.currentHarmonies();
+    QCOMPARE(comp.size(), 1);
+    QCOMPARE(comp[0].hsvHue(), 180);
+
+    // Triadic: +120° and +240° (Green and Blue)
+    wheel.setHarmonyRule(ColorHarmonyRule::Triadic);
+    auto tri = wheel.currentHarmonies();
+    QCOMPARE(tri.size(), 2);
+    QCOMPARE(tri[0].hsvHue(), 120);
+    QCOMPARE(tri[1].hsvHue(), 240);
+
+    // Tetradic: +90°, +180°, +270°
+    wheel.setHarmonyRule(ColorHarmonyRule::Tetradic);
+    auto tetra = wheel.currentHarmonies();
+    QCOMPARE(tetra.size(), 3);
+    QCOMPARE(tetra[0].hsvHue(), 90);
+    QCOMPARE(tetra[1].hsvHue(), 180);
+    QCOMPARE(tetra[2].hsvHue(), 270);
+
+    // Analogous: -30° and +30°
+    wheel.setHarmonyRule(ColorHarmonyRule::Analogous);
+    auto ana = wheel.currentHarmonies();
+    QCOMPARE(ana.size(), 2);
+    QCOMPARE(ana[0].hsvHue(), 330);
+    QCOMPARE(ana[1].hsvHue(), 30);
+
+    // 2. 2D Map (Saturation-Value box + Hue strip)
+    ColorMap2DWidget map2D;
+    map2D.setColor(QColor(100, 150, 200));
+    QCOMPARE(map2D.color(), QColor(100, 150, 200));
+
+    // 3. RGB & HSV Sliders
+    ColorSlidersWidget sliders;
+    sliders.setColor(QColor(173, 93, 55)); // #ad5d37 from Aseprite screenshot
+    QCOMPARE(sliders.color().red(), 173);
+    QCOMPARE(sliders.color().green(), 93);
+    QCOMPARE(sliders.color().blue(), 55);
+
+    // 4. Integrated ColorPickerWidget
+    ColorPickerWidget picker;
+    picker.setColor(QColor(50, 120, 240));
+    QCOMPARE(picker.color(), QColor(50, 120, 240));
+
+    // Switching view modes
+    picker.setViewMode(ColorPickerWidget::WheelMode);
+    QCOMPARE(picker.viewMode(), ColorPickerWidget::WheelMode);
+    picker.setViewMode(ColorPickerWidget::Map2DMode);
+    QCOMPARE(picker.viewMode(), ColorPickerWidget::Map2DMode);
+    picker.setViewMode(ColorPickerWidget::SlidersMode);
+    QCOMPARE(picker.viewMode(), ColorPickerWidget::SlidersMode);
+
+    // Test ProColorPickerDialog instantiation
+    ProColorPickerDialog dlg(QColor(255, 128, 0));
+    QCOMPARE(dlg.selectedColor(), QColor(255, 128, 0));
 }
 
 int main(int argc, char *argv[])

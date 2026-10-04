@@ -33,6 +33,8 @@
 #include <QEvent>
 #include <QSlider>
 #include <QCheckBox>
+#include "image/colorpalettepresets.h"
+#include "widgets/colorpickerwidget.h"
 
 class SpriteDocument;
 class PixelCanvas;
@@ -51,15 +53,19 @@ class BENTOPACK_WIDGETS_EXPORT PixelEditorDialog : public QDialog
 
 public:
     enum PalettePreset {
-        Standard = 0,
-        SpriteColors = 0, // Compatible alias
-        NES,
-        SNES,
-        Amiga,
-        PCEngine,
-        GameBoy,
-        Pico8,
-        Commodore64
+        Standard = ColorPalettePresets::Standard,
+        SpriteColors = ColorPalettePresets::Standard, // Compatible alias
+        GameBoy = ColorPalettePresets::GameBoyDMG,
+        GameBoyPocket = ColorPalettePresets::GameBoyPocket,
+        NES = ColorPalettePresets::NES,
+        SNES = ColorPalettePresets::SNES,
+        Pico8 = ColorPalettePresets::Pico8,
+        Commodore64 = ColorPalettePresets::Commodore64,
+        Amiga = ColorPalettePresets::Amiga,
+        PCEngine = ColorPalettePresets::PCEngine,
+        CGAMode1 = ColorPalettePresets::CGAMode1,
+        CGAMode2 = ColorPalettePresets::CGAMode2,
+        Endesga32 = ColorPalettePresets::Endesga32
     };
 
     explicit PixelEditorDialog(SpriteDocument *document,
@@ -195,6 +201,7 @@ private:
 
     // Palette & Colors
     QGroupBox*              m_colorsGroup = nullptr;
+    ColorPickerWidget*      m_colorPickerWidget = nullptr;
     QPushButton*            m_primarySwatchBtn = nullptr;
     QPushButton*            m_secondarySwatchBtn = nullptr;
     QPushButton*            m_swapBtn = nullptr;

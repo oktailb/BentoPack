@@ -584,6 +584,140 @@ Choose which branch to restore:</source>
     </message>
 </context>
 <context>
+    <name>ColorPalettePresets</name>
+    <message>
+        <source>Bento Standard (36)</source>
+        <translation type="unfinished">Bento 표준 (36)</translation>
+    </message>
+    <message>
+        <source>Game Boy DMG (4 Greens)</source>
+        <translation type="unfinished">게임보이 DMG (4가지 녹색)</translation>
+    </message>
+    <message>
+        <source>Game Boy Pocket (4 Grays)</source>
+        <translation type="unfinished">게임보이 포켓 (4가지 회색)</translation>
+    </message>
+    <message>
+        <source>NES / Famicom (54)</source>
+        <translation type="unfinished">NES / Famicom (54)</translation>
+    </message>
+    <message>
+        <source>SNES / 16-bit (32)</source>
+        <translation type="unfinished">SNES / 16비트 (32)</translation>
+    </message>
+    <message>
+        <source>PICO-8 (16)</source>
+        <translation type="unfinished">PICO-8 (16)</translation>
+    </message>
+    <message>
+        <source>Commodore 64 (16)</source>
+        <translation type="unfinished">Commodore 64 (16)</translation>
+    </message>
+    <message>
+        <source>Amiga OCS (32)</source>
+        <translation type="unfinished">Amiga OCS (32)</translation>
+    </message>
+    <message>
+        <source>NEC PC-Engine (32)</source>
+        <translation type="unfinished">NEC PC-Engine (32)</translation>
+    </message>
+    <message>
+        <source>CGA Mode 1 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CGA Mode 2 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Endesga 32 (32)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Imported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to decode image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file for reading.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No valid colors found in palette file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ColorPickerWidget</name>
+    <message>
+        <source>🎡 Wheel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⊞ 2D Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🎛️ Sliders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Val:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Harmonies:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Triadic (Triangle)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Complementary (Opposite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analogous (Adjacent)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Split-Complementary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tetradic (Square)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Monochromatic (Shades)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current selected color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous color (click to restore)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base Color: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Harmony %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ColorSwapFilter</name>
     <message>
         <source>Color Swap (Alt-Skins)...</source>
@@ -2426,8 +2560,24 @@ Strict removal clears the pixel.</source>
         <translation>다시 실행 (Ctrl+Y)</translation>
     </message>
     <message>
+        <source>Primary Color (Click to open Pro Color Picker)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Swap Colors (X)</source>
         <translation>색상 전환 (X)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Click to open Pro Color Picker)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⛶ Pop-out...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Full Pro Color Picker Dialog</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2440,10 +2590,6 @@ Strict removal clears the pixel.</source>
     <message>
         <source>NEC PC-Engine (32)</source>
         <translation>NEC PC-Engine (32)</translation>
-    </message>
-    <message>
-        <source>Game Boy DMG (4)</source>
-        <translation>Game Boy DMG (4)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
@@ -2530,20 +2676,8 @@ Strict removal clears the pixel.</source>
         <translation>선택 영역 지우기 / 선택 취소 (Del)</translation>
     </message>
     <message>
-        <source>Color Picker</source>
-        <translation>색상 선택기</translation>
-    </message>
-    <message>
-        <source>Primary Color (Click to open Color Picker)</source>
-        <translation>기본 색상 (클릭하여 색상 선택기 열기)</translation>
-    </message>
-    <message>
-        <source>Secondary Color (Click to open Color Picker)</source>
-        <translation>보조 색상 (클릭하여 색상 선택기 열기)</translation>
-    </message>
-    <message>
-        <source>🎨 Pick Color...</source>
-        <translation>🎨 색상 선택...</translation>
+        <source>Color Studio &amp;&amp; Harmonies</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2566,8 +2700,28 @@ Strict removal clears the pixel.</source>
         <translation>Bento 표준 (36)</translation>
     </message>
     <message>
+        <source>Game Boy DMG (4 Greens)</source>
+        <translation type="unfinished">게임보이 DMG (4가지 녹색)</translation>
+    </message>
+    <message>
+        <source>Game Boy Pocket (4 Grays)</source>
+        <translation type="unfinished">게임보이 포켓 (4가지 회색)</translation>
+    </message>
+    <message>
         <source>SNES / 16-bit (32)</source>
         <translation>SNES / 16비트 (32)</translation>
+    </message>
+    <message>
+        <source>CGA Mode 1 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CGA Mode 2 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Endesga 32 (32)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Onion Skinning</source>
@@ -2901,6 +3055,13 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>✓ Tight mesh removed. Reverted to rectangle.</source>
         <translation>✓ 타이트 메시가 제거되었습니다. 사각형으로 복원되었습니다.</translation>
+    </message>
+</context>
+<context>
+    <name>ProColorPickerDialog</name>
+    <message>
+        <source>Color Picker — Professional</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

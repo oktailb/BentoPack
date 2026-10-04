@@ -263,7 +263,7 @@ void PixelEditorDialog::setupUi()
 
     connect(m_canvas, &PixelCanvas::primaryColorChanged, this, [this](const QColor &col) {
         if (m_primarySwatchBtn) {
-            m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #374151; border-radius: 6px;").arg(col.name()));
+            m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid palette(window-text); border-radius: 6px;").arg(col.name()));
         }
         if (m_primaryHexLabel) {
             m_primaryHexLabel->setText(col.name().toUpper());
@@ -271,11 +271,14 @@ void PixelEditorDialog::setupUi()
         if (m_rgbLabel) {
             m_rgbLabel->setText(QStringLiteral("RGB(%1,%2,%3)").arg(col.red()).arg(col.green()).arg(col.blue()));
         }
+        if (m_colorPickerWidget) {
+            m_colorPickerWidget->setColor(col);
+        }
         addRecentColor(col);
     });
     connect(m_canvas, &PixelCanvas::secondaryColorChanged, this, [this](const QColor &col) {
         if (m_secondarySwatchBtn) {
-            m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid #9ca3af; border-radius: 6px;").arg(col.name()));
+            m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid palette(mid); border-radius: 6px;").arg(col.name()));
         }
     });
 
@@ -332,16 +335,12 @@ QWidget* PixelEditorDialog::createHeaderBar()
 
     const QString navBtnStyle = QStringLiteral(
         "QPushButton {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
+        "  border: 1px solid palette(mid);"
         "  border-radius: 6px;"
-        "  color: #1f2937;"
         "  font-weight: bold;"
         "  font-size: 13px;"
         "}"
-        "QPushButton:hover { background-color: #f3f4f6; border-color: #9ca3af; }"
-        "QPushButton:pressed { background-color: #e5e7eb; }"
-        "QPushButton:disabled { color: #9ca3af; background-color: #f9fafb; border-color: #e5e7eb; }"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
     );
 
     m_prevFrameBtn = new QPushButton(QStringLiteral("◀"), bar);
@@ -354,13 +353,11 @@ QWidget* PixelEditorDialog::createHeaderBar()
     m_frameInfoLabel = new QLabel(tr("Frame 1 / 1 (32x32 px)"), bar);
     m_frameInfoLabel->setAlignment(Qt::AlignCenter);
     m_frameInfoLabel->setStyleSheet(QStringLiteral(
-        "background-color: #ffffff;"
-        "border: 1px solid #d1d5db;"
+        "border: 1px solid palette(mid);"
         "border-radius: 6px;"
         "padding: 4px 14px;"
         "font-weight: bold;"
         "font-size: 12px;"
-        "color: #1f2937;"
     ));
     layout->addWidget(m_frameInfoLabel);
 
@@ -374,31 +371,15 @@ QWidget* PixelEditorDialog::createHeaderBar()
     // Animation Selector Combobox
     QFrame *animSep = new QFrame(bar);
     animSep->setFrameShape(QFrame::VLine);
-    animSep->setStyleSheet(QStringLiteral("color: #d1d5db;"));
     layout->addWidget(animSep);
 
     m_animLabel = new QLabel(tr("Animation:"), bar);
-    m_animLabel->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 11px; color: #4b5563;"));
+    m_animLabel->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 11px;"));
     layout->addWidget(m_animLabel);
 
     m_animCombo = new QComboBox(bar);
     m_animCombo->setMinimumWidth(160);
     m_animCombo->setMaximumWidth(240);
-    m_animCombo->setStyleSheet(QStringLiteral(
-        "QComboBox {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
-        "  border-radius: 6px;"
-        "  padding: 4px 8px;"
-        "  color: #1f2937;"
-        "  font-size: 11px;"
-        "  font-weight: 500;"
-        "  min-height: 24px;"
-        "}"
-        "QComboBox:hover { border-color: #9ca3af; }"
-        "QComboBox::drop-down { border: none; }"
-        "QComboBox QAbstractItemView { background-color: #ffffff; color: #1f2937; selection-background-color: #eff6ff; selection-color: #2563eb; }"
-    ));
     connect(m_animCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PixelEditorDialog::onAnimationFilterChanged);
     layout->addWidget(m_animCombo);
 
@@ -407,16 +388,13 @@ QWidget* PixelEditorDialog::createHeaderBar()
     // View & Zoom controls
     const QString viewBtnStyle = QStringLiteral(
         "QToolButton {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
+        "  border: 1px solid palette(mid);"
         "  border-radius: 6px;"
-        "  color: #1f2937;"
         "  font-weight: 500;"
         "  font-size: 12px;"
         "}"
-        "QToolButton:hover { background-color: #f3f4f6; border-color: #9ca3af; }"
-        "QToolButton:checked { background-color: #eff6ff; border: 2px solid #2563eb; color: #2563eb; font-weight: bold; }"
-        "QToolButton:pressed { background-color: #e5e7eb; }"
+        "QToolButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
+        "QToolButton:checked { background-color: palette(highlight); color: palette(highlighted-text); border: 2px solid palette(highlight); font-weight: bold; }"
     );
 
     m_btnGrid = new QToolButton(bar);
@@ -446,19 +424,6 @@ QWidget* PixelEditorDialog::createHeaderBar()
     m_allowOutsidePolyCheck = new QCheckBox(tr("Edit outside polygon"), bar);
     m_allowOutsidePolyCheck->setToolTip(tr("Allow editing pixels outside polygon boundaries (Default: off when polygon exists)"));
     m_allowOutsidePolyCheck->setFixedHeight(28);
-    m_allowOutsidePolyCheck->setStyleSheet(QStringLiteral(
-        "QCheckBox {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
-        "  border-radius: 6px;"
-        "  padding: 2px 8px;"
-        "  font-size: 11px;"
-        "  font-weight: 500;"
-        "  color: #1f2937;"
-        "}"
-        "QCheckBox:hover { border-color: #9ca3af; background-color: #f3f4f6; }"
-        "QCheckBox:disabled { color: #9ca3af; background-color: #f9fafb; border-color: #e5e7eb; }"
-    ));
     connect(m_allowOutsidePolyCheck, &QCheckBox::toggled, this, &PixelEditorDialog::onAllowOutsidePolygonToggled);
     layout->addWidget(m_allowOutsidePolyCheck);
 
@@ -467,12 +432,10 @@ QWidget* PixelEditorDialog::createHeaderBar()
     m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot"));
     m_applyToAllFramesCheck->setChecked(false);
     m_applyToAllFramesCheck->setFixedHeight(28);
-    m_applyToAllFramesCheck->setStyleSheet(m_allowOutsidePolyCheck->styleSheet());
     layout->addWidget(m_applyToAllFramesCheck);
 
     QFrame *sep = new QFrame(bar);
     sep->setFrameShape(QFrame::VLine);
-    sep->setStyleSheet(QStringLiteral("color: #d1d5db;"));
     layout->addWidget(sep);
 
     m_btnZoomOut = new QToolButton(bar);
@@ -487,13 +450,12 @@ QWidget* PixelEditorDialog::createHeaderBar()
     m_zoomLabel->setAlignment(Qt::AlignCenter);
     m_zoomLabel->setFixedWidth(92);
     m_zoomLabel->setStyleSheet(QStringLiteral(
-        "background-color: #ffffff;"
-        "border: 1px solid #d1d5db;"
+        "border: 1px solid palette(mid);"
         "border-radius: 6px;"
         "padding: 4px 6px;"
         "font-weight: bold;"
         "font-size: 11px;"
-        "color: #0284c7;"
+        "font-family: monospace;"
     ));
     layout->addWidget(m_zoomLabel);
 
@@ -529,29 +491,22 @@ QWidget* PixelEditorDialog::createToolBar()
 
     const QString toolBtnStyle = QStringLiteral(
         "QToolButton {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
+        "  border: 1px solid palette(mid);"
         "  border-radius: 6px;"
-        "  color: #1f2937;"
         "  font-size: 15px;"
         "  font-weight: bold;"
         "}"
         "QToolButton:hover {"
-        "  background-color: #f3f4f6;"
-        "  border-color: #9ca3af;"
+        "  background-color: palette(alternate-base);"
+        "  border-color: palette(highlight);"
         "}"
         "QToolButton:checked {"
-        "  background-color: #eff6ff;"
-        "  border: 2px solid #2563eb;"
-        "  color: #2563eb;"
-        "}"
-        "QToolButton:pressed {"
-        "  background-color: #e5e7eb;"
+        "  background-color: palette(highlight);"
+        "  color: palette(highlighted-text);"
+        "  border: 2px solid palette(highlight);"
         "}"
         "QToolButton:disabled {"
-        "  background-color: #f9fafb;"
-        "  border-color: #e5e7eb;"
-        "  color: #9ca3af;"
+        "  color: palette(placeholder-text);"
         "}"
     );
 
@@ -580,7 +535,6 @@ QWidget* PixelEditorDialog::createToolBar()
     // Separator 1
     QFrame *line1 = new QFrame(this);
     line1->setFrameShape(QFrame::HLine);
-    line1->setStyleSheet(QStringLiteral("color: #d1d5db;"));
     layout->addWidget(line1, 3, 0, 1, 2);
 
     auto addActionBtn = [this, layout, &toolBtnStyle](const QString &text, const QString &tooltip, int row, int col, const auto &slot) -> QToolButton* {
@@ -608,7 +562,6 @@ QWidget* PixelEditorDialog::createToolBar()
     // Separator 2
     QFrame *line2 = new QFrame(this);
     line2->setFrameShape(QFrame::HLine);
-    line2->setStyleSheet(QStringLiteral("color: #d1d5db;"));
     layout->addWidget(line2, 6, 0, 1, 2);
 
     // Undo / Redo
@@ -626,13 +579,13 @@ QWidget* PixelEditorDialog::createToolBar()
 QWidget* PixelEditorDialog::createPalettePanel()
 {
     QScrollArea *scrollPanel = new QScrollArea(this);
-    scrollPanel->setFixedWidth(300);
+    scrollPanel->setFixedWidth(318);
     scrollPanel->setWidgetResizable(true);
     scrollPanel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollPanel->setStyleSheet(QStringLiteral("QScrollArea { background-color: transparent; border: none; }"));
 
     QWidget *panel = new QWidget(scrollPanel);
-    panel->setFixedWidth(288);
+    panel->setFixedWidth(304);
     QVBoxLayout *layout = new QVBoxLayout(panel);
     layout->setContentsMargins(6, 8, 6, 8);
     layout->setSpacing(10);
@@ -641,100 +594,106 @@ QWidget* PixelEditorDialog::createPalettePanel()
         "QGroupBox {"
         "  font-weight: bold;"
         "  font-size: 11px;"
-        "  border: 1px solid #d1d5db;"
+        "  border: 1px solid palette(mid);"
         "  border-radius: 6px;"
-        "  margin-top: 22px;"
+        "  margin-top: 14px;"
         "  padding-top: 6px;"
-        "  background-color: #ffffff;"
         "}"
         "QGroupBox::title {"
         "  subcontrol-origin: margin;"
         "  subcontrol-position: top left;"
         "  left: 8px;"
-        "  top: 2px;"
+        "  top: 0px;"
         "  padding: 0 4px;"
-        "  color: #f1f5f9;"
         "  font-weight: bold;"
         "  font-size: 11px;"
         "}"
     );
 
-    // 1. Active Color Box & Direct Color Picker
-    m_colorsGroup = new QGroupBox(tr("Color Picker"), panel);
+    // 1. Active Color Box & Pro Color Picker Suite
+    m_colorsGroup = new QGroupBox(tr("Color Studio && Harmonies"), panel);
     m_colorsGroup->setStyleSheet(groupBoxStyle);
     QVBoxLayout *colorsMainLayout = new QVBoxLayout(m_colorsGroup);
-    colorsMainLayout->setContentsMargins(8, 8, 8, 8);
+    colorsMainLayout->setContentsMargins(6, 8, 6, 8);
     colorsMainLayout->setSpacing(6);
 
     QHBoxLayout *swatchesRow = new QHBoxLayout();
-    swatchesRow->setSpacing(8);
+    swatchesRow->setSpacing(6);
 
     m_primarySwatchBtn = new QPushButton(m_colorsGroup);
-    m_primarySwatchBtn->setFixedSize(44, 44);
-    m_primarySwatchBtn->setToolTip(tr("Primary Color (Click to open Color Picker)"));
-    m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #000000; border: 2px solid #374151; border-radius: 6px;"));
+    m_primarySwatchBtn->setFixedSize(38, 38);
+    m_primarySwatchBtn->setToolTip(tr("Primary Color (Click to open Pro Color Picker)"));
+    m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #000000; border: 2px solid palette(window-text); border-radius: 6px;"));
     connect(m_primarySwatchBtn, &QPushButton::clicked, this, &PixelEditorDialog::onPrimarySwatchClicked);
     swatchesRow->addWidget(m_primarySwatchBtn);
 
     m_swapBtn = new QPushButton(QStringLiteral("⇄"), m_colorsGroup);
-    m_swapBtn->setFixedSize(28, 28);
+    m_swapBtn->setFixedSize(26, 26);
     m_swapBtn->setToolTip(tr("Swap Colors (X)"));
     m_swapBtn->setStyleSheet(QStringLiteral(
         "QPushButton {"
-        "  background-color: #f3f4f6;"
-        "  border: 1px solid #d1d5db;"
-        "  border-radius: 14px;"
-        "  color: #374151;"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 13px;"
         "  font-weight: bold;"
         "  font-size: 12px;"
         "}"
-        "QPushButton:hover { background-color: #e5e7eb; border-color: #2563eb; color: #2563eb; }"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
     ));
     connect(m_swapBtn, &QPushButton::clicked, this, [this]() { m_canvas->swapColors(); });
     swatchesRow->addWidget(m_swapBtn);
 
     m_secondarySwatchBtn = new QPushButton(m_colorsGroup);
-    m_secondarySwatchBtn->setFixedSize(40, 40);
-    m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Click to open Color Picker)"));
-    m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #ffffff; border: 2px solid #9ca3af; border-radius: 6px;"));
+    m_secondarySwatchBtn->setFixedSize(34, 34);
+    m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Click to open Pro Color Picker)"));
+    m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #ffffff; border: 2px solid palette(mid); border-radius: 6px;"));
     connect(m_secondarySwatchBtn, &QPushButton::clicked, this, &PixelEditorDialog::onSecondarySwatchClicked);
     swatchesRow->addWidget(m_secondarySwatchBtn);
 
-    swatchesRow->addStretch();
-    colorsMainLayout->addLayout(swatchesRow);
-
-    QHBoxLayout *hexRow = new QHBoxLayout();
+    QVBoxLayout *hexCol = new QVBoxLayout();
+    hexCol->setSpacing(1);
     m_primaryHexLabel = new QLabel(QStringLiteral("#000000"), m_colorsGroup);
-    m_primaryHexLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px; font-weight: bold; color: #1f2937;"));
-    hexRow->addWidget(m_primaryHexLabel);
+    m_primaryHexLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px; font-weight: bold;"));
+    hexCol->addWidget(m_primaryHexLabel);
 
     m_rgbLabel = new QLabel(QStringLiteral("RGB(0, 0, 0)"), m_colorsGroup);
-    m_rgbLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 10px; color: #6b7280;"));
-    hexRow->addWidget(m_rgbLabel);
-    hexRow->addStretch();
-    colorsMainLayout->addLayout(hexRow);
+    m_rgbLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 10px;"));
+    hexCol->addWidget(m_rgbLabel);
+    swatchesRow->addLayout(hexCol);
 
-    // Direct color picker launcher button
-    m_btnPickColor = new QPushButton(tr("🎨 Pick Color..."), m_colorsGroup);
+    swatchesRow->addStretch();
+
+    m_btnPickColor = new QPushButton(tr("⛶ Pop-out..."), m_colorsGroup);
+    m_btnPickColor->setToolTip(tr("Open Full Pro Color Picker Dialog"));
     m_btnPickColor->setStyleSheet(QStringLiteral(
         "QPushButton {"
-        "  background-color: #f9fafb;"
-        "  border: 1px solid #d1d5db;"
-        "  border-radius: 6px;"
-        "  color: #1f2937;"
-        "  font-size: 11px;"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 4px;"
+        "  font-size: 10px;"
         "  font-weight: 600;"
-        "  padding: 6px 10px;"
+        "  padding: 3px 6px;"
         "}"
-        "QPushButton:hover { background-color: #eff6ff; border-color: #2563eb; color: #2563eb; }"
-        "QPushButton:pressed { background-color: #dbeafe; }"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
     ));
     connect(m_btnPickColor, &QPushButton::clicked, this, &PixelEditorDialog::onPickColorClicked);
-    colorsMainLayout->addWidget(m_btnPickColor);
+    swatchesRow->addWidget(m_btnPickColor);
+
+    colorsMainLayout->addLayout(swatchesRow);
+
+    // Embedded Interactive Pro Color Picker (Wheel + Harmonies, 2D Map, Sliders)
+    m_colorPickerWidget = new ColorPickerWidget(m_colorsGroup);
+    QColor initialCol = m_canvas ? m_canvas->primaryColor() : Qt::black;
+    m_colorPickerWidget->setColor(initialCol);
+    m_colorPickerWidget->setOldColor(initialCol);
+    connect(m_colorPickerWidget, &ColorPickerWidget::colorChanged, this, [this](const QColor &col) {
+        if (m_canvas) {
+            m_canvas->setPrimaryColor(col);
+        }
+    });
+    colorsMainLayout->addWidget(m_colorPickerWidget);
 
     // Recent colors
     m_recentLabel = new QLabel(tr("Recent:"), m_colorsGroup);
-    m_recentLabel->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: bold; color: #6b7280; margin-top: 4px;"));
+    m_recentLabel->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: bold; margin-top: 2px;"));
     colorsMainLayout->addWidget(m_recentLabel);
 
     m_recentContainer = new QWidget(m_colorsGroup);
@@ -749,50 +708,38 @@ QWidget* PixelEditorDialog::createPalettePanel()
     // 2. Palette Presets & Sample Frame button
     QHBoxLayout *presetHeader = new QHBoxLayout();
     m_palLabel = new QLabel(tr("Preset:"), panel);
-    m_palLabel->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; color: #f1f5f9;"));
+    m_palLabel->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
     presetHeader->addWidget(m_palLabel);
 
     m_btnSampleFrame = new QPushButton(tr("Sample Frame"), panel);
     m_btnSampleFrame->setToolTip(tr("Extract all unique colors from current sprite frame"));
     m_btnSampleFrame->setStyleSheet(QStringLiteral(
         "QPushButton {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
+        "  border: 1px solid palette(mid);"
         "  border-radius: 4px;"
-        "  color: #374151;"
         "  font-size: 10px;"
         "  font-weight: 500;"
         "  padding: 2px 6px;"
         "}"
-        "QPushButton:hover { background-color: #f3f4f6; border-color: #2563eb; color: #2563eb; }"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
     ));
     connect(m_btnSampleFrame, &QPushButton::clicked, this, &PixelEditorDialog::onSampleFrameColorsClicked);
     presetHeader->addWidget(m_btnSampleFrame);
     layout->addLayout(presetHeader);
 
     m_paletteCombo = new QComboBox(panel);
-    m_paletteCombo->setStyleSheet(QStringLiteral(
-        "QComboBox {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
-        "  border-radius: 6px;"
-        "  padding: 4px 8px;"
-        "  color: #1f2937;"
-        "  font-size: 12px;"
-        "  min-height: 24px;"
-        "}"
-        "QComboBox:hover { border-color: #9ca3af; }"
-        "QComboBox::drop-down { border: none; }"
-        "QComboBox QAbstractItemView { background-color: #ffffff; color: #1f2937; selection-background-color: #eff6ff; selection-color: #2563eb; }"
-    ));
     m_paletteCombo->addItem(tr("Bento Standard (36)"), Standard);
+    m_paletteCombo->addItem(tr("Game Boy DMG (4 Greens)"), GameBoy);
+    m_paletteCombo->addItem(tr("Game Boy Pocket (4 Grays)"), GameBoyPocket);
     m_paletteCombo->addItem(tr("NES / Famicom (54)"), NES);
     m_paletteCombo->addItem(tr("SNES / 16-bit (32)"), SNES);
-    m_paletteCombo->addItem(tr("Amiga OCS (32)"), Amiga);
-    m_paletteCombo->addItem(tr("NEC PC-Engine (32)"), PCEngine);
-    m_paletteCombo->addItem(tr("Game Boy DMG (4)"), GameBoy);
     m_paletteCombo->addItem(tr("PICO-8 (16)"), Pico8);
     m_paletteCombo->addItem(tr("Commodore 64 (16)"), Commodore64);
+    m_paletteCombo->addItem(tr("Amiga OCS (32)"), Amiga);
+    m_paletteCombo->addItem(tr("NEC PC-Engine (32)"), PCEngine);
+    m_paletteCombo->addItem(tr("CGA Mode 1 (4)"), CGAMode1);
+    m_paletteCombo->addItem(tr("CGA Mode 2 (4)"), CGAMode2);
+    m_paletteCombo->addItem(tr("Endesga 32 (32)"), Endesga32);
     connect(m_paletteCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PixelEditorDialog::onPalettePresetChanged);
     layout->addWidget(m_paletteCombo);
 
@@ -800,7 +747,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     QScrollArea *swatchScroll = new QScrollArea(panel);
     swatchScroll->setWidgetResizable(true);
     swatchScroll->setFixedHeight(110);
-    swatchScroll->setStyleSheet(QStringLiteral("background-color: #ffffff; border: 1px solid #d1d5db; border-radius: 6px;"));
+    swatchScroll->setStyleSheet(QStringLiteral("background-color: palette(base); border: 1px solid palette(mid); border-radius: 6px;"));
 
     m_swatchesContainer = new QWidget(swatchScroll);
     m_swatchesLayout = new QGridLayout(m_swatchesContainer);
@@ -818,7 +765,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     m_onionSkinCheck = new QCheckBox(tr("Enable Onion Skin"), m_onionSkinGroup);
     m_onionSkinCheck->setChecked(true);
-    m_onionSkinCheck->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: 600; color: #1f2937;"));
+    m_onionSkinCheck->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: 600;"));
     connect(m_onionSkinCheck, &QCheckBox::toggled, this, &PixelEditorDialog::onOnionSkinToggled);
     osLayout->addWidget(m_onionSkinCheck);
 
@@ -831,12 +778,12 @@ QWidget* PixelEditorDialog::createPalettePanel()
     pastCol->setSpacing(2);
     QHBoxLayout *pastHeaderLayout = new QHBoxLayout();
     m_lblPastTitle = new QLabel(tr("Past:"), m_onionSkinGroup);
-    m_lblPastTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600; color: #4b5563;"));
+    m_lblPastTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
     pastHeaderLayout->addWidget(m_lblPastTitle);
     pastHeaderLayout->addStretch();
     m_lblPastFrames = new QLabel(tr("-1"), m_onionSkinGroup);
     m_lblPastFrames->setStyleSheet(QStringLiteral(
-        "background-color: #e0f2fe; color: #0369a1; font-size: 10px; font-weight: bold; border-radius: 3px; padding: 1px 6px;"
+        "border: 1px solid palette(mid); border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: bold;"
     ));
     pastHeaderLayout->addWidget(m_lblPastFrames);
     pastCol->addLayout(pastHeaderLayout);
@@ -856,12 +803,12 @@ QWidget* PixelEditorDialog::createPalettePanel()
     futureCol->setSpacing(2);
     QHBoxLayout *futureHeaderLayout = new QHBoxLayout();
     m_lblFutureTitle = new QLabel(tr("Future:"), m_onionSkinGroup);
-    m_lblFutureTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600; color: #4b5563;"));
+    m_lblFutureTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
     futureHeaderLayout->addWidget(m_lblFutureTitle);
     futureHeaderLayout->addStretch();
     m_lblFutureFrames = new QLabel(tr("0"), m_onionSkinGroup);
     m_lblFutureFrames->setStyleSheet(QStringLiteral(
-        "background-color: #fee2e2; color: #b91c1c; font-size: 10px; font-weight: bold; border-radius: 3px; padding: 1px 6px;"
+        "border: 1px solid palette(mid); border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: bold;"
     ));
     futureHeaderLayout->addWidget(m_lblFutureFrames);
     futureCol->addLayout(futureHeaderLayout);
@@ -881,12 +828,12 @@ QWidget* PixelEditorDialog::createPalettePanel()
     // Opacity / Intensity slider row directly below
     QHBoxLayout *opHeaderLayout = new QHBoxLayout();
     m_lblOpacityTitle = new QLabel(tr("Effect Intensity:"), m_onionSkinGroup);
-    m_lblOpacityTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600; color: #4b5563;"));
+    m_lblOpacityTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
     opHeaderLayout->addWidget(m_lblOpacityTitle);
     opHeaderLayout->addStretch();
     m_lblOpacity = new QLabel(tr("50%"), m_onionSkinGroup);
     m_lblOpacity->setStyleSheet(QStringLiteral(
-        "background-color: #f3f4f6; color: #374151; font-size: 10px; font-weight: bold; border-radius: 3px; padding: 1px 6px;"
+        "border: 1px solid palette(mid); border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: bold;"
     ));
     opHeaderLayout->addWidget(m_lblOpacity);
     osLayout->addLayout(opHeaderLayout);
@@ -900,21 +847,10 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     // Effect combo
     m_lblEffect = new QLabel(tr("Effect mode:"), m_onionSkinGroup);
-    m_lblEffect->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600; color: #4b5563;"));
+    m_lblEffect->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
     osLayout->addWidget(m_lblEffect);
 
     m_comboEffect = new QComboBox(m_onionSkinGroup);
-    m_comboEffect->setStyleSheet(QStringLiteral(
-        "QComboBox {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
-        "  border-radius: 4px;"
-        "  padding: 3px 6px;"
-        "  color: #1f2937;"
-        "  font-size: 11px;"
-        "  min-height: 22px;"
-        "}"
-    ));
     m_comboEffect->addItem(tr("Tinted (Blue/Red)"), static_cast<int>(OnionSkinEffect::TintedBlueRed));
     m_comboEffect->addItem(tr("Border Detection (Edge)"), static_cast<int>(OnionSkinEffect::EdgeDetection));
     m_comboEffect->addItem(tr("Red Channel (R)"), static_cast<int>(OnionSkinEffect::ChannelR));
@@ -936,7 +872,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_previewLabel = new QLabel(m_prevGroup);
     m_previewLabel->setAlignment(Qt::AlignCenter);
     m_previewLabel->setMinimumHeight(76);
-    m_previewLabel->setStyleSheet(QStringLiteral("background-color: #1e1e24; border: 1px solid #cbd5e1; border-radius: 4px;"));
+    m_previewLabel->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 4px;"));
     prevLayout->addWidget(m_previewLabel);
     layout->addWidget(m_prevGroup);
 
@@ -957,24 +893,22 @@ QWidget* PixelEditorDialog::createBottomBar()
     m_coordLabel->setFixedWidth(100);
     m_coordLabel->setAlignment(Qt::AlignCenter);
     m_coordLabel->setStyleSheet(QStringLiteral(
-        "background-color: #ffffff;"
-        "border: 1px solid #d1d5db;"
+        "border: 1px solid palette(mid);"
         "border-radius: 4px;"
         "padding: 3px 6px;"
         "font-family: monospace;"
         "font-size: 11px;"
-        "color: #374151;"
     ));
     layout->addWidget(m_coordLabel);
 
     m_hoverColorSwatch = new QLabel(bar);
     m_hoverColorSwatch->setFixedSize(18, 18);
-    m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid #9ca3af; border-radius: 3px; background-color: transparent;"));
+    m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 3px; background-color: transparent;"));
     m_hoverColorSwatch->hide();
     layout->addWidget(m_hoverColorSwatch);
 
     m_colorInfoLabel = new QLabel(QStringLiteral(""), bar);
-    m_colorInfoLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px; color: #374151;"));
+    m_colorInfoLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px;"));
     layout->addWidget(m_colorInfoLabel);
 
     m_lblCollisionWarning = new QLabel(bar);
@@ -1016,17 +950,14 @@ QWidget* PixelEditorDialog::createBottomBar()
 
     const QString btnSecondaryStyle = QStringLiteral(
         "QPushButton {"
-        "  background-color: #ffffff;"
-        "  border: 1px solid #d1d5db;"
+        "  border: 1px solid palette(mid);"
         "  border-radius: 6px;"
-        "  color: #1f2937;"
         "  font-size: 12px;"
         "  font-weight: 500;"
         "  min-width: 80px;"
         "  min-height: 28px;"
         "}"
-        "QPushButton:hover { background-color: #f3f4f6; border-color: #9ca3af; }"
-        "QPushButton:pressed { background-color: #e5e7eb; }"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
     );
 
     m_cancelBtn = new QPushButton(tr("Cancel"), bar);
@@ -1043,17 +974,15 @@ QWidget* PixelEditorDialog::createBottomBar()
     m_okBtn->setDefault(true);
     m_okBtn->setStyleSheet(QStringLiteral(
         "QPushButton {"
-        "  background-color: #2563eb;"
-        "  border: none;"
+        "  background-color: palette(highlight);"
+        "  color: palette(highlighted-text);"
+        "  border: 1px solid palette(highlight);"
         "  border-radius: 6px;"
-        "  color: #ffffff;"
         "  font-size: 12px;"
         "  font-weight: bold;"
         "  min-width: 80px;"
         "  min-height: 28px;"
         "}"
-        "QPushButton:hover { background-color: #1d4ed8; }"
-        "QPushButton:pressed { background-color: #1e40af; }"
     ));
     connect(m_okBtn, &QPushButton::clicked, this, &PixelEditorDialog::onOkClicked);
     layout->addWidget(m_okBtn);
@@ -1074,10 +1003,13 @@ void PixelEditorDialog::onPickColorClicked()
 void PixelEditorDialog::onPrimarySwatchClicked()
 {
     QColor initial = m_canvas ? m_canvas->primaryColor() : Qt::black;
-    QColor col = QColorDialog::getColor(initial, this, tr("Select Primary Color"), QColorDialog::ShowAlphaChannel);
+    QColor col = ProColorPickerDialog::getColor(initial, this, tr("Select Primary Color"));
     if (col.isValid()) {
         if (m_canvas) {
             m_canvas->setPrimaryColor(col);
+        }
+        if (m_colorPickerWidget) {
+            m_colorPickerWidget->setColor(col);
         }
         addRecentColor(col);
     }
@@ -1086,7 +1018,7 @@ void PixelEditorDialog::onPrimarySwatchClicked()
 void PixelEditorDialog::onSecondarySwatchClicked()
 {
     QColor initial = m_canvas ? m_canvas->secondaryColor() : Qt::white;
-    QColor col = QColorDialog::getColor(initial, this, tr("Select Secondary Color"), QColorDialog::ShowAlphaChannel);
+    QColor col = ProColorPickerDialog::getColor(initial, this, tr("Select Secondary Color"));
     if (col.isValid()) {
         if (m_canvas) {
             m_canvas->setSecondaryColor(col);
@@ -1106,13 +1038,13 @@ void PixelEditorDialog::onCanvasPixelMoved(int x, int y, const QColor &color)
     m_coordLabel->setText(tr("X: %1 , Y: %2").arg(x).arg(y));
     if (color.alpha() == 0) {
         if (m_hoverColorSwatch) {
-            m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid #475569; border-radius: 3px; background-color: rgba(255,255,255,0.06);"));
+            m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 3px; background-color: transparent;"));
             m_hoverColorSwatch->show();
         }
         m_colorInfoLabel->setText(tr("Transparent [alpha: 0]"));
     } else {
         if (m_hoverColorSwatch) {
-            m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid #ffffff; border-radius: 3px; background-color: %1;").arg(color.name()));
+            m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid palette(window-text); border-radius: 3px; background-color: %1;").arg(color.name()));
             m_hoverColorSwatch->show();
         }
         m_colorInfoLabel->setText(QStringLiteral("%1  RGBA(%2, %3, %4, %5)")
@@ -2152,11 +2084,11 @@ void PixelEditorDialog::refreshRecentSwatches()
         btn->setStyleSheet(QStringLiteral(
             "QPushButton {"
             "  background-color: %1;"
-            "  border: 1px solid rgba(0, 0, 0, 0.25);"
+            "  border: 1px solid palette(mid);"
             "  border-radius: 4px;"
             "}"
             "QPushButton:hover {"
-            "  border: 2px solid #2563eb;"
+            "  border: 2px solid palette(highlight);"
             "}"
         ).arg(col.name()));
 
@@ -2198,11 +2130,11 @@ void PixelEditorDialog::refreshPaletteSwatches()
         btn->setStyleSheet(QStringLiteral(
             "QPushButton {"
             "  background-color: %1;"
-            "  border: 1px solid rgba(0, 0, 0, 0.2);"
+            "  border: 1px solid palette(mid);"
             "  border-radius: 4px;"
             "}"
             "QPushButton:hover {"
-            "  border: 2px solid #2563eb;"
+            "  border: 2px solid palette(highlight);"
             "}"
         ).arg(col.name()));
 
@@ -2229,120 +2161,7 @@ void PixelEditorDialog::refreshPaletteSwatches()
 
 QVector<QRgb> PixelEditorDialog::getPresetPalette(PalettePreset preset)
 {
-    QVector<QRgb> pal;
-    switch (preset) {
-    case Standard:
-        pal = {
-            // Row 1: Grayscale / Neutrals
-            qRgb(0, 0, 0),       qRgb(43, 43, 43),    qRgb(90, 90, 90),
-            qRgb(142, 142, 142), qRgb(196, 196, 196), qRgb(255, 255, 255),
-            // Row 2: Skin & Earth Tones
-            qRgb(58, 31, 29),    qRgb(107, 62, 46),   qRgb(160, 90, 63),
-            qRgb(199, 131, 99),  qRgb(224, 169, 139), qRgb(245, 211, 190),
-            // Row 3: Warm Reds & Oranges
-            qRgb(128, 12, 12),   qRgb(196, 27, 27),   qRgb(230, 74, 25),
-            qRgb(255, 112, 67),  qRgb(245, 124, 0),   qRgb(255, 183, 77),
-            // Row 4: Yellows & Greens
-            qRgb(251, 192, 45),  qRgb(255, 241, 118), qRgb(104, 159, 56),
-            qRgb(139, 195, 74),  qRgb(46, 125, 50),   qRgb(76, 175, 80),
-            // Row 5: Cyans & Blues
-            qRgb(0, 131, 143),   qRgb(0, 172, 193),   qRgb(2, 119, 189),
-            qRgb(3, 169, 244),   qRgb(21, 101, 192),  qRgb(63, 81, 181),
-            // Row 6: Purples, Magentas & Pinks
-            qRgb(74, 20, 140),   qRgb(123, 31, 162),  qRgb(171, 71, 188),
-            qRgb(173, 20, 87),   qRgb(233, 30, 99),   qRgb(244, 143, 177)
-        };
-        break;
-
-    case NES:
-        pal = {
-            qRgb(124,124,124), qRgb(0,0,252),     qRgb(0,0,188),     qRgb(68,40,188),
-            qRgb(148,0,132),   qRgb(168,0,32),     qRgb(168,16,0),    qRgb(136,20,0),
-            qRgb(80,48,0),     qRgb(0,120,0),      qRgb(0,104,0),     qRgb(0,88,0),
-            qRgb(0,64,88),     qRgb(0,0,0),        qRgb(188,188,188), qRgb(0,120,248),
-            qRgb(0,88,248),    qRgb(104,68,252),   qRgb(216,0,204),   qRgb(228,0,88),
-            qRgb(248,56,0),    qRgb(228,92,16),    qRgb(172,124,0),   qRgb(0,184,0),
-            qRgb(0,168,0),     qRgb(0,168,68),     qRgb(0,136,136),   qRgb(248,248,248),
-            qRgb(60,188,252),  qRgb(104,136,252),  qRgb(152,120,248), qRgb(248,120,248),
-            qRgb(248,88,152),  qRgb(248,120,88),   qRgb(252,160,68),  qRgb(248,184,0),
-            qRgb(184,248,24),  qRgb(88,216,84),    qRgb(88,248,152),  qRgb(0,232,216),
-            qRgb(120,120,120), qRgb(252,252,252), qRgb(164,228,252), qRgb(184,184,248),
-            qRgb(216,184,248), qRgb(248,184,248), qRgb(248,164,192), qRgb(240,208,176),
-            qRgb(252,224,168), qRgb(248,216,120), qRgb(216,248,120), qRgb(184,248,184),
-            qRgb(184,248,216), qRgb(0,252,252)
-        };
-        break;
-
-    case SNES:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(248, 248, 248), qRgb(184, 184, 184), qRgb(104, 104, 104),
-            qRgb(248, 56, 0),    qRgb(216, 0, 0),     qRgb(152, 0, 0),     qRgb(248, 120, 88),
-            qRgb(248, 160, 0),   qRgb(248, 224, 0),   qRgb(184, 152, 0),   qRgb(104, 72, 0),
-            qRgb(0, 216, 0),     qRgb(0, 144, 0),     qRgb(0, 80, 0),      qRgb(120, 248, 88),
-            qRgb(0, 184, 216),   qRgb(0, 104, 184),   qRgb(0, 48, 120),    qRgb(120, 216, 248),
-            qRgb(88, 88, 248),   qRgb(40, 40, 184),   qRgb(16, 16, 104),   qRgb(160, 160, 248),
-            qRgb(216, 0, 184),   qRgb(144, 0, 120),   qRgb(248, 120, 216), qRgb(248, 184, 152),
-            qRgb(216, 136, 88),  qRgb(160, 88, 48),   qRgb(96, 48, 16),    qRgb(48, 48, 48)
-        };
-        break;
-
-    case Amiga:
-        pal = {
-            qRgb(0, 85, 170),   qRgb(255, 255, 255), qRgb(0, 0, 0),       qRgb(255, 136, 0),
-            qRgb(0, 0, 170),    qRgb(0, 170, 0),     qRgb(0, 170, 170),   qRgb(170, 0, 0),
-            qRgb(170, 0, 170),  qRgb(170, 85, 0),    qRgb(170, 170, 170), qRgb(85, 85, 85),
-            qRgb(85, 85, 255),  qRgb(85, 255, 85),   qRgb(85, 255, 255),  qRgb(255, 85, 85),
-            qRgb(255, 85, 255), qRgb(255, 255, 85), qRgb(238, 68, 68),  qRgb(68, 170, 238),
-            qRgb(34, 102, 34),  qRgb(204, 170, 119), qRgb(136, 102, 68), qRgb(68, 51, 34),
-            qRgb(221, 221, 221),qRgb(187, 187, 187),qRgb(153, 153, 153),qRgb(102, 102, 102),
-            qRgb(51, 51, 51),   qRgb(255, 204, 153), qRgb(204, 119, 85), qRgb(119, 34, 34)
-        };
-        break;
-
-    case PCEngine:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(255, 255, 255), qRgb(182, 182, 182), qRgb(109, 109, 109),
-            qRgb(255, 36, 36),   qRgb(218, 0, 0),     qRgb(145, 0, 0),     qRgb(255, 145, 145),
-            qRgb(255, 109, 0),   qRgb(255, 182, 0),   qRgb(255, 255, 0),   qRgb(182, 145, 0),
-            qRgb(36, 218, 36),   qRgb(0, 182, 0),     qRgb(0, 109, 0),     qRgb(145, 255, 145),
-            qRgb(36, 218, 255),  qRgb(0, 145, 218),   qRgb(0, 72, 182),    qRgb(145, 218, 255),
-            qRgb(72, 72, 255),   qRgb(36, 36, 182),   qRgb(0, 0, 145),     qRgb(182, 182, 255),
-            qRgb(218, 36, 218),  qRgb(145, 0, 145),   qRgb(255, 145, 255), qRgb(255, 182, 145),
-            qRgb(218, 145, 72),  qRgb(145, 72, 0),    qRgb(109, 36, 0),    qRgb(36, 36, 36)
-        };
-        break;
-
-    case GameBoy:
-        pal = {
-            qRgb(15, 56, 15),
-            qRgb(48, 98, 48),
-            qRgb(139, 172, 15),
-            qRgb(155, 188, 15)
-        };
-        break;
-
-    case Pico8:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(29, 43, 83),    qRgb(126, 37, 83),  qRgb(0, 135, 81),
-            qRgb(171, 82, 54),   qRgb(95, 87, 79),    qRgb(194, 195, 199),qRgb(255, 241, 232),
-            qRgb(255, 0, 77),    qRgb(255, 163, 0),   qRgb(255, 236, 39), qRgb(0, 228, 54),
-            qRgb(41, 173, 255),  qRgb(131, 118, 156), qRgb(255, 119, 168),qRgb(255, 204, 170)
-        };
-        break;
-
-    case Commodore64:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(255, 255, 255), qRgb(136, 0, 0),    qRgb(170, 255, 238),
-            qRgb(204, 68, 204),  qRgb(0, 204, 85),    qRgb(0, 0, 170),    qRgb(238, 238, 119),
-            qRgb(221, 136, 85),  qRgb(102, 68, 0),    qRgb(255, 119, 119),qRgb(51, 51, 51),
-            qRgb(119, 119, 119), qRgb(170, 255, 102), qRgb(0, 136, 255),  qRgb(187, 187, 187)
-        };
-        break;
-
-    default:
-        break;
-    }
-    return pal;
+    return ColorPalettePresets::getPresetPalette(static_cast<ColorPalettePresets::Preset>(preset));
 }
 
 bool PixelEditorDialog::hasAtlasCollision() const
@@ -2767,11 +2586,11 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnRedo) m_btnRedo->setToolTip(tr("Redo (Ctrl+Y)"));
 
     // Palette & Colors
-    if (m_colorsGroup) m_colorsGroup->setTitle(tr("Color Picker"));
-    if (m_primarySwatchBtn) m_primarySwatchBtn->setToolTip(tr("Primary Color (Click to open Color Picker)"));
-    if (m_secondarySwatchBtn) m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Click to open Color Picker)"));
+    if (m_colorsGroup) m_colorsGroup->setTitle(tr("Color Studio && Harmonies"));
+    if (m_primarySwatchBtn) m_primarySwatchBtn->setToolTip(tr("Primary Color (Click to open Pro Color Picker)"));
+    if (m_secondarySwatchBtn) m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Click to open Pro Color Picker)"));
     if (m_swapBtn) m_swapBtn->setToolTip(tr("Swap Colors (X)"));
-    if (m_btnPickColor) m_btnPickColor->setText(tr("🎨 Pick Color..."));
+    if (m_btnPickColor) m_btnPickColor->setText(tr("⛶ Pop-out..."));
     if (m_recentLabel) m_recentLabel->setText(tr("Recent:"));
     if (m_palLabel) m_palLabel->setText(tr("Preset:"));
     if (m_btnSampleFrame) {
@@ -2782,14 +2601,10 @@ void PixelEditorDialog::retranslateUi()
     if (m_paletteCombo) {
         int curIdx = m_paletteCombo->currentIndex();
         m_paletteCombo->blockSignals(true);
-        m_paletteCombo->setItemText(Standard, tr("Bento Standard (36)"));
-        m_paletteCombo->setItemText(NES, tr("NES / Famicom (54)"));
-        m_paletteCombo->setItemText(SNES, tr("SNES / 16-bit (32)"));
-        m_paletteCombo->setItemText(Amiga, tr("Amiga OCS (32)"));
-        m_paletteCombo->setItemText(PCEngine, tr("NEC PC-Engine (32)"));
-        m_paletteCombo->setItemText(GameBoy, tr("Game Boy DMG (4)"));
-        m_paletteCombo->setItemText(Pico8, tr("PICO-8 (16)"));
-        m_paletteCombo->setItemText(Commodore64, tr("Commodore 64 (16)"));
+        for (int i = 0; i < m_paletteCombo->count(); ++i) {
+            ColorPalettePresets::Preset p = static_cast<ColorPalettePresets::Preset>(m_paletteCombo->itemData(i).toInt());
+            m_paletteCombo->setItemText(i, ColorPalettePresets::getPresetName(p));
+        }
         m_paletteCombo->setCurrentIndex(curIdx);
         m_paletteCombo->blockSignals(false);
     }

@@ -584,6 +584,140 @@ Choose which branch to restore:</translation>
     </message>
 </context>
 <context>
+    <name>ColorPalettePresets</name>
+    <message>
+        <source>Bento Standard (36)</source>
+        <translation type="unfinished">Bento Tiêu chuẩn (36)</translation>
+    </message>
+    <message>
+        <source>Game Boy DMG (4 Greens)</source>
+        <translation type="unfinished">Game Boy DMG (4 sắc xanh lá)</translation>
+    </message>
+    <message>
+        <source>Game Boy Pocket (4 Grays)</source>
+        <translation type="unfinished">Game Boy Pocket (4 sắc xám)</translation>
+    </message>
+    <message>
+        <source>NES / Famicom (54)</source>
+        <translation type="unfinished">Thao tác: NES / Famicom (54)</translation>
+    </message>
+    <message>
+        <source>SNES / 16-bit (32)</source>
+        <translation type="unfinished">Thao tác: SNES / 16-bit (32)</translation>
+    </message>
+    <message>
+        <source>PICO-8 (16)</source>
+        <translation type="unfinished">Thao tác: PICO-8 (16)</translation>
+    </message>
+    <message>
+        <source>Commodore 64 (16)</source>
+        <translation type="unfinished">Thao tác: Commodore 64 (16)</translation>
+    </message>
+    <message>
+        <source>Amiga OCS (32)</source>
+        <translation type="unfinished">Thao tác: Amiga OCS (32)</translation>
+    </message>
+    <message>
+        <source>NEC PC-Engine (32)</source>
+        <translation type="unfinished">Thao tác: NEC PC-Engine (32)</translation>
+    </message>
+    <message>
+        <source>CGA Mode 1 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CGA Mode 2 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Endesga 32 (32)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Imported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to decode image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file for reading.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No valid colors found in palette file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ColorPickerWidget</name>
+    <message>
+        <source>🎡 Wheel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⊞ 2D Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🎛️ Sliders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Val:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Harmonies:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Triadic (Triangle)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Complementary (Opposite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analogous (Adjacent)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Split-Complementary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tetradic (Square)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Monochromatic (Shades)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current selected color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous color (click to restore)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base Color: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Harmony %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ColorSwapFilter</name>
     <message>
         <source>Color Swap (Alt-Skins)...</source>
@@ -2426,8 +2560,24 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Làm lại (Ctrl+Y)</translation>
     </message>
     <message>
+        <source>Primary Color (Click to open Pro Color Picker)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Swap Colors (X)</source>
         <translation>Thao tác: Swap Colors (X)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Click to open Pro Color Picker)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⛶ Pop-out...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Full Pro Color Picker Dialog</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2440,10 +2590,6 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>NEC PC-Engine (32)</source>
         <translation>Thao tác: NEC PC-Engine (32)</translation>
-    </message>
-    <message>
-        <source>Game Boy DMG (4)</source>
-        <translation>Thao tác: Game Boy DMG (4)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
@@ -2530,20 +2676,8 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Xóa vùng chọn / Bỏ chọn (Del)</translation>
     </message>
     <message>
-        <source>Color Picker</source>
-        <translation>Bộ chọn màu</translation>
-    </message>
-    <message>
-        <source>Primary Color (Click to open Color Picker)</source>
-        <translation>Màu chính (Nhấn để mở bộ chọn màu)</translation>
-    </message>
-    <message>
-        <source>Secondary Color (Click to open Color Picker)</source>
-        <translation>Màu phụ (Nhấn để mở bộ chọn màu)</translation>
-    </message>
-    <message>
-        <source>🎨 Pick Color...</source>
-        <translation>🎨 Chọn màu...</translation>
+        <source>Color Studio &amp;&amp; Harmonies</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2566,8 +2700,28 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Bento Tiêu chuẩn (36)</translation>
     </message>
     <message>
+        <source>Game Boy DMG (4 Greens)</source>
+        <translation type="unfinished">Game Boy DMG (4 sắc xanh lá)</translation>
+    </message>
+    <message>
+        <source>Game Boy Pocket (4 Grays)</source>
+        <translation type="unfinished">Game Boy Pocket (4 sắc xám)</translation>
+    </message>
+    <message>
         <source>SNES / 16-bit (32)</source>
         <translation>Thao tác: SNES / 16-bit (32)</translation>
+    </message>
+    <message>
+        <source>CGA Mode 1 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CGA Mode 2 (4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Endesga 32 (32)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Onion Skinning</source>
@@ -2901,6 +3055,13 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source>✓ Tight mesh removed. Reverted to rectangle.</source>
         <translation>Thao tác: ✓ Tight mesh removed. Reverted to rectangle.</translation>
+    </message>
+</context>
+<context>
+    <name>ProColorPickerDialog</name>
+    <message>
+        <source>Color Picker — Professional</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
