@@ -28,6 +28,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QColorDialog>
+#include <QMenu>
 #include <QMessageBox>
 #include <QGroupBox>
 #include <QFrame>
@@ -433,6 +434,19 @@ QWidget* PixelEditorDialog::createHeaderBar()
     m_applyToAllFramesCheck->setChecked(false);
     m_applyToAllFramesCheck->setFixedHeight(28);
     layout->addWidget(m_applyToAllFramesCheck);
+
+    m_btnFilters = new QToolButton(bar);
+    m_btnFilters->setObjectName(QStringLiteral("filtersButton"));
+    m_btnFilters->setText(tr("✨ Filters ▾"));
+    m_btnFilters->setToolTip(tr("Apply image and color filters (Despill, Outline, Rescale, Palette...)"));
+    m_btnFilters->setPopupMode(QToolButton::InstantPopup);
+    m_btnFilters->setFixedHeight(28);
+    m_btnFilters->setStyleSheet(viewBtnStyle);
+
+    QMenu *filtersMenu = new QMenu(m_btnFilters);
+    populateFiltersMenu(filtersMenu);
+    m_btnFilters->setMenu(filtersMenu);
+    layout->addWidget(m_btnFilters);
 
     QFrame *sep = new QFrame(bar);
     sep->setFrameShape(QFrame::VLine);
@@ -1314,6 +1328,16 @@ void PixelEditorDialog::populateAnimationCombo()
     }
 
     m_animCombo->blockSignals(false);
+
+    if (m_applyToAllFramesCheck) {
+        if (!m_activeAnimName.isEmpty()) {
+            m_applyToAllFramesCheck->setText(tr("Apply to all '%1' frames").arg(m_activeAnimName));
+            m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits and filters to all frames of animation '%1'").arg(m_activeAnimName));
+        } else {
+            m_applyToAllFramesCheck->setText(tr("Apply to all frames"));
+            m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot"));
+        }
+    }
 }
 
 void PixelEditorDialog::onAnimationFilterChanged(int index)
@@ -1336,6 +1360,15 @@ void PixelEditorDialog::onAnimationFilterChanged(int index)
     } else {
         updateNavigationButtons();
         updateOnionSkinLayers();
+        if (m_applyToAllFramesCheck) {
+            if (!m_activeAnimName.isEmpty()) {
+                m_applyToAllFramesCheck->setText(tr("Apply to all '%1' frames").arg(m_activeAnimName));
+                m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits and filters to all frames of animation '%1'").arg(m_activeAnimName));
+            } else {
+                m_applyToAllFramesCheck->setText(tr("Apply to all frames"));
+                m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot"));
+            }
+        }
         if (m_canvas && m_frameInfoLabel) {
             QImage cur = m_canvas->image();
             if (!m_activeSequence.isEmpty() && !m_activeAnimName.isEmpty()) {
@@ -2573,8 +2606,20 @@ void PixelEditorDialog::retranslateUi()
         }
     }
     if (m_applyToAllFramesCheck) {
-        m_applyToAllFramesCheck->setText(tr("Apply to all frames"));
-        m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot"));
+        if (!m_activeAnimName.isEmpty()) {
+            m_applyToAllFramesCheck->setText(tr("Apply to all '%1' frames").arg(m_activeAnimName));
+            m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits and filters to all frames of animation '%1'").arg(m_activeAnimName));
+        } else {
+            m_applyToAllFramesCheck->setText(tr("Apply to all frames"));
+            m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot"));
+        }
+    }
+    if (m_btnFilters) {
+        m_btnFilters->setText(tr("✨ Filters ▾"));
+        m_btnFilters->setToolTip(tr("Apply image and color filters (Despill, Outline, Rescale, Palette...)"));
+        if (m_btnFilters->menu()) {
+            populateFiltersMenu(m_btnFilters->menu());
+        }
     }
     if (m_btnZoomIn) m_btnZoomIn->setToolTip(tr("Zoom In"));
     if (m_btnZoomOut) m_btnZoomOut->setToolTip(tr("Zoom Out"));
@@ -2651,3 +2696,218 @@ void PixelEditorDialog::retranslateUi()
     updateNavigationButtons();
 }
 
+
+
+void PixelEditorDialog::populateFiltersMenu(QMenu *menu)
+{
+    if (!menu) return;
+    menu->clear();
+
+    FilterRegistry &reg = FilterRegistry::instance();
+    reg.initDefaultFilters();
+
+    QList<FilterPlugin*> eligible;
+    for (FilterPlugin *f : reg.filters()) {
+        if (f && !f->isAtlasModifier()) {
+            eligible.append(f);
+        }
+    }
+
+    if (eligible.isEmpty()) {
+        QAction *emptyAct = menu->addAction(tr("No filters available"));
+        emptyAct->setEnabled(false);
+        return;
+    }
+
+    QStringList cats;
+    for (FilterPlugin *f : eligible) {
+        if (!cats.contains(f->category())) {
+            cats.append(f->category());
+        }
+    }
+
+    for (int i = 0; i < cats.size(); ++i) {
+        const QString &cat = cats[i];
+        if (i > 0) {
+            menu->addSeparator();
+        }
+        menu->addSection(cat);
+
+        for (FilterPlugin *f : eligible) {
+            if (f->category() == cat) {
+                QAction *act = menu->addAction(f->name());
+                act->setToolTip(f->description());
+                if (!f->icon().isNull()) {
+                    act->setIcon(f->icon());
+                }
+                connect(act, &QAction::triggered, this, [this, f]() {
+                    applyFilterToSession(f);
+                });
+            }
+        }
+    }
+}
+
+void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
+{
+    if (!filter || !m_canvas) return;
+
+    // 1. Determine target frames: current frame vs entire animation
+    QList<int> targetFrames;
+    bool allAnim = isApplyToAllFramesEnabled();
+    if (allAnim && m_document && m_document->frameCount() > 1) {
+        if (!m_activeSequence.isEmpty()) {
+            for (int idx : m_activeSequence) {
+                if (idx >= 0 && idx < m_document->frameCount() && !targetFrames.contains(idx)) {
+                    targetFrames.append(idx);
+                }
+            }
+        } else {
+            for (int i = 0; i < m_document->frameCount(); ++i) {
+                targetFrames.append(i);
+            }
+        }
+    } else {
+        targetFrames.append(m_currentFrameIndex);
+    }
+
+    if (targetFrames.isEmpty()) return;
+
+    // 2. Collect pristine current images for target frames
+    QList<QImage> targetImages;
+    targetImages.reserve(targetFrames.size());
+    for (int frameIdx : targetFrames) {
+        QImage img;
+        if (frameIdx == m_currentFrameIndex) {
+            img = m_canvas->image();
+        } else if (m_sessionModifiedFrames.contains(frameIdx)) {
+            img = m_sessionModifiedFrames[frameIdx];
+        } else if (m_document) {
+            bool hasPoly = (frameIdx >= 0 && frameIdx < m_document->boxes().size() &&
+                            m_document->box(frameIdx).polygon.size() >= 3);
+            img = hasPoly ? m_document->polygonClippedFrame(frameIdx) : m_document->frame(frameIdx);
+        }
+        if (img.isNull()) {
+            img = QImage(32, 32, QImage::Format_ARGB32);
+            img.fill(Qt::transparent);
+        }
+        targetImages.append(img.convertToFormat(QImage::Format_ARGB32));
+    }
+
+    // Pack into temp atlas strip with 8px margin
+    const int margin = 8;
+    int totalWidth = margin;
+    int maxHeight = 0;
+    for (const QImage &img : targetImages) {
+        totalWidth += img.width() + margin;
+        if (img.height() > maxHeight) {
+            maxHeight = img.height();
+        }
+    }
+    maxHeight += margin * 2;
+
+    QImage tempAtlas(totalWidth, maxHeight, QImage::Format_ARGB32);
+    tempAtlas.fill(Qt::transparent);
+
+    QPainter painter(&tempAtlas);
+    QList<QImage> tempFrames;
+    QList<SpriteBox> tempBoxes;
+    int curX = margin;
+
+    for (int i = 0; i < targetImages.size(); ++i) {
+        const QImage &img = targetImages[i];
+        painter.drawImage(curX, margin, img);
+        QRect r(curX, margin, img.width(), img.height());
+        SpriteBox b(r);
+        b.index = i;
+        tempBoxes.append(b);
+        tempFrames.append(img);
+        curX += img.width() + margin;
+    }
+    painter.end();
+
+    SpriteDocument tempDoc;
+    tempDoc.setAtlas(tempAtlas);
+    tempDoc.setFrames(tempFrames, tempBoxes);
+
+    // 3. Open filter dialog
+    FilterDialogBase *dlg = filter->createDialog(&tempDoc, nullptr, this);
+    if (!dlg) return;
+
+    int res = dlg->exec();
+    delete dlg;
+
+    if (res != QDialog::Accepted) {
+        return; // User canceled
+    }
+
+    // 4. Extract filtered results
+    QVector<FrameBackup> backups;
+    backups.reserve(targetFrames.size());
+
+    for (int i = 0; i < targetFrames.size(); ++i) {
+        int frameIdx = targetFrames[i];
+        QImage oldImg = targetImages[i];
+        QPolygonF oldPoly = sessionModifiedPolygon(frameIdx);
+
+        // Get new image from tempDoc
+        QImage newImg;
+        if (i < tempDoc.frameCount()) {
+            newImg = tempDoc.frame(i);
+        } else if (i < tempDoc.boxes().size()) {
+            QRect r = tempDoc.box(i).rect.intersected(tempDoc.atlas().rect());
+            newImg = tempDoc.atlas().copy(r);
+        } else {
+            newImg = oldImg;
+        }
+
+        QPolygonF newPoly = oldPoly;
+        if (newImg.size() != oldImg.size() && oldPoly.size() >= 3) {
+            double sx = static_cast<double>(newImg.width()) / std::max(1, oldImg.width());
+            double sy = static_cast<double>(newImg.height()) / std::max(1, oldImg.height());
+            QPolygonF scaledPoly;
+            for (const QPointF &pt : oldPoly) {
+                scaledPoly.append(QPointF(pt.x() * sx, pt.y() * sy));
+            }
+            newPoly = scaledPoly;
+        }
+
+        backups.append({frameIdx, oldImg, newImg, oldPoly, newPoly});
+    }
+
+    // 5. Apply changes and create undo command on canvas undo stack
+    auto applyState = [this, backups](bool isRedo) {
+        for (const auto &b : backups) {
+            const QImage &img = isRedo ? b.newImage : b.oldImage;
+            const QPolygonF &poly = isRedo ? b.newPoly : b.oldPoly;
+            restoreFrameBackup(b.frameIndex, img, poly);
+        }
+        onMultiFrameUndoRedoDone();
+    };
+
+    // Execute immediately
+    applyState(true);
+
+    // Push custom command for Undo/Redo
+    if (m_canvas && m_canvas->undoStack()) {
+        class FilterUndoCmd : public QUndoCommand {
+        public:
+            FilterUndoCmd(const std::function<void(bool)> &func, const QString &name)
+                : QUndoCommand(name), m_func(func) {}
+            void undo() override { m_func(false); }
+            void redo() override {
+                if (m_first) { m_first = false; return; }
+                m_func(true);
+            }
+        private:
+            std::function<void(bool)> m_func;
+            bool m_first = true;
+        };
+
+        QString cmdText = allAnim
+            ? tr("Apply %1 to Animation").arg(filter->name())
+            : tr("Apply %1 to Frame").arg(filter->name());
+
+        m_canvas->undoStack()->push(new FilterUndoCmd(applyState, cmdText));
+    }
+}

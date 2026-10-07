@@ -38,6 +38,8 @@
 
 class SpriteDocument;
 class PixelCanvas;
+class FilterPlugin;
+class QMenu;
 enum class CanvasAction;
 #include "bentopackwidgets_export.h"
 
@@ -87,6 +89,8 @@ public:
     QCheckBox* applyToAllFramesCheckBox() const { return m_applyToAllFramesCheck; }
     bool isApplyToAllFramesEnabled() const { return m_applyToAllFramesCheck && m_applyToAllFramesCheck->isChecked(); }
     void setApplyToAllFrames(bool enabled);
+    QToolButton* filtersButton() const { return m_btnFilters; }
+    void applyFilterToSession(FilterPlugin *filter);
     bool hasAtlasCollision() const;
     QLabel* collisionAlertLabel() const { return m_lblCollisionWarning; }
     QPushButton* repackButton() const { return m_btnRepackAtlas; }
@@ -148,6 +152,7 @@ private:
     void addRecentColor(const QColor &color);
     void updateLivePreview();
     void updateOnionSkinLayers();
+    void populateFiltersMenu(QMenu *menu);
     void computeAnimationEnvelope(QSize &outSize, QPoint &outPivot, QPoint &outFrameOffset) const;
 
     QWidget* createToolBar();
@@ -192,6 +197,7 @@ private:
     QToolButton*            m_btnShowPivot = nullptr;
     QCheckBox*              m_allowOutsidePolyCheck = nullptr;
     QCheckBox*              m_applyToAllFramesCheck = nullptr;
+    QToolButton*            m_btnFilters = nullptr;
     QToolButton*            m_btnZoomIn = nullptr;
     QToolButton*            m_btnZoomOut = nullptr;
     QToolButton*            m_btnFit = nullptr;

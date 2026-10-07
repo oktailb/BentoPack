@@ -13,6 +13,10 @@
 #include "image/colorpalettepresets.h"
 #include "widgets/colorpickerwidget.h"
 #include "filters/filterregistry.h"
+#include "filters/filterplugin.h"
+#include "widgets/filterdialogbase.h"
+#include <QMenu>
+#include <QTimer>
 
 class TestPixelEditor : public QObject
 {
@@ -70,6 +74,7 @@ private slots:
     void testAtlasPolygonCollisionAndRepack();
     void testApplyToAllFramesRelativePivot();
     void testProColorPickerAndHarmonies();
+    void testPixelEditorNonAtlasFiltersAndAnimationScope();
 };
 
 void TestPixelEditor::initTestCase()
@@ -1511,6 +1516,147 @@ void TestPixelEditor::testProColorPickerAndHarmonies()
     // Test ProColorPickerDialog instantiation
     ProColorPickerDialog dlg(QColor(255, 128, 0));
     QCOMPARE(dlg.selectedColor(), QColor(255, 128, 0));
+}
+
+void TestPixelEditor::testPixelEditorNonAtlasFiltersAndAnimationScope()
+{
+    // Setup document with 3 frames
+    SpriteDocument doc;
+    QImage f0(16, 16, QImage::Format_ARGB32);
+    f0.fill(qRgba(255, 0, 0, 255)); // Red
+    QImage f1(16, 16, QImage::Format_ARGB32);
+    f1.fill(qRgba(0, 255, 0, 255)); // Green
+    QImage f2(16, 16, QImage::Format_ARGB32);
+    f2.fill(qRgba(0, 0, 255, 255)); // Blue
+
+    doc.setFrames({f0, f1, f2}, {SpriteBox(QRect(0, 0, 16, 16)), SpriteBox(QRect(16, 0, 16, 16)), SpriteBox(QRect(32, 0, 16, 16))});
+
+    doc.addAnimation(QStringLiteral("walk"), {0, 1});
+
+    QUndoStack docUndoStack;
+    PixelEditorDialog dialog(&doc, &docUndoStack, 0);
+
+    // 1. Verify filtersButton exists and is populated
+    QToolButton *filtersBtn = dialog.filtersButton();
+    QVERIFY(filtersBtn != nullptr);
+    QVERIFY(filtersBtn->menu() != nullptr);
+
+    QList<QAction*> actions = filtersBtn->menu()->actions();
+    QStringList actionTexts;
+    for (QAction *act : actions) {
+        if (!act->isSeparator() && !act->isIconVisibleInMenu() && !act->text().isEmpty()) {
+            actionTexts.append(act->text());
+        }
+    }
+
+    // Verify non-atlas filters are present
+    FilterRegistry &reg = FilterRegistry::instance();
+    for (FilterPlugin *f : reg.filters()) {
+        if (f->isAtlasModifier()) {
+            // Must NOT be present
+            for (const QString &txt : actionTexts) {
+                QVERIFY(!txt.contains(f->name()));
+            }
+        }
+    }
+
+    // Verify at least one non-atlas filter action exists
+    QVERIFY(!actions.isEmpty());
+
+    // 2. Verify checkbox text dynamically updates with animation
+    QCheckBox *checkAll = dialog.applyToAllFramesCheckBox();
+    QVERIFY(checkAll != nullptr);
+    QVERIFY(!checkAll->isChecked());
+
+    // Switch to "walk" animation
+    QComboBox *animCombo = dialog.animationCombo();
+    QVERIFY(animCombo != nullptr);
+    int walkIdx = animCombo->findText(QStringLiteral("walk (2 frames)"));
+    if (walkIdx < 0) {
+        walkIdx = animCombo->findData(QStringLiteral("walk"));
+    }
+    if (walkIdx >= 0) {
+        animCombo->setCurrentIndex(walkIdx);
+    }
+
+    QVERIFY(checkAll->text().contains(QStringLiteral("walk")) || checkAll->toolTip().contains(QStringLiteral("walk")));
+
+    // 3. Test filter application with custom simulated filter
+    class TestMockFilter : public FilterPlugin {
+    public:
+        QString id() const override { return QStringLiteral("test_mock_filter"); }
+        QString name() const override { return QStringLiteral("Mock Inverter"); }
+        QString description() const override { return QStringLiteral("Test mock filter"); }
+        QString category() const override { return QStringLiteral("Colors & Palettes"); }
+        FilterModifierFlags modifierFlags() const override { return PixelModifier; }
+
+        FilterDialogBase* createDialog(SpriteDocument *d, QUndoStack*, QWidget *parent) override {
+            class MockDlg : public FilterDialogBase {
+            public:
+                MockDlg(SpriteDocument *doc, QWidget *p) : FilterDialogBase(doc, nullptr, p) {
+                    QTimer::singleShot(0, this, &QDialog::accept);
+                }
+                void applyPreview() override {
+                    if (!m_document) return;
+                    QImage atlas = m_document->atlas();
+                    atlas.invertPixels(QImage::InvertRgb);
+                    m_document->setAtlas(atlas);
+                    QList<QImage> fList;
+                    for (const auto &b : m_document->boxes()) {
+                        fList.append(atlas.copy(b.rect));
+                    }
+                    m_document->setFrames(fList, m_document->boxes());
+                }
+                QUndoCommand* createUndoCommand() override { return nullptr; }
+                void resetDefaults() override {}
+            };
+            return new MockDlg(d, parent);
+        }
+    };
+
+    TestMockFilter mockFilter;
+    QVERIFY(!mockFilter.isAtlasModifier());
+    QVERIFY(mockFilter.isPixelModifier());
+
+    // A. Single frame mode (checkbox off)
+    dialog.setApplyToAllFrames(false);
+    dialog.loadFrame(0);
+    dialog.applyFilterToSession(&mockFilter);
+
+    // Frame 0 should be modified and inverted
+    QVERIFY(dialog.sessionModifiedFrames().contains(0));
+    QColor invertedPixel0 = dialog.canvas()->image().pixelColor(0, 0);
+    QCOMPARE(invertedPixel0.red(), 0);
+    QCOMPARE(invertedPixel0.green(), 255);
+    QCOMPARE(invertedPixel0.blue(), 255);
+
+    // Frame 1 should NOT be modified
+    QVERIFY(!dialog.sessionModifiedFrames().contains(1));
+
+    // Test Undo
+    dialog.canvas()->undo();
+    QCOMPARE(dialog.canvas()->image().pixelColor(0, 0), QColor(255, 0, 0, 255));
+
+    // B. Multi-frame animation mode (checkbox ON)
+    dialog.setApplyToAllFrames(true);
+    dialog.applyFilterToSession(&mockFilter);
+
+    // Both frames 0 and 1 of "walk" should be modified
+    QVERIFY(dialog.sessionModifiedFrames().contains(0));
+    QVERIFY(dialog.sessionModifiedFrames().contains(1));
+    // Frame 2 is NOT in "walk", so it must remain untouched
+    QVERIFY(!dialog.sessionModifiedFrames().contains(2));
+
+    // Frame 1 inverted (was green -> now magenta 255, 0, 255)
+    QColor invertedPixel1 = dialog.sessionModifiedFrames()[1].pixelColor(0, 0);
+    QCOMPARE(invertedPixel1.red(), 255);
+    QCOMPARE(invertedPixel1.green(), 0);
+    QCOMPARE(invertedPixel1.blue(), 255);
+
+    // Undo multi-frame filter
+    dialog.canvas()->undo();
+    dialog.loadFrame(0);
+    QCOMPARE(dialog.canvas()->image().pixelColor(0, 0), QColor(255, 0, 0, 255));
 }
 
 int main(int argc, char *argv[])
