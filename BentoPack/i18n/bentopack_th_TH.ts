@@ -587,134 +587,134 @@ Choose which branch to restore:</translation>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento มาตรฐาน (36)</translation>
+        <translation>Bento มาตรฐาน (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (สีเขียว 4 ระดับ)</translation>
+        <translation>Game Boy DMG (สีเขียว 4 ระดับ)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (สีเทา 4 ระดับ)</translation>
+        <translation>Game Boy Pocket (สีเทา 4 ระดับ)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">ดำเนินการ: NES / Famicom (54)</translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">SNES / 16-บิต (32)</translation>
+        <translation>SNES / 16-บิต (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">ดำเนินการ: PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">ดำเนินการ: Commodore 64 (16)</translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">ดำเนินการ: Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">ดำเนินการ: NEC PC-Engine (32)</translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA โหมด 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA โหมด 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>นำเข้ากำหนดเอง</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>ถอดรหัสรูปภาพล้มเหลว</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>ไม่สามารถเปิดไฟล์เพื่ออ่านได้</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>ไม่พบสีที่ถูกต้องในไฟล์จานสี</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 วงล้อสี</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ แผนผัง 2D</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ แถบเลื่อน</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>ความสว่าง:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>ชุดสีกลมกลืน:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>สามเหลี่ยม (Triadic)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>สีคู่ตรงข้าม (Complementary)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>สีข้างเคียง (Analogous)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>สีตรงข้ามเยื้อง (Split-Comp.)</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>สี่เหลี่ยมจัตุรัส (Tetradic)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>สีเอกรงค์ (Monochromatic)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>ไม่มี</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>สีที่เลือกในปัจจุบัน</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>สีก่อนหน้า (คลิกเพื่อกู้คืน)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>สีหลัก: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>สีกลมกลืน %1: %2</translation>
     </message>
 </context>
 <context>
@@ -2561,7 +2561,7 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>สีหลัก (คลิกเพื่อเปิดเครื่องมือเลือกสี Pro)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2569,15 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>สีรอง (คลิกเพื่อเปิดเครื่องมือเลือกสี Pro)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ แยกหน้าต่าง...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>เปิดกล่องโต้ตอบเครื่องมือเลือกสี Pro แบบเต็ม</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2672,20 @@ Strict removal clears the pixel.</translation>
         <translation>นำการแก้ไข (วาด, พลิก, เทสี ฯลฯ) ไปใช้กับทุกเฟรมโดยจัดแนวตามจุดยึด</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ ฟิลเตอร์ ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>ใช้ฟิลเตอร์ภาพและสี (ลบสีล้น, เส้นขอบ, ปรับขนาด, จานสี...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>ล้างส่วนที่เลือก / ยกเลิกการเลือก (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>สตูดิโอสี &amp;&amp; ชุดสีกลมกลืน</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2709,11 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (สีเขียว 4 ระดับ)</translation>
+        <translation>Game Boy DMG (สีเขียว 4 ระดับ)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (สีเทา 4 ระดับ)</translation>
+        <translation>Game Boy Pocket (สีเทา 4 ระดับ)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,15 +2721,15 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA โหมด 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA โหมด 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Onion Skinning</source>
@@ -2820,6 +2828,18 @@ Strict removal clears the pixel.</translation>
         <translation>เฟรมทั้งหมด (%1)</translation>
     </message>
     <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>ใช้กับทุกเฟรมของ &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>นำการแก้ไขการวาดและฟิลเตอร์ไปใช้กับทุกเฟรมของแอนิเมชัน &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>นำการแก้ไข (การวาด, พลิก, เติมสี, ฟิลเตอร์) ไปใช้กับทุกเฟรมที่จัดแนวตามจุดหมุน</translation>
+    </message>
+    <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
         <translation>• เฟรม %1 (%2) ชนกับเฟรม %3 (%4)</translation>
     </message>
@@ -2878,6 +2898,18 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source># Grid</source>
         <translation># ตาราง</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>ไม่มีฟิลเตอร์ที่ใช้งานได้</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>ใช้ %1 กับแอนิเมชัน</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>ใช้ %1 กับเฟรม</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3093,7 @@ Would you like to repack the atlas now?</translation>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>เครื่องมือเลือกสี — มืออาชีพ</translation>
     </message>
 </context>
 <context>
@@ -3286,20 +3318,20 @@ Would you like to repack the atlas now?</translation>
         <translation>ดำเนินการ: JSON root must be an object.</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>ดำเนินการ: Cleanup</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>การล้างและการแยก</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>ดำเนินการ: Colors</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>สีและจานสี</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>ดำเนินการ: Effects</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>เอฟเฟกต์และเส้นขอบ</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>ดำเนินการ: Geometry</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>เรขาคณิตและการแปลง</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3308,6 +3340,28 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>ดำเนินการ: Please open or import a sprite sheet first before applying a filter.</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>แก้ไขเรขาคณิตแล้ว</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>ฟิลเตอร์ที่ใช้นี้ได้ปรับเปลี่ยนเรขาคณิตและรูปทรงขอบของสไปรต์
+เมชรูปหลายเหลี่ยมที่มีอยู่อาจไม่ตรงกับรูปทรงขอบใหม่อีกต่อไป
+
+คุณต้องการเปิดเครื่องมือเมชรูปหลายเหลี่ยมเพื่อคำนวณเมชใหม่หรือไม่?</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>ฟิลเตอร์ที่ใช้นี้ได้ปรับเปลี่ยนเรขาคณิตและรูปทรงขอบของสไปรต์
+
+คุณต้องการเปิดเครื่องมือเมชรูปหลายเหลี่ยมเพื่อสร้างเมชรูปหลายเหลี่ยมที่กระชับและลด GPU overdraw หรือไม่?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>

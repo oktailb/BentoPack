@@ -587,134 +587,134 @@ Choose which branch to restore:</source>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento Standard (36)</translation>
+        <translation>Bento Standard (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 відтінки зеленого)</translation>
+        <translation>Game Boy DMG (4 відтінки зеленого)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 відтінки сірого)</translation>
+        <translation>Game Boy Pocket (4 відтінки сірого)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">NES / Famicom (54)</translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">SNES / 16-bit (32)</translation>
+        <translation>SNES / 16-bit (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">Commodore 64 (16)</translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">NEC PC-Engine (32)</translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Режим 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Режим 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувацька імпортована</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося декодувати зображення.</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося відкрити файл для читання.</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>У файлі палітри не знайдено дійсних кольорів.</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 Колірне коло</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ 2D-мапа</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ Повзунки</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>Яскр.:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>Гармонії:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>Тріада (Трикутник)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Комплементарна (Протилежна)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>Аналогова (Суміжна)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>Роздільно-комплементарна</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>Тетрадний (Квадрат)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>Монохромна (Відтінки)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточний вибраний колір</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>Попередній колір (клацніть для відновлення)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Базовий колір: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Гармонія %1: %2</translation>
     </message>
 </context>
 <context>
@@ -2561,7 +2561,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Основний колір (Клацніть, щоб відкрити професійну палітру)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2569,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Вторинний колір (Клацніть, щоб відкрити професійну палітру)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ Відкріпити...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити повне діалогове вікно професійного вибору кольору</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2672,20 @@ Strict removal clears the pixel.</source>
         <translation>Застосувати зміни (малювання, віддзеркалення, заливка тощо) до всіх кадрів, вирівняних за опорною точкою</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ Фільтри ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>Застосувати фільтри зображення та кольору (Очищення країв, Контур, Масштаб, Палітра...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>Зняти виділення (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>Колірна студія &amp;&amp; Гармонії</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2709,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 відтінки зеленого)</translation>
+        <translation>Game Boy DMG (4 відтінки зеленого)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 відтінки сірого)</translation>
+        <translation>Game Boy Pocket (4 відтінки сірого)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,15 +2721,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Режим 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Режим 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Onion Skinning</source>
@@ -2820,6 +2828,18 @@ Strict removal clears the pixel.</source>
         <translation>Усі кадри (%1)</translation>
     </message>
     <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Застосувати до всіх кадрів &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Застосувати зміни малюнка та фільтри до всіх кадрів анімації &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>Застосувати зміни (малювання, віддзеркалення, заливка, фільтри) до всіх кадрів, вирівняних за опорною точкою</translation>
+    </message>
+    <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
         <translation>• Кадр %1 (%2) накладається на Кадр %3 (%4)</translation>
     </message>
@@ -2878,6 +2898,18 @@ Would you like to repack the atlas now?</source>
     <message>
         <source># Grid</source>
         <translation># Сітка</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>Немає доступних фільтрів</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>Застосувати %1 до анімації</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>Застосувати %1 до кадру</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3093,7 @@ Would you like to repack the atlas now?</source>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибір кольору — Професійний</translation>
     </message>
 </context>
 <context>
@@ -3290,20 +3322,20 @@ Would you like to repack the atlas now?</source>
         <translation>Корінь JSON повинен бути об&apos;єктом.</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>Очищення</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>Очищення та видобування</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>Кольори</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>Кольори та палітри</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>Ефекти</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>Ефекти та контури</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>Геометрія</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>Геометрія та трансформація</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3312,6 +3344,28 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Будь ласка, спочатку відкрийте або імпортуйте спрайтшит перед застосуванням фільтра.</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>Геометрію змінено</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>Застосований фільтр змінив геометрію та силуети спрайтів.
+Наявні полігональні сітки можуть більше не відповідати новим силуетам.
+
+Бажаєте відкрити інструмент «Полігональна сітка», щоб перерахувати сітки?</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>Застосований фільтр змінив геометрію та силуети спрайтів.
+
+Бажаєте відкрити інструмент «Полігональна сітка», щоб створити точні полігональні сітки та зменшити овердро GPU?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>

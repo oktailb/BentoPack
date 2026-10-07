@@ -587,134 +587,134 @@ Choose which branch to restore:</source>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento スタンダード (36)</translation>
+        <translation>Bento スタンダード (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">ゲームボーイ DMG (緑4階調)</translation>
+        <translation>ゲームボーイ DMG (緑4階調)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">ゲームボーイポケット (モノクロ4階調)</translation>
+        <translation>ゲームボーイポケット (モノクロ4階調)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">ファミコン / NES (54)</translation>
+        <translation>ファミコン / NES (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">SNES / 16ビット (32)</translation>
+        <translation>SNES / 16ビット (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">コモドール64 (16)</translation>
+        <translation>コモドール64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">PCエンジン (32)</translation>
+        <translation>PCエンジン (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA モード 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA モード 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>カスタムインポート</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>画像のデコードに失敗しました。</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルを読み込み用に開けません。</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットファイル内に有効な色が見つかりません。</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 カラーホイール</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ 2Dマップ</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ スライダー</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>明度:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>配色調和:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>トライアド (三角形)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>補色 (対向)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>類似色 (隣接)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>分裂補色</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>テトラード (正方形)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>モノクロマティック (明淡)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>なし</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>現在選択されている色</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>以前の色 (クリックで復元)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>基本色: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>調和色 %1: %2</translation>
     </message>
 </context>
 <context>
@@ -2561,7 +2561,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>描画色 (クリックしてプロ用カラーピッカーを開く)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2569,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>背景色 (クリックしてプロ用カラーピッカーを開く)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ ポップアウト...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>フル機能のプロ用カラーピッカーダイアログを開く</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2672,20 @@ Strict removal clears the pixel.</source>
         <translation>ピボットで整列されたすべてのフレームに編集 (描画、反転、塗りつぶしなど) を適用</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ フィルター ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>画像とカラーフィルターを適用 (色にじみ除去、輪郭線、リサイズ、パレット...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>選択範囲の消去 / 選択解除 (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>カラースタジオ &amp;&amp; 配色調和</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2709,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">ゲームボーイ DMG (緑4階調)</translation>
+        <translation>ゲームボーイ DMG (緑4階調)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">ゲームボーイポケット (モノクロ4階調)</translation>
+        <translation>ゲームボーイポケット (モノクロ4階調)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,15 +2721,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA モード 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA モード 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Onion Skinning</source>
@@ -2820,6 +2828,18 @@ Strict removal clears the pixel.</source>
         <translation>すべてのフレーム (%1)</translation>
     </message>
     <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>アニメーション &apos;%1&apos; の全フレームに適用</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>アニメーション &apos;%1&apos; の全フレームに描画編集とフィルターを適用</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>ピボットを基準にしてすべてのフレームに編集 (描画、反転、塗りつぶし、フィルター) を適用</translation>
+    </message>
+    <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
         <translation>• フレーム %1 (%2) がフレーム %3 (%4) と衝突しています</translation>
     </message>
@@ -2878,6 +2898,18 @@ Would you like to repack the atlas now?</source>
     <message>
         <source># Grid</source>
         <translation># グリッド</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>利用可能なフィルターはありません</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>アニメーションに %1 を適用</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>フレームに %1 を適用</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3093,7 @@ Would you like to repack the atlas now?</source>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>カラーピッカー — プロフェッショナル</translation>
     </message>
 </context>
 <context>
@@ -3286,20 +3318,20 @@ Would you like to repack the atlas now?</source>
         <translation>JSONルートはオブジェクトである必要があります。</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>クリーンアップ</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>クリーンアップと抽出</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>カラー</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>カラーとパレット</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>エフェクト</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>エフェクトと輪郭</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>ジオメトリ</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>ジオメトリと変形</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3308,6 +3340,28 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>フィルターを適用する前に、まずスプライトシートを開くかインポートしてください。</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>ジオメトリが変更されました</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>適用されたフィルターにより、スプライトのジオメトリとシルエットが変更されました。
+既存のポリゴンメッシュが新しいシルエットと一致しない可能性があります。
+
+ポリゴンメッシュツールを開いてメッシュを再計算しますか？</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>適用されたフィルターにより、スプライトのジオメトリとシルエットが変更されました。
+
+ポリゴンメッシュツールを開いてタイトなポリゴンメッシュを生成し、GPUのオーバードローを削減しますか？</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>

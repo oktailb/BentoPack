@@ -587,134 +587,134 @@ Wybierz gałąź do przywrócenia:</translation>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento Standard (36)</translation>
+        <translation>Bento Standard (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 odcienie zieleni)</translation>
+        <translation>Game Boy DMG (4 odcienie zieleni)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 odcienie szarości)</translation>
+        <translation>Game Boy Pocket (4 odcienie szarości)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">NES / Famicom (54)</translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">SNES / 16-bit (32)</translation>
+        <translation>SNES / 16-bit (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">Commodore 64 (16)</translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">NEC PC-Engine (32)</translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Tryb 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Tryb 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>Niestandardowa zaimportowana</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się zdekodować obrazu.</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można otworzyć pliku do odczytu.</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie znaleziono prawidłowych kolorów w pliku palety.</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 Koło barw</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ Mapa 2D</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ Suwaki</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wart.:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonie:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>Triadyczna (Trójkąt)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dopełniająca (Przeciwległa)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>Analogiczna (Sąsiadująca)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>Dopełniająca rozdzielona</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tetradyczna (Kwadrat)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>Monochromatyczna (Odcienie)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualnie wybrany kolor</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>Poprzedni kolor (kliknij, aby przywrócić)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolor podstawowy: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonia %1: %2</translation>
     </message>
 </context>
 <context>
@@ -2561,7 +2561,7 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolor podstawowy (Kliknij, aby otworzyć profesjonalny próbnik)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2569,15 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolor dodatkowy (Kliknij, aby otworzyć profesjonalny próbnik)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ Odłącz...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz pełne okno profesjonalnego próbnika kolorów</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2672,20 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Zastosuj edycję (rysunek, obrót, wypełnienie) do wszystkich klatek wyrównanych według punktu obrotu</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ Filtry ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>Zastosuj filtry obrazu i kolorów (Usuwanie poświaty, Kontur, Skalowanie, Paleta...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>Odznacz (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>Studio kolorów &amp;&amp; Harmonie</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2709,11 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 odcienie zieleni)</translation>
+        <translation>Game Boy DMG (4 odcienie zieleni)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 odcienie szarości)</translation>
+        <translation>Game Boy Pocket (4 odcienie szarości)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,15 +2721,15 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Tryb 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Tryb 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Onion Skinning</source>
@@ -2820,6 +2828,18 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Wszystkie klatki (%1)</translation>
     </message>
     <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Zastosuj do wszystkich klatek &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Zastosuj edycję rysunku i filtry do wszystkich klatek animacji &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>Zastosuj modyfikacje (rysunek, odbicie, wypełnienie, filtry) do wszystkich klatek wyrównanych według punktu obrotu</translation>
+    </message>
+    <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
         <translation>• Klatka %1 (%2) koliduje z klatką %3 (%4)</translation>
     </message>
@@ -2878,6 +2898,18 @@ Czy chcesz przepakować atlas teraz?</translation>
     <message>
         <source># Grid</source>
         <translation># Siatka</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>Brak dostępnych filtrów</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>Zastosuj %1 do animacji</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>Zastosuj %1 do klatki</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3093,7 @@ Czy chcesz przepakować atlas teraz?</translation>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybór kolorów — Profesjonalny</translation>
     </message>
 </context>
 <context>
@@ -3290,20 +3322,20 @@ Czy chcesz przepakować atlas teraz?</translation>
         <translation>Główny element JSON musi być obiektem.</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>Czyszczenie</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>Czyszczenie i wyodrębnianie</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>Kolory</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>Kolory i palety</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>Efekty</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>Efekty i kontury</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>Geometria</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>Geometria i przekształcenia</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3312,6 +3344,28 @@ Czy chcesz przepakować atlas teraz?</translation>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Przed zastosowaniem filtra otwórz lub zaimportuj najpierw arkusz sprite&apos;ów.</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>Zmodyfikowano geometrię</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>Zastosowany filtr zmodyfikował geometrię i sylwetki duszków.
+Istniejące siatki wielokątów mogą już nie pasować do nowych sylwetek.
+
+Czy chcesz otworzyć narzędzie Siatka wielokątów, aby ponownie przeliczyć siatki?</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>Zastosowany filtr zmodyfikował geometrię i sylwetki duszków.
+
+Czy chcesz otworzyć narzędzie Siatka wielokątów, aby wygenerować dopasowane siatki wielokątów i zredukować overdraw GPU?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>

@@ -587,134 +587,134 @@ Choose which branch to restore:</source>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento 标准调色板 (36)</translation>
+        <translation>Bento 标准调色板 (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4色绿)</translation>
+        <translation>Game Boy DMG (4色绿)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4色灰)</translation>
+        <translation>Game Boy Pocket (4色灰)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">NES / Famicom (54)</translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">SNES / 16位经典 (32)</translation>
+        <translation>SNES / 16位经典 (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">Commodore 64 (16)</translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">NEC PC-Engine (32)</translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA 模式 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA 模式 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义导入</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>解码图像失败。</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开文件进行读取。</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>调色板文件中未找到有效颜色。</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 色轮</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ 2D色板</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ 滑块</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>明度:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>色彩和谐:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>三色配 (三角形)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>互补色 (对立)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>类似色 (相邻)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>分裂互补色</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>四色矩形 (正方形)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>单色阶 (明暗)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>无</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>当前选定颜色</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>先前的颜色 (点击以恢复)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>基准色: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>和谐色 %1: %2</translation>
     </message>
 </context>
 <context>
@@ -2561,7 +2561,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>前景色 (点击打开专业拾色器)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2569,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>背景色 (点击打开专业拾色器)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ 弹出独立窗口...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>打开完整专业拾色器对话框</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2672,20 @@ Strict removal clears the pixel.</source>
         <translation>将编辑（绘制、翻转、填充等）按轴心对齐应用于所有帧</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ 滤镜 ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>应用图像与色彩滤镜 (溢色去除、描边、重设尺寸、调色板...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>清除选择 / 取消选择 (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>色彩工作室 &amp;&amp; 和谐配阶</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2709,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4色绿)</translation>
+        <translation>Game Boy DMG (4色绿)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4色灰)</translation>
+        <translation>Game Boy Pocket (4色灰)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,15 +2721,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA 模式 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA 模式 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Onion Skinning</source>
@@ -2820,6 +2828,18 @@ Strict removal clears the pixel.</source>
         <translation>所有帧 (%1)</translation>
     </message>
     <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>应用到 &apos;%1&apos; 的所有帧</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>将绘制编辑与滤镜应用到动画 &apos;%1&apos; 的所有帧</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>按中心轴对齐将编辑 (绘制、翻转、填充、滤镜) 应用到所有帧</translation>
+    </message>
+    <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
         <translation>• 帧 %1 (%2) 与帧 %3 (%4) 发生重叠冲突</translation>
     </message>
@@ -2878,6 +2898,18 @@ Would you like to repack the atlas now?</source>
     <message>
         <source># Grid</source>
         <translation># 网格</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>无可用滤镜</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>将 %1 应用到动画</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>将 %1 应用到当前帧</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3093,7 @@ Would you like to repack the atlas now?</source>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>拾色器 — 专业版</translation>
     </message>
 </context>
 <context>
@@ -3286,20 +3318,20 @@ Would you like to repack the atlas now?</source>
         <translation>JSON 根节点必须是一个对象。</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>清理</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>清理与提取</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>颜色</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>颜色与调色板</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>特效</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>特效与轮廓</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>几何</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>几何与变换</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3308,6 +3340,28 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>在应用滤镜之前，请先打开或导入精灵表。</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>几何图形已修改</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>所应用的滤镜修改了精灵几何形状和轮廓。
+现有的多边形网格可能不再匹配新的轮廓。
+
+是否打开多边形网格工具重新计算网格？</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>所应用的滤镜修改了精灵几何形状和轮廓。
+
+是否打开多边形网格工具生成紧密的多边形网格并减少 GPU 像素过度绘制 (Overdraw)？</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>
