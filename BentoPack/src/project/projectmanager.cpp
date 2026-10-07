@@ -25,6 +25,7 @@
 #include <QImage>
 #include <QImageReader>
 #include <QImageWriter>
+#include <QBuffer>
 #include <QDebug>
 #include "packer/vramtexturecompressor.h"
 
@@ -139,6 +140,67 @@ QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
         animsArray.append(aObj);
     }
     root[QStringLiteral("animations")] = animsArray;
+
+    // Layers
+    QJsonArray layersArray;
+    for (const SpriteLayer &layer : doc.layers()) {
+        QJsonObject lObj;
+        lObj[QStringLiteral("id")] = layer.id;
+        lObj[QStringLiteral("name")] = layer.name;
+        lObj[QStringLiteral("visible")] = layer.visible;
+        lObj[QStringLiteral("locked")] = layer.locked;
+        lObj[QStringLiteral("opacity")] = layer.opacity;
+        lObj[QStringLiteral("z_order")] = layer.zOrder;
+        lObj[QStringLiteral("type")] = layer.type;
+        lObj[QStringLiteral("child_level")] = layer.childLevel;
+        lObj[QStringLiteral("blend_mode")] = layer.blendMode;
+        layersArray.append(lObj);
+    }
+    root[QStringLiteral("layers")] = layersArray;
+
+    // Frame Cels
+    QJsonArray frameCelsArray;
+    for (int f = 0; f < doc.frameCount(); ++f) {
+        const auto &cels = doc.frameCels(f);
+        if (!cels.isEmpty()) {
+            QJsonObject frameCelObj;
+            frameCelObj[QStringLiteral("frame")] = f;
+            QJsonArray celsArr;
+            for (const SpriteCel &cel : cels) {
+                QJsonObject cObj;
+                cObj[QStringLiteral("layer_index")] = cel.layerIndex;
+                cObj[QStringLiteral("layer_id")] = cel.layerId;
+                cObj[QStringLiteral("x")] = cel.x;
+                cObj[QStringLiteral("y")] = cel.y;
+                cObj[QStringLiteral("opacity")] = cel.opacity;
+                if (!cel.image.isNull()) {
+                    QBuffer buf;
+                    buf.open(QIODevice::WriteOnly);
+                    cel.image.save(&buf, "PNG");
+                    cObj[QStringLiteral("image_data")] = QString::fromLatin1(buf.data().toBase64());
+                }
+                celsArr.append(cObj);
+            }
+            frameCelObj[QStringLiteral("cels")] = celsArr;
+            frameCelsArray.append(frameCelObj);
+        }
+    }
+    root[QStringLiteral("frame_cels")] = frameCelsArray;
+
+    // Skin Profiles
+    QJsonArray skinsArray;
+    for (const SkinProfile &skin : doc.skinProfiles()) {
+        QJsonObject sObj;
+        sObj[QStringLiteral("id")] = skin.id;
+        sObj[QStringLiteral("name")] = skin.name;
+        QJsonArray activeLayers;
+        for (const QString &lid : skin.activeLayerIds) {
+            activeLayers.append(lid);
+        }
+        sObj[QStringLiteral("active_layers")] = activeLayers;
+        skinsArray.append(sObj);
+    }
+    root[QStringLiteral("skin_profiles")] = skinsArray;
 
     QJsonDocument jsonDoc(root);
     return jsonDoc.toJson(QJsonDocument::Indented);
@@ -325,6 +387,72 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
         if (!name.isEmpty()) {
             outDoc.setAnimation(name, frameIndices, fps, (loopMode == SpriteAnimation::Loop), loopMode);
         }
+    }
+
+    // Layers
+    QJsonArray layersArray = root.value(QStringLiteral("layers")).toArray();
+    QList<SpriteLayer> layers;
+    for (const QJsonValue &v : layersArray) {
+        QJsonObject lObj = v.toObject();
+        SpriteLayer layer;
+        layer.id = lObj.value(QStringLiteral("id")).toString();
+        layer.name = lObj.value(QStringLiteral("name")).toString();
+        layer.visible = lObj.value(QStringLiteral("visible")).toBool(true);
+        layer.locked = lObj.value(QStringLiteral("locked")).toBool(false);
+        layer.opacity = lObj.value(QStringLiteral("opacity")).toInt(255);
+        layer.zOrder = lObj.value(QStringLiteral("z_order")).toInt(0);
+        layer.type = static_cast<SpriteLayer::LayerType>(lObj.value(QStringLiteral("type")).toInt(0));
+        layer.childLevel = lObj.value(QStringLiteral("child_level")).toInt(0);
+        layer.blendMode = static_cast<QPainter::CompositionMode>(lObj.value(QStringLiteral("blend_mode")).toInt(0));
+        layers.append(layer);
+    }
+    if (!layers.isEmpty()) {
+        outDoc.setLayers(layers);
+    }
+
+    // Frame Cels
+    QJsonArray frameCelsArray = root.value(QStringLiteral("frame_cels")).toArray();
+    for (const QJsonValue &fv : frameCelsArray) {
+        QJsonObject frameCelObj = fv.toObject();
+        int frameIdx = frameCelObj.value(QStringLiteral("frame")).toInt(-1);
+        if (frameIdx >= 0 && frameIdx < outDoc.frameCount()) {
+            QJsonArray celsArr = frameCelObj.value(QStringLiteral("cels")).toArray();
+            QList<SpriteCel> cels;
+            for (const QJsonValue &cv : celsArr) {
+                QJsonObject cObj = cv.toObject();
+                SpriteCel cel;
+                cel.layerIndex = cObj.value(QStringLiteral("layer_index")).toInt(0);
+                cel.layerId = cObj.value(QStringLiteral("layer_id")).toString();
+                cel.x = cObj.value(QStringLiteral("x")).toInt(0);
+                cel.y = cObj.value(QStringLiteral("y")).toInt(0);
+                cel.opacity = cObj.value(QStringLiteral("opacity")).toInt(255);
+                QString imgData = cObj.value(QStringLiteral("image_data")).toString();
+                if (!imgData.isEmpty()) {
+                    QByteArray raw = QByteArray::fromBase64(imgData.toLatin1());
+                    cel.image.loadFromData(raw, "PNG");
+                }
+                cels.append(cel);
+            }
+            outDoc.setFrameCels(frameIdx, cels);
+        }
+    }
+
+    // Skin Profiles
+    QJsonArray skinsArray = root.value(QStringLiteral("skin_profiles")).toArray();
+    QMap<QString, SkinProfile> skinProfiles;
+    for (const QJsonValue &sv : skinsArray) {
+        QJsonObject sObj = sv.toObject();
+        SkinProfile skin;
+        skin.id = sObj.value(QStringLiteral("id")).toString();
+        skin.name = sObj.value(QStringLiteral("name")).toString();
+        QJsonArray activeLayers = sObj.value(QStringLiteral("active_layers")).toArray();
+        for (const QJsonValue &lv : activeLayers) {
+            skin.activeLayerIds.append(lv.toString());
+        }
+        skinProfiles.insert(skin.id, skin);
+    }
+    if (!skinProfiles.isEmpty()) {
+        outDoc.setSkinProfiles(skinProfiles);
     }
 
     return true;

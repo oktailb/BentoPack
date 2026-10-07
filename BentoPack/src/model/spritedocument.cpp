@@ -32,6 +32,9 @@ void SpriteDocument::clear()
     m_boxes.clear();
     m_selectedFrameIndices.clear();
     m_animations.clear();
+    m_layers.clear();
+    m_frameCels.clear();
+    m_skinProfiles.clear();
     m_filePath.clear();
     m_maxFrameWidth = 0;
     m_maxFrameHeight = 0;
@@ -200,6 +203,18 @@ void SpriteDocument::insertFrame(int index, const QImage &image, const SpriteBox
         m_selectedFrameIndices.append(index);
     }
 
+    if (!m_frameCels.isEmpty()) {
+        QMap<int, QList<SpriteCel>> shiftedCels;
+        for (auto it = m_frameCels.begin(); it != m_frameCels.end(); ++it) {
+            if (it.key() >= index) {
+                shiftedCels[it.key() + 1] = it.value();
+            } else {
+                shiftedCels[it.key()] = it.value();
+            }
+        }
+        m_frameCels = shiftedCels;
+    }
+
     recalculateMaxFrameDimensions();
     emit framesChanged();
     emit animationsChanged();
@@ -225,6 +240,19 @@ void SpriteDocument::removeFrame(int index)
     m_frames.removeAt(index);
     if (index < m_boxes.size()) {
         m_boxes.removeAt(index);
+    }
+
+    if (!m_frameCels.isEmpty()) {
+        m_frameCels.remove(index);
+        QMap<int, QList<SpriteCel>> shiftedCels;
+        for (auto it = m_frameCels.begin(); it != m_frameCels.end(); ++it) {
+            if (it.key() > index) {
+                shiftedCels[it.key() - 1] = it.value();
+            } else {
+                shiftedCels[it.key()] = it.value();
+            }
+        }
+        m_frameCels = shiftedCels;
     }
 
     // Update animations: remove referencing frames and shift indices down
@@ -275,6 +303,24 @@ void SpriteDocument::removeFrames(const QList<int> &indices)
                 m_boxes.removeAt(idx);
             }
         }
+    }
+
+    if (!m_frameCels.isEmpty()) {
+        for (int idx : sortedIndices) {
+            m_frameCels.remove(idx);
+        }
+        QMap<int, QList<SpriteCel>> shiftedCels;
+        for (auto it = m_frameCels.begin(); it != m_frameCels.end(); ++it) {
+            int frameIdx = it.key();
+            int shift = 0;
+            for (int removedIdx : sortedIndices) {
+                if (removedIdx < frameIdx) {
+                    shift++;
+                }
+            }
+            shiftedCels[frameIdx - shift] = it.value();
+        }
+        m_frameCels = shiftedCels;
     }
 
     // Update animations
@@ -336,6 +382,16 @@ void SpriteDocument::reorderFrames(const QList<int> &newOrder)
     QMap<int, int> oldToNew;
     for (int newPos = 0; newPos < newOrder.size(); ++newPos) {
         oldToNew[newOrder[newPos]] = newPos;
+    }
+
+    if (!m_frameCels.isEmpty()) {
+        QMap<int, QList<SpriteCel>> reorderedCels;
+        for (auto it = m_frameCels.begin(); it != m_frameCels.end(); ++it) {
+            if (oldToNew.contains(it.key())) {
+                reorderedCels[oldToNew.value(it.key())] = it.value();
+            }
+        }
+        m_frameCels = reorderedCels;
     }
 
     for (auto it = m_animations.begin(); it != m_animations.end(); ++it) {
@@ -824,3 +880,277 @@ double SpriteBox::overdrawSavings() const
     }
     return std::clamp((boxArea - polyArea) / boxArea * 100.0, 0.0, 100.0);
 }
+
+// ============================================================================
+// M17: Layers, Cels, Compositing & Skin Profiles
+// ============================================================================
+
+void SpriteDocument::setLayers(const QList<SpriteLayer> &layers)
+{
+    m_layers = layers;
+    emit layersChanged();
+}
+
+void SpriteDocument::addLayer(const SpriteLayer &layer)
+{
+    m_layers.append(layer);
+    emit layersChanged();
+}
+
+void SpriteDocument::removeLayer(int layerIndex)
+{
+    if (layerIndex < 0 || layerIndex >= m_layers.size()) return;
+    QString removedId = m_layers.at(layerIndex).id;
+    m_layers.removeAt(layerIndex);
+
+    // Remove cels on this layer across all frames, and adjust cel layerIndex
+    for (auto it = m_frameCels.begin(); it != m_frameCels.end(); ++it) {
+        QList<SpriteCel> &cels = it.value();
+        for (int i = cels.size() - 1; i >= 0; --i) {
+            if (cels[i].layerIndex == layerIndex || (!removedId.isEmpty() && cels[i].layerId == removedId)) {
+                cels.removeAt(i);
+            } else if (cels[i].layerIndex > layerIndex) {
+                cels[i].layerIndex--;
+            }
+        }
+    }
+    emit layersChanged();
+}
+
+SpriteLayer SpriteDocument::layer(int layerIndex) const
+{
+    if (layerIndex >= 0 && layerIndex < m_layers.size()) {
+        return m_layers.at(layerIndex);
+    }
+    return SpriteLayer();
+}
+
+void SpriteDocument::setLayerVisible(int layerIndex, bool visible)
+{
+    if (layerIndex >= 0 && layerIndex < m_layers.size()) {
+        if (m_layers[layerIndex].visible != visible) {
+            m_layers[layerIndex].visible = visible;
+            emit layersChanged();
+        }
+    }
+}
+
+int SpriteDocument::findLayerIndexById(const QString &layerId) const
+{
+    for (int i = 0; i < m_layers.size(); ++i) {
+        if (m_layers[i].id == layerId) return i;
+    }
+    return -1;
+}
+
+bool SpriteDocument::hasFrameCels(int frameIndex) const
+{
+    return m_frameCels.contains(frameIndex) && !m_frameCels.value(frameIndex).isEmpty();
+}
+
+QList<SpriteCel> SpriteDocument::frameCels(int frameIndex) const
+{
+    return m_frameCels.value(frameIndex);
+}
+
+void SpriteDocument::setFrameCels(int frameIndex, const QList<SpriteCel> &cels)
+{
+    m_frameCels[frameIndex] = cels;
+}
+
+void SpriteDocument::setCel(int frameIndex, int layerIndex, const SpriteCel &cel)
+{
+    QList<SpriteCel> &cels = m_frameCels[frameIndex];
+    for (int i = 0; i < cels.size(); ++i) {
+        if (cels[i].layerIndex == layerIndex) {
+            cels[i] = cel;
+            return;
+        }
+    }
+    cels.append(cel);
+}
+
+SpriteCel SpriteDocument::cel(int frameIndex, int layerIndex) const
+{
+    if (!m_frameCels.contains(frameIndex)) return SpriteCel();
+    const auto &cels = m_frameCels.value(frameIndex);
+    for (const auto &c : cels) {
+        if (c.layerIndex == layerIndex) return c;
+    }
+    return SpriteCel();
+}
+
+void SpriteDocument::removeCel(int frameIndex, int layerIndex)
+{
+    if (!m_frameCels.contains(frameIndex)) return;
+    QList<SpriteCel> &cels = m_frameCels[frameIndex];
+    for (int i = cels.size() - 1; i >= 0; --i) {
+        if (cels[i].layerIndex == layerIndex) {
+            cels.removeAt(i);
+            break;
+        }
+    }
+}
+
+QImage SpriteDocument::compositeFrame(int frameIndex, const QStringList &activeLayerIds) const
+{
+    if (frameIndex < 0 || frameIndex >= m_frames.size()) return QImage();
+
+    // If no layers or no cels defined, return standard frame
+    if (m_layers.isEmpty() || !m_frameCels.contains(frameIndex) || m_frameCels.value(frameIndex).isEmpty()) {
+        return m_frames.at(frameIndex);
+    }
+
+    QSize sz = m_frames.at(frameIndex).size();
+    if (sz.isEmpty() && frameIndex < m_boxes.size()) {
+        sz = m_boxes.at(frameIndex).rect.size();
+    }
+    if (sz.isEmpty()) sz = QSize(32, 32);
+
+    QImage composite(sz, QImage::Format_ARGB32_Premultiplied);
+    composite.fill(Qt::transparent);
+
+    QPainter painter(&composite);
+
+    // Sort layers by zOrder
+    QList<int> sortedLayerIndices;
+    sortedLayerIndices.reserve(m_layers.size());
+    for (int i = 0; i < m_layers.size(); ++i) {
+        sortedLayerIndices.append(i);
+    }
+    std::stable_sort(sortedLayerIndices.begin(), sortedLayerIndices.end(), [this](int a, int b) {
+        return m_layers[a].zOrder < m_layers[b].zOrder;
+    });
+
+    const QList<SpriteCel> &cels = m_frameCels.value(frameIndex);
+
+    for (int lIdx : sortedLayerIndices) {
+        const SpriteLayer &lyr = m_layers.at(lIdx);
+
+        // Check if layer is active/visible
+        if (!activeLayerIds.isEmpty()) {
+            if (!activeLayerIds.contains(lyr.id) && !activeLayerIds.contains(lyr.name)) {
+                continue;
+            }
+        } else if (!lyr.visible) {
+            continue;
+        }
+
+        // Find cel for this layer
+        SpriteCel currentCel;
+        bool found = false;
+        for (const auto &c : cels) {
+            if (c.layerIndex == lIdx || (!lyr.id.isEmpty() && c.layerId == lyr.id)) {
+                currentCel = c;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found || currentCel.isNull()) continue;
+
+        // Apply blend mode and opacities
+        painter.setCompositionMode(lyr.blendMode);
+        double layerOp = (lyr.opacity / 255.0) * (currentCel.opacity / 255.0);
+        painter.setOpacity(std::clamp(layerOp, 0.0, 1.0));
+
+        painter.drawImage(QPoint(currentCel.x, currentCel.y), currentCel.image);
+    }
+    painter.end();
+
+    return composite.convertToFormat(QImage::Format_ARGB32);
+}
+
+void SpriteDocument::recompositeFrame(int frameIndex)
+{
+    if (frameIndex < 0 || frameIndex >= m_frames.size()) return;
+    QImage comp = compositeFrame(frameIndex);
+    if (!comp.isNull()) {
+        m_frames[frameIndex] = comp;
+        emit frameUpdated(frameIndex);
+    }
+}
+
+void SpriteDocument::recompositeAllFrames()
+{
+    for (int i = 0; i < m_frames.size(); ++i) {
+        QImage comp = compositeFrame(i);
+        if (!comp.isNull()) {
+            m_frames[i] = comp;
+        }
+    }
+    emit framesChanged();
+}
+
+void SpriteDocument::setSkinProfiles(const QMap<QString, SkinProfile> &profiles)
+{
+    m_skinProfiles = profiles;
+    emit skinProfilesChanged();
+}
+
+void SpriteDocument::addSkinProfile(const SkinProfile &profile)
+{
+    m_skinProfiles[profile.id] = profile;
+    emit skinProfilesChanged();
+}
+
+void SpriteDocument::removeSkinProfile(const QString &profileId)
+{
+    if (m_skinProfiles.remove(profileId) > 0) {
+        emit skinProfilesChanged();
+    }
+}
+
+SkinProfile SpriteDocument::skinProfile(const QString &profileId) const
+{
+    return m_skinProfiles.value(profileId);
+}
+
+void SpriteDocument::bakeAnimationVariants(const QStringList &profileIds)
+{
+    if (m_skinProfiles.isEmpty() || m_animations.isEmpty()) return;
+
+    QStringList targetProfiles = profileIds.isEmpty() ? m_skinProfiles.keys() : profileIds;
+
+    for (const QString &profId : targetProfiles) {
+        if (!m_skinProfiles.contains(profId)) continue;
+        const SkinProfile &prof = m_skinProfiles.value(profId);
+
+        auto existingAnims = m_animations;
+        for (auto it = existingAnims.constBegin(); it != existingAnims.constEnd(); ++it) {
+            const QString &animName = it.key();
+            const SpriteAnimation &baseAnim = it.value();
+
+            // Avoid re-baking onto already baked variants
+            QString suffix = QLatin1Char('_') + (prof.name.isEmpty() ? prof.id : prof.name).toLower();
+            if (animName.endsWith(suffix) || animName.contains(suffix)) {
+                continue;
+            }
+
+            QString variantAnimName = animName + suffix;
+
+            QList<int> variantFrameIndices;
+            for (int baseFrameIdx : baseAnim.frameIndices) {
+                if (baseFrameIdx < 0 || baseFrameIdx >= m_frames.size()) continue;
+
+                QImage bakedImg = compositeFrame(baseFrameIdx, prof.activeLayerIds);
+                SpriteBox bakedBox = (baseFrameIdx < m_boxes.size()) ? m_boxes.at(baseFrameIdx) : SpriteBox(QRect(0, 0, bakedImg.width(), bakedImg.height()));
+                bakedBox.index = m_frames.size();
+
+                int newFrameIdx = m_frames.size();
+                addFrame(bakedImg, bakedBox);
+                variantFrameIndices.append(newFrameIdx);
+
+                if (m_frameCels.contains(baseFrameIdx)) {
+                    m_frameCels[newFrameIdx] = m_frameCels.value(baseFrameIdx);
+                }
+            }
+
+            SpriteAnimation variantAnim = baseAnim;
+            variantAnim.name = variantAnimName;
+            variantAnim.frameIndices = variantFrameIndices;
+            setAnimation(variantAnim);
+        }
+    }
+}
+

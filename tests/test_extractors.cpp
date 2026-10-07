@@ -18,6 +18,7 @@
 #include "jsonextractor.h"
 #include "libgdxextractor.h"
 #include "model/spritedocument.h"
+#include "project/projectmanager.h"
 #include "spriteextractor.h"
 
 
@@ -33,6 +34,7 @@ private slots:
   void testGodotExtractorReadWrite();
   void testLibGdxExtractorReadWrite();
   void testAsepriteExtractorRead();
+  void testAsepriteMultiLayerAndSkinVariants();
   void testGifExtractorRead();
   void testGifExtractorWriteMultiAnimations();
   void testErrorHandlingNonExistentFile();
@@ -888,6 +890,218 @@ void TestExtractors::testSpriteDetectorLargeScaleInclusionPerformance() {
 }
 
 #include <QGuiApplication>
+
+
+void TestExtractors::testAsepriteMultiLayerAndSkinVariants() {
+  QByteArray bin;
+  QDataStream ds(&bin, QIODevice::WriteOnly);
+  ds.setByteOrder(QDataStream::LittleEndian);
+
+  // 1. Header (128 bytes)
+  ds << static_cast<quint32>(0);      // File size placeholder
+  ds << static_cast<quint16>(0xA5E0); // Magic
+  ds << static_cast<quint16>(2);      // 2 Frames
+  ds << static_cast<quint16>(16);     // Width 16
+  ds << static_cast<quint16>(16);     // Height 16
+  ds << static_cast<quint16>(32);     // RGBA 32-bit
+  ds << static_cast<quint32>(1);      // Flags
+  ds << static_cast<quint16>(100);    // Speed
+  ds << static_cast<quint32>(0) << static_cast<quint32>(0);
+  ds << static_cast<quint8>(0);       // Transparent index
+  ds << static_cast<quint8>(0) << static_cast<quint8>(0) << static_cast<quint8>(0);
+  ds << static_cast<quint16>(256);    // Number of colors
+  ds << static_cast<quint8>(1) << static_cast<quint8>(1);
+  ds << static_cast<qint16>(0) << static_cast<qint16>(0);
+  ds << static_cast<quint16>(16) << static_cast<quint16>(16);
+  for (int i = 0; i < 84; ++i) {
+    ds << static_cast<quint8>(0);
+  }
+  QCOMPARE(bin.size(), 128);
+
+  // Helper lambda to write a Layer chunk (0x2004)
+  auto writeLayerChunk = [&](quint16 flags, const QString &name) {
+    QByteArray nameUtf8 = name.toUtf8();
+    quint32 chunkSize = 6 + 2 + 2 + 2 + 2 + 2 + 2 + 1 + 3 + 2 + nameUtf8.size();
+    ds << static_cast<quint32>(chunkSize);
+    ds << static_cast<quint16>(0x2004); // CHUNK_LAYER
+    ds << static_cast<quint16>(flags);  // Flags (1=visible)
+    ds << static_cast<quint16>(0);      // Type (0=normal)
+    ds << static_cast<quint16>(0);      // Child level
+    ds << static_cast<quint16>(0) << static_cast<quint16>(0); // Default w, h
+    ds << static_cast<quint16>(0);      // Blend mode (0=normal)
+    ds << static_cast<quint8>(255);     // Opacity
+    ds << static_cast<quint8>(0) << static_cast<quint8>(0) << static_cast<quint8>(0); // Reserved
+    ds << static_cast<quint16>(nameUtf8.size());
+    ds.writeRawData(nameUtf8.constData(), nameUtf8.size());
+  };
+
+  // Helper lambda to write a Raw Cel chunk (0x2005)
+  auto writeCelChunk = [&](quint16 layerIdx, qint16 x, qint16 y, quint16 w, quint16 h, quint8 r, quint8 g, quint8 b, quint8 a) {
+    quint32 chunkSize = 6 + 20 + w * h * 4;
+    ds << static_cast<quint32>(chunkSize);
+    ds << static_cast<quint16>(0x2005); // CHUNK_CEL
+    ds << static_cast<quint16>(layerIdx);
+    ds << static_cast<qint16>(x) << static_cast<qint16>(y);
+    ds << static_cast<quint8>(255);     // Opacity
+    ds << static_cast<quint16>(0);      // Cel type (0=raw)
+    for (int i = 0; i < 7; ++i) ds << static_cast<quint8>(0);
+    ds << static_cast<quint16>(w) << static_cast<quint16>(h);
+    for (int i = 0; i < w * h; ++i) {
+      ds << r << g << b << a;
+    }
+  };
+
+  // Frame 0 Start
+  int frame0Start = bin.size();
+  ds << static_cast<quint32>(0);      // Frame size placeholder
+  ds << static_cast<quint16>(0xF1FA); // Magic
+  ds << static_cast<quint16>(6);      // 3 layers + 3 cels = 6 chunks
+  ds << static_cast<quint16>(100);    // Duration ms
+  ds << static_cast<quint8>(0) << static_cast<quint8>(0);
+  ds << static_cast<quint32>(0);
+
+  // Layers in Frame 0
+  writeLayerChunk(1, QStringLiteral("Body"));             // Layer 0: Visible
+  writeLayerChunk(1, QStringLiteral("Weapon: Sword"));    // Layer 1: Visible
+  writeLayerChunk(0, QStringLiteral("Weapon: Flowers"));  // Layer 2: Hidden
+
+  // Cels in Frame 0
+  // Layer 0: Body (Blue 16x16)
+  writeCelChunk(0, 0, 0, 16, 16, 0, 0, 255, 255);
+  // Layer 1: Sword (Red 4x4 at x=6, y=6)
+  writeCelChunk(1, 6, 6, 4, 4, 255, 0, 0, 255);
+  // Layer 2: Flowers (Green 4x4 at x=6, y=6)
+  writeCelChunk(2, 6, 6, 4, 4, 0, 255, 0, 255);
+
+  quint32 frame0Size = bin.size() - frame0Start;
+  memcpy(bin.data() + frame0Start, &frame0Size, sizeof(quint32));
+
+  // Frame 1 Start
+  int frame1Start = bin.size();
+  ds << static_cast<quint32>(0);
+  ds << static_cast<quint16>(0xF1FA);
+  ds << static_cast<quint16>(4);      // 1 tag chunk + 3 cels = 4 chunks
+  ds << static_cast<quint16>(100);
+  ds << static_cast<quint8>(0) << static_cast<quint8>(0);
+  ds << static_cast<quint32>(0);
+
+  // Frame 1 - Tags chunk (0x2018)
+  QByteArray tagName = "Slash";
+  quint32 tagChunkSize = 6 + 10 + 19 + tagName.size();
+  ds << static_cast<quint32>(tagChunkSize);
+  ds << static_cast<quint16>(0x2018);
+  ds << static_cast<quint16>(1);      // 1 tag
+  for (int i = 0; i < 8; ++i) ds << static_cast<quint8>(0);
+  ds << static_cast<quint16>(0) << static_cast<quint16>(1); // from 0 to 1
+  ds << static_cast<quint8>(0);       // Loop forward
+  ds << static_cast<quint16>(0);      // Repeat
+  for (int i = 0; i < 6; ++i) ds << static_cast<quint8>(0);
+  ds << static_cast<quint8>(0) << static_cast<quint8>(0) << static_cast<quint8>(0);
+  ds << static_cast<quint8>(0);
+  ds << static_cast<quint16>(tagName.size());
+  ds.writeRawData(tagName.constData(), tagName.size());
+
+  // Cels in Frame 1
+  writeCelChunk(0, 0, 0, 16, 16, 0, 0, 255, 255);
+  writeCelChunk(1, 6, 6, 4, 4, 255, 0, 0, 255);
+  writeCelChunk(2, 6, 6, 4, 4, 0, 255, 0, 255);
+
+  quint32 frame1Size = bin.size() - frame1Start;
+  memcpy(bin.data() + frame1Start, &frame1Size, sizeof(quint32));
+
+  // Patch total file size
+  quint32 totalSize = bin.size();
+  memcpy(bin.data(), &totalSize, sizeof(quint32));
+
+  // Write temporary Aseprite file
+  QTemporaryDir tmpDir;
+  QVERIFY(tmpDir.isValid());
+  QString asePath = tmpDir.filePath(QStringLiteral("hero_multi_layers.aseprite"));
+  {
+    QFile f(asePath);
+    QVERIFY(f.open(QIODevice::WriteOnly));
+    f.write(bin);
+    f.close();
+  }
+
+  // 1. Read file with AsepriteExtractor
+  AsepriteExtractor extractor;
+  SpriteDocument doc;
+  ExtractorError err;
+  QVERIFY2(extractor.read(asePath, doc, &err), qPrintable(err.message));
+
+  // Verify basic extraction
+  QCOMPARE(doc.frameCount(), 2);
+  QCOMPARE(doc.layerCount(), 3);
+  QCOMPARE(doc.layer(0).name, QStringLiteral("Body"));
+  QCOMPARE(doc.layer(1).name, QStringLiteral("Weapon: Sword"));
+  QCOMPARE(doc.layer(2).name, QStringLiteral("Weapon: Flowers"));
+  QVERIFY(doc.layer(0).visible);
+  QVERIFY(doc.layer(1).visible);
+  QVERIFY(!doc.layer(2).visible); // Layer 2 was hidden
+
+  // Verify Cels presence
+  QVERIFY(doc.hasFrameCels(0));
+  QVERIFY(doc.hasFrameCels(1));
+  QCOMPARE(doc.frameCels(0).size(), 3);
+  QCOMPARE(doc.frameCels(1).size(), 3);
+
+  // Verify automated Skin Profile generation from "Weapon: Sword" vs "Weapon: Flowers"
+  QVERIFY(!doc.skinProfiles().isEmpty());
+  qDebug() << "Detected skin profiles count:" << doc.skinProfiles().size();
+
+  // Verify compositing: default composite (Body + Sword visible)
+  // Pixel at (0,0) is Body (Blue), pixel at (7,7) is Sword (Red)
+  QImage compDefault = doc.compositeFrame(0);
+  QCOMPARE(compDefault.size(), QSize(16, 16));
+  QCOMPARE(compDefault.pixelColor(0, 0), QColor(0, 0, 255, 255));
+  QCOMPARE(compDefault.pixelColor(7, 7), QColor(255, 0, 0, 255));
+
+  // Compositing with variant skin (Body + Flowers)
+  QString bodyId = doc.layer(0).id;
+  QString flowerId = doc.layer(2).id;
+  QImage compFlowers = doc.compositeFrame(0, {bodyId, flowerId});
+  QCOMPARE(compFlowers.pixelColor(0, 0), QColor(0, 0, 255, 255));
+  QCOMPARE(compFlowers.pixelColor(7, 7), QColor(0, 255, 0, 255)); // Flowers are green!
+
+  // 2. Test bakeAnimationVariants()
+  int initialFrames = doc.frameCount();
+  doc.bakeAnimationVariants();
+  QVERIFY(doc.frameCount() > initialFrames);
+  QVERIFY(doc.animationNames().contains(QStringLiteral("Slash_sword")) ||
+          doc.animationNames().contains(QStringLiteral("Slash_flowers")));
+  qDebug() << "Animations after baking variants:" << doc.animationNames();
+
+  // 3. Test Bento Project serialization and round-trip
+  QString projectSessionDir = tmpDir.filePath(QStringLiteral("bento_project"));
+  QString projErr;
+  QVERIFY(ProjectManager::saveProjectToSessionDir(doc, projectSessionDir, 1.0, QPointF(0, 0), &projErr));
+
+  SpriteDocument loadedDoc;
+  QVERIFY2(ProjectManager::loadProjectFromSessionDir(projectSessionDir, loadedDoc, nullptr, nullptr, &projErr),
+           qPrintable(projErr));
+
+  QCOMPARE(loadedDoc.frameCount(), doc.frameCount());
+  QCOMPARE(loadedDoc.layerCount(), 3);
+  QCOMPARE(loadedDoc.layer(0).name, QStringLiteral("Body"));
+  QCOMPARE(loadedDoc.layer(1).name, QStringLiteral("Weapon: Sword"));
+  QCOMPARE(loadedDoc.layer(2).name, QStringLiteral("Weapon: Flowers"));
+  QVERIFY(loadedDoc.hasFrameCels(0));
+  QCOMPARE(loadedDoc.frameCels(0).size(), 3);
+
+  // 4. Test multi-layer Aseprite writing and re-reading
+  QString exportedAse = tmpDir.filePath(QStringLiteral("exported_multi.aseprite"));
+  ExportOptions opts;
+  ExtractorError writeErr;
+  QVERIFY2(extractor.write(exportedAse, doc, opts, &writeErr), qPrintable(writeErr.message));
+
+  SpriteDocument reimportedDoc;
+  ExtractorError reimportErr;
+  QVERIFY2(extractor.read(exportedAse, reimportedDoc, &reimportErr), qPrintable(reimportErr.message));
+  QCOMPARE(reimportedDoc.layerCount(), doc.layerCount());
+  QCOMPARE(reimportedDoc.layer(0).name, QStringLiteral("Body"));
+  QCOMPARE(reimportedDoc.layer(1).name, QStringLiteral("Weapon: Sword"));
+}
 
 int main(int argc, char *argv[]) {
   qputenv("QT_QPA_PLATFORM", "offscreen");

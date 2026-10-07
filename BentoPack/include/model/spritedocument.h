@@ -26,6 +26,7 @@
 #include <QStringList>
 #include <QPolygonF>
 #include <QPointF>
+#include <QPainter>
 #include "bentopackcore_export.h"
 
 enum class PivotPreset {
@@ -40,6 +41,71 @@ enum class PivotPreset {
     BottomRight,
     Custom
 };
+
+/**
+ * @brief Structure representing a visual layer in a multi-layer sprite document (e.g. from Aseprite).
+ */
+struct BENTOPACK_CORE_EXPORT SpriteLayer {
+    enum LayerType {
+        Normal = 0,
+        Group = 1,
+        Tilemap = 2
+    };
+
+    QString                     id;
+    QString                     name;
+    bool                        visible = true;
+    bool                        locked = false;
+    quint8                      opacity = 255;
+    int                         zOrder = 0;
+    LayerType                   type = Normal;
+    int                         childLevel = 0;
+    QPainter::CompositionMode   blendMode = QPainter::CompositionMode_SourceOver;
+
+    bool operator==(const SpriteLayer &other) const {
+        return id == other.id && name == other.name && visible == other.visible
+               && locked == other.locked && opacity == other.opacity
+               && zOrder == other.zOrder && type == other.type
+               && childLevel == other.childLevel && blendMode == other.blendMode;
+    }
+    bool operator!=(const SpriteLayer &other) const { return !(*this == other); }
+};
+
+/**
+ * @brief Structure representing a cel (a specific layer's graphic content on a specific frame).
+ */
+struct BENTOPACK_CORE_EXPORT SpriteCel {
+    int     layerIndex = 0;
+    QString layerId;
+    qint16  x = 0;
+    qint16  y = 0;
+    quint8  opacity = 255;
+    QImage  image;
+
+    bool isNull() const { return image.isNull(); }
+
+    bool operator==(const SpriteCel &other) const {
+        return layerIndex == other.layerIndex && layerId == other.layerId
+               && x == other.x && y == other.y && opacity == other.opacity
+               && image == other.image;
+    }
+    bool operator!=(const SpriteCel &other) const { return !(*this == other); }
+};
+
+/**
+ * @brief Structure representing a skin / equipment variant profile.
+ */
+struct BENTOPACK_CORE_EXPORT SkinProfile {
+    QString     id;
+    QString     name;
+    QStringList activeLayerIds; // IDs of layers enabled for this skin
+
+    bool operator==(const SkinProfile &other) const {
+        return id == other.id && name == other.name && activeLayerIds == other.activeLayerIds;
+    }
+    bool operator!=(const SkinProfile &other) const { return !(*this == other); }
+};
+
 
 /**
  * @brief Structure representing the bounding box of a sprite frame in the atlas.
@@ -210,6 +276,42 @@ public:
     // Manipulation helper
     void clearAtlasAreas(const QList<int> &frameIndices);
 
+    // Layers (M17)
+    bool hasLayers() const { return !m_layers.isEmpty(); }
+    int layerCount() const { return m_layers.size(); }
+    const QList<SpriteLayer>& layers() const { return m_layers; }
+    void setLayers(const QList<SpriteLayer> &layers);
+    void addLayer(const SpriteLayer &layer);
+    void removeLayer(int layerIndex);
+    SpriteLayer layer(int layerIndex) const;
+    void setLayerVisible(int layerIndex, bool visible);
+    int findLayerIndexById(const QString &layerId) const;
+
+    // Cels (M17)
+    bool hasFrameCels(int frameIndex) const;
+    QList<SpriteCel> frameCels(int frameIndex) const;
+    void setFrameCels(int frameIndex, const QList<SpriteCel> &cels);
+    void setCel(int frameIndex, int layerIndex, const SpriteCel &cel);
+    SpriteCel cel(int frameIndex, int layerIndex) const;
+    void removeCel(int frameIndex, int layerIndex);
+
+    // Compositing (M17)
+    QImage compositeFrame(int frameIndex, const QStringList &activeLayerIds = QStringList()) const;
+    void recompositeFrame(int frameIndex);
+    void recompositeAllFrames();
+
+    // Skin Profiles (M17)
+    bool hasSkinProfiles() const { return !m_skinProfiles.isEmpty(); }
+    const QMap<QString, SkinProfile>& skinProfiles() const { return m_skinProfiles; }
+    void setSkinProfiles(const QMap<QString, SkinProfile> &profiles);
+    void addSkinProfile(const SkinProfile &profile);
+    void removeSkinProfile(const QString &profileId);
+    SkinProfile skinProfile(const QString &profileId) const;
+    bool hasSkinProfile(const QString &profileId) const { return m_skinProfiles.contains(profileId); }
+
+    // Animation Variant Baking (M17)
+    void bakeAnimationVariants(const QStringList &profileIds = QStringList());
+
 signals:
     void atlasChanged();
     void atlasRegionChanged(const QRect &rect);
@@ -218,6 +320,8 @@ signals:
     void boxPivotChanged(int index, const QPoint &pivot);
     void animationsChanged();
     void documentReset();
+    void layersChanged();
+    void skinProfilesChanged();
 
 private:
     void recalculateMaxFrameDimensions();
@@ -227,6 +331,9 @@ private:
     QList<SpriteBox>                m_boxes;
     QList<int>                      m_selectedFrameIndices;
     QMap<QString, SpriteAnimation>  m_animations;
+    QList<SpriteLayer>              m_layers;
+    QMap<int, QList<SpriteCel>>     m_frameCels;
+    QMap<QString, SkinProfile>      m_skinProfiles;
     QString                         m_filePath;
     int                             m_maxFrameWidth = 0;
     int                             m_maxFrameHeight = 0;

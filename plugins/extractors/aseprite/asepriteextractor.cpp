@@ -440,9 +440,52 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
         return false;
     }
 
-    // 3. Composite frames into QImages
+    // 3. Composite frames into QImages & populate Layers / Cels (M17)
     outDoc.clear();
     outDoc.setFilePath(filePath);
+
+    QList<SpriteLayer> docLayers;
+    if (!layers.isEmpty()) {
+        docLayers.reserve(layers.size());
+        for (int i = 0; i < layers.size(); ++i) {
+            const AseLayer &al = layers.at(i);
+            SpriteLayer sl;
+            sl.id = QStringLiteral("layer_%1").arg(i);
+            sl.name = al.name.isEmpty() ? QStringLiteral("Layer %1").arg(i + 1) : al.name;
+            sl.visible = al.isVisible();
+            sl.locked = (al.flags & 2) == 0;
+            sl.opacity = al.opacity;
+            sl.zOrder = i;
+            sl.childLevel = al.childLevel;
+            sl.type = (al.type == 1) ? SpriteLayer::Group : (al.type == 2 ? SpriteLayer::Tilemap : SpriteLayer::Normal);
+
+            switch (al.blendMode) {
+            case 1: sl.blendMode = QPainter::CompositionMode_Multiply; break;
+            case 2: sl.blendMode = QPainter::CompositionMode_Screen; break;
+            case 3: sl.blendMode = QPainter::CompositionMode_Overlay; break;
+            case 4: sl.blendMode = QPainter::CompositionMode_Darken; break;
+            case 5: sl.blendMode = QPainter::CompositionMode_Lighten; break;
+            case 6: sl.blendMode = QPainter::CompositionMode_ColorDodge; break;
+            case 7: sl.blendMode = QPainter::CompositionMode_ColorBurn; break;
+            case 8: sl.blendMode = QPainter::CompositionMode_HardLight; break;
+            case 9: sl.blendMode = QPainter::CompositionMode_SoftLight; break;
+            case 10: sl.blendMode = QPainter::CompositionMode_Difference; break;
+            case 11: sl.blendMode = QPainter::CompositionMode_Exclusion; break;
+            case 16: sl.blendMode = QPainter::CompositionMode_Plus; break;
+            default: sl.blendMode = QPainter::CompositionMode_SourceOver; break;
+            }
+
+            docLayers.append(sl);
+        }
+    } else {
+        SpriteLayer sl;
+        sl.id = QStringLiteral("layer_0");
+        sl.name = QStringLiteral("Layer 1");
+        sl.visible = true;
+        sl.opacity = 255;
+        docLayers.append(sl);
+    }
+    outDoc.setLayers(docLayers);
 
     int totalCompositeFrames = frames.size();
     QList<QImage> composedImages;
@@ -450,16 +493,14 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
 
     for (int f = 0; f < totalCompositeFrames; ++f) {
         const FrameData &fd = frames.at(f);
+        QList<SpriteCel> docCels;
+        docCels.reserve(fd.cels.size());
+
         QImage frameCanvas(canvasWidth, canvasHeight, QImage::Format_ARGB32_Premultiplied);
         frameCanvas.fill(Qt::transparent);
         QPainter p(&frameCanvas);
 
         for (const AseCel &cel : fd.cels) {
-            // Check layer visibility
-            if (cel.layerIndex < layers.size() && !layers.at(cel.layerIndex).isVisible()) {
-                continue;
-            }
-
             QImage celImg = cel.image;
             if (cel.celType == 1 && cel.linkedFrame < frames.size()) {
                 // Find cel from linked frame
@@ -472,22 +513,75 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
             }
 
             if (!celImg.isNull()) {
-                if (cel.opacity < 255) {
-                    p.setOpacity(cel.opacity / 255.0);
+                SpriteCel sc;
+                sc.layerIndex = cel.layerIndex;
+                if (cel.layerIndex < docLayers.size()) {
+                    sc.layerId = docLayers.at(cel.layerIndex).id;
                 } else {
-                    p.setOpacity(1.0);
+                    sc.layerId = QStringLiteral("layer_%1").arg(cel.layerIndex);
                 }
-                p.drawImage(QPoint(cel.x, cel.y), celImg);
+                sc.x = cel.x;
+                sc.y = cel.y;
+                sc.opacity = cel.opacity;
+                sc.image = celImg;
+                docCels.append(sc);
+
+                // Draw to composite frameCanvas if layer is visible
+                bool lyrVis = (cel.layerIndex < layers.size()) ? layers.at(cel.layerIndex).isVisible() : true;
+                if (lyrVis) {
+                    if (cel.opacity < 255) {
+                        p.setOpacity(cel.opacity / 255.0);
+                    } else {
+                        p.setOpacity(1.0);
+                    }
+                    p.drawImage(QPoint(cel.x, cel.y), celImg);
+                }
             }
         }
         p.end();
 
+        outDoc.setFrameCels(f, docCels);
         composedImages.append(frameCanvas);
         SpriteBox box(QRect(0, 0, canvasWidth, canvasHeight));
         box.index = f;
         outDoc.addFrame(frameCanvas, box);
 
         setProgress(50 + (f * 30 / qMax(1, totalCompositeFrames)));
+    }
+
+    // 3b. Detect candidate skin / variant profiles from layer naming conventions
+    QMap<QString, QStringList> variantGroups;
+    QStringList baseLayerIds;
+
+    for (const SpriteLayer &sl : docLayers) {
+        int sepIdx = sl.name.indexOf(QLatin1Char(':'));
+        if (sepIdx < 0) sepIdx = sl.name.indexOf(QLatin1Char('/'));
+
+        if (sepIdx > 0) {
+            QString group = sl.name.left(sepIdx).trimmed();
+            variantGroups[group].append(sl.id);
+        } else {
+            baseLayerIds.append(sl.id);
+        }
+    }
+
+    if (!variantGroups.isEmpty()) {
+        for (auto git = variantGroups.constBegin(); git != variantGroups.constEnd(); ++git) {
+            const QStringList &varLayerIds = git.value();
+            for (const QString &vId : varLayerIds) {
+                int lyrIdx = outDoc.findLayerIndexById(vId);
+                QString lyrName = (lyrIdx >= 0) ? docLayers.at(lyrIdx).name : vId;
+                int sep = lyrName.indexOf(QLatin1Char(':'));
+                if (sep < 0) sep = lyrName.indexOf(QLatin1Char('/'));
+                QString profName = (sep >= 0) ? lyrName.mid(sep + 1).trimmed() : lyrName;
+                SkinProfile prof;
+                prof.id = QStringLiteral("skin_%1").arg(vId);
+                prof.name = profName;
+                prof.activeLayerIds = baseLayerIds;
+                prof.activeLayerIds.append(vId);
+                outDoc.addSkinProfile(prof);
+            }
+        }
     }
 
     // 4. Compose default atlas layout (side-by-side or grid) so outDoc.atlas() is populated
@@ -615,14 +709,49 @@ bool AsepriteExtractor::write(const QString &filePath, const SpriteDocument &inD
     QList<SpriteAnimation> animList = inDoc.animations().values();
     bool hasTags = !animList.isEmpty();
 
+    auto writeCompressedCel = [&ds](int layerIdx, int x, int y, int opacity, const QImage &img) {
+        QImage cImg = img;
+        if (cImg.format() != QImage::Format_ARGB32_Premultiplied) {
+            cImg = cImg.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        }
+        int fw = cImg.width();
+        int fh = cImg.height();
+        QByteArray rawPixels;
+        rawPixels.reserve(fw * fh * 4);
+        for (int py = 0; py < fh; ++py) {
+            const QRgb *scan = reinterpret_cast<const QRgb*>(cImg.constScanLine(py));
+            for (int px = 0; px < fw; ++px) {
+                rawPixels.append(static_cast<char>(qRed(scan[px])));
+                rawPixels.append(static_cast<char>(qGreen(scan[px])));
+                rawPixels.append(static_cast<char>(qBlue(scan[px])));
+                rawPixels.append(static_cast<char>(qAlpha(scan[px])));
+            }
+        }
+        QByteArray qComp = qCompress(rawPixels);
+        QByteArray zlibData = (qComp.size() > 4) ? qComp.mid(4) : rawPixels;
+
+        quint32 celChunkSize = 6 + 20 + zlibData.size();
+        ds << static_cast<quint32>(celChunkSize);
+        ds << static_cast<quint16>(0x2005);
+        ds << static_cast<quint16>(layerIdx);
+        ds << static_cast<qint16>(x);
+        ds << static_cast<qint16>(y);
+        ds << static_cast<quint8>(opacity);
+        ds << static_cast<quint16>(2); // Compressed
+        for (int i = 0; i < 7; ++i) ds << static_cast<quint8>(0);
+        ds << static_cast<quint16>(fw);
+        ds << static_cast<quint16>(fh);
+        ds.writeRawData(zlibData.constData(), zlibData.size());
+    };
+
     // 2. Frames
     for (int f = 0; f < numFrames; ++f) {
         int frameStart = fileBuf.size();
 
-        // Count chunks for this frame:
-        // Frame 0 has Layer chunk (0x2004) + Cel chunk (0x2005) + optional Tags chunk (0x2018)
-        // Other frames have Cel chunk (0x2005)
-        quint16 chunksCount = (f == 0) ? (hasTags ? 3 : 2) : 1;
+        bool hasDocCels = inDoc.hasFrameCels(f) && !inDoc.frameCels(f).isEmpty();
+        quint16 celCount = hasDocCels ? static_cast<quint16>(inDoc.frameCels(f).size()) : 1;
+        quint16 layerCount = (f == 0) ? (inDoc.hasLayers() ? static_cast<quint16>(inDoc.layers().size()) : 1) : 0;
+        quint16 chunksCount = layerCount + celCount + ((f == 0 && hasTags) ? 1 : 0);
 
         // Frame header (16 bytes)
         ds << static_cast<quint32>(0);          // Frame bytes placeholder
@@ -632,75 +761,74 @@ bool AsepriteExtractor::write(const QString &filePath, const SpriteDocument &inD
         ds << static_cast<quint8>(0) << static_cast<quint8>(0); // Reserved
         ds << static_cast<quint32>(0);          // New chunks count (if old == 0xFFFF)
 
-        // Frame 0: Layer chunk (0x2004)
+        // Frame 0: Layer chunks (0x2004)
         if (f == 0) {
-            QByteArray layerName = "Layer 1";
-            quint16 nameLen = static_cast<quint16>(layerName.size());
-            quint32 layerChunkSize = 6 + 18 + nameLen;
+            if (inDoc.hasLayers()) {
+                for (const SpriteLayer &sl : inDoc.layers()) {
+                    QByteArray layerName = sl.name.toUtf8();
+                    quint16 nameLen = static_cast<quint16>(layerName.size());
+                    quint32 layerChunkSize = 6 + 18 + nameLen;
+                    quint16 flags = (sl.visible ? 1 : 0) | (sl.locked ? 0 : 2);
+                    quint16 lyrType = (sl.type == SpriteLayer::Group) ? 1 : (sl.type == SpriteLayer::Tilemap ? 2 : 0);
 
-            ds << static_cast<quint32>(layerChunkSize);
-            ds << static_cast<quint16>(0x2004); // Chunk type
-            ds << static_cast<quint16>(3);      // Flags: 1=visible | 2=editable
-            ds << static_cast<quint16>(0);      // Layer type: 0=normal
-            ds << static_cast<quint16>(0);      // Child level
-            ds << static_cast<quint16>(canvasW);// Default width
-            ds << static_cast<quint16>(canvasH);// Default height
-            ds << static_cast<quint16>(0);      // Blend mode: 0=normal
-            ds << static_cast<quint8>(255);     // Opacity
-            ds << static_cast<quint8>(0) << static_cast<quint8>(0) << static_cast<quint8>(0); // Reserved
-            ds << static_cast<quint16>(nameLen);
-            for (char c : layerName) {
-                ds << static_cast<quint8>(c);
+                    quint16 aseBlend = 0;
+                    switch (sl.blendMode) {
+                    case QPainter::CompositionMode_Multiply: aseBlend = 1; break;
+                    case QPainter::CompositionMode_Screen: aseBlend = 2; break;
+                    case QPainter::CompositionMode_Overlay: aseBlend = 3; break;
+                    case QPainter::CompositionMode_Darken: aseBlend = 4; break;
+                    case QPainter::CompositionMode_Lighten: aseBlend = 5; break;
+                    case QPainter::CompositionMode_ColorDodge: aseBlend = 6; break;
+                    case QPainter::CompositionMode_ColorBurn: aseBlend = 7; break;
+                    case QPainter::CompositionMode_HardLight: aseBlend = 8; break;
+                    case QPainter::CompositionMode_SoftLight: aseBlend = 9; break;
+                    case QPainter::CompositionMode_Difference: aseBlend = 10; break;
+                    case QPainter::CompositionMode_Exclusion: aseBlend = 11; break;
+                    case QPainter::CompositionMode_Plus: aseBlend = 16; break;
+                    default: aseBlend = 0; break;
+                    }
+
+                    ds << static_cast<quint32>(layerChunkSize);
+                    ds << static_cast<quint16>(0x2004);
+                    ds << static_cast<quint16>(flags);
+                    ds << static_cast<quint16>(lyrType);
+                    ds << static_cast<quint16>(sl.childLevel);
+                    ds << static_cast<quint16>(canvasW);
+                    ds << static_cast<quint16>(canvasH);
+                    ds << static_cast<quint16>(aseBlend);
+                    ds << static_cast<quint8>(sl.opacity);
+                    ds << static_cast<quint8>(0) << static_cast<quint8>(0) << static_cast<quint8>(0);
+                    ds << static_cast<quint16>(nameLen);
+                    ds.writeRawData(layerName.constData(), layerName.size());
+                }
+            } else {
+                QByteArray layerName = "Layer 1";
+                quint16 nameLen = static_cast<quint16>(layerName.size());
+                quint32 layerChunkSize = 6 + 18 + nameLen;
+
+                ds << static_cast<quint32>(layerChunkSize);
+                ds << static_cast<quint16>(0x2004); // Chunk type
+                ds << static_cast<quint16>(3);      // Flags: 1=visible | 2=editable
+                ds << static_cast<quint16>(0);      // Layer type: 0=normal
+                ds << static_cast<quint16>(0);      // Child level
+                ds << static_cast<quint16>(canvasW);// Default width
+                ds << static_cast<quint16>(canvasH);// Default height
+                ds << static_cast<quint16>(0);      // Blend mode: 0=normal
+                ds << static_cast<quint8>(255);     // Opacity
+                ds << static_cast<quint8>(0) << static_cast<quint8>(0) << static_cast<quint8>(0); // Reserved
+                ds << static_cast<quint16>(nameLen);
+                ds.writeRawData(layerName.constData(), layerName.size());
             }
         }
 
-        // Cel chunk (0x2005): Compressed image cel (type 2)
-        QImage frameImg = inDoc.frame(f);
-        if (frameImg.format() != QImage::Format_ARGB32_Premultiplied) {
-            frameImg = frameImg.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-        }
-
-        int fw = frameImg.width();
-        int fh = frameImg.height();
-        if (fw <= 0 || fh <= 0) {
-            fw = canvasW;
-            fh = canvasH;
-            frameImg = QImage(canvasW, canvasH, QImage::Format_ARGB32_Premultiplied);
-            frameImg.fill(Qt::transparent);
-        }
-
-        // Extract raw 32-bit RGBA pixel stream
-        QByteArray rawPixels;
-        rawPixels.reserve(fw * fh * 4);
-        for (int y = 0; y < fh; ++y) {
-            const QRgb *scan = reinterpret_cast<const QRgb*>(frameImg.constScanLine(y));
-            for (int x = 0; x < fw; ++x) {
-                rawPixels.append(static_cast<char>(qRed(scan[x])));
-                rawPixels.append(static_cast<char>(qGreen(scan[x])));
-                rawPixels.append(static_cast<char>(qBlue(scan[x])));
-                rawPixels.append(static_cast<char>(qAlpha(scan[x])));
+        // Cel chunks (0x2005)
+        if (hasDocCels) {
+            for (const SpriteCel &sc : inDoc.frameCels(f)) {
+                writeCompressedCel(sc.layerIndex, sc.x, sc.y, sc.opacity, sc.image);
             }
+        } else {
+            writeCompressedCel(0, 0, 0, 255, inDoc.frame(f));
         }
-
-        // Compress with standard zlib via qCompress (strip Qt's 4-byte header)
-        QByteArray qComp = qCompress(rawPixels);
-        QByteArray zlibData = (qComp.size() > 4) ? qComp.mid(4) : rawPixels;
-
-        // Cel Chunk header: 6 (chunk) + 20 (cel) + zlibData.size()
-        quint32 celChunkSize = 6 + 20 + zlibData.size();
-        ds << static_cast<quint32>(celChunkSize);
-        ds << static_cast<quint16>(0x2005);     // Chunk type
-        ds << static_cast<quint16>(0);          // Layer index: 0
-        ds << static_cast<qint16>(0);           // X: 0
-        ds << static_cast<qint16>(0);           // Y: 0
-        ds << static_cast<quint8>(255);         // Opacity: 255
-        ds << static_cast<quint16>(2);          // Cel type: 2 (Compressed image zlib)
-        for (int i = 0; i < 7; ++i) ds << static_cast<quint8>(0); // Reserved
-        ds << static_cast<quint16>(fw);         // Width
-        ds << static_cast<quint16>(fh);         // Height
-
-        // Append raw zlib bytes
-        ds.writeRawData(zlibData.constData(), zlibData.size());
 
         // Frame 0: Optional Frame Tags chunk (0x2018)
         if (f == 0 && hasTags) {
