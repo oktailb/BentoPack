@@ -38,8 +38,12 @@
 │ Jalon             │ Thématique                        │ Priorité       │
 ├───────────────────┼───────────────────────────────────┼────────────────┤
 │ STORES            │ Publication & Distribution Stores │ Haute (Imm.)   │
-│ FORMATS           │ Formats d'Exportation Post-M10    │ Moyenne        │
+│ M17 (ASE-LAYERS)  │ Calques Aseprite & Variantes Skin │ Haute          │
+│ M18 (LAYER-EDIT)  │ Édition Pixel Multi-Calques       │ Haute          │
+│ M19 (SMART-MESH)  │ Maillage Intelligent CDT & Relief │ Haute / Moyenne│
+│ M20 (FILTER-TAX)  │ Taxonomie & Déclencheurs Filtres  │ Moyenne        │
 │ M16               │ Multi-Page Atlas (Atlas Spanning) │ Haute / Moyenne│
+│ FORMATS           │ Formats d'Exportation Post-M10    │ Moyenne        │
 │ FILTERS-POLISH    │ Fignolage Extrusions & Filtres    │ Moyenne        │
 │ CLI-DOCS          │ Clarification Watch Daemon CLI    │ Moyenne        │
 │ M14               │ Optimisations SIMD & Grands Atlas │ Moyenne        │
@@ -224,12 +228,145 @@ Concevoir un **micro-démonstrateur web vitrine ultra-léger** (mini-module WebA
 
 ---
 
-## 📊 Matrice d'Exécution
+## 🎨 10. M17 : Calques Aseprite & Variantes d'Animations (Skins / Équipements Modulaires)
+
+### 📌 Contexte & Problématique Métier
+Dans les jeux vidéo (RPG, action, beat'em up), un personnage effectue les mêmes mouvements corporels (ex. course, coup d'estoc, saut), mais l'élément tenu en main ou équipé change (épée en acier, gourdin, baguette magique ou bouquet de fleurs ; chapeaux, armures, boucliers).
+* **Dans Aseprite :** Cette logique est couramment modélisée via les **calques (*layers*)** : un calque pour le corps animé, et plusieurs calques distincts pour les accessoires alternatifs.
+* **Limitation actuelle de BentoPack :** L'extracteur `asepriteextractor.cpp` aplatit aveuglément tous les calques visibles lors du décodage binaire des cels. Il est impossible d'importer la structure hiérarchique, de basculer la visibilité d'un accessoire, ou de générer des variantes d'atlas sans exporter manuellement chaque combinaison depuis Aseprite.
+
+### 🏛️ Spécifications Techniques d'Implémentation
+1. **Évolution du Modèle de Données (`SpriteDocument` & `SpriteAnimation`) :**
+   - Introduction d'une structure de calque de premier ordre :
+     ```cpp
+     struct SpriteLayer {
+         QString id;
+         QString name;
+         bool visible = true;
+         bool locked = false;
+         quint8 opacity = 255;
+         int zOrder = 0;
+         QPainter::CompositionMode blendMode = QPainter::CompositionMode_SourceOver;
+     };
+     ```
+   - Chaque frame / cel stocke son image par calque plutôt qu'une image unique pré-aplatie (`QMap<QString, QImage> m_layerCels`).
+2. **Décodage Binaire Aseprite Avancé (`asepriteextractor.cpp`) :**
+   - Préservation de l'arbre des calques Aseprite (`CHUNK_LAYER`, type normal/groupe, hiérarchie `childLevel`, drapeaux de visibilité).
+   - Décodage cel par cel (`CHUNK_CEL`) sans aplatissement immédiat, avec association directe au calque parent (`layerIndex`).
+3. **Gestion des Profils de Variantes (Skins / Équipements) :**
+   - Définition de profils de visibilité : un profil déclare quels calques sont actifs (ex. Profil *« Épée »* = Base + Main_Epée ; Profil *« Fleur »* = Base + Main_Fleurs).
+   - **Mode Combinatoire / Baking :** Génération automatique des séquences d'animations combinées pour l'atlas (`hero_walk_sword`, `hero_walk_flower`).
+   - **Mode Modulaire / Découplé :** Export séparé de la base et des overlays d'équipements calés sur le **même point de pivot**, permettant aux moteurs (Godot, Unity) d'assembler les sprites dynamiquement à l'exécution avec zéro duplication de texture pour le corps.
+4. **Corpus de Test & Fichiers d'Exemple :**
+   - Intégration de fixtures `.aseprite` multi-calques sous licence libre (CC0 / MIT, ex. spritesheets modulaires de Kenney ou Daniel Linssen) dans `tests/data/aseprite/`.
+   - Tests automatisés dans `test_extractors.cpp` validant la conservation des calques, des cels indépendants et des tags.
+
+---
+
+## 🖌️ 11. M18 : Édition de Pixels Multi-Calques & Pile de Calques (Layer Stack)
+
+### 📌 Contexte & Problématique Métier
+Avec l'avènement des animations multi-calques, l'Éditeur de Pixels ([`PixelEditorDialog`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/src/widgets/pixeleditordialog.cpp), [`PixelCanvas`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/src/widgets/pixelcanvas.cpp)) ne peut plus se contenter d'éditer une simple image aplatie. L'utilisateur doit pouvoir dessiner sur l'accessoire sans écraser les pixels du corps du personnage situé dessous.
+
+### 🏛️ Spécifications Techniques d'Implémentation
+1. **Dock « Pile de Calques » (*Layer Stack*) dans `PixelEditorDialog` :**
+   - Liste ordonnée de bas en haut respectant le Z-order.
+   - Sélection du **calque actif** (sur lequel tous les outils de dessin opèrent).
+   - Contrôles directs par calque :
+     - 👁️ Bascule de visibilité.
+     - 🔒 Verrouillage en écriture (protection anti-peinture accidentelle).
+     - Curseur d'opacité (0 à 100%).
+     - Menu déroulant des modes de fusion (Normal, Multiplier, Écran, Incrustation, etc.).
+   - Actions contextuelles : *Nouveau calque*, *Dupliquer*, *Supprimer*, *Monter/Descendre*, *Fusionner vers le bas (Merge Down)*, *Aplatir l'image (Flatten)*.
+2. **Rendu Composite & Moteur de Tracé (`PixelCanvas`) :**
+   - Composition en temps réel multi-couches accélérée par `QPainter` avec buffer de prévisualisation du trait en cours.
+   - **Outils sensibles aux calques :**
+     - *Crayon / Pinceau / Gomme :* Altère strictement les pixels du calque actif.
+     - *Pipette :* Option commutable *« Échantillonner calque actif »* vs *« Échantillonner tous les calques visibles »*.
+     - *Seau de remplissage & Baguette magique :* Option *« Détection de contour multi-calques »* (permet de remplir une zone sur un calque transparent en s'appuyant sur les traits d'encrage d'un autre calque).
+3. **Synergie avec la Pelure d'Oignon (Onion Skinning) :**
+   - Option d'affichage : projeter l'onion skin sur l'ensemble de l'image composite, OU isoler l'onion skin au calque actif uniquement (idéal pour régler la trajectoire d'un coup d'épée sans être distrait par le corps).
+4. **Application Multi-Frames Transactionnelle :**
+   - La propagation de traits à travers plusieurs frames (`CanvasActionData`) applique la modification sur le calque sélectionné de chaque frame cible.
+
+---
+
+## 📐 12. M19 : Maillage Polygonal Intelligent (Triangulation CDT, Points de Steiner & Contraste Interne)
+
+### 📌 Contexte & Problématique Métier
+La triangulation actuelle par Ear-Clipping ([`triangulator.cpp`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/src/geometry/triangulator.cpp)) opère exclusivement sur les sommets du contour extérieur du sprite.
+* **Défaut majeur :** Sur des formes concaves ou allongées (bras, épées, capes, jambes), l'algorithme génère des triangles étirés et très effilés (*sliver triangles* avec des angles très aigus $< 10^\circ$).
+* **Conséquences GPU & Artistiques :**
+  1. *Pénalité Quad Overdraw :* Les petits triangles étirés traversent de multiples quads de pixels $2 \times 2$ sur les GPUs, annulant une partie des gains de fillrate.
+  2. *Inutilisable en déformation 2.5D / Squelettique :* Les artistes 3D/2D dans Unity (2D Animation), Godot (Skeleton2D / Bone2D) ou Spine ne peuvent pas déformer proprement le maillage (rigging, bending). Les membres se tordent avec des artefacts d'interpolation hideux.
+
+### 🏛️ Spécifications Techniques d'Implémentation
+1. **Conservation Stricte de la Frontière Extérieure :**
+   - Le contour extérieur simplifié (Marching Squares + RDP + normal padding) reste la frontière rigide (*rigid boundary constraint*). Aucun pixel opaque n'est exclu, la découpe anti-overdraw reste à 100% garantie.
+2. **Détection d'Arêtes Internes à Fort Contraste (*Feature Edge Detection*) :**
+   - Analyse locale du gradient sur les canaux RGB/Luminance (filtre Sobel / Scharr ou dérivée morphologique) au sein de la zone opaque.
+   - Détection des lignes de rupture fortes : séparation nette entre chevelure et visage, col de vêtement, contours d'yeux, plis de tissu, limite bras/buste.
+   - Vectorisation et simplification RDP de ces arêtes intérieures sous forme de polylignes de contrainte.
+3. **Triangulation de Delaunay Contrainte (CDT) & Points de Steiner :**
+   - Remplacement / évolution du Ear-Clipping basique par une **Triangulation de Delaunay Contrainte (Constrained Delaunay Triangulation - CDT)** (ex. algorithme de Chew / Ruppert).
+   - Les segments du contour extérieur ET les arêtes internes de contraste sont injectés comme arêtes obligatoires (*constrained edges*).
+   - **Génération de points intérieurs (Points de Steiner) :**
+     - Insertion de points au barycentre des triangles trop grands ou trop effilés.
+     - Garantie d'un angle minimal (ex. $\theta_{min} \ge 25^\circ$ à $30^\circ$) assurant des triangles bien proportionnés (*Delaunay quality mesh*).
+4. **Bénéfice Moteur & Prise en Main dans l'UI :**
+   - Les sous-parties du sprite (ex. les mèches de cheveux, le visage, la manche) forment des groupes de triangles cohérents. Un artiste 2D/3D peut pondérer un os (*bone weight*) sur le cluster de cheveux pour les faire bouger indépendamment du visage au vent !
+   - Contrôles interactifs dans [`PolygonMeshDialog`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/src/widgets/polygonmeshdialog.cpp) :
+     - Curseur *« Densité du maillage intérieur »* (faible, équilibrée, dense).
+     - Curseur *« Sensibilité au contraste »* (seuil d'arêtes internes).
+     - Curseur *« Angle minimal garanti »* (15° à 35°).
+
+---
+
+## 🧩 13. M20 : Taxonomie & Déclencheurs Intelligents des Filtres (Pipeline Déclaratif)
+
+### 📌 Contexte & Problématique Métier
+À ce jour, les 9 plugins de filtres implémentent `FilterPlugin` sans déclarer la nature exacte de leurs mutations. Le moteur ignore si un filtre ne fait que changer une teinte (ex. *ColorSwap*), altère la silhouette alpha (ex. *Outline*, *BackgroundRemoval*), ou bouscule l'emplacement de tous les sprites sur la feuille (ex. *AtlasPacking*).
+* **Conséquence :** L'utilisateur applique un filtre modifiant le contour (ex. contour de 2px) mais doit penser manuellement à rouvrir le dialogue de maillage polygonal pour recalculer les triangles devenus obsolètes.
+
+### 🏛️ Spécifications Techniques d'Implémentation
+1. **Typage Déclaratif des Filtres (`FilterModifierFlags`) :**
+   - Extension de l'interface [`FilterPlugin`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/include/filters/filterplugin.h) :
+     ```cpp
+     enum FilterModifierFlag {
+         None               = 0x0,
+         PixelModifier      = 0x1, // Teinte, palette, saturation, despill (silhouette et taille 100% invariantes)
+         GeometryModifier   = 0x2, // Modifie le contour alpha, la taille ou la silhouette (Outline, Rescale, Chroma BG)
+         AtlasModifier      = 0x4  // Réorganise l'empaquetage ou les rectangles de l'atlas (MaxRects, TightPacking)
+     };
+     Q_DECLARE_FLAGS(FilterModifierFlags, FilterModifierFlag)
+     virtual FilterModifierFlags modifierFlags() const = 0;
+     ```
+   - Classification des filtres existants :
+     - `PixelModifier` : `ColorSwapFilter`, `ColorAdjustFilter`, `RetroPaletteFilter`, `DespillFilter`.
+     - `GeometryModifier` : `BackgroundRemovalFilter` (efface des pixels de fond), `OutlineFilter` (élargit le sprite), `PixelRescaleFilter` (change les dimensions).
+     - `AtlasModifier` : `AtlasPackingFilter`, `TightPolygonPackingFilter`.
+2. **Système de Déclencheurs Intelligents & Invalidation de Cache :**
+   - **Lors d'un `GeometryModifier` :**
+     - Invalidation automatique du cache des polygones simplifiés et des boîtes englobantes ajustées.
+     - Notification contextuelle discrète (barre d'action ou toast) : *« La géométrie des sprites a été modifiée. Recalculer le maillage polygonal anti-overdraw ? »* avec bouton d'exécution immédiat `[Recalculer les Maillages]`.
+   - **Lors d'un `PixelModifier` :**
+     - Préservation stricte de la géométrie polygonale, des coordonnées UV et du placement d'atlas. Aucun calcul lourd superflu n'est déclenché.
+   - **Lors d'un `AtlasModifier` :**
+     - Mise à jour des coordonnées UV et avertissement si l'atlas dépasse les limites matérielles de la cible.
+3. **Organisation Ergonomique dans les Menus & Docks :**
+   - Regroupement des actions dans le menu *Filtres* selon leur nature :
+     - 🎨 *Filtres de Couleur & Traitement Pixel* (`PixelModifier`)
+     - ✂️ *Filtres Géométriques & Découpe* (`GeometryModifier`)
+     - 📦 *Organisation & Empaquetage d'Atlas* (`AtlasModifier`)
+
+---
+
+## 📊 Matrice d'Exécution Révisée
 
 | Phase | Horizon | Chantiers Clés | Livrables Attendus |
 |---|---|---|---|
 | **Phase 1** | **Court terme (Immédiat)** | **Stores & Distribution** | • Soumission officielle Godot AssetLib (`godot-bentopack-addon`)<br>• Enregistrement OpenUPM et soumission Unity Asset Store<br>• Soumission Unreal Fab (`unreal-bentopack-plugin`)<br>• Déploiement des pages Steam / Itch.io (Windows, Linux, macOS, Haiku) | Visibilité officielle sur tous les écosystèmes et premiers flux d'acquisition. |
-| **Phase 2** | **Court terme** | **Multi-Atlas & Raffinements** | • **M16 :** Multi-Page Atlas (Atlas Spanning & débordement VRAM)<br>• **Filtres/Extrusions :** Clamping angles 8-connectés, despill perceptuel CIELAB<br>• **CLI Docs :** Documentation et tutos du mode daemon `--watch` | Traitement des gros projets RPG/metroidvanias et pipelines automatisés sans friction. |
-| **Phase 3** | **Moyen terme** | **M14 (Performances)** | • Vectorisation AVX2 / NEON des filtres graphiques les plus lourds<br>• Plafonnement mémoire `QUndoStack` & snapshotting différentiel Dirty Rects | Traitement temps réel des planches 8K/16K sous les 15 ms sans fuite mémoire. |
-| **Phase 4** | **Moyen/Long terme** | **Formats & Vitrine** | • Formats Post-M10 (LibGDX/Spine `.atlas`, décodeur Aseprite `.ase`, export `.plist`)<br>• Micro-démonstrateur web vitrine sur le site officiel<br>• Plugin découpe de membres / export squelettique léger (M12 cadré) | Diversification fonctionnelle ciblée et acquisition continue. |
+| **Phase 2** | **Court terme** | **Calques & Pipeline Intelligent** | • **M20 :** Taxonomie des filtres (`PixelModifier` / `GeometryModifier` / `AtlasModifier`) et relance intelligente du maillage<br>• **M17 :** Import calques Aseprite & gestion des variantes d'équipements/skins<br>• **M18 :** Dock Calques et dessin multi-couches dans le Pixel Editor | Prise en charge des assets professionnels modulaires et confort de travail fluide. |
+| **Phase 3** | **Moyen terme** | **Maillage Avancé & Grands Atlas** | • **M19 :** Maillage polygonal intelligent (CDT, détection de fort contraste, clusters de déformation 2D/3D)<br>• **M16 :** Multi-Page Atlas (Atlas Spanning & débordement VRAM)<br>• **Filtres/Extrusions :** Clamping angles 8-connectés, despill perceptuel CIELAB | Géométrie haut de gamme pour animateurs et gestion des gros projets RPG/metroidvanias. |
+| **Phase 4** | **Moyen/Long terme** | **Performances & Écosystème** | • **M14 :** Vectorisation AVX2 / NEON des filtres graphiques & dirty rects undo<br>• Formats Post-M10 (LibGDX/Spine `.atlas`, export `.plist`)<br>• Micro-démonstrateur web vitrine sur le site officiel<br>• Plugin découpe de membres / export squelettique léger (M12 cadré) | Traitement ultra-rapide des planches 8K/16K et rayonnement produit. |
 
