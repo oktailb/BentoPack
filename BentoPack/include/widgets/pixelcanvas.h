@@ -24,6 +24,7 @@
 #include <QRect>
 #include <QVector>
 #include <QUndoStack>
+#include <QPainter>
 #include <functional>
 
 enum class PixelTool {
@@ -76,6 +77,29 @@ struct OnionSkinLayer {
     QImage image;
     int relativeOffset = 0; ///< Relative offset: e.g. -3, -2, -1, +1, +2, +3
     QPoint alignmentOffset = QPoint(0, 0); ///< Alignment offset based on animation pivot points (currentPivot - layerPivot)
+};
+
+/**
+ * @brief Structure representing a visual layer and its active frame cel inside the Pixel Canvas (M18).
+ */
+struct CanvasLayer {
+    QString                     id;
+    QString                     name;
+    bool                        visible = true;
+    bool                        locked = false;
+    quint8                      opacity = 255;
+    int                         zOrder = 0;
+    QPainter::CompositionMode   blendMode = QPainter::CompositionMode_SourceOver;
+    QImage                      image; ///< Current frame cel image
+    QPoint                      offset = QPoint(0, 0);
+
+    bool operator==(const CanvasLayer &other) const {
+        return id == other.id && name == other.name && visible == other.visible
+               && locked == other.locked && opacity == other.opacity
+               && zOrder == other.zOrder && blendMode == other.blendMode
+               && offset == other.offset && image == other.image;
+    }
+    bool operator!=(const CanvasLayer &other) const { return !(*this == other); }
 };
 
 #include "bentopackwidgets_export.h"
@@ -174,6 +198,42 @@ public:
 
     static QImage processOnionSkinLayer(const QImage &src, int relativeOffset, int opacityPercent, OnionSkinEffect effect, const QSize &targetSize);
 
+    // Multi-Layer Support (M18)
+    bool hasLayers() const { return !m_layers.isEmpty(); }
+    int layerCount() const { return m_layers.size(); }
+    QList<CanvasLayer> layers() const { return m_layers; }
+    void setLayers(const QList<CanvasLayer> &layers, int activeIndex = 0);
+    int activeLayerIndex() const { return m_activeLayerIndex; }
+    void setActiveLayerIndex(int index);
+    CanvasLayer activeLayer() const;
+    QImage activeLayerImage() const;
+    bool isLayerLocked(int index = -1) const;
+
+    void setLayerVisible(int index, bool visible);
+    void setLayerLocked(int index, bool locked);
+    void setLayerOpacity(int index, quint8 opacity);
+    void setLayerBlendMode(int index, QPainter::CompositionMode mode);
+    void setLayerName(int index, const QString &name);
+    void setLayerCelImage(int index, const QImage &img);
+    void applyLayerPatch(int index, const QRect &rect, const QImage &patch);
+
+    void addLayer(const QString &name = QString());
+    void duplicateLayer(int index = -1);
+    void removeLayer(int index = -1);
+    void moveLayerUp(int index = -1);
+    void moveLayerDown(int index = -1);
+    void mergeLayerDown(int index = -1);
+    void flattenLayers();
+
+    void recomposite();
+
+    // Multi-layer sampling & onion skinning (M18)
+    bool sampleAllLayers() const { return m_sampleAllLayers; }
+    void setSampleAllLayers(bool sampleAll);
+
+    bool onionSkinCurrentLayerOnly() const { return m_onionSkinCurrentLayerOnly; }
+    void setOnionSkinCurrentLayerOnly(bool currentOnly);
+
     friend class PixelCanvasUndoCommand;
 
     // Undo / Redo
@@ -204,6 +264,9 @@ signals:
     void selectionStateChanged(bool hasSelection);
     void zoomChanged(double zoom);
     void panRequested(int dx, int dy);
+    void layersChanged();
+    void activeLayerChanged(int index);
+    void layerLockedAttempted();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -285,6 +348,13 @@ private:
     bool            m_hasFloating = false;
     QImage          m_floatingImage;
     QPoint          m_floatingPixelPos = QPoint(0, 0);
+
+    // Multi-Layer Support (M18)
+    void ensureActiveCelAllocated();
+    QList<CanvasLayer>  m_layers;
+    int                 m_activeLayerIndex = 0;
+    bool                m_sampleAllLayers = false;
+    bool                m_onionSkinCurrentLayerOnly = false;
 
     // Local Undo Stack
     QUndoStack      m_undoStack;

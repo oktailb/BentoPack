@@ -1673,6 +1673,141 @@ Strict removal clears the pixel.</source>
     </message>
 </context>
 <context>
+    <name>LayerStackWidget</name>
+    <message>
+        <source>Blend mode of the active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opacity of the active layer (0-100%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a new transparent layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten all visible layers into a single layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eyedropper, Bucket Fill and Wand detect color contours across all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Onion skin: active layer only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Isolates onion skinning to the active layer rather than the full composite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Darken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lighten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Dodge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Burn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hard Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soft Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exclusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LibGdxExtractor</name>
     <message>
         <source>Atlas file is empty.</source>
@@ -2445,6 +2580,18 @@ Strict removal clears the pixel.</source>
 <context>
     <name>PixelCanvas</name>
     <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear Pixels</source>
         <translation>清除像素</translation>
     </message>
@@ -2732,6 +2879,14 @@ Strict removal clears the pixel.</source>
         <translation>Endesga 32 (32)</translation>
     </message>
     <message>
+        <source>Layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚠ Active layer is locked! Unlock to paint.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Onion Skinning</source>
         <translation>洋蔥皮 (Onion Skinning)</translation>
     </message>
@@ -2810,6 +2965,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Select Secondary Color</source>
         <translation>選擇次色</translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>

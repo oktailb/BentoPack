@@ -15,6 +15,7 @@
 #include "filters/filterregistry.h"
 #include "filters/filterplugin.h"
 #include "widgets/filterdialogbase.h"
+#include "widgets/layerstackwidget.h"
 #include <QMenu>
 #include <QTimer>
 
@@ -75,6 +76,14 @@ private slots:
     void testApplyToAllFramesRelativePivot();
     void testProColorPickerAndHarmonies();
     void testPixelEditorNonAtlasFiltersAndAnimationScope();
+
+    // 9. Multi-Layer Editing & Layer Stack Tests (M18)
+    void testLayerStackWidgetAndControls();
+    void testMultiLayerCanvasDrawingAndLock();
+    void testMultiLayerBlendModesAndOpacity();
+    void testMultiLayerSamplingAndFloodFill();
+    void testMultiLayerOnionSkinRestricted();
+    void testMultiLayerSessionSaveAndDocumentSync();
 };
 
 void TestPixelEditor::initTestCase()
@@ -1658,6 +1667,359 @@ void TestPixelEditor::testPixelEditorNonAtlasFiltersAndAnimationScope()
     dialog.loadFrame(0);
     QCOMPARE(dialog.canvas()->image().pixelColor(0, 0), QColor(255, 0, 0, 255));
 }
+
+// ============================================================================
+// 9. Multi-Layer Editing & Layer Stack Tests (M18)
+// ============================================================================
+
+void TestPixelEditor::testLayerStackWidgetAndControls()
+{
+    LayerStackWidget widget;
+    CanvasLayer l1;
+    l1.id = QStringLiteral("bg");
+    l1.name = QStringLiteral("Background");
+    l1.visible = true;
+    l1.locked = false;
+    l1.opacity = 255;
+    l1.zOrder = 0;
+    l1.image = QImage(32, 32, QImage::Format_ARGB32);
+    l1.image.fill(Qt::white);
+
+    CanvasLayer l2;
+    l2.id = QStringLiteral("fg");
+    l2.name = QStringLiteral("Lineart");
+    l2.visible = true;
+    l2.locked = false;
+    l2.opacity = 200;
+    l2.zOrder = 10;
+    l2.image = QImage(32, 32, QImage::Format_ARGB32);
+    l2.image.fill(Qt::transparent);
+
+    widget.setLayers({l1, l2}, 1);
+    QCOMPARE(widget.activeIndex(), 1);
+
+    int activeSignalIdx = -1;
+    connect(&widget, &LayerStackWidget::activeLayerChanged, [&activeSignalIdx](int idx) {
+        activeSignalIdx = idx;
+    });
+
+    widget.setActiveIndex(0);
+    QCOMPARE(activeSignalIdx, 0);
+    QCOMPARE(widget.activeIndex(), 0);
+
+    // Verify toolbar button signals
+    bool addReq = false;
+    connect(&widget, &LayerStackWidget::addLayerRequested, [&addReq]() { addReq = true; });
+    widget.addLayerButton()->click();
+    QVERIFY(addReq);
+
+    bool dupReq = false;
+    connect(&widget, &LayerStackWidget::duplicateLayerRequested, [&dupReq]() { dupReq = true; });
+    widget.duplicateLayerButton()->click();
+    QVERIFY(dupReq);
+
+    bool delReq = false;
+    connect(&widget, &LayerStackWidget::removeLayerRequested, [&delReq]() { delReq = true; });
+    widget.removeLayerButton()->click();
+    QVERIFY(delReq);
+
+    bool upReq = false;
+    connect(&widget, &LayerStackWidget::moveLayerUpRequested, [&upReq]() { upReq = true; });
+    widget.moveLayerUpButton()->click();
+    QVERIFY(upReq);
+
+    widget.setActiveIndex(1);
+
+    bool downReq = false;
+    connect(&widget, &LayerStackWidget::moveLayerDownRequested, [&downReq]() { downReq = true; });
+    widget.moveLayerDownButton()->click();
+    QVERIFY(downReq);
+
+    bool mergeReq = false;
+    connect(&widget, &LayerStackWidget::mergeLayerDownRequested, [&mergeReq]() { mergeReq = true; });
+    widget.mergeLayerDownButton()->click();
+    QVERIFY(mergeReq);
+
+    bool flatReq = false;
+    connect(&widget, &LayerStackWidget::flattenLayersRequested, [&flatReq]() { flatReq = true; });
+    widget.flattenLayersButton()->click();
+    QVERIFY(flatReq);
+
+    // Verify options checkboxes
+    bool sampleChanged = false;
+    connect(&widget, &LayerStackWidget::sampleAllLayersChanged, [&sampleChanged](bool b) { sampleChanged = b; });
+    widget.sampleAllLayersCheckBox()->setChecked(true);
+    QVERIFY(sampleChanged);
+    QVERIFY(widget.isSampleAllLayers());
+
+    bool onionRestricted = false;
+    connect(&widget, &LayerStackWidget::onionSkinCurrentLayerOnlyChanged, [&onionRestricted](bool b) { onionRestricted = b; });
+    widget.onionSkinCurrentLayerOnlyCheckBox()->setChecked(true);
+    QVERIFY(onionRestricted);
+    QVERIFY(widget.isOnionSkinCurrentLayerOnly());
+
+    // Verify opacity slider
+    quint8 newOp = 0;
+    connect(&widget, &LayerStackWidget::layerOpacityChanged, [&newOp](int, quint8 op) { newOp = op; });
+    widget.opacitySlider()->setValue(50);
+    QCOMPARE(newOp, 128);
+}
+
+void TestPixelEditor::testMultiLayerCanvasDrawingAndLock()
+{
+    PixelCanvas canvas;
+    canvas.setZoom(1.0);
+
+    CanvasLayer bg;
+    bg.id = QStringLiteral("bg");
+    bg.name = QStringLiteral("Background");
+    bg.visible = true;
+    bg.locked = false;
+    bg.opacity = 255;
+    bg.zOrder = 0;
+    bg.image = QImage(32, 32, QImage::Format_ARGB32);
+    bg.image.fill(Qt::red);
+
+    CanvasLayer fg;
+    fg.id = QStringLiteral("fg");
+    fg.name = QStringLiteral("Foreground");
+    fg.visible = true;
+    fg.locked = false;
+    fg.opacity = 255;
+    fg.zOrder = 10;
+    fg.image = QImage(32, 32, QImage::Format_ARGB32);
+    fg.image.fill(Qt::transparent);
+
+    canvas.setLayers({bg, fg}, 1);
+    QCOMPARE(canvas.activeLayerIndex(), 1);
+
+    // Initial composite is red everywhere
+    QCOMPARE(canvas.image().pixelColor(10, 10), QColor(Qt::red));
+
+    // Draw on active layer (Foreground) at (10, 10) with green
+    canvas.setCurrentTool(PixelTool::Pencil);
+    canvas.setPrimaryColor(Qt::green);
+    sendMouseEvent(&canvas, QEvent::MouseButtonPress, QPointF(10 * canvas.zoom(), 10 * canvas.zoom()), Qt::LeftButton);
+    sendMouseEvent(&canvas, QEvent::MouseButtonRelease, QPointF(10 * canvas.zoom(), 10 * canvas.zoom()), Qt::LeftButton);
+
+    // Foreground cel must have green pixel at (10, 10)
+    QCOMPARE(canvas.activeLayerImage().pixelColor(10, 10), QColor(Qt::green));
+    // Background layer cel must still be red at (10, 10)
+    QCOMPARE(canvas.layers().at(0).image.pixelColor(10, 10), QColor(Qt::red));
+    // Composite must now show green at (10, 10)
+    QCOMPARE(canvas.image().pixelColor(10, 10), QColor(Qt::green));
+
+    // Test Undo on multi-layer cel
+    canvas.undo();
+    QCOMPARE(canvas.activeLayerImage().pixelColor(10, 10), QColor(Qt::transparent));
+    QCOMPARE(canvas.image().pixelColor(10, 10), QColor(Qt::red));
+
+    // Redo
+    canvas.redo();
+    QCOMPARE(canvas.activeLayerImage().pixelColor(10, 10), QColor(Qt::green));
+    QCOMPARE(canvas.image().pixelColor(10, 10), QColor(Qt::green));
+
+    // Test Write-Lock Protection
+    canvas.setLayerLocked(1, true);
+    QVERIFY(canvas.isLayerLocked());
+
+    bool lockAttempted = false;
+    connect(&canvas, &PixelCanvas::layerLockedAttempted, [&lockAttempted]() {
+        lockAttempted = true;
+    });
+
+    // Attempt to draw on locked layer
+    canvas.setPrimaryColor(Qt::blue);
+    sendMouseEvent(&canvas, QEvent::MouseButtonPress, QPointF(15 * canvas.zoom(), 15 * canvas.zoom()), Qt::LeftButton);
+    sendMouseEvent(&canvas, QEvent::MouseButtonRelease, QPointF(15 * canvas.zoom(), 15 * canvas.zoom()), Qt::LeftButton);
+    QVERIFY(lockAttempted);
+    // Pixel must NOT be modified
+    QCOMPARE(canvas.activeLayerImage().pixelColor(15, 15), QColor(Qt::transparent));
+}
+
+void TestPixelEditor::testMultiLayerBlendModesAndOpacity()
+{
+    PixelCanvas canvas;
+
+    CanvasLayer bg;
+    bg.id = QStringLiteral("bg");
+    bg.name = QStringLiteral("Background");
+    bg.visible = true;
+    bg.locked = false;
+    bg.opacity = 255;
+    bg.zOrder = 0;
+    bg.image = QImage(32, 32, QImage::Format_ARGB32);
+    bg.image.fill(QColor(255, 255, 255)); // White
+
+    CanvasLayer fg;
+    fg.id = QStringLiteral("fg");
+    fg.name = QStringLiteral("MultiplyLayer");
+    fg.visible = true;
+    fg.locked = false;
+    fg.opacity = 255;
+    fg.zOrder = 10;
+    fg.blendMode = QPainter::CompositionMode_Multiply;
+    fg.image = QImage(32, 32, QImage::Format_ARGB32);
+    fg.image.fill(QColor(255, 0, 0)); // Pure Red
+
+    canvas.setLayers({bg, fg}, 1);
+
+    // White multiplied by Red is Red
+    QCOMPARE(canvas.image().pixelColor(10, 10).red(), 255);
+    QCOMPARE(canvas.image().pixelColor(10, 10).green(), 0);
+    QCOMPARE(canvas.image().pixelColor(10, 10).blue(), 0);
+
+    // Change layer opacity to ~50% (128)
+    canvas.setLayerOpacity(1, 128);
+    QColor blended = canvas.image().pixelColor(10, 10);
+    QCOMPARE(blended.red(), 255);
+    QVERIFY(blended.green() > 100 && blended.green() < 155);
+
+    // Toggle visibility off -> Background white should show through
+    canvas.setLayerVisible(1, false);
+    QCOMPARE(canvas.image().pixelColor(10, 10), QColor(255, 255, 255));
+}
+
+void TestPixelEditor::testMultiLayerSamplingAndFloodFill()
+{
+    PixelCanvas canvas;
+
+    CanvasLayer bg;
+    bg.id = QStringLiteral("lines");
+    bg.name = QStringLiteral("Lines");
+    bg.visible = true;
+    bg.locked = false;
+    bg.opacity = 255;
+    bg.zOrder = 0;
+    bg.image = QImage(32, 32, QImage::Format_ARGB32);
+    bg.image.fill(Qt::transparent);
+    // Draw a black square outline on Background from (5, 5) to (15, 15)
+    for (int i = 5; i <= 15; ++i) {
+        bg.image.setPixelColor(i, 5, Qt::black);
+        bg.image.setPixelColor(i, 15, Qt::black);
+        bg.image.setPixelColor(5, i, Qt::black);
+        bg.image.setPixelColor(15, i, Qt::black);
+    }
+
+    CanvasLayer fg;
+    fg.id = QStringLiteral("color");
+    fg.name = QStringLiteral("Color");
+    fg.visible = true;
+    fg.locked = false;
+    fg.opacity = 255;
+    fg.zOrder = 10;
+    fg.image = QImage(32, 32, QImage::Format_ARGB32);
+    fg.image.fill(Qt::transparent);
+
+    canvas.setLayers({bg, fg}, 1);
+
+    // Mode A: sampleAllLayers = true
+    canvas.setSampleAllLayers(true);
+    // Flood fill on Foreground layer inside the outline at (10, 10) with yellow
+    canvas.applyFloodFill(10, 10, Qt::yellow);
+
+    // Inside the outline on Foreground should be yellow
+    QCOMPARE(canvas.activeLayerImage().pixelColor(10, 10), QColor(Qt::yellow));
+    // Outside the outline at (0, 0) Foreground should STILL BE TRANSPARENT (bounded by Background's lines!)
+    QCOMPARE(canvas.activeLayerImage().pixelColor(0, 0), QColor(Qt::transparent));
+
+    // Clear Foreground and test Mode B: sampleAllLayers = false
+    canvas.undo();
+    QCOMPARE(canvas.activeLayerImage().pixelColor(10, 10), QColor(Qt::transparent));
+
+    canvas.setSampleAllLayers(false);
+    // Flood fill at (10, 10) with cyan: since Foreground has no lines, it floods the ENTIRE layer!
+    canvas.applyFloodFill(10, 10, Qt::cyan);
+    QCOMPARE(canvas.activeLayerImage().pixelColor(10, 10), QColor(Qt::cyan));
+    QCOMPARE(canvas.activeLayerImage().pixelColor(0, 0), QColor(Qt::cyan));
+}
+
+void TestPixelEditor::testMultiLayerOnionSkinRestricted()
+{
+    SpriteDocument doc;
+    QImage f0(32, 32, QImage::Format_ARGB32);
+    f0.fill(Qt::red);
+    QImage f1(32, 32, QImage::Format_ARGB32);
+    f1.fill(Qt::green);
+    doc.setFrames({f0, f1}, {SpriteBox(QRect(0, 0, 32, 32)), SpriteBox(QRect(0, 0, 32, 32))});
+
+    SpriteLayer l1;
+    l1.id = QStringLiteral("body");
+    l1.name = QStringLiteral("Body");
+    SpriteLayer l2;
+    l2.id = QStringLiteral("sword");
+    l2.name = QStringLiteral("Sword");
+    doc.setLayers({l1, l2});
+
+    SpriteCel c0_body{0, QStringLiteral("body"), 0, 0, 255, f0};
+    QImage sword0(32, 32, QImage::Format_ARGB32);
+    sword0.fill(Qt::transparent);
+    sword0.setPixelColor(5, 5, Qt::blue);
+    SpriteCel c0_sword{1, QStringLiteral("sword"), 0, 0, 255, sword0};
+    doc.setFrameCels(0, {c0_body, c0_sword});
+
+    SpriteCel c1_body{0, QStringLiteral("body"), 0, 0, 255, f1};
+    QImage sword1(32, 32, QImage::Format_ARGB32);
+    sword1.fill(Qt::transparent);
+    sword1.setPixelColor(10, 10, Qt::blue);
+    SpriteCel c1_sword{1, QStringLiteral("sword"), 0, 0, 255, sword1};
+    doc.setFrameCels(1, {c1_body, c1_sword});
+
+    PixelEditorDialog dlg(&doc, nullptr, 1);
+    QVERIFY(dlg.canvas() != nullptr);
+    QVERIFY(dlg.canvas()->hasLayers());
+
+    // Switch active layer to "sword" (index 1)
+    dlg.canvas()->setActiveLayerIndex(1);
+    QCOMPARE(dlg.canvas()->activeLayerIndex(), 1);
+
+    // Enable onion skin restricted to current layer
+    dlg.canvas()->setOnionSkinCurrentLayerOnly(true);
+    QVERIFY(dlg.canvas()->onionSkinCurrentLayerOnly());
+}
+
+void TestPixelEditor::testMultiLayerSessionSaveAndDocumentSync()
+{
+    SpriteDocument doc;
+    QImage f0(32, 32, QImage::Format_ARGB32);
+    f0.fill(Qt::blue);
+    doc.setFrames({f0}, {SpriteBox(QRect(0, 0, 32, 32))});
+
+    PixelEditorDialog dlg(&doc, nullptr, 0);
+    QVERIFY(dlg.layerStackWidget() != nullptr);
+
+    // Add a new layer
+    dlg.canvas()->addLayer(QStringLiteral("Hat"));
+    QCOMPARE(dlg.canvas()->layerCount(), 2);
+    QCOMPARE(dlg.canvas()->activeLayerIndex(), 1);
+
+    // Draw on the new "Hat" layer at (16, 8) with yellow
+    dlg.canvas()->setCurrentTool(PixelTool::Pencil);
+    dlg.canvas()->setPrimaryColor(Qt::yellow);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonPress, QPointF(16 * dlg.canvas()->zoom(), 8 * dlg.canvas()->zoom()), Qt::LeftButton);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonRelease, QPointF(16 * dlg.canvas()->zoom(), 8 * dlg.canvas()->zoom()), Qt::LeftButton);
+    QCOMPARE(dlg.canvas()->activeLayerImage().pixelColor(16, 8), QColor(Qt::yellow));
+
+    // Save/Apply changes
+    dlg.applyButton()->click();
+
+    // Document must now have 2 layers!
+    QVERIFY(doc.hasLayers());
+    QCOMPARE(doc.layerCount(), 2);
+    QCOMPARE(doc.layers().at(1).name, QStringLiteral("Hat"));
+
+    // Document cels for frame 0 must exist
+    QVERIFY(doc.hasFrameCels(0));
+    QList<SpriteCel> cels = doc.frameCels(0);
+    QCOMPARE(cels.size(), 2);
+    QCOMPARE(cels.at(1).image.pixelColor(16, 8), QColor(Qt::yellow));
+
+    // Composite frame must combine both layers
+    QImage comp = doc.compositeFrame(0);
+    QCOMPARE(comp.pixelColor(16, 8), QColor(Qt::yellow));
+    QCOMPARE(comp.pixelColor(0, 0), QColor(Qt::blue));
+}
+
 
 int main(int argc, char *argv[])
 {

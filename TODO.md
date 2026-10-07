@@ -24,6 +24,8 @@
 | **M10** | **Addons Moteurs (Godot, Unity, Unreal)** | Haute | **Godot 4 :** `godot-bentopack-addon` (AssetLib zip, ArrayMesh, transport interactif).<br>**Unity 6 :** `com.bentopack.importer` (UPM tgz, Tight Mesh, AnimationClips, Dashboard).<br>**Unreal 5 :** `BentoPack UE5 Plugin` (Zip Fab, UFactory, M8 Render/Collision, Slate Dashboard).<br>Cahier des charges : [`addons/ADDONS_GUIDELINES.md`](file:///addons/ADDONS_GUIDELINES.md). Méta-cible `package_all_addons`. |
 | **M11** | **Architecture de Plugins Qt6 & SDK** | Haute | Externalisation des 9 filtres et 6 extracteurs en modules `.so`/`.dll` dynamiques (`QPluginLoader`), CMake config exportable. |
 | **M15** | **Refonte Drag & Drop Filmstrip** | Moyenne | `FilmstripListWidget` dédié, calcul linéaire du drop 1D, indicateur bleu contrasté, découplage transactionnel sans récursion destructrice. |
+| **M17** | **Calques Aseprite & Variantes Skin** | Haute | Structures `SpriteLayer` et `SpriteCel` dans `SpriteDocument`, décodage/encodage binaire Aseprite complet (`CHUNK_LAYER`, `CHUNK_CEL` raw/zlib, tags, blending), profils de skins/variantes combinatoires et découplés, compatibilité 100% Aseprite bidirectionnelle. |
+| **M18** | **Édition de Pixels Multi-Calques & Pile de Calques** | Haute | Dock `LayerStackWidget` complet dans `PixelEditorDialog` (Z-order, visibilité, verrou, opacité 0-100%, modes de composition QPainter, duplication, suppression, merge down, flatten), dessin multi-couches dans `PixelCanvas`, échantillonnage multi-calques (pipette, remplissage, baguette magique), onion skinning ciblé, synchronisation bidirectionnelle avec `SpriteDocument` et préservation des documents plats. |
 | **M20** | **Taxonomie Filtres & Pixel Editor** | Moyenne | Typage déclaratif `FilterModifierFlags` (`PixelModifier`, `GeometryModifier`, `AtlasModifier`). Intégration complète des filtres non-atlas dans `PixelEditorDialog` avec bouton menu dédié, gestion ciblée frame unique vs animation complète via checkbox dynamique, et Undo/Redo transactionnel. |
 | **M-CLI** | **Interface CLI & Mode Watch Daemon** | Moyenne | `bentopack-cli` avec mode daemon de surveillance en arrière-plan (`--watch`, détection QFileSystemWatcher, debouncing, isolation par verrou `.lock`, protection contre l'auto-déclenchement), drop-in TexturePacker / Aseprite (`-b`) et export Godot 4 avec conservation des UIDs. |
 | **M-DEVOPS** | **Release CI Multi-Plateforme & Packaging** | Haute | Pipelines CI/CD automatisés sur tous les OS cibles :<br>• **Windows :** NSIS installer & ZIP portable autonome (résolution transitives MinGW par `ldd` 3 passes, `qt.conf` relatif).<br>• **Linux :** Ubuntu 22.04+ (paquets DEB, RPM, AppImage autonome, Tarball).<br>• **macOS :** Puces Apple Silicon (ARM64) et Intel (x86_64), bundles `.app` et archives DMG.<br>• **Haiku OS :** Support natif BeAPI/HaikuDepot via `haiku.PackageInfo.in` et `package.cmake` (génération `.hpkg`). |
@@ -39,10 +41,7 @@
 │ Jalon             │ Thématique                        │ Priorité       │
 ├───────────────────┼───────────────────────────────────┼────────────────┤
 │ STORES            │ Publication & Distribution Stores │ Haute (Imm.)   │
-│ M17 (ASE-LAYERS)  │ Calques Aseprite & Variantes Skin │ Haute          │
-│ M18 (LAYER-EDIT)  │ Édition Pixel Multi-Calques       │ Haute          │
 │ M19 (SMART-MESH)  │ Maillage Intelligent CDT & Relief │ Haute / Moyenne│
-│ M20 (FILTER-TAX)  │ Taxonomie & Déclencheurs Filtres  │ Moyenne        │
 │ M16               │ Multi-Page Atlas (Atlas Spanning) │ Haute / Moyenne│
 │ FORMATS           │ Formats d'Exportation Post-M10    │ Moyenne        │
 │ FILTERS-POLISH    │ Fignolage Extrusions & Filtres    │ Moyenne        │
@@ -264,10 +263,10 @@ Dans les jeux vidéo (RPG, action, beat'em up), un personnage effectue les même
 
 ---
 
-## 🖌️ 11. M18 : Édition de Pixels Multi-Calques & Pile de Calques (Layer Stack)
+## 🖌️ 11. M18 : Édition de Pixels Multi-Calques & Pile de Calques (Layer Stack) — ✅ Terminé & Validé (42/42 Tests Pixel Editor, 15/15 CTest)
 
 ### 📌 Contexte & Problématique Métier
-Avec l'avènement des animations multi-calques, l'Éditeur de Pixels ([`PixelEditorDialog`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/src/widgets/pixeleditordialog.cpp), [`PixelCanvas`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/src/widgets/pixelcanvas.cpp)) ne peut plus se contenter d'éditer une simple image aplatie. L'utilisateur doit pouvoir dessiner sur l'accessoire sans écraser les pixels du corps du personnage situé dessous.
+Avec l'avènement des animations multi-calques, l'Éditeur de Pixels ([`PixelEditorDialog`](file:///BentoPack/src/widgets/pixeleditordialog.cpp), [`PixelCanvas`](file:///BentoPack/src/widgets/pixelcanvas.cpp)) ne peut plus se contenter d'éditer une simple image aplatie. L'utilisateur doit pouvoir dessiner sur l'accessoire sans écraser les pixels du corps du personnage situé dessous.
 
 ### 🏛️ Spécifications Techniques d'Implémentation
 1. **Dock « Pile de Calques » (*Layer Stack*) dans `PixelEditorDialog` :**

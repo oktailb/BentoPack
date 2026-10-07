@@ -770,6 +770,60 @@ QWidget* PixelEditorDialog::createPalettePanel()
     swatchScroll->setWidget(m_swatchesContainer);
     layout->addWidget(swatchScroll);
 
+    // 3b. Layer Stack Dock (M18)
+    m_layerStackGroup = new QGroupBox(tr("Layers"), panel);
+    m_layerStackGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *lsLayout = new QVBoxLayout(m_layerStackGroup);
+    lsLayout->setContentsMargins(4, 6, 4, 6);
+    lsLayout->setSpacing(4);
+
+    m_layerStackWidget = new LayerStackWidget(m_layerStackGroup);
+    lsLayout->addWidget(m_layerStackWidget);
+    layout->addWidget(m_layerStackGroup);
+
+    connect(m_layerStackWidget, &LayerStackWidget::activeLayerChanged,
+            this, [this](int index) {
+                if (m_canvas) m_canvas->setActiveLayerIndex(index);
+            });
+    connect(m_layerStackWidget, &LayerStackWidget::layerVisibilityChanged,
+            this, &PixelEditorDialog::onLayerVisibilityChanged);
+    connect(m_layerStackWidget, &LayerStackWidget::layerLockChanged,
+            this, &PixelEditorDialog::onLayerLockChanged);
+    connect(m_layerStackWidget, &LayerStackWidget::layerOpacityChanged,
+            this, &PixelEditorDialog::onLayerOpacityChanged);
+    connect(m_layerStackWidget, &LayerStackWidget::layerBlendModeChanged,
+            this, &PixelEditorDialog::onLayerBlendModeChanged);
+    connect(m_layerStackWidget, &LayerStackWidget::layerNameChanged,
+            this, &PixelEditorDialog::onLayerNameChanged);
+    connect(m_layerStackWidget, &LayerStackWidget::addLayerRequested,
+            this, &PixelEditorDialog::onAddLayerRequested);
+    connect(m_layerStackWidget, &LayerStackWidget::duplicateLayerRequested,
+            this, &PixelEditorDialog::onDuplicateLayerRequested);
+    connect(m_layerStackWidget, &LayerStackWidget::removeLayerRequested,
+            this, &PixelEditorDialog::onRemoveLayerRequested);
+    connect(m_layerStackWidget, &LayerStackWidget::moveLayerUpRequested,
+            this, &PixelEditorDialog::onMoveLayerUpRequested);
+    connect(m_layerStackWidget, &LayerStackWidget::moveLayerDownRequested,
+            this, &PixelEditorDialog::onMoveLayerDownRequested);
+    connect(m_layerStackWidget, &LayerStackWidget::mergeLayerDownRequested,
+            this, &PixelEditorDialog::onMergeLayerDownRequested);
+    connect(m_layerStackWidget, &LayerStackWidget::flattenLayersRequested,
+            this, &PixelEditorDialog::onFlattenLayersRequested);
+    connect(m_layerStackWidget, &LayerStackWidget::sampleAllLayersChanged,
+            this, &PixelEditorDialog::onSampleAllLayersChanged);
+    connect(m_layerStackWidget, &LayerStackWidget::onionSkinCurrentLayerOnlyChanged,
+            this, &PixelEditorDialog::onOnionSkinCurrentLayerOnlyChanged);
+
+    connect(m_canvas, &PixelCanvas::layersChanged,
+            this, &PixelEditorDialog::onCanvasLayersChanged);
+    connect(m_canvas, &PixelCanvas::activeLayerChanged,
+            this, &PixelEditorDialog::onCanvasActiveLayerChanged);
+    connect(m_canvas, &PixelCanvas::layerLockedAttempted, this, [this]() {
+        if (m_colorInfoLabel) {
+            m_colorInfoLabel->setText(tr("⚠ Active layer is locked! Unlock to paint."));
+        }
+    });
+
     // 4. Onion Skinning Suite
     m_onionSkinGroup = new QGroupBox(tr("Onion Skinning"), panel);
     m_onionSkinGroup->setStyleSheet(groupBoxStyle);
@@ -1234,7 +1288,81 @@ void PixelEditorDialog::loadFrame(int index)
     QPoint curFrameOffset;
     computeAnimationEnvelope(envSize, envPivot, curFrameOffset);
 
-    m_canvas->setImage(frameImg);
+    // Multi-Layer Initialization (M18)
+    bool hasLayers = false;
+    QList<SpriteLayer> layersToUse;
+    if (m_sessionLayersModified && !m_sessionLayers.isEmpty()) {
+        layersToUse = m_sessionLayers;
+        hasLayers = true;
+    } else if (m_document && m_document->hasLayers()) {
+        layersToUse = m_document->layers();
+        m_sessionLayers = layersToUse;
+        hasLayers = true;
+    }
+
+    if (hasLayers) {
+        QList<SpriteCel> celsToUse;
+        if (m_sessionModifiedCels.contains(index)) {
+            celsToUse = m_sessionModifiedCels[index];
+        } else if (m_document && m_document->hasFrameCels(index)) {
+            celsToUse = m_document->frameCels(index);
+        }
+
+        QList<CanvasLayer> canvasLayers;
+        canvasLayers.reserve(layersToUse.size());
+        for (int l = 0; l < layersToUse.size(); ++l) {
+            const auto &docL = layersToUse.at(l);
+            CanvasLayer cl;
+            cl.id = docL.id;
+            cl.name = docL.name;
+            cl.visible = docL.visible;
+            cl.locked = docL.locked;
+            cl.opacity = docL.opacity;
+            cl.zOrder = docL.zOrder;
+            cl.blendMode = docL.blendMode;
+
+            for (const auto &cel : celsToUse) {
+                if (cel.layerIndex == l || (!docL.id.isEmpty() && cel.layerId == docL.id)) {
+                    cl.image = cel.image;
+                    cl.offset = QPoint(cel.x, cel.y);
+                    break;
+                }
+            }
+            if (cl.image.isNull()) {
+                if (l == 0 && !frameImg.isNull()) {
+                    cl.image = frameImg;
+                } else {
+                    cl.image = QImage(frameImg.size().isEmpty() ? QSize(32, 32) : frameImg.size(), QImage::Format_ARGB32);
+                    cl.image.fill(Qt::transparent);
+                }
+            }
+            canvasLayers.append(cl);
+        }
+
+        int activeIdx = m_canvas ? m_canvas->activeLayerIndex() : 0;
+        if (activeIdx < 0 || activeIdx >= canvasLayers.size()) activeIdx = 0;
+        m_canvas->setLayers(canvasLayers, activeIdx);
+        if (m_layerStackWidget) {
+            m_layerStackWidget->setLayers(canvasLayers, activeIdx);
+        }
+    } else {
+        // Flat document: 1 base layer
+        CanvasLayer cl;
+        cl.id = QStringLiteral("base_0");
+        cl.name = tr("Background");
+        cl.visible = true;
+        cl.locked = false;
+        cl.opacity = 255;
+        cl.zOrder = 0;
+        cl.image = frameImg;
+        cl.offset = QPoint(0, 0);
+
+        m_canvas->setLayers({cl}, 0);
+        if (m_layerStackWidget) {
+            m_layerStackWidget->setLayers({cl}, 0);
+        }
+    }
+
     m_canvas->setPolygonMesh(poly);
     m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
 
@@ -1398,6 +1526,25 @@ void PixelEditorDialog::saveCurrentFrameToSession()
     if (m_canvas->hasPolygonMesh()) {
         m_sessionModifiedPolygons[m_currentFrameIndex] = m_canvas->polygonMesh();
     }
+
+    if (m_canvas->hasLayers() && (m_canvas->layerCount() > 1 || m_sessionLayersModified || (m_document && m_document->hasLayers()))) {
+        const auto canvasLayers = m_canvas->layers();
+        QList<SpriteCel> cels;
+        cels.reserve(canvasLayers.size());
+        for (int i = 0; i < canvasLayers.size(); ++i) {
+            const auto &cl = canvasLayers.at(i);
+            SpriteCel cel;
+            cel.layerIndex = i;
+            cel.layerId = cl.id;
+            cel.opacity = cl.opacity;
+            cel.x = static_cast<qint16>(cl.offset.x());
+            cel.y = static_cast<qint16>(cl.offset.y());
+            cel.image = cl.image;
+            cels.append(cel);
+        }
+        m_sessionModifiedCels[m_currentFrameIndex] = cels;
+        syncSessionLayersFromCanvas();
+    }
 }
 
 void PixelEditorDialog::onPreviousFrame()
@@ -1485,6 +1632,11 @@ void PixelEditorDialog::restoreFrameBackup(int frameIndex, const QImage &img, co
         m_sessionModifiedPolygons[frameIndex] = poly;
     } else {
         m_sessionModifiedPolygons.remove(frameIndex);
+    }
+    if (m_sessionModifiedCels.contains(frameIndex) && !m_sessionModifiedCels[frameIndex].isEmpty()) {
+        int actIdx = m_canvas ? m_canvas->activeLayerIndex() : 0;
+        if (actIdx < 0 || actIdx >= m_sessionModifiedCels[frameIndex].size()) actIdx = 0;
+        m_sessionModifiedCels[frameIndex][actIdx].image = img;
     }
 
     if (frameIndex == m_currentFrameIndex && m_canvas) {
@@ -1928,32 +2080,58 @@ void PixelEditorDialog::updateOnionSkinLayers()
     auto getClippedFrameImage = [this](int frameIdx) -> QImage {
         const bool hasPoly = (frameIdx >= 0 && frameIdx < m_document->boxes().size() &&
                               m_document->box(frameIdx).polygon.size() >= 3);
-        if (m_sessionModifiedFrames.contains(frameIdx)) {
-            QImage baseImage = m_sessionModifiedFrames[frameIdx];
-            if (!hasPoly || baseImage.isNull()) {
-                return baseImage;
+
+        QImage baseImage;
+        if (m_canvas && m_canvas->onionSkinCurrentLayerOnly() && m_canvas->hasLayers()) {
+            QString targetLayerId = m_canvas->activeLayer().id;
+            int targetLayerIndex = m_canvas->activeLayerIndex();
+            if (m_sessionModifiedCels.contains(frameIdx)) {
+                const auto &cels = m_sessionModifiedCels[frameIdx];
+                for (const auto &c : cels) {
+                    if (c.layerId == targetLayerId || c.layerIndex == targetLayerIndex) {
+                        baseImage = c.image;
+                        break;
+                    }
+                }
+            } else if (m_document && m_document->hasLayers()) {
+                int docLayerIdx = m_document->findLayerIndexById(targetLayerId);
+                if (docLayerIdx < 0) docLayerIdx = targetLayerIndex;
+                if (docLayerIdx >= 0 && docLayerIdx < m_document->layerCount()) {
+                    SpriteCel c = m_document->cel(frameIdx, docLayerIdx);
+                    baseImage = c.image;
+                }
             }
-            // Clip modified frame image using polygon mask
-            const SpriteBox &b = m_document->box(frameIdx);
-            QImage mask(baseImage.size(), QImage::Format_ARGB32_Premultiplied);
-            mask.fill(Qt::transparent);
-            {
-                QPainter mp(&mask);
-                mp.setRenderHint(QPainter::Antialiasing, false);
-                mp.setBrush(Qt::white);
-                mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
-                mp.drawPolygon(b.polygon);
-            }
-            QImage clipped = baseImage.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-            {
-                QPainter p(&clipped);
-                p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-                p.drawImage(0, 0, mask);
-            }
-            return clipped.convertToFormat(QImage::Format_ARGB32);
-        } else {
-            return hasPoly ? m_document->polygonClippedFrame(frameIdx) : m_document->frame(frameIdx);
         }
+
+        if (baseImage.isNull()) {
+            if (m_sessionModifiedFrames.contains(frameIdx)) {
+                baseImage = m_sessionModifiedFrames[frameIdx];
+            } else {
+                baseImage = hasPoly ? m_document->polygonClippedFrame(frameIdx) : m_document->frame(frameIdx);
+            }
+        }
+
+        if (!hasPoly || baseImage.isNull()) {
+            return baseImage;
+        }
+        // Clip modified frame image using polygon mask
+        const SpriteBox &b = m_document->box(frameIdx);
+        QImage mask(baseImage.size(), QImage::Format_ARGB32_Premultiplied);
+        mask.fill(Qt::transparent);
+        {
+            QPainter mp(&mask);
+            mp.setRenderHint(QPainter::Antialiasing, false);
+            mp.setBrush(Qt::white);
+            mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+            mp.drawPolygon(b.polygon);
+        }
+        QImage clipped = baseImage.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        {
+            QPainter p(&clipped);
+            p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+            p.drawImage(0, 0, mask);
+        }
+        return clipped.convertToFormat(QImage::Format_ARGB32);
     };
 
     // Calculate current frame's effective pivot
@@ -2416,7 +2594,11 @@ bool PixelEditorDialog::performAtlasRepack(const QMap<int, QImage> &modifiedFram
 bool PixelEditorDialog::applyChanges()
 {
     saveCurrentFrameToSession();
-    if (m_sessionModifiedFrames.isEmpty() && m_sessionModifiedPolygons.isEmpty()) {
+    if (m_canvas && m_canvas->layerCount() > 1 && m_sessionLayers.size() <= 1) {
+        syncSessionLayersFromCanvas();
+    }
+    const bool hasMultiLayerChanges = (m_sessionLayers.size() > 1 || m_sessionLayersModified || !m_sessionModifiedCels.isEmpty() || (m_canvas && m_canvas->layerCount() > 1));
+    if (m_sessionModifiedFrames.isEmpty() && m_sessionModifiedPolygons.isEmpty() && !hasMultiLayerChanges) {
         return true;
     }
     if (!m_document) return false;
@@ -2438,7 +2620,7 @@ bool PixelEditorDialog::applyChanges()
         }
     }
 
-    if (actualFrameChanges.isEmpty() && actualPolyChanges.isEmpty()) {
+    if (actualFrameChanges.isEmpty() && actualPolyChanges.isEmpty() && !hasMultiLayerChanges) {
         m_sessionModifiedFrames.clear();
         m_sessionModifiedPolygons.clear();
         updateCollisionWarningUI();
@@ -2476,15 +2658,30 @@ bool PixelEditorDialog::applyChanges()
     }
 
     // Commit frame & polygon changes first so document state is completely up-to-date
-    if (m_docUndoStack) {
-        m_docUndoStack->push(new EditSpritePixelsCommand(m_document, actualFrameChanges, actualPolyChanges));
-    } else {
-        EditSpritePixelsCommand cmd(m_document, actualFrameChanges, actualPolyChanges);
-        cmd.redo();
+    if (!actualFrameChanges.isEmpty() || !actualPolyChanges.isEmpty()) {
+        if (m_docUndoStack) {
+            m_docUndoStack->push(new EditSpritePixelsCommand(m_document, actualFrameChanges, actualPolyChanges));
+        } else {
+            EditSpritePixelsCommand cmd(m_document, actualFrameChanges, actualPolyChanges);
+            cmd.redo();
+        }
+    }
+
+    // Commit layers and cels to document if modified
+    if (m_document && (hasMultiLayerChanges || m_sessionLayersModified || !m_sessionModifiedCels.isEmpty() || !m_sessionLayers.isEmpty())) {
+        if (!m_sessionLayers.isEmpty()) {
+            m_document->setLayers(m_sessionLayers);
+        }
+        for (auto it = m_sessionModifiedCels.constBegin(); it != m_sessionModifiedCels.constEnd(); ++it) {
+            m_document->setFrameCels(it.key(), it.value());
+        }
+        m_document->recompositeAllFrames();
     }
 
     m_sessionModifiedFrames.clear();
     m_sessionModifiedPolygons.clear();
+    m_sessionModifiedCels.clear();
+    m_sessionLayersModified = false;
     updateCollisionWarningUI();
 
     if (shouldRepack) {
@@ -2653,6 +2850,10 @@ void PixelEditorDialog::retranslateUi()
         m_paletteCombo->setCurrentIndex(curIdx);
         m_paletteCombo->blockSignals(false);
     }
+
+    // Layer Stack (M18)
+    if (m_layerStackGroup) m_layerStackGroup->setTitle(tr("Layers"));
+    if (m_layerStackWidget) m_layerStackWidget->retranslateUi();
 
     // Onion Skinning
     if (m_onionSkinGroup) m_onionSkinGroup->setTitle(tr("Onion Skinning"));
@@ -2911,3 +3112,160 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         m_canvas->undoStack()->push(new FilterUndoCmd(applyState, cmdText));
     }
 }
+
+// ============================================================================
+// Multi-Layer Management (M18)
+// ============================================================================
+
+void PixelEditorDialog::onLayerVisibilityChanged(int index, bool visible)
+{
+    if (!m_canvas) return;
+    m_canvas->setLayerVisible(index, visible);
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+    updateOnionSkinLayers();
+}
+
+void PixelEditorDialog::onLayerLockChanged(int index, bool locked)
+{
+    if (!m_canvas) return;
+    m_canvas->setLayerLocked(index, locked);
+    syncSessionLayersFromCanvas();
+}
+
+void PixelEditorDialog::onLayerOpacityChanged(int index, quint8 opacity)
+{
+    if (!m_canvas) return;
+    m_canvas->setLayerOpacity(index, opacity);
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onLayerBlendModeChanged(int index, QPainter::CompositionMode mode)
+{
+    if (!m_canvas) return;
+    m_canvas->setLayerBlendMode(index, mode);
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onLayerNameChanged(int index, const QString &name)
+{
+    if (!m_canvas) return;
+    m_canvas->setLayerName(index, name);
+    syncSessionLayersFromCanvas();
+}
+
+void PixelEditorDialog::onAddLayerRequested()
+{
+    if (!m_canvas) return;
+    m_canvas->addLayer();
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onDuplicateLayerRequested()
+{
+    if (!m_canvas) return;
+    m_canvas->duplicateLayer(m_canvas->activeLayerIndex());
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onRemoveLayerRequested()
+{
+    if (!m_canvas) return;
+    m_canvas->removeLayer(m_canvas->activeLayerIndex());
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onMoveLayerUpRequested()
+{
+    if (!m_canvas) return;
+    m_canvas->moveLayerUp(m_canvas->activeLayerIndex());
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onMoveLayerDownRequested()
+{
+    if (!m_canvas) return;
+    m_canvas->moveLayerDown(m_canvas->activeLayerIndex());
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onMergeLayerDownRequested()
+{
+    if (!m_canvas) return;
+    m_canvas->mergeLayerDown(m_canvas->activeLayerIndex());
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onFlattenLayersRequested()
+{
+    if (!m_canvas) return;
+    m_canvas->flattenLayers();
+    syncSessionLayersFromCanvas();
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onSampleAllLayersChanged(bool enabled)
+{
+    if (!m_canvas) return;
+    m_canvas->setSampleAllLayers(enabled);
+}
+
+void PixelEditorDialog::onOnionSkinCurrentLayerOnlyChanged(bool enabled)
+{
+    if (!m_canvas) return;
+    m_canvas->setOnionSkinCurrentLayerOnly(enabled);
+    updateOnionSkinLayers();
+}
+
+void PixelEditorDialog::onCanvasLayersChanged()
+{
+    if (m_layerStackWidget && m_canvas) {
+        m_layerStackWidget->setLayers(m_canvas->layers(), m_canvas->activeLayerIndex());
+    }
+    if (m_canvas && (m_canvas->layerCount() > 1 || (m_document && m_document->hasLayers()))) {
+        syncSessionLayersFromCanvas();
+    }
+    updateLivePreview();
+}
+
+void PixelEditorDialog::onCanvasActiveLayerChanged(int index)
+{
+    if (m_layerStackWidget) {
+        m_layerStackWidget->setActiveLayerIndex(index);
+    }
+    if (m_canvas && m_canvas->onionSkinCurrentLayerOnly()) {
+        updateOnionSkinLayers();
+    }
+}
+
+void PixelEditorDialog::syncSessionLayersFromCanvas()
+{
+    if (!m_canvas) return;
+    const auto canvasLayers = m_canvas->layers();
+    m_sessionLayers.clear();
+    m_sessionLayers.reserve(canvasLayers.size());
+    for (int i = 0; i < canvasLayers.size(); ++i) {
+        const auto &cl = canvasLayers.at(i);
+        SpriteLayer sl;
+        sl.id = cl.id;
+        sl.name = cl.name;
+        sl.visible = cl.visible;
+        sl.locked = cl.locked;
+        sl.opacity = cl.opacity;
+        sl.zOrder = cl.zOrder;
+        sl.blendMode = cl.blendMode;
+        m_sessionLayers.append(sl);
+    }
+    if (m_sessionLayers.size() > 1 || (m_document && m_document->hasLayers())) {
+        m_sessionLayersModified = true;
+    }
+}
+
