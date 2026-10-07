@@ -36,6 +36,7 @@ public:
     QString name() const override;
     QString description() const override;
     QString category() const override;
+    FilterModifierFlags modifierFlags() const override { return PixelModifier; }
 
     FilterDialogBase* createDialog(SpriteDocument *doc,
                                    QUndoStack *undoStack = nullptr,

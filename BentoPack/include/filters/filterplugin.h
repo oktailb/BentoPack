@@ -36,7 +36,27 @@ class FilterDialogBase;
 class BENTOPACK_CORE_EXPORT FilterPlugin
 {
 public:
+    /**
+     * @brief Declares the functional nature of mutations performed by the filter.
+     */
+    enum FilterModifierFlag {
+        NoModifier       = 0x0,
+        PixelModifier    = 0x1, ///< Modifies color channels/palette without altering alpha silhouettes or dimensions.
+        GeometryModifier = 0x2, ///< Modifies alpha silhouettes, dimensions, or bounds (e.g. Outline, Rescale, BackgroundRemoval).
+        AtlasModifier    = 0x4  ///< Reorganizes or packs rectangles/sprites across the atlas sheet.
+    };
+    Q_DECLARE_FLAGS(FilterModifierFlags, FilterModifierFlag)
+
     virtual ~FilterPlugin() = default;
+
+    /**
+     * @brief Returns bitwise flags describing what this filter modifies.
+     */
+    virtual FilterModifierFlags modifierFlags() const { return PixelModifier; }
+
+    bool isPixelModifier() const { return modifierFlags().testFlag(PixelModifier); }
+    bool isGeometryModifier() const { return modifierFlags().testFlag(GeometryModifier); }
+    bool isAtlasModifier() const { return modifierFlags().testFlag(AtlasModifier); }
 
     /**
      * @brief Unique identifier for the filter (e.g., "background_removal", "despill").
@@ -100,5 +120,6 @@ public:
 
 #define FilterPlugin_iid "com.bentopack.FilterPlugin/1.0"
 Q_DECLARE_INTERFACE(FilterPlugin, FilterPlugin_iid)
+Q_DECLARE_OPERATORS_FOR_FLAGS(FilterPlugin::FilterModifierFlags)
 
 #endif // FILTERPLUGIN_H

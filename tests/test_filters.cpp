@@ -98,6 +98,40 @@ void TestFilters::testFilterRegistry()
     }
     // Exactly 9 filter actions without any duplicates
     QCOMPARE(filterActionCount, 9);
+
+    // Test taxonomy and modifier flags
+    FilterPlugin *bgRem = reg.findFilter(QStringLiteral("background_removal"));
+    QVERIFY(bgRem != nullptr);
+    QVERIFY(bgRem->isGeometryModifier());
+    QVERIFY(bgRem->isPixelModifier());
+    QVERIFY(!bgRem->isAtlasModifier());
+
+    FilterPlugin *outline = reg.findFilter(QStringLiteral("outline"));
+    QVERIFY(outline != nullptr);
+    QVERIFY(outline->isGeometryModifier());
+
+    FilterPlugin *despill = reg.findFilter(QStringLiteral("despill"));
+    QVERIFY(despill != nullptr);
+    QVERIFY(despill->isPixelModifier());
+    QVERIFY(!despill->isGeometryModifier());
+    QVERIFY(!despill->isAtlasModifier());
+
+    FilterPlugin *atlasPack = reg.findFilter(QStringLiteral("atlas_packing"));
+    QVERIFY(atlasPack != nullptr);
+    QVERIFY(atlasPack->isAtlasModifier());
+    QVERIFY(!atlasPack->isGeometryModifier());
+
+    FilterPlugin *tightPack = reg.findFilter(QStringLiteral("tight_polygon_packing"));
+    QVERIFY(tightPack != nullptr);
+    QVERIFY(tightPack->isAtlasModifier());
+    QVERIFY(tightPack->isGeometryModifier());
+
+    QList<FilterPlugin*> pixelMods = reg.filtersByModifier(FilterPlugin::PixelModifier);
+    QVERIFY(!pixelMods.isEmpty());
+    QList<FilterPlugin*> geomMods = reg.filtersByModifier(FilterPlugin::GeometryModifier);
+    QVERIFY(!geomMods.isEmpty());
+    QList<FilterPlugin*> atlasMods = reg.filtersByModifier(FilterPlugin::AtlasModifier);
+    QCOMPARE(atlasMods.size(), 2);
 }
 
 void TestFilters::testDespillFilterAlgorithm()

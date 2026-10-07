@@ -36,6 +36,7 @@ public:
     QString name() const override;
     QString description() const override;
     QString category() const override;
+    FilterModifierFlags modifierFlags() const override { return AtlasModifier; }
     QKeySequence shortcut() const override { return QKeySequence(QStringLiteral("Ctrl+Shift+P")); }
 
     FilterDialogBase* createDialog(SpriteDocument *doc,

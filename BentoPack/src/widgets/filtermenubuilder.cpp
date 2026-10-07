@@ -18,6 +18,7 @@
 #include "filters/filterregistry.h"
 #include "filters/filterplugin.h"
 #include "widgets/filterdialogbase.h"
+#include "widgets/polygonmeshdialog.h"
 #include "model/spritedocument.h"
 #include <QAction>
 #include <QMessageBox>
@@ -41,10 +42,14 @@ void FilterMenuBuilder::populateMenu(QMenu *menu,
 
         // Section header for category
         QString catDisplay = cat;
-        if (cat == QLatin1String("Cleanup"))       catDisplay = QObject::tr("Cleanup");
-        else if (cat == QLatin1String("Colors"))   catDisplay = QObject::tr("Colors");
-        else if (cat == QLatin1String("Effects"))  catDisplay = QObject::tr("Effects");
-        else if (cat == QLatin1String("Geometry")) catDisplay = QObject::tr("Geometry");
+        if (cat == QLatin1String("Cleanup") || cat == QLatin1String("Cleanup & Extraction"))
+            catDisplay = QObject::tr("Cleanup & Extraction");
+        else if (cat == QLatin1String("Colors") || cat == QLatin1String("Colors & Palettes"))
+            catDisplay = QObject::tr("Colors & Palettes");
+        else if (cat == QLatin1String("Effects") || cat == QLatin1String("Effects & Outlines"))
+            catDisplay = QObject::tr("Effects & Outlines");
+        else if (cat == QLatin1String("Geometry") || cat == QLatin1String("Geometry & Transform"))
+            catDisplay = QObject::tr("Geometry & Transform");
 
         menu->addSection(catDisplay);
 
@@ -72,8 +77,29 @@ void FilterMenuBuilder::populateMenu(QMenu *menu,
 
                 FilterDialogBase *dlg = filter->createDialog(doc, undoStack, parentWindow);
                 if (dlg) {
-                    dlg->exec();
+                    int res = dlg->exec();
                     delete dlg;
+
+                    if (res == QDialog::Accepted && filter->isGeometryModifier() && doc && doc->frameCount() > 0) {
+                        bool hasAnyMesh = false;
+                        for (const auto &box : doc->boxes()) {
+                            if (box.hasPolygonMesh) {
+                                hasAnyMesh = true;
+                                break;
+                            }
+                        }
+
+                        QString title = QObject::tr("Geometry Modified");
+                        QString prompt = hasAnyMesh
+                            ? QObject::tr("The applied filter modified sprite geometry and silhouettes.\nExisting polygon meshes might no longer match the new silhouettes.\n\nWould you like to open the Polygon Mesh tool to recalculate meshes?")
+                            : QObject::tr("The applied filter modified sprite geometry and silhouettes.\n\nWould you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?");
+
+                        int reply = QMessageBox::question(parentWindow, title, prompt, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                        if (reply == QMessageBox::Yes) {
+                            PolygonMeshDialog meshDlg(doc, undoStack, 0, parentWindow);
+                            meshDlg.exec();
+                        }
+                    }
                 }
             });
         }

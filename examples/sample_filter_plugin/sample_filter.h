@@ -18,6 +18,7 @@ public:
     QString name() const override { return QStringLiteral("Sample Invert Color"); }
     QString description() const override { return QStringLiteral("Reference filter plugin inverting RGB pixel channels."); }
     QString category() const override { return QStringLiteral("Color"); }
+    FilterModifierFlags modifierFlags() const override { return PixelModifier; }
 
     FilterDialogBase* createDialog(SpriteDocument *doc,
                                    QUndoStack *undoStack = nullptr,

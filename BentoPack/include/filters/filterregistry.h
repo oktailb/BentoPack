@@ -51,6 +51,7 @@ public:
 
     QStringList categories() const;
     QList<FilterPlugin*> filtersByCategory(const QString &category) const;
+    QList<FilterPlugin*> filtersByModifier(FilterPlugin::FilterModifierFlag flag) const;
 
     void initDefaultFilters();
     void rescanPlugins();

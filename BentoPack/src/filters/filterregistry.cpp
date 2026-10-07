@@ -93,6 +93,17 @@ QList<FilterPlugin*> FilterRegistry::filtersByCategory(const QString &category) 
     return list;
 }
 
+QList<FilterPlugin*> FilterRegistry::filtersByModifier(FilterPlugin::FilterModifierFlag flag) const
+{
+    QList<FilterPlugin*> list;
+    for (FilterPlugin *f : m_filters) {
+        if (f && f->modifierFlags().testFlag(flag)) {
+            list.append(f);
+        }
+    }
+    return list;
+}
+
 void FilterRegistry::initDefaultFilters()
 {
     if (m_initialized) return;

@@ -36,6 +36,7 @@ public:
     QString name() const override;
     QString description() const override;
     QString category() const override;
+    FilterModifierFlags modifierFlags() const override { return GeometryModifier | PixelModifier; }
     QKeySequence shortcut() const override { return QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B); }
 
     FilterDialogBase* createDialog(SpriteDocument *doc,
