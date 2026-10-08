@@ -76,6 +76,7 @@ private slots:
     void testApplyToAllFramesRelativePivot();
     void testProColorPickerAndHarmonies();
     void testPixelEditorNonAtlasFiltersAndAnimationScope();
+    void testPixelEditorFilterLivePreviewAndRollback();
 
     // 9. Multi-Layer Editing & Layer Stack Tests (M18)
     void testLayerStackWidgetAndControls();
@@ -84,6 +85,8 @@ private slots:
     void testMultiLayerSamplingAndFloodFill();
     void testMultiLayerOnionSkinRestricted();
     void testMultiLayerSessionSaveAndDocumentSync();
+    void testErgonomicContextualPanels();
+    void testFilterAllFramesMultiLayerAndNavigation();
 };
 
 void TestPixelEditor::initTestCase()
@@ -1668,6 +1671,127 @@ void TestPixelEditor::testPixelEditorNonAtlasFiltersAndAnimationScope()
     QCOMPARE(dialog.canvas()->image().pixelColor(0, 0), QColor(255, 0, 0, 255));
 }
 
+void TestPixelEditor::testPixelEditorFilterLivePreviewAndRollback()
+{
+    // Prepare document with a single 16x16 solid red frame
+    QImage redImg(16, 16, QImage::Format_ARGB32);
+    redImg.fill(QColor(255, 0, 0, 255));
+
+    SpriteDocument doc;
+    doc.setAtlas(redImg);
+    SpriteBox box(QRect(0, 0, 16, 16));
+    box.index = 0;
+    doc.setFrames({redImg}, {box});
+
+    PixelEditorDialog dialog(&doc, nullptr, 0);
+    QCOMPARE(dialog.canvas()->image().pixelColor(0, 0), QColor(255, 0, 0, 255));
+
+    // Custom Mock Filter that enables interactive live preview validation
+    class LivePreviewTestFilter : public FilterPlugin {
+    public:
+        enum ActionToPerform { TestPreviewThenReject, TestPreviewThenAccept };
+        ActionToPerform action = TestPreviewThenReject;
+        PixelCanvas *observedCanvas = nullptr;
+        bool previewSeenOnCanvas = false;
+        bool restoreSeenOnCanvas = false;
+
+        QString id() const override { return QStringLiteral("live_preview_filter"); }
+        QString name() const override { return QStringLiteral("Live Preview Filter"); }
+        QString description() const override { return QStringLiteral("Test live preview filter"); }
+        QString category() const override { return QStringLiteral("Effects"); }
+        FilterModifierFlags modifierFlags() const override { return PixelModifier; }
+
+        FilterDialogBase* createDialog(SpriteDocument *d, QUndoStack*, QWidget *parent) override {
+            class LiveDlg : public FilterDialogBase {
+            public:
+                LivePreviewTestFilter *m_parentFilter = nullptr;
+                LiveDlg(SpriteDocument *doc, LivePreviewTestFilter *pf, QWidget *p)
+                    : FilterDialogBase(doc, nullptr, p), m_parentFilter(pf)
+                {
+                    QTimer::singleShot(10, this, [this]() {
+                        // 1. Apply preview: fill tempDoc with blue
+                        applyPreview();
+                        // Verify that observed canvas immediately received the preview!
+                        if (m_parentFilter && m_parentFilter->observedCanvas) {
+                            QColor col = m_parentFilter->observedCanvas->image().pixelColor(0, 0);
+                            if (col == QColor(0, 0, 255, 255)) {
+                                m_parentFilter->previewSeenOnCanvas = true;
+                            }
+                        }
+
+                        // 2. Simulate user toggling Live Preview checkbox OFF
+                        restoreInitialState();
+                        // Verify that observed canvas reverted back to original red!
+                        if (m_parentFilter && m_parentFilter->observedCanvas) {
+                            QColor col = m_parentFilter->observedCanvas->image().pixelColor(0, 0);
+                            if (col == QColor(255, 0, 0, 255)) {
+                                m_parentFilter->restoreSeenOnCanvas = true;
+                            }
+                        }
+
+                        // 3. Re-apply preview
+                        applyPreview();
+
+                        // 4. Either reject or accept based on test configuration
+                        if (m_parentFilter && m_parentFilter->action == TestPreviewThenReject) {
+                            reject();
+                        } else {
+                            accept();
+                        }
+                    });
+                }
+
+                void applyPreview() override {
+                    if (!m_document) return;
+                    QImage blueAtlas(16, 16, QImage::Format_ARGB32);
+                    blueAtlas.fill(QColor(0, 0, 255, 255));
+                    m_document->setAtlas(blueAtlas);
+                    m_document->setFrames({blueAtlas}, m_document->boxes());
+                }
+
+                QUndoCommand* createUndoCommand() override { return nullptr; }
+                void resetDefaults() override {}
+            };
+            return new LiveDlg(d, this, parent);
+        }
+    };
+
+    LivePreviewTestFilter testFilter;
+    testFilter.observedCanvas = dialog.canvas();
+
+    // --- Scenario 1: Live preview followed by Cancel (Reject) ---
+    testFilter.action = LivePreviewTestFilter::TestPreviewThenReject;
+    testFilter.previewSeenOnCanvas = false;
+    testFilter.restoreSeenOnCanvas = false;
+
+    dialog.applyFilterToSession(&testFilter);
+
+    // Canvas must have experienced the real-time preview and restore
+    QVERIFY(testFilter.previewSeenOnCanvas);
+    QVERIFY(testFilter.restoreSeenOnCanvas);
+
+    // Because user cancelled (rejected), canvas must be pristine red and session unmodified
+    QCOMPARE(dialog.canvas()->image().pixelColor(0, 0), QColor(255, 0, 0, 255));
+    QVERIFY(!dialog.sessionModifiedFrames().contains(0));
+
+    // --- Scenario 2: Live preview followed by OK (Accept) ---
+    testFilter.action = LivePreviewTestFilter::TestPreviewThenAccept;
+    testFilter.previewSeenOnCanvas = false;
+    testFilter.restoreSeenOnCanvas = false;
+
+    dialog.applyFilterToSession(&testFilter);
+
+    // Filter changes must be applied and committed
+    QVERIFY(testFilter.previewSeenOnCanvas);
+    QCOMPARE(dialog.canvas()->image().pixelColor(0, 0), QColor(0, 0, 255, 255));
+    QVERIFY(dialog.sessionModifiedFrames().contains(0));
+
+    // Undo must restore the original red image
+    dialog.canvas()->undo();
+    QCOMPARE(dialog.canvas()->image().pixelColor(0, 0), QColor(255, 0, 0, 255));
+}
+
+
 // ============================================================================
 // 9. Multi-Layer Editing & Layer Stack Tests (M18)
 // ============================================================================
@@ -2020,6 +2144,217 @@ void TestPixelEditor::testMultiLayerSessionSaveAndDocumentSync()
     QCOMPARE(comp.pixelColor(0, 0), QColor(Qt::blue));
 }
 
+
+
+void TestPixelEditor::testErgonomicContextualPanels()
+{
+    SpriteDocument doc;
+    QImage f0(32, 32, QImage::Format_ARGB32);
+    f0.fill(Qt::transparent);
+    doc.setFrames({f0}, {SpriteBox(QRect(0, 0, 32, 32))});
+
+    PixelEditorDialog dlg(&doc, nullptr, 0);
+
+    // Verify filter button exists in toolbar
+    QVERIFY(dlg.filtersButton() != nullptr);
+    QCOMPARE(dlg.filtersButton()->objectName(), QStringLiteral("filtersButton"));
+
+    // Verify contextual stack exists
+    QStackedWidget *stack = dlg.findChild<QStackedWidget*>();
+    QVERIFY(stack != nullptr);
+    QCOMPARE(stack->count(), 4);
+
+    // Initial tool is Pencil -> page 0 (Color studio)
+    QCOMPARE(stack->currentIndex(), 0);
+
+    // Switch to Eraser -> page 1 (Eraser options)
+    dlg.canvas()->setCurrentTool(PixelTool::Eraser);
+    // Trigger tool group click on eraser
+    QList<QToolButton*> toolButtons = dlg.findChildren<QToolButton*>();
+    for (QToolButton *btn : toolButtons) {
+        if (btn->toolTip().contains(QLatin1String("Eraser"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(stack->currentIndex(), 1);
+
+    // Switch to SelectRect -> page 2 (Selection options)
+    for (QToolButton *btn : toolButtons) {
+        if (btn->toolTip().contains(QLatin1String("Marquee"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(stack->currentIndex(), 2);
+
+    // Switch to Eyedropper -> page 3 (Eyedropper options)
+    for (QToolButton *btn : toolButtons) {
+        if (btn->toolTip().contains(QLatin1String("Eyedropper"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(stack->currentIndex(), 3);
+
+    // Switch to BucketFill -> page 0 (Color studio)
+    for (QToolButton *btn : toolButtons) {
+        if (btn->toolTip().contains(QLatin1String("Bucket"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(stack->currentIndex(), 0);
+}
+
+void TestPixelEditor::testFilterAllFramesMultiLayerAndNavigation()
+{
+    // Setup document with 2 frames and 2 layers
+    SpriteDocument doc;
+    QImage f0(16, 16, QImage::Format_ARGB32);
+    f0.fill(Qt::transparent);
+    QImage f1(16, 16, QImage::Format_ARGB32);
+    f1.fill(Qt::transparent);
+    doc.setFrames({f0, f1}, {SpriteBox(QRect(0, 0, 16, 16)), SpriteBox(QRect(16, 0, 16, 16))});
+
+    SpriteLayer l0;
+    l0.id = QStringLiteral("bg");
+    l0.name = QStringLiteral("Background");
+    l0.zOrder = 0;
+    l0.visible = true;
+
+    SpriteLayer l1;
+    l1.id = QStringLiteral("fg");
+    l1.name = QStringLiteral("Foreground");
+    l1.zOrder = 1;
+    l1.visible = true;
+
+    doc.setLayers({l0, l1});
+
+    // Frame 0 cels: bg blue, fg solid red
+    QImage bg0(16, 16, QImage::Format_ARGB32);
+    bg0.fill(qRgba(0, 0, 255, 255));
+    QImage fg0(16, 16, QImage::Format_ARGB32);
+    fg0.fill(qRgba(255, 0, 0, 255));
+
+    SpriteCel cel0_0;
+    cel0_0.layerIndex = 0; cel0_0.layerId = l0.id; cel0_0.image = bg0;
+    SpriteCel cel0_1;
+    cel0_1.layerIndex = 1; cel0_1.layerId = l1.id; cel0_1.image = fg0;
+    doc.setFrameCels(0, {cel0_0, cel0_1});
+
+    // Frame 1 cels: bg blue, fg solid green
+    QImage bg1(16, 16, QImage::Format_ARGB32);
+    bg1.fill(qRgba(0, 0, 255, 255));
+    QImage fg1(16, 16, QImage::Format_ARGB32);
+    fg1.fill(qRgba(0, 255, 0, 255));
+
+    SpriteCel cel1_0;
+    cel1_0.layerIndex = 0; cel1_0.layerId = l0.id; cel1_0.image = bg1;
+    SpriteCel cel1_1;
+    cel1_1.layerIndex = 1; cel1_1.layerId = l1.id; cel1_1.image = fg1;
+    doc.setFrameCels(1, {cel1_0, cel1_1});
+
+    doc.recompositeAllFrames();
+    doc.addAnimation(QStringLiteral("run"), {0, 1});
+
+    QUndoStack undoStack;
+    PixelEditorDialog dialog(&doc, &undoStack, 0);
+
+    // 1. Verify Top Bar applyToAllFramesCheckBox exists and matches menu
+    QCheckBox *checkAll = dialog.applyToAllFramesCheckBox();
+    QVERIFY(checkAll != nullptr);
+    QVERIFY(!checkAll->isChecked());
+
+    QToolButton *filtersBtn = dialog.filtersButton();
+    QVERIFY(filtersBtn != nullptr);
+    QVERIFY(filtersBtn->menu() != nullptr);
+
+    // Check first action in Filters menu is the Scope toggle action
+    QList<QAction*> menuActs = filtersBtn->menu()->actions();
+    QVERIFY(!menuActs.isEmpty());
+    QAction *scopeAct = menuActs.first();
+    QVERIFY(scopeAct->isCheckable());
+    QVERIFY(!scopeAct->isChecked());
+
+    // Toggle scope action in menu -> should update checkbox
+    scopeAct->setChecked(true);
+    QVERIFY(checkAll->isChecked());
+    QVERIFY(dialog.isApplyToAllFramesEnabled());
+
+    // 2. Mock filter that inverts pixels
+    class MockInvertFilter : public FilterPlugin {
+    public:
+        QString id() const override { return QStringLiteral("mock_invert_filter"); }
+        QString name() const override { return QStringLiteral("Mock Inverter"); }
+        QString description() const override { return QStringLiteral("Invert RGB"); }
+        QString category() const override { return QStringLiteral("Colors & Palettes"); }
+        FilterModifierFlags modifierFlags() const override { return PixelModifier; }
+
+        FilterDialogBase* createDialog(SpriteDocument *d, QUndoStack*, QWidget *parent) override {
+            class MockInvertDlg : public FilterDialogBase {
+            public:
+                MockInvertDlg(SpriteDocument *doc, QWidget *p) : FilterDialogBase(doc, nullptr, p) {
+                    QTimer::singleShot(0, this, &QDialog::accept);
+                }
+                void applyPreview() override {
+                    if (!m_document) return;
+                    QImage atlas = m_document->atlas();
+                    atlas.invertPixels(QImage::InvertRgb);
+                    m_document->setAtlas(atlas);
+                    QList<QImage> fList;
+                    for (const auto &b : m_document->boxes()) {
+                        fList.append(atlas.copy(b.rect));
+                    }
+                    m_document->setFrames(fList, m_document->boxes());
+                }
+                QUndoCommand* createUndoCommand() override { return nullptr; }
+                void resetDefaults() override {}
+            };
+            return new MockInvertDlg(d, parent);
+        }
+    };
+
+    MockInvertFilter filter;
+
+    // Target active layer = 1 (Foreground)
+    dialog.canvas()->setActiveLayerIndex(1);
+    QCOMPARE(dialog.canvas()->activeLayerIndex(), 1);
+
+    // Apply filter to all frames of animation
+    dialog.applyFilterToSession(&filter);
+
+    // Frame 0 active cel was red (255, 0, 0) -> inverted should be cyan (0, 255, 255)
+    QCOMPARE(dialog.canvas()->activeLayerImage().pixelColor(0, 0), QColor(0, 255, 255, 255));
+
+    // 3. Navigate to Frame 1: must properly show inverted green -> magenta (255, 0, 255)
+    dialog.loadFrame(1);
+    dialog.canvas()->setActiveLayerIndex(1);
+    QCOMPARE(dialog.canvas()->activeLayerImage().pixelColor(0, 0), QColor(255, 0, 255, 255));
+
+    // Background layer on Frame 1 must NOT have been inverted (remains blue 0, 0, 255)
+    dialog.canvas()->setActiveLayerIndex(0);
+    QCOMPARE(dialog.canvas()->activeLayerImage().pixelColor(0, 0), QColor(0, 0, 255, 255));
+
+    // 4. Validate and commit changes to document
+    bool ok = dialog.applyChanges();
+    QVERIFY(ok);
+
+    // Verify document frame cels across all frames
+    QList<SpriteCel> cels0 = doc.frameCels(0);
+    QCOMPARE(cels0.size(), 2);
+    QCOMPARE(cels0[0].image.pixelColor(0, 0), QColor(0, 0, 255, 255)); // bg blue
+    QCOMPARE(cels0[1].image.pixelColor(0, 0), QColor(0, 255, 255, 255)); // fg cyan
+
+    QList<SpriteCel> cels1 = doc.frameCels(1);
+    QCOMPARE(cels1.size(), 2);
+    QCOMPARE(cels1[0].image.pixelColor(0, 0), QColor(0, 0, 255, 255)); // bg blue
+    QCOMPARE(cels1[1].image.pixelColor(0, 0), QColor(255, 0, 255, 255)); // fg magenta
+
+    // Verify document recomposited frames
+    QCOMPARE(doc.frame(0).pixelColor(0, 0), QColor(0, 255, 255, 255));
+    QCOMPARE(doc.frame(1).pixelColor(0, 0), QColor(255, 0, 255, 255));
+}
 
 int main(int argc, char *argv[])
 {

@@ -53,6 +53,47 @@ struct FrameBackup {
     QPolygonF newPoly;
 };
 
+static QImage compositeCelsForFrame(const QList<SpriteLayer> &layers, const QList<SpriteCel> &cels)
+{
+    if (layers.isEmpty() || cels.isEmpty()) return QImage();
+    QSize sz;
+    for (const auto &cel : cels) {
+        if (!cel.image.isNull()) {
+            sz = sz.expandedTo(cel.image.size());
+        }
+    }
+    if (sz.isEmpty()) sz = QSize(32, 32);
+    QImage composite(sz, QImage::Format_ARGB32_Premultiplied);
+    composite.fill(Qt::transparent);
+    QPainter p(&composite);
+    p.setRenderHint(QPainter::SmoothPixmapTransform, false);
+
+    QList<int> sortedIndices;
+    sortedIndices.reserve(layers.size());
+    for (int i = 0; i < layers.size(); ++i) sortedIndices.append(i);
+    std::stable_sort(sortedIndices.begin(), sortedIndices.end(), [&layers](int a, int b) {
+        return layers[a].zOrder < layers[b].zOrder;
+    });
+
+    for (int idx : sortedIndices) {
+        const auto &layer = layers.at(idx);
+        if (!layer.visible) continue;
+        for (const auto &cel : cels) {
+            if (cel.layerIndex == idx || (!layer.id.isEmpty() && cel.layerId == layer.id)) {
+                if (!cel.image.isNull()) {
+                    p.setCompositionMode(layer.blendMode);
+                    double op = (layer.opacity * cel.opacity) / (255.0 * 255.0);
+                    p.setOpacity(std::clamp(op, 0.0, 1.0));
+                    p.drawImage(QPoint(cel.x, cel.y), cel.image);
+                }
+                break;
+            }
+        }
+    }
+    p.end();
+    return composite.convertToFormat(QImage::Format_ARGB32);
+}
+
 static void drawBresenhamOnTarget(QImage &img, int x0, int y0, int x1, int y1, const QColor &color,
                                   bool canEditOutside, const QPolygonF &targetPoly,
                                   bool hasSelection, const QRect &targetSelRect)
@@ -305,6 +346,10 @@ void PixelEditorDialog::setupUi()
     addShortcut(QKeySequence(Qt::Key_Delete), [this]() { m_canvas->clearSelection(); });
     addShortcut(QKeySequence(Qt::Key_Backspace), [this]() { m_canvas->clearSelection(); });
     addShortcut(QKeySequence(Qt::Key_Escape), [this]() { m_canvas->deselect(); });
+    addShortcut(QKeySequence(Qt::CTRL | Qt::Key_A), [this]() { m_canvas->selectAll(); });
+    addShortcut(QKeySequence(Qt::CTRL | Qt::Key_C), [this]() { m_canvas->copySelection(); });
+    addShortcut(QKeySequence(Qt::CTRL | Qt::Key_X), [this]() { m_canvas->cutSelection(); });
+    addShortcut(QKeySequence(Qt::CTRL | Qt::Key_V), [this]() { m_canvas->pasteClipboard(); });
 
     // Zoom & Grid
     addShortcut(QKeySequence(Qt::Key_Plus), [this]() { m_canvas->zoomIn(); });
@@ -344,6 +389,7 @@ QWidget* PixelEditorDialog::createHeaderBar()
         "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
     );
 
+    // 1. Frame Navigation
     m_prevFrameBtn = new QPushButton(QStringLiteral("◀"), bar);
     m_prevFrameBtn->setFixedSize(34, 28);
     m_prevFrameBtn->setStyleSheet(navBtnStyle);
@@ -356,7 +402,7 @@ QWidget* PixelEditorDialog::createHeaderBar()
     m_frameInfoLabel->setStyleSheet(QStringLiteral(
         "border: 1px solid palette(mid);"
         "border-radius: 6px;"
-        "padding: 4px 14px;"
+        "padding: 4px 12px;"
         "font-weight: bold;"
         "font-size: 12px;"
     ));
@@ -369,24 +415,75 @@ QWidget* PixelEditorDialog::createHeaderBar()
     connect(m_nextFrameBtn, &QPushButton::clicked, this, &PixelEditorDialog::onNextFrame);
     layout->addWidget(m_nextFrameBtn);
 
-    // Animation Selector Combobox
+    // 2. Animation Selector
     QFrame *animSep = new QFrame(bar);
     animSep->setFrameShape(QFrame::VLine);
     layout->addWidget(animSep);
 
-    m_animLabel = new QLabel(tr("Animation:"), bar);
+    m_animLabel = new QLabel(tr("Anim:"), bar);
     m_animLabel->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 11px;"));
     layout->addWidget(m_animLabel);
 
     m_animCombo = new QComboBox(bar);
-    m_animCombo->setMinimumWidth(160);
-    m_animCombo->setMaximumWidth(240);
+    m_animCombo->setMinimumWidth(130);
+    m_animCombo->setMaximumWidth(200);
     connect(m_animCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PixelEditorDialog::onAnimationFilterChanged);
     layout->addWidget(m_animCombo);
 
+    m_applyToAllFramesCheck = new QCheckBox(tr("Apply to all frames"), bar);
+    m_applyToAllFramesCheck->setObjectName(QStringLiteral("applyToAllFramesCheck"));
+    m_applyToAllFramesCheck->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: 600;"));
+    m_applyToAllFramesCheck->setChecked(false);
+    m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot"));
+    layout->addWidget(m_applyToAllFramesCheck);
+
+    // 3. Temporal / Onion Skinning Controls (Compact in Header)
+    QFrame *osSep = new QFrame(bar);
+    osSep->setFrameShape(QFrame::VLine);
+    layout->addWidget(osSep);
+
+    m_onionSkinCheck = new QCheckBox(tr("🧅 Onion"), bar);
+    m_onionSkinCheck->setChecked(true);
+    m_onionSkinCheck->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: 600;"));
+    m_onionSkinCheck->setToolTip(tr("Enable Onion Skinning across temporal frames"));
+    connect(m_onionSkinCheck, &QCheckBox::toggled, this, &PixelEditorDialog::onOnionSkinToggled);
+    layout->addWidget(m_onionSkinCheck);
+
+    m_lblPastTitle = new QLabel(tr("Past:"), bar);
+    m_lblPastTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
+    layout->addWidget(m_lblPastTitle);
+
+    m_sliderPastFrames = new QSlider(Qt::Horizontal, bar);
+    m_sliderPastFrames->setRange(-3, 0);
+    m_sliderPastFrames->setValue(-1);
+    m_sliderPastFrames->setFixedWidth(46);
+    m_sliderPastFrames->setToolTip(tr("Past frames to display (-3 to 0)"));
+    connect(m_sliderPastFrames, &QSlider::valueChanged, this, &PixelEditorDialog::onOnionSkinPastChanged);
+    layout->addWidget(m_sliderPastFrames);
+
+    m_lblPastFrames = new QLabel(QStringLiteral("-1"), bar);
+    m_lblPastFrames->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: bold;"));
+    layout->addWidget(m_lblPastFrames);
+
+    m_lblFutureTitle = new QLabel(tr("Fut:"), bar);
+    m_lblFutureTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
+    layout->addWidget(m_lblFutureTitle);
+
+    m_sliderFutureFrames = new QSlider(Qt::Horizontal, bar);
+    m_sliderFutureFrames->setRange(0, 3);
+    m_sliderFutureFrames->setValue(0);
+    m_sliderFutureFrames->setFixedWidth(46);
+    m_sliderFutureFrames->setToolTip(tr("Future frames to display (0 to +3)"));
+    connect(m_sliderFutureFrames, &QSlider::valueChanged, this, &PixelEditorDialog::onOnionSkinFutureChanged);
+    layout->addWidget(m_sliderFutureFrames);
+
+    m_lblFutureFrames = new QLabel(QStringLiteral("0"), bar);
+    m_lblFutureFrames->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: bold;"));
+    layout->addWidget(m_lblFutureFrames);
+
     layout->addStretch(1);
 
-    // View & Zoom controls
+    // 4. View & Zoom Controls
     const QString viewBtnStyle = QStringLiteral(
         "QToolButton {"
         "  border: 1px solid palette(mid);"
@@ -403,7 +500,7 @@ QWidget* PixelEditorDialog::createHeaderBar()
     m_btnGrid->setToolTip(tr("Toggle Pixel Grid"));
     m_btnGrid->setCheckable(true);
     m_btnGrid->setChecked(true);
-    m_btnGrid->setFixedSize(68, 28);
+    m_btnGrid->setFixedSize(58, 28);
     m_btnGrid->setStyleSheet(viewBtnStyle);
     connect(m_btnGrid, &QToolButton::toggled, this, [this](bool checked) {
         m_canvas->setShowGrid(checked);
@@ -411,42 +508,16 @@ QWidget* PixelEditorDialog::createHeaderBar()
     layout->addWidget(m_btnGrid);
 
     m_btnShowPivot = new QToolButton(bar);
-    m_btnShowPivot->setText(QStringLiteral("⌖ ") + tr("Pivot"));
+    m_btnShowPivot->setText(QStringLiteral("⌖ Pivot"));
     m_btnShowPivot->setToolTip(tr("Show / Hide Pivot Anchor Marker"));
     m_btnShowPivot->setCheckable(true);
     m_btnShowPivot->setChecked(true);
-    m_btnShowPivot->setFixedSize(68, 28);
+    m_btnShowPivot->setFixedSize(62, 28);
     m_btnShowPivot->setStyleSheet(viewBtnStyle);
     connect(m_btnShowPivot, &QToolButton::toggled, this, [this](bool checked) {
         if (m_canvas) m_canvas->setShowPivot(checked);
     });
     layout->addWidget(m_btnShowPivot);
-
-    m_allowOutsidePolyCheck = new QCheckBox(tr("Edit outside polygon"), bar);
-    m_allowOutsidePolyCheck->setToolTip(tr("Allow editing pixels outside polygon boundaries (Default: off when polygon exists)"));
-    m_allowOutsidePolyCheck->setFixedHeight(28);
-    connect(m_allowOutsidePolyCheck, &QCheckBox::toggled, this, &PixelEditorDialog::onAllowOutsidePolygonToggled);
-    layout->addWidget(m_allowOutsidePolyCheck);
-
-    m_applyToAllFramesCheck = new QCheckBox(tr("Apply to all frames"), bar);
-    m_applyToAllFramesCheck->setObjectName(QStringLiteral("applyToAllFramesCheck"));
-    m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot"));
-    m_applyToAllFramesCheck->setChecked(false);
-    m_applyToAllFramesCheck->setFixedHeight(28);
-    layout->addWidget(m_applyToAllFramesCheck);
-
-    m_btnFilters = new QToolButton(bar);
-    m_btnFilters->setObjectName(QStringLiteral("filtersButton"));
-    m_btnFilters->setText(tr("✨ Filters ▾"));
-    m_btnFilters->setToolTip(tr("Apply image and color filters (Despill, Outline, Rescale, Palette...)"));
-    m_btnFilters->setPopupMode(QToolButton::InstantPopup);
-    m_btnFilters->setFixedHeight(28);
-    m_btnFilters->setStyleSheet(viewBtnStyle);
-
-    QMenu *filtersMenu = new QMenu(m_btnFilters);
-    populateFiltersMenu(filtersMenu);
-    m_btnFilters->setMenu(filtersMenu);
-    layout->addWidget(m_btnFilters);
 
     QFrame *sep = new QFrame(bar);
     sep->setFrameShape(QFrame::VLine);
@@ -460,13 +531,13 @@ QWidget* PixelEditorDialog::createHeaderBar()
     connect(m_btnZoomOut, &QToolButton::clicked, this, [this]() { m_canvas->zoomOut(); });
     layout->addWidget(m_btnZoomOut);
 
-    m_zoomLabel = new QLabel(tr("Zoom: 1600%"), bar);
+    m_zoomLabel = new QLabel(QStringLiteral("1600%"), bar);
     m_zoomLabel->setAlignment(Qt::AlignCenter);
-    m_zoomLabel->setFixedWidth(92);
+    m_zoomLabel->setFixedWidth(64);
     m_zoomLabel->setStyleSheet(QStringLiteral(
         "border: 1px solid palette(mid);"
-        "border-radius: 6px;"
-        "padding: 4px 6px;"
+        "border-radius: 4px;"
+        "padding: 2px 4px;"
         "font-weight: bold;"
         "font-size: 11px;"
         "font-family: monospace;"
@@ -484,7 +555,7 @@ QWidget* PixelEditorDialog::createHeaderBar()
     m_btnFit = new QToolButton(bar);
     m_btnFit->setText(tr("⊡ Fit"));
     m_btnFit->setToolTip(tr("Fit to View"));
-    m_btnFit->setFixedSize(56, 28);
+    m_btnFit->setFixedSize(50, 28);
     m_btnFit->setStyleSheet(viewBtnStyle);
     connect(m_btnFit, &QToolButton::clicked, this, [this]() { m_canvas->zoomFit(m_scrollArea->viewport()->size()); });
     layout->addWidget(m_btnFit);
@@ -539,8 +610,8 @@ QWidget* PixelEditorDialog::createToolBar()
 
     m_btnPencil = addToolBtn(QStringLiteral("✏"), tr("Pencil (1px continuous Bresenham) [P]"), PixelTool::Pencil, static_cast<int>(PixelTool::Pencil), 0, 0, true);
     m_btnEraser = addToolBtn(QStringLiteral("🧹"), tr("Eraser (1px clear to alpha 0) [E]"), PixelTool::Eraser, static_cast<int>(PixelTool::Eraser), 0, 1);
-    m_btnEyedropper = addToolBtn(QStringLiteral("💧"), tr("Eyedropper / Pipette (Alt+Click or [I])"), PixelTool::Eyedropper, static_cast<int>(PixelTool::Eyedropper), 1, 0);
-    m_btnBucket = addToolBtn(QStringLiteral("🪣"), tr("Bucket Fill (Flood Fill 4-way) [G]"), PixelTool::BucketFill, static_cast<int>(PixelTool::BucketFill), 1, 1);
+    m_btnBucket = addToolBtn(QStringLiteral("🪣"), tr("Bucket Fill (Flood Fill 4-way) [G]"), PixelTool::BucketFill, static_cast<int>(PixelTool::BucketFill), 1, 0);
+    m_btnEyedropper = addToolBtn(QStringLiteral("💧"), tr("Eyedropper / Pipette (Alt+Click or [I])"), PixelTool::Eyedropper, static_cast<int>(PixelTool::Eyedropper), 1, 1);
     m_btnSelectRect = addToolBtn(QStringLiteral("⬚"), tr("Rectangular Marquee Selection [M]"), PixelTool::SelectRect, static_cast<int>(PixelTool::SelectRect), 2, 0);
     m_btnSelectColor = addToolBtn(QStringLiteral("🪄"), tr("Magic Wand (Color Selection) [W]"), PixelTool::SelectColor, static_cast<int>(PixelTool::SelectColor), 2, 1);
 
@@ -562,9 +633,9 @@ QWidget* PixelEditorDialog::createToolBar()
         return btn;
     };
 
-    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal"), 4, 0, [this]() { m_canvas->flipHorizontal(); });
-    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical"), 4, 1, [this]() { m_canvas->flipVertical(); });
-    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise"), 5, 0, [this]() { m_canvas->rotate90CW(); });
+    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal (H)"), 4, 0, [this]() { m_canvas->flipHorizontal(); });
+    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical (V)"), 4, 1, [this]() { m_canvas->flipVertical(); });
+    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise (R)"), 5, 0, [this]() { m_canvas->rotate90CW(); });
     m_btnClearSel = addActionBtn(QStringLiteral("✕"), tr("Clear Selection / Deselect (Del)"), 5, 1, [this]() {
         if (m_canvas->hasSelection()) {
             m_canvas->clearSelection();
@@ -578,14 +649,33 @@ QWidget* PixelEditorDialog::createToolBar()
     line2->setFrameShape(QFrame::HLine);
     layout->addWidget(line2, 6, 0, 1, 2);
 
+    // Filters Button (Moved into Left ToolBar!)
+    m_btnFilters = new QToolButton(this);
+    m_btnFilters->setObjectName(QStringLiteral("filtersButton"));
+    m_btnFilters->setText(tr("✨ Filters ▾"));
+    m_btnFilters->setToolTip(tr("Apply image and color filters (Despill, Outline, Rescale, Palette...)"));
+    m_btnFilters->setPopupMode(QToolButton::InstantPopup);
+    m_btnFilters->setFixedSize(90, 32);
+    m_btnFilters->setStyleSheet(toolBtnStyle + QStringLiteral("QToolButton { font-size: 11px; }"));
+
+    QMenu *filtersMenu = new QMenu(m_btnFilters);
+    populateFiltersMenu(filtersMenu);
+    m_btnFilters->setMenu(filtersMenu);
+    layout->addWidget(m_btnFilters, 7, 0, 1, 2);
+
+    // Separator 3
+    QFrame *line3 = new QFrame(this);
+    line3->setFrameShape(QFrame::HLine);
+    layout->addWidget(line3, 8, 0, 1, 2);
+
     // Undo / Redo
-    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 7, 0, [this]() { m_canvas->undo(); });
-    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 7, 1, [this]() { m_canvas->redo(); });
+    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 9, 0, [this]() { m_canvas->undo(); });
+    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 9, 1, [this]() { m_canvas->redo(); });
     if (m_btnUndo) m_btnUndo->setEnabled(false);
     if (m_btnRedo) m_btnRedo->setEnabled(false);
 
     // Spacer
-    layout->addItem(new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 8, 0, 1, 2);
+    layout->addItem(new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 10, 0, 1, 2);
 
     return panel;
 }
@@ -593,25 +683,24 @@ QWidget* PixelEditorDialog::createToolBar()
 QWidget* PixelEditorDialog::createPalettePanel()
 {
     QScrollArea *scrollPanel = new QScrollArea(this);
-    scrollPanel->setFixedWidth(318);
+    scrollPanel->setFixedWidth(310);
     scrollPanel->setWidgetResizable(true);
     scrollPanel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollPanel->setStyleSheet(QStringLiteral("QScrollArea { background-color: transparent; border: none; }"));
 
     QWidget *panel = new QWidget(scrollPanel);
-    panel->setFixedWidth(304);
     QVBoxLayout *layout = new QVBoxLayout(panel);
-    layout->setContentsMargins(6, 8, 6, 8);
-    layout->setSpacing(10);
+    layout->setContentsMargins(4, 2, 4, 2);
+    layout->setSpacing(6);
 
     const QString groupBoxStyle = QStringLiteral(
         "QGroupBox {"
-        "  font-weight: bold;"
-        "  font-size: 11px;"
         "  border: 1px solid palette(mid);"
         "  border-radius: 6px;"
-        "  margin-top: 14px;"
-        "  padding-top: 6px;"
+        "  margin-top: 8px;"
+        "  padding-top: 10px;"
+        "  font-weight: bold;"
+        "  font-size: 11px;"
         "}"
         "QGroupBox::title {"
         "  subcontrol-origin: margin;"
@@ -624,8 +713,16 @@ QWidget* PixelEditorDialog::createPalettePanel()
         "}"
     );
 
-    // 1. Active Color Box & Pro Color Picker Suite
-    m_colorsGroup = new QGroupBox(tr("Color Studio && Harmonies"), panel);
+    // 1. Dynamic Contextual Stack (Adapts based on current tool)
+    m_contextualStack = new QStackedWidget(panel);
+
+    // --- PAGE 0: Color Studio & Presets (Pencil / Bucket) ---
+    m_colorOptionsPage = new QWidget(m_contextualStack);
+    QVBoxLayout *colorPageLayout = new QVBoxLayout(m_colorOptionsPage);
+    colorPageLayout->setContentsMargins(0, 0, 0, 0);
+    colorPageLayout->setSpacing(6);
+
+    m_colorsGroup = new QGroupBox(tr("Color Studio && Harmonies"), m_colorOptionsPage);
     m_colorsGroup->setStyleSheet(groupBoxStyle);
     QVBoxLayout *colorsMainLayout = new QVBoxLayout(m_colorsGroup);
     colorsMainLayout->setContentsMargins(6, 8, 6, 8);
@@ -635,21 +732,21 @@ QWidget* PixelEditorDialog::createPalettePanel()
     swatchesRow->setSpacing(6);
 
     m_primarySwatchBtn = new QPushButton(m_colorsGroup);
-    m_primarySwatchBtn->setFixedSize(38, 38);
+    m_primarySwatchBtn->setFixedSize(36, 36);
     m_primarySwatchBtn->setToolTip(tr("Primary Color (Click to open Pro Color Picker)"));
     m_primarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #000000; border: 2px solid palette(window-text); border-radius: 6px;"));
     connect(m_primarySwatchBtn, &QPushButton::clicked, this, &PixelEditorDialog::onPrimarySwatchClicked);
     swatchesRow->addWidget(m_primarySwatchBtn);
 
     m_swapBtn = new QPushButton(QStringLiteral("⇄"), m_colorsGroup);
-    m_swapBtn->setFixedSize(26, 26);
+    m_swapBtn->setFixedSize(24, 24);
     m_swapBtn->setToolTip(tr("Swap Colors (X)"));
     m_swapBtn->setStyleSheet(QStringLiteral(
         "QPushButton {"
         "  border: 1px solid palette(mid);"
-        "  border-radius: 13px;"
+        "  border-radius: 12px;"
         "  font-weight: bold;"
-        "  font-size: 12px;"
+        "  font-size: 11px;"
         "}"
         "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
     ));
@@ -657,7 +754,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     swatchesRow->addWidget(m_swapBtn);
 
     m_secondarySwatchBtn = new QPushButton(m_colorsGroup);
-    m_secondarySwatchBtn->setFixedSize(34, 34);
+    m_secondarySwatchBtn->setFixedSize(32, 32);
     m_secondarySwatchBtn->setToolTip(tr("Secondary Color (Click to open Pro Color Picker)"));
     m_secondarySwatchBtn->setStyleSheet(QStringLiteral("background-color: #ffffff; border: 2px solid palette(mid); border-radius: 6px;"));
     connect(m_secondarySwatchBtn, &QPushButton::clicked, this, &PixelEditorDialog::onSecondarySwatchClicked);
@@ -676,7 +773,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     swatchesRow->addStretch();
 
-    m_btnPickColor = new QPushButton(tr("⛶ Pop-out..."), m_colorsGroup);
+    m_btnPickColor = new QPushButton(tr("⛶ Pop-out"), m_colorsGroup);
     m_btnPickColor->setToolTip(tr("Open Full Pro Color Picker Dialog"));
     m_btnPickColor->setStyleSheet(QStringLiteral(
         "QPushButton {"
@@ -693,7 +790,6 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     colorsMainLayout->addLayout(swatchesRow);
 
-    // Embedded Interactive Pro Color Picker (Wheel + Harmonies, 2D Map, Sliders)
     m_colorPickerWidget = new ColorPickerWidget(m_colorsGroup);
     QColor initialCol = m_canvas ? m_canvas->primaryColor() : Qt::black;
     m_colorPickerWidget->setColor(initialCol);
@@ -705,8 +801,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     });
     colorsMainLayout->addWidget(m_colorPickerWidget);
 
-    // Recent colors
-    m_recentLabel = new QLabel(tr("Recent:"), m_colorsGroup);
+    m_recentLabel = new QLabel(tr("Recent Colors:"), m_colorsGroup);
     m_recentLabel->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: bold; margin-top: 2px;"));
     colorsMainLayout->addWidget(m_recentLabel);
 
@@ -717,15 +812,15 @@ QWidget* PixelEditorDialog::createPalettePanel()
     refreshRecentSwatches();
     colorsMainLayout->addWidget(m_recentContainer);
 
-    layout->addWidget(m_colorsGroup);
+    colorPageLayout->addWidget(m_colorsGroup);
 
-    // 2. Palette Presets & Sample Frame button
+    // Presets & Nuanciers
     QHBoxLayout *presetHeader = new QHBoxLayout();
-    m_palLabel = new QLabel(tr("Preset:"), panel);
+    m_palLabel = new QLabel(tr("Palette Preset:"), m_colorOptionsPage);
     m_palLabel->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
     presetHeader->addWidget(m_palLabel);
 
-    m_btnSampleFrame = new QPushButton(tr("Sample Frame"), panel);
+    m_btnSampleFrame = new QPushButton(tr("Sample Frame"), m_colorOptionsPage);
     m_btnSampleFrame->setToolTip(tr("Extract all unique colors from current sprite frame"));
     m_btnSampleFrame->setStyleSheet(QStringLiteral(
         "QPushButton {"
@@ -739,9 +834,9 @@ QWidget* PixelEditorDialog::createPalettePanel()
     ));
     connect(m_btnSampleFrame, &QPushButton::clicked, this, &PixelEditorDialog::onSampleFrameColorsClicked);
     presetHeader->addWidget(m_btnSampleFrame);
-    layout->addLayout(presetHeader);
+    colorPageLayout->addLayout(presetHeader);
 
-    m_paletteCombo = new QComboBox(panel);
+    m_paletteCombo = new QComboBox(m_colorOptionsPage);
     m_paletteCombo->addItem(tr("Bento Standard (36)"), Standard);
     m_paletteCombo->addItem(tr("Game Boy DMG (4 Greens)"), GameBoy);
     m_paletteCombo->addItem(tr("Game Boy Pocket (4 Grays)"), GameBoyPocket);
@@ -755,12 +850,11 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_paletteCombo->addItem(tr("CGA Mode 2 (4)"), CGAMode2);
     m_paletteCombo->addItem(tr("Endesga 32 (32)"), Endesga32);
     connect(m_paletteCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PixelEditorDialog::onPalettePresetChanged);
-    layout->addWidget(m_paletteCombo);
+    colorPageLayout->addWidget(m_paletteCombo);
 
-    // 3. Swatches Grid inside ScrollArea
-    QScrollArea *swatchScroll = new QScrollArea(panel);
+    QScrollArea *swatchScroll = new QScrollArea(m_colorOptionsPage);
     swatchScroll->setWidgetResizable(true);
-    swatchScroll->setFixedHeight(110);
+    swatchScroll->setFixedHeight(92);
     swatchScroll->setStyleSheet(QStringLiteral("background-color: palette(base); border: 1px solid palette(mid); border-radius: 6px;"));
 
     m_swatchesContainer = new QWidget(swatchScroll);
@@ -768,9 +862,152 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_swatchesLayout->setContentsMargins(4, 4, 4, 4);
     m_swatchesLayout->setSpacing(4);
     swatchScroll->setWidget(m_swatchesContainer);
-    layout->addWidget(swatchScroll);
+    colorPageLayout->addWidget(swatchScroll);
 
-    // 3b. Layer Stack Dock (M18)
+
+
+    m_allowOutsidePolyCheck = new QCheckBox(tr("Edit outside polygon"), m_colorOptionsPage);
+    m_allowOutsidePolyCheck->setToolTip(tr("Allow editing pixels outside polygon boundaries"));
+    connect(m_allowOutsidePolyCheck, &QCheckBox::toggled, this, &PixelEditorDialog::onAllowOutsidePolygonToggled);
+    colorPageLayout->addWidget(m_allowOutsidePolyCheck);
+
+    m_contextualStack->addWidget(m_colorOptionsPage);
+
+    // --- PAGE 1: Eraser Options (Eraser) ---
+    m_eraserOptionsPage = new QWidget(m_contextualStack);
+    QVBoxLayout *eraserLayout = new QVBoxLayout(m_eraserOptionsPage);
+    eraserLayout->setContentsMargins(0, 0, 0, 0);
+    eraserLayout->setSpacing(6);
+
+    QGroupBox *eraserGroup = new QGroupBox(tr("Eraser Options"), m_eraserOptionsPage);
+    eraserGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *egLayout = new QVBoxLayout(eraserGroup);
+    egLayout->setContentsMargins(8, 10, 8, 10);
+    egLayout->setSpacing(8);
+
+    m_eraserApplyAllFramesCheck = new QCheckBox(tr("Erase across all frames (Timeline)"), eraserGroup);
+    m_eraserApplyAllFramesCheck->setToolTip(tr("Erase pixels across all frames of current animation aligned by pivot"));
+    connect(m_eraserApplyAllFramesCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_applyToAllFramesCheck && m_applyToAllFramesCheck->isChecked() != checked) {
+            m_applyToAllFramesCheck->setChecked(checked);
+        }
+    });
+    connect(m_applyToAllFramesCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_eraserApplyAllFramesCheck && m_eraserApplyAllFramesCheck->isChecked() != checked) {
+            m_eraserApplyAllFramesCheck->setChecked(checked);
+        }
+    });
+    egLayout->addWidget(m_eraserApplyAllFramesCheck);
+
+    m_eraserAllLayersCheck = new QCheckBox(tr("Erase across all visible layers"), eraserGroup);
+    m_eraserAllLayersCheck->setToolTip(tr("When checked, clears pixels on all visible layers simultaneously instead of only active layer"));
+    egLayout->addWidget(m_eraserAllLayersCheck);
+
+    QLabel *eraserTip = new QLabel(tr("💡 <b>Tip:</b> 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold <b>Shift</b> to draw straight lines."), eraserGroup);
+    eraserTip->setWordWrap(true);
+    eraserTip->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    egLayout->addWidget(eraserTip);
+
+    egLayout->addStretch();
+    eraserLayout->addWidget(eraserGroup);
+    m_contextualStack->addWidget(m_eraserOptionsPage);
+
+    // --- PAGE 2: Selection Actions & Options (SelectRect / SelectColor) ---
+    m_selectionOptionsPage = new QWidget(m_contextualStack);
+    QVBoxLayout *selLayout = new QVBoxLayout(m_selectionOptionsPage);
+    selLayout->setContentsMargins(0, 0, 0, 0);
+    selLayout->setSpacing(6);
+
+    QGroupBox *selGroup = new QGroupBox(tr("Selection Actions"), m_selectionOptionsPage);
+    selGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *sgLayout = new QVBoxLayout(selGroup);
+    sgLayout->setContentsMargins(8, 10, 8, 10);
+    sgLayout->setSpacing(6);
+
+    const QString actionBtnStyle = QStringLiteral(
+        "QPushButton {"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 4px;"
+        "  padding: 5px 8px;"
+        "  font-size: 11px;"
+        "  font-weight: 600;"
+        "  text-align: left;"
+        "}"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
+    );
+
+    m_btnSelectAll = new QPushButton(tr("⬚ Select All (Ctrl+A)"), selGroup);
+    m_btnSelectAll->setStyleSheet(actionBtnStyle);
+    connect(m_btnSelectAll, &QPushButton::clicked, this, [this]() { m_canvas->selectAll(); });
+    sgLayout->addWidget(m_btnSelectAll);
+
+    m_btnDeselect = new QPushButton(tr("✕ Deselect (Esc)"), selGroup);
+    m_btnDeselect->setStyleSheet(actionBtnStyle);
+    connect(m_btnDeselect, &QPushButton::clicked, this, [this]() { m_canvas->deselect(); });
+    sgLayout->addWidget(m_btnDeselect);
+
+    m_btnClearSelection = new QPushButton(tr("🗑 Delete Contents (Del)"), selGroup);
+    m_btnClearSelection->setStyleSheet(actionBtnStyle);
+    connect(m_btnClearSelection, &QPushButton::clicked, this, [this]() { m_canvas->clearSelection(); });
+    sgLayout->addWidget(m_btnClearSelection);
+
+    QHBoxLayout *cbRow = new QHBoxLayout();
+    m_btnCopySel = new QPushButton(tr("📋 Copy"), selGroup);
+    m_btnCopySel->setStyleSheet(actionBtnStyle);
+    connect(m_btnCopySel, &QPushButton::clicked, this, [this]() { m_canvas->copySelection(); });
+    cbRow->addWidget(m_btnCopySel);
+
+    m_btnCutSel = new QPushButton(tr("✂ Cut"), selGroup);
+    m_btnCutSel->setStyleSheet(actionBtnStyle);
+    connect(m_btnCutSel, &QPushButton::clicked, this, [this]() { m_canvas->cutSelection(); });
+    cbRow->addWidget(m_btnCutSel);
+
+    m_btnPasteSel = new QPushButton(tr("📥 Paste"), selGroup);
+    m_btnPasteSel->setStyleSheet(actionBtnStyle);
+    connect(m_btnPasteSel, &QPushButton::clicked, this, [this]() { m_canvas->pasteClipboard(); });
+    cbRow->addWidget(m_btnPasteSel);
+    sgLayout->addLayout(cbRow);
+
+    QLabel *selTip = new QLabel(tr("💡 <b>Tip:</b> Drag selection to move floating pixels. Press <b>Enter</b> or click outside to commit."), selGroup);
+    selTip->setWordWrap(true);
+    selTip->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    sgLayout->addWidget(selTip);
+
+    sgLayout->addStretch();
+    selLayout->addWidget(selGroup);
+    m_contextualStack->addWidget(m_selectionOptionsPage);
+
+    // --- PAGE 3: Eyedropper Options (Eyedropper) ---
+    m_eyedropperOptionsPage = new QWidget(m_contextualStack);
+    QVBoxLayout *eyeLayout = new QVBoxLayout(m_eyedropperOptionsPage);
+    eyeLayout->setContentsMargins(0, 0, 0, 0);
+    eyeLayout->setSpacing(6);
+
+    QGroupBox *eyeGroup = new QGroupBox(tr("Eyedropper Sampling"), m_eyedropperOptionsPage);
+    eyeGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *egEyeLayout = new QVBoxLayout(eyeGroup);
+    egEyeLayout->setContentsMargins(8, 10, 8, 10);
+    egEyeLayout->setSpacing(8);
+
+    m_radioSampleAllLayers = new QRadioButton(tr("Sample All Visible Layers (Composite)"), eyeGroup);
+    m_radioSampleAllLayers->setChecked(true);
+    egEyeLayout->addWidget(m_radioSampleAllLayers);
+
+    m_radioSampleActiveLayer = new QRadioButton(tr("Sample Active Layer Only"), eyeGroup);
+    egEyeLayout->addWidget(m_radioSampleActiveLayer);
+
+    QLabel *eyeTip = new QLabel(tr("💡 <b>Tip:</b> Click on any pixel to set primary color. Hold <b>Alt</b> while using any tool to temporarily sample color."), eyeGroup);
+    eyeTip->setWordWrap(true);
+    eyeTip->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    egEyeLayout->addWidget(eyeTip);
+
+    egEyeLayout->addStretch();
+    eyeLayout->addWidget(eyeGroup);
+    m_contextualStack->addWidget(m_eyedropperOptionsPage);
+
+    layout->addWidget(m_contextualStack);
+
+    // 2. Layer Stack Dock (M18) - Always Visible Below Contextual Tool Options
     m_layerStackGroup = new QGroupBox(tr("Layers"), panel);
     m_layerStackGroup->setStyleSheet(groupBoxStyle);
     QVBoxLayout *lsLayout = new QVBoxLayout(m_layerStackGroup);
@@ -824,114 +1061,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
         }
     });
 
-    // 4. Onion Skinning Suite
-    m_onionSkinGroup = new QGroupBox(tr("Onion Skinning"), panel);
-    m_onionSkinGroup->setStyleSheet(groupBoxStyle);
-    QVBoxLayout *osLayout = new QVBoxLayout(m_onionSkinGroup);
-    osLayout->setContentsMargins(8, 8, 8, 8);
-    osLayout->setSpacing(6);
-
-    m_onionSkinCheck = new QCheckBox(tr("Enable Onion Skin"), m_onionSkinGroup);
-    m_onionSkinCheck->setChecked(true);
-    m_onionSkinCheck->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: 600;"));
-    connect(m_onionSkinCheck, &QCheckBox::toggled, this, &PixelEditorDialog::onOnionSkinToggled);
-    osLayout->addWidget(m_onionSkinCheck);
-
-    // Side-by-side Past and Future sliders
-    QHBoxLayout *slidersRow = new QHBoxLayout();
-    slidersRow->setSpacing(8);
-
-    // Left column: Past frames (-3 to 0)
-    QVBoxLayout *pastCol = new QVBoxLayout();
-    pastCol->setSpacing(2);
-    QHBoxLayout *pastHeaderLayout = new QHBoxLayout();
-    m_lblPastTitle = new QLabel(tr("Past:"), m_onionSkinGroup);
-    m_lblPastTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
-    pastHeaderLayout->addWidget(m_lblPastTitle);
-    pastHeaderLayout->addStretch();
-    m_lblPastFrames = new QLabel(tr("-1"), m_onionSkinGroup);
-    m_lblPastFrames->setStyleSheet(QStringLiteral(
-        "border: 1px solid palette(mid); border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: bold;"
-    ));
-    pastHeaderLayout->addWidget(m_lblPastFrames);
-    pastCol->addLayout(pastHeaderLayout);
-
-    m_sliderPastFrames = new QSlider(Qt::Horizontal, m_onionSkinGroup);
-    m_sliderPastFrames->setRange(-3, 0);
-    m_sliderPastFrames->setValue(-1);
-    m_sliderPastFrames->setTickPosition(QSlider::TicksBelow);
-    m_sliderPastFrames->setTickInterval(1);
-    m_sliderPastFrames->setToolTip(tr("Past frames to display (-3 to 0)"));
-    connect(m_sliderPastFrames, &QSlider::valueChanged, this, &PixelEditorDialog::onOnionSkinPastChanged);
-    pastCol->addWidget(m_sliderPastFrames);
-    slidersRow->addLayout(pastCol, 1);
-
-    // Right column: Future frames (0 to +3)
-    QVBoxLayout *futureCol = new QVBoxLayout();
-    futureCol->setSpacing(2);
-    QHBoxLayout *futureHeaderLayout = new QHBoxLayout();
-    m_lblFutureTitle = new QLabel(tr("Future:"), m_onionSkinGroup);
-    m_lblFutureTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
-    futureHeaderLayout->addWidget(m_lblFutureTitle);
-    futureHeaderLayout->addStretch();
-    m_lblFutureFrames = new QLabel(tr("0"), m_onionSkinGroup);
-    m_lblFutureFrames->setStyleSheet(QStringLiteral(
-        "border: 1px solid palette(mid); border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: bold;"
-    ));
-    futureHeaderLayout->addWidget(m_lblFutureFrames);
-    futureCol->addLayout(futureHeaderLayout);
-
-    m_sliderFutureFrames = new QSlider(Qt::Horizontal, m_onionSkinGroup);
-    m_sliderFutureFrames->setRange(0, 3);
-    m_sliderFutureFrames->setValue(0);
-    m_sliderFutureFrames->setTickPosition(QSlider::TicksBelow);
-    m_sliderFutureFrames->setTickInterval(1);
-    m_sliderFutureFrames->setToolTip(tr("Future frames to display (0 to +3)"));
-    connect(m_sliderFutureFrames, &QSlider::valueChanged, this, &PixelEditorDialog::onOnionSkinFutureChanged);
-    futureCol->addWidget(m_sliderFutureFrames);
-    slidersRow->addLayout(futureCol, 1);
-
-    osLayout->addLayout(slidersRow);
-
-    // Opacity / Intensity slider row directly below
-    QHBoxLayout *opHeaderLayout = new QHBoxLayout();
-    m_lblOpacityTitle = new QLabel(tr("Effect Intensity:"), m_onionSkinGroup);
-    m_lblOpacityTitle->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
-    opHeaderLayout->addWidget(m_lblOpacityTitle);
-    opHeaderLayout->addStretch();
-    m_lblOpacity = new QLabel(tr("50%"), m_onionSkinGroup);
-    m_lblOpacity->setStyleSheet(QStringLiteral(
-        "border: 1px solid palette(mid); border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: bold;"
-    ));
-    opHeaderLayout->addWidget(m_lblOpacity);
-    osLayout->addLayout(opHeaderLayout);
-
-    m_sliderOpacity = new QSlider(Qt::Horizontal, m_onionSkinGroup);
-    m_sliderOpacity->setRange(0, 100);
-    m_sliderOpacity->setValue(50);
-    m_sliderOpacity->setToolTip(tr("Global opacity intensity with distance falloff (0% to 100%)"));
-    connect(m_sliderOpacity, &QSlider::valueChanged, this, &PixelEditorDialog::onOnionSkinOpacityChanged);
-    osLayout->addWidget(m_sliderOpacity);
-
-    // Effect combo
-    m_lblEffect = new QLabel(tr("Effect mode:"), m_onionSkinGroup);
-    m_lblEffect->setStyleSheet(QStringLiteral("font-size: 10px; font-weight: 600;"));
-    osLayout->addWidget(m_lblEffect);
-
-    m_comboEffect = new QComboBox(m_onionSkinGroup);
-    m_comboEffect->addItem(tr("Tinted (Blue/Red)"), static_cast<int>(OnionSkinEffect::TintedBlueRed));
-    m_comboEffect->addItem(tr("Border Detection (Edge)"), static_cast<int>(OnionSkinEffect::EdgeDetection));
-    m_comboEffect->addItem(tr("Red Channel (R)"), static_cast<int>(OnionSkinEffect::ChannelR));
-    m_comboEffect->addItem(tr("Green Channel (G)"), static_cast<int>(OnionSkinEffect::ChannelG));
-    m_comboEffect->addItem(tr("Blue Channel (B)"), static_cast<int>(OnionSkinEffect::ChannelB));
-    m_comboEffect->addItem(tr("Monochrome Silhouette"), static_cast<int>(OnionSkinEffect::Silhouette));
-    m_comboEffect->addItem(tr("True Color (Ghost)"), static_cast<int>(OnionSkinEffect::TrueColor));
-    connect(m_comboEffect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PixelEditorDialog::onOnionSkinEffectChanged);
-    osLayout->addWidget(m_comboEffect);
-
-    layout->addWidget(m_onionSkinGroup);
-
-    // 5. Live Preview (1:1 scale)
+    // 3. Live Preview (1:1 scale)
     m_prevGroup = new QGroupBox(tr("1:1 Scale Preview"), panel);
     m_prevGroup->setStyleSheet(groupBoxStyle);
     QVBoxLayout *prevLayout = new QVBoxLayout(m_prevGroup);
@@ -939,7 +1069,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     m_previewLabel = new QLabel(m_prevGroup);
     m_previewLabel->setAlignment(Qt::AlignCenter);
-    m_previewLabel->setMinimumHeight(76);
+    m_previewLabel->setMinimumHeight(64);
     m_previewLabel->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 4px;"));
     prevLayout->addWidget(m_previewLabel);
     layout->addWidget(m_prevGroup);
@@ -1060,7 +1190,27 @@ QWidget* PixelEditorDialog::createBottomBar()
 
 void PixelEditorDialog::onToolButtonClicked(int id)
 {
-    m_canvas->setCurrentTool(static_cast<PixelTool>(id));
+    PixelTool tool = static_cast<PixelTool>(id);
+    m_canvas->setCurrentTool(tool);
+
+    if (m_contextualStack) {
+        switch (tool) {
+        case PixelTool::Pencil:
+        case PixelTool::BucketFill:
+            m_contextualStack->setCurrentIndex(0); // Color & Palette Studio
+            break;
+        case PixelTool::Eraser:
+            m_contextualStack->setCurrentIndex(1); // Eraser Options
+            break;
+        case PixelTool::SelectRect:
+        case PixelTool::SelectColor:
+            m_contextualStack->setCurrentIndex(2); // Selection Actions
+            break;
+        case PixelTool::Eyedropper:
+            m_contextualStack->setCurrentIndex(3); // Eyedropper Sampling
+            break;
+        }
+    }
 }
 
 void PixelEditorDialog::onPickColorClicked()
@@ -1633,10 +1783,78 @@ void PixelEditorDialog::restoreFrameBackup(int frameIndex, const QImage &img, co
     } else {
         m_sessionModifiedPolygons.remove(frameIndex);
     }
-    if (m_sessionModifiedCels.contains(frameIndex) && !m_sessionModifiedCels[frameIndex].isEmpty()) {
+
+    const bool docHasLayers = (m_document && m_document->hasLayers());
+    const bool canvasHasLayers = (m_canvas && m_canvas->hasLayers() && m_canvas->layerCount() > 1);
+    const bool sessionHasLayers = (m_sessionLayersModified && !m_sessionLayers.isEmpty()) || !m_sessionModifiedCels.isEmpty();
+
+    if (docHasLayers || canvasHasLayers || sessionHasLayers) {
         int actIdx = m_canvas ? m_canvas->activeLayerIndex() : 0;
-        if (actIdx < 0 || actIdx >= m_sessionModifiedCels[frameIndex].size()) actIdx = 0;
-        m_sessionModifiedCels[frameIndex][actIdx].image = img;
+        QList<SpriteCel> cels;
+
+        if (m_sessionModifiedCels.contains(frameIndex)) {
+            cels = m_sessionModifiedCels[frameIndex];
+        } else if (m_document && m_document->hasFrameCels(frameIndex)) {
+            cels = m_document->frameCels(frameIndex);
+        } else {
+            QList<SpriteLayer> layers = !m_sessionLayers.isEmpty() ? m_sessionLayers : (m_document ? m_document->layers() : QList<SpriteLayer>());
+            if (layers.isEmpty() && m_canvas) {
+                const auto cLayers = m_canvas->layers();
+                for (const auto &cl : cLayers) {
+                    SpriteLayer sl;
+                    sl.id = cl.id;
+                    sl.name = cl.name;
+                    sl.visible = cl.visible;
+                    sl.locked = cl.locked;
+                    sl.opacity = cl.opacity;
+                    sl.blendMode = cl.blendMode;
+                    sl.zOrder = cl.zOrder;
+                    layers.append(sl);
+                }
+            }
+            for (int l = 0; l < layers.size(); ++l) {
+                SpriteCel cel;
+                cel.layerIndex = l;
+                cel.layerId = layers[l].id;
+                cel.opacity = layers[l].opacity;
+                if (l == 0) {
+                    cel.image = img;
+                } else {
+                    cel.image = QImage(img.size().isEmpty() ? QSize(32, 32) : img.size(), QImage::Format_ARGB32);
+                    cel.image.fill(Qt::transparent);
+                }
+                cels.append(cel);
+            }
+        }
+
+        if (actIdx < 0) actIdx = 0;
+        bool found = false;
+        for (int c = 0; c < cels.size(); ++c) {
+            if (cels[c].layerIndex == actIdx) {
+                cels[c].image = img;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            if (actIdx < cels.size()) {
+                cels[actIdx].image = img;
+            } else {
+                SpriteCel cel;
+                cel.layerIndex = actIdx;
+                cel.image = img;
+                cels.append(cel);
+            }
+        }
+        m_sessionModifiedCels[frameIndex] = cels;
+
+        QList<SpriteLayer> layers = !m_sessionLayers.isEmpty() ? m_sessionLayers : (m_document ? m_document->layers() : QList<SpriteLayer>());
+        if (!layers.isEmpty()) {
+            QImage comp = compositeCelsForFrame(layers, cels);
+            if (!comp.isNull()) {
+                m_sessionModifiedFrames[frameIndex] = comp;
+            }
+        }
     }
 
     if (frameIndex == m_currentFrameIndex && m_canvas) {
@@ -1645,7 +1863,11 @@ void PixelEditorDialog::restoreFrameBackup(int frameIndex, const QImage &img, co
         QPoint curFrameOffset;
         computeAnimationEnvelope(envSize, envPivot, curFrameOffset);
 
-        m_canvas->setImage(img);
+        if (m_canvas->hasLayers() && m_canvas->layerCount() > 1) {
+            m_canvas->setLayerCelImage(m_canvas->activeLayerIndex(), img);
+        } else {
+            m_canvas->setImage(img);
+        }
         m_canvas->setPolygonMesh(poly);
         m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
     }
@@ -2904,6 +3126,24 @@ void PixelEditorDialog::populateFiltersMenu(QMenu *menu)
     if (!menu) return;
     menu->clear();
 
+    // Top action: Scope toggle
+    int targetCount = 0;
+    QString scopeText;
+    if (!m_activeSequence.isEmpty() && !m_activeAnimName.isEmpty()) {
+        targetCount = m_activeSequence.size();
+        scopeText = tr("Apply filter to all '%1' frames (%2 frames)").arg(m_activeAnimName).arg(targetCount);
+    } else {
+        targetCount = m_document ? m_document->frameCount() : 1;
+        scopeText = tr("Apply filter to all frames (%1 frames)").arg(targetCount);
+    }
+    QAction *scopeAct = menu->addAction(scopeText);
+    scopeAct->setCheckable(true);
+    scopeAct->setChecked(isApplyToAllFramesEnabled());
+    connect(scopeAct, &QAction::toggled, this, [this](bool checked) {
+        setApplyToAllFrames(checked);
+    });
+    menu->addSeparator();
+
     FilterRegistry &reg = FilterRegistry::instance();
     reg.initDefaultFilters();
 
@@ -2974,13 +3214,44 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
 
     if (targetFrames.isEmpty()) return;
 
+    const bool docHasLayers = (m_document && m_document->hasLayers());
+    const bool canvasHasLayers = (m_canvas && m_canvas->hasLayers() && m_canvas->layerCount() > 1);
+    const bool sessionHasLayers = (m_sessionLayersModified && !m_sessionLayers.isEmpty()) || !m_sessionModifiedCels.isEmpty();
+    const bool hasLayers = (docHasLayers || canvasHasLayers || sessionHasLayers);
+    const int actIdx = m_canvas ? m_canvas->activeLayerIndex() : 0;
+
     // 2. Collect pristine current images for target frames
     QList<QImage> targetImages;
     targetImages.reserve(targetFrames.size());
     for (int frameIdx : targetFrames) {
         QImage img;
         if (frameIdx == m_currentFrameIndex) {
-            img = m_canvas->image();
+            img = (hasLayers && m_canvas) ? m_canvas->activeLayerImage() : m_canvas->image();
+        } else if (hasLayers) {
+            if (m_sessionModifiedCels.contains(frameIdx)) {
+                const auto &cels = m_sessionModifiedCels[frameIdx];
+                for (const auto &cel : cels) {
+                    if (cel.layerIndex == actIdx) {
+                        img = cel.image;
+                        break;
+                    }
+                }
+            } else if (m_document && m_document->hasFrameCels(frameIdx)) {
+                const auto &cels = m_document->frameCels(frameIdx);
+                for (const auto &cel : cels) {
+                    if (cel.layerIndex == actIdx) {
+                        img = cel.image;
+                        break;
+                    }
+                }
+            }
+            if (img.isNull()) {
+                if (m_sessionModifiedFrames.contains(frameIdx)) {
+                    img = m_sessionModifiedFrames[frameIdx];
+                } else if (m_document) {
+                    img = m_document->frame(frameIdx);
+                }
+            }
         } else if (m_sessionModifiedFrames.contains(frameIdx)) {
             img = m_sessionModifiedFrames[frameIdx];
         } else if (m_document) {
@@ -3031,14 +3302,98 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
     tempDoc.setAtlas(tempAtlas);
     tempDoc.setFrames(tempFrames, tempBoxes);
 
-    // 3. Open filter dialog
+    // 3. Connect live preview so adjustments in filter dialog are immediately visible on canvas
+    const QImage initialCanvasImage = (hasLayers && m_canvas) ? m_canvas->activeLayerImage() : (m_canvas ? m_canvas->image() : QImage());
+    const QPolygonF initialPolygonMesh = m_canvas ? m_canvas->polygonMesh() : QPolygonF();
+    QSize initialEnvSize;
+    QPoint initialEnvPivot;
+    QPoint initialFrameOffset;
+    computeAnimationEnvelope(initialEnvSize, initialEnvPivot, initialFrameOffset);
+
+    const int currentTempIdx = targetFrames.indexOf(m_currentFrameIndex);
+
+    auto updatePreviewOnCanvas = [&]() {
+        if (!m_canvas || currentTempIdx < 0) return;
+        QImage previewImg;
+        if (currentTempIdx < tempDoc.frameCount()) {
+            previewImg = tempDoc.frame(currentTempIdx);
+        } else if (currentTempIdx < tempDoc.boxes().size()) {
+            QRect r = tempDoc.box(currentTempIdx).rect.intersected(tempDoc.atlas().rect());
+            previewImg = tempDoc.atlas().copy(r);
+        }
+        if (previewImg.isNull()) return;
+
+        QPolygonF previewPoly = initialPolygonMesh;
+        if (previewImg.size() != initialCanvasImage.size() && initialPolygonMesh.size() >= 3) {
+            double sx = static_cast<double>(previewImg.width()) / std::max(1, initialCanvasImage.width());
+            double sy = static_cast<double>(previewImg.height()) / std::max(1, initialCanvasImage.height());
+            QPolygonF scaledPoly;
+            for (const QPointF &pt : initialPolygonMesh) {
+                scaledPoly.append(QPointF(pt.x() * sx, pt.y() * sy));
+            }
+            previewPoly = scaledPoly;
+        }
+
+        if (hasLayers) {
+            m_canvas->setLayerCelImage(m_canvas->activeLayerIndex(), previewImg);
+        } else {
+            m_canvas->setImage(previewImg);
+        }
+        m_canvas->setPolygonMesh(previewPoly);
+
+        if (previewImg.size() != initialCanvasImage.size()) {
+            double sx = static_cast<double>(previewImg.width()) / std::max(1, initialCanvasImage.width());
+            double sy = static_cast<double>(previewImg.height()) / std::max(1, initialCanvasImage.height());
+            m_canvas->setCanvasEnvelope(
+                QSize(std::max(1, static_cast<int>(std::round(initialEnvSize.width() * sx))),
+                      std::max(1, static_cast<int>(std::round(initialEnvSize.height() * sy)))),
+                QPoint(static_cast<int>(std::round(initialFrameOffset.x() * sx)),
+                       static_cast<int>(std::round(initialFrameOffset.y() * sy))),
+                QPoint(static_cast<int>(std::round(initialEnvPivot.x() * sx)),
+                       static_cast<int>(std::round(initialEnvPivot.y() * sy))));
+        } else {
+            m_canvas->setCanvasEnvelope(initialEnvSize, initialFrameOffset, initialEnvPivot);
+        }
+    };
+
+    // Connect tempDoc changes so live preview updates canvas in real-time
+    connect(&tempDoc, &SpriteDocument::framesChanged, this, updatePreviewOnCanvas);
+    connect(&tempDoc, &SpriteDocument::frameUpdated, this, updatePreviewOnCanvas);
+    connect(&tempDoc, &SpriteDocument::atlasChanged, this, updatePreviewOnCanvas);
+
+    // Open filter dialog
     FilterDialogBase *dlg = filter->createDialog(&tempDoc, nullptr, this);
-    if (!dlg) return;
+    if (!dlg) {
+        disconnect(&tempDoc, nullptr, this, nullptr);
+        return;
+    }
+
+    if (allAnim && !m_activeAnimName.isEmpty()) {
+        dlg->setWindowTitle(tr("%1 — [%2: all %3 frames]").arg(dlg->windowTitle(), m_activeAnimName).arg(targetFrames.size()));
+    } else if (allAnim) {
+        dlg->setWindowTitle(tr("%1 — [All %2 frames]").arg(dlg->windowTitle()).arg(targetFrames.size()));
+    } else {
+        dlg->setWindowTitle(tr("%1 — [Frame %2]").arg(dlg->windowTitle()).arg(m_currentFrameIndex + 1));
+    }
+
+    // Initial sync in case filter already applied preview in constructor
+    updatePreviewOnCanvas();
 
     int res = dlg->exec();
     delete dlg;
+    disconnect(&tempDoc, nullptr, this, nullptr);
 
     if (res != QDialog::Accepted) {
+        // Guarantee non-destructive rollback on Cancel/Escape
+        if (m_canvas) {
+            if (hasLayers) {
+                m_canvas->setLayerCelImage(m_canvas->activeLayerIndex(), initialCanvasImage);
+            } else {
+                m_canvas->setImage(initialCanvasImage);
+            }
+            m_canvas->setPolygonMesh(initialPolygonMesh);
+            m_canvas->setCanvasEnvelope(initialEnvSize, initialFrameOffset, initialEnvPivot);
+        }
         return; // User canceled
     }
 

@@ -284,13 +284,20 @@ bool PixelCanvas::isLayerLocked(int index) const
 
 void PixelCanvas::setLayers(const QList<CanvasLayer> &layers, int activeIndex)
 {
+    commitFloatingSelection();
     m_layers = layers;
     int maxIdx = static_cast<int>(m_layers.size() - 1);
     m_activeLayerIndex = std::clamp(activeIndex, 0, std::max(0, maxIdx));
     ensureActiveCelAllocated();
     recomposite();
+    deselect();
+    updatePolygonMask();
+    updateCanvasSize();
+    updateOnionSkinComposite();
     emit layersChanged();
     emit activeLayerChanged(m_activeLayerIndex);
+    emit imageChanged();
+    update();
 }
 
 void PixelCanvas::setActiveLayerIndex(int index)

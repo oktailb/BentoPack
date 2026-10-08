@@ -33,6 +33,8 @@
 #include <QEvent>
 #include <QSlider>
 #include <QCheckBox>
+#include <QStackedWidget>
+#include <QRadioButton>
 #include "image/colorpalettepresets.h"
 #include "widgets/colorpickerwidget.h"
 #include "widgets/layerstackwidget.h"
@@ -100,6 +102,7 @@ public:
     QPolygonF sessionModifiedPolygon(int frameIndex) const;
     QMap<int, QImage> sessionModifiedFrames() const { return m_sessionModifiedFrames; }
     QMap<int, QPolygonF> sessionModifiedPolygons() const { return m_sessionModifiedPolygons; }
+    bool applyChanges();
     bool openAtlasPackingDialog(bool nonInteractive = false);
     bool performAtlasRepack(const QMap<int, QImage> &modifiedFrames, const QMap<int, QPolygonF> &modifiedPolygons);
 
@@ -165,7 +168,6 @@ private:
     void updateNavigationButtons();
     void populateAnimationCombo();
     void saveCurrentFrameToSession();
-    bool applyChanges();
     bool checkAtlasPolygonCollision(QString *outDetails = nullptr, QList<int> *outCollidingIndices = nullptr) const;
     void updateCollisionWarningUI();
     void refreshPaletteSwatches();
@@ -229,6 +231,30 @@ private:
     QToolButton*            m_btnUndo = nullptr;
     QToolButton*            m_btnRedo = nullptr;
     QToolButton*            m_btnClearSel = nullptr;
+
+
+    // Contextual Panel (Ergonomic Tool-Aware Suite)
+    QStackedWidget*         m_contextualStack = nullptr;
+    QWidget*                m_colorOptionsPage = nullptr;
+    QWidget*                m_eraserOptionsPage = nullptr;
+    QWidget*                m_selectionOptionsPage = nullptr;
+    QWidget*                m_eyedropperOptionsPage = nullptr;
+
+    // Contextual: Eraser
+    QCheckBox*              m_eraserApplyAllFramesCheck = nullptr;
+    QCheckBox*              m_eraserAllLayersCheck = nullptr;
+
+    // Contextual: Selection
+    QPushButton*            m_btnSelectAll = nullptr;
+    QPushButton*            m_btnDeselect = nullptr;
+    QPushButton*            m_btnClearSelection = nullptr;
+    QPushButton*            m_btnCopySel = nullptr;
+    QPushButton*            m_btnCutSel = nullptr;
+    QPushButton*            m_btnPasteSel = nullptr;
+
+    // Contextual: Eyedropper
+    QRadioButton*           m_radioSampleActiveLayer = nullptr;
+    QRadioButton*           m_radioSampleAllLayers = nullptr;
 
     // Palette & Colors
     QGroupBox*              m_colorsGroup = nullptr;
