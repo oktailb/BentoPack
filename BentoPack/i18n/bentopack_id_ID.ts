@@ -587,134 +587,134 @@ Pilih cabang yang ingin dipulihkan:</translation>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento Standar (36)</translation>
+        <translation>Bento Standar (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 Nuansa Hijau)</translation>
+        <translation>Game Boy DMG (4 Nuansa Hijau)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 Nuansa Abu-abu)</translation>
+        <translation>Game Boy Pocket (4 Nuansa Abu-abu)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">NES / Famicom (54)</translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">SNES / 16-bit (32)</translation>
+        <translation>SNES / 16-bit (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">Commodore 64 (16)</translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">NEC PC-Engine (32)</translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Mode 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Mode 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>Kustom Diimpor</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gagal mendekode gambar.</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka berkas untuk dibaca.</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada warna valid yang ditemukan dalam berkas palet.</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 Roda Warna</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ Peta 2D</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ Penggeser</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmoni:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>Triadik (Segitiga)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Komplementer (Berlawanan)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>Analog (Bersebelahan)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>Komplementer Terpisah</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tetradik (Persegi)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>Monokromatik (Nuansa)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna yang dipilih saat ini</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna sebelumnya (klik untuk memulihkan)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna Dasar: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmoni %1: %2</translation>
     </message>
 </context>
 <context>
@@ -1673,6 +1673,141 @@ Klik simpul untuk melihat detailnya.</translation>
     </message>
 </context>
 <context>
+    <name>LayerStackWidget</name>
+    <message>
+        <source>Blend mode of the active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opacity of the active layer (0-100%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a new transparent layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten all visible layers into a single layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eyedropper, Bucket Fill and Wand detect color contours across all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Onion skin: active layer only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Isolates onion skinning to the active layer rather than the full composite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Darken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lighten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Dodge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Burn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hard Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soft Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exclusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LibGdxExtractor</name>
     <message>
         <source>Atlas file is empty.</source>
@@ -2445,6 +2580,18 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
 <context>
     <name>PixelCanvas</name>
     <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear Pixels</source>
         <translation>Bersihkan Piksel</translation>
     </message>
@@ -2561,7 +2708,7 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna Utama (Klik untuk membuka Pemilih Warna Pro)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2716,15 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna Sekunder (Klik untuk membuka Pemilih Warna Pro)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ Buka Terpisah...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Dialog Pemilih Warna Pro Lengkap</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2819,20 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Terapkan pengeditan (menggambar, membalik, mengisi, dll.) ke semua bingkai sejajar poros</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ Filter ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>Terapkan filter gambar dan warna (Hapus bocoran, Garis luar, Ubah skala, Palet...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>Bersihkan Pilihan (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>Studio Warna &amp;&amp; Harmoni</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2856,11 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 Nuansa Hijau)</translation>
+        <translation>Game Boy DMG (4 Nuansa Hijau)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 Nuansa Abu-abu)</translation>
+        <translation>Game Boy Pocket (4 Nuansa Abu-abu)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,14 +2868,22 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Mode 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Mode 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
+        <translation>Endesga 32 (32)</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚠ Active layer is locked! Unlock to paint.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2804,6 +2967,10 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Pilih Warna Sekunder</translation>
     </message>
     <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Izinkan pengeditan piksel di luar batas poligon (Tidak dicentang: dinonaktifkan)</translation>
     </message>
@@ -2818,6 +2985,18 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>All Frames (%1)</source>
         <translation>Semua Bingkai (%1)</translation>
+    </message>
+    <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Terapkan ke semua bingkai &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Terapkan pengeditan gambar dan filter ke semua bingkai animasi &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>Terapkan edit (gambar, balik, isi, filter) ke semua bingkai yang disejajarkan oleh poros</translation>
     </message>
     <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
@@ -2878,6 +3057,18 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
     <message>
         <source># Grid</source>
         <translation># Kisi</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>Tidak ada filter yang tersedia</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>Terapkan %1 ke Animasi</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>Terapkan %1 ke Bingkai</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3252,7 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>Pemilih Warna — Profesional</translation>
     </message>
 </context>
 <context>
@@ -3286,20 +3477,20 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
         <translation>Root JSON harus berupa objek.</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>Pembersihan</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>Pembersihan &amp; Ekstraksi</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>Warna</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>Warna &amp; Palet</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>Efek</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>Efek &amp; Garis Luar</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>Geometri</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>Geometri &amp; Transformasi</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3308,6 +3499,28 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Silakan buka atau impor lembar sprite terlebih dahulu sebelum menerapkan filter.</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>Geometri Dimodifikasi</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>Filter yang diterapkan memodifikasi geometri dan siluet sprite.
+Jala poligon yang ada mungkin tidak lagi cocok dengan siluet baru.
+
+Apakah Anda ingin membuka alat Jala Poligon untuk menghitung ulang jala?</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>Filter yang diterapkan memodifikasi geometri dan siluet sprite.
+
+Apakah Anda ingin membuka alat Jala Poligon untuk menghasilkan jala poligon rapat dan mengurangi overdraw GPU?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>

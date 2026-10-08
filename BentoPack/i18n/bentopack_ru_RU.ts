@@ -587,134 +587,134 @@ Choose which branch to restore:</source>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento Standard (36)</translation>
+        <translation>Bento Standard (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 оттенка зелёного)</translation>
+        <translation>Game Boy DMG (4 оттенка зелёного)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 оттенка серого)</translation>
+        <translation>Game Boy Pocket (4 оттенка серого)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">NES / Famicom (54)</translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">SNES / 16-бит (32)</translation>
+        <translation>SNES / 16-бит (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">Commodore 64 (16)</translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">NEC PC-Engine (32)</translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Режим 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Режим 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательская импортированная</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось декодировать изображение.</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удается открыть файл для чтения.</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>В файле палитры не найдено допустимых цветов.</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 Цветовой круг</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ 2D-карта</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ Ползунки</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ярк.:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>Гармонии:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>Триада (Треугольник)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Комплиментарная (Противоположная)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>Аналоговая (Смежная)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>Раздельно-комплиментарная</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>Тетрадная (Квадрат)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>Монохромная (Оттенки)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущий выбранный цвет</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>Предыдущий цвет (нажмите для восстановления)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Базовый цвет: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Гармония %1: %2</translation>
     </message>
 </context>
 <context>
@@ -1673,6 +1673,141 @@ Strict removal clears the pixel.</source>
     </message>
 </context>
 <context>
+    <name>LayerStackWidget</name>
+    <message>
+        <source>Blend mode of the active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opacity of the active layer (0-100%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a new transparent layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten all visible layers into a single layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eyedropper, Bucket Fill and Wand detect color contours across all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Onion skin: active layer only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Isolates onion skinning to the active layer rather than the full composite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Darken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lighten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Dodge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Burn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hard Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soft Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exclusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LibGdxExtractor</name>
     <message>
         <source>Atlas file is empty.</source>
@@ -2445,6 +2580,18 @@ Strict removal clears the pixel.</source>
 <context>
     <name>PixelCanvas</name>
     <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear Pixels</source>
         <translation>Очистить пиксели</translation>
     </message>
@@ -2561,7 +2708,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Основной цвет (Нажмите, чтобы открыть профессиональную палитру)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2716,15 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Вторичный цвет (Нажмите, чтобы открыть профессиональную палитру)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ Открепить...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть полное диалоговое окно профессиональной палитры</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2819,20 @@ Strict removal clears the pixel.</source>
         <translation>Применять правки (рисование, отражение, заливку) ко всем кадрам с выравниванием по опорной точке</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ Фильтры ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>Применить фильтры изображения и цвета (Очистка краёв, Контур, Масштаб, Палитра...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>Снять выделение (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>Цветовая студия &amp;&amp; Гармонии</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2856,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 оттенка зелёного)</translation>
+        <translation>Game Boy DMG (4 оттенка зелёного)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 оттенка серого)</translation>
+        <translation>Game Boy Pocket (4 оттенка серого)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,14 +2868,22 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Режим 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Режим 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
+        <translation>Endesga 32 (32)</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚠ Active layer is locked! Unlock to paint.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2804,6 +2967,10 @@ Strict removal clears the pixel.</source>
         <translation>Выбрать дополнительный цвет</translation>
     </message>
     <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Разрешить редактирование пикселей за пределами полигона (отключено: редактирование вне полигона запрещено)</translation>
     </message>
@@ -2818,6 +2985,18 @@ Strict removal clears the pixel.</source>
     <message>
         <source>All Frames (%1)</source>
         <translation>Все кадры (%1)</translation>
+    </message>
+    <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Применить ко всем кадрам &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Применить изменения рисунка и фильтры ко всем кадрам анимации &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>Применить изменения (рисование, отражение, заливка, фильтры) ко всем кадрам, выровненным по опорной точке</translation>
     </message>
     <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
@@ -2878,6 +3057,18 @@ Would you like to repack the atlas now?</source>
     <message>
         <source># Grid</source>
         <translation># Сетка</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>Нет доступных фильтров</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>Применить %1 к анимации</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>Применить %1 к кадру</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3252,7 @@ Would you like to repack the atlas now?</source>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>Палитра цветов — Профессиональная</translation>
     </message>
 </context>
 <context>
@@ -3290,20 +3481,20 @@ Would you like to repack the atlas now?</source>
         <translation>Корень JSON должен быть объектом.</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>Очистка</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>Очистка и извлечение</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>Цвета</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>Цвета и палитры</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>Эффекты</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>Эффекты и контуры</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>Геометрия</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>Геометрия и трансформация</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3312,6 +3503,28 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Пожалуйста, откройте или импортируйте спрайт-лист перед применением фильтра.</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>Геометрия изменена</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>Примененный фильтр изменил геометрию и силуэты спрайтов.
+Существующие полигональные сетки могут больше не соответствовать новым силуэтам.
+
+Хотите открыть инструмент «Полигональная сетка» для пересчета сеток?</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>Примененный фильтр изменил геометрию и силуэты спрайтов.
+
+Хотите открыть инструмент «Полигональная сетка», чтобы создать точные полигональные сетки и уменьшить избыточную отрисовку (GPU overdraw)?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>

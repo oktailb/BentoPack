@@ -587,134 +587,134 @@ Choose which branch to restore:</translation>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento Standard (36)</translation>
+        <translation>Bento Standard (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 Greens)</translation>
+        <translation>Game Boy DMG (4 Greens)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 Grays)</translation>
+        <translation>Game Boy Pocket (4 Grays)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">NES / Famicom (54)</translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">SNES / 16-bit (32)</translation>
+        <translation>SNES / 16-bit (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">Commodore 64 (16)</translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">NEC PC-Engine (32)</translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Mode 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Mode 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>Custom Imported</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to decode image.</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open file for reading.</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>No valid colors found in palette file.</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 Wheel</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ 2D Map</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ Sliders</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>Val:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonies:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>Triadic (Triangle)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Complementary (Opposite)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>Analogous (Adjacent)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>Split-Complementary</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tetradic (Square)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>Monochromatic (Shades)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>None</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>Current selected color</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>Previous color (click to restore)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Base Color: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmony %1: %2</translation>
     </message>
 </context>
 <context>
@@ -1673,6 +1673,141 @@ Click a node to view its details.</translation>
     </message>
 </context>
 <context>
+    <name>LayerStackWidget</name>
+    <message>
+        <source>Blend mode of the active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opacity of the active layer (0-100%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a new transparent layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten all visible layers into a single layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eyedropper, Bucket Fill and Wand detect color contours across all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Onion skin: active layer only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Isolates onion skinning to the active layer rather than the full composite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Darken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lighten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Dodge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Burn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hard Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soft Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exclusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LibGdxExtractor</name>
     <message>
         <source>Atlas file is empty.</source>
@@ -2445,6 +2580,18 @@ Do you want to save them before proceeding?</translation>
 <context>
     <name>PixelCanvas</name>
     <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear Pixels</source>
         <translation>Clear Pixels</translation>
     </message>
@@ -2561,7 +2708,7 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Primary Color (Click to open Pro Color Picker)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2716,15 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Secondary Color (Click to open Pro Color Picker)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ Pop-out...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Full Pro Color Picker Dialog</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2819,20 @@ Do you want to save them before proceeding?</translation>
         <translation>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ Filters ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>Apply image and color filters (Despill, Outline, Rescale, Palette...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>Clear Selection / Deselect (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>Color Studio &amp;&amp; Harmonies</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2856,11 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 Greens)</translation>
+        <translation>Game Boy DMG (4 Greens)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 Grays)</translation>
+        <translation>Game Boy Pocket (4 Grays)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,14 +2868,22 @@ Do you want to save them before proceeding?</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Mode 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Mode 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
+        <translation>Endesga 32 (32)</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚠ Active layer is locked! Unlock to paint.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2804,6 +2967,10 @@ Do you want to save them before proceeding?</translation>
         <translation>Select Secondary Color</translation>
     </message>
     <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</translation>
     </message>
@@ -2818,6 +2985,18 @@ Do you want to save them before proceeding?</translation>
     <message>
         <source>All Frames (%1)</source>
         <translation>All Frames (%1)</translation>
+    </message>
+    <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Apply to all &apos;%1&apos; frames</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</translation>
     </message>
     <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
@@ -2878,6 +3057,18 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source># Grid</source>
         <translation># Grid</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>No filters available</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>Apply %1 to Animation</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>Apply %1 to Frame</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3252,7 @@ Would you like to repack the atlas now?</translation>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>Color Picker — Professional</translation>
     </message>
 </context>
 <context>
@@ -3288,20 +3479,20 @@ Would you like to repack the atlas now?</translation>
         <translation>JSON root must be an object.</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>Cleanup</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>Cleanup &amp; Extraction</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>Colors</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>Colors &amp; Palettes</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>Effects</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>Effects &amp; Outlines</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>Geometry</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>Geometry &amp; Transform</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3310,6 +3501,28 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Please open or import a sprite sheet first before applying a filter.</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>Geometry Modified</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>

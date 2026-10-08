@@ -128,6 +128,7 @@ set(BentoPackWidgets_SRC
     src/widgets/polygonmeshdialog.cpp
     src/widgets/pixelcanvas.cpp
     src/widgets/pixeleditordialog.cpp
+    src/widgets/layerstackwidget.cpp
     src/widgets/colorpickerwidget.cpp
     src/widgets/branchselectiondialog.cpp
 )
@@ -156,6 +157,7 @@ set(BentoPackWidgets_INCLUDE
     include/widgets/polygonmeshdialog.h
     include/widgets/pixelcanvas.h
     include/widgets/pixeleditordialog.h
+    include/widgets/layerstackwidget.h
     include/widgets/colorpickerwidget.h
 )
 

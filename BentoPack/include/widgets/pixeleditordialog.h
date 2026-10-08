@@ -35,8 +35,9 @@
 #include <QCheckBox>
 #include "image/colorpalettepresets.h"
 #include "widgets/colorpickerwidget.h"
+#include "widgets/layerstackwidget.h"
+#include "model/spritedocument.h"
 
-class SpriteDocument;
 class PixelCanvas;
 class FilterPlugin;
 class QMenu;
@@ -83,6 +84,7 @@ public:
     int currentFrameIndex() const { return m_currentFrameIndex; }
     QComboBox* animationCombo() const { return m_animCombo; }
     PixelCanvas* canvas() const { return m_canvas; }
+    LayerStackWidget* layerStackWidget() const { return m_layerStackWidget; }
     QPoint visualPivotPos() const;
     QCheckBox* allowOutsidePolygonCheckBox() const { return m_allowOutsidePolyCheck; }
     bool isEditingOutsidePolygonAllowed() const;
@@ -94,6 +96,7 @@ public:
     bool hasAtlasCollision() const;
     QLabel* collisionAlertLabel() const { return m_lblCollisionWarning; }
     QPushButton* repackButton() const { return m_btnRepackAtlas; }
+    QPushButton* applyButton() const { return m_applyBtn; }
     QPolygonF sessionModifiedPolygon(int frameIndex) const;
     QMap<int, QImage> sessionModifiedFrames() const { return m_sessionModifiedFrames; }
     QMap<int, QPolygonF> sessionModifiedPolygons() const { return m_sessionModifiedPolygons; }
@@ -129,6 +132,24 @@ private slots:
                                     const QPolygonF &oldPolygon, const QPolygonF &newPolygon,
                                     CanvasAction action, QUndoCommand *parentCommand);
 
+    // Multi-Layer Slots (M18)
+    void onLayerVisibilityChanged(int index, bool visible);
+    void onLayerLockChanged(int index, bool locked);
+    void onLayerOpacityChanged(int index, quint8 opacity);
+    void onLayerBlendModeChanged(int index, QPainter::CompositionMode mode);
+    void onLayerNameChanged(int index, const QString &name);
+    void onAddLayerRequested();
+    void onDuplicateLayerRequested();
+    void onRemoveLayerRequested();
+    void onMoveLayerUpRequested();
+    void onMoveLayerDownRequested();
+    void onMergeLayerDownRequested();
+    void onFlattenLayersRequested();
+    void onSampleAllLayersChanged(bool enabled);
+    void onOnionSkinCurrentLayerOnlyChanged(bool enabled);
+    void onCanvasLayersChanged();
+    void onCanvasActiveLayerChanged(int index);
+
 public:
     void restoreFrameBackup(int frameIndex, const QImage &img, const QPolygonF &poly);
     void onMultiFrameUndoRedoDone();
@@ -154,6 +175,7 @@ private:
     void updateOnionSkinLayers();
     void populateFiltersMenu(QMenu *menu);
     void computeAnimationEnvelope(QSize &outSize, QPoint &outPivot, QPoint &outFrameOffset) const;
+    void syncSessionLayersFromCanvas();
 
     QWidget* createToolBar();
     QWidget* createPalettePanel();
@@ -166,6 +188,9 @@ private:
     int                     m_currentFrameIndex = 0;
     QMap<int, QImage>       m_sessionModifiedFrames;
     QMap<int, QPolygonF>    m_sessionModifiedPolygons;
+    QMap<int, QList<SpriteCel>> m_sessionModifiedCels;
+    QList<SpriteLayer>      m_sessionLayers;
+    bool                    m_sessionLayersModified = false;
 
     // Animation Scoping
     QLabel*                 m_animLabel = nullptr;
@@ -225,6 +250,10 @@ private:
     QWidget*                m_swatchesContainer = nullptr;
     QGridLayout*            m_swatchesLayout = nullptr;
     QVector<QRgb>           m_currentPalette;
+
+    // Layer Stack (M18)
+    QGroupBox*              m_layerStackGroup = nullptr;
+    LayerStackWidget*       m_layerStackWidget = nullptr;
 
     // Live Preview
     QGroupBox*              m_prevGroup = nullptr;

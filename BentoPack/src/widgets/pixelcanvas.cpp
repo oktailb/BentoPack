@@ -21,6 +21,7 @@
 #include <QKeyEvent>
 #include <QQueue>
 #include <QTransform>
+#include <QDateTime>
 #include <algorithm>
 #include <cmath>
 
@@ -67,11 +68,13 @@ static QRect computeDirtyRect(const QImage &img1, const QImage &img2)
 class PixelCanvasUndoCommand : public QUndoCommand
 {
 public:
-    PixelCanvasUndoCommand(PixelCanvas *canvas, const QImage &oldImg, const QImage &newImg,
+    PixelCanvasUndoCommand(PixelCanvas *canvas, int layerIndex,
+                           const QImage &oldImg, const QImage &newImg,
                            const QPolygonF &oldPoly, const QPolygonF &newPoly,
                            const QString &text, QUndoCommand *parent = nullptr)
         : QUndoCommand(text, parent)
         , m_canvas(canvas)
+        , m_layerIndex(layerIndex)
         , m_oldPoly(oldPoly)
         , m_newPoly(newPoly)
         , m_firstExecution(true)
@@ -115,10 +118,18 @@ public:
         QUndoCommand::undo();
         if (!m_canvas) return;
         if (!m_isEmpty) {
-            if (m_isFullImage) {
-                m_canvas->setImage(m_oldImage);
+            if (m_canvas->hasLayers() && m_layerIndex >= 0 && m_layerIndex < m_canvas->layerCount()) {
+                if (m_isFullImage) {
+                    m_canvas->setLayerCelImage(m_layerIndex, m_oldImage);
+                } else {
+                    m_canvas->applyLayerPatch(m_layerIndex, m_dirtyRect, m_oldPatch);
+                }
             } else {
-                m_canvas->applyPatch(m_dirtyRect, m_oldPatch);
+                if (m_isFullImage) {
+                    m_canvas->setImage(m_oldImage);
+                } else {
+                    m_canvas->applyPatch(m_dirtyRect, m_oldPatch);
+                }
             }
         }
         if (m_oldPoly != m_newPoly) {
@@ -139,10 +150,18 @@ public:
         QUndoCommand::redo();
         if (!m_canvas) return;
         if (!m_isEmpty) {
-            if (m_isFullImage) {
-                m_canvas->setImage(m_newImage);
+            if (m_canvas->hasLayers() && m_layerIndex >= 0 && m_layerIndex < m_canvas->layerCount()) {
+                if (m_isFullImage) {
+                    m_canvas->setLayerCelImage(m_layerIndex, m_newImage);
+                } else {
+                    m_canvas->applyLayerPatch(m_layerIndex, m_dirtyRect, m_newPatch);
+                }
             } else {
-                m_canvas->applyPatch(m_dirtyRect, m_newPatch);
+                if (m_isFullImage) {
+                    m_canvas->setImage(m_newImage);
+                } else {
+                    m_canvas->applyPatch(m_dirtyRect, m_newPatch);
+                }
             }
         }
         if (m_oldPoly != m_newPoly) {
@@ -153,6 +172,7 @@ public:
 
 private:
     PixelCanvas *m_canvas = nullptr;
+    int          m_layerIndex = -1;
     QRect        m_dirtyRect;
     QImage       m_oldPatch;
     QImage       m_newPatch;
@@ -194,12 +214,376 @@ void PixelCanvas::setImage(const QImage &image)
     } else {
         m_image = image.convertToFormat(QImage::Format_ARGB32);
     }
+    if (!m_layers.isEmpty()) {
+        ensureActiveCelAllocated();
+        m_layers[m_activeLayerIndex].image = m_image;
+        recomposite();
+    }
     deselect();
     updatePolygonMask();
     updateCanvasSize();
     updateOnionSkinComposite();
     emit imageChanged();
     update();
+}
+
+void PixelCanvas::ensureActiveCelAllocated()
+{
+    if (m_layers.isEmpty()) return;
+    if (m_activeLayerIndex < 0 || m_activeLayerIndex >= m_layers.size()) {
+        m_activeLayerIndex = 0;
+    }
+    QSize sz;
+    for (const auto &l : m_layers) {
+        if (!l.image.isNull()) {
+            sz = sz.expandedTo(l.image.size());
+        }
+    }
+    if (sz.isEmpty()) {
+        sz = m_image.isNull() ? QSize(32, 32) : m_image.size();
+    }
+    if (sz.isEmpty()) sz = QSize(32, 32);
+
+    CanvasLayer &cur = m_layers[m_activeLayerIndex];
+    if (cur.image.isNull() || cur.image.format() != QImage::Format_ARGB32) {
+        QImage newImg(sz, QImage::Format_ARGB32);
+        newImg.fill(Qt::transparent);
+        if (!cur.image.isNull()) {
+            QPainter p(&newImg);
+            p.drawImage(0, 0, cur.image);
+        }
+        cur.image = newImg;
+    }
+}
+
+CanvasLayer PixelCanvas::activeLayer() const
+{
+    if (!m_layers.isEmpty() && m_activeLayerIndex >= 0 && m_activeLayerIndex < m_layers.size()) {
+        return m_layers.at(m_activeLayerIndex);
+    }
+    return CanvasLayer();
+}
+
+QImage PixelCanvas::activeLayerImage() const
+{
+    if (!m_layers.isEmpty() && m_activeLayerIndex >= 0 && m_activeLayerIndex < m_layers.size()) {
+        return m_layers.at(m_activeLayerIndex).image;
+    }
+    return m_image;
+}
+
+bool PixelCanvas::isLayerLocked(int index) const
+{
+    if (m_layers.isEmpty()) return false;
+    int idx = (index >= 0) ? index : m_activeLayerIndex;
+    if (idx >= 0 && idx < m_layers.size()) {
+        return m_layers.at(idx).locked;
+    }
+    return false;
+}
+
+void PixelCanvas::setLayers(const QList<CanvasLayer> &layers, int activeIndex)
+{
+    m_layers = layers;
+    int maxIdx = static_cast<int>(m_layers.size() - 1);
+    m_activeLayerIndex = std::clamp(activeIndex, 0, std::max(0, maxIdx));
+    ensureActiveCelAllocated();
+    recomposite();
+    emit layersChanged();
+    emit activeLayerChanged(m_activeLayerIndex);
+}
+
+void PixelCanvas::setActiveLayerIndex(int index)
+{
+    if (m_layers.isEmpty()) return;
+    int maxIdx = static_cast<int>(m_layers.size() - 1);
+    int clamped = std::clamp(index, 0, maxIdx);
+    if (m_activeLayerIndex != clamped) {
+        m_activeLayerIndex = clamped;
+        ensureActiveCelAllocated();
+        emit activeLayerChanged(m_activeLayerIndex);
+        update();
+    }
+}
+
+void PixelCanvas::setLayerVisible(int index, bool visible)
+{
+    if (index >= 0 && index < m_layers.size()) {
+        if (m_layers[index].visible != visible) {
+            m_layers[index].visible = visible;
+            recomposite();
+            emit layersChanged();
+        }
+    }
+}
+
+void PixelCanvas::setLayerLocked(int index, bool locked)
+{
+    if (index >= 0 && index < m_layers.size()) {
+        if (m_layers[index].locked != locked) {
+            m_layers[index].locked = locked;
+            emit layersChanged();
+        }
+    }
+}
+
+void PixelCanvas::setLayerOpacity(int index, quint8 opacity)
+{
+    if (index >= 0 && index < m_layers.size()) {
+        if (m_layers[index].opacity != opacity) {
+            m_layers[index].opacity = opacity;
+            recomposite();
+            emit layersChanged();
+        }
+    }
+}
+
+void PixelCanvas::setLayerBlendMode(int index, QPainter::CompositionMode mode)
+{
+    if (index >= 0 && index < m_layers.size()) {
+        if (m_layers[index].blendMode != mode) {
+            m_layers[index].blendMode = mode;
+            recomposite();
+            emit layersChanged();
+        }
+    }
+}
+
+void PixelCanvas::setLayerName(int index, const QString &name)
+{
+    if (index >= 0 && index < m_layers.size()) {
+        m_layers[index].name = name;
+        emit layersChanged();
+    }
+}
+
+void PixelCanvas::setLayerCelImage(int index, const QImage &img)
+{
+    if (index >= 0 && index < m_layers.size()) {
+        m_layers[index].image = img;
+        recomposite();
+    }
+}
+
+void PixelCanvas::applyLayerPatch(int index, const QRect &rect, const QImage &patch)
+{
+    if (index >= 0 && index < m_layers.size() && !rect.isEmpty() && !patch.isNull()) {
+        ensureActiveCelAllocated();
+        QPainter p(&m_layers[index].image);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+        p.drawImage(rect.topLeft(), patch);
+        p.end();
+        recomposite();
+    }
+}
+
+void PixelCanvas::addLayer(const QString &name)
+{
+    CanvasLayer layer;
+    layer.id = QStringLiteral("layer_%1").arg(QDateTime::currentMSecsSinceEpoch());
+    layer.name = name.isEmpty() ? tr("Layer %1").arg(m_layers.size() + 1) : name;
+    layer.visible = true;
+    layer.locked = false;
+    layer.opacity = 255;
+    layer.zOrder = m_layers.isEmpty() ? 0 : (m_layers.last().zOrder + 10);
+    QSize sz;
+    for (const auto &l : m_layers) {
+        if (!l.image.isNull()) {
+            sz = sz.expandedTo(l.image.size());
+        }
+    }
+    if (sz.isEmpty()) {
+        sz = m_image.isNull() ? QSize(32, 32) : m_image.size();
+    }
+    layer.image = QImage(sz, QImage::Format_ARGB32);
+    layer.image.fill(Qt::transparent);
+
+    int insertPos = (m_activeLayerIndex >= 0 && m_activeLayerIndex < m_layers.size())
+                    ? m_activeLayerIndex + 1
+                    : m_layers.size();
+    m_layers.insert(insertPos, layer);
+    m_activeLayerIndex = insertPos;
+
+    recomposite();
+    emit layersChanged();
+    emit activeLayerChanged(m_activeLayerIndex);
+}
+
+void PixelCanvas::duplicateLayer(int index)
+{
+    int target = (index >= 0) ? index : m_activeLayerIndex;
+    if (target < 0 || target >= m_layers.size()) return;
+
+    CanvasLayer dup = m_layers.at(target);
+    dup.id = QStringLiteral("layer_%1").arg(QDateTime::currentMSecsSinceEpoch());
+    dup.name = tr("%1 Copy").arg(dup.name);
+    dup.image = dup.image.copy();
+
+    m_layers.insert(target + 1, dup);
+    m_activeLayerIndex = target + 1;
+
+    recomposite();
+    emit layersChanged();
+    emit activeLayerChanged(m_activeLayerIndex);
+}
+
+void PixelCanvas::removeLayer(int index)
+{
+    if (m_layers.size() <= 1) return;
+    int target = (index >= 0) ? index : m_activeLayerIndex;
+    if (target < 0 || target >= m_layers.size()) return;
+
+    m_layers.removeAt(target);
+    int maxIdx = static_cast<int>(m_layers.size() - 1);
+    m_activeLayerIndex = std::clamp(target, 0, maxIdx);
+
+    recomposite();
+    emit layersChanged();
+    emit activeLayerChanged(m_activeLayerIndex);
+}
+
+void PixelCanvas::moveLayerUp(int index)
+{
+    int target = (index >= 0) ? index : m_activeLayerIndex;
+    if (target < 0 || target >= m_layers.size() - 1) return;
+
+    m_layers.swapItemsAt(target, target + 1);
+    m_activeLayerIndex = target + 1;
+
+    recomposite();
+    emit layersChanged();
+    emit activeLayerChanged(m_activeLayerIndex);
+}
+
+void PixelCanvas::moveLayerDown(int index)
+{
+    int target = (index >= 0) ? index : m_activeLayerIndex;
+    if (target <= 0 || target >= m_layers.size()) return;
+
+    m_layers.swapItemsAt(target, target - 1);
+    m_activeLayerIndex = target - 1;
+
+    recomposite();
+    emit layersChanged();
+    emit activeLayerChanged(m_activeLayerIndex);
+}
+
+void PixelCanvas::mergeLayerDown(int index)
+{
+    int target = (index >= 0) ? index : m_activeLayerIndex;
+    if (target <= 0 || target >= m_layers.size()) return;
+
+    const CanvasLayer &top = m_layers.at(target);
+    CanvasLayer &bottom = m_layers[target - 1];
+
+    QSize sz = bottom.image.size().expandedTo(top.image.size());
+    if (sz.isEmpty()) {
+        sz = m_image.isNull() ? QSize(32, 32) : m_image.size();
+    }
+    if (bottom.image.isNull() || bottom.image.size() != sz) {
+        QImage n(sz, QImage::Format_ARGB32);
+        n.fill(Qt::transparent);
+        if (!bottom.image.isNull()) {
+            QPainter p(&n);
+            p.drawImage(0, 0, bottom.image);
+        }
+        bottom.image = n;
+    }
+
+    QPainter p(&bottom.image);
+    p.setCompositionMode(top.blendMode);
+    p.setOpacity(top.opacity / 255.0);
+    p.drawImage(top.offset, top.image);
+    p.end();
+
+    m_layers.removeAt(target);
+    m_activeLayerIndex = target - 1;
+
+    recomposite();
+    emit layersChanged();
+    emit activeLayerChanged(m_activeLayerIndex);
+}
+
+void PixelCanvas::flattenLayers()
+{
+    if (m_layers.isEmpty()) return;
+    recomposite();
+
+    CanvasLayer flat;
+    flat.id = QStringLiteral("flat_0");
+    flat.name = tr("Background");
+    flat.visible = true;
+    flat.locked = false;
+    flat.opacity = 255;
+    flat.zOrder = 0;
+    flat.image = m_image.copy();
+
+    m_layers.clear();
+    m_layers.append(flat);
+    m_activeLayerIndex = 0;
+
+    recomposite();
+    emit layersChanged();
+    emit activeLayerChanged(0);
+}
+
+void PixelCanvas::recomposite()
+{
+    if (m_layers.isEmpty()) return;
+
+    QSize sz;
+    for (const auto &l : m_layers) {
+        if (!l.image.isNull()) {
+            sz = sz.expandedTo(l.image.size());
+        }
+    }
+    if (sz.isEmpty()) {
+        sz = m_image.isNull() ? QSize(32, 32) : m_image.size();
+    }
+    if (sz.isEmpty()) sz = QSize(32, 32);
+
+    QImage composite(sz, QImage::Format_ARGB32_Premultiplied);
+    composite.fill(Qt::transparent);
+
+    QPainter painter(&composite);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, false);
+
+    // Sort layer indices by zOrder
+    QList<int> sortedIndices;
+    sortedIndices.reserve(m_layers.size());
+    for (int i = 0; i < m_layers.size(); ++i) sortedIndices.append(i);
+    std::stable_sort(sortedIndices.begin(), sortedIndices.end(), [this](int a, int b) {
+        return m_layers[a].zOrder < m_layers[b].zOrder;
+    });
+
+    for (int idx : sortedIndices) {
+        const CanvasLayer &l = m_layers.at(idx);
+        if (!l.visible || l.image.isNull()) continue;
+
+        painter.setCompositionMode(l.blendMode);
+        double op = l.opacity / 255.0;
+        painter.setOpacity(std::clamp(op, 0.0, 1.0));
+        painter.drawImage(l.offset, l.image);
+    }
+    painter.end();
+
+    m_image = composite.convertToFormat(QImage::Format_ARGB32);
+    emit imageChanged();
+    update();
+}
+
+void PixelCanvas::setSampleAllLayers(bool sampleAll)
+{
+    m_sampleAllLayers = sampleAll;
+}
+
+void PixelCanvas::setOnionSkinCurrentLayerOnly(bool currentOnly)
+{
+    if (m_onionSkinCurrentLayerOnly != currentOnly) {
+        m_onionSkinCurrentLayerOnly = currentOnly;
+        updateOnionSkinComposite();
+        update();
+    }
 }
 
 void PixelCanvas::setOnionSkinEnabled(bool enabled)
@@ -545,17 +929,27 @@ void PixelCanvas::deselect()
 
 void PixelCanvas::clearSelection()
 {
+    if (isLayerLocked()) {
+        emit layerLockedAttempted();
+        return;
+    }
     commitFloatingSelection();
     if (m_image.isNull()) return;
-    QImage oldImg = m_image;
+    if (hasLayers()) ensureActiveCelAllocated();
+    QImage oldImg = hasLayers() ? activeLayerImage() : m_image;
     bool anyChanged = false;
 
     if (hasSelection()) {
         for (int y = m_selectionRect.top(); y <= m_selectionRect.bottom(); ++y) {
             for (int x = m_selectionRect.left(); x <= m_selectionRect.right(); ++x) {
                 if (isPixelEditable(x, y)) {
-                    if (qAlpha(m_image.pixel(x, y)) != 0) {
-                        m_image.setPixelColor(x, y, Qt::transparent);
+                    QColor curCol = hasLayers() ? m_layers[m_activeLayerIndex].image.pixelColor(x, y) : m_image.pixelColor(x, y);
+                    if (curCol.alpha() != 0) {
+                        if (hasLayers()) {
+                            m_layers[m_activeLayerIndex].image.setPixelColor(x, y, Qt::transparent);
+                        } else {
+                            m_image.setPixelColor(x, y, Qt::transparent);
+                        }
                         anyChanged = true;
                     }
                 }
@@ -565,8 +959,13 @@ void PixelCanvas::clearSelection()
         for (int y = 0; y < m_image.height(); ++y) {
             for (int x = 0; x < m_image.width(); ++x) {
                 if (isPixelEditable(x, y)) {
-                    if (qAlpha(m_image.pixel(x, y)) != 0) {
-                        m_image.setPixelColor(x, y, Qt::transparent);
+                    QColor curCol = hasLayers() ? m_layers[m_activeLayerIndex].image.pixelColor(x, y) : m_image.pixelColor(x, y);
+                    if (curCol.alpha() != 0) {
+                        if (hasLayers()) {
+                            m_layers[m_activeLayerIndex].image.setPixelColor(x, y, Qt::transparent);
+                        } else {
+                            m_image.setPixelColor(x, y, Qt::transparent);
+                        }
                         anyChanged = true;
                     }
                 }
@@ -575,6 +974,7 @@ void PixelCanvas::clearSelection()
     }
 
     if (anyChanged) {
+        if (hasLayers()) recomposite();
         m_lastActionData = CanvasActionData();
         m_lastActionData.action = CanvasAction::Clear;
         m_lastActionData.hasSelection = hasSelection();
@@ -590,8 +990,11 @@ void PixelCanvas::copySelection()
     commitFloatingSelection();
     if (m_image.isNull()) return;
 
+    QImage srcImg = (hasLayers() && !m_sampleAllLayers) ? activeLayerImage() : m_image;
+    if (srcImg.isNull()) return;
+
     if (hasSelection()) {
-        QRect r = m_selectionRect.intersected(m_image.rect());
+        QRect r = m_selectionRect.intersected(srcImg.rect());
         if (r.isEmpty()) return;
         QImage sub(r.size(), QImage::Format_ARGB32);
         sub.fill(Qt::transparent);
@@ -600,13 +1003,13 @@ void PixelCanvas::copySelection()
                 int px = r.x() + x;
                 int py = r.y() + y;
                 if (isPixelSelected(px, py)) {
-                    sub.setPixelColor(x, y, m_image.pixelColor(px, py));
+                    sub.setPixelColor(x, y, srcImg.pixelColor(px, py));
                 }
             }
         }
         s_clipboardImage = sub;
     } else {
-        s_clipboardImage = m_image.copy();
+        s_clipboardImage = srcImg.copy();
     }
 }
 
@@ -635,7 +1038,17 @@ void PixelCanvas::commitFloatingSelection()
 {
     if (!m_hasFloating) return;
 
-    QImage oldImg = m_image;
+    if (isLayerLocked()) {
+        emit layerLockedAttempted();
+        m_hasFloating = false;
+        m_floatingImage = QImage();
+        update();
+        return;
+    }
+
+    if (hasLayers()) ensureActiveCelAllocated();
+    QImage oldImg = hasLayers() ? activeLayerImage() : m_image;
+
     if (!m_allowEditingOutsidePolygon && hasPolygonMesh()) {
         int fw = m_floatingImage.width();
         int fh = m_floatingImage.height();
@@ -647,9 +1060,13 @@ void PixelCanvas::commitFloatingSelection()
                     QColor srcCol = m_floatingImage.pixelColor(x, y);
                     if (srcCol.alpha() > 0) {
                         if (srcCol.alpha() == 255) {
-                            m_image.setPixelColor(tx, ty, srcCol);
+                            if (hasLayers()) {
+                                m_layers[m_activeLayerIndex].image.setPixelColor(tx, ty, srcCol);
+                            } else {
+                                m_image.setPixelColor(tx, ty, srcCol);
+                            }
                         } else {
-                            QColor dstCol = m_image.pixelColor(tx, ty);
+                            QColor dstCol = hasLayers() ? m_layers[m_activeLayerIndex].image.pixelColor(tx, ty) : m_image.pixelColor(tx, ty);
                             int a = srcCol.alpha();
                             int invA = 255 - a;
                             int outA = a + (dstCol.alpha() * invA) / 255;
@@ -657,7 +1074,11 @@ void PixelCanvas::commitFloatingSelection()
                                 int r = (srcCol.red() * a + dstCol.red() * dstCol.alpha() * invA / 255) / outA;
                                 int g = (srcCol.green() * a + dstCol.green() * dstCol.alpha() * invA / 255) / outA;
                                 int b = (srcCol.blue() * a + dstCol.blue() * dstCol.alpha() * invA / 255) / outA;
-                                m_image.setPixelColor(tx, ty, QColor(r, g, b, outA));
+                                if (hasLayers()) {
+                                    m_layers[m_activeLayerIndex].image.setPixelColor(tx, ty, QColor(r, g, b, outA));
+                                } else {
+                                    m_image.setPixelColor(tx, ty, QColor(r, g, b, outA));
+                                }
                             }
                         }
                     }
@@ -665,11 +1086,20 @@ void PixelCanvas::commitFloatingSelection()
             }
         }
     } else {
-        QPainter p(&m_image);
-        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        p.drawImage(m_floatingPixelPos, m_floatingImage);
-        p.end();
+        if (hasLayers()) {
+            QPainter p(&m_layers[m_activeLayerIndex].image);
+            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            p.drawImage(m_floatingPixelPos, m_floatingImage);
+            p.end();
+        } else {
+            QPainter p(&m_image);
+            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            p.drawImage(m_floatingPixelPos, m_floatingImage);
+            p.end();
+        }
     }
+
+    if (hasLayers()) recomposite();
 
     m_lastActionData = CanvasActionData();
     m_lastActionData.action = CanvasAction::Paste;
@@ -685,9 +1115,14 @@ void PixelCanvas::commitFloatingSelection()
 
 void PixelCanvas::flipHorizontal()
 {
+    if (isLayerLocked()) {
+        emit layerLockedAttempted();
+        return;
+    }
     commitFloatingSelection();
     if (m_image.isNull()) return;
-    QImage oldImg = m_image;
+    if (hasLayers()) ensureActiveCelAllocated();
+    QImage oldImg = hasLayers() ? activeLayerImage() : m_image;
     QPolygonF oldPoly = m_polygonMesh;
 
     if (hasSelection()) {
@@ -696,26 +1131,44 @@ void PixelCanvas::flipHorizontal()
             for (int x = 0; x < r.width() / 2; ++x) {
                 int leftX = r.left() + x;
                 int rightX = r.right() - x;
-                QColor temp = m_image.pixelColor(leftX, y);
-                m_image.setPixelColor(leftX, y, m_image.pixelColor(rightX, y));
-                m_image.setPixelColor(rightX, y, temp);
+                if (hasLayers()) {
+                    QColor temp = m_layers[m_activeLayerIndex].image.pixelColor(leftX, y);
+                    m_layers[m_activeLayerIndex].image.setPixelColor(leftX, y, m_layers[m_activeLayerIndex].image.pixelColor(rightX, y));
+                    m_layers[m_activeLayerIndex].image.setPixelColor(rightX, y, temp);
+                } else {
+                    QColor temp = m_image.pixelColor(leftX, y);
+                    m_image.setPixelColor(leftX, y, m_image.pixelColor(rightX, y));
+                    m_image.setPixelColor(rightX, y, temp);
+                }
             }
         }
         if (!m_allowEditingOutsidePolygon && hasPolygonMesh() && !m_polygonMask.isEmpty()) {
             for (int y = r.top(); y <= r.bottom(); ++y) {
                 for (int x = r.left(); x <= r.right(); ++x) {
                     if (!isPixelInsidePolygon(x, y)) {
-                        m_image.setPixelColor(x, y, oldImg.pixelColor(x, y));
+                        if (hasLayers()) {
+                            m_layers[m_activeLayerIndex].image.setPixelColor(x, y, oldImg.pixelColor(x, y));
+                        } else {
+                            m_image.setPixelColor(x, y, oldImg.pixelColor(x, y));
+                        }
                     }
                 }
             }
         }
     } else {
+        if (hasLayers()) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
-        m_image = m_image.flipped(Qt::Horizontal);
+            m_layers[m_activeLayerIndex].image = m_layers[m_activeLayerIndex].image.flipped(Qt::Horizontal);
 #else
-        m_image = m_image.mirrored(true, false);
+            m_layers[m_activeLayerIndex].image = m_layers[m_activeLayerIndex].image.mirrored(true, false);
 #endif
+        } else {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+            m_image = m_image.flipped(Qt::Horizontal);
+#else
+            m_image = m_image.mirrored(true, false);
+#endif
+        }
         if (hasPolygonMesh()) {
             QPolygonF flippedPoly;
             flippedPoly.reserve(m_polygonMesh.size());
@@ -729,6 +1182,8 @@ void PixelCanvas::flipHorizontal()
         }
     }
 
+    if (hasLayers()) recomposite();
+
     m_lastActionData = CanvasActionData();
     m_lastActionData.action = CanvasAction::FlipHorizontal;
     m_lastActionData.hasSelection = hasSelection();
@@ -740,9 +1195,14 @@ void PixelCanvas::flipHorizontal()
 
 void PixelCanvas::flipVertical()
 {
+    if (isLayerLocked()) {
+        emit layerLockedAttempted();
+        return;
+    }
     commitFloatingSelection();
     if (m_image.isNull()) return;
-    QImage oldImg = m_image;
+    if (hasLayers()) ensureActiveCelAllocated();
+    QImage oldImg = hasLayers() ? activeLayerImage() : m_image;
     QPolygonF oldPoly = m_polygonMesh;
 
     if (hasSelection()) {
@@ -751,26 +1211,44 @@ void PixelCanvas::flipVertical()
             for (int y = 0; y < r.height() / 2; ++y) {
                 int topY = r.top() + y;
                 int botY = r.bottom() - y;
-                QColor temp = m_image.pixelColor(x, topY);
-                m_image.setPixelColor(x, topY, m_image.pixelColor(x, botY));
-                m_image.setPixelColor(x, botY, temp);
+                if (hasLayers()) {
+                    QColor temp = m_layers[m_activeLayerIndex].image.pixelColor(x, topY);
+                    m_layers[m_activeLayerIndex].image.setPixelColor(x, topY, m_layers[m_activeLayerIndex].image.pixelColor(x, botY));
+                    m_layers[m_activeLayerIndex].image.setPixelColor(x, botY, temp);
+                } else {
+                    QColor temp = m_image.pixelColor(x, topY);
+                    m_image.setPixelColor(x, topY, m_image.pixelColor(x, botY));
+                    m_image.setPixelColor(x, botY, temp);
+                }
             }
         }
         if (!m_allowEditingOutsidePolygon && hasPolygonMesh() && !m_polygonMask.isEmpty()) {
             for (int y = r.top(); y <= r.bottom(); ++y) {
                 for (int x = r.left(); x <= r.right(); ++x) {
                     if (!isPixelInsidePolygon(x, y)) {
-                        m_image.setPixelColor(x, y, oldImg.pixelColor(x, y));
+                        if (hasLayers()) {
+                            m_layers[m_activeLayerIndex].image.setPixelColor(x, y, oldImg.pixelColor(x, y));
+                        } else {
+                            m_image.setPixelColor(x, y, oldImg.pixelColor(x, y));
+                        }
                     }
                 }
             }
         }
     } else {
+        if (hasLayers()) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
-        m_image = m_image.flipped(Qt::Vertical);
+            m_layers[m_activeLayerIndex].image = m_layers[m_activeLayerIndex].image.flipped(Qt::Vertical);
 #else
-        m_image = m_image.mirrored(false, true);
+            m_layers[m_activeLayerIndex].image = m_layers[m_activeLayerIndex].image.mirrored(false, true);
 #endif
+        } else {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+            m_image = m_image.flipped(Qt::Vertical);
+#else
+            m_image = m_image.mirrored(false, true);
+#endif
+        }
         if (hasPolygonMesh()) {
             QPolygonF flippedPoly;
             flippedPoly.reserve(m_polygonMesh.size());
@@ -784,6 +1262,8 @@ void PixelCanvas::flipVertical()
         }
     }
 
+    if (hasLayers()) recomposite();
+
     m_lastActionData = CanvasActionData();
     m_lastActionData.action = CanvasAction::FlipVertical;
     m_lastActionData.hasSelection = hasSelection();
@@ -795,21 +1275,34 @@ void PixelCanvas::flipVertical()
 
 void PixelCanvas::rotate90CW()
 {
+    if (isLayerLocked()) {
+        emit layerLockedAttempted();
+        return;
+    }
     commitFloatingSelection();
     if (m_image.isNull()) return;
-    QImage oldImg = m_image;
+    if (hasLayers()) ensureActiveCelAllocated();
+    QImage oldImg = hasLayers() ? activeLayerImage() : m_image;
     QPolygonF oldPoly = m_polygonMesh;
     int oldH = m_image.height();
 
     QTransform t;
     t.rotate(90.0);
-    m_image = m_image.transformed(t).convertToFormat(QImage::Format_ARGB32);
+    if (hasLayers()) {
+        for (int i = 0; i < m_layers.size(); ++i) {
+            if (!m_layers[i].image.isNull()) {
+                m_layers[i].image = m_layers[i].image.transformed(t).convertToFormat(QImage::Format_ARGB32);
+            }
+        }
+        recomposite();
+    } else {
+        m_image = m_image.transformed(t).convertToFormat(QImage::Format_ARGB32);
+    }
 
     if (hasPolygonMesh()) {
         QPolygonF rotatedPoly;
         rotatedPoly.reserve(m_polygonMesh.size());
         for (const QPointF &pt : m_polygonMesh) {
-            // Clockwise 90° rotation: x' = oldH - y, y' = x
             rotatedPoly.append(QPointF(static_cast<double>(oldH) - pt.y(), pt.x()));
         }
         m_polygonMesh = rotatedPoly;
@@ -833,16 +1326,17 @@ void PixelCanvas::rotate90CW()
 
 void PixelCanvas::pushSnapshot(const QImage &oldImage, const QString &text, const QPolygonF &oldPolygon, CanvasAction action)
 {
+    QImage curImg = hasLayers() ? activeLayerImage() : m_image;
     if (action == CanvasAction::FloodFill && (m_lastActionData.action != CanvasAction::FloodFill || !m_lastActionData.color.isValid())) {
         m_lastActionData = CanvasActionData();
         m_lastActionData.action = CanvasAction::FloodFill;
         m_lastActionData.hasSelection = hasSelection();
         m_lastActionData.selectionRect = m_selectionRect;
-        for (int y = 0; y < m_image.height(); ++y) {
-            for (int x = 0; x < m_image.width(); ++x) {
-                if (oldImage.isNull() || m_image.pixel(x, y) != oldImage.pixel(x, y)) {
+        for (int y = 0; y < curImg.height(); ++y) {
+            for (int x = 0; x < curImg.width(); ++x) {
+                if (oldImage.isNull() || curImg.pixel(x, y) != oldImage.pixel(x, y)) {
                     m_lastActionData.pos = QPoint(x, y);
-                    m_lastActionData.color = QColor(m_image.pixel(x, y));
+                    m_lastActionData.color = QColor(curImg.pixel(x, y));
                     break;
                 }
             }
@@ -850,17 +1344,22 @@ void PixelCanvas::pushSnapshot(const QImage &oldImage, const QString &text, cons
         }
     }
     QPolygonF oldP = oldPolygon.isEmpty() ? m_polygonMesh : oldPolygon;
-    auto *cmd = new PixelCanvasUndoCommand(this, oldImage, m_image, oldP, m_polygonMesh, text);
+    int layerIdx = hasLayers() ? m_activeLayerIndex : -1;
+    auto *cmd = new PixelCanvasUndoCommand(this, layerIdx, oldImage, curImg, oldP, m_polygonMesh, text);
     if (cmd->isEmpty()) {
         delete cmd;
         return;
     }
-    emit modificationPushed(oldImage, m_image, oldP, m_polygonMesh, action, cmd);
+    emit modificationPushed(oldImage, curImg, oldP, m_polygonMesh, action, cmd);
     m_undoStack.push(cmd);
 }
 
 void PixelCanvas::applyPatch(const QRect &rect, const QImage &patch)
 {
+    if (hasLayers()) {
+        applyLayerPatch(m_activeLayerIndex, rect, patch);
+        return;
+    }
     if (m_image.isNull() || rect.isEmpty() || patch.isNull()) return;
 
     QPainter p(&m_image);
@@ -966,6 +1465,7 @@ bool PixelCanvas::isPixelInsidePolygon(int x, int y) const
 bool PixelCanvas::isPixelEditable(int x, int y) const
 {
     if (!isPixelInside(x, y)) return false;
+    if (isLayerLocked()) return false;
     if (!isPixelSelected(x, y)) return false;
     if (!m_allowEditingOutsidePolygon && hasPolygonMesh()) {
         if (!isPixelInsidePolygon(x, y)) return false;
@@ -975,15 +1475,30 @@ bool PixelCanvas::isPixelEditable(int x, int y) const
 
 void PixelCanvas::drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor &color)
 {
+    if (isLayerLocked()) {
+        emit layerLockedAttempted();
+        return;
+    }
+
     int dx = std::abs(x1 - x0);
     int dy = std::abs(y1 - y0);
     int sx = (x0 < x1) ? 1 : -1;
     int sy = (y0 < y1) ? 1 : -1;
     int err = dx - dy;
 
+    bool anyModified = false;
+    if (hasLayers()) {
+        ensureActiveCelAllocated();
+    }
+
     while (true) {
         if (isPixelEditable(x0, y0)) {
-            m_image.setPixelColor(x0, y0, color);
+            if (hasLayers()) {
+                m_layers[m_activeLayerIndex].image.setPixelColor(x0, y0, color);
+            } else {
+                m_image.setPixelColor(x0, y0, color);
+            }
+            anyModified = true;
         }
         if (x0 == x1 && y0 == y1) break;
         int e2 = 2 * err;
@@ -996,16 +1511,30 @@ void PixelCanvas::drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor
             y0 += sy;
         }
     }
+
+    if (anyModified && hasLayers()) {
+        recomposite();
+    }
 }
 
 void PixelCanvas::applyFloodFill(int startX, int startY, const QColor &replacementColor)
 {
+    if (isLayerLocked()) {
+        emit layerLockedAttempted();
+        return;
+    }
     if (!isPixelEditable(startX, startY)) return;
-    QRgb targetRgb = m_image.pixel(startX, startY);
+
+    if (hasLayers()) {
+        ensureActiveCelAllocated();
+    }
+
+    QImage sourceImage = (hasLayers() && !m_sampleAllLayers) ? activeLayerImage() : m_image;
+    QRgb targetRgb = sourceImage.pixel(startX, startY);
     QRgb replaceRgb = replacementColor.rgba();
     if (targetRgb == replaceRgb) return;
 
-    QImage oldImg = m_image;
+    QImage oldImg = hasLayers() ? activeLayerImage() : m_image;
     int w = m_image.width();
     int h = m_image.height();
     QVector<bool> visited(w * h, false);
@@ -1019,7 +1548,11 @@ void PixelCanvas::applyFloodFill(int startX, int startY, const QColor &replaceme
         int x = pt.x();
         int y = pt.y();
 
-        m_image.setPixelColor(x, y, replacementColor);
+        if (hasLayers()) {
+            m_layers[m_activeLayerIndex].image.setPixelColor(x, y, replacementColor);
+        } else {
+            m_image.setPixelColor(x, y, replacementColor);
+        }
 
         const int dx[] = {-1, 1, 0, 0};
         const int dy[] = {0, 0, -1, 1};
@@ -1028,12 +1561,16 @@ void PixelCanvas::applyFloodFill(int startX, int startY, const QColor &replaceme
             int ny = y + dy[i];
             if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
                 int idx = ny * w + nx;
-                if (!visited[idx] && isPixelEditable(nx, ny) && m_image.pixel(nx, ny) == targetRgb) {
+                if (!visited[idx] && isPixelEditable(nx, ny) && sourceImage.pixel(nx, ny) == targetRgb) {
                     visited[idx] = true;
                     queue.enqueue(QPoint(nx, ny));
                 }
             }
         }
+    }
+
+    if (hasLayers()) {
+        recomposite();
     }
 
     m_lastActionData = CanvasActionData();
@@ -1052,9 +1589,10 @@ void PixelCanvas::applyColorSelection(int targetX, int targetY)
     if (!isPixelInside(targetX, targetY)) return;
     commitFloatingSelection();
 
-    QRgb targetRgb = m_image.pixel(targetX, targetY);
-    int w = m_image.width();
-    int h = m_image.height();
+    QImage source = (hasLayers() && !m_sampleAllLayers) ? activeLayerImage() : m_image;
+    QRgb targetRgb = source.pixel(targetX, targetY);
+    int w = source.width();
+    int h = source.height();
     m_selectionMask.resize(w * h);
     m_selectionMask.fill(false);
 
@@ -1062,7 +1600,7 @@ void PixelCanvas::applyColorSelection(int targetX, int targetY)
 
     for (int y = 0; y < h; ++y) {
         for (int x = 0; x < w; ++x) {
-            if (m_image.pixel(x, y) == targetRgb) {
+            if (source.pixel(x, y) == targetRgb) {
                 m_selectionMask[y * w + x] = true;
                 if (x < minX) minX = x;
                 if (x > maxX) maxX = x;
@@ -1340,9 +1878,13 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
 
     m_activeButton = event->button();
     m_lastPixelPos = pixelPos;
-    m_strokePreImage = m_image;
+    m_strokePreImage = hasLayers() ? activeLayerImage() : m_image;
 
     if (m_tool == PixelTool::Pencil || m_tool == PixelTool::Eraser) {
+        if (isLayerLocked()) {
+            emit layerLockedAttempted();
+            return;
+        }
         m_isDrawing = true;
         m_currentStroke.clear();
         QColor drawColor;
@@ -1357,7 +1899,12 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
         update();
     } else if (m_tool == PixelTool::Eyedropper) {
         if (isPixelInside(pixelPos.x(), pixelPos.y())) {
-            QColor picked = m_image.pixelColor(pixelPos.x(), pixelPos.y());
+            QColor picked;
+            if (hasLayers() && !m_sampleAllLayers) {
+                picked = activeLayerImage().pixelColor(pixelPos.x(), pixelPos.y());
+            } else {
+                picked = m_image.pixelColor(pixelPos.x(), pixelPos.y());
+            }
             if (event->button() == Qt::RightButton) {
                 setSecondaryColor(picked);
             } else {
@@ -1365,6 +1912,10 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
             }
         }
     } else if (m_tool == PixelTool::BucketFill) {
+        if (isLayerLocked()) {
+            emit layerLockedAttempted();
+            return;
+        }
         QColor fillCol = (event->button() == Qt::RightButton) ? m_secondaryColor : m_primaryColor;
         applyFloodFill(pixelPos.x(), pixelPos.y(), fillCol);
     } else if (m_tool == PixelTool::SelectRect) {

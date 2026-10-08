@@ -104,7 +104,7 @@ void TestFilters::testFilterRegistry()
     QVERIFY(bgRem != nullptr);
     QVERIFY(bgRem->isGeometryModifier());
     QVERIFY(bgRem->isPixelModifier());
-    QVERIFY(!bgRem->isAtlasModifier());
+    QVERIFY(bgRem->isAtlasModifier());
 
     FilterPlugin *outline = reg.findFilter(QStringLiteral("outline"));
     QVERIFY(outline != nullptr);
@@ -131,7 +131,7 @@ void TestFilters::testFilterRegistry()
     QList<FilterPlugin*> geomMods = reg.filtersByModifier(FilterPlugin::GeometryModifier);
     QVERIFY(!geomMods.isEmpty());
     QList<FilterPlugin*> atlasMods = reg.filtersByModifier(FilterPlugin::AtlasModifier);
-    QCOMPARE(atlasMods.size(), 2);
+    QCOMPARE(atlasMods.size(), 3);
 }
 
 void TestFilters::testDespillFilterAlgorithm()

@@ -587,134 +587,134 @@ Choose which branch to restore:</translation>
     <name>ColorPalettePresets</name>
     <message>
         <source>Bento Standard (36)</source>
-        <translation type="unfinished">Bento Tiêu chuẩn (36)</translation>
+        <translation>Bento Tiêu chuẩn (36)</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 sắc xanh lá)</translation>
+        <translation>Game Boy DMG (4 sắc xanh lá)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 sắc xám)</translation>
+        <translation>Game Boy Pocket (4 sắc xám)</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
-        <translation type="unfinished">Thao tác: NES / Famicom (54)</translation>
+        <translation>NES / Famicom (54)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
-        <translation type="unfinished">Thao tác: SNES / 16-bit (32)</translation>
+        <translation>SNES / 16-bit (32)</translation>
     </message>
     <message>
         <source>PICO-8 (16)</source>
-        <translation type="unfinished">Thao tác: PICO-8 (16)</translation>
+        <translation>PICO-8 (16)</translation>
     </message>
     <message>
         <source>Commodore 64 (16)</source>
-        <translation type="unfinished">Thao tác: Commodore 64 (16)</translation>
+        <translation>Commodore 64 (16)</translation>
     </message>
     <message>
         <source>Amiga OCS (32)</source>
-        <translation type="unfinished">Thao tác: Amiga OCS (32)</translation>
+        <translation>Amiga OCS (32)</translation>
     </message>
     <message>
         <source>NEC PC-Engine (32)</source>
-        <translation type="unfinished">Thao tác: NEC PC-Engine (32)</translation>
+        <translation>NEC PC-Engine (32)</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Chế độ 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Chế độ 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Endesga 32 (32)</translation>
     </message>
     <message>
         <source>Custom Imported</source>
-        <translation type="unfinished"></translation>
+        <translation>Tùy chỉnh đã nhập</translation>
     </message>
     <message>
         <source>Failed to decode image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Không thể giải mã hình ảnh.</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Không thể mở tệp để đọc.</translation>
     </message>
     <message>
         <source>No valid colors found in palette file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Không tìm thấy màu hợp lệ trong tệp bảng màu.</translation>
     </message>
 </context>
 <context>
     <name>ColorPickerWidget</name>
     <message>
         <source>🎡 Wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>🎡 Vòng tròn màu</translation>
     </message>
     <message>
         <source>⊞ 2D Map</source>
-        <translation type="unfinished"></translation>
+        <translation>⊞ Bản đồ 2D</translation>
     </message>
     <message>
         <source>🎛️ Sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>🎛️ Thanh trượt</translation>
     </message>
     <message>
         <source>Val:</source>
-        <translation type="unfinished"></translation>
+        <translation>Độ sáng:</translation>
     </message>
     <message>
         <source>Harmonies:</source>
-        <translation type="unfinished"></translation>
+        <translation>Phối màu hài hòa:</translation>
     </message>
     <message>
         <source>Triadic (Triangle)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bộ ba tam giác (Triadic)</translation>
     </message>
     <message>
         <source>Complementary (Opposite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tương phản đối lập (Complementary)</translation>
     </message>
     <message>
         <source>Analogous (Adjacent)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tương đồng liền kề (Analogous)</translation>
     </message>
     <message>
         <source>Split-Complementary</source>
-        <translation type="unfinished"></translation>
+        <translation>Tương phản bổ túc kép (Split-Comp.)</translation>
     </message>
     <message>
         <source>Tetradic (Square)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bộ bốn hình vuông (Tetradic)</translation>
     </message>
     <message>
         <source>Monochromatic (Shades)</source>
-        <translation type="unfinished"></translation>
+        <translation>Đơn sắc (Monochromatic)</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Không có</translation>
     </message>
     <message>
         <source>Current selected color</source>
-        <translation type="unfinished"></translation>
+        <translation>Màu đang chọn</translation>
     </message>
     <message>
         <source>Previous color (click to restore)</source>
-        <translation type="unfinished"></translation>
+        <translation>Màu trước đó (nhấp để khôi phục)</translation>
     </message>
     <message>
         <source>Base Color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Màu gốc: %1</translation>
     </message>
     <message>
         <source>Harmony %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Màu hài hòa %1: %2</translation>
     </message>
 </context>
 <context>
@@ -1673,6 +1673,141 @@ Bấm vào một nút để xem chi tiết.</translation>
     </message>
 </context>
 <context>
+    <name>LayerStackWidget</name>
+    <message>
+        <source>Blend mode of the active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opacity of the active layer (0-100%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a new transparent layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge active layer down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flatten all visible layers into a single layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eyedropper, Bucket Fill and Wand detect color contours across all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Onion skin: active layer only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Isolates onion skinning to the active layer rather than the full composite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layer name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Darken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lighten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Dodge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color Burn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hard Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soft Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exclusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LibGdxExtractor</name>
     <message>
         <source>Atlas file is empty.</source>
@@ -2445,6 +2580,18 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
 <context>
     <name>PixelCanvas</name>
     <message>
+        <source>Layer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear Pixels</source>
         <translation>Thao tác: Clear Pixels</translation>
     </message>
@@ -2561,7 +2708,7 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     </message>
     <message>
         <source>Primary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Màu chính (Nhấp để mở Bộ chọn màu Pro)</translation>
     </message>
     <message>
         <source>Swap Colors (X)</source>
@@ -2569,15 +2716,15 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     </message>
     <message>
         <source>Secondary Color (Click to open Pro Color Picker)</source>
-        <translation type="unfinished"></translation>
+        <translation>Màu phụ (Nhấp để mở Bộ chọn màu Pro)</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
-        <translation type="unfinished"></translation>
+        <translation>⛶ Tách cửa sổ...</translation>
     </message>
     <message>
         <source>Open Full Pro Color Picker Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Mở hộp thoại Bộ chọn màu Pro đầy đủ</translation>
     </message>
     <message>
         <source>NES / Famicom (54)</source>
@@ -2672,12 +2819,20 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Áp dụng chỉnh sửa (vẽ, lật, đổ màu...) cho tất cả khung hình căn theo điểm neo</translation>
     </message>
     <message>
+        <source>✨ Filters ▾</source>
+        <translation>✨ Bộ lọc ▾</translation>
+    </message>
+    <message>
+        <source>Apply image and color filters (Despill, Outline, Rescale, Palette...)</source>
+        <translation>Áp dụng bộ lọc hình ảnh và màu sắc (Khử tràn màu, Đường viền, Đổi kích thước, Bảng màu...)</translation>
+    </message>
+    <message>
         <source>Clear Selection / Deselect (Del)</source>
         <translation>Xóa vùng chọn / Bỏ chọn (Del)</translation>
     </message>
     <message>
         <source>Color Studio &amp;&amp; Harmonies</source>
-        <translation type="unfinished"></translation>
+        <translation>Phòng màu sắc &amp;&amp; Phối màu hài hòa</translation>
     </message>
     <message>
         <source>Recent:</source>
@@ -2701,11 +2856,11 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     </message>
     <message>
         <source>Game Boy DMG (4 Greens)</source>
-        <translation type="unfinished">Game Boy DMG (4 sắc xanh lá)</translation>
+        <translation>Game Boy DMG (4 sắc xanh lá)</translation>
     </message>
     <message>
         <source>Game Boy Pocket (4 Grays)</source>
-        <translation type="unfinished">Game Boy Pocket (4 sắc xám)</translation>
+        <translation>Game Boy Pocket (4 sắc xám)</translation>
     </message>
     <message>
         <source>SNES / 16-bit (32)</source>
@@ -2713,14 +2868,22 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     </message>
     <message>
         <source>CGA Mode 1 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Chế độ 1 (4)</translation>
     </message>
     <message>
         <source>CGA Mode 2 (4)</source>
-        <translation type="unfinished"></translation>
+        <translation>CGA Chế độ 2 (4)</translation>
     </message>
     <message>
         <source>Endesga 32 (32)</source>
+        <translation>Endesga 32 (32)</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚠ Active layer is locked! Unlock to paint.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2804,6 +2967,10 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Thao tác: Select Secondary Color</translation>
     </message>
     <message>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Cho phép sửa pixel ngoài đa giác (Bỏ chọn: vô hiệu hóa sửa ngoài đa giác)</translation>
     </message>
@@ -2818,6 +2985,18 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>All Frames (%1)</source>
         <translation>Tất cả khung hình (%1)</translation>
+    </message>
+    <message>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Áp dụng cho tất cả khung hình &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply drawing edits and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Áp dụng chỉnh sửa vẽ và bộ lọc cho tất cả khung hình của hoạt ảnh &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
+        <translation>Áp dụng chỉnh sửa (vẽ, lật, tô, bộ lọc) cho tất cả khung hình căn chỉnh theo điểm gốc</translation>
     </message>
     <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
@@ -2878,6 +3057,18 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source># Grid</source>
         <translation># Lưới</translation>
+    </message>
+    <message>
+        <source>No filters available</source>
+        <translation>Không có bộ lọc nào khả dụng</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Animation</source>
+        <translation>Áp dụng %1 cho Hoạt ảnh</translation>
+    </message>
+    <message>
+        <source>Apply %1 to Frame</source>
+        <translation>Áp dụng %1 cho Khung hình</translation>
     </message>
     <message>
         <source>Pivot</source>
@@ -3061,7 +3252,7 @@ Would you like to repack the atlas now?</translation>
     <name>ProColorPickerDialog</name>
     <message>
         <source>Color Picker — Professional</source>
-        <translation type="unfinished"></translation>
+        <translation>Bộ chọn màu — Chuyên nghiệp</translation>
     </message>
 </context>
 <context>
@@ -3286,20 +3477,20 @@ Would you like to repack the atlas now?</translation>
         <translation>Thao tác: JSON root must be an object.</translation>
     </message>
     <message>
-        <source>Cleanup</source>
-        <translation>Nettoyage</translation>
+        <source>Cleanup &amp; Extraction</source>
+        <translation>Làm sạch &amp; Trích xuất</translation>
     </message>
     <message>
-        <source>Colors</source>
-        <translation>Couleurs</translation>
+        <source>Colors &amp; Palettes</source>
+        <translation>Màu sắc &amp; Bảng màu</translation>
     </message>
     <message>
-        <source>Effects</source>
-        <translation>Effets</translation>
+        <source>Effects &amp; Outlines</source>
+        <translation>Hiệu ứng &amp; Đường viền</translation>
     </message>
     <message>
-        <source>Geometry</source>
-        <translation>Thao tác: Geometry</translation>
+        <source>Geometry &amp; Transform</source>
+        <translation>Hình học &amp; Biến đổi</translation>
     </message>
     <message>
         <source>No Atlas Loaded</source>
@@ -3308,6 +3499,28 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source>Please open or import a sprite sheet first before applying a filter.</source>
         <translation>Thao tác: Please open or import a sprite sheet first before applying a filter.</translation>
+    </message>
+    <message>
+        <source>Geometry Modified</source>
+        <translation>Hình học đã được sửa đổi</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+Existing polygon meshes might no longer match the new silhouettes.
+
+Would you like to open the Polygon Mesh tool to recalculate meshes?</source>
+        <translation>Bộ lọc được áp dụng đã thay đổi hình học và đường viền của sprite.
+Lưới đa giác hiện có có thể không còn khớp với đường viền mới.
+
+Bạn có muốn mở công cụ Lưới đa giác để tính toán lại lưới không?</translation>
+    </message>
+    <message>
+        <source>The applied filter modified sprite geometry and silhouettes.
+
+Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
+        <translation>Bộ lọc được áp dụng đã thay đổi hình học và đường viền của sprite.
+
+Bạn có muốn mở công cụ Lưới đa giác để tạo lưới đa giác vừa khít và giảm hiện tượng vẽ đè (GPU overdraw) không?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>
