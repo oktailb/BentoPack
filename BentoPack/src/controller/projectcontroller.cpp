@@ -407,7 +407,8 @@ void ProjectController::openFileAsync(const QString &filePath)
     }
 
     // If it's a non-image file (e.g. JSON or GIF), fallback to synchronous read
-    if (ext == QStringLiteral("json") || ext == QStringLiteral("tres") || ext == QStringLiteral("gif")) {
+    if (ext == QStringLiteral("json") || ext == QStringLiteral("tres") || ext == QStringLiteral("gif") ||
+        ext == QStringLiteral("ase") || ext == QStringLiteral("aseprite") || ext == QStringLiteral("atlas")) {
         emit processingStarted();
         openFile(filePath);
         emit processingFinished();

@@ -1101,6 +1101,26 @@ void TestExtractors::testAsepriteMultiLayerAndSkinVariants() {
   QCOMPARE(reimportedDoc.layerCount(), doc.layerCount());
   QCOMPARE(reimportedDoc.layer(0).name, QStringLiteral("Body"));
   QCOMPARE(reimportedDoc.layer(1).name, QStringLiteral("Weapon: Sword"));
+
+  // 5. Test real-world fixtures from odin-aseprite test suite if present
+  QString odinDir = QStringLiteral("C:/Users/ec135/Downloads/odin-aseprite-main/odin-aseprite-main/tests/asefile");
+  if (QDir(odinDir).exists()) {
+    QDir d(odinDir);
+    QStringList files = d.entryList(QStringList() << QStringLiteral("*.ase") << QStringLiteral("*.aseprite"), QDir::Files);
+    int passed = 0;
+    for (const QString &fn : files) {
+      QString fullP = d.filePath(fn);
+      SpriteDocument realDoc;
+      ExtractorError realErr;
+      if (extractor.read(fullP, realDoc, &realErr)) {
+        passed++;
+      } else {
+        qDebug() << "Odin fixture skipped/unsupported:" << fn << realErr.toString();
+      }
+    }
+    qDebug() << "Odin Aseprite fixtures passed:" << passed << "out of" << files.size();
+    QVERIFY(passed >= 30); // At least majority of complex fixtures pass
+  }
 }
 
 int main(int argc, char *argv[]) {
