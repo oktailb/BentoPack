@@ -87,6 +87,9 @@ private slots:
     void testMultiLayerSessionSaveAndDocumentSync();
     void testErgonomicContextualPanels();
     void testFilterAllFramesMultiLayerAndNavigation();
+
+    // 10. Intelligent Polygon Mesh Interactive Editing (M19)
+    void testPixelEditorPolygonMeshInteractiveEditingAndUndo();
 };
 
 void TestPixelEditor::initTestCase()
@@ -2159,10 +2162,10 @@ void TestPixelEditor::testErgonomicContextualPanels()
     QVERIFY(dlg.filtersButton() != nullptr);
     QCOMPARE(dlg.filtersButton()->objectName(), QStringLiteral("filtersButton"));
 
-    // Verify contextual stack exists
+    // Verify contextual stack exists (0: Colors, 1: Eraser, 2: Marquee, 3: Eyedropper, 4: PolygonMesh)
     QStackedWidget *stack = dlg.findChild<QStackedWidget*>();
     QVERIFY(stack != nullptr);
-    QCOMPARE(stack->count(), 4);
+    QCOMPARE(stack->count(), 5);
 
     // Initial tool is Pencil -> page 0 (Color studio)
     QCOMPARE(stack->currentIndex(), 0);
@@ -2196,6 +2199,15 @@ void TestPixelEditor::testErgonomicContextualPanels()
         }
     }
     QCOMPARE(stack->currentIndex(), 3);
+
+    // Switch to PolygonEdit -> page 4 (Polygon mesh options)
+    for (QToolButton *btn : toolButtons) {
+        if (btn->text() == QStringLiteral("◆") || btn->toolTip().contains(QLatin1String("Polygonal"), Qt::CaseInsensitive) || btn->toolTip().contains(QLatin1String("CDT"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(stack->currentIndex(), 4);
 
     // Switch to BucketFill -> page 0 (Color studio)
     for (QToolButton *btn : toolButtons) {
@@ -2354,6 +2366,84 @@ void TestPixelEditor::testFilterAllFramesMultiLayerAndNavigation()
     // Verify document recomposited frames
     QCOMPARE(doc.frame(0).pixelColor(0, 0), QColor(0, 255, 255, 255));
     QCOMPARE(doc.frame(1).pixelColor(0, 0), QColor(255, 0, 255, 255));
+}
+
+void TestPixelEditor::testPixelEditorPolygonMeshInteractiveEditingAndUndo()
+{
+    SpriteDocument doc;
+    QImage f0(32, 32, QImage::Format_ARGB32);
+    f0.fill(Qt::transparent);
+    {
+        QPainter p(&f0);
+        p.fillRect(4, 4, 24, 24, Qt::red);
+    }
+    SpriteBox box(QRect(0, 0, 32, 32));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(4, 4) << QPointF(28, 4) << QPointF(28, 28) << QPointF(4, 28);
+    box.vertices = box.polygon.toList();
+    box.triangles = BentoPackGeometry::Triangulator::triangulateCDT(box.polygon, box.vertices);
+    doc.setFrames({f0}, {box});
+
+    QUndoStack docStack;
+    PixelEditorDialog dlg(&doc, &docStack, 0);
+
+    PixelCanvas *canvas = dlg.canvas();
+    QVERIFY(canvas != nullptr);
+    QVERIFY(canvas->hasPolygonMesh());
+    QCOMPARE(canvas->polygonMesh().size(), 4);
+    QCOMPARE(canvas->meshVertices().size(), 4);
+    QVERIFY(!canvas->meshTriangles().isEmpty());
+
+    // Switch to PolygonEdit tool
+    canvas->setCurrentTool(PixelTool::PolygonEdit);
+    QCOMPARE(canvas->currentTool(), PixelTool::PolygonEdit);
+
+    // Switch edit mode to AddInterior
+    canvas->setPolygonEditMode(PolygonEditMode::AddInterior);
+    QCOMPARE(canvas->polygonEditMode(), PolygonEditMode::AddInterior);
+
+    // Simulate mouse click inside polygon to add interior point at (16, 16)
+    double zoom = canvas->zoom();
+    QPoint imgOffset = canvas->imageOffset();
+    QPoint widgetPos(static_cast<int>((16 + imgOffset.x()) * zoom),
+                     static_cast<int>((16 + imgOffset.y()) * zoom));
+
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPointF(widgetPos), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(canvas, &pressEvent);
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPointF(widgetPos), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(canvas, &releaseEvent);
+
+    // Now mesh should have 5 vertices (4 boundary + 1 interior)
+    QCOMPARE(canvas->meshVertices().size(), 5);
+    QCOMPARE(canvas->meshVertices().last(), QPointF(16, 16));
+
+    // Canvas undo should revert back to 4 vertices
+    QVERIFY(canvas->canUndo());
+    canvas->undo();
+    QCOMPARE(canvas->meshVertices().size(), 4);
+
+    // Canvas redo should restore the 5th vertex
+    QVERIFY(canvas->canRedo());
+    canvas->redo();
+    QCOMPARE(canvas->meshVertices().size(), 5);
+
+    // Apply changes to document
+    bool ok = dlg.applyChanges();
+    QVERIFY(ok);
+
+    // Document box must have 5 vertices and valid triangles
+    QCOMPARE(doc.box(0).vertices.size(), 5);
+    QVERIFY(!doc.box(0).triangles.isEmpty());
+    QCOMPARE(doc.box(0).vertices.last(), QPointF(16, 16));
+
+    // Document undo stack should allow undoing the EditSpritePixelsCommand
+    QVERIFY(docStack.canUndo());
+    docStack.undo();
+    QCOMPARE(doc.box(0).vertices.size(), 4);
+
+    // Document redo
+    docStack.redo();
+    QCOMPARE(doc.box(0).vertices.size(), 5);
 }
 
 int main(int argc, char *argv[])

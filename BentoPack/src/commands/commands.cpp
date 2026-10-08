@@ -505,18 +505,22 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                                                  int frameIndex,
                                                  const QImage &newFrame,
                                                  QUndoCommand *parent)
-    : EditSpritePixelsCommand(doc, QMap<int, QImage>{{frameIndex, newFrame}}, {}, parent)
+    : EditSpritePixelsCommand(doc, QMap<int, QImage>{{frameIndex, newFrame}}, {}, {}, {}, parent)
 {
 }
 
 EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                                                  const QMap<int, QImage> &modifiedFrames,
                                                  const QMap<int, QPolygonF> &modifiedPolygons,
+                                                 const QMap<int, QList<QPointF>> &modifiedVertices,
+                                                 const QMap<int, QList<int>> &modifiedTriangles,
                                                  QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_doc(doc)
     , m_newFrames(modifiedFrames)
     , m_newPolygons(modifiedPolygons)
+    , m_newVertices(modifiedVertices)
+    , m_newTriangles(modifiedTriangles)
 {
     if (m_doc) {
         for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
@@ -538,7 +542,7 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
             }
         }
 
-        // Store old and new SpriteBoxes for polygon / rect size changes
+        // Store old and new SpriteBoxes for polygon / vertices / triangles / rect size changes
         for (auto it = m_newPolygons.constBegin(); it != m_newPolygons.constEnd(); ++it) {
             int idx = it.key();
             if (idx >= 0 && idx < m_doc->boxes().size()) {
@@ -547,10 +551,39 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                 SpriteBox newB = oldB;
                 newB.polygon = it.value();
                 newB.hasPolygonMesh = (newB.polygon.size() >= 3);
-                newB.vertices = newB.polygon.toList();
-                newB.triangles = BentoPackGeometry::Triangulator::triangulate(newB.polygon);
+                if (m_newVertices.contains(idx)) {
+                    newB.vertices = m_newVertices[idx];
+                } else if (oldB.vertices.size() > oldB.polygon.size() && oldB.polygon == newB.polygon) {
+                    newB.vertices = oldB.vertices;
+                } else {
+                    newB.vertices = newB.polygon.toList();
+                }
+                if (m_newTriangles.contains(idx)) {
+                    newB.triangles = m_newTriangles[idx];
+                } else {
+                    if (newB.vertices.size() > newB.polygon.size()) {
+                        newB.triangles = BentoPackGeometry::Triangulator::triangulateCDT(newB.polygon, newB.vertices);
+                    } else {
+                        newB.triangles = BentoPackGeometry::Triangulator::triangulate(newB.polygon);
+                    }
+                }
                 if (m_newFrames.contains(idx)) {
                     newB.rect.setSize(m_newFrames[idx].size());
+                }
+                m_newBoxes[idx] = newB;
+            }
+        }
+        for (auto it = m_newVertices.constBegin(); it != m_newVertices.constEnd(); ++it) {
+            int idx = it.key();
+            if (!m_newBoxes.contains(idx) && idx >= 0 && idx < m_doc->boxes().size()) {
+                SpriteBox oldB = m_doc->box(idx);
+                m_oldBoxes[idx] = oldB;
+                SpriteBox newB = oldB;
+                newB.vertices = it.value();
+                if (m_newTriangles.contains(idx)) {
+                    newB.triangles = m_newTriangles[idx];
+                } else {
+                    newB.triangles = BentoPackGeometry::Triangulator::triangulateCDT(newB.polygon, newB.vertices);
                 }
                 m_newBoxes[idx] = newB;
             }

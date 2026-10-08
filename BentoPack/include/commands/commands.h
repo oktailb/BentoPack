@@ -331,6 +331,8 @@ public:
     EditSpritePixelsCommand(SpriteDocument *doc,
                             const QMap<int, QImage> &modifiedFrames,
                             const QMap<int, QPolygonF> &modifiedPolygons = {},
+                            const QMap<int, QList<QPointF>> &modifiedVertices = {},
+                            const QMap<int, QList<int>> &modifiedTriangles = {},
                             QUndoCommand *parent = nullptr);
 
     EditSpritePixelsCommand(SpriteDocument *doc,
@@ -351,15 +353,17 @@ private:
         QImage newPatch;
     };
 
-    SpriteDocument*        m_doc;
-    QMap<int, QImage>      m_oldFrames;
-    QMap<int, QImage>      m_newFrames;
-    QMap<int, QPolygonF>   m_newPolygons;
-    QMap<int, SpriteBox>   m_oldBoxes;
-    QMap<int, SpriteBox>   m_newBoxes;
-    QList<FramePatch>      m_framePatches;
-    QImage                 m_oldAtlas;
-    QImage                 m_newAtlas;
+    SpriteDocument*             m_doc;
+    QMap<int, QImage>           m_oldFrames;
+    QMap<int, QImage>           m_newFrames;
+    QMap<int, QPolygonF>        m_newPolygons;
+    QMap<int, QList<QPointF>>   m_newVertices;
+    QMap<int, QList<int>>       m_newTriangles;
+    QMap<int, SpriteBox>        m_oldBoxes;
+    QMap<int, SpriteBox>        m_newBoxes;
+    QList<FramePatch>           m_framePatches;
+    QImage                      m_oldAtlas;
+    QImage                      m_newAtlas;
 };
 
 #endif // COMMANDS_H

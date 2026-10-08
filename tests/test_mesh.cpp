@@ -82,6 +82,10 @@ private slots:
     void testPolygonMergerMultiIslandContourTracer();
     void testPolygonMergerSpriteBoxes();
     void testSpriteDocumentMergeFramesPreservesPolygonsAndUndo();
+
+    // 10. Intelligent Mesh & CDT Tests (M19)
+    void testCDTTriangulationWithInteriorVertices();
+    void testSmartMeshGenerationSteinerAndContrast();
 };
 
 void TestMesh::initTestCase()
@@ -1091,6 +1095,85 @@ void TestMesh::testSpriteDocumentMergeFramesPreservesPolygonsAndUndo()
     QVERIFY(doc.box(1).hasPolygonMesh);
     QCOMPARE(doc.box(1).rect, QRect(40, 10, 20, 20));
     QCOMPARE(doc.box(1).polygon.size(), 4);
+}
+
+void TestMesh::testCDTTriangulationWithInteriorVertices()
+{
+    // Define a square boundary 0,0 to 100,100
+    QPolygonF square;
+    square << QPointF(0, 0) << QPointF(100, 0) << QPointF(100, 100) << QPointF(0, 100);
+
+    // Add interior vertices
+    QList<QPointF> allVerts = square.toList();
+    allVerts.append(QPointF(50, 50)); // Center
+    allVerts.append(QPointF(25, 25)); // Top-left interior
+    allVerts.append(QPointF(75, 75)); // Bottom-right interior
+
+    QList<int> tris = Triangulator::triangulateCDT(square, allVerts);
+
+    // Triangles count must be non-empty and divisible by 3
+    QVERIFY(!tris.isEmpty());
+    QCOMPARE(tris.size() % 3, 0);
+
+    // Verify all indices are valid
+    for (int idx : tris) {
+        QVERIFY(idx >= 0 && idx < allVerts.size());
+    }
+
+    // Verify that the interior vertices are actually referenced in triangles
+    bool centerReferenced = false;
+    for (int idx : tris) {
+        if (idx == 4) { // Index of QPointF(50, 50)
+            centerReferenced = true;
+            break;
+        }
+    }
+    QVERIFY(centerReferenced);
+
+    // Verify all triangle centroids lie inside the square boundary
+    for (int i = 0; i < tris.size(); i += 3) {
+        QPointF p0 = allVerts[tris[i]];
+        QPointF p1 = allVerts[tris[i + 1]];
+        QPointF p2 = allVerts[tris[i + 2]];
+        QPointF centroid((p0.x() + p1.x() + p2.x()) / 3.0, (p0.y() + p1.y() + p2.y()) / 3.0);
+        QVERIFY(square.containsPoint(centroid, Qt::OddEvenFill));
+    }
+}
+
+void TestMesh::testSmartMeshGenerationSteinerAndContrast()
+{
+    // Create an image with an internal high-contrast feature ridge
+    QImage img(64, 64, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    {
+        QPainter p(&img);
+        // Base solid shape
+        p.fillRect(4, 4, 56, 56, QColor(60, 60, 60));
+        // High-contrast diagonal stripe/ridge
+        p.setPen(QPen(QColor(255, 255, 255), 3));
+        p.drawLine(10, 10, 54, 54);
+    }
+
+    QPolygonF outer;
+    outer << QPointF(4, 4) << QPointF(60, 4) << QPointF(60, 60) << QPointF(4, 60);
+
+    SmartMeshParams params;
+    params.steinerDensity = 40;
+    params.contrastSensitivity = 30; // Sensitive to internal edge
+    params.minAngleDeg = 25.0;
+
+    SmartMeshResult result = Triangulator::generateSmartMesh(outer, img, params);
+
+    QCOMPARE(result.outerPolygon, outer);
+    QVERIFY(result.vertices.size() > outer.size()); // Has interior points generated
+    QVERIFY(result.interiorVertexCount > 0);
+    QVERIFY(!result.triangles.isEmpty());
+    QCOMPARE(result.triangles.size() % 3, 0);
+
+    // Verify all indices are valid
+    for (int idx : result.triangles) {
+        QVERIFY(idx >= 0 && idx < result.vertices.size());
+    }
 }
 
 #include <QApplication>

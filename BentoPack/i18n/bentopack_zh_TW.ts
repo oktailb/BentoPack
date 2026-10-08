@@ -2616,12 +2616,28 @@ Strict removal clears the pixel.</source>
         <translation>油漆桶填充</translation>
     </message>
     <message>
+        <source>Delete Mesh Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Interior Mesh Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Boundary Mesh Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Eraser</source>
         <translation>橡皮擦</translation>
     </message>
     <message>
         <source>Pencil</source>
         <translation>鉛筆</translation>
+    </message>
+    <message>
+        <source>Move Mesh Vertex</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2747,20 +2763,8 @@ Strict removal clears the pixel.</source>
         <translation>Commodore 64 (16)</translation>
     </message>
     <message>
-        <source>-1</source>
-        <translation>-1</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
         <source>Effect Intensity:</source>
         <translation>效果強度：</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation>50%</translation>
     </message>
     <message>
         <source>Effect mode:</source>
@@ -2783,10 +2787,6 @@ Strict removal clears the pixel.</source>
         <translation>透明 [alpha: 0]</translation>
     </message>
     <message>
-        <source>Zoom: 1600%</source>
-        <translation>縮放：1600%</translation>
-    </message>
-    <message>
         <source>Zoom: %1%</source>
         <translation>縮放：%1%</translation>
     </message>
@@ -2807,16 +2807,8 @@ Strict removal clears the pixel.</source>
         <translation>允許在多邊形外部編輯</translation>
     </message>
     <message>
-        <source>Allow editing pixels outside polygon boundaries (Default: off when polygon exists)</source>
-        <translation>允許編輯多邊形邊界之外的像素（預設值：存在多邊形時關閉）</translation>
-    </message>
-    <message>
         <source>Apply to all frames</source>
         <translation>應用於所有幀</translation>
-    </message>
-    <message>
-        <source>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</source>
-        <translation>將編輯（繪制、翻轉、填充等）按軸心對齊應用於所有幀</translation>
     </message>
     <message>
         <source>✨ Filters ▾</source>
@@ -2911,10 +2903,6 @@ Strict removal clears the pixel.</source>
         <translation>顯示的未來幀數量（0 到 +3）</translation>
     </message>
     <message>
-        <source>Global opacity intensity with distance falloff (0% to 100%)</source>
-        <translation>隨距離衰減的全局不透明度（0% 到 100%）</translation>
-    </message>
-    <message>
         <source>Tinted (Blue/Red)</source>
         <translation>色相著色（藍/紅）</translation>
     </message>
@@ -2999,6 +2987,206 @@ Strict removal clears the pixel.</source>
         <translation>按中心軸對齊將編輯 (繪圖、翻轉、填色、濾鏡) 套用到所有影格</translation>
     </message>
     <message>
+        <source>Anim:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🧅 Onion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Onion Skinning across temporal frames</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fut:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flip Horizontal (H)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flip Vertical (V)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate 90° Clockwise (R)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⛶ Pop-out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recent Colors:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Palette Preset:</source>
+        <translation type="unfinished">調色盤預設：</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eraser Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase across all frames (Timeline)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase pixels across all frames of current animation aligned by pivot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase across all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When checked, clears pixels on all visible layers simultaneously instead of only active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Selection Actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⬚ Select All (Ctrl+A)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✕ Deselect (Esc)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🗑 Delete Contents (Del)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>📋 Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✂ Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>📥 Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eyedropper Sampling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample All Visible Layers (Composite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample Active Layer Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚠️ &lt;b&gt;Aucun découpage polygonal&lt;/b&gt; pour ce sprite.&lt;br&gt;Le découpage polygonal doit déjà exister préalablement (générez-le depuis la boîte à outils principale : Outils &gt; Maillage Polygonal).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode d&apos;Édition des Sommets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✥ Déplacer / Sélectionner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>➕ Ajouter point intérieur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🔲 Ajouter point contour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✖ Supprimer point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🗑 Supprimer le sommet (Suppr)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Génération CDT &amp; Points de Steiner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Densité de Steiner :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Angle minimal garanti :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contraste interne :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚡ Générer Maillage CDT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↺ Réinitialiser au contour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Statistiques du Maillage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sommets contour :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sommets intérieurs :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Triangles CDT :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gain Overdraw :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Éditeur de Maillage Polygonal CDT (◆)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun maillage polygonal sur cette frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
         <translation>• 幀 %1 (%2) 與幀 %3 (%4) 發生重疊衝突</translation>
     </message>
@@ -3059,8 +3247,28 @@ Would you like to repack the atlas now?</source>
         <translation># 網格</translation>
     </message>
     <message>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply filter to all frames (%1 frames)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>No filters available</source>
         <translation>無可用濾鏡</translation>
+    </message>
+    <message>
+        <source>%1 — [%2: all %3 frames]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 — [All %2 frames]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 — [Frame %2]</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Apply %1 to Animation</source>
@@ -3069,6 +3277,14 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Apply %1 to Frame</source>
         <translation>將 %1 套用到當前影格</translation>
+    </message>
+    <message>
+        <source>Génération Maillage CDT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Réinitialiser maillage au contour</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pivot</source>

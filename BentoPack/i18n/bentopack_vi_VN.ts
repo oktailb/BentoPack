@@ -2616,12 +2616,28 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Remplissage</translation>
     </message>
     <message>
+        <source>Delete Mesh Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Interior Mesh Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Boundary Mesh Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Eraser</source>
         <translation>Gomme</translation>
     </message>
     <message>
         <source>Pencil</source>
         <translation>Crayon</translation>
+    </message>
+    <message>
+        <source>Move Mesh Vertex</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2747,20 +2763,8 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Thao tác: Commodore 64 (16)</translation>
     </message>
     <message>
-        <source>-1</source>
-        <translation>Thao tác: -1</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>Thao tác: 0</translation>
-    </message>
-    <message>
         <source>Effect Intensity:</source>
         <translation>Thao tác: Effect Intensity:</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation>Thao tác: 50%</translation>
     </message>
     <message>
         <source>Effect mode:</source>
@@ -2783,10 +2787,6 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Thao tác: Transparent [alpha: 0]</translation>
     </message>
     <message>
-        <source>Zoom: 1600%</source>
-        <translation>Thao tác: Zoom: 1600%</translation>
-    </message>
-    <message>
         <source>Zoom: %1%</source>
         <translation>Thu phóng: %1%</translation>
     </message>
@@ -2807,16 +2807,8 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Chỉnh sửa ngoài đa giác</translation>
     </message>
     <message>
-        <source>Allow editing pixels outside polygon boundaries (Default: off when polygon exists)</source>
-        <translation>Cho phép chỉnh sửa pixel ngoài ranh giới đa giác (Mặc định: tắt khi có đa giác)</translation>
-    </message>
-    <message>
         <source>Apply to all frames</source>
         <translation>Áp dụng cho tất cả khung hình</translation>
-    </message>
-    <message>
-        <source>Apply edits (drawing, flip, fill, etc.) to all frames aligned by pivot</source>
-        <translation>Áp dụng chỉnh sửa (vẽ, lật, đổ màu...) cho tất cả khung hình căn theo điểm neo</translation>
     </message>
     <message>
         <source>✨ Filters ▾</source>
@@ -2911,10 +2903,6 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Số khung hình sau cần hiển thị (0 đến +3)</translation>
     </message>
     <message>
-        <source>Global opacity intensity with distance falloff (0% to 100%)</source>
-        <translation>Độ mờ tổng thể giảm dần theo khoảng cách (0% đến 100%)</translation>
-    </message>
-    <message>
         <source>Tinted (Blue/Red)</source>
         <translation>Ám màu (Xanh/Đỏ)</translation>
     </message>
@@ -2999,6 +2987,206 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Áp dụng chỉnh sửa (vẽ, lật, tô, bộ lọc) cho tất cả khung hình căn chỉnh theo điểm gốc</translation>
     </message>
     <message>
+        <source>Anim:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🧅 Onion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Onion Skinning across temporal frames</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fut:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flip Horizontal (H)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flip Vertical (V)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate 90° Clockwise (R)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⛶ Pop-out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recent Colors:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Palette Preset:</source>
+        <translation type="unfinished">Mẫu bảng màu:</translation>
+    </message>
+    <message>
+        <source>Allow editing pixels outside polygon boundaries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eraser Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase across all frames (Timeline)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase pixels across all frames of current animation aligned by pivot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase across all visible layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When checked, clears pixels on all visible layers simultaneously instead of only active layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Selection Actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⬚ Select All (Ctrl+A)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✕ Deselect (Esc)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🗑 Delete Contents (Del)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>📋 Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✂ Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>📥 Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eyedropper Sampling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample All Visible Layers (Composite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sample Active Layer Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚠️ &lt;b&gt;Aucun découpage polygonal&lt;/b&gt; pour ce sprite.&lt;br&gt;Le découpage polygonal doit déjà exister préalablement (générez-le depuis la boîte à outils principale : Outils &gt; Maillage Polygonal).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode d&apos;Édition des Sommets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✥ Déplacer / Sélectionner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>➕ Ajouter point intérieur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🔲 Ajouter point contour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✖ Supprimer point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🗑 Supprimer le sommet (Suppr)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Génération CDT &amp; Points de Steiner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Densité de Steiner :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Angle minimal garanti :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contraste interne :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚡ Générer Maillage CDT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↺ Réinitialiser au contour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Statistiques du Maillage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sommets contour :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sommets intérieurs :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Triangles CDT :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gain Overdraw :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Éditeur de Maillage Polygonal CDT (◆)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun maillage polygonal sur cette frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>• Frame %1 (%2) collides with Frame %3 (%4)</source>
         <translation>• Khung hình %1 (%2) va chạm với Khung hình %3 (%4)</translation>
     </message>
@@ -3059,8 +3247,28 @@ Would you like to repack the atlas now?</translation>
         <translation># Lưới</translation>
     </message>
     <message>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply filter to all frames (%1 frames)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>No filters available</source>
         <translation>Không có bộ lọc nào khả dụng</translation>
+    </message>
+    <message>
+        <source>%1 — [%2: all %3 frames]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 — [All %2 frames]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 — [Frame %2]</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Apply %1 to Animation</source>
@@ -3069,6 +3277,14 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source>Apply %1 to Frame</source>
         <translation>Áp dụng %1 cho Khung hình</translation>
+    </message>
+    <message>
+        <source>Génération Maillage CDT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Réinitialiser maillage au contour</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pivot</source>

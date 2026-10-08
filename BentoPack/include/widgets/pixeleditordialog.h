@@ -102,6 +102,8 @@ public:
     QPolygonF sessionModifiedPolygon(int frameIndex) const;
     QMap<int, QImage> sessionModifiedFrames() const { return m_sessionModifiedFrames; }
     QMap<int, QPolygonF> sessionModifiedPolygons() const { return m_sessionModifiedPolygons; }
+    QMap<int, QList<QPointF>> sessionModifiedVertices() const { return m_sessionModifiedVertices; }
+    QMap<int, QList<int>> sessionModifiedTriangles() const { return m_sessionModifiedTriangles; }
     bool applyChanges();
     bool openAtlasPackingDialog(bool nonInteractive = false);
     bool performAtlasRepack(const QMap<int, QImage> &modifiedFrames, const QMap<int, QPolygonF> &modifiedPolygons);
@@ -153,8 +155,18 @@ private slots:
     void onCanvasLayersChanged();
     void onCanvasActiveLayerChanged(int index);
 
+    // Smart Mesh & CDT Slots (M19)
+    void onMeshEditModeChanged(int id);
+    void onGenerateSmartMeshRequested();
+    void onResetMeshToOutlineRequested();
+    void onDeleteSelectedVertexRequested();
+    void onCanvasMeshDataChanged(const QPolygonF &poly, const QList<QPointF> &verts, const QList<int> &tris);
+    void onCanvasSelectedVertexChanged(int index, bool isInterior);
+    void updateMeshStatsUI();
+
 public:
-    void restoreFrameBackup(int frameIndex, const QImage &img, const QPolygonF &poly);
+    void restoreFrameBackup(int frameIndex, const QImage &img, const QPolygonF &poly,
+                            const QList<QPointF> &verts = {}, const QList<int> &tris = {});
     void onMultiFrameUndoRedoDone();
 
 protected:
@@ -190,6 +202,8 @@ private:
     int                     m_currentFrameIndex = 0;
     QMap<int, QImage>       m_sessionModifiedFrames;
     QMap<int, QPolygonF>    m_sessionModifiedPolygons;
+    QMap<int, QList<QPointF>> m_sessionModifiedVertices;
+    QMap<int, QList<int>>     m_sessionModifiedTriangles;
     QMap<int, QList<SpriteCel>> m_sessionModifiedCels;
     QList<SpriteLayer>      m_sessionLayers;
     bool                    m_sessionLayersModified = false;
@@ -217,6 +231,7 @@ private:
     QToolButton*            m_btnBucket = nullptr;
     QToolButton*            m_btnSelectRect = nullptr;
     QToolButton*            m_btnSelectColor = nullptr;
+    QToolButton*            m_btnToolPolygon = nullptr;
     QToolButton*            m_btnFlipH = nullptr;
     QToolButton*            m_btnFlipV = nullptr;
     QToolButton*            m_btnRotate = nullptr;
@@ -239,6 +254,29 @@ private:
     QWidget*                m_eraserOptionsPage = nullptr;
     QWidget*                m_selectionOptionsPage = nullptr;
     QWidget*                m_eyedropperOptionsPage = nullptr;
+    QWidget*                m_meshOptionsPage = nullptr;
+
+    // Contextual: Smart Mesh CDT (M19)
+    QLabel*                 m_meshNoticeLabel = nullptr;
+    QWidget*                m_meshControlsContainer = nullptr;
+    QButtonGroup*           m_meshModeGroup = nullptr;
+    QRadioButton*           m_radioMeshSelectMove = nullptr;
+    QRadioButton*           m_radioMeshAddInterior = nullptr;
+    QRadioButton*           m_radioMeshAddExterior = nullptr;
+    QRadioButton*           m_radioMeshDelete = nullptr;
+    QPushButton*            m_btnDeleteSelectedVertex = nullptr;
+    QSlider*                m_sliderSteinerDensity = nullptr;
+    QLabel*                 m_lblSteinerDensityVal = nullptr;
+    QSlider*                m_sliderMinAngle = nullptr;
+    QLabel*                 m_lblMinAngleVal = nullptr;
+    QSlider*                m_sliderContrastSensitivity = nullptr;
+    QLabel*                 m_lblContrastSensitivityVal = nullptr;
+    QPushButton*            m_btnGenerateSmartMesh = nullptr;
+    QPushButton*            m_btnResetToOutline = nullptr;
+    QLabel*                 m_lblMeshBoundaryVerts = nullptr;
+    QLabel*                 m_lblMeshInteriorVerts = nullptr;
+    QLabel*                 m_lblMeshTriangles = nullptr;
+    QLabel*                 m_lblMeshOverdrawSavings = nullptr;
 
     // Contextual: Eraser
     QCheckBox*              m_eraserApplyAllFramesCheck = nullptr;

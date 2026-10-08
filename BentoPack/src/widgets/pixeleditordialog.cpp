@@ -278,6 +278,8 @@ void PixelEditorDialog::setupUi()
         m_sessionModifiedPolygons[m_currentFrameIndex] = newMesh;
         updateCollisionWarningUI();
     });
+    connect(m_canvas, &PixelCanvas::meshDataChanged, this, &PixelEditorDialog::onCanvasMeshDataChanged);
+    connect(m_canvas, &PixelCanvas::selectedVertexChanged, this, &PixelEditorDialog::onCanvasSelectedVertexChanged);
     connect(m_canvas, &PixelCanvas::mousePixelMoved, this, &PixelEditorDialog::onCanvasPixelMoved);
     connect(m_canvas, &PixelCanvas::mousePixelLeft, this, &PixelEditorDialog::onCanvasPixelLeft);
     connect(m_canvas, &PixelCanvas::zoomChanged, this, &PixelEditorDialog::onCanvasZoomChanged);
@@ -614,13 +616,14 @@ QWidget* PixelEditorDialog::createToolBar()
     m_btnEyedropper = addToolBtn(QStringLiteral("💧"), tr("Eyedropper / Pipette (Alt+Click or [I])"), PixelTool::Eyedropper, static_cast<int>(PixelTool::Eyedropper), 1, 1);
     m_btnSelectRect = addToolBtn(QStringLiteral("⬚"), tr("Rectangular Marquee Selection [M]"), PixelTool::SelectRect, static_cast<int>(PixelTool::SelectRect), 2, 0);
     m_btnSelectColor = addToolBtn(QStringLiteral("🪄"), tr("Magic Wand (Color Selection) [W]"), PixelTool::SelectColor, static_cast<int>(PixelTool::SelectColor), 2, 1);
+    m_btnToolPolygon = addToolBtn(QStringLiteral("◆"), tr("Polygon & Smart CDT Mesh Editor [D]"), PixelTool::PolygonEdit, static_cast<int>(PixelTool::PolygonEdit), 3, 0);
 
     connect(m_toolGroup, &QButtonGroup::idClicked, this, &PixelEditorDialog::onToolButtonClicked);
 
     // Separator 1
     QFrame *line1 = new QFrame(this);
     line1->setFrameShape(QFrame::HLine);
-    layout->addWidget(line1, 3, 0, 1, 2);
+    layout->addWidget(line1, 4, 0, 1, 2);
 
     auto addActionBtn = [this, layout, &toolBtnStyle](const QString &text, const QString &tooltip, int row, int col, const auto &slot) -> QToolButton* {
         QToolButton *btn = new QToolButton(this);
@@ -633,10 +636,10 @@ QWidget* PixelEditorDialog::createToolBar()
         return btn;
     };
 
-    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal (H)"), 4, 0, [this]() { m_canvas->flipHorizontal(); });
-    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical (V)"), 4, 1, [this]() { m_canvas->flipVertical(); });
-    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise (R)"), 5, 0, [this]() { m_canvas->rotate90CW(); });
-    m_btnClearSel = addActionBtn(QStringLiteral("✕"), tr("Clear Selection / Deselect (Del)"), 5, 1, [this]() {
+    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal (H)"), 5, 0, [this]() { m_canvas->flipHorizontal(); });
+    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical (V)"), 5, 1, [this]() { m_canvas->flipVertical(); });
+    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise (R)"), 6, 0, [this]() { m_canvas->rotate90CW(); });
+    m_btnClearSel = addActionBtn(QStringLiteral("✕"), tr("Clear Selection / Deselect (Del)"), 6, 1, [this]() {
         if (m_canvas->hasSelection()) {
             m_canvas->clearSelection();
         } else {
@@ -647,7 +650,7 @@ QWidget* PixelEditorDialog::createToolBar()
     // Separator 2
     QFrame *line2 = new QFrame(this);
     line2->setFrameShape(QFrame::HLine);
-    layout->addWidget(line2, 6, 0, 1, 2);
+    layout->addWidget(line2, 7, 0, 1, 2);
 
     // Filters Button (Moved into Left ToolBar!)
     m_btnFilters = new QToolButton(this);
@@ -661,21 +664,21 @@ QWidget* PixelEditorDialog::createToolBar()
     QMenu *filtersMenu = new QMenu(m_btnFilters);
     populateFiltersMenu(filtersMenu);
     m_btnFilters->setMenu(filtersMenu);
-    layout->addWidget(m_btnFilters, 7, 0, 1, 2);
+    layout->addWidget(m_btnFilters, 8, 0, 1, 2);
 
     // Separator 3
     QFrame *line3 = new QFrame(this);
     line3->setFrameShape(QFrame::HLine);
-    layout->addWidget(line3, 8, 0, 1, 2);
+    layout->addWidget(line3, 9, 0, 1, 2);
 
     // Undo / Redo
-    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 9, 0, [this]() { m_canvas->undo(); });
-    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 9, 1, [this]() { m_canvas->redo(); });
+    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 10, 0, [this]() { m_canvas->undo(); });
+    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 10, 1, [this]() { m_canvas->redo(); });
     if (m_btnUndo) m_btnUndo->setEnabled(false);
     if (m_btnRedo) m_btnRedo->setEnabled(false);
 
     // Spacer
-    layout->addItem(new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 10, 0, 1, 2);
+    layout->addItem(new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 11, 0, 1, 2);
 
     return panel;
 }
@@ -1005,6 +1008,164 @@ QWidget* PixelEditorDialog::createPalettePanel()
     eyeLayout->addWidget(eyeGroup);
     m_contextualStack->addWidget(m_eyedropperOptionsPage);
 
+    // --- PAGE 4: Polygon Mesh & Smart CDT Options (PolygonEdit) ---
+    m_meshOptionsPage = new QWidget(m_contextualStack);
+    QVBoxLayout *meshLayout = new QVBoxLayout(m_meshOptionsPage);
+    meshLayout->setContentsMargins(0, 0, 0, 0);
+    meshLayout->setSpacing(6);
+
+    // Warning banner when frame has no polygonal mesh
+    m_meshNoticeLabel = new QLabel(tr("⚠️ <b>Aucun découpage polygonal</b> pour ce sprite.<br>Le découpage polygonal doit déjà exister préalablement (générez-le depuis la boîte à outils principale : Outils > Maillage Polygonal)."), m_meshOptionsPage);
+    m_meshNoticeLabel->setWordWrap(true);
+    m_meshNoticeLabel->setStyleSheet(QStringLiteral("background-color: rgba(230, 150, 0, 0.15); border: 1px solid rgba(230, 150, 0, 0.5); border-radius: 6px; padding: 8px; font-size: 11px;"));
+    m_meshNoticeLabel->setVisible(false);
+    meshLayout->addWidget(m_meshNoticeLabel);
+
+    m_meshControlsContainer = new QWidget(m_meshOptionsPage);
+    QVBoxLayout *mcLayout = new QVBoxLayout(m_meshControlsContainer);
+    mcLayout->setContentsMargins(0, 0, 0, 0);
+    mcLayout->setSpacing(6);
+
+    // Group 1: Vertex Editing Mode
+    QGroupBox *modeGroup = new QGroupBox(tr("Mode d'Édition des Sommets"), m_meshControlsContainer);
+    modeGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *mgLayout = new QVBoxLayout(modeGroup);
+    mgLayout->setContentsMargins(8, 10, 8, 10);
+    mgLayout->setSpacing(6);
+
+    m_meshModeGroup = new QButtonGroup(this);
+    m_radioMeshSelectMove = new QRadioButton(tr("✥ Déplacer / Sélectionner"), modeGroup);
+    m_radioMeshAddInterior = new QRadioButton(tr("➕ Ajouter point intérieur"), modeGroup);
+    m_radioMeshAddExterior = new QRadioButton(tr("🔲 Ajouter point contour"), modeGroup);
+    m_radioMeshDelete = new QRadioButton(tr("✖ Supprimer point"), modeGroup);
+
+    m_radioMeshSelectMove->setChecked(true);
+    m_meshModeGroup->addButton(m_radioMeshSelectMove, static_cast<int>(PolygonEditMode::SelectOrMove));
+    m_meshModeGroup->addButton(m_radioMeshAddInterior, static_cast<int>(PolygonEditMode::AddInterior));
+    m_meshModeGroup->addButton(m_radioMeshAddExterior, static_cast<int>(PolygonEditMode::AddExterior));
+    m_meshModeGroup->addButton(m_radioMeshDelete, static_cast<int>(PolygonEditMode::DeleteVertex));
+
+    mgLayout->addWidget(m_radioMeshSelectMove);
+    mgLayout->addWidget(m_radioMeshAddInterior);
+    mgLayout->addWidget(m_radioMeshAddExterior);
+    mgLayout->addWidget(m_radioMeshDelete);
+
+    connect(m_meshModeGroup, &QButtonGroup::idClicked, this, &PixelEditorDialog::onMeshEditModeChanged);
+
+    m_btnDeleteSelectedVertex = new QPushButton(tr("🗑 Supprimer le sommet (Suppr)"), modeGroup);
+    m_btnDeleteSelectedVertex->setEnabled(false);
+    connect(m_btnDeleteSelectedVertex, &QPushButton::clicked, this, &PixelEditorDialog::onDeleteSelectedVertexRequested);
+    mgLayout->addWidget(m_btnDeleteSelectedVertex);
+
+    mcLayout->addWidget(modeGroup);
+
+    // Group 2: Smart Mesh CDT Generation
+    QGroupBox *cdtGroup = new QGroupBox(tr("Génération CDT & Points de Steiner"), m_meshControlsContainer);
+    cdtGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *cgLayout = new QVBoxLayout(cdtGroup);
+    cgLayout->setContentsMargins(8, 10, 8, 10);
+    cgLayout->setSpacing(6);
+
+    // Steiner density slider
+    QHBoxLayout *sdHeader = new QHBoxLayout();
+    QLabel *lblSdTitle = new QLabel(tr("Densité de Steiner :"), cdtGroup);
+    m_lblSteinerDensityVal = new QLabel(QStringLiteral("30%"), cdtGroup);
+    m_lblSteinerDensityVal->setStyleSheet(QStringLiteral("font-weight: bold; color: palette(highlight);"));
+    sdHeader->addWidget(lblSdTitle);
+    sdHeader->addStretch();
+    sdHeader->addWidget(m_lblSteinerDensityVal);
+    cgLayout->addLayout(sdHeader);
+
+    m_sliderSteinerDensity = new QSlider(Qt::Horizontal, cdtGroup);
+    m_sliderSteinerDensity->setRange(0, 100);
+    m_sliderSteinerDensity->setValue(30);
+    connect(m_sliderSteinerDensity, &QSlider::valueChanged, this, [this](int val) {
+        if (m_lblSteinerDensityVal) m_lblSteinerDensityVal->setText(QStringLiteral("%1%").arg(val));
+    });
+    cgLayout->addWidget(m_sliderSteinerDensity);
+
+    // Min angle slider
+    QHBoxLayout *maHeader = new QHBoxLayout();
+    QLabel *lblMaTitle = new QLabel(tr("Angle minimal garanti :"), cdtGroup);
+    m_lblMinAngleVal = new QLabel(QStringLiteral("25°"), cdtGroup);
+    m_lblMinAngleVal->setStyleSheet(QStringLiteral("font-weight: bold; color: palette(highlight);"));
+    maHeader->addWidget(lblMaTitle);
+    maHeader->addStretch();
+    maHeader->addWidget(m_lblMinAngleVal);
+    cgLayout->addLayout(maHeader);
+
+    m_sliderMinAngle = new QSlider(Qt::Horizontal, cdtGroup);
+    m_sliderMinAngle->setRange(15, 35);
+    m_sliderMinAngle->setValue(25);
+    connect(m_sliderMinAngle, &QSlider::valueChanged, this, [this](int val) {
+        if (m_lblMinAngleVal) m_lblMinAngleVal->setText(QStringLiteral("%1°").arg(val));
+    });
+    cgLayout->addWidget(m_sliderMinAngle);
+
+    // Contrast sensitivity slider
+    QHBoxLayout *csHeader = new QHBoxLayout();
+    QLabel *lblCsTitle = new QLabel(tr("Contraste interne :"), cdtGroup);
+    m_lblContrastSensitivityVal = new QLabel(QStringLiteral("50%"), cdtGroup);
+    m_lblContrastSensitivityVal->setStyleSheet(QStringLiteral("font-weight: bold; color: palette(highlight);"));
+    csHeader->addWidget(lblCsTitle);
+    csHeader->addStretch();
+    csHeader->addWidget(m_lblContrastSensitivityVal);
+    cgLayout->addLayout(csHeader);
+
+    m_sliderContrastSensitivity = new QSlider(Qt::Horizontal, cdtGroup);
+    m_sliderContrastSensitivity->setRange(0, 100);
+    m_sliderContrastSensitivity->setValue(50);
+    connect(m_sliderContrastSensitivity, &QSlider::valueChanged, this, [this](int val) {
+        if (m_lblContrastSensitivityVal) m_lblContrastSensitivityVal->setText(QStringLiteral("%1%").arg(val));
+    });
+    cgLayout->addWidget(m_sliderContrastSensitivity);
+
+    // Action buttons
+    m_btnGenerateSmartMesh = new QPushButton(tr("⚡ Générer Maillage CDT"), cdtGroup);
+    m_btnGenerateSmartMesh->setStyleSheet(QStringLiteral("QPushButton { font-weight: bold; padding: 5px; }"));
+    connect(m_btnGenerateSmartMesh, &QPushButton::clicked, this, &PixelEditorDialog::onGenerateSmartMeshRequested);
+    cgLayout->addWidget(m_btnGenerateSmartMesh);
+
+    m_btnResetToOutline = new QPushButton(tr("↺ Réinitialiser au contour"), cdtGroup);
+    connect(m_btnResetToOutline, &QPushButton::clicked, this, &PixelEditorDialog::onResetMeshToOutlineRequested);
+    cgLayout->addWidget(m_btnResetToOutline);
+
+    mcLayout->addWidget(cdtGroup);
+
+    // Group 3: Mesh Statistics
+    QGroupBox *statsGroup = new QGroupBox(tr("Statistiques du Maillage"), m_meshControlsContainer);
+    statsGroup->setStyleSheet(groupBoxStyle);
+    QGridLayout *sgGrid = new QGridLayout(statsGroup);
+    sgGrid->setContentsMargins(8, 8, 8, 8);
+    sgGrid->setSpacing(4);
+
+    sgGrid->addWidget(new QLabel(tr("Sommets contour :"), statsGroup), 0, 0);
+    m_lblMeshBoundaryVerts = new QLabel(QStringLiteral("0"), statsGroup);
+    m_lblMeshBoundaryVerts->setStyleSheet(QStringLiteral("font-weight: bold;"));
+    sgGrid->addWidget(m_lblMeshBoundaryVerts, 0, 1);
+
+    sgGrid->addWidget(new QLabel(tr("Sommets intérieurs :"), statsGroup), 1, 0);
+    m_lblMeshInteriorVerts = new QLabel(QStringLiteral("0"), statsGroup);
+    m_lblMeshInteriorVerts->setStyleSheet(QStringLiteral("font-weight: bold; color: #00E5FF;"));
+    sgGrid->addWidget(m_lblMeshInteriorVerts, 1, 1);
+
+    sgGrid->addWidget(new QLabel(tr("Triangles CDT :"), statsGroup), 2, 0);
+    m_lblMeshTriangles = new QLabel(QStringLiteral("0"), statsGroup);
+    m_lblMeshTriangles->setStyleSheet(QStringLiteral("font-weight: bold;"));
+    sgGrid->addWidget(m_lblMeshTriangles, 2, 1);
+
+    sgGrid->addWidget(new QLabel(tr("Gain Overdraw :"), statsGroup), 3, 0);
+    m_lblMeshOverdrawSavings = new QLabel(QStringLiteral("0.0%"), statsGroup);
+    m_lblMeshOverdrawSavings->setStyleSheet(QStringLiteral("font-weight: bold; color: #00E676;"));
+    sgGrid->addWidget(m_lblMeshOverdrawSavings, 3, 1);
+
+    mcLayout->addWidget(statsGroup);
+    mcLayout->addStretch();
+
+    meshLayout->addWidget(m_meshControlsContainer);
+    meshLayout->addStretch();
+    m_contextualStack->addWidget(m_meshOptionsPage);
+
     layout->addWidget(m_contextualStack);
 
     // 2. Layer Stack Dock (M18) - Always Visible Below Contextual Tool Options
@@ -1208,6 +1369,10 @@ void PixelEditorDialog::onToolButtonClicked(int id)
             break;
         case PixelTool::Eyedropper:
             m_contextualStack->setCurrentIndex(3); // Eyedropper Sampling
+            break;
+        case PixelTool::PolygonEdit:
+            m_contextualStack->setCurrentIndex(4); // Smart Mesh CDT & Polygon Editing (M19)
+            updateMeshStatsUI();
             break;
         }
     }
@@ -1513,8 +1678,29 @@ void PixelEditorDialog::loadFrame(int index)
         }
     }
 
-    m_canvas->setPolygonMesh(poly);
+    QList<QPointF> verts;
+    QList<int> tris;
+    if (m_sessionModifiedVertices.contains(index)) {
+        verts = m_sessionModifiedVertices[index];
+        tris = m_sessionModifiedTriangles.value(index);
+    } else if (index < m_document->boxes().size() && m_document->box(index).hasPolygonMesh) {
+        verts = m_document->box(index).vertices;
+        tris = m_document->box(index).triangles;
+    }
+
+    m_canvas->setPolygonMeshData(poly, verts, tris);
     m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
+
+    if (m_meshNoticeLabel) {
+        m_meshNoticeLabel->setVisible(!hasPoly);
+    }
+    if (m_meshControlsContainer) {
+        m_meshControlsContainer->setEnabled(hasPoly);
+    }
+    if (m_btnToolPolygon) {
+        m_btnToolPolygon->setToolTip(hasPoly ? tr("Éditeur de Maillage Polygonal CDT (◆)") : tr("Aucun maillage polygonal sur cette frame"));
+    }
+    updateMeshStatsUI();
 
     if (m_allowOutsidePolyCheck) {
         m_allowOutsidePolyCheck->blockSignals(true);
@@ -1675,6 +1861,8 @@ void PixelEditorDialog::saveCurrentFrameToSession()
     m_sessionModifiedFrames[m_currentFrameIndex] = m_canvas->image();
     if (m_canvas->hasPolygonMesh()) {
         m_sessionModifiedPolygons[m_currentFrameIndex] = m_canvas->polygonMesh();
+        m_sessionModifiedVertices[m_currentFrameIndex] = m_canvas->meshVertices();
+        m_sessionModifiedTriangles[m_currentFrameIndex] = m_canvas->meshTriangles();
     }
 
     if (m_canvas->hasLayers() && (m_canvas->layerCount() > 1 || m_sessionLayersModified || (m_document && m_document->hasLayers()))) {
@@ -1775,13 +1963,23 @@ void PixelEditorDialog::setApplyToAllFrames(bool enabled)
     }
 }
 
-void PixelEditorDialog::restoreFrameBackup(int frameIndex, const QImage &img, const QPolygonF &poly)
+void PixelEditorDialog::restoreFrameBackup(int frameIndex, const QImage &img, const QPolygonF &poly,
+                                          const QList<QPointF> &verts, const QList<int> &tris)
 {
     m_sessionModifiedFrames[frameIndex] = img;
     if (poly.size() >= 3) {
         m_sessionModifiedPolygons[frameIndex] = poly;
+        if (!verts.isEmpty()) {
+            m_sessionModifiedVertices[frameIndex] = verts;
+            m_sessionModifiedTriangles[frameIndex] = tris;
+        } else {
+            m_sessionModifiedVertices.remove(frameIndex);
+            m_sessionModifiedTriangles.remove(frameIndex);
+        }
     } else {
         m_sessionModifiedPolygons.remove(frameIndex);
+        m_sessionModifiedVertices.remove(frameIndex);
+        m_sessionModifiedTriangles.remove(frameIndex);
     }
 
     const bool docHasLayers = (m_document && m_document->hasLayers());
@@ -1868,8 +2066,9 @@ void PixelEditorDialog::restoreFrameBackup(int frameIndex, const QImage &img, co
         } else {
             m_canvas->setImage(img);
         }
-        m_canvas->setPolygonMesh(poly);
+        m_canvas->setPolygonMeshData(poly, verts, tris);
         m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
+        updateMeshStatsUI();
     }
 }
 
@@ -2820,7 +3019,7 @@ bool PixelEditorDialog::applyChanges()
         syncSessionLayersFromCanvas();
     }
     const bool hasMultiLayerChanges = (m_sessionLayers.size() > 1 || m_sessionLayersModified || !m_sessionModifiedCels.isEmpty() || (m_canvas && m_canvas->layerCount() > 1));
-    if (m_sessionModifiedFrames.isEmpty() && m_sessionModifiedPolygons.isEmpty() && !hasMultiLayerChanges) {
+    if (m_sessionModifiedFrames.isEmpty() && m_sessionModifiedPolygons.isEmpty() && m_sessionModifiedVertices.isEmpty() && !hasMultiLayerChanges) {
         return true;
     }
     if (!m_document) return false;
@@ -2842,9 +3041,22 @@ bool PixelEditorDialog::applyChanges()
         }
     }
 
-    if (actualFrameChanges.isEmpty() && actualPolyChanges.isEmpty() && !hasMultiLayerChanges) {
+    QMap<int, QList<QPointF>> actualVerticesChanges;
+    QMap<int, QList<int>> actualTrianglesChanges;
+    for (auto it = m_sessionModifiedVertices.constBegin(); it != m_sessionModifiedVertices.constEnd(); ++it) {
+        if (it.key() >= 0 && it.key() < m_document->boxes().size()) {
+            if (m_document->box(it.key()).vertices != it.value() || m_document->box(it.key()).triangles != m_sessionModifiedTriangles.value(it.key())) {
+                actualVerticesChanges[it.key()] = it.value();
+                actualTrianglesChanges[it.key()] = m_sessionModifiedTriangles.value(it.key());
+            }
+        }
+    }
+
+    if (actualFrameChanges.isEmpty() && actualPolyChanges.isEmpty() && actualVerticesChanges.isEmpty() && !hasMultiLayerChanges) {
         m_sessionModifiedFrames.clear();
         m_sessionModifiedPolygons.clear();
+        m_sessionModifiedVertices.clear();
+        m_sessionModifiedTriangles.clear();
         updateCollisionWarningUI();
         return true;
     }
@@ -2879,12 +3091,12 @@ bool PixelEditorDialog::applyChanges()
         }
     }
 
-    // Commit frame & polygon changes first so document state is completely up-to-date
-    if (!actualFrameChanges.isEmpty() || !actualPolyChanges.isEmpty()) {
+    // Commit frame, polygon & mesh changes first so document state is completely up-to-date
+    if (!actualFrameChanges.isEmpty() || !actualPolyChanges.isEmpty() || !actualVerticesChanges.isEmpty()) {
         if (m_docUndoStack) {
-            m_docUndoStack->push(new EditSpritePixelsCommand(m_document, actualFrameChanges, actualPolyChanges));
+            m_docUndoStack->push(new EditSpritePixelsCommand(m_document, actualFrameChanges, actualPolyChanges, actualVerticesChanges, actualTrianglesChanges));
         } else {
-            EditSpritePixelsCommand cmd(m_document, actualFrameChanges, actualPolyChanges);
+            EditSpritePixelsCommand cmd(m_document, actualFrameChanges, actualPolyChanges, actualVerticesChanges, actualTrianglesChanges);
             cmd.redo();
         }
     }
@@ -2902,6 +3114,8 @@ bool PixelEditorDialog::applyChanges()
 
     m_sessionModifiedFrames.clear();
     m_sessionModifiedPolygons.clear();
+    m_sessionModifiedVertices.clear();
+    m_sessionModifiedTriangles.clear();
     m_sessionModifiedCels.clear();
     m_sessionLayersModified = false;
     updateCollisionWarningUI();
@@ -3001,6 +3215,10 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnBucket) m_btnBucket->setToolTip(tr("Bucket Fill (Flood Fill 4-way) [G]"));
     if (m_btnSelectRect) m_btnSelectRect->setToolTip(tr("Rectangular Marquee Selection [M]"));
     if (m_btnSelectColor) m_btnSelectColor->setToolTip(tr("Magic Wand (Color Selection) [W]"));
+    if (m_btnToolPolygon) {
+        bool hasPoly = (m_canvas && m_canvas->hasPolygonMesh());
+        m_btnToolPolygon->setToolTip(hasPoly ? tr("Éditeur de Maillage Polygonal CDT (◆)") : tr("Aucun maillage polygonal sur cette frame"));
+    }
 
     if (m_btnFlipH) m_btnFlipH->setToolTip(tr("Flip Horizontal"));
     if (m_btnFlipV) m_btnFlipV->setToolTip(tr("Flip Vertical"));
@@ -3621,6 +3839,134 @@ void PixelEditorDialog::syncSessionLayersFromCanvas()
     }
     if (m_sessionLayers.size() > 1 || (m_document && m_document->hasLayers())) {
         m_sessionLayersModified = true;
+    }
+}
+
+void PixelEditorDialog::onMeshEditModeChanged(int id)
+{
+    if (m_canvas) {
+        m_canvas->setPolygonEditMode(static_cast<PolygonEditMode>(id));
+    }
+}
+
+void PixelEditorDialog::onGenerateSmartMeshRequested()
+{
+    if (!m_canvas || !m_canvas->hasPolygonMesh()) return;
+
+    QPolygonF poly = m_canvas->polygonMesh();
+    if (poly.size() < 3) return;
+
+    BentoPackGeometry::SmartMeshParams params;
+    params.steinerDensity = m_sliderSteinerDensity ? m_sliderSteinerDensity->value() : 30;
+    params.minAngleDeg = m_sliderMinAngle ? static_cast<double>(m_sliderMinAngle->value()) : 25.0;
+    params.contrastSensitivity = m_sliderContrastSensitivity ? m_sliderContrastSensitivity->value() : 50;
+
+    // Preserve any existing user interior points
+    const auto currentVerts = m_canvas->meshVertices();
+    const int bCount = poly.size();
+    for (int i = bCount; i < currentVerts.size(); ++i) {
+        params.userInteriorPoints.append(currentVerts.at(i));
+    }
+
+    QImage frameImg = m_canvas->image();
+    auto result = BentoPackGeometry::Triangulator::generateSmartMesh(poly, frameImg, params);
+
+    QPolygonF oldPoly = m_canvas->polygonMesh();
+    QList<QPointF> oldVerts = m_canvas->meshVertices();
+    QList<int> oldTris = m_canvas->meshTriangles();
+
+    m_canvas->setPolygonMeshData(result.outerPolygon, result.vertices, result.triangles);
+    m_canvas->pushMeshSnapshot(tr("Génération Maillage CDT"), oldPoly, oldVerts, oldTris);
+    m_sessionModifiedPolygons[m_currentFrameIndex] = result.outerPolygon;
+    m_sessionModifiedVertices[m_currentFrameIndex] = result.vertices;
+    m_sessionModifiedTriangles[m_currentFrameIndex] = result.triangles;
+    updateMeshStatsUI();
+}
+
+void PixelEditorDialog::onResetMeshToOutlineRequested()
+{
+    if (!m_canvas || !m_canvas->hasPolygonMesh()) return;
+
+    QPolygonF poly = m_canvas->polygonMesh();
+    if (poly.size() < 3) return;
+
+    QPolygonF oldPoly = m_canvas->polygonMesh();
+    QList<QPointF> oldVerts = m_canvas->meshVertices();
+    QList<int> oldTris = m_canvas->meshTriangles();
+
+    QList<QPointF> verts = poly.toList();
+    QList<int> tris = BentoPackGeometry::Triangulator::triangulateCDT(poly, verts);
+
+    m_canvas->setPolygonMeshData(poly, verts, tris);
+    m_canvas->pushMeshSnapshot(tr("Réinitialiser maillage au contour"), oldPoly, oldVerts, oldTris);
+    m_sessionModifiedPolygons[m_currentFrameIndex] = poly;
+    m_sessionModifiedVertices[m_currentFrameIndex] = verts;
+    m_sessionModifiedTriangles[m_currentFrameIndex] = tris;
+    updateMeshStatsUI();
+}
+
+void PixelEditorDialog::onDeleteSelectedVertexRequested()
+{
+    if (m_canvas) {
+        m_canvas->deleteSelectedVertex();
+    }
+}
+
+void PixelEditorDialog::onCanvasMeshDataChanged(const QPolygonF &poly, const QList<QPointF> &verts, const QList<int> &tris)
+{
+    m_sessionModifiedPolygons[m_currentFrameIndex] = poly;
+    m_sessionModifiedVertices[m_currentFrameIndex] = verts;
+    m_sessionModifiedTriangles[m_currentFrameIndex] = tris;
+    updateCollisionWarningUI();
+    updateMeshStatsUI();
+}
+
+void PixelEditorDialog::onCanvasSelectedVertexChanged(int index, bool isInterior)
+{
+    if (m_btnDeleteSelectedVertex) {
+        bool canDelete = (index >= 0);
+        if (m_canvas && !isInterior && m_canvas->polygonMesh().size() <= 3) {
+            canDelete = false;
+        }
+        m_btnDeleteSelectedVertex->setEnabled(canDelete);
+    }
+}
+
+void PixelEditorDialog::updateMeshStatsUI()
+{
+    if (!m_canvas) return;
+
+    const bool hasPoly = m_canvas->hasPolygonMesh();
+    if (m_meshNoticeLabel) {
+        m_meshNoticeLabel->setVisible(!hasPoly);
+    }
+    if (m_meshControlsContainer) {
+        m_meshControlsContainer->setEnabled(hasPoly);
+    }
+
+    if (!hasPoly) {
+        if (m_lblMeshBoundaryVerts) m_lblMeshBoundaryVerts->setText(QStringLiteral("0"));
+        if (m_lblMeshInteriorVerts) m_lblMeshInteriorVerts->setText(QStringLiteral("0"));
+        if (m_lblMeshTriangles) m_lblMeshTriangles->setText(QStringLiteral("0"));
+        if (m_lblMeshOverdrawSavings) m_lblMeshOverdrawSavings->setText(QStringLiteral("0.0%"));
+        if (m_btnDeleteSelectedVertex) m_btnDeleteSelectedVertex->setEnabled(false);
+        return;
+    }
+
+    const QPolygonF poly = m_canvas->polygonMesh();
+    const auto verts = m_canvas->meshVertices();
+    const auto tris = m_canvas->meshTriangles();
+    const int bCount = poly.size();
+    const int iCount = std::max(0, static_cast<int>(verts.size()) - bCount);
+
+    if (m_lblMeshBoundaryVerts) m_lblMeshBoundaryVerts->setText(QString::number(bCount));
+    if (m_lblMeshInteriorVerts) m_lblMeshInteriorVerts->setText(QString::number(iCount));
+    if (m_lblMeshTriangles) m_lblMeshTriangles->setText(QString::number(tris.size() / 3));
+
+    QSize imgSize = m_canvas->imageSize();
+    double savings = BentoPackGeometry::Triangulator::calculateOverdrawSavings(poly, imgSize);
+    if (m_lblMeshOverdrawSavings) {
+        m_lblMeshOverdrawSavings->setText(QStringLiteral("%1%").arg(savings, 0, 'f', 1));
     }
 }
 

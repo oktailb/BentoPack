@@ -33,7 +33,15 @@ enum class PixelTool {
     Eyedropper,
     BucketFill,
     SelectRect,
-    SelectColor
+    SelectColor,
+    PolygonEdit
+};
+
+enum class PolygonEditMode {
+    SelectOrMove = 0,
+    AddInterior = 1,
+    AddExterior = 2,
+    DeleteVertex = 3
 };
 
 enum class OnionSkinEffect {
@@ -162,10 +170,21 @@ public:
 
     CanvasActionData lastActionData() const { return m_lastActionData; }
 
-    // Polygon Mesh & Restriction
+    // Polygon Mesh & Restriction (M8 / M19 Smart Mesh CDT)
     void setPolygonMesh(const QPolygonF &polygon);
+    void setPolygonMeshData(const QPolygonF &polygon, const QList<QPointF> &vertices, const QList<int> &triangles);
     QPolygonF polygonMesh() const { return m_polygonMesh; }
+    QList<QPointF> meshVertices() const { return m_meshVertices; }
+    QList<int> meshTriangles() const { return m_meshTriangles; }
     bool hasPolygonMesh() const { return m_polygonMesh.size() >= 3; }
+
+    PolygonEditMode polygonEditMode() const { return m_polygonEditMode; }
+    void setPolygonEditMode(PolygonEditMode mode);
+    int selectedVertexIndex() const { return m_selectedVertexIndex; }
+    void setSelectedVertexIndex(int index);
+    void deleteSelectedVertex();
+    void retriangulateMesh();
+    void pushMeshSnapshot(const QString &text, const QPolygonF &oldPoly, const QList<QPointF> &oldVerts, const QList<int> &oldTris);
 
     bool allowEditingOutsidePolygon() const { return m_allowEditingOutsidePolygon; }
     void setAllowEditingOutsidePolygon(bool allow);
@@ -253,6 +272,8 @@ public:
 signals:
     void imageChanged();
     void polygonMeshChanged(const QPolygonF &polygon);
+    void meshDataChanged(const QPolygonF &polygon, const QList<QPointF> &vertices, const QList<int> &triangles);
+    void selectedVertexChanged(int index, bool isInterior);
     void modificationPushed(const QImage &oldImage, const QImage &newImage,
                             const QPolygonF &oldPolygon, const QPolygonF &newPolygon,
                             CanvasAction action, QUndoCommand *parentCommand);
@@ -319,11 +340,24 @@ private:
     QVector<OnionSkinLayer> m_onionSkinLayers;
     QImage                  m_onionSkinComposite;
 
-    // Polygon Mesh
+    // Polygon Mesh (M8 / M19 Smart Mesh CDT)
     QPolygonF       m_polygonMesh;
+    QList<QPointF>  m_meshVertices;
+    QList<int>      m_meshTriangles;
+    PolygonEditMode m_polygonEditMode = PolygonEditMode::SelectOrMove;
+    int             m_selectedVertexIndex = -1;
+    int             m_hoveredVertexIndex = -1;
+    int             m_hoveredEdgeIndex = -1;
+    bool            m_isDraggingVertex = false;
+    QPointF         m_dragVertexOriginalPos;
+    QPolygonF       m_dragPrePolygon;
+    QList<QPointF>  m_dragPreVertices;
+    QList<int>      m_dragPreTriangles;
     bool            m_allowEditingOutsidePolygon = true;
     QVector<bool>   m_polygonMask;
     void updatePolygonMask();
+    int findVertexAt(const QPoint &widgetPos, double hitRadius = 8.0) const;
+    int findBoundaryEdgeAt(const QPoint &widgetPos, double hitRadius = 6.0) const;
 
     // Interaction state
     bool            m_isDrawing = false;

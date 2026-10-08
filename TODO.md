@@ -41,7 +41,7 @@
 │ Jalon             │ Thématique                        │ Priorité       │
 ├───────────────────┼───────────────────────────────────┼────────────────┤
 │ STORES            │ Publication & Distribution Stores │ Haute (Imm.)   │
-│ M19 (SMART-MESH)  │ Maillage Intelligent CDT & Relief │ Haute / Moyenne│
+│ M19 (SMART-MESH)  │ Maillage Intelligent CDT & Relief │ ✅ Terminé     │
 │ M16               │ Multi-Page Atlas (Atlas Spanning) │ Haute / Moyenne│
 │ FORMATS           │ Formats d'Exportation Post-M10    │ Moyenne        │
 │ FILTERS-POLISH    │ Fignolage Extrusions & Filtres    │ Moyenne        │
@@ -291,34 +291,29 @@ Avec l'avènement des animations multi-calques, l'Éditeur de Pixels ([`PixelEdi
 
 ---
 
-## 📐 12. M19 : Maillage Polygonal Intelligent (Triangulation CDT, Points de Steiner & Contraste Interne)
+## 📐 12. M19 : Maillage Polygonal Intelligent (Triangulation CDT, Points de Steiner & Contraste Interne) — ✅ TERMINÉ
 
 ### 📌 Contexte & Problématique Métier
-La triangulation actuelle par Ear-Clipping ([`triangulator.cpp`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/src/geometry/triangulator.cpp)) opère exclusivement sur les sommets du contour extérieur du sprite.
-* **Défaut majeur :** Sur des formes concaves ou allongées (bras, épées, capes, jambes), l'algorithme génère des triangles étirés et très effilés (*sliver triangles* avec des angles très aigus $< 10^\circ$).
-* **Conséquences GPU & Artistiques :**
-  1. *Pénalité Quad Overdraw :* Les petits triangles étirés traversent de multiples quads de pixels $2 \times 2$ sur les GPUs, annulant une partie des gains de fillrate.
-  2. *Inutilisable en déformation 2.5D / Squelettique :* Les artistes 3D/2D dans Unity (2D Animation), Godot (Skeleton2D / Bone2D) ou Spine ne peuvent pas déformer proprement le maillage (rigging, bending). Les membres se tordent avec des artefacts d'interpolation hideux.
+La triangulation historique par Ear-Clipping ([`triangulator.cpp`](file:///BentoPack/src/geometry/triangulator.cpp)) opérait exclusivement sur les sommets du contour extérieur du sprite, ce qui pouvait générer des triangles étirés inutilisables pour le rigging/déformation 2D squelettique.
 
-### 🏛️ Spécifications Techniques d'Implémentation
-1. **Conservation Stricte de la Frontière Extérieure :**
-   - Le contour extérieur simplifié (Marching Squares + RDP + normal padding) reste la frontière rigide (*rigid boundary constraint*). Aucun pixel opaque n'est exclu, la découpe anti-overdraw reste à 100% garantie.
-2. **Détection d'Arêtes Internes à Fort Contraste (*Feature Edge Detection*) :**
-   - Analyse locale du gradient sur les canaux RGB/Luminance (filtre Sobel / Scharr ou dérivée morphologique) au sein de la zone opaque.
-   - Détection des lignes de rupture fortes : séparation nette entre chevelure et visage, col de vêtement, contours d'yeux, plis de tissu, limite bras/buste.
-   - Vectorisation et simplification RDP de ces arêtes intérieures sous forme de polylignes de contrainte.
-3. **Triangulation de Delaunay Contrainte (CDT) & Points de Steiner :**
-   - Remplacement / évolution du Ear-Clipping basique par une **Triangulation de Delaunay Contrainte (Constrained Delaunay Triangulation - CDT)** (ex. algorithme de Chew / Ruppert).
-   - Les segments du contour extérieur ET les arêtes internes de contraste sont injectés comme arêtes obligatoires (*constrained edges*).
-   - **Génération de points intérieurs (Points de Steiner) :**
-     - Insertion de points au barycentre des triangles trop grands ou trop effilés.
-     - Garantie d'un angle minimal (ex. $\theta_{min} \ge 25^\circ$ à $30^\circ$) assurant des triangles bien proportionnés (*Delaunay quality mesh*).
-4. **Bénéfice Moteur & Prise en Main dans l'UI :**
-   - Les sous-parties du sprite (ex. les mèches de cheveux, le visage, la manche) forment des groupes de triangles cohérents. Un artiste 2D/3D peut pondérer un os (*bone weight*) sur le cluster de cheveux pour les faire bouger indépendamment du visage au vent !
-   - Contrôles interactifs dans [`PolygonMeshDialog`](file:///c:/Users/ec135/Documents/GitHub/SpriteStudio/BentoPack/src/widgets/polygonmeshdialog.cpp) :
-     - Curseur *« Densité du maillage intérieur »* (faible, équilibrée, dense).
-     - Curseur *« Sensibilité au contraste »* (seuil d'arêtes internes).
-     - Curseur *« Angle minimal garanti »* (15° à 35°).
+### 🏛️ Implémentation & Architecture Finale
+1. **Contrainte Préalable de Contour (Pré-requis M8) :**
+   - Le découpage polygonal rigide doit déjà exister préalablement sur le sprite (généré via la boîte à outils principale *Outils > Maillage Polygonal* ou importé). Si aucun maillage n'existe, un bandeau d'avertissement informe l'utilisateur et désactive les commandes de maillage intérieur.
+2. **Intégration Exclusive dans le Pixel Editor :**
+   - La fonctionnalité est accessible directement depuis le **Pixel Editor** (`PixelEditorDialog` & `PixelCanvas`) via le bouton d'outil dédié `◆` (`PixelTool::PolygonEdit`).
+   - Panneau contextuel dédié (page 4 du stack ergonomique) avec curseurs interactifs (Densité de Steiner 0–100%, Angle minimal garanti 15°–35°, Contraste interne Sobel 0–100%), bouton de génération CDT intelligente et bouton de réinitialisation au contour.
+3. **Édition Interactive des Sommets (Contour & Intérieur) :**
+   - **Déplacer / Sélectionner (✥) :** Sélection et drag & drop des sommets avec recalcul CDT en temps réel.
+   - **Ajouter point intérieur (➕) :** Insertion interactive de points de Steiner / points de contrôle internes avec ré-indexation et re-triangulation CDT instantanée.
+   - **Ajouter point contour (🔲) :** Fractionnement d'arête de contour au clic ou via Maj+Clic.
+   - **Supprimer point (✖ / Suppr) :** Suppression d'un sommet intérieur ou contour (avec garde-fou $>3$ points sur le contour) et re-triangulation immédiate.
+   - Rendu haute précision : contour cyan/bleu, arêtes CDT fil de fer, poignées carrées (contour) et circulaires `#00E5FF` (intérieur), halos luisants de sélection et survol.
+4. **Triangulation CDT & Détection Sobel :**
+   - `Triangulator::triangulateCDT()` : Triangulation incrémentale de Bowyer-Watson avec flipping d'arêtes de contrainte et élagage des triangles hors frontière.
+   - `Triangulator::generateSmartMesh()` : Détection de crêtes internes par filtre de luminance Sobel et raffinement géométrique de Delaunay.
+5. **Persistance & Undo/Redo Total :**
+   - `PixelCanvasUndoCommand` et `EditSpritePixelsCommand` synchronisent `vertices` et `triangles` au sein de `SpriteBox` et `SpriteDocument` avec support Undo/Redo complet.
+   - Export automatique sans modification supplémentaire via les extracteurs Unity, Godot, Unreal et JSON.
 
 ---
 

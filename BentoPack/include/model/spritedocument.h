@@ -141,7 +141,7 @@ struct BENTOPACK_CORE_EXPORT SpriteBox {
         return rect == other.rect && index == other.index && selected == other.selected
                && pivot == other.pivot && hasCustomPivot == other.hasCustomPivot
                && hasPolygonMesh == other.hasPolygonMesh && polygon == other.polygon
-               && triangles == other.triangles;
+               && vertices == other.vertices && triangles == other.triangles;
     }
 
     bool operator!=(const SpriteBox &other) const {

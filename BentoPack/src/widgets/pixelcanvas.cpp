@@ -15,6 +15,7 @@
  */
 
 #include "widgets/pixelcanvas.h"
+#include "geometry/triangulator.h"
 #include <QPainter>
 #include <QMouseEvent>
 #include <QWheelEvent>
@@ -71,12 +72,21 @@ public:
     PixelCanvasUndoCommand(PixelCanvas *canvas, int layerIndex,
                            const QImage &oldImg, const QImage &newImg,
                            const QPolygonF &oldPoly, const QPolygonF &newPoly,
-                           const QString &text, QUndoCommand *parent = nullptr)
+                           const QString &text,
+                           const QList<QPointF> &oldVerts = {},
+                           const QList<QPointF> &newVerts = {},
+                           const QList<int> &oldTris = {},
+                           const QList<int> &newTris = {},
+                           QUndoCommand *parent = nullptr)
         : QUndoCommand(text, parent)
         , m_canvas(canvas)
         , m_layerIndex(layerIndex)
         , m_oldPoly(oldPoly)
         , m_newPoly(newPoly)
+        , m_oldVerts(oldVerts)
+        , m_newVerts(newVerts)
+        , m_oldTris(oldTris)
+        , m_newTris(newTris)
         , m_firstExecution(true)
     {
         m_dirtyRect = computeDirtyRect(oldImg, newImg);
@@ -102,7 +112,7 @@ public:
     }
 
     bool isEmpty() const {
-        return m_isEmpty && (m_oldPoly == m_newPoly);
+        return m_isEmpty && (m_oldPoly == m_newPoly) && (m_oldVerts == m_newVerts) && (m_oldTris == m_newTris);
     }
 
     void setCustomUndoRedo(const std::function<void()> &undoFunc, const std::function<void()> &redoFunc) {
@@ -132,9 +142,8 @@ public:
                 }
             }
         }
-        if (m_oldPoly != m_newPoly) {
-            m_canvas->setPolygonMesh(m_oldPoly);
-            emit m_canvas->polygonMeshChanged(m_oldPoly);
+        if (m_oldPoly != m_newPoly || m_oldVerts != m_newVerts) {
+            m_canvas->setPolygonMeshData(m_oldPoly, m_oldVerts, m_oldTris);
         }
     }
 
@@ -164,9 +173,8 @@ public:
                 }
             }
         }
-        if (m_oldPoly != m_newPoly) {
-            m_canvas->setPolygonMesh(m_newPoly);
-            emit m_canvas->polygonMeshChanged(m_newPoly);
+        if (m_oldPoly != m_newPoly || m_oldVerts != m_newVerts) {
+            m_canvas->setPolygonMeshData(m_newPoly, m_newVerts, m_newTris);
         }
     }
 
@@ -180,6 +188,10 @@ private:
     QImage       m_newImage;
     QPolygonF    m_oldPoly;
     QPolygonF    m_newPoly;
+    QList<QPointF> m_oldVerts;
+    QList<QPointF> m_newVerts;
+    QList<int>   m_oldTris;
+    QList<int>   m_newTris;
     std::function<void()> m_customUndo;
     std::function<void()> m_customRedo;
     bool         m_isFullImage = false;
@@ -845,6 +857,12 @@ void PixelCanvas::setCurrentTool(PixelTool tool)
 {
     commitFloatingSelection();
     m_tool = tool;
+    if (m_tool == PixelTool::PolygonEdit) {
+        if (m_meshVertices.isEmpty() && m_polygonMesh.size() >= 3) {
+            m_meshVertices = m_polygonMesh.toList();
+            m_meshTriangles = BentoPackGeometry::Triangulator::triangulate(m_polygonMesh);
+        }
+    }
     update();
 }
 
@@ -1361,6 +1379,22 @@ void PixelCanvas::pushSnapshot(const QImage &oldImage, const QString &text, cons
     m_undoStack.push(cmd);
 }
 
+void PixelCanvas::pushMeshSnapshot(const QString &text, const QPolygonF &oldPoly, const QList<QPointF> &oldVerts, const QList<int> &oldTris)
+{
+    QImage curImg = hasLayers() ? activeLayerImage() : m_image;
+    auto *cmd = new PixelCanvasUndoCommand(this, hasLayers() ? m_activeLayerIndex : -1,
+                                           curImg, curImg,
+                                           oldPoly, m_polygonMesh,
+                                           text,
+                                           oldVerts, m_meshVertices,
+                                           oldTris, m_meshTriangles);
+    if (cmd->isEmpty()) {
+        delete cmd;
+        return;
+    }
+    m_undoStack.push(cmd);
+}
+
 void PixelCanvas::applyPatch(const QRect &rect, const QImage &patch)
 {
     if (hasLayers()) {
@@ -1705,8 +1739,145 @@ void PixelCanvas::drawFloatingStamp(QPainter &painter)
 void PixelCanvas::setPolygonMesh(const QPolygonF &polygon)
 {
     m_polygonMesh = polygon;
+    if (polygon.size() >= 3) {
+        m_meshVertices = polygon.toList();
+        m_meshTriangles = BentoPackGeometry::Triangulator::triangulate(polygon);
+    } else {
+        m_meshVertices.clear();
+        m_meshTriangles.clear();
+    }
+    m_selectedVertexIndex = -1;
+    m_hoveredVertexIndex = -1;
+    m_hoveredEdgeIndex = -1;
     updatePolygonMask();
     update();
+    emit polygonMeshChanged(m_polygonMesh);
+    emit meshDataChanged(m_polygonMesh, m_meshVertices, m_meshTriangles);
+}
+
+void PixelCanvas::setPolygonMeshData(const QPolygonF &polygon, const QList<QPointF> &vertices, const QList<int> &triangles)
+{
+    m_polygonMesh = polygon;
+    m_meshVertices = vertices.isEmpty() ? polygon.toList() : vertices;
+    if (!triangles.isEmpty()) {
+        m_meshTriangles = triangles;
+    } else if (polygon.size() >= 3) {
+        if (m_meshVertices.size() > polygon.size()) {
+            m_meshTriangles = BentoPackGeometry::Triangulator::triangulateCDT(polygon, m_meshVertices);
+        } else {
+            m_meshTriangles = BentoPackGeometry::Triangulator::triangulate(polygon);
+        }
+    } else {
+        m_meshTriangles.clear();
+    }
+    m_selectedVertexIndex = -1;
+    m_hoveredVertexIndex = -1;
+    m_hoveredEdgeIndex = -1;
+    updatePolygonMask();
+    update();
+    emit polygonMeshChanged(m_polygonMesh);
+    emit meshDataChanged(m_polygonMesh, m_meshVertices, m_meshTriangles);
+}
+
+void PixelCanvas::setPolygonEditMode(PolygonEditMode mode)
+{
+    if (m_polygonEditMode != mode) {
+        m_polygonEditMode = mode;
+        update();
+    }
+}
+
+void PixelCanvas::setSelectedVertexIndex(int index)
+{
+    if (m_selectedVertexIndex != index) {
+        m_selectedVertexIndex = index;
+        bool isInterior = (index >= m_polygonMesh.size());
+        emit selectedVertexChanged(index, isInterior);
+        update();
+    }
+}
+
+void PixelCanvas::retriangulateMesh()
+{
+    if (m_polygonMesh.size() < 3) {
+        m_meshTriangles.clear();
+        updatePolygonMask();
+        update();
+        emit polygonMeshChanged(m_polygonMesh);
+        emit meshDataChanged(m_polygonMesh, m_meshVertices, m_meshTriangles);
+        return;
+    }
+    if (m_meshVertices.size() > m_polygonMesh.size()) {
+        m_meshTriangles = BentoPackGeometry::Triangulator::triangulateCDT(m_polygonMesh, m_meshVertices);
+    } else {
+        m_meshTriangles = BentoPackGeometry::Triangulator::triangulate(m_polygonMesh);
+    }
+    updatePolygonMask();
+    update();
+    emit polygonMeshChanged(m_polygonMesh);
+    emit meshDataChanged(m_polygonMesh, m_meshVertices, m_meshTriangles);
+}
+
+void PixelCanvas::deleteSelectedVertex()
+{
+    if (m_selectedVertexIndex < 0 || m_selectedVertexIndex >= m_meshVertices.size()) return;
+
+    QPolygonF oldPoly = m_polygonMesh;
+    QList<QPointF> oldVerts = m_meshVertices;
+    QList<int> oldTris = m_meshTriangles;
+
+    int idx = m_selectedVertexIndex;
+    if (idx < m_polygonMesh.size()) {
+        // Exterior vertex
+        if (m_polygonMesh.size() <= 3) {
+            return;
+        }
+        m_polygonMesh.removeAt(idx);
+        m_meshVertices.removeAt(idx);
+    } else {
+        // Interior vertex
+        m_meshVertices.removeAt(idx);
+    }
+
+    m_selectedVertexIndex = -1;
+    retriangulateMesh();
+    pushMeshSnapshot(tr("Delete Mesh Vertex"), oldPoly, oldVerts, oldTris);
+    emit selectedVertexChanged(-1, false);
+}
+
+int PixelCanvas::findVertexAt(const QPoint &widgetPos, double hitRadius) const
+{
+    for (int i = m_meshVertices.size() - 1; i >= 0; --i) {
+        const QPointF &pt = m_meshVertices[i];
+        QPointF widgetPt((pt.x() + m_imageOffset.x()) * m_zoom, (pt.y() + m_imageOffset.y()) * m_zoom);
+        double dist = std::hypot(widgetPos.x() - widgetPt.x(), widgetPos.y() - widgetPt.y());
+        if (dist <= hitRadius) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int PixelCanvas::findBoundaryEdgeAt(const QPoint &widgetPos, double hitRadius) const
+{
+    int n = m_polygonMesh.size();
+    if (n < 3) return -1;
+    for (int i = 0; i < n; ++i) {
+        const QPointF &p1 = m_polygonMesh[i];
+        const QPointF &p2 = m_polygonMesh[(i + 1) % n];
+        QPointF w1((p1.x() + m_imageOffset.x()) * m_zoom, (p1.y() + m_imageOffset.y()) * m_zoom);
+        QPointF w2((p2.x() + m_imageOffset.x()) * m_zoom, (p2.y() + m_imageOffset.y()) * m_zoom);
+
+        double l2 = (w2.x() - w1.x()) * (w2.x() - w1.x()) + (w2.y() - w1.y()) * (w2.y() - w1.y());
+        if (l2 < 1e-6) continue;
+        double t = std::clamp(((widgetPos.x() - w1.x()) * (w2.x() - w1.x()) + (widgetPos.y() - w1.y()) * (w2.y() - w1.y())) / l2, 0.0, 1.0);
+        QPointF proj(w1.x() + t * (w2.x() - w1.x()), w1.y() + t * (w2.y() - w1.y()));
+        double dist = std::hypot(widgetPos.x() - proj.x(), widgetPos.y() - proj.y());
+        if (dist <= hitRadius) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void PixelCanvas::setAllowEditingOutsidePolygon(bool allow)
@@ -1752,16 +1923,88 @@ void PixelCanvas::drawPolygonMesh(QPainter &painter)
     painter.save();
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    // 1. Draw CDT wireframe triangles
+    if (!m_meshTriangles.isEmpty()) {
+        QPen triPen(QColor(0, 210, 255, 130), 1.0, Qt::DashLine);
+        painter.setPen(triPen);
+        painter.setBrush(Qt::NoBrush);
+        for (int i = 0; i + 2 < m_meshTriangles.size(); i += 3) {
+            int i0 = m_meshTriangles[i];
+            int i1 = m_meshTriangles[i + 1];
+            int i2 = m_meshTriangles[i + 2];
+            if (i0 >= 0 && i0 < m_meshVertices.size() &&
+                i1 >= 0 && i1 < m_meshVertices.size() &&
+                i2 >= 0 && i2 < m_meshVertices.size()) {
+                QPolygonF triWidget;
+                triWidget << QPointF(m_meshVertices[i0].x() * m_zoom, m_meshVertices[i0].y() * m_zoom);
+                triWidget << QPointF(m_meshVertices[i1].x() * m_zoom, m_meshVertices[i1].y() * m_zoom);
+                triWidget << QPointF(m_meshVertices[i2].x() * m_zoom, m_meshVertices[i2].y() * m_zoom);
+                painter.drawPolygon(triWidget);
+            }
+        }
+    }
+
+    // 2. Draw outer polygon contour
     QPolygonF widgetPoly;
     for (const QPointF &pt : m_polygonMesh) {
         widgetPoly << QPointF(pt.x() * m_zoom, pt.y() * m_zoom);
     }
-
-    // Draw subtle bright green dashed outline matching BentoPack polygon contour
-    QPen pen(QColor(0, 220, 130, 210), 1.5, Qt::DashLine);
+    QPen pen(QColor(0, 230, 130, 230), 1.8, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     painter.setPen(pen);
-    painter.setBrush(QBrush(QColor(0, 220, 130, 20)));
+    painter.setBrush(QBrush(QColor(0, 230, 130, 20)));
     painter.drawPolygon(widgetPoly);
+
+    // 3. Highlight hovered edge if present
+    if (m_hoveredEdgeIndex >= 0 && m_hoveredEdgeIndex < m_polygonMesh.size()) {
+        int next = (m_hoveredEdgeIndex + 1) % m_polygonMesh.size();
+        QPointF p1(m_polygonMesh[m_hoveredEdgeIndex].x() * m_zoom, m_polygonMesh[m_hoveredEdgeIndex].y() * m_zoom);
+        QPointF p2(m_polygonMesh[next].x() * m_zoom, m_polygonMesh[next].y() * m_zoom);
+        painter.setPen(QPen(QColor(255, 220, 0, 230), 3.0, Qt::SolidLine));
+        painter.drawLine(p1, p2);
+    }
+
+    // 4. If PolygonEdit tool is active, draw vertex handles
+    if (m_tool == PixelTool::PolygonEdit) {
+        const int numBoundary = m_polygonMesh.size();
+
+        for (int i = 0; i < m_meshVertices.size(); ++i) {
+            const QPointF &pt = m_meshVertices[i];
+            QPointF wpt(pt.x() * m_zoom, pt.y() * m_zoom);
+            bool isInterior = (i >= numBoundary);
+            bool isSelected = (i == m_selectedVertexIndex);
+            bool isHovered = (i == m_hoveredVertexIndex);
+
+            if (!isInterior) {
+                // Exterior boundary vertex: Square handle
+                double size = isSelected ? 10.0 : (isHovered ? 9.0 : 7.0);
+                QRectF rect(wpt.x() - size * 0.5, wpt.y() - size * 0.5, size, size);
+
+                QColor fillColor = isSelected ? QColor(255, 170, 0) : (isHovered ? QColor(255, 235, 59) : QColor(240, 255, 240));
+                QColor borderColor = isSelected ? QColor(255, 255, 255) : QColor(0, 120, 60);
+
+                painter.setPen(QPen(borderColor, isSelected ? 2.0 : 1.2));
+                painter.setBrush(QBrush(fillColor));
+                painter.drawRect(rect);
+            } else {
+                // Interior Steiner / contrast vertex: Circular handle
+                double r = isSelected ? 6.0 : (isHovered ? 5.5 : 4.0);
+
+                QColor fillColor = isSelected ? QColor(255, 120, 0) : (isHovered ? QColor(255, 235, 59) : QColor(0, 229, 255));
+                QColor borderColor = isSelected ? QColor(255, 255, 255) : QColor(0, 50, 120);
+
+                painter.setPen(QPen(borderColor, isSelected ? 2.0 : 1.2));
+                painter.setBrush(QBrush(fillColor));
+                painter.drawEllipse(wpt, r, r);
+            }
+
+            if (isSelected) {
+                // Draw glowing halo around selected point
+                painter.setPen(QPen(QColor(255, 200, 0, 180), 1.0, Qt::DashLine));
+                painter.setBrush(Qt::NoBrush);
+                painter.drawEllipse(wpt, 11.0, 11.0);
+            }
+        }
+    }
 
     painter.restore();
 }
@@ -1934,6 +2177,81 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
         update();
     } else if (m_tool == PixelTool::SelectColor) {
         applyColorSelection(pixelPos.x(), pixelPos.y());
+    } else if (m_tool == PixelTool::PolygonEdit) {
+        if (m_polygonMesh.size() < 3) return;
+
+        int hitV = findVertexAt(event->pos(), 8.0);
+        int hitE = findBoundaryEdgeAt(event->pos(), 6.0);
+
+        if (event->button() == Qt::RightButton || m_polygonEditMode == PolygonEditMode::DeleteVertex) {
+            if (hitV >= 0) {
+                m_selectedVertexIndex = hitV;
+                deleteSelectedVertex();
+            }
+            return;
+        }
+
+        if (event->button() == Qt::LeftButton) {
+            if (m_polygonEditMode == PolygonEditMode::AddInterior) {
+                QPointF newP(event->pos().x() / m_zoom - m_imageOffset.x(),
+                             event->pos().y() / m_zoom - m_imageOffset.y());
+                if (m_polygonMesh.containsPoint(newP, Qt::OddEvenFill)) {
+                    QPolygonF oldPoly = m_polygonMesh;
+                    QList<QPointF> oldVerts = m_meshVertices;
+                    QList<int> oldTris = m_meshTriangles;
+
+                    m_meshVertices.append(newP);
+                    m_selectedVertexIndex = m_meshVertices.size() - 1;
+                    retriangulateMesh();
+                    pushMeshSnapshot(tr("Add Interior Mesh Vertex"), oldPoly, oldVerts, oldTris);
+                    emit selectedVertexChanged(m_selectedVertexIndex, true);
+                }
+                return;
+            }
+
+            if (m_polygonEditMode == PolygonEditMode::AddExterior || (hitV < 0 && hitE >= 0 && (event->modifiers() & Qt::ShiftModifier))) {
+                if (hitE >= 0 && hitE < m_polygonMesh.size()) {
+                    QPolygonF oldPoly = m_polygonMesh;
+                    QList<QPointF> oldVerts = m_meshVertices;
+                    QList<int> oldTris = m_meshTriangles;
+
+                    const QPointF &p1 = m_polygonMesh[hitE];
+                    const QPointF &p2 = m_polygonMesh[(hitE + 1) % m_polygonMesh.size()];
+                    QPointF w1((p1.x() + m_imageOffset.x()) * m_zoom, (p1.y() + m_imageOffset.y()) * m_zoom);
+                    QPointF w2((p2.x() + m_imageOffset.x()) * m_zoom, (p2.y() + m_imageOffset.y()) * m_zoom);
+                    double l2 = (w2.x() - w1.x()) * (w2.x() - w1.x()) + (w2.y() - w1.y()) * (w2.y() - w1.y());
+                    double t = (l2 > 1e-6) ? std::clamp(((event->pos().x() - w1.x()) * (w2.x() - w1.x()) + (event->pos().y() - w1.y()) * (w2.y() - w1.y())) / l2, 0.05, 0.95) : 0.5;
+                    QPointF insertPt(p1.x() + t * (p2.x() - p1.x()), p1.y() + t * (p2.y() - p1.y()));
+
+                    m_polygonMesh.insert(hitE + 1, insertPt);
+                    m_meshVertices.insert(hitE + 1, insertPt);
+                    m_selectedVertexIndex = hitE + 1;
+                    retriangulateMesh();
+                    pushMeshSnapshot(tr("Add Boundary Mesh Vertex"), oldPoly, oldVerts, oldTris);
+                    emit selectedVertexChanged(m_selectedVertexIndex, false);
+                }
+                return;
+            }
+
+            // Select or Move Mode
+            if (hitV >= 0) {
+                m_selectedVertexIndex = hitV;
+                m_isDraggingVertex = true;
+                m_dragVertexOriginalPos = m_meshVertices[hitV];
+                m_dragPrePolygon = m_polygonMesh;
+                m_dragPreVertices = m_meshVertices;
+                m_dragPreTriangles = m_meshTriangles;
+                bool isInterior = (hitV >= m_polygonMesh.size());
+                emit selectedVertexChanged(hitV, isInterior);
+                update();
+                return;
+            } else {
+                m_selectedVertexIndex = -1;
+                emit selectedVertexChanged(-1, false);
+                update();
+            }
+        }
+        return;
     }
 }
 
@@ -1984,6 +2302,34 @@ void PixelCanvas::mouseMoveEvent(QMouseEvent *event)
         int y2 = std::clamp(std::max(m_dragStartPixel.y(), pixelPos.y()), 0, m_image.height() - 1);
         m_selectionRect = QRect(QPoint(x1, y1), QPoint(x2, y2));
         update();
+    } else if (m_tool == PixelTool::PolygonEdit) {
+        if (m_isDraggingVertex && m_selectedVertexIndex >= 0 && m_selectedVertexIndex < m_meshVertices.size()) {
+            QPointF newP(event->pos().x() / m_zoom - m_imageOffset.x(),
+                         event->pos().y() / m_zoom - m_imageOffset.y());
+            int maxW = m_image.width();
+            int maxH = m_image.height();
+            newP.setX(std::clamp(newP.x(), 0.0, static_cast<double>(maxW)));
+            newP.setY(std::clamp(newP.y(), 0.0, static_cast<double>(maxH)));
+
+            int numBoundary = m_polygonMesh.size();
+            if (m_selectedVertexIndex < numBoundary) {
+                m_polygonMesh[m_selectedVertexIndex] = newP;
+                m_meshVertices[m_selectedVertexIndex] = newP;
+            } else {
+                if (m_polygonMesh.containsPoint(newP, Qt::OddEvenFill)) {
+                    m_meshVertices[m_selectedVertexIndex] = newP;
+                }
+            }
+            retriangulateMesh();
+        } else {
+            int prevH = m_hoveredVertexIndex;
+            int prevE = m_hoveredEdgeIndex;
+            m_hoveredVertexIndex = findVertexAt(event->pos(), 8.0);
+            m_hoveredEdgeIndex = (m_hoveredVertexIndex < 0) ? findBoundaryEdgeAt(event->pos(), 6.0) : -1;
+            if (m_hoveredVertexIndex != prevH || m_hoveredEdgeIndex != prevE) {
+                update();
+            }
+        }
     }
 }
 
@@ -2031,6 +2377,13 @@ void PixelCanvas::mouseReleaseEvent(QMouseEvent *event)
             }
         }
         emit selectionStateChanged(hasSelection());
+    } else if (m_tool == PixelTool::PolygonEdit) {
+        if (m_isDraggingVertex) {
+            m_isDraggingVertex = false;
+            if (m_dragPreVertices != m_meshVertices) {
+                pushMeshSnapshot(tr("Move Mesh Vertex"), m_dragPrePolygon, m_dragPreVertices, m_dragPreTriangles);
+            }
+        }
     }
     m_activeButton = Qt::NoButton;
 }
@@ -2061,6 +2414,11 @@ void PixelCanvas::keyPressEvent(QKeyEvent *event)
         event->accept();
         return;
     } else if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) {
+        if (m_tool == PixelTool::PolygonEdit && m_selectedVertexIndex >= 0) {
+            deleteSelectedVertex();
+            event->accept();
+            return;
+        }
         clearSelection();
         event->accept();
         return;
