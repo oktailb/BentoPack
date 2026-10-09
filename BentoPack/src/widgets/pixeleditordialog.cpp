@@ -716,8 +716,48 @@ QWidget* PixelEditorDialog::createPalettePanel()
         "}"
     );
 
-    // 1. Dynamic Contextual Stack (Adapts based on current tool)
-    m_contextualStack = new QStackedWidget(panel);
+    // 1. Right Column Tab Widget (Ergonomic separation: Tool Options vs Layers)
+    m_rightTabWidget = new QTabWidget(panel);
+    m_rightTabWidget->setObjectName(QStringLiteral("pixelEditorRightTabs"));
+    m_rightTabWidget->setStyleSheet(QStringLiteral(
+        "QTabWidget::pane {"
+        "  border: 1px solid palette(mid);"
+        "  background-color: transparent;"
+        "  border-radius: 6px;"
+        "}"
+        "QTabWidget::tab-bar {"
+        "  alignment: left;"
+        "}"
+        "QTabBar::tab {"
+        "  background-color: palette(button);"
+        "  color: palette(button-text);"
+        "  border: 1px solid palette(mid);"
+        "  padding: 6px 14px;"
+        "  margin-right: 4px;"
+        "  border-top-left-radius: 5px;"
+        "  border-top-right-radius: 5px;"
+        "  font-weight: 600;"
+        "  font-size: 11px;"
+        "}"
+        "QTabBar::tab:selected {"
+        "  background-color: palette(highlight);"
+        "  color: palette(highlighted-text);"
+        "  border-color: palette(highlight);"
+        "  font-weight: bold;"
+        "}"
+        "QTabBar::tab:hover:!selected {"
+        "  background-color: palette(alternate-base);"
+        "}"
+    ));
+
+    // Tab 1: Tool Options
+    m_toolTab = new QWidget(m_rightTabWidget);
+    QVBoxLayout *toolTabLayout = new QVBoxLayout(m_toolTab);
+    toolTabLayout->setContentsMargins(4, 4, 4, 4);
+    toolTabLayout->setSpacing(4);
+
+    m_contextualStack = new QStackedWidget(m_toolTab);
+    m_contextualStack->setObjectName(QStringLiteral("contextualStack"));
 
     // --- PAGE 0: Color Studio & Presets (Pencil / Bucket) ---
     m_colorOptionsPage = new QWidget(m_contextualStack);
@@ -1197,10 +1237,17 @@ QWidget* PixelEditorDialog::createPalettePanel()
     meshLayout->addStretch();
     m_contextualStack->addWidget(m_meshOptionsPage);
 
-    layout->addWidget(m_contextualStack);
+    toolTabLayout->addWidget(m_contextualStack);
+    toolTabLayout->addStretch();
+    m_rightTabWidget->addTab(m_toolTab, tr("Tool Options"));
 
-    // 2. Layer Stack Dock (M18) - Always Visible Below Contextual Tool Options
-    m_layerStackGroup = new QGroupBox(tr("Layers"), panel);
+    // 2. Layer Stack Tab (M18)
+    m_layersTab = new QWidget(m_rightTabWidget);
+    QVBoxLayout *layersTabLayout = new QVBoxLayout(m_layersTab);
+    layersTabLayout->setContentsMargins(4, 4, 4, 4);
+    layersTabLayout->setSpacing(4);
+
+    m_layerStackGroup = new QGroupBox(tr("Layers"), m_layersTab);
     m_layerStackGroup->setStyleSheet(groupBoxStyle);
     QVBoxLayout *lsLayout = new QVBoxLayout(m_layerStackGroup);
     lsLayout->setContentsMargins(4, 6, 4, 6);
@@ -1208,7 +1255,11 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     m_layerStackWidget = new LayerStackWidget(m_layerStackGroup);
     lsLayout->addWidget(m_layerStackWidget);
-    layout->addWidget(m_layerStackGroup);
+    layersTabLayout->addWidget(m_layerStackGroup);
+    layersTabLayout->addStretch();
+    m_rightTabWidget->addTab(m_layersTab, tr("Layers"));
+
+    layout->addWidget(m_rightTabWidget);
 
     connect(m_layerStackWidget, &LayerStackWidget::activeLayerChanged,
             this, [this](int index) {
@@ -1384,6 +1435,10 @@ void PixelEditorDialog::onToolButtonClicked(int id)
 {
     PixelTool tool = static_cast<PixelTool>(id);
     m_canvas->setCurrentTool(tool);
+
+    if (m_rightTabWidget) {
+        m_rightTabWidget->setCurrentIndex(0);
+    }
 
     if (m_contextualStack) {
         switch (tool) {
@@ -3347,6 +3402,12 @@ void PixelEditorDialog::retranslateUi()
         }
         m_paletteCombo->setCurrentIndex(curIdx);
         m_paletteCombo->blockSignals(false);
+    }
+
+    // Right Column Tabs
+    if (m_rightTabWidget) {
+        m_rightTabWidget->setTabText(0, tr("Tool Options"));
+        m_rightTabWidget->setTabText(1, tr("Layers"));
     }
 
     // Layer Stack (M18)

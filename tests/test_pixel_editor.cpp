@@ -2115,6 +2115,18 @@ void TestPixelEditor::testMultiLayerSessionSaveAndDocumentSync()
 
     PixelEditorDialog dlg(&doc, nullptr, 0);
     QVERIFY(dlg.layerStackWidget() != nullptr);
+    QVERIFY(dlg.rightTabWidget() != nullptr);
+    QCOMPARE(dlg.rightTabWidget()->count(), 2);
+    QCOMPARE(dlg.rightTabWidget()->tabText(0), QStringLiteral("Tool Options"));
+    QCOMPARE(dlg.rightTabWidget()->tabText(1), QStringLiteral("Layers"));
+
+    // Verify auto-switching tab when a tool is selected
+    dlg.rightTabWidget()->setCurrentIndex(1);
+    QCOMPARE(dlg.rightTabWidget()->currentIndex(), 1);
+    if (dlg.toolButtonGroup() && dlg.toolButtonGroup()->button(static_cast<int>(PixelTool::Pencil))) {
+        dlg.toolButtonGroup()->button(static_cast<int>(PixelTool::Pencil))->click();
+        QCOMPARE(dlg.rightTabWidget()->currentIndex(), 0);
+    }
 
     // Add a new layer
     dlg.canvas()->addLayer(QStringLiteral("Hat"));
@@ -2164,7 +2176,10 @@ void TestPixelEditor::testErgonomicContextualPanels()
     QCOMPARE(dlg.filtersButton()->objectName(), QStringLiteral("filtersButton"));
 
     // Verify contextual stack exists (0: Colors, 1: Eraser, 2: Marquee, 3: Eyedropper, 4: PolygonMesh)
-    QStackedWidget *stack = dlg.findChild<QStackedWidget*>();
+    QStackedWidget *stack = dlg.contextualStack();
+    if (!stack) {
+        stack = dlg.findChild<QStackedWidget*>(QStringLiteral("contextualStack"));
+    }
     QVERIFY(stack != nullptr);
     QCOMPARE(stack->count(), 5);
 

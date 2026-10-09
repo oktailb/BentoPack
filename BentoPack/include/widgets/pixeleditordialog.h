@@ -34,6 +34,7 @@
 #include <QSlider>
 #include <QCheckBox>
 #include <QStackedWidget>
+#include <QTabWidget>
 #include <QRadioButton>
 #include "image/colorpalettepresets.h"
 #include "widgets/colorpickerwidget.h"
@@ -87,6 +88,9 @@ public:
     QComboBox* animationCombo() const { return m_animCombo; }
     PixelCanvas* canvas() const { return m_canvas; }
     LayerStackWidget* layerStackWidget() const { return m_layerStackWidget; }
+    QTabWidget* rightTabWidget() const { return m_rightTabWidget; }
+    QStackedWidget* contextualStack() const { return m_contextualStack; }
+    QButtonGroup* toolButtonGroup() const { return m_toolGroup; }
     QPoint visualPivotPos() const;
     QCheckBox* allowOutsidePolygonCheckBox() const { return m_allowOutsidePolyCheck; }
     bool isEditingOutsidePolygonAllowed() const;
@@ -320,6 +324,11 @@ private:
     QWidget*                m_swatchesContainer = nullptr;
     QGridLayout*            m_swatchesLayout = nullptr;
     QVector<QRgb>           m_currentPalette;
+
+    // Right Column Tabs (Ergonomic separation of Tool Options vs Layers)
+    QTabWidget*             m_rightTabWidget = nullptr;
+    QWidget*                m_toolTab = nullptr;
+    QWidget*                m_layersTab = nullptr;
 
     // Layer Stack (M18)
     QGroupBox*              m_layerStackGroup = nullptr;
