@@ -515,6 +515,10 @@ void TestPixelEditor::testRetroPalettesAuthenticity()
     QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("cga_mode1")).size(), 4);
     QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("cga_mode2")).size(), 4);
     QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("endesga32")).size(), 32);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("sega_master_system")).size(), 64);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("sega_megadrive")).size(), 64);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("sega_saturn")).size(), 64);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("neogeo")).size(), 64);
 
     // Verify PixelEditorDialog forwards directly to ColorPalettePresets without duplicate tables
     QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Standard), ColorPalettePresets::standardPalette());
@@ -522,9 +526,11 @@ void TestPixelEditor::testRetroPalettesAuthenticity()
     QCOMPARE(dlg.getPaletteById(QStringLiteral("snes")), ColorPalettePresets::getPaletteById(QStringLiteral("snes")));
     QCOMPARE(dlg.getPaletteById(QStringLiteral("amiga")), ColorPalettePresets::getPaletteById(QStringLiteral("amiga")));
     QCOMPARE(dlg.getPaletteById(QStringLiteral("gameboy_dmg")), ColorPalettePresets::getPaletteById(QStringLiteral("gameboy_dmg")));
+    QCOMPARE(dlg.getPaletteById(QStringLiteral("sega_megadrive")), ColorPalettePresets::getPaletteById(QStringLiteral("sega_megadrive")));
+    QCOMPARE(dlg.getPaletteById(QStringLiteral("neogeo")), ColorPalettePresets::getPaletteById(QStringLiteral("neogeo")));
 
     // Verify file-based discovery and startup scanning
-    QVERIFY(ColorPalettePresets::availablePalettes().size() >= 12);
+    QVERIFY(ColorPalettePresets::availablePalettes().size() >= 16);
     QString userDir = ColorPalettePresets::userPalettesDirectory();
     QVERIFY(!userDir.isEmpty());
     QVERIFY(QDir(userDir).exists());

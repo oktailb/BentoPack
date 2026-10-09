@@ -20,6 +20,10 @@ This directory contains standard retro and studio color palettes for **BentoPack
 10. `cga_mode1.gpl` — IBM CGA Mode 1 (Noir, Cyan, Magenta, Blanc)
 11. `cga_mode2.gpl` — IBM CGA Mode 2 (Noir, Vert, Rouge, Jaune)
 12. `endesga32.gpl` — EDG 32 par Endesga (32 couleurs pixel art)
+13. `sega_master_system.gpl` — Sega 8-bit / Master System (64 couleurs, 6-bit RGB)
+14. `sega_megadrive.gpl` — Sega 16-bit / Mega Drive & Genesis (64 couleurs, 9-bit RGB)
+15. `sega_saturn.gpl` — Sega 32-bit / Saturn & 32X (64 couleurs, 15-bit arcade)
+16. `neogeo.gpl` — SNK Neo Geo AES / MVS (64 couleurs, arcade vibrant)
 
 ## Ajout de palettes personnalisées
 Pour ajouter vos propres palettes :

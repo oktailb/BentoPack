@@ -13,5 +13,9 @@
         <file>cga_mode1.gpl</file>
         <file>cga_mode2.gpl</file>
         <file>endesga32.gpl</file>
+        <file>sega_master_system.gpl</file>
+        <file>sega_megadrive.gpl</file>
+        <file>sega_saturn.gpl</file>
+        <file>neogeo.gpl</file>
     </qresource>
 </RCC>
