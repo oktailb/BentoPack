@@ -899,6 +899,9 @@ QWidget* PixelEditorDialog::createPalettePanel()
         if (m_eraserApplyAllFramesCheck && m_eraserApplyAllFramesCheck->isChecked() != checked) {
             m_eraserApplyAllFramesCheck->setChecked(checked);
         }
+        if (m_meshApplyAllFramesCheck && m_meshApplyAllFramesCheck->isChecked() != checked) {
+            m_meshApplyAllFramesCheck->setChecked(checked);
+        }
     });
     egLayout->addWidget(m_eraserApplyAllFramesCheck);
 
@@ -1037,17 +1040,20 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_radioMeshSelectMove = new QRadioButton(tr("✥ Déplacer / Sélectionner"), modeGroup);
     m_radioMeshAddInterior = new QRadioButton(tr("➕ Ajouter point intérieur"), modeGroup);
     m_radioMeshAddExterior = new QRadioButton(tr("🔲 Ajouter point contour"), modeGroup);
+    m_radioMeshCutLine = new QRadioButton(tr("✂️ Trait de coupe (Couteau)"), modeGroup);
     m_radioMeshDelete = new QRadioButton(tr("✖ Supprimer point"), modeGroup);
 
     m_radioMeshSelectMove->setChecked(true);
     m_meshModeGroup->addButton(m_radioMeshSelectMove, static_cast<int>(PolygonEditMode::SelectOrMove));
     m_meshModeGroup->addButton(m_radioMeshAddInterior, static_cast<int>(PolygonEditMode::AddInterior));
     m_meshModeGroup->addButton(m_radioMeshAddExterior, static_cast<int>(PolygonEditMode::AddExterior));
+    m_meshModeGroup->addButton(m_radioMeshCutLine, static_cast<int>(PolygonEditMode::CutLine));
     m_meshModeGroup->addButton(m_radioMeshDelete, static_cast<int>(PolygonEditMode::DeleteVertex));
 
     mgLayout->addWidget(m_radioMeshSelectMove);
     mgLayout->addWidget(m_radioMeshAddInterior);
     mgLayout->addWidget(m_radioMeshAddExterior);
+    mgLayout->addWidget(m_radioMeshCutLine);
     mgLayout->addWidget(m_radioMeshDelete);
 
     connect(m_meshModeGroup, &QButtonGroup::idClicked, this, &PixelEditorDialog::onMeshEditModeChanged);
@@ -1065,6 +1071,17 @@ QWidget* PixelEditorDialog::createPalettePanel()
     QVBoxLayout *cgLayout = new QVBoxLayout(cdtGroup);
     cgLayout->setContentsMargins(8, 10, 8, 10);
     cgLayout->setSpacing(6);
+
+    // Contrast detection mode combo
+    QHBoxLayout *cmHeader = new QHBoxLayout();
+    QLabel *lblCmTitle = new QLabel(tr("Mode détection :"), cdtGroup);
+    m_comboContrastMode = new QComboBox(cdtGroup);
+    m_comboContrastMode->addItem(tr("🎨 Distance Couleur (RGB)"), static_cast<int>(BentoPackGeometry::ContrastMode::RgbColorDistance));
+    m_comboContrastMode->addItem(tr("💡 Luminance (Sobel classique)"), static_cast<int>(BentoPackGeometry::ContrastMode::SobelLuminance));
+    m_comboContrastMode->setCurrentIndex(0);
+    cmHeader->addWidget(lblCmTitle);
+    cmHeader->addWidget(m_comboContrastMode);
+    cgLayout->addLayout(cmHeader);
 
     // Steiner density slider
     QHBoxLayout *sdHeader = new QHBoxLayout();
@@ -1121,6 +1138,20 @@ QWidget* PixelEditorDialog::createPalettePanel()
     cgLayout->addWidget(m_sliderContrastSensitivity);
 
     // Action buttons
+    m_meshApplyAllFramesCheck = new QCheckBox(tr("Appliquer à toute l'animation"), cdtGroup);
+    m_meshApplyAllFramesCheck->setObjectName(QStringLiteral("meshApplyAllFramesCheck"));
+    m_meshApplyAllFramesCheck->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: 600;"));
+    m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation courante"));
+    if (m_applyToAllFramesCheck) {
+        m_meshApplyAllFramesCheck->setChecked(m_applyToAllFramesCheck->isChecked());
+    }
+    connect(m_meshApplyAllFramesCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_applyToAllFramesCheck && m_applyToAllFramesCheck->isChecked() != checked) {
+            m_applyToAllFramesCheck->setChecked(checked);
+        }
+    });
+    cgLayout->addWidget(m_meshApplyAllFramesCheck);
+
     m_btnGenerateSmartMesh = new QPushButton(tr("⚡ Générer Maillage CDT"), cdtGroup);
     m_btnGenerateSmartMesh->setStyleSheet(QStringLiteral("QPushButton { font-weight: bold; padding: 5px; }"));
     connect(m_btnGenerateSmartMesh, &QPushButton::clicked, this, &PixelEditorDialog::onGenerateSmartMeshRequested);
@@ -1796,10 +1827,19 @@ void PixelEditorDialog::populateAnimationCombo()
     if (m_applyToAllFramesCheck) {
         if (!m_activeAnimName.isEmpty()) {
             m_applyToAllFramesCheck->setText(tr("Apply to all '%1' frames").arg(m_activeAnimName));
-            m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits and filters to all frames of animation '%1'").arg(m_activeAnimName));
+            m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits, mesh generation and filters to all frames of animation '%1'").arg(m_activeAnimName));
         } else {
             m_applyToAllFramesCheck->setText(tr("Apply to all frames"));
-            m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot"));
+            m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot"));
+        }
+    }
+    if (m_meshApplyAllFramesCheck) {
+        if (!m_activeAnimName.isEmpty()) {
+            m_meshApplyAllFramesCheck->setText(tr("Appliquer aux frames de '%1'").arg(m_activeAnimName));
+            m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation '%1'").arg(m_activeAnimName));
+        } else {
+            m_meshApplyAllFramesCheck->setText(tr("Appliquer à toute l'animation"));
+            m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation courante"));
         }
     }
 }
@@ -1827,10 +1867,19 @@ void PixelEditorDialog::onAnimationFilterChanged(int index)
         if (m_applyToAllFramesCheck) {
             if (!m_activeAnimName.isEmpty()) {
                 m_applyToAllFramesCheck->setText(tr("Apply to all '%1' frames").arg(m_activeAnimName));
-                m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits and filters to all frames of animation '%1'").arg(m_activeAnimName));
+                m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits, mesh generation and filters to all frames of animation '%1'").arg(m_activeAnimName));
             } else {
                 m_applyToAllFramesCheck->setText(tr("Apply to all frames"));
-                m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot"));
+                m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot"));
+            }
+        }
+        if (m_meshApplyAllFramesCheck) {
+            if (!m_activeAnimName.isEmpty()) {
+                m_meshApplyAllFramesCheck->setText(tr("Appliquer aux frames de '%1'").arg(m_activeAnimName));
+                m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation '%1'").arg(m_activeAnimName));
+            } else {
+                m_meshApplyAllFramesCheck->setText(tr("Appliquer à toute l'animation"));
+                m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation courante"));
             }
         }
         if (m_canvas && m_frameInfoLabel) {
@@ -3245,10 +3294,19 @@ void PixelEditorDialog::retranslateUi()
     if (m_applyToAllFramesCheck) {
         if (!m_activeAnimName.isEmpty()) {
             m_applyToAllFramesCheck->setText(tr("Apply to all '%1' frames").arg(m_activeAnimName));
-            m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits and filters to all frames of animation '%1'").arg(m_activeAnimName));
+            m_applyToAllFramesCheck->setToolTip(tr("Apply drawing edits, mesh generation and filters to all frames of animation '%1'").arg(m_activeAnimName));
         } else {
             m_applyToAllFramesCheck->setText(tr("Apply to all frames"));
-            m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot"));
+            m_applyToAllFramesCheck->setToolTip(tr("Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot"));
+        }
+    }
+    if (m_meshApplyAllFramesCheck) {
+        if (!m_activeAnimName.isEmpty()) {
+            m_meshApplyAllFramesCheck->setText(tr("Appliquer aux frames de '%1'").arg(m_activeAnimName));
+            m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation '%1'").arg(m_activeAnimName));
+        } else {
+            m_meshApplyAllFramesCheck->setText(tr("Appliquer à toute l'animation"));
+            m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation courante"));
         }
     }
     if (m_btnFilters) {
@@ -3860,6 +3918,8 @@ void PixelEditorDialog::onGenerateSmartMeshRequested()
     params.steinerDensity = m_sliderSteinerDensity ? m_sliderSteinerDensity->value() : 30;
     params.minAngleDeg = m_sliderMinAngle ? static_cast<double>(m_sliderMinAngle->value()) : 25.0;
     params.contrastSensitivity = m_sliderContrastSensitivity ? m_sliderContrastSensitivity->value() : 50;
+    params.contrastMode = m_comboContrastMode ? static_cast<BentoPackGeometry::ContrastMode>(m_comboContrastMode->currentData().toInt())
+                                              : BentoPackGeometry::ContrastMode::RgbColorDistance;
 
     // Preserve any existing user interior points
     const auto currentVerts = m_canvas->meshVertices();
@@ -3880,6 +3940,65 @@ void PixelEditorDialog::onGenerateSmartMeshRequested()
     m_sessionModifiedPolygons[m_currentFrameIndex] = result.outerPolygon;
     m_sessionModifiedVertices[m_currentFrameIndex] = result.vertices;
     m_sessionModifiedTriangles[m_currentFrameIndex] = result.triangles;
+
+    // Apply to all frames of current animation (or all document frames) if checkbox is enabled
+    if (isApplyToAllFramesEnabled() && m_document && m_document->frameCount() > 1) {
+        QList<int> targetFrames;
+        if (!m_activeSequence.isEmpty()) {
+            for (int idx : m_activeSequence) {
+                if (idx >= 0 && idx < m_document->frameCount() && !targetFrames.contains(idx)) {
+                    targetFrames.append(idx);
+                }
+            }
+        } else {
+            for (int i = 0; i < m_document->frameCount(); ++i) {
+                targetFrames.append(i);
+            }
+        }
+
+        for (int targetIdx : targetFrames) {
+            if (targetIdx == m_currentFrameIndex) continue;
+
+            QImage targetImg;
+            if (m_sessionModifiedFrames.contains(targetIdx)) {
+                targetImg = m_sessionModifiedFrames[targetIdx];
+            } else {
+                targetImg = m_document->frame(targetIdx);
+            }
+            if (targetImg.isNull()) continue;
+
+            QPolygonF targetPoly;
+            if (m_sessionModifiedPolygons.contains(targetIdx)) {
+                targetPoly = m_sessionModifiedPolygons[targetIdx];
+            } else if (targetIdx >= 0 && targetIdx < m_document->boxes().size() &&
+                       m_document->box(targetIdx).polygon.size() >= 3) {
+                targetPoly = m_document->box(targetIdx).polygon;
+            }
+            if (targetPoly.size() < 3) continue;
+
+            BentoPackGeometry::SmartMeshParams targetParams = params;
+            targetParams.userInteriorPoints.clear();
+
+            // Preserve target frame's existing user interior points if any
+            QList<QPointF> targetVerts;
+            if (m_sessionModifiedVertices.contains(targetIdx)) {
+                targetVerts = m_sessionModifiedVertices[targetIdx];
+            } else if (targetIdx >= 0 && targetIdx < m_document->boxes().size()) {
+                targetVerts = m_document->box(targetIdx).vertices;
+            }
+            if (targetVerts.size() > targetPoly.size()) {
+                for (int vi = targetPoly.size(); vi < targetVerts.size(); ++vi) {
+                    targetParams.userInteriorPoints.append(targetVerts.at(vi));
+                }
+            }
+
+            auto targetResult = BentoPackGeometry::Triangulator::generateSmartMesh(targetPoly, targetImg, targetParams);
+            m_sessionModifiedPolygons[targetIdx] = targetResult.outerPolygon;
+            m_sessionModifiedVertices[targetIdx] = targetResult.vertices;
+            m_sessionModifiedTriangles[targetIdx] = targetResult.triangles;
+        }
+    }
+
     updateMeshStatsUI();
 }
 
@@ -3902,6 +4021,43 @@ void PixelEditorDialog::onResetMeshToOutlineRequested()
     m_sessionModifiedPolygons[m_currentFrameIndex] = poly;
     m_sessionModifiedVertices[m_currentFrameIndex] = verts;
     m_sessionModifiedTriangles[m_currentFrameIndex] = tris;
+
+    // Reset all frames of current animation (or all document frames) if checkbox is enabled
+    if (isApplyToAllFramesEnabled() && m_document && m_document->frameCount() > 1) {
+        QList<int> targetFrames;
+        if (!m_activeSequence.isEmpty()) {
+            for (int idx : m_activeSequence) {
+                if (idx >= 0 && idx < m_document->frameCount() && !targetFrames.contains(idx)) {
+                    targetFrames.append(idx);
+                }
+            }
+        } else {
+            for (int i = 0; i < m_document->frameCount(); ++i) {
+                targetFrames.append(i);
+            }
+        }
+
+        for (int targetIdx : targetFrames) {
+            if (targetIdx == m_currentFrameIndex) continue;
+
+            QPolygonF targetPoly;
+            if (m_sessionModifiedPolygons.contains(targetIdx)) {
+                targetPoly = m_sessionModifiedPolygons[targetIdx];
+            } else if (targetIdx >= 0 && targetIdx < m_document->boxes().size() &&
+                       m_document->box(targetIdx).polygon.size() >= 3) {
+                targetPoly = m_document->box(targetIdx).polygon;
+            }
+            if (targetPoly.size() < 3) continue;
+
+            QList<QPointF> tVerts = targetPoly.toList();
+            QList<int> tTris = BentoPackGeometry::Triangulator::triangulateCDT(targetPoly, tVerts);
+
+            m_sessionModifiedPolygons[targetIdx] = targetPoly;
+            m_sessionModifiedVertices[targetIdx] = tVerts;
+            m_sessionModifiedTriangles[targetIdx] = tTris;
+        }
+    }
+
     updateMeshStatsUI();
 }
 

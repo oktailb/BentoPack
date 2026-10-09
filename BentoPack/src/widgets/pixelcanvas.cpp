@@ -1845,6 +1845,132 @@ void PixelCanvas::deleteSelectedVertex()
     emit selectedVertexChanged(-1, false);
 }
 
+void PixelCanvas::applyCutLine(const QPointF &startPt, const QPointF &endPt)
+{
+    if (m_polygonMesh.size() < 3) return;
+
+    double len = std::hypot(endPt.x() - startPt.x(), endPt.y() - startPt.y());
+    if (len < 1.5) return;
+
+    QPolygonF oldPoly = m_polygonMesh;
+    QList<QPointF> oldVerts = m_meshVertices;
+    QList<int> oldTris = m_meshTriangles;
+
+    auto lineIntersection = [](const QPointF &p1, const QPointF &p2,
+                               const QPointF &p3, const QPointF &p4,
+                               double &tSeg, double &uSeg) -> bool {
+        double d = (p1.x() - p2.x()) * (p3.y() - p4.y()) - (p1.y() - p2.y()) * (p3.x() - p4.x());
+        if (std::abs(d) < 1e-9) return false;
+        double t = ((p1.x() - p3.x()) * (p3.y() - p4.y()) - (p1.y() - p3.y()) * (p3.x() - p4.x())) / d;
+        double u = -((p1.x() - p2.x()) * (p1.y() - p3.y()) - (p1.y() - p2.y()) * (p1.x() - p3.x())) / d;
+        if (t >= 0.0 && t <= 1.0 && u >= 0.0 && u <= 1.0) {
+            tSeg = t;
+            uSeg = u;
+            return true;
+        }
+        return false;
+    };
+
+    struct CandidatePoint {
+        double t;
+        QPointF pt;
+    };
+    QList<CandidatePoint> candidates;
+
+    // 1. Endpoints if inside polygon
+    if (m_polygonMesh.containsPoint(startPt, Qt::OddEvenFill)) {
+        candidates.append({0.0, startPt});
+    }
+    if (m_polygonMesh.containsPoint(endPt, Qt::OddEvenFill)) {
+        candidates.append({1.0, endPt});
+    }
+
+    // 2. Intersections with boundary edges
+    const int numBoundary = m_polygonMesh.size();
+    for (int b = 0; b < numBoundary; ++b) {
+        const QPointF &bp1 = m_polygonMesh[b];
+        const QPointF &bp2 = m_polygonMesh[(b + 1) % numBoundary];
+        double tCut, uBound;
+        if (lineIntersection(startPt, endPt, bp1, bp2, tCut, uBound)) {
+            QPointF pInt(startPt.x() + tCut * (endPt.x() - startPt.x()),
+                         startPt.y() + tCut * (endPt.y() - startPt.y()));
+            candidates.append({tCut, pInt});
+        }
+    }
+
+    // 3. Intersections with all current mesh triangle edges
+    for (int i = 0; i + 2 < m_meshTriangles.size(); i += 3) {
+        int idxs[3] = {m_meshTriangles[i], m_meshTriangles[i + 1], m_meshTriangles[i + 2]};
+        for (int e = 0; e < 3; ++e) {
+            int v0 = idxs[e];
+            int v1 = idxs[(e + 1) % 3];
+            if (v0 < 0 || v0 >= m_meshVertices.size() || v1 < 0 || v1 >= m_meshVertices.size()) continue;
+            const QPointF &ep1 = m_meshVertices[v0];
+            const QPointF &ep2 = m_meshVertices[v1];
+            double tCut, uEdge;
+            if (lineIntersection(startPt, endPt, ep1, ep2, tCut, uEdge)) {
+                QPointF pInt(startPt.x() + tCut * (endPt.x() - startPt.x()),
+                             startPt.y() + tCut * (endPt.y() - startPt.y()));
+                if (m_polygonMesh.containsPoint(pInt, Qt::OddEvenFill)) {
+                    candidates.append({tCut, pInt});
+                }
+            }
+        }
+    }
+
+    // 4. Regular intermediate samples along the cut line (every 8px)
+    int steps = std::max(1, static_cast<int>(std::round(len / 8.0)));
+    for (int s = 1; s < steps; ++s) {
+        double tStep = static_cast<double>(s) / static_cast<double>(steps);
+        QPointF pStep(startPt.x() + tStep * (endPt.x() - startPt.x()),
+                      startPt.y() + tStep * (endPt.y() - startPt.y()));
+        if (m_polygonMesh.containsPoint(pStep, Qt::OddEvenFill)) {
+            candidates.append({tStep, pStep});
+        }
+    }
+
+    if (candidates.isEmpty()) return;
+
+    // Sort candidates by t along cut line
+    std::sort(candidates.begin(), candidates.end(), [](const CandidatePoint &a, const CandidatePoint &b) {
+        return a.t < b.t;
+    });
+
+    // Deduplicate against existing vertices and among candidates
+    QList<QPointF> pointsToAdd;
+    for (const auto &cand : candidates) {
+        bool tooClose = false;
+        for (const QPointF &v : m_meshVertices) {
+            if (std::hypot(v.x() - cand.pt.x(), v.y() - cand.pt.y()) < 2.0) {
+                tooClose = true;
+                break;
+            }
+        }
+        if (!tooClose) {
+            for (const QPointF &added : pointsToAdd) {
+                if (std::hypot(added.x() - cand.pt.x(), added.y() - cand.pt.y()) < 2.0) {
+                    tooClose = true;
+                    break;
+                }
+            }
+        }
+        if (!tooClose) {
+            pointsToAdd.append(cand.pt);
+        }
+    }
+
+    if (pointsToAdd.isEmpty()) return;
+
+    for (const QPointF &pt : pointsToAdd) {
+        m_meshVertices.append(pt);
+    }
+
+    m_selectedVertexIndex = m_meshVertices.size() - 1;
+    retriangulateMesh();
+    pushMeshSnapshot(tr("Trait de coupe maillage"), oldPoly, oldVerts, oldTris);
+    emit selectedVertexChanged(m_selectedVertexIndex, true);
+}
+
 int PixelCanvas::findVertexAt(const QPoint &widgetPos, double hitRadius) const
 {
     for (int i = m_meshVertices.size() - 1; i >= 0; --i) {
@@ -2004,6 +2130,26 @@ void PixelCanvas::drawPolygonMesh(QPainter &painter)
                 painter.drawEllipse(wpt, 11.0, 11.0);
             }
         }
+    }
+
+    // 5. Draw laser / cut line preview if actively cutting
+    if (m_isCuttingLine && m_tool == PixelTool::PolygonEdit) {
+        QPointF wStart(m_cutLineStart.x() * m_zoom, m_cutLineStart.y() * m_zoom);
+        QPointF wEnd(m_cutLineEnd.x() * m_zoom, m_cutLineEnd.y() * m_zoom);
+
+        // Glow halo
+        painter.setPen(QPen(QColor(255, 61, 0, 90), 5.0, Qt::SolidLine, Qt::RoundCap));
+        painter.drawLine(wStart, wEnd);
+
+        // Sharp laser line
+        painter.setPen(QPen(QColor(255, 61, 0, 240), 2.0, Qt::DashLine, Qt::RoundCap));
+        painter.drawLine(wStart, wEnd);
+
+        // Endpoints
+        painter.setPen(QPen(Qt::white, 1.5));
+        painter.setBrush(QBrush(QColor(255, 61, 0)));
+        painter.drawEllipse(wStart, 4.0, 4.0);
+        painter.drawEllipse(wEnd, 4.0, 4.0);
     }
 
     painter.restore();
@@ -2192,6 +2338,15 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
         }
 
         if (event->button() == Qt::LeftButton) {
+            if (m_polygonEditMode == PolygonEditMode::CutLine) {
+                m_isCuttingLine = true;
+                m_cutLineStart = QPointF(event->pos().x() / m_zoom - m_imageOffset.x(),
+                                         event->pos().y() / m_zoom - m_imageOffset.y());
+                m_cutLineEnd = m_cutLineStart;
+                update();
+                return;
+            }
+
             if (m_polygonEditMode == PolygonEditMode::AddInterior) {
                 QPointF newP(event->pos().x() / m_zoom - m_imageOffset.x(),
                              event->pos().y() / m_zoom - m_imageOffset.y());
@@ -2303,6 +2458,12 @@ void PixelCanvas::mouseMoveEvent(QMouseEvent *event)
         m_selectionRect = QRect(QPoint(x1, y1), QPoint(x2, y2));
         update();
     } else if (m_tool == PixelTool::PolygonEdit) {
+        if (m_isCuttingLine) {
+            m_cutLineEnd = QPointF(event->pos().x() / m_zoom - m_imageOffset.x(),
+                                   event->pos().y() / m_zoom - m_imageOffset.y());
+            update();
+            return;
+        }
         if (m_isDraggingVertex && m_selectedVertexIndex >= 0 && m_selectedVertexIndex < m_meshVertices.size()) {
             QPointF newP(event->pos().x() / m_zoom - m_imageOffset.x(),
                          event->pos().y() / m_zoom - m_imageOffset.y());
@@ -2378,6 +2539,13 @@ void PixelCanvas::mouseReleaseEvent(QMouseEvent *event)
         }
         emit selectionStateChanged(hasSelection());
     } else if (m_tool == PixelTool::PolygonEdit) {
+        if (m_isCuttingLine) {
+            m_isCuttingLine = false;
+            applyCutLine(m_cutLineStart, m_cutLineEnd);
+            update();
+            m_activeButton = Qt::NoButton;
+            return;
+        }
         if (m_isDraggingVertex) {
             m_isDraggingVertex = false;
             if (m_dragPreVertices != m_meshVertices) {

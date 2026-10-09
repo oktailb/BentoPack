@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -480,17 +480,49 @@ bool ProjectManager::saveProjectToSessionDir(const SpriteDocument &doc,
     // Save Atlas Image if present
     QString relativeAtlasPath;
     if (!doc.atlas().isNull()) {
+        QImage atlasToSave = doc.atlas();
+
+        // Safety check: if project uses tight polygon packing with overlapping boxes,
+        // recomposite atlasToSave from clean frames so no historical hole from previous clobbers gets written to disk!
+        bool hasOverlappingBoxes = false;
+        for (int i = 0; i < doc.boxes().size(); ++i) {
+            for (int j = i + 1; j < doc.boxes().size(); ++j) {
+                if (doc.box(i).rect.intersects(doc.box(j).rect)) {
+                    hasOverlappingBoxes = true;
+                    break;
+                }
+            }
+            if (hasOverlappingBoxes) break;
+        }
+
+        if (hasOverlappingBoxes && !doc.frames().isEmpty() && !atlasToSave.isNull()) {
+            QImage cleanAtlas(atlasToSave.size(), QImage::Format_ARGB32_Premultiplied);
+            cleanAtlas.fill(Qt::transparent);
+            QPainter p(&cleanAtlas);
+            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            for (int i = 0; i < doc.frames().size(); ++i) {
+                if (i < doc.boxes().size() && !doc.box(i).rect.isEmpty()) {
+                    QImage img = doc.polygonClippedFrame(i);
+                    if (!img.isNull()) {
+                        p.drawImage(doc.box(i).rect.topLeft(), img);
+                    }
+                }
+            }
+            p.end();
+            atlasToSave = cleanAtlas.convertToFormat(QImage::Format_ARGB32);
+        }
+
         bool canWriteWebp = QImageWriter::supportedImageFormats().contains("webp");
         if (canWriteWebp) {
             relativeAtlasPath = QStringLiteral("assets/atlas.webp");
             QString atlasFullPath = sDir.filePath(relativeAtlasPath);
             // Save WebP with high quality (quality 99 avoids Qt Windows VP8L decoder bug on opaque textures)
-            if (!doc.atlas().save(atlasFullPath, "WEBP", 99)) {
+            if (!atlasToSave.save(atlasFullPath, "WEBP", 99)) {
                 // If WebP saving failed, fallback to PNG
                 qWarning() << "[BentoPack] WebP writer failed. Falling back to PNG for project atlas archive.";
                 relativeAtlasPath = QStringLiteral("assets/atlas.png");
                 atlasFullPath = sDir.filePath(relativeAtlasPath);
-                if (!doc.atlas().save(atlasFullPath, "PNG")) {
+                if (!atlasToSave.save(atlasFullPath, "PNG")) {
                     if (errorMsg) *errorMsg = QStringLiteral("Failed to save atlas image to ") + atlasFullPath;
                     return false;
                 }
@@ -500,7 +532,7 @@ bool ProjectManager::saveProjectToSessionDir(const SpriteDocument &doc,
             qWarning().noquote() << VramTextureCompressor::missingFormatHelp(QStringLiteral("webp"));
             relativeAtlasPath = QStringLiteral("assets/atlas.png");
             QString atlasFullPath = sDir.filePath(relativeAtlasPath);
-            if (!doc.atlas().save(atlasFullPath, "PNG")) {
+            if (!atlasToSave.save(atlasFullPath, "PNG")) {
                 if (errorMsg) *errorMsg = QStringLiteral("Failed to save atlas image to ") + atlasFullPath;
                 return false;
             }

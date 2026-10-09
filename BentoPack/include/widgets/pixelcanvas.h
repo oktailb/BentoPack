@@ -41,7 +41,8 @@ enum class PolygonEditMode {
     SelectOrMove = 0,
     AddInterior = 1,
     AddExterior = 2,
-    DeleteVertex = 3
+    DeleteVertex = 3,
+    CutLine = 4
 };
 
 enum class OnionSkinEffect {
@@ -183,6 +184,7 @@ public:
     int selectedVertexIndex() const { return m_selectedVertexIndex; }
     void setSelectedVertexIndex(int index);
     void deleteSelectedVertex();
+    void applyCutLine(const QPointF &startPt, const QPointF &endPt);
     void retriangulateMesh();
     void pushMeshSnapshot(const QString &text, const QPolygonF &oldPoly, const QList<QPointF> &oldVerts, const QList<int> &oldTris);
 
@@ -354,6 +356,9 @@ private:
     QList<QPointF>  m_dragPreVertices;
     QList<int>      m_dragPreTriangles;
     bool            m_allowEditingOutsidePolygon = true;
+    bool            m_isCuttingLine = false;
+    QPointF         m_cutLineStart;
+    QPointF         m_cutLineEnd;
     QVector<bool>   m_polygonMask;
     void updatePolygonMask();
     int findVertexAt(const QPoint &widgetPos, double hitRadius = 8.0) const;

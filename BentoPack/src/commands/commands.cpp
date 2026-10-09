@@ -629,34 +629,34 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
 void EditSpritePixelsCommand::redo()
 {
     if (!m_doc) return;
-    for (const FramePatch &fp : m_framePatches) {
-        m_doc->patchAtlas(fp.rect, fp.newPatch);
-    }
-    if (m_framePatches.isEmpty() && !m_newAtlas.isNull()) {
-        m_doc->setAtlas(m_newAtlas);
-    }
     for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
         m_doc->replaceFrame(it.key(), it.value());
     }
     for (auto it = m_newBoxes.constBegin(); it != m_newBoxes.constEnd(); ++it) {
         m_doc->setBox(it.key(), it.value());
     }
+    for (const FramePatch &fp : m_framePatches) {
+        m_doc->patchAtlas(fp.rect, fp.newPatch);
+    }
+    if (m_framePatches.isEmpty() && !m_newAtlas.isNull()) {
+        m_doc->setAtlas(m_newAtlas);
+    }
 }
 
 void EditSpritePixelsCommand::undo()
 {
     if (!m_doc) return;
-    for (const FramePatch &fp : m_framePatches) {
-        m_doc->patchAtlas(fp.rect, fp.oldPatch);
-    }
-    if (m_framePatches.isEmpty() && !m_oldAtlas.isNull()) {
-        m_doc->setAtlas(m_oldAtlas);
-    }
     for (auto it = m_oldFrames.constBegin(); it != m_oldFrames.constEnd(); ++it) {
         m_doc->replaceFrame(it.key(), it.value());
     }
     for (auto it = m_oldBoxes.constBegin(); it != m_oldBoxes.constEnd(); ++it) {
         m_doc->setBox(it.key(), it.value());
+    }
+    for (const FramePatch &fp : m_framePatches) {
+        m_doc->patchAtlas(fp.rect, fp.oldPatch);
+    }
+    if (m_framePatches.isEmpty() && !m_oldAtlas.isNull()) {
+        m_doc->setAtlas(m_oldAtlas);
     }
 }
 

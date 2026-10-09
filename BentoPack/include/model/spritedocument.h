@@ -211,6 +211,7 @@ public:
     void setAtlas(const QImage &image);
     void patchAtlas(const QRect &rect, const QImage &patch);
     void clearAtlasRegion(const QRect &rect);
+    void recompositeAtlas();
 
     // Frames
     int frameCount() const { return m_frames.size(); }

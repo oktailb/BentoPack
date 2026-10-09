@@ -513,17 +513,53 @@ SmartMeshResult Triangulator::generateSmartMesh(const QPolygonF &outerPolygon,
                 QRgb centerRgb = image.pixel(x, y);
                 if (qAlpha(centerRgb) < 64) continue;
 
-                auto lum = [&](int px, int py) -> double {
-                    QRgb c = image.pixel(px, py);
-                    return 0.299 * qRed(c) + 0.587 * qGreen(c) + 0.114 * qBlue(c);
-                };
+                double grad = 0.0;
+                if (params.contrastMode == ContrastMode::RgbColorDistance) {
+                    // Multi-channel Euclidean color distance gradient (optimal for pixel art / chromatic ridges)
+                    auto getRgb = [&](int px, int py) -> QRgb {
+                        return image.pixel(px, py);
+                    };
 
-                double gx = (lum(x + 1, y - 1) + 2.0 * lum(x + 1, y) + lum(x + 1, y + 1)) -
-                            (lum(x - 1, y - 1) + 2.0 * lum(x - 1, y) + lum(x - 1, y + 1));
-                double gy = (lum(x - 1, y + 1) + 2.0 * lum(x, y + 1) + lum(x + 1, y + 1)) -
-                            (lum(x - 1, y - 1) + 2.0 * lum(x, y - 1) + lum(x + 1, y - 1));
+                    QRgb c_xp_ym = getRgb(x + 1, y - 1);
+                    QRgb c_xp_y0 = getRgb(x + 1, y);
+                    QRgb c_xp_yp = getRgb(x + 1, y + 1);
 
-                double grad = std::hypot(gx, gy);
+                    QRgb c_xm_ym = getRgb(x - 1, y - 1);
+                    QRgb c_xm_y0 = getRgb(x - 1, y);
+                    QRgb c_xm_yp = getRgb(x - 1, y + 1);
+
+                    double rx = (qRed(c_xp_ym) + 2.0 * qRed(c_xp_y0) + qRed(c_xp_yp)) -
+                                (qRed(c_xm_ym) + 2.0 * qRed(c_xm_y0) + qRed(c_xm_yp));
+                    double ry = (qRed(c_xm_yp) + 2.0 * qRed(getRgb(x, y + 1)) + qRed(c_xp_yp)) -
+                                (qRed(c_xm_ym) + 2.0 * qRed(getRgb(x, y - 1)) + qRed(c_xp_ym));
+
+                    double gx = (qGreen(c_xp_ym) + 2.0 * qGreen(c_xp_y0) + qGreen(c_xp_yp)) -
+                                (qGreen(c_xm_ym) + 2.0 * qGreen(c_xm_y0) + qGreen(c_xm_yp));
+                    double gy = (qGreen(c_xm_yp) + 2.0 * qGreen(getRgb(x, y + 1)) + qGreen(c_xp_yp)) -
+                                (qGreen(c_xm_ym) + 2.0 * qGreen(getRgb(x, y - 1)) + qGreen(c_xp_ym));
+
+                    double bx = (qBlue(c_xp_ym) + 2.0 * qBlue(c_xp_y0) + qBlue(c_xp_yp)) -
+                                (qBlue(c_xm_ym) + 2.0 * qBlue(c_xm_y0) + qBlue(c_xm_yp));
+                    double by = (qBlue(c_xm_yp) + 2.0 * qBlue(getRgb(x, y + 1)) + qBlue(c_xp_yp)) -
+                                (qBlue(c_xm_ym) + 2.0 * qBlue(getRgb(x, y - 1)) + qBlue(c_xp_ym));
+
+                    // Normalize to luminance dynamic range by dividing variance by sqrt(3)
+                    grad = std::sqrt((rx * rx + ry * ry + gx * gx + gy * gy + bx * bx + by * by) / 3.0);
+                } else {
+                    // Classic Sobel on scalar luminance
+                    auto lum = [&](int px, int py) -> double {
+                        QRgb c = image.pixel(px, py);
+                        return 0.299 * qRed(c) + 0.587 * qGreen(c) + 0.114 * qBlue(c);
+                    };
+
+                    double gx = (lum(x + 1, y - 1) + 2.0 * lum(x + 1, y) + lum(x + 1, y + 1)) -
+                                (lum(x - 1, y - 1) + 2.0 * lum(x - 1, y) + lum(x - 1, y + 1));
+                    double gy = (lum(x - 1, y + 1) + 2.0 * lum(x, y + 1) + lum(x + 1, y + 1)) -
+                                (lum(x - 1, y - 1) + 2.0 * lum(x, y - 1) + lum(x + 1, y - 1));
+
+                    grad = std::hypot(gx, gy);
+                }
+
                 if (grad >= threshold) {
                     // Check spacing with existing points
                     bool tooClose = false;

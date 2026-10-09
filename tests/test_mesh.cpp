@@ -75,6 +75,7 @@ private slots:
     void testAtlasPackingDialogPreservesPolygons();
     void testPolygonClippedFrame();
     void testPolygonalRepackEliminatesNeighborArtifacts();
+    void testTightPackingAtlasPatchPreservesOverlappingSprites();
 
     // 9. Modernized Polygon Merger Tests
     void testPolygonMergerTouching();
@@ -930,6 +931,134 @@ void TestMesh::testPolygonalRepackEliminatesNeighborArtifacts()
     QVERIFY(greenPixelCount > 100);
 }
 
+void TestMesh::testTightPackingAtlasPatchPreservesOverlappingSprites()
+{
+    // Simulate tight packing scenario where two sprites have overlapping bounding boxes:
+    // Box 0 (Sprite A): rect(0, 0, 100, 100).
+    // Polygon A is a triangle in the top-left corner: (0,0), (60,0), (0,60).
+    // Filled with Blue in that triangle, transparent elsewhere.
+    //
+    // Box 1 (Sprite B): rect(40, 40, 60, 60).
+    // Polygon B is a square in (50, 50) to (90, 90) relative to atlas:
+    // Local coords in Box 1: (10, 10), (50, 10), (50, 50), (10, 50).
+    // Filled with Red inside that square, transparent elsewhere.
+    // Box 1's rect (40, 40, 60, 60) intersects Box 0's rect (0, 0, 100, 100) on [40..100, 40..100].
+
+    SpriteDocument doc;
+    QImage atlas(200, 200, QImage::Format_ARGB32);
+    atlas.fill(Qt::transparent);
+
+    QPolygonF polyA;
+    polyA << QPointF(0, 0) << QPointF(60, 0) << QPointF(0, 60);
+
+    QPolygonF polyB;
+    polyB << QPointF(10, 10) << QPointF(50, 10) << QPointF(50, 50) << QPointF(10, 50);
+
+    QImage frameA(100, 100, QImage::Format_ARGB32);
+    frameA.fill(Qt::transparent);
+    {
+        QPainter p(&frameA);
+        p.setBrush(Qt::blue);
+        p.setPen(Qt::NoPen);
+        p.drawPolygon(polyA);
+    }
+
+    QImage frameB(60, 60, QImage::Format_ARGB32);
+    frameB.fill(Qt::transparent);
+    {
+        QPainter p(&frameB);
+        p.setBrush(Qt::red);
+        p.setPen(Qt::NoPen);
+        p.drawPolygon(polyB);
+    }
+
+    SpriteBox boxA;
+    boxA.rect = QRect(0, 0, 100, 100);
+    boxA.hasPolygonMesh = true;
+    boxA.polygon = polyA;
+
+    SpriteBox boxB;
+    boxB.rect = QRect(40, 40, 60, 60);
+    boxB.hasPolygonMesh = true;
+    boxB.polygon = polyB;
+
+    QList<QImage> frames = {frameA, frameB};
+    QList<SpriteBox> boxes = {boxA, boxB};
+    doc.setFrames(frames, boxes);
+    doc.setAtlas(atlas);
+    doc.recompositeAtlas();
+
+    // Verify initial red pixels from Sprite B are on the atlas
+    int initialRedCount = 0;
+    for (int y = 0; y < doc.atlas().height(); ++y) {
+        for (int x = 0; x < doc.atlas().width(); ++x) {
+            if (doc.atlas().pixelColor(x, y).red() > 200) {
+                initialRedCount++;
+            }
+        }
+    }
+    QVERIFY(initialRedCount > 100);
+
+    // Edit Sprite A: add a green pixel inside Sprite A's polygon (top-left)
+    QImage editedFrameA = frameA;
+    editedFrameA.setPixelColor(10, 10, QColor(0, 255, 0, 255));
+
+    // Execute EditSpritePixelsCommand which patches the atlas
+    QUndoStack undoStack;
+    auto *cmd = new EditSpritePixelsCommand(&doc, 0, editedFrameA);
+    undoStack.push(cmd);
+
+    // Verify Sprite B's red pixels were NOT clobbered by patchAtlas(boxA.rect, editedFrameA)
+    int afterPatchRedCount = 0;
+    for (int y = 0; y < doc.atlas().height(); ++y) {
+        for (int x = 0; x < doc.atlas().width(); ++x) {
+            if (doc.atlas().pixelColor(x, y).red() > 200) {
+                afterPatchRedCount++;
+            }
+        }
+    }
+    QCOMPARE(afterPatchRedCount, initialRedCount);
+
+    // Test Undo
+    undoStack.undo();
+    int afterUndoRedCount = 0;
+    for (int y = 0; y < doc.atlas().height(); ++y) {
+        for (int x = 0; x < doc.atlas().width(); ++x) {
+            if (doc.atlas().pixelColor(x, y).red() > 200) {
+                afterUndoRedCount++;
+            }
+        }
+    }
+    QCOMPARE(afterUndoRedCount, initialRedCount);
+
+    // Test Project Save and Reopen auto-healing
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    QString err;
+    QVERIFY(ProjectManager::saveProjectToSessionDir(doc, tempDir.path(), 1.0, QPointF(0, 0), &err));
+
+    SpriteDocument loadedDoc;
+    QFile jsonFile(tempDir.path() + QStringLiteral("/project.json"));
+    QVERIFY(jsonFile.open(QIODevice::ReadOnly));
+    QByteArray data = jsonFile.readAll();
+    jsonFile.close();
+
+    QVERIFY(ProjectManager::deserializeJsonToDocument(data, loadedDoc, tempDir.path(), nullptr, nullptr, &err));
+
+    // Loaded document's frame B must still have red pixels intact, not truncated!
+    int loadedRedCount = 0;
+    for (int y = 0; y < loadedDoc.frame(1).height(); ++y) {
+        for (int x = 0; x < loadedDoc.frame(1).width(); ++x) {
+            if (loadedDoc.frame(1).pixelColor(x, y).red() > 200) {
+                loadedRedCount++;
+            }
+        }
+    }
+    // WebP quality 99 compression may quantize a tiny handful of boundary pixels (< 0.5%)
+    QVERIFY(std::abs(loadedRedCount - initialRedCount) <= 10);
+    QVERIFY(loadedRedCount > 1500);
+}
+
 void TestMesh::testPolygonMergerTouching()
 {
     // Two squares touching along x=20
@@ -1142,7 +1271,7 @@ void TestMesh::testCDTTriangulationWithInteriorVertices()
 
 void TestMesh::testSmartMeshGenerationSteinerAndContrast()
 {
-    // Create an image with an internal high-contrast feature ridge
+    // 1. Create an image with an internal high-contrast feature ridge (tested with default RGB color distance)
     QImage img(64, 64, QImage::Format_ARGB32_Premultiplied);
     img.fill(Qt::transparent);
     {
@@ -1161,6 +1290,7 @@ void TestMesh::testSmartMeshGenerationSteinerAndContrast()
     params.steinerDensity = 40;
     params.contrastSensitivity = 30; // Sensitive to internal edge
     params.minAngleDeg = 25.0;
+    params.contrastMode = ContrastMode::RgbColorDistance; // Default mode
 
     SmartMeshResult result = Triangulator::generateSmartMesh(outer, img, params);
 
@@ -1174,6 +1304,32 @@ void TestMesh::testSmartMeshGenerationSteinerAndContrast()
     for (int idx : result.triangles) {
         QVERIFY(idx >= 0 && idx < result.vertices.size());
     }
+
+    // 2. Also test with SobelLuminance mode
+    params.contrastMode = ContrastMode::SobelLuminance;
+    SmartMeshResult resultSobel = Triangulator::generateSmartMesh(outer, img, params);
+    QCOMPARE(resultSobel.outerPolygon, outer);
+    QVERIFY(resultSobel.vertices.size() > outer.size());
+    QVERIFY(resultSobel.interiorVertexCount > 0);
+    QVERIFY(!resultSobel.triangles.isEmpty());
+
+    // 3. Test chromatic-only contrast where luminance is nearly identical
+    // Red (255, 0, 0) -> lum ~ 76.2 vs (0, 110, 100) -> lum ~ 76.0
+    QImage chromaImg(64, 64, QImage::Format_ARGB32_Premultiplied);
+    chromaImg.fill(Qt::transparent);
+    {
+        QPainter p(&chromaImg);
+        p.fillRect(4, 4, 56, 56, QColor(0, 110, 100));
+        p.setPen(QPen(QColor(255, 0, 0), 3));
+        p.drawLine(10, 10, 54, 54);
+    }
+    SmartMeshParams chromaParams;
+    chromaParams.steinerDensity = 0; // Pure contrast detection
+    chromaParams.contrastSensitivity = 60;
+    chromaParams.contrastMode = ContrastMode::RgbColorDistance;
+
+    SmartMeshResult chromaResult = Triangulator::generateSmartMesh(outer, chromaImg, chromaParams);
+    QVERIFY(chromaResult.interiorVertexCount > 0);
 }
 
 #include <QApplication>

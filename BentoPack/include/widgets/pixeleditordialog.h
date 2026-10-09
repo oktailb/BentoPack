@@ -91,6 +91,7 @@ public:
     QCheckBox* allowOutsidePolygonCheckBox() const { return m_allowOutsidePolyCheck; }
     bool isEditingOutsidePolygonAllowed() const;
     QCheckBox* applyToAllFramesCheckBox() const { return m_applyToAllFramesCheck; }
+    QCheckBox* meshApplyAllFramesCheckBox() const { return m_meshApplyAllFramesCheck; }
     bool isApplyToAllFramesEnabled() const { return m_applyToAllFramesCheck && m_applyToAllFramesCheck->isChecked(); }
     void setApplyToAllFrames(bool enabled);
     QToolButton* filtersButton() const { return m_btnFilters; }
@@ -104,6 +105,8 @@ public:
     QMap<int, QPolygonF> sessionModifiedPolygons() const { return m_sessionModifiedPolygons; }
     QMap<int, QList<QPointF>> sessionModifiedVertices() const { return m_sessionModifiedVertices; }
     QMap<int, QList<int>> sessionModifiedTriangles() const { return m_sessionModifiedTriangles; }
+    QPushButton* generateSmartMeshButton() const { return m_btnGenerateSmartMesh; }
+    QPushButton* resetMeshToOutlineButton() const { return m_btnResetToOutline; }
     bool applyChanges();
     bool openAtlasPackingDialog(bool nonInteractive = false);
     bool performAtlasRepack(const QMap<int, QImage> &modifiedFrames, const QMap<int, QPolygonF> &modifiedPolygons);
@@ -112,6 +115,8 @@ public slots:
     void onPreviousFrame();
     void onNextFrame();
     void loadFrame(int index);
+    void onGenerateSmartMeshRequested();
+    void onResetMeshToOutlineRequested();
 
 private slots:
     void onToolButtonClicked(int id);
@@ -157,8 +162,6 @@ private slots:
 
     // Smart Mesh & CDT Slots (M19)
     void onMeshEditModeChanged(int id);
-    void onGenerateSmartMeshRequested();
-    void onResetMeshToOutlineRequested();
     void onDeleteSelectedVertexRequested();
     void onCanvasMeshDataChanged(const QPolygonF &poly, const QList<QPointF> &verts, const QList<int> &tris);
     void onCanvasSelectedVertexChanged(int index, bool isInterior);
@@ -264,7 +267,9 @@ private:
     QRadioButton*           m_radioMeshAddInterior = nullptr;
     QRadioButton*           m_radioMeshAddExterior = nullptr;
     QRadioButton*           m_radioMeshDelete = nullptr;
+    QRadioButton*           m_radioMeshCutLine = nullptr;
     QPushButton*            m_btnDeleteSelectedVertex = nullptr;
+    QComboBox*              m_comboContrastMode = nullptr;
     QSlider*                m_sliderSteinerDensity = nullptr;
     QLabel*                 m_lblSteinerDensityVal = nullptr;
     QSlider*                m_sliderMinAngle = nullptr;
@@ -273,6 +278,7 @@ private:
     QLabel*                 m_lblContrastSensitivityVal = nullptr;
     QPushButton*            m_btnGenerateSmartMesh = nullptr;
     QPushButton*            m_btnResetToOutline = nullptr;
+    QCheckBox*              m_meshApplyAllFramesCheck = nullptr;
     QLabel*                 m_lblMeshBoundaryVerts = nullptr;
     QLabel*                 m_lblMeshInteriorVerts = nullptr;
     QLabel*                 m_lblMeshTriangles = nullptr;

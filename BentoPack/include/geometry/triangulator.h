@@ -26,12 +26,21 @@
 namespace BentoPackGeometry {
 
 /**
+ * @brief Mode of internal feature ridge detection (M19).
+ */
+enum class ContrastMode {
+    RgbColorDistance = 0, ///< Euclidean RGB color distance / chromatic gradient (default for pixel art)
+    SobelLuminance = 1    ///< Classical Sobel operator on scalar luminance
+};
+
+/**
  * @brief Parameters for intelligent polygonal mesh generation (M19).
  */
 struct SmartMeshParams {
     int             steinerDensity = 30;          ///< 0 to 100: density of internal Steiner points (0 = off)
     double          minAngleDeg = 25.0;           ///< 15° to 35°: minimum angle target for quality triangles
-    int             contrastSensitivity = 50;    ///< 0 to 100: Sobel edge detection sensitivity for internal feature ridges
+    int             contrastSensitivity = 50;    ///< 0 to 100: edge detection sensitivity for internal feature ridges
+    ContrastMode    contrastMode = ContrastMode::RgbColorDistance; ///< Color distance (default) or Sobel Luminance
     QList<QPointF>  userInteriorPoints;          ///< Manually placed interior points
 };
 

@@ -90,6 +90,7 @@ private slots:
 
     // 10. Intelligent Polygon Mesh Interactive Editing (M19)
     void testPixelEditorPolygonMeshInteractiveEditingAndUndo();
+    void testSmartMeshGenerationApplyToAllAnimationFrames();
 };
 
 void TestPixelEditor::initTestCase()
@@ -2427,14 +2428,44 @@ void TestPixelEditor::testPixelEditorPolygonMeshInteractiveEditingAndUndo()
     canvas->redo();
     QCOMPARE(canvas->meshVertices().size(), 5);
 
+    // Test CutLine (Knife) tool mode
+    canvas->setPolygonEditMode(PolygonEditMode::CutLine);
+    QCOMPARE(canvas->polygonEditMode(), PolygonEditMode::CutLine);
+
+    // Simulate drawing a cut line across the mesh from (6, 16) to (26, 16)
+    QPoint cutStartWidget(static_cast<int>((6 + imgOffset.x()) * zoom),
+                          static_cast<int>((16 + imgOffset.y()) * zoom));
+    QPoint cutEndWidget(static_cast<int>((26 + imgOffset.x()) * zoom),
+                        static_cast<int>((16 + imgOffset.y()) * zoom));
+
+    QMouseEvent cutPress(QEvent::MouseButtonPress, QPointF(cutStartWidget), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(canvas, &cutPress);
+    QMouseEvent cutMove(QEvent::MouseMove, QPointF(cutEndWidget), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(canvas, &cutMove);
+    QMouseEvent cutRelease(QEvent::MouseButtonRelease, QPointF(cutEndWidget), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(canvas, &cutRelease);
+
+    // Cut line should have added additional vertices along the cut
+    int vertexCountAfterCut = canvas->meshVertices().size();
+    QVERIFY(vertexCountAfterCut > 5);
+    QVERIFY(!canvas->meshTriangles().isEmpty());
+
+    // Undo the cut line
+    canvas->undo();
+    QCOMPARE(canvas->meshVertices().size(), 5);
+
+    // Redo the cut line
+    canvas->redo();
+    QCOMPARE(canvas->meshVertices().size(), vertexCountAfterCut);
+
     // Apply changes to document
     bool ok = dlg.applyChanges();
     QVERIFY(ok);
 
-    // Document box must have 5 vertices and valid triangles
-    QCOMPARE(doc.box(0).vertices.size(), 5);
+    // Document box must have the vertices and valid triangles
+    QCOMPARE(doc.box(0).vertices.size(), vertexCountAfterCut);
     QVERIFY(!doc.box(0).triangles.isEmpty());
-    QCOMPARE(doc.box(0).vertices.last(), QPointF(16, 16));
+    QVERIFY(doc.box(0).vertices.contains(QPointF(16, 16)));
 
     // Document undo stack should allow undoing the EditSpritePixelsCommand
     QVERIFY(docStack.canUndo());
@@ -2443,7 +2474,92 @@ void TestPixelEditor::testPixelEditorPolygonMeshInteractiveEditingAndUndo()
 
     // Document redo
     docStack.redo();
-    QCOMPARE(doc.box(0).vertices.size(), 5);
+    QCOMPARE(doc.box(0).vertices.size(), vertexCountAfterCut);
+}
+
+void TestPixelEditor::testSmartMeshGenerationApplyToAllAnimationFrames()
+{
+    SpriteDocument doc;
+    QImage atlas(100, 100, QImage::Format_ARGB32);
+    atlas.fill(Qt::transparent);
+
+    // Frame 0: 32x32 square
+    QImage frame0(32, 32, QImage::Format_ARGB32);
+    frame0.fill(Qt::transparent);
+    frame0.setPixelColor(16, 16, Qt::black);
+    for (int y = 4; y < 28; ++y) {
+        for (int x = 4; x < 28; ++x) {
+            frame0.setPixelColor(x, y, (x < 16) ? Qt::blue : Qt::cyan);
+        }
+    }
+
+    // Frame 1: 32x32 square
+    QImage frame1(32, 32, QImage::Format_ARGB32);
+    frame1.fill(Qt::transparent);
+    for (int y = 4; y < 28; ++y) {
+        for (int x = 4; x < 28; ++x) {
+            frame1.setPixelColor(x, y, (y < 16) ? Qt::red : Qt::yellow);
+        }
+    }
+
+    QPolygonF poly;
+    poly << QPointF(4, 4) << QPointF(28, 4) << QPointF(28, 28) << QPointF(4, 28);
+
+    SpriteBox box0;
+    box0.rect = QRect(0, 0, 32, 32);
+    box0.hasPolygonMesh = true;
+    box0.polygon = poly;
+    box0.vertices = poly.toList();
+    box0.triangles = BentoPackGeometry::Triangulator::triangulate(poly);
+
+    SpriteBox box1;
+    box1.rect = QRect(40, 0, 32, 32);
+    box1.hasPolygonMesh = true;
+    box1.polygon = poly;
+    box1.vertices = poly.toList();
+    box1.triangles = BentoPackGeometry::Triangulator::triangulate(poly);
+
+    doc.setFrames({frame0, frame1}, {box0, box1});
+    doc.setAtlas(atlas);
+    doc.setAnimation(QStringLiteral("run"), {0, 1}, 10, true);
+
+    QUndoStack docStack;
+    PixelEditorDialog dlg(&doc, &docStack, 0);
+
+    // Verify checkbox synchronization between header bar and contextual mesh panel
+    QVERIFY(dlg.applyToAllFramesCheckBox() != nullptr);
+    QVERIFY(dlg.meshApplyAllFramesCheckBox() != nullptr);
+    QVERIFY(!dlg.isApplyToAllFramesEnabled());
+    QVERIFY(!dlg.meshApplyAllFramesCheckBox()->isChecked());
+
+    // Toggle contextual mesh checkbox -> should toggle main header checkbox
+    dlg.meshApplyAllFramesCheckBox()->setChecked(true);
+    QVERIFY(dlg.isApplyToAllFramesEnabled());
+    QVERIFY(dlg.applyToAllFramesCheckBox()->isChecked());
+
+    // Trigger CDT smart mesh generation on current frame (frame 0) with all frames enabled
+    dlg.onGenerateSmartMeshRequested();
+
+    // Verify current frame has CDT interior points
+    QVERIFY(dlg.canvas()->meshVertices().size() > 4);
+    QVERIFY(dlg.sessionModifiedVertices().contains(0));
+    QVERIFY(dlg.sessionModifiedVertices().value(0).size() > 4);
+
+    // Verify frame 1 (the other frame of "run" animation) also got CDT smart mesh generated!
+    QVERIFY(dlg.sessionModifiedVertices().contains(1));
+    QVERIFY(dlg.sessionModifiedVertices().value(1).size() > 4);
+    QVERIFY(!dlg.sessionModifiedTriangles().value(1).isEmpty());
+
+    // Test Reset Mesh to Outline with apply to all frames
+    dlg.onResetMeshToOutlineRequested();
+
+    // Frame 0 and Frame 1 should both be reset to 4 vertices (outline only)
+    QCOMPARE(dlg.canvas()->meshVertices().size(), 4);
+    QCOMPARE(dlg.sessionModifiedVertices().value(0).size(), 4);
+    QCOMPARE(dlg.sessionModifiedVertices().value(1).size(), 4);
+
+    // Apply changes to document
+    QVERIFY(dlg.applyChanges());
 }
 
 int main(int argc, char *argv[])

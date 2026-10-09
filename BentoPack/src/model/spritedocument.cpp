@@ -66,10 +66,81 @@ void SpriteDocument::patchAtlas(const QRect &rect, const QImage &patch)
         m_atlas = m_atlas.convertToFormat(QImage::Format_ARGB32);
     }
 
-    QPainter p(&m_atlas);
-    p.setCompositionMode(QPainter::CompositionMode_Source);
-    p.drawImage(rect.topLeft(), patch);
-    p.end();
+    // Determine target box and check if other boxes overlap rect (tight polygon packing / nested atlas)
+    int targetBoxIndex = -1;
+    for (int i = 0; i < m_boxes.size(); ++i) {
+        if (m_boxes[i].rect == rect) {
+            targetBoxIndex = i;
+            break;
+        }
+    }
+
+    QList<int> overlappingIndices;
+    for (int i = 0; i < m_boxes.size(); ++i) {
+        if (i != targetBoxIndex && !m_boxes[i].rect.isEmpty() && m_boxes[i].rect.intersects(rect)) {
+            overlappingIndices.append(i);
+        }
+    }
+
+    if (overlappingIndices.isEmpty()) {
+        // Standard non-overlapping box: direct fast patch
+        QPainter p(&m_atlas);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+        p.drawImage(rect.topLeft(), patch);
+        p.end();
+    } else {
+        // Overlapping bounding boxes:
+        // 1. Clip target image to its polygon if present so transparent bounding box margins don't clobber neighbor sprites
+        QImage targetImg = patch;
+        if (targetBoxIndex >= 0 && targetBoxIndex < m_boxes.size()) {
+            const SpriteBox &targetBox = m_boxes[targetBoxIndex];
+            if (targetBox.hasPolygonMesh && targetBox.polygon.size() >= 3) {
+                QImage mask(targetImg.size(), QImage::Format_ARGB32_Premultiplied);
+                mask.fill(Qt::transparent);
+                {
+                    QPainter mp(&mask);
+                    mp.setRenderHint(QPainter::Antialiasing, false);
+                    mp.setBrush(Qt::white);
+                    mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+                    mp.drawPolygon(targetBox.polygon);
+                }
+                QImage cleanTarget = targetImg.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+                {
+                    QPainter p(&cleanTarget);
+                    p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                    p.drawImage(0, 0, mask);
+                }
+                targetImg = cleanTarget;
+            }
+        }
+
+        // 2. Clear rect on atlas
+        {
+            QPainter p(&m_atlas);
+            p.setCompositionMode(QPainter::CompositionMode_Clear);
+            p.fillRect(rect.intersected(m_atlas.rect()), Qt::transparent);
+        }
+
+        // 3. Redraw overlapping neighbor sprites and target sprite with SourceOver
+        {
+            QPainter p(&m_atlas);
+            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+            // Redraw overlapping neighbor sprites
+            for (int ovIdx : overlappingIndices) {
+                if (ovIdx >= 0 && ovIdx < m_frames.size()) {
+                    QImage ovImg = polygonClippedFrame(ovIdx);
+                    if (!ovImg.isNull()) {
+                        p.drawImage(m_boxes[ovIdx].rect.topLeft(), ovImg);
+                    }
+                }
+            }
+
+            // Draw target sprite
+            p.drawImage(rect.topLeft(), targetImg);
+            p.end();
+        }
+    }
 
     emit atlasRegionChanged(rect);
     emit atlasChanged();
@@ -86,9 +157,44 @@ void SpriteDocument::clearAtlasRegion(const QRect &rect)
     QPainter p(&m_atlas);
     p.setCompositionMode(QPainter::CompositionMode_Clear);
     p.fillRect(rect.intersected(m_atlas.rect()), Qt::transparent);
+
+    // If other boxes intersect rect, restore their visible pixels
+    p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    for (int i = 0; i < m_boxes.size(); ++i) {
+        if (m_boxes[i].rect != rect && !m_boxes[i].rect.isEmpty() && m_boxes[i].rect.intersects(rect)) {
+            QImage img = polygonClippedFrame(i);
+            if (!img.isNull()) {
+                p.drawImage(m_boxes[i].rect.topLeft(), img);
+            }
+        }
+    }
     p.end();
 
     emit atlasRegionChanged(rect);
+    emit atlasChanged();
+}
+
+void SpriteDocument::recompositeAtlas()
+{
+    if (m_atlas.isNull() || m_frames.isEmpty()) return;
+
+    QImage newAtlas(m_atlas.size(), QImage::Format_ARGB32_Premultiplied);
+    newAtlas.fill(Qt::transparent);
+
+    QPainter p(&newAtlas);
+    p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+    for (int i = 0; i < m_frames.size(); ++i) {
+        if (i < m_boxes.size() && !m_boxes[i].rect.isEmpty()) {
+            QImage img = polygonClippedFrame(i);
+            if (!img.isNull()) {
+                p.drawImage(m_boxes[i].rect.topLeft(), img);
+            }
+        }
+    }
+    p.end();
+
+    m_atlas = newAtlas.convertToFormat(QImage::Format_ARGB32);
     emit atlasChanged();
 }
 

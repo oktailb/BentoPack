@@ -307,13 +307,19 @@ La triangulation historique par Ear-Clipping ([`triangulator.cpp`](file:///Bento
    - **Ajouter point intérieur (➕) :** Insertion interactive de points de Steiner / points de contrôle internes avec ré-indexation et re-triangulation CDT instantanée.
    - **Ajouter point contour (🔲) :** Fractionnement d'arête de contour au clic ou via Maj+Clic.
    - **Supprimer point (✖ / Suppr) :** Suppression d'un sommet intérieur ou contour (avec garde-fou $>3$ points sur le contour) et re-triangulation immédiate.
-   - Rendu haute précision : contour cyan/bleu, arêtes CDT fil de fer, poignées carrées (contour) et circulaires `#00E5FF` (intérieur), halos luisants de sélection et survol.
-4. **Triangulation CDT & Détection Sobel :**
+   - **Trait de coupe / Couteau (✂️) :** Tracé interactif d'une ligne de coupe (visée laser dynamique) insérant des sommets aux intersections et subdivisant les triangles CDT en un geste pour marquer les pliures et articulations.
+   - Rendu haute précision : contour cyan/bleu, arêtes CDT fil de fer, poignées carrées (contour) et circulaires `#00E5FF` (intérieur), visée laser rouge/orange pour le couteau, halos luisants de sélection et survol.
+4. **Triangulation CDT & Détection de Crêtes (RGB + Sobel) :**
    - `Triangulator::triangulateCDT()` : Triangulation incrémentale de Bowyer-Watson avec flipping d'arêtes de contrainte et élagage des triangles hors frontière.
-   - `Triangulator::generateSmartMesh()` : Détection de crêtes internes par filtre de luminance Sobel et raffinement géométrique de Delaunay.
+   - `Triangulator::generateSmartMesh()` : Détection de crêtes internes paramétrable avec deux modes :
+     - **Distance de Couleur RGB** (par défaut) : Gradient euclidien multi-canal adapté au pixel art, détectant les transitions chromatiques même à luminance égale.
+     - **Luminance Sobel classique** : Opérateur Sobel sur la luminance scalaire.
+     - Raffinement géométrique de Delaunay (points de Steiner et angle garanti).
 5. **Persistance & Undo/Redo Total :**
    - `PixelCanvasUndoCommand` et `EditSpritePixelsCommand` synchronisent `vertices` et `triangles` au sein de `SpriteBox` et `SpriteDocument` avec support Undo/Redo complet.
    - Export automatique sans modification supplémentaire via les extracteurs Unity, Godot, Unreal et JSON.
+
+> 📝 **Note Ergonomie & Rendu UI (Windows) :** Remplacement prévu des glyphes / emojis UTF-8 des outils (qui peuvent mal s'afficher sous Windows selon les polices de rendu de caractères, à l'instar des drapeaux régionaux) par de vraies icônes vectorielles ou pixmaps stables (idéalement dessinées directement avec BentoPack lui-même !).
 
 ---
 
