@@ -28,6 +28,7 @@
 #include <QPointF>
 #include <QPainter>
 #include "bentopackcore_export.h"
+#include "packer/multiatlaspacker.h"
 
 enum class PivotPreset {
     TopLeft,
@@ -309,9 +310,15 @@ public:
     void removeSkinProfile(const QString &profileId);
     SkinProfile skinProfile(const QString &profileId) const;
     bool hasSkinProfile(const QString &profileId) const { return m_skinProfiles.contains(profileId); }
-
-    // Animation Variant Baking (M17)
     void bakeAnimationVariants(const QStringList &profileIds = QStringList());
+
+    // Material Maps / 2D Lighting (M21)
+    bool hasAuxiliaryMap(MaterialMapType type) const;
+    bool hasAnyAuxiliaryMaps() const;
+    QList<QImage> auxiliaryFrames(MaterialMapType type) const;
+    void setAuxiliaryFrames(MaterialMapType type, const QList<QImage> &frames);
+    QImage compositeFrameForMap(int frameIndex, MaterialMapType mapType) const;
+    QList<QImage> framesForMap(MaterialMapType mapType) const;
 
 signals:
     void atlasChanged();
@@ -323,21 +330,24 @@ signals:
     void documentReset();
     void layersChanged();
     void skinProfilesChanged();
+    void auxiliaryMapsChanged();
 
 private:
     void recalculateMaxFrameDimensions();
 
-    QImage                          m_atlas;
-    QList<QImage>                   m_frames;
-    QList<SpriteBox>                m_boxes;
-    QList<int>                      m_selectedFrameIndices;
-    QMap<QString, SpriteAnimation>  m_animations;
-    QList<SpriteLayer>              m_layers;
-    QMap<int, QList<SpriteCel>>     m_frameCels;
-    QMap<QString, SkinProfile>      m_skinProfiles;
-    QString                         m_filePath;
-    int                             m_maxFrameWidth = 0;
-    int                             m_maxFrameHeight = 0;
+    QImage                              m_atlas;
+    QList<QImage>                       m_frames;
+    QList<SpriteBox>                    m_boxes;
+    QList<int>                          m_selectedFrameIndices;
+    QMap<QString, SpriteAnimation>      m_animations;
+    QList<SpriteLayer>                  m_layers;
+    QMap<int, QList<SpriteCel>>         m_frameCels;
+    QMap<QString, SkinProfile>          m_skinProfiles;
+    QMap<MaterialMapType, QList<QImage>> m_auxiliaryFrames;
+    QString                             m_filePath;
+    int                                 m_maxFrameWidth = 0;
+    int                                 m_maxFrameHeight = 0;
 };
 
 #endif // SPRITEDOCUMENT_H
+

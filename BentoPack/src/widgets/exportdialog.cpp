@@ -281,6 +281,10 @@ ExportOptions ExportDialog::exportOptions() const
     opts.vramOptions.zstdSupercompression = ui->chkZstd->isChecked();
     opts.vramOptions.zstdLevel = ui->spinZstdLevel->value();
 
+    // 2D Lighting / Material maps (M21)
+    opts.exportMaterialMaps = ui->chkExportMaterialMaps->isChecked();
+    opts.normalMapYFlip = ui->chkNormalMapYFlip->isChecked();
+
     return opts;
 }
 
@@ -371,6 +375,8 @@ void ExportDialog::updateContextualVisibility()
     // Show/hide contextual groups
     ui->grpGeometry->setVisible(isAtlas);
     ui->grpVram->setVisible(isAtlas);
+    bool hasAux = m_document && m_document->hasAnyAuxiliaryMaps();
+    ui->grpLighting->setVisible(isAtlas && hasAux);
     ui->grpStats->setVisible(isAtlas);
     ui->grpGifOptions->setVisible(isGif);
     ui->grpAsepriteOptions->setVisible(isAseprite);

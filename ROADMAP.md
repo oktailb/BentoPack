@@ -87,7 +87,17 @@ Le code source, les binaires multi-plateformes et les trois packages d'addons mo
 
 ---
 
-## 💡 Priorité 2 (P1) : M21 — Éclairage 2D & Multi-Atlas Synchronisé (Normal, Emissive, Specular)
+## 💡 Priorité 2 (P1) : M21 — Éclairage 2D & Multi-Atlas Synchronisé (Normal, Emissive, Specular) — [x] TERMINÉ / LIVRÉ
+
+> [!NOTE]
+> **Implémentation Livrée (100% CTest Passed) :**
+> - Détection et isolation automatique des calques Aseprite suffixés `_n`, `_normal`, `_e`, `_emissive`, `_s`, `_specular`.
+> - Zéro pollution de la diffuse albedo lors du rendu des frames.
+> - Algorithme Maître-Esclave (`MultiAtlasPacker`) appliquant strictement les mêmes coordonnées UV, dimensions, paddings et extrusions aux atlas esclaves.
+> - Couleurs neutres conformes aux standards GPU (Bleu tangent `128,128,255,0` pour les normales, transparent pour l'émissif et spéculaire).
+> - Option Y-Flip (inversion du canal vert) pour compatibilité totale OpenGL (Godot) vs DirectX (Unity/Unreal).
+> - Liaison native Godot 4 `CanvasTexture`, Unity 6 URP 2D et Unreal Paper2D.
+> - Intégration complète dans `ExportDialog` et validation par tests unitaires dédiés.
 
 ### 📌 Contexte & Problématique Métier
 La 2D contemporaine (Unity URP 2D, Godot 4 `CanvasTexture`, Unreal Paper2D) s'appuie massivement sur l'éclairage dynamique (point lights, torches, ombres en temps réel).

@@ -15,6 +15,7 @@
  */
 
 #include "asepriteextractor.h"
+#include "packer/multiatlaspacker.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -526,9 +527,11 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
                 sc.image = celImg;
                 docCels.append(sc);
 
-                // Draw to composite frameCanvas if layer is visible
+                // Draw to composite frameCanvas if layer is visible AND not an auxiliary material map
                 bool lyrVis = (cel.layerIndex < layers.size()) ? layers.at(cel.layerIndex).isVisible() : true;
-                if (lyrVis) {
+                QString lyrName = (cel.layerIndex < layers.size()) ? layers.at(cel.layerIndex).name : QString();
+                bool isAuxMap = (MultiAtlasPacker::detectMapType(lyrName) != MaterialMapType::Albedo);
+                if (lyrVis && !isAuxMap) {
                     if (cel.opacity < 255) {
                         p.setOpacity(cel.opacity / 255.0);
                     } else {
@@ -547,6 +550,18 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
         outDoc.addFrame(frameCanvas, box);
 
         setProgress(50 + (f * 30 / qMax(1, totalCompositeFrames)));
+    }
+
+    // 3a. Populate auxiliary material map frames if auxiliary layers were detected (M21)
+    for (MaterialMapType mt : {MaterialMapType::Normal, MaterialMapType::Emissive, MaterialMapType::Specular}) {
+        if (outDoc.hasAuxiliaryMap(mt)) {
+            QList<QImage> auxList;
+            auxList.reserve(totalCompositeFrames);
+            for (int f = 0; f < totalCompositeFrames; ++f) {
+                auxList.append(outDoc.compositeFrameForMap(f, mt));
+            }
+            outDoc.setAuxiliaryFrames(mt, auxList);
+        }
     }
 
     // 3b. Detect candidate skin / variant profiles from layer naming conventions

@@ -35,6 +35,7 @@ void SpriteDocument::clear()
     m_layers.clear();
     m_frameCels.clear();
     m_skinProfiles.clear();
+    m_auxiliaryFrames.clear();
     m_filePath.clear();
     m_maxFrameWidth = 0;
     m_maxFrameHeight = 0;
@@ -1138,8 +1139,14 @@ QImage SpriteDocument::compositeFrame(int frameIndex, const QStringList &activeL
             if (!activeLayerIds.contains(lyr.id) && !activeLayerIds.contains(lyr.name)) {
                 continue;
             }
-        } else if (!lyr.visible) {
-            continue;
+        } else {
+            // M21: Exclude auxiliary maps (_n, _e, _s) from diffuse albedo compositing
+            if (MultiAtlasPacker::detectMapType(lyr.name) != MaterialMapType::Albedo) {
+                continue;
+            }
+            if (!lyr.visible) {
+                continue;
+            }
         }
 
         // Find cel for this layer
@@ -1258,5 +1265,122 @@ void SpriteDocument::bakeAnimationVariants(const QStringList &profileIds)
             setAnimation(variantAnim);
         }
     }
+}
+
+bool SpriteDocument::hasAuxiliaryMap(MaterialMapType type) const
+{
+    if (type == MaterialMapType::Albedo) {
+        return !m_frames.isEmpty();
+    }
+    if (m_auxiliaryFrames.contains(type) && !m_auxiliaryFrames.value(type).isEmpty()) {
+        return true;
+    }
+    for (const auto &lyr : m_layers) {
+        if (MultiAtlasPacker::detectMapType(lyr.name) == type) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool SpriteDocument::hasAnyAuxiliaryMaps() const
+{
+    return hasAuxiliaryMap(MaterialMapType::Normal)
+        || hasAuxiliaryMap(MaterialMapType::Emissive)
+        || hasAuxiliaryMap(MaterialMapType::Specular);
+}
+
+QList<QImage> SpriteDocument::auxiliaryFrames(MaterialMapType type) const
+{
+    return m_auxiliaryFrames.value(type);
+}
+
+void SpriteDocument::setAuxiliaryFrames(MaterialMapType type, const QList<QImage> &frames)
+{
+    m_auxiliaryFrames[type] = frames;
+    emit auxiliaryMapsChanged();
+}
+
+QImage SpriteDocument::compositeFrameForMap(int frameIndex, MaterialMapType mapType) const
+{
+    if (mapType == MaterialMapType::Albedo) {
+        return compositeFrame(frameIndex);
+    }
+    if (frameIndex < 0 || frameIndex >= m_frames.size()) {
+        return QImage();
+    }
+
+    if (m_auxiliaryFrames.contains(mapType)) {
+        const auto &auxList = m_auxiliaryFrames.value(mapType);
+        if (frameIndex < auxList.size() && !auxList.at(frameIndex).isNull()) {
+            return auxList.at(frameIndex);
+        }
+    }
+
+    QSize sz = m_frames.at(frameIndex).size();
+    if (sz.isEmpty() && frameIndex < m_boxes.size()) {
+        sz = m_boxes.at(frameIndex).rect.size();
+    }
+    if (sz.isEmpty()) sz = QSize(32, 32);
+
+    QImage composite(sz, QImage::Format_ARGB32_Premultiplied);
+    composite.fill(MultiAtlasPacker::neutralColor(mapType));
+
+    if (m_layers.isEmpty() || !m_frameCels.contains(frameIndex)) {
+        return composite.convertToFormat(QImage::Format_ARGB32);
+    }
+
+    QPainter painter(&composite);
+    QList<int> sortedLayerIndices;
+    sortedLayerIndices.reserve(m_layers.size());
+    for (int i = 0; i < m_layers.size(); ++i) {
+        sortedLayerIndices.append(i);
+    }
+    std::stable_sort(sortedLayerIndices.begin(), sortedLayerIndices.end(), [this](int a, int b) {
+        return m_layers[a].zOrder < m_layers[b].zOrder;
+    });
+
+    const QList<SpriteCel> &cels = m_frameCels.value(frameIndex);
+    for (int lIdx : sortedLayerIndices) {
+        const SpriteLayer &lyr = m_layers.at(lIdx);
+        if (MultiAtlasPacker::detectMapType(lyr.name) != mapType) {
+            continue;
+        }
+
+        SpriteCel currentCel;
+        bool found = false;
+        for (const auto &c : cels) {
+            if (c.layerIndex == lIdx || (!lyr.id.isEmpty() && c.layerId == lyr.id)) {
+                currentCel = c;
+                found = true;
+                break;
+            }
+        }
+        if (!found || currentCel.isNull()) continue;
+
+        painter.drawImage(QPoint(currentCel.x, currentCel.y), currentCel.image);
+    }
+    painter.end();
+
+    return composite.convertToFormat(QImage::Format_ARGB32);
+}
+
+QList<QImage> SpriteDocument::framesForMap(MaterialMapType mapType) const
+{
+    if (mapType == MaterialMapType::Albedo) {
+        return m_frames;
+    }
+    if (!hasAuxiliaryMap(mapType)) {
+        return QList<QImage>();
+    }
+    if (m_auxiliaryFrames.contains(mapType) && !m_auxiliaryFrames.value(mapType).isEmpty()) {
+        return m_auxiliaryFrames.value(mapType);
+    }
+    QList<QImage> result;
+    result.reserve(m_frames.size());
+    for (int i = 0; i < m_frames.size(); ++i) {
+        result.append(compositeFrameForMap(i, mapType));
+    }
+    return result;
 }
 

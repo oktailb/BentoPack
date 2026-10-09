@@ -458,6 +458,44 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="grpLighting">
+     <property name="title">
+      <string>2D Lighting &amp; Multi-Atlas Maps (M21)</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayoutLighting">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="chkExportMaterialMaps">
+        <property name="text">
+         <string>Export Synchronized Material Atlases (Normal, Emissive, Specular)</string>
+        </property>
+        <property name="toolTip">
+         <string>Generates synchronized slave atlases (_n, _e, _s) matching diffuse layout</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkNormalMapYFlip">
+        <property name="text">
+         <string>Invert Normal Map Green Channel (Y-Flip for DirectX / Unreal)</string>
+        </property>
+        <property name="toolTip">
+         <string>Inverts normal map green channel (OpenGL/Godot Y+ vs DirectX/Unity/Unreal Y-)</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="grpStats">
      <property name="title">
       <string>Packing &amp; VRAM Statistics (Live Estimation)</string>

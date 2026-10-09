@@ -16,8 +16,11 @@
 #include "godotextractor.h"
 #include "image/spritedetector.h"
 #include "jsonextractor.h"
+#include "unityextractor.h"
+#include "unrealextractor.h"
 #include "libgdxextractor.h"
 #include "model/spritedocument.h"
+#include "packer/multiatlaspacker.h"
 #include "project/projectmanager.h"
 #include "spriteextractor.h"
 
@@ -27,6 +30,7 @@ class TestExtractors : public QObject {
 
 private slots:
   void initTestCase();
+  void testMultiAtlasLightingAndMaterials();
   void testExtractorRegistryBasics();
   void testSpriteExtractorCapabilities();
   void testSpriteExtractorReadPng();
@@ -73,6 +77,146 @@ void TestExtractors::initTestCase() {
   QString binPlugins = QDir(QCoreApplication::applicationDirPath())
                            .filePath(QStringLiteral("plugins"));
   ExtractorRegistry::instance().loadPlugins(binPlugins);
+}
+
+void TestExtractors::testMultiAtlasLightingAndMaterials() {
+  // 1. Detection of map types from names
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("player_n")), MaterialMapType::Normal);
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("Player_Normal")), MaterialMapType::Normal);
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("Layer_N")), MaterialMapType::Normal);
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("torch_e")), MaterialMapType::Emissive);
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("magic_emissive")), MaterialMapType::Emissive);
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("sword_s")), MaterialMapType::Specular);
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("shield_specular")), MaterialMapType::Specular);
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("player_diffuse")), MaterialMapType::Albedo);
+  QCOMPARE(MultiAtlasPacker::detectMapType(QStringLiteral("Layer 1")), MaterialMapType::Albedo);
+
+  // 2. Neutral fill colors
+  QCOMPARE(MultiAtlasPacker::neutralColor(MaterialMapType::Normal), QColor(128, 128, 255, 0));
+  QCOMPARE(MultiAtlasPacker::neutralColor(MaterialMapType::Emissive), QColor(0, 0, 0, 0));
+  QCOMPARE(MultiAtlasPacker::neutralColor(MaterialMapType::Specular), QColor(0, 0, 0, 0));
+
+  // 3. Normal Map Y-Flip (Green channel inversion)
+  QImage normTest(4, 4, QImage::Format_ARGB32);
+  normTest.fill(qRgba(128, 60, 255, 255));
+  QImage flipped = MultiAtlasPacker::flipNormalMapY(normTest);
+  QCOMPARE(qGreen(flipped.pixel(0, 0)), 255 - 60);
+  QCOMPARE(qRed(flipped.pixel(0, 0)), 128);
+  QCOMPARE(qBlue(flipped.pixel(0, 0)), 255);
+
+  // 4. MultiAtlas master-slave packing synchronization
+  SpriteDocument doc;
+  QImage albedo0(16, 16, QImage::Format_ARGB32);
+  albedo0.fill(QColor(255, 0, 0)); // Red
+  QImage albedo1(24, 20, QImage::Format_ARGB32);
+  albedo1.fill(QColor(0, 255, 0)); // Green
+
+  QImage normal0(16, 16, QImage::Format_ARGB32);
+  normal0.fill(qRgba(128, 128, 255, 255)); // Tangent normal
+  QImage normal1(24, 20, QImage::Format_ARGB32);
+  normal1.fill(qRgba(140, 110, 255, 255));
+
+  QImage emissive0(16, 16, QImage::Format_ARGB32);
+  emissive0.fill(qRgba(255, 200, 50, 255)); // Glowing yellow
+  QImage emissive1(24, 20, QImage::Format_ARGB32);
+  emissive1.fill(qRgba(0, 0, 0, 0));
+
+  doc.addFrame(albedo0, SpriteBox(QRect(0, 0, 16, 16)));
+  doc.addFrame(albedo1, SpriteBox(QRect(0, 0, 24, 20)));
+  doc.setAuxiliaryFrames(MaterialMapType::Normal, {normal0, normal1});
+  doc.setAuxiliaryFrames(MaterialMapType::Emissive, {emissive0, emissive1});
+
+  QVERIFY(doc.hasAuxiliaryMap(MaterialMapType::Normal));
+  QVERIFY(doc.hasAuxiliaryMap(MaterialMapType::Emissive));
+  QVERIFY(!doc.hasAuxiliaryMap(MaterialMapType::Specular));
+  QVERIFY(doc.hasAnyAuxiliaryMaps());
+
+  AtlasPacker::PackOptions packOpts;
+  packOpts.algorithm = AtlasPacker::MaxRects;
+  packOpts.padding = 2;
+
+  MultiAtlasPackResult multiRes = MultiAtlasPacker::pack(doc, packOpts, false);
+  QVERIFY(multiRes.success);
+  QVERIFY(multiRes.hasMap(MaterialMapType::Normal));
+  QVERIFY(multiRes.hasMap(MaterialMapType::Emissive));
+  QVERIFY(!multiRes.hasMap(MaterialMapType::Specular));
+
+  // Verify dimensions match perfectly
+  QCOMPARE(multiRes.master.dimensions, multiRes.maps[MaterialMapType::Normal].size());
+  QCOMPARE(multiRes.master.dimensions, multiRes.maps[MaterialMapType::Emissive].size());
+  QCOMPARE(multiRes.master.frameRects.size(), 2);
+
+  // 5. Godot 4 CanvasTexture export
+  QTemporaryDir tempDir;
+  QVERIFY(tempDir.isValid());
+  QString godotFile = tempDir.filePath(QStringLiteral("player_anim.tres"));
+
+  GodotExtractor godotExt;
+  ExportOptions expOpts;
+  expOpts.exportMaterialMaps = true;
+  expOpts.normalMapYFlip = false;
+  ExtractorError godotErr;
+
+  QVERIFY2(godotExt.write(godotFile, doc, expOpts, &godotErr), qPrintable(godotErr.message));
+  QVERIFY(QFile::exists(godotFile));
+  QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("player_anim.png"))));
+  QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("player_anim_n.png"))));
+  QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("player_anim_e.png"))));
+
+  QFile gFile(godotFile);
+  QVERIFY(gFile.open(QIODevice::ReadOnly | QIODevice::Text));
+  QString gContent = QString::fromUtf8(gFile.readAll());
+  gFile.close();
+
+  QVERIFY(gContent.contains(QStringLiteral("CanvasTexture_main")));
+  QVERIFY(gContent.contains(QStringLiteral("diffuse_texture")));
+  QVERIFY(gContent.contains(QStringLiteral("normal_texture")));
+  QVERIFY(gContent.contains(QStringLiteral("atlas = SubResource(\"CanvasTexture_main\")")));
+
+  // 6. Unity 2D Sprite Mesh export
+  QString unityFile = tempDir.filePath(QStringLiteral("player_unity.unity.json"));
+  UnityExtractor unityExt;
+  ExtractorError unityErr;
+  QVERIFY2(unityExt.write(unityFile, doc, expOpts, &unityErr), qPrintable(unityErr.message));
+  QVERIFY(QFile::exists(unityFile));
+  QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("player_unity_n.png"))));
+
+  QFile uFile(unityFile);
+  QVERIFY(uFile.open(QIODevice::ReadOnly | QIODevice::Text));
+  QString uContent = QString::fromUtf8(uFile.readAll());
+  uFile.close();
+  QVERIFY(uContent.contains(QStringLiteral("\"textures\"")));
+  QVERIFY(uContent.contains(QStringLiteral("\"normal\"")));
+
+  // 7. Unreal Engine Paper2D export
+  QString unrealFile = tempDir.filePath(QStringLiteral("player_unreal.paper2d.json"));
+  UnrealExtractor unrealExt;
+  ExtractorError unrealErr;
+  QVERIFY2(unrealExt.write(unrealFile, doc, expOpts, &unrealErr), qPrintable(unrealErr.message));
+  QVERIFY(QFile::exists(unrealFile));
+  QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("player_unreal_n.png"))));
+
+  QFile unFile(unrealFile);
+  QVERIFY(unFile.open(QIODevice::ReadOnly | QIODevice::Text));
+  QString unContent = QString::fromUtf8(unFile.readAll());
+  unFile.close();
+  QVERIFY(unContent.contains(QStringLiteral("\"textures\"")));
+  QVERIFY(unContent.contains(QStringLiteral("\"normal\"")));
+
+  // 8. Standard JSON export
+  QString jsonFile = tempDir.filePath(QStringLiteral("player_sheet.json"));
+  JsonExtractor jsonExt;
+  ExtractorError jsonErr;
+  QVERIFY2(jsonExt.write(jsonFile, doc, expOpts, &jsonErr), qPrintable(jsonErr.message));
+  QVERIFY(QFile::exists(jsonFile));
+  QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("player_sheet_n.png"))));
+
+  QFile jFile(jsonFile);
+  QVERIFY(jFile.open(QIODevice::ReadOnly | QIODevice::Text));
+  QString jContent = QString::fromUtf8(jFile.readAll());
+  jFile.close();
+  QVERIFY(jContent.contains(QStringLiteral("\"textures\"")));
+  QVERIFY(jContent.contains(QStringLiteral("\"normal\"")));
 }
 
 void TestExtractors::testExtractorRegistryBasics() {

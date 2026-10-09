@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,6 +65,8 @@ struct BENTOPACK_CORE_EXPORT ExportOptions {
 
     AtlasPacker::PackOptions packOptions;
     QVariantMap extraParams; // Extensible parameters passed directly to dynamic plugins
+    bool exportMaterialMaps = true; // M21
+    bool normalMapYFlip = false;    // M21
 };
 
 class ExportManager {

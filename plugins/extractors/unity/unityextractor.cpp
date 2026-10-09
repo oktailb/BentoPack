@@ -16,6 +16,7 @@
 
 #include "unityextractor.h"
 #include "packer/atlaspacker.h"
+#include "packer/multiatlaspacker.h"
 #include "geometry/triangulator.h"
 #include "generated/version.h"
 #include <QFileInfo>
@@ -257,7 +258,13 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     }
 
     AtlasPackResult packResult;
-    if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
+    MultiAtlasPackResult multiResult;
+    bool hasAux = options.exportMaterialMaps && doc.hasAnyAuxiliaryMaps();
+
+    if (hasAux) {
+        multiResult = MultiAtlasPacker::pack(doc, packOpts, options.normalMapYFlip);
+        packResult = multiResult.master;
+    } else if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
         packResult.atlas = doc.atlas();
         packResult.frameRects.reserve(doc.boxes().size());
         for (const SpriteBox &box : doc.boxes()) {
@@ -305,6 +312,23 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         }
     }
 
+    // Save synchronized auxiliary material maps if present
+    QString normalFileName, specFileName, emissiveFileName;
+    if (hasAux) {
+        if (multiResult.hasMap(MaterialMapType::Normal)) {
+            normalFileName = baseName + QStringLiteral("_n") + imageExt;
+            multiResult.maps[MaterialMapType::Normal].save(dir.filePath(normalFileName), "PNG");
+        }
+        if (multiResult.hasMap(MaterialMapType::Specular)) {
+            specFileName = baseName + QStringLiteral("_s") + imageExt;
+            multiResult.maps[MaterialMapType::Specular].save(dir.filePath(specFileName), "PNG");
+        }
+        if (multiResult.hasMap(MaterialMapType::Emissive)) {
+            emissiveFileName = baseName + QStringLiteral("_e") + imageExt;
+            multiResult.maps[MaterialMapType::Emissive].save(dir.filePath(emissiveFileName), "PNG");
+        }
+    }
+
     setProgress(75);
 
     // Build Unity JSON descriptor
@@ -313,6 +337,15 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     rootObj["version"] = QString(PROJECT_VERSION);
     rootObj["format"] = QStringLiteral("Unity2D_SpriteMesh");
     rootObj["texture"] = pngFileName;
+
+    if (hasAux) {
+        QJsonObject texturesObj;
+        texturesObj["diffuse"] = pngFileName;
+        if (!normalFileName.isEmpty()) texturesObj["normal"] = normalFileName;
+        if (!specFileName.isEmpty()) texturesObj["specular"] = specFileName;
+        if (!emissiveFileName.isEmpty()) texturesObj["emissive"] = emissiveFileName;
+        rootObj["textures"] = texturesObj;
+    }
 
     QJsonObject texSize;
     texSize["w"] = packResult.dimensions.width();

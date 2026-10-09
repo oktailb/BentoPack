@@ -17,6 +17,7 @@
 #include "godotextractor.h"
 #include "godot_pipeline.h"
 #include "packer/atlaspacker.h"
+#include "packer/multiatlaspacker.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -433,7 +434,13 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     }
 
     AtlasPackResult packResult;
-    if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
+    MultiAtlasPackResult multiResult;
+    bool hasAux = options.exportMaterialMaps && doc.hasAnyAuxiliaryMaps();
+
+    if (hasAux) {
+        multiResult = MultiAtlasPacker::pack(doc, packOpts, options.normalMapYFlip);
+        packResult = multiResult.master;
+    } else if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
         packResult.atlas = doc.atlas();
         packResult.frameRects.reserve(doc.boxes().size());
         for (const SpriteBox &box : doc.boxes()) {
@@ -480,6 +487,23 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         }
     }
 
+    // Save synchronized auxiliary material maps if present
+    QString normalFilename, specFilename, emissiveFilename;
+    if (hasAux) {
+        if (multiResult.hasMap(MaterialMapType::Normal)) {
+            normalFilename = baseName + QStringLiteral("_n") + imageExt;
+            multiResult.maps[MaterialMapType::Normal].save(dir.filePath(normalFilename), "PNG");
+        }
+        if (multiResult.hasMap(MaterialMapType::Specular)) {
+            specFilename = baseName + QStringLiteral("_s") + imageExt;
+            multiResult.maps[MaterialMapType::Specular].save(dir.filePath(specFilename), "PNG");
+        }
+        if (multiResult.hasMap(MaterialMapType::Emissive)) {
+            emissiveFilename = baseName + QStringLiteral("_e") + imageExt;
+            multiResult.maps[MaterialMapType::Emissive].save(dir.filePath(emissiveFilename), "PNG");
+        }
+    }
+
     setProgress(80);
 
     QFile outFile(tresPath);
@@ -504,20 +528,58 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         uid = GodotPipeline::generateDeterministicUid(fileInfo.fileName());
     }
 
-    // Write Godot 4.x SpriteFrames header
-    int loadSteps = packResult.frameRects.size() + 2;
+    // Write Godot 4.x SpriteFrames header with optional CanvasTexture 2D Lighting
+    bool useCanvasTexture = hasAux && (!normalFilename.isEmpty() || !specFilename.isEmpty());
+    int extResourceCount = 1;
+    if (useCanvasTexture) {
+        if (!normalFilename.isEmpty()) extResourceCount++;
+        if (!specFilename.isEmpty()) extResourceCount++;
+    }
+
+    int loadSteps = packResult.frameRects.size() + extResourceCount + 1;
+    if (useCanvasTexture) loadSteps += 1; // CanvasTexture sub_resource
+
     out << "[gd_resource type=\"SpriteFrames\" load_steps=" << loadSteps << " format=3";
     if (!uid.isEmpty()) {
         out << " uid=\"" << uid << "\"";
     }
     out << "]\n\n";
-    out << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_atlas\"]\n\n";
+
+    if (useCanvasTexture) {
+        out << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_diffuse\"]\n";
+        int nextId = 2;
+        QString normIdStr, specIdStr;
+        if (!normalFilename.isEmpty()) {
+            normIdStr = QStringLiteral("%1_normal").arg(nextId++);
+            out << "[ext_resource type=\"Texture2D\" path=\"res://" << normalFilename << "\" id=\"" << normIdStr << "\"]\n";
+        }
+        if (!specFilename.isEmpty()) {
+            specIdStr = QStringLiteral("%1_specular").arg(nextId++);
+            out << "[ext_resource type=\"Texture2D\" path=\"res://" << specFilename << "\" id=\"" << specIdStr << "\"]\n";
+        }
+        out << "\n";
+        out << "[sub_resource type=\"CanvasTexture\" id=\"CanvasTexture_main\"]\n";
+        out << "diffuse_texture = ExtResource(\"1_diffuse\")\n";
+        if (!normIdStr.isEmpty()) {
+            out << "normal_texture = ExtResource(\"" << normIdStr << "\")\n";
+        }
+        if (!specIdStr.isEmpty()) {
+            out << "specular_texture = ExtResource(\"" << specIdStr << "\")\n";
+        }
+        out << "\n";
+    } else {
+        out << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_atlas\"]\n\n";
+    }
 
     for (int i = 0; i < packResult.frameRects.size(); ++i) {
         const QRect &r = packResult.frameRects[i];
         QString subResId = QString("AtlasTexture_%1").arg(i);
         out << "[sub_resource type=\"AtlasTexture\" id=\"" << subResId << "\"]\n";
-        out << "atlas = ExtResource(\"1_atlas\")\n";
+        if (useCanvasTexture) {
+            out << "atlas = SubResource(\"CanvasTexture_main\")\n";
+        } else {
+            out << "atlas = ExtResource(\"1_atlas\")\n";
+        }
         out << "region = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n";
 
         // Find which animation contains frame i
