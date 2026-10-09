@@ -1,0 +1,8 @@
+GIMP Palette
+Name: Game Boy Pocket (4 Grays)
+Columns: 4
+#
+  0   0   0	#000000
+ 85  85  85	#555555
+170 170 170	#aaaaaa
+255 255 255	#ffffff

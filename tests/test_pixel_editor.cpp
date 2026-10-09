@@ -502,28 +502,65 @@ void TestPixelEditor::testRetroPalettesAuthenticity()
     PixelEditorDialog dlg(nullptr, nullptr);
 
     // Verify ColorPalettePresets canonical sizes and single source of truth
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Standard).size(), 36);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::NES).size(), 54);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::SNES).size(), 32);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Amiga).size(), 32);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::PCEngine).size(), 32);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::GameBoyDMG).size(), 4);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::GameBoyPocket).size(), 4);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Pico8).size(), 16);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Commodore64).size(), 16);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::CGAMode1).size(), 4);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::CGAMode2).size(), 4);
-    QCOMPARE(ColorPalettePresets::getPresetPalette(ColorPalettePresets::Endesga32).size(), 32);
+    QCOMPARE(ColorPalettePresets::standardPalette().size(), 36);
+    QCOMPARE(ColorPalettePresets::getPresetPalette().size(), 36);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("nes")).size(), 54);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("snes")).size(), 32);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("amiga")).size(), 32);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("pc_engine")).size(), 32);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("gameboy_dmg")).size(), 4);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("gameboy_pocket")).size(), 4);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("pico8")).size(), 16);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("c64")).size(), 16);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("cga_mode1")).size(), 4);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("cga_mode2")).size(), 4);
+    QCOMPARE(ColorPalettePresets::getPaletteById(QStringLiteral("endesga32")).size(), 32);
 
     // Verify PixelEditorDialog forwards directly to ColorPalettePresets without duplicate tables
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Standard), ColorPalettePresets::getPresetPalette(ColorPalettePresets::Standard));
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::NES), ColorPalettePresets::getPresetPalette(ColorPalettePresets::NES));
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::SNES), ColorPalettePresets::getPresetPalette(ColorPalettePresets::SNES));
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Amiga), ColorPalettePresets::getPresetPalette(ColorPalettePresets::Amiga));
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::PCEngine), ColorPalettePresets::getPresetPalette(ColorPalettePresets::PCEngine));
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::GameBoy), ColorPalettePresets::getPresetPalette(ColorPalettePresets::GameBoyDMG));
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Pico8), ColorPalettePresets::getPresetPalette(ColorPalettePresets::Pico8));
-    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Commodore64), ColorPalettePresets::getPresetPalette(ColorPalettePresets::Commodore64));
+    QCOMPARE(dlg.getPresetPalette(PixelEditorDialog::Standard), ColorPalettePresets::standardPalette());
+    QCOMPARE(dlg.getPaletteById(QStringLiteral("nes")), ColorPalettePresets::getPaletteById(QStringLiteral("nes")));
+    QCOMPARE(dlg.getPaletteById(QStringLiteral("snes")), ColorPalettePresets::getPaletteById(QStringLiteral("snes")));
+    QCOMPARE(dlg.getPaletteById(QStringLiteral("amiga")), ColorPalettePresets::getPaletteById(QStringLiteral("amiga")));
+    QCOMPARE(dlg.getPaletteById(QStringLiteral("gameboy_dmg")), ColorPalettePresets::getPaletteById(QStringLiteral("gameboy_dmg")));
+
+    // Verify file-based discovery and startup scanning
+    QVERIFY(ColorPalettePresets::availablePalettes().size() >= 12);
+    QString userDir = ColorPalettePresets::userPalettesDirectory();
+    QVERIFY(!userDir.isEmpty());
+    QVERIFY(QDir(userDir).exists());
+
+    // Test dynamic discovery by adding a user .gpl file
+    QString testCustomPath = QDir(userDir).filePath(QStringLiteral("test_dynamic_retro.gpl"));
+    {
+        QFile f(testCustomPath);
+        QVERIFY(f.open(QIODevice::WriteOnly | QIODevice::Text));
+        QTextStream out(&f);
+        out << "GIMP Palette\n";
+        out << "Name: Test Dynamic Custom (3)\n";
+        out << "Columns: 3\n#\n";
+        out << "255   0   0\n";
+        out << "  0 255   0\n";
+        out << "  0   0 255\n";
+    }
+
+    ColorPalettePresets::scanPalettes();
+    bool foundCustom = false;
+    for (const auto &p : ColorPalettePresets::availablePalettes()) {
+        if (p.id == QStringLiteral("test_dynamic_retro")) {
+            foundCustom = true;
+            QCOMPARE(p.name, QStringLiteral("Test Dynamic Custom (3)"));
+            QCOMPARE(p.colors.size(), 3);
+            QCOMPARE(p.colors[0], qRgb(255, 0, 0));
+            QCOMPARE(p.colors[1], qRgb(0, 255, 0));
+            QCOMPARE(p.colors[2], qRgb(0, 0, 255));
+            break;
+        }
+    }
+    QVERIFY(foundCustom);
+
+    // Clean up test file and rescan
+    QFile::remove(testCustomPath);
+    ColorPalettePresets::scanPalettes();
 }
 
 void TestPixelEditor::testDynamicSpriteColorExtraction()

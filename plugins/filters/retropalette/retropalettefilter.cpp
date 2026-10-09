@@ -43,8 +43,17 @@ FilterDialogBase* RetroPaletteFilter::createDialog(SpriteDocument *doc,
 
 QImage RetroPaletteFilter::applyImage(const QImage &image, const QVariantMap &params)
 {
-    int presetIdx = params.value(QStringLiteral("preset"), 0).toInt();
-    QVector<QRgb> pal = RetroPaletteFilterDialog::getPresetPalette(static_cast<RetroPaletteFilterDialog::Preset>(presetIdx));
+    QString paletteId = params.value(QStringLiteral("paletteId")).toString();
+    QVector<QRgb> pal;
+    if (!paletteId.isEmpty()) {
+        pal = ColorPalettePresets::getPaletteById(paletteId);
+    } else if (params.contains(QStringLiteral("preset"))) {
+        int presetIdx = params.value(QStringLiteral("preset"), 0).toInt();
+        pal = ColorPalettePresets::getPaletteByIndex(presetIdx);
+    }
+    if (pal.isEmpty()) {
+        pal = ColorPalettePresets::standardPalette();
+    }
     int ditherIdx = params.value(QStringLiteral("dither"), 0).toInt();
     int strength = params.value(QStringLiteral("strength"), 100).toInt();
     return RetroPaletteFilterDialog::applyRetroPalette(image, pal, static_cast<RetroPaletteFilterDialog::DitherMatrix>(ditherIdx), strength);

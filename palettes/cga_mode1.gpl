@@ -1,0 +1,8 @@
+GIMP Palette
+Name: CGA Mode 1 (4)
+Columns: 4
+#
+  0   0   0	#000000
+ 85 255 255	#55ffff
+255  85 255	#ff55ff
+255 255 255	#ffffff

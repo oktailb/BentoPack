@@ -1,0 +1,17 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/palettes">
+        <file>bento_standard.gpl</file>
+        <file>gameboy_dmg.gpl</file>
+        <file>gameboy_pocket.gpl</file>
+        <file>nes.gpl</file>
+        <file>snes.gpl</file>
+        <file>pico8.gpl</file>
+        <file>c64.gpl</file>
+        <file>amiga.gpl</file>
+        <file>pc_engine.gpl</file>
+        <file>cga_mode1.gpl</file>
+        <file>cga_mode2.gpl</file>
+        <file>endesga32.gpl</file>
+    </qresource>
+</RCC>

@@ -60,18 +60,7 @@ class BENTOPACK_WIDGETS_EXPORT PixelEditorDialog : public QDialog
 public:
     enum PalettePreset {
         Standard = ColorPalettePresets::Standard,
-        SpriteColors = ColorPalettePresets::Standard, // Compatible alias
-        GameBoy = ColorPalettePresets::GameBoyDMG,
-        GameBoyPocket = ColorPalettePresets::GameBoyPocket,
-        NES = ColorPalettePresets::NES,
-        SNES = ColorPalettePresets::SNES,
-        Pico8 = ColorPalettePresets::Pico8,
-        Commodore64 = ColorPalettePresets::Commodore64,
-        Amiga = ColorPalettePresets::Amiga,
-        PCEngine = ColorPalettePresets::PCEngine,
-        CGAMode1 = ColorPalettePresets::CGAMode1,
-        CGAMode2 = ColorPalettePresets::CGAMode2,
-        Endesga32 = ColorPalettePresets::Endesga32
+        SpriteColors = ColorPalettePresets::Standard // Compatible alias
     };
 
     explicit PixelEditorDialog(SpriteDocument *document,
@@ -80,7 +69,8 @@ public:
                                QWidget *parent = nullptr);
     ~PixelEditorDialog() override;
 
-    static QVector<QRgb> getPresetPalette(PalettePreset preset);
+    static QVector<QRgb> getPresetPalette(PalettePreset preset = Standard);
+    static QVector<QRgb> getPaletteById(const QString &id);
 
     QString activeAnimationName() const { return m_activeAnimName; }
     QList<int> activeSequence() const { return m_activeSequence; }

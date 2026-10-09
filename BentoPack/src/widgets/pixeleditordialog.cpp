@@ -880,18 +880,11 @@ QWidget* PixelEditorDialog::createPalettePanel()
     colorPageLayout->addLayout(presetHeader);
 
     m_paletteCombo = new QComboBox(m_colorOptionsPage);
-    m_paletteCombo->addItem(tr("Bento Standard (36)"), Standard);
-    m_paletteCombo->addItem(tr("Game Boy DMG (4 Greens)"), GameBoy);
-    m_paletteCombo->addItem(tr("Game Boy Pocket (4 Grays)"), GameBoyPocket);
-    m_paletteCombo->addItem(tr("NES / Famicom (54)"), NES);
-    m_paletteCombo->addItem(tr("SNES / 16-bit (32)"), SNES);
-    m_paletteCombo->addItem(tr("PICO-8 (16)"), Pico8);
-    m_paletteCombo->addItem(tr("Commodore 64 (16)"), Commodore64);
-    m_paletteCombo->addItem(tr("Amiga OCS (32)"), Amiga);
-    m_paletteCombo->addItem(tr("NEC PC-Engine (32)"), PCEngine);
-    m_paletteCombo->addItem(tr("CGA Mode 1 (4)"), CGAMode1);
-    m_paletteCombo->addItem(tr("CGA Mode 2 (4)"), CGAMode2);
-    m_paletteCombo->addItem(tr("Endesga 32 (32)"), Endesga32);
+    const auto initialPalettes = ColorPalettePresets::availablePalettes();
+    for (int i = 0; i < initialPalettes.size(); ++i) {
+        const auto &p = initialPalettes.at(i);
+        m_paletteCombo->addItem(p.name, p.id);
+    }
     connect(m_paletteCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PixelEditorDialog::onPalettePresetChanged);
     colorPageLayout->addWidget(m_paletteCombo);
 
@@ -2041,8 +2034,12 @@ void PixelEditorDialog::updateNavigationButtons()
 
 void PixelEditorDialog::onPalettePresetChanged(int index)
 {
-    PalettePreset preset = static_cast<PalettePreset>(m_paletteCombo->itemData(index).toInt());
-    m_currentPalette = getPresetPalette(preset);
+    if (index < 0 || !m_paletteCombo || index >= m_paletteCombo->count()) return;
+    QString id = m_paletteCombo->itemData(index).toString();
+    m_currentPalette = ColorPalettePresets::getPaletteById(id);
+    if (m_currentPalette.isEmpty()) {
+        m_currentPalette = ColorPalettePresets::getPaletteByIndex(index);
+    }
     refreshPaletteSwatches();
 }
 
@@ -2897,7 +2894,13 @@ void PixelEditorDialog::refreshPaletteSwatches()
 
 QVector<QRgb> PixelEditorDialog::getPresetPalette(PalettePreset preset)
 {
-    return ColorPalettePresets::getPresetPalette(static_cast<ColorPalettePresets::Preset>(preset));
+    Q_UNUSED(preset);
+    return ColorPalettePresets::standardPalette();
+}
+
+QVector<QRgb> PixelEditorDialog::getPaletteById(const QString &id)
+{
+    return ColorPalettePresets::getPaletteById(id);
 }
 
 bool PixelEditorDialog::hasAtlasCollision() const
@@ -3396,9 +3399,9 @@ void PixelEditorDialog::retranslateUi()
     if (m_paletteCombo) {
         int curIdx = m_paletteCombo->currentIndex();
         m_paletteCombo->blockSignals(true);
-        for (int i = 0; i < m_paletteCombo->count(); ++i) {
-            ColorPalettePresets::Preset p = static_cast<ColorPalettePresets::Preset>(m_paletteCombo->itemData(i).toInt());
-            m_paletteCombo->setItemText(i, ColorPalettePresets::getPresetName(p));
+        const auto palettes = ColorPalettePresets::availablePalettes();
+        for (int i = 0; i < m_paletteCombo->count() && i < palettes.size(); ++i) {
+            m_paletteCombo->setItemText(i, palettes.at(i).name);
         }
         m_paletteCombo->setCurrentIndex(curIdx);
         m_paletteCombo->blockSignals(false);

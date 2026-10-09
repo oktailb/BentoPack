@@ -71,7 +71,12 @@ set(BentoPackCore_SRC
     src/geometry/triangulator.cpp
     src/geometry/polygonmerger.cpp
     src/commands/meshcommands.cpp
+    ${CMAKE_SOURCE_DIR}/palettes/palettes.qrc
 )
+
+# Copy palettes directory to build bin directory for runtime discovery
+file(COPY "${CMAKE_SOURCE_DIR}/palettes" DESTINATION "${CMAKE_BINARY_DIR}/bin")
+
 
 set(BentoPackCore_INCLUDE
     include/bentopackcore_export.h

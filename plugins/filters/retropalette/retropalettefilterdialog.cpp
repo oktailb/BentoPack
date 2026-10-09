@@ -72,7 +72,8 @@ RetroPaletteFilterDialog::RetroPaletteFilterDialog(SpriteDocument *doc,
     setWindowTitle(tr("Retro Palette & Dithering"));
     setMinimumWidth(480);
 
-    m_activePalette = getPresetPalette(GameBoyDMG);
+    const auto palettes = ColorPalettePresets::availablePalettes();
+    m_activePalette = palettes.isEmpty() ? ColorPalettePresets::standardPalette() : palettes.first().colors;
 
     setupFilterUI();
     schedulePreview();
@@ -87,15 +88,12 @@ void RetroPaletteFilterDialog::setupFilterUI()
     QHBoxLayout *topRow = new QHBoxLayout();
     QLabel *lblPreset = new QLabel(tr("Palette Preset:"), this);
     m_presetCombo = new QComboBox(this);
-    m_presetCombo->addItem(tr("Game Boy DMG (4 Greens)"), GameBoyDMG);
-    m_presetCombo->addItem(tr("Game Boy Pocket (4 Grays)"), GameBoyPocket);
-    m_presetCombo->addItem(tr("PICO-8 (16 Colors)"), Pico8);
-    m_presetCombo->addItem(tr("NES / Famicom (54 Colors)"), NES);
-    m_presetCombo->addItem(tr("Commodore 64 (16 Colors)"), Commodore64);
-    m_presetCombo->addItem(tr("CGA Mode 1 (Cyan/Magenta/White)"), CGAMode1);
-    m_presetCombo->addItem(tr("CGA Mode 2 (Red/Green/Yellow)"), CGAMode2);
-    m_presetCombo->addItem(tr("Endesga 32 (32 Pixel Art Colors)"), Endesga32);
-    m_presetCombo->addItem(tr("Custom / Imported Palette"), Custom);
+    const auto initialPalettes = ColorPalettePresets::availablePalettes();
+    for (int i = 0; i < initialPalettes.size(); ++i) {
+        const auto &p = initialPalettes.at(i);
+        m_presetCombo->addItem(p.name, p.id);
+    }
+    m_presetCombo->addItem(tr("Custom / Imported Palette..."), QStringLiteral("__custom__"));
     topRow->addWidget(lblPreset);
     topRow->addWidget(m_presetCombo, 1);
 
@@ -175,9 +173,17 @@ void RetroPaletteFilterDialog::setupFilterUI()
     connect(m_selectedFramesOnlyCheck, &QCheckBox::toggled, this, &RetroPaletteFilterDialog::onParametersChanged);
 }
 
+QString RetroPaletteFilterDialog::activePresetId() const
+{
+    return m_presetCombo ? m_presetCombo->currentData().toString() : QStringLiteral("bento_standard");
+}
+
 RetroPaletteFilterDialog::Preset RetroPaletteFilterDialog::activePreset() const
 {
-    return m_presetCombo ? static_cast<Preset>(m_presetCombo->currentData().toInt()) : GameBoyDMG;
+    if (m_presetCombo && m_presetCombo->currentData().toString() == QStringLiteral("__custom__")) {
+        return Custom;
+    }
+    return Standard;
 }
 
 RetroPaletteFilterDialog::DitherMatrix RetroPaletteFilterDialog::ditherMatrix() const
@@ -202,15 +208,19 @@ QVector<QRgb> RetroPaletteFilterDialog::currentPalette() const
 
 void RetroPaletteFilterDialog::onPresetChanged(int index)
 {
-    Preset preset = static_cast<Preset>(m_presetCombo->itemData(index).toInt());
-    if (preset == Custom) {
+    if (index < 0 || !m_presetCombo || index >= m_presetCombo->count()) return;
+    QString id = m_presetCombo->itemData(index).toString();
+    if (id == QStringLiteral("__custom__")) {
         if (m_customPalette.isEmpty()) {
             importPalette();
             return;
         }
         m_activePalette = m_customPalette;
     } else {
-        m_activePalette = getPresetPalette(preset);
+        m_activePalette = ColorPalettePresets::getPaletteById(id);
+        if (m_activePalette.isEmpty()) {
+            m_activePalette = ColorPalettePresets::getPaletteByIndex(index);
+        }
     }
     updatePalettePreview();
     schedulePreview();
@@ -280,10 +290,11 @@ void RetroPaletteFilterDialog::onParametersChanged()
 
 void RetroPaletteFilterDialog::resetDefaults()
 {
-    if (m_presetCombo) m_presetCombo->setCurrentIndex(0); // GameBoyDMG
+    if (m_presetCombo) m_presetCombo->setCurrentIndex(0);
     if (m_ditherCombo) m_ditherCombo->setCurrentIndex(2); // Bayer 4x4
     if (m_strengthSlider) m_strengthSlider->setValue(50);
-    m_activePalette = getPresetPalette(GameBoyDMG);
+    const auto palettes = ColorPalettePresets::availablePalettes();
+    m_activePalette = palettes.isEmpty() ? ColorPalettePresets::standardPalette() : palettes.first().colors;
     updatePalettePreview();
 }
 
@@ -293,7 +304,13 @@ void RetroPaletteFilterDialog::saveSettings()
 
 QVector<QRgb> RetroPaletteFilterDialog::getPresetPalette(Preset preset)
 {
-    return ColorPalettePresets::getPresetPalette(static_cast<ColorPalettePresets::Preset>(preset));
+    Q_UNUSED(preset);
+    return ColorPalettePresets::standardPalette();
+}
+
+QVector<QRgb> RetroPaletteFilterDialog::getPresetPalette(const QString &id)
+{
+    return ColorPalettePresets::getPaletteById(id);
 }
 
 QVector<QRgb> RetroPaletteFilterDialog::loadPaletteFromFile(const QString &filePath, QString *outError)

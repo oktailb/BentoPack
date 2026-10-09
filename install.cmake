@@ -149,6 +149,16 @@ if (WIN32)
     )
 endif()
 
+# 6. Bundle standard color palettes (.gpl / .hex / .pal) into deliverables
+install(DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/palettes/"
+    DESTINATION "${CMAKE_INSTALL_BINDIR}/palettes"
+    COMPONENT bentopack
+    FILES_MATCHING
+        PATTERN "*.gpl"
+        PATTERN "*.hex"
+        PATTERN "*.pal"
+)
+
 if(UNIX AND NOT APPLE AND NOT HAIKU)
     install(FILES BentoPack/res/linux/BentoPack.desktop
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications

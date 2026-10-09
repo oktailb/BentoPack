@@ -39,19 +39,8 @@ class RetroPaletteFilterDialog : public FilterDialogBase
 
 public:
     enum Preset {
-        Standard = ColorPalettePresets::Standard,
-        GameBoyDMG = ColorPalettePresets::GameBoyDMG,
-        GameBoyPocket = ColorPalettePresets::GameBoyPocket,
-        Pico8 = ColorPalettePresets::Pico8,
-        NES = ColorPalettePresets::NES,
-        SNES = ColorPalettePresets::SNES,
-        Commodore64 = ColorPalettePresets::Commodore64,
-        Amiga = ColorPalettePresets::Amiga,
-        PCEngine = ColorPalettePresets::PCEngine,
-        CGAMode1 = ColorPalettePresets::CGAMode1,
-        CGAMode2 = ColorPalettePresets::CGAMode2,
-        Endesga32 = ColorPalettePresets::Endesga32,
-        Custom = ColorPalettePresets::Custom
+        Standard = 0,
+        Custom = -1
     };
 
     enum DitherMatrix {
@@ -66,6 +55,7 @@ public:
                                       QWidget *parent = nullptr);
     ~RetroPaletteFilterDialog() override = default;
 
+    QString activePresetId() const;
     Preset activePreset() const;
     DitherMatrix ditherMatrix() const;
     int ditherStrength() const;
@@ -78,9 +68,14 @@ public:
     static QVector<QRgb> loadPaletteFromFile(const QString &filePath, QString *outError = nullptr);
 
     /**
-     * @brief Gets standard colors for a built-in preset.
+     * @brief Gets standard colors for a built-in preset or fallback.
      */
-    static QVector<QRgb> getPresetPalette(Preset preset);
+    static QVector<QRgb> getPresetPalette(Preset preset = Standard);
+
+    /**
+     * @brief Gets palette colors by unique identifier (e.g. "gameboy_dmg", "nes", "pico8").
+     */
+    static QVector<QRgb> getPresetPalette(const QString &id);
 
     /**
      * @brief Executes palette quantization with optional Bayer dithering.

@@ -325,17 +325,17 @@ void TestFilters::testPixelRescaleFilterAlgorithm()
 
 void TestFilters::testRetroPaletteFilterAlgorithm()
 {
-    // 1. Built-in Preset verification
-    QVector<QRgb> dmg = RetroPaletteFilterDialog::getPresetPalette(RetroPaletteFilterDialog::GameBoyDMG);
+    // 1. Built-in Preset verification via dynamic ID
+    QVector<QRgb> dmg = RetroPaletteFilterDialog::getPresetPalette(QStringLiteral("gameboy_dmg"));
     QCOMPARE(dmg.size(), 4);
 
-    QVector<QRgb> pico8 = RetroPaletteFilterDialog::getPresetPalette(RetroPaletteFilterDialog::Pico8);
+    QVector<QRgb> pico8 = RetroPaletteFilterDialog::getPresetPalette(QStringLiteral("pico8"));
     QCOMPARE(pico8.size(), 16);
 
-    QVector<QRgb> nes = RetroPaletteFilterDialog::getPresetPalette(RetroPaletteFilterDialog::NES);
+    QVector<QRgb> nes = RetroPaletteFilterDialog::getPresetPalette(QStringLiteral("nes"));
     QCOMPARE(nes.size(), 54);
 
-    QVector<QRgb> endesga = RetroPaletteFilterDialog::getPresetPalette(RetroPaletteFilterDialog::Endesga32);
+    QVector<QRgb> endesga = RetroPaletteFilterDialog::getPresetPalette(QStringLiteral("endesga32"));
     QCOMPARE(endesga.size(), 32);
 
     // 2. Nearest Quantization without dithering

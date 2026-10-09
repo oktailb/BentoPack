@@ -20,6 +20,11 @@
   - Vérifier que chaque bouton d'outil dans `PixelEditorDialog`, la timeline et le dock de calques dispose d'un tooltip descriptif avec rappel de son raccourci clavier.
 - [ ] **Feedback visuel sur les sélections d'outils :**
   - Vérifier l'état enfoncé (*checked state*) et le contraste des boutons d'outils maillage et dessin sous le thème sombre.
+- [x] **Système modulaire de palettes de couleurs standardisées (`.gpl` / `.hex`) :**
+  - Palettes extraites en fichiers indépendants au format standard GIMP/Aseprite (`.gpl`) dans `palettes/`.
+  - Embarquement autonome via Qt Resource System (`palettes.qrc`), copie automatique dans le dossier `bin/` et packaging dans les livrables (`install.cmake`).
+  - Scan automatique au démarrage dans le dossier de l'application et le dossier de configuration utilisateur (`%APPDATA%/BentoPack/palettes/`).
+  - Suppression totale des enums redondants et mappings statiques (`mapIdToPreset`, `presetFileName`, `allPresets`) : seul `Standard` (36 couleurs) est conservé comme secours ultime, tout le reste est piloté dynamiquement par identifiant et métadonnées de fichiers.
 
 ---
 

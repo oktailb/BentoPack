@@ -17,204 +17,167 @@
 #include "image/colorpalettepresets.h"
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QSet>
+#include <QMap>
 #include <QImage>
+#include <QStandardPaths>
 #include <QCoreApplication>
 
-QVector<QRgb> ColorPalettePresets::getPresetPalette(Preset preset)
+static void initPaletteResources()
 {
-    QVector<QRgb> pal;
-    switch (preset) {
-    case Standard:
-        pal = {
-            // Row 1: Grayscale & Neutrals
-            qRgb(0, 0, 0),       qRgb(33, 33, 33),    qRgb(66, 66, 66),
-            qRgb(117, 117, 117), qRgb(189, 189, 189), qRgb(255, 255, 255),
-            // Row 2: Earth & Browns
-            qRgb(62, 39, 35),    qRgb(93, 64, 55),    qRgb(141, 110, 99),
-            qRgb(215, 204, 200), qRgb(255, 235, 238), qRgb(255, 205, 210),
-            // Row 3: Reds & Oranges
-            qRgb(183, 28, 28),   qRgb(229, 57, 53),   qRgb(239, 108, 0),
-            qRgb(255, 167, 38),  qRgb(253, 216, 53),  qRgb(255, 245, 157),
-            // Row 4: Greens
-            qRgb(27, 94, 32),    qRgb(56, 142, 60),   qRgb(76, 175, 80),
-            qRgb(139, 195, 74),  qRgb(205, 220, 57),  qRgb(178, 255, 89),
-            // Row 5: Cyans & Blues
-            qRgb(0, 77, 64),     qRgb(0, 137, 123),   qRgb(0, 188, 212),
-            qRgb(3, 169, 244),   qRgb(21, 101, 192),  qRgb(63, 81, 181),
-            // Row 6: Purples, Magentas & Pinks
-            qRgb(74, 20, 140),   qRgb(123, 31, 162),  qRgb(171, 71, 188),
-            qRgb(173, 20, 87),   qRgb(233, 30, 99),   qRgb(244, 143, 177)
-        };
-        break;
-
-    case GameBoyDMG:
-        pal = {
-            qRgb(15, 56, 15),     // #0f380f Darkest green
-            qRgb(48, 98, 48),     // #306230 Dark green
-            qRgb(139, 172, 15),   // #8bac0f Light green
-            qRgb(155, 188, 15)    // #9bbc0f Lightest green
-        };
-        break;
-
-    case GameBoyPocket:
-        pal = {
-            qRgb(0, 0, 0),        // #000000 Black
-            qRgb(85, 85, 85),     // #555555 Dark gray
-            qRgb(170, 170, 170),  // #aaaaaa Light gray
-            qRgb(255, 255, 255)   // #ffffff White
-        };
-        break;
-
-    case NES:
-        pal = {
-            qRgb(124,124,124), qRgb(0,0,252),     qRgb(0,0,188),     qRgb(68,40,188),
-            qRgb(148,0,132),   qRgb(168,0,32),     qRgb(168,16,0),    qRgb(136,20,0),
-            qRgb(80,48,0),     qRgb(0,120,0),      qRgb(0,104,0),     qRgb(0,88,0),
-            qRgb(0,64,88),     qRgb(0,0,0),        qRgb(188,188,188), qRgb(0,120,248),
-            qRgb(0,88,248),    qRgb(104,68,252),   qRgb(216,0,204),   qRgb(228,0,88),
-            qRgb(248,56,0),    qRgb(228,92,16),    qRgb(172,124,0),   qRgb(0,184,0),
-            qRgb(0,168,0),     qRgb(0,168,68),     qRgb(0,136,136),   qRgb(248,248,248),
-            qRgb(60,188,252),  qRgb(104,136,252),  qRgb(152,120,248), qRgb(248,120,248),
-            qRgb(248,88,152),  qRgb(248,120,88),   qRgb(252,160,68),  qRgb(248,184,0),
-            qRgb(184,248,24),  qRgb(88,216,84),    qRgb(88,248,152),  qRgb(0,232,216),
-            qRgb(120,120,120), qRgb(252,252,252), qRgb(164,228,252), qRgb(184,184,248),
-            qRgb(216,184,248), qRgb(248,184,248), qRgb(248,164,192), qRgb(240,208,176),
-            qRgb(252,224,168), qRgb(248,216,120), qRgb(216,248,120), qRgb(184,248,184),
-            qRgb(184,248,216), qRgb(0,252,252)
-        };
-        break;
-
-    case SNES:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(248, 248, 248), qRgb(184, 184, 184), qRgb(104, 104, 104),
-            qRgb(248, 56, 0),    qRgb(216, 0, 0),     qRgb(152, 0, 0),     qRgb(248, 120, 88),
-            qRgb(248, 160, 0),   qRgb(248, 224, 0),   qRgb(184, 152, 0),   qRgb(104, 72, 0),
-            qRgb(0, 216, 0),     qRgb(0, 144, 0),     qRgb(0, 80, 0),      qRgb(120, 248, 88),
-            qRgb(0, 184, 216),   qRgb(0, 104, 184),   qRgb(0, 48, 120),    qRgb(120, 216, 248),
-            qRgb(88, 88, 248),   qRgb(40, 40, 184),   qRgb(16, 16, 104),   qRgb(160, 160, 248),
-            qRgb(216, 0, 184),   qRgb(144, 0, 120),   qRgb(248, 120, 216), qRgb(248, 184, 152),
-            qRgb(216, 136, 88),  qRgb(160, 88, 48),   qRgb(96, 48, 16),    qRgb(48, 48, 48)
-        };
-        break;
-
-    case Pico8:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(29, 43, 83),    qRgb(126, 37, 83),  qRgb(0, 135, 81),
-            qRgb(171, 82, 54),   qRgb(95, 87, 79),    qRgb(194, 195, 199),qRgb(255, 241, 232),
-            qRgb(255, 0, 77),    qRgb(255, 163, 0),   qRgb(255, 236, 39), qRgb(0, 228, 54),
-            qRgb(41, 173, 255),  qRgb(131, 118, 156), qRgb(255, 119, 168),qRgb(255, 204, 170)
-        };
-        break;
-
-    case Commodore64:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(255, 255, 255), qRgb(136, 0, 0),    qRgb(170, 255, 238),
-            qRgb(204, 68, 204),  qRgb(0, 204, 85),    qRgb(0, 0, 170),    qRgb(238, 238, 119),
-            qRgb(221, 136, 85),  qRgb(102, 68, 0),    qRgb(255, 119, 119),qRgb(51, 51, 51),
-            qRgb(119, 119, 119), qRgb(170, 255, 102), qRgb(0, 136, 255),  qRgb(187, 187, 187)
-        };
-        break;
-
-    case Amiga:
-        pal = {
-            qRgb(0, 85, 170),   qRgb(255, 255, 255), qRgb(0, 0, 0),       qRgb(255, 136, 0),
-            qRgb(0, 0, 170),    qRgb(0, 170, 0),     qRgb(0, 170, 170),   qRgb(170, 0, 0),
-            qRgb(170, 0, 170),  qRgb(170, 85, 0),    qRgb(170, 170, 170), qRgb(85, 85, 85),
-            qRgb(85, 85, 255),  qRgb(85, 255, 85),   qRgb(85, 255, 255),  qRgb(255, 85, 85),
-            qRgb(255, 85, 255), qRgb(255, 255, 85), qRgb(238, 68, 68),  qRgb(68, 170, 238),
-            qRgb(34, 102, 34),  qRgb(204, 170, 119), qRgb(136, 102, 68), qRgb(68, 51, 34),
-            qRgb(221, 221, 221),qRgb(187, 187, 187),qRgb(153, 153, 153),qRgb(102, 102, 102),
-            qRgb(51, 51, 51),   qRgb(255, 204, 153), qRgb(204, 119, 85), qRgb(119, 34, 34)
-        };
-        break;
-
-    case PCEngine:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(255, 255, 255), qRgb(182, 182, 182), qRgb(109, 109, 109),
-            qRgb(255, 36, 36),   qRgb(218, 0, 0),     qRgb(145, 0, 0),     qRgb(255, 145, 145),
-            qRgb(255, 109, 0),   qRgb(255, 182, 0),   qRgb(255, 255, 0),   qRgb(182, 145, 0),
-            qRgb(36, 218, 36),   qRgb(0, 182, 0),     qRgb(0, 109, 0),     qRgb(145, 255, 145),
-            qRgb(36, 218, 255),  qRgb(0, 145, 218),   qRgb(0, 72, 182),    qRgb(145, 218, 255),
-            qRgb(72, 72, 255),   qRgb(36, 36, 182),   qRgb(0, 0, 145),     qRgb(182, 182, 255),
-            qRgb(218, 36, 218),  qRgb(145, 0, 145),   qRgb(255, 145, 255), qRgb(255, 182, 145),
-            qRgb(218, 145, 72),  qRgb(145, 72, 0),    qRgb(109, 36, 0),    qRgb(36, 36, 36)
-        };
-        break;
-
-    case CGAMode1:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(85, 255, 255),  qRgb(255, 85, 255), qRgb(255, 255, 255)
-        };
-        break;
-
-    case CGAMode2:
-        pal = {
-            qRgb(0, 0, 0),       qRgb(85, 255, 85),   qRgb(255, 85, 85),  qRgb(255, 255, 85)
-        };
-        break;
-
-    case Endesga32:
-        pal = {
-            qRgb(190, 74, 47),   qRgb(215, 118, 67),  qRgb(234, 212, 170),qRgb(228, 166, 114),
-            qRgb(184, 111, 80),  qRgb(115, 62, 57),   qRgb(62, 39, 49),   qRgb(162, 38, 51),
-            qRgb(228, 59, 68),   qRgb(247, 118, 34),  qRgb(254, 174, 52), qRgb(254, 231, 97),
-            qRgb(99, 199, 77),   qRgb(62, 137, 72),   qRgb(38, 92, 66),   qRgb(25, 60, 62),
-            qRgb(18, 78, 137),   qRgb(0, 153, 219),   qRgb(44, 232, 245), qRgb(255, 255, 255),
-            qRgb(192, 203, 220), qRgb(139, 155, 180), qRgb(90, 105, 136), qRgb(58, 68, 102),
-            qRgb(38, 43, 68),    qRgb(24, 20, 37),    qRgb(255, 0, 68),   qRgb(104, 56, 108),
-            qRgb(181, 80, 136),  qRgb(246, 117, 122), qRgb(232, 183, 150),qRgb(194, 133, 105)
-        };
-        break;
-
-    case Custom:
-    default:
-        break;
+    static bool inited = false;
+    if (!inited) {
+        Q_INIT_RESOURCE(palettes);
+        inited = true;
     }
-    return pal;
 }
 
-QString ColorPalettePresets::getPresetName(Preset preset)
-{
-    switch (preset) {
-    case Standard:      return QCoreApplication::translate("ColorPalettePresets", "Bento Standard (36)");
-    case GameBoyDMG:    return QCoreApplication::translate("ColorPalettePresets", "Game Boy DMG (4 Greens)");
-    case GameBoyPocket: return QCoreApplication::translate("ColorPalettePresets", "Game Boy Pocket (4 Grays)");
-    case NES:           return QCoreApplication::translate("ColorPalettePresets", "NES / Famicom (54)");
-    case SNES:          return QCoreApplication::translate("ColorPalettePresets", "SNES / 16-bit (32)");
-    case Pico8:         return QCoreApplication::translate("ColorPalettePresets", "PICO-8 (16)");
-    case Commodore64:   return QCoreApplication::translate("ColorPalettePresets", "Commodore 64 (16)");
-    case Amiga:         return QCoreApplication::translate("ColorPalettePresets", "Amiga OCS (32)");
-    case PCEngine:      return QCoreApplication::translate("ColorPalettePresets", "NEC PC-Engine (32)");
-    case CGAMode1:      return QCoreApplication::translate("ColorPalettePresets", "CGA Mode 1 (4)");
-    case CGAMode2:      return QCoreApplication::translate("ColorPalettePresets", "CGA Mode 2 (4)");
-    case Endesga32:     return QCoreApplication::translate("ColorPalettePresets", "Endesga 32 (32)");
-    case Custom:        return QCoreApplication::translate("ColorPalettePresets", "Custom Imported");
-    }
-    return QString();
-}
+static QList<ColorPalettePresets::PaletteInfo> s_availablePalettes;
 
-QList<ColorPalettePresets::Preset> ColorPalettePresets::allPresets()
+QVector<QRgb> ColorPalettePresets::standardPalette()
 {
     return {
-        Standard,
-        GameBoyDMG,
-        GameBoyPocket,
-        NES,
-        SNES,
-        Pico8,
-        Commodore64,
-        Amiga,
-        PCEngine,
-        CGAMode1,
-        CGAMode2,
-        Endesga32
+        // Bento Studio Standard 36-color palette (emergency fallback)
+        qRgb(0, 0, 0),       qRgb(33, 33, 33),    qRgb(66, 66, 66),
+        qRgb(117, 117, 117), qRgb(189, 189, 189), qRgb(255, 255, 255),
+        qRgb(62, 39, 35),    qRgb(93, 64, 55),    qRgb(141, 110, 99),
+        qRgb(215, 204, 200), qRgb(255, 235, 238), qRgb(255, 205, 210),
+        qRgb(183, 28, 28),   qRgb(229, 57, 53),   qRgb(239, 108, 0),
+        qRgb(255, 167, 38),  qRgb(253, 216, 53),  qRgb(255, 245, 157),
+        qRgb(27, 94, 32),    qRgb(56, 142, 60),   qRgb(76, 175, 80),
+        qRgb(139, 195, 74),  qRgb(205, 220, 57),  qRgb(178, 255, 89),
+        qRgb(0, 77, 64),     qRgb(0, 137, 123),   qRgb(0, 188, 212),
+        qRgb(3, 169, 244),   qRgb(21, 101, 192),  qRgb(63, 81, 181),
+        qRgb(74, 20, 140),   qRgb(123, 31, 162),  qRgb(171, 71, 188),
+        qRgb(173, 20, 87),   qRgb(233, 30, 99),   qRgb(244, 143, 177)
     };
 }
 
-QVector<QRgb> ColorPalettePresets::loadPaletteFromFile(const QString &filePath, QString *outError)
+QString ColorPalettePresets::userPalettesDirectory()
+{
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + QStringLiteral("/palettes");
+    QDir().mkpath(dir);
+    return dir;
+}
+
+QStringList ColorPalettePresets::paletteSearchPaths()
+{
+    QStringList paths;
+    paths << QStringLiteral(":/palettes");
+    paths << QDir(QCoreApplication::applicationDirPath()).filePath(QStringLiteral("palettes"));
+    paths << userPalettesDirectory();
+    return paths;
+}
+
+void ColorPalettePresets::scanPalettes()
+{
+    initPaletteResources();
+    s_availablePalettes.clear();
+
+    QSet<QString> seenIds;
+    QStringList nameFilters;
+    nameFilters << QStringLiteral("*.gpl") << QStringLiteral("*.hex") << QStringLiteral("*.pal");
+
+    // Scan search paths in order: 1. embedded :/palettes, 2. app dir, 3. user config dir
+    for (const QString &dirPath : paletteSearchPaths()) {
+        QDir dir(dirPath);
+        if (!dir.exists()) continue;
+
+        QFileInfoList files = dir.entryInfoList(nameFilters, QDir::Files | QDir::Readable, QDir::Name);
+        for (const QFileInfo &fi : files) {
+            QString id = fi.completeBaseName().toLower();
+            QString name;
+            QString err;
+            QVector<QRgb> colors = loadPaletteFromFile(fi.absoluteFilePath(), &err, &name);
+            if (colors.isEmpty()) continue;
+
+            if (seenIds.contains(id)) {
+                // User or local app directory override of an existing palette
+                for (auto &existing : s_availablePalettes) {
+                    if (existing.id.toLower() == id) {
+                        existing.colors = colors;
+                        existing.filePath = fi.absoluteFilePath();
+                        if (!name.isEmpty()) existing.name = name;
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            PaletteInfo info;
+            info.id = id;
+            info.name = name.isEmpty() ? fi.completeBaseName() : name;
+            info.filePath = fi.absoluteFilePath();
+            info.colors = colors;
+            info.isBuiltIn = fi.absoluteFilePath().startsWith(QStringLiteral(":/"));
+            s_availablePalettes.append(info);
+            seenIds.insert(id);
+        }
+    }
+
+    // Ensure bento_standard is first if present
+    for (int i = 0; i < s_availablePalettes.size(); ++i) {
+        if (s_availablePalettes.at(i).id == QStringLiteral("bento_standard")) {
+            if (i > 0) s_availablePalettes.move(i, 0);
+            break;
+        }
+    }
+
+    // Ultimate emergency fallback if resource system or directory scan had an issue
+    if (s_availablePalettes.isEmpty()) {
+        PaletteInfo standardInfo;
+        standardInfo.id = QStringLiteral("bento_standard");
+        standardInfo.name = QStringLiteral("Bento Standard (36)");
+        standardInfo.isBuiltIn = true;
+        standardInfo.colors = standardPalette();
+        s_availablePalettes.append(standardInfo);
+    }
+}
+
+QList<ColorPalettePresets::PaletteInfo> ColorPalettePresets::availablePalettes()
+{
+    if (s_availablePalettes.isEmpty()) {
+        scanPalettes();
+    }
+    return s_availablePalettes;
+}
+
+QVector<QRgb> ColorPalettePresets::getPaletteById(const QString &id)
+{
+    QString lowerId = id.toLower();
+    for (const auto &p : availablePalettes()) {
+        if (p.id.toLower() == lowerId) {
+            return p.colors;
+        }
+    }
+
+    if (lowerId == QLatin1String("bento_standard") || lowerId == QLatin1String("standard")) {
+        return standardPalette();
+    }
+    return {};
+}
+
+QVector<QRgb> ColorPalettePresets::getPaletteByIndex(int index)
+{
+    const auto list = availablePalettes();
+    if (index >= 0 && index < list.size()) {
+        return list.at(index).colors;
+    }
+    return standardPalette();
+}
+
+QVector<QRgb> ColorPalettePresets::getPresetPalette(Preset preset)
+{
+    Q_UNUSED(preset);
+    return standardPalette();
+}
+
+
+
+QVector<QRgb> ColorPalettePresets::loadPaletteFromFile(const QString &filePath, QString *outError, QString *outName)
 {
     QVector<QRgb> result;
     QFileInfo fi(filePath);
@@ -226,6 +189,9 @@ QVector<QRgb> ColorPalettePresets::loadPaletteFromFile(const QString &filePath, 
         if (img.isNull()) {
             if (outError) *outError = QCoreApplication::translate("ColorPalettePresets", "Failed to decode image.");
             return result;
+        }
+        if (outName) {
+            *outName = fi.completeBaseName();
         }
         QSet<QRgb> uniqueColors;
         for (int y = 0; y < img.height(); ++y) {
@@ -253,7 +219,18 @@ QVector<QRgb> ColorPalettePresets::loadPaletteFromFile(const QString &filePath, 
 
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
-        if (line.isEmpty() || line.startsWith(QLatin1String("GIMP")) || line.startsWith(QLatin1String("JASC"))) {
+        if (line.isEmpty() || line.startsWith(QLatin1String("GIMP"), Qt::CaseInsensitive) || line.startsWith(QLatin1String("JASC"), Qt::CaseInsensitive)) {
+            continue;
+        }
+
+        // Header: "Name: <Palette Name>"
+        if (line.startsWith(QLatin1String("Name:"), Qt::CaseInsensitive)) {
+            if (outName && outName->isEmpty()) {
+                *outName = line.mid(5).trimmed();
+            }
+            continue;
+        }
+        if (line.startsWith(QLatin1String("Columns:"), Qt::CaseInsensitive)) {
             continue;
         }
 
@@ -268,8 +245,15 @@ QVector<QRgb> ColorPalettePresets::loadPaletteFromFile(const QString &filePath, 
             continue;
         }
 
+        // Comments
         if (line.startsWith(QLatin1Char('#')) || line.startsWith(QLatin1Char(';'))) {
-            continue; // Skip comments
+            if (outName && outName->isEmpty()) {
+                QString c = line.mid(1).trimmed();
+                if (c.startsWith(QLatin1String("Name:"), Qt::CaseInsensitive)) {
+                    *outName = c.mid(5).trimmed();
+                }
+            }
+            continue;
         }
 
         // Check for RGB triplet (e.g. "255 128 0" as in .gpl or .pal)
@@ -282,6 +266,10 @@ QVector<QRgb> ColorPalettePresets::loadPaletteFromFile(const QString &filePath, 
                 result.append(qRgb(r, g, b));
             }
         }
+    }
+
+    if (outName && outName->isEmpty()) {
+        *outName = fi.completeBaseName();
     }
 
     if (result.isEmpty() && outError) {
