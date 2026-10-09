@@ -253,11 +253,23 @@ func _ready():
 
 ---
 
-## 5. Guide & Conducteur pour Vidéo YouTube / DevLog
+## 5. Guide & Conducteur pour Vidéo YouTube, DevLog & Réseaux Sociaux
 
-Ce script minuté de **8 à 10 minutes** est calibré pour captiver les développeurs indépendants et les convaincre par la preuve technique :
+Ce conducteur minuté est conçu pour captiver les développeurs indépendants, démontrer la supériorité technique de BentoPack et maximiser les téléchargements des addons et de BentoPack Studio :
 
-```
+---
+
+### 5.1 Configuration Recommandée d'Enregistrement (OBS Studio)
+Pour que vos vidéos et captures de pixel art soient d'une netteté cristalline et ne soient pas dégradées par la compression :
+* **Résolution de Base / Sortie :** `1920x1080` ou `2560x1440` à **60 FPS constants**.
+* **Mise à l'échelle :** Désactivez tout filtrage bilinéaire ou bicubique ! Utilisez impérativement **Point / Nearest Neighbor** (Integer Scaling) pour que chaque pixel reste parfaitement carré.
+* **Débit Vidéo (Bitrate) :** Minimum **20 000 Kbps** (CBR) ou CQP 16 (codec NVENC H.264 / HEVC / Apple ProRes) pour éviter les macro-blocs de compression sur les fonds noirs du mode Overdraw.
+
+---
+
+### 5.2 Script Long Métrage (8 à 10 minutes — YouTube & DevLog)
+
+```text
 ⏱️ 0:00 - 0:45 | L'ACCROCHE CHOC (Le "Hook")
 "Votre jeu 2D rame sur Nintendo Switch, Steam Deck ou smartphone alors que vos graphismes sont en pixel art ?
 Vous pensez que votre code C# ou votre processeur est coupable... mais en réalité, vous gaspillez 75%
@@ -271,24 +283,27 @@ de la puissance de votre carte graphique dans le vide. Regardez cette image."
   pour chaque pixel invisible !"
 - Montrez ce qui se passe quand 10 sprites se superposent : "Le GPU calcule 10 fois le même vide."
 
-⏱️ 2:15 - 4:30 | LE BENCHMARK EN DIRECT (La Preuve)
-- Montrez la scène de benchmark (350 sprites qui se superposent avec lumières 2D URP).
+⏱️ 2:15 - 4:30 | LE BENCHMARK EN DIRECT (La Preuve Chiffrée)
+- Montrez la scène de benchmark (350 sprites qui se superposent avec lumières 2D dynamiques URP).
 - Ouvrez le Profiler en direct :
   "16.8 millisecondes par image. Sur Switch, on est bloqué à 50 FPS."
 - Basculez sur la version BentoPack Tight Mesh en 1 clic :
   "4.9 millisecondes. On passe à plus de 200 FPS. -70% de charge GPU instantanée, sans rien changer au code."
 
-⏱️ 4:30 - 6:45 | LA SOLUTION : BENTOPACK STUDIO
+⏱️ 4:30 - 6:45 | LA SOLUTION : BENTOPACK STUDIO (CDT MESH & ASEPRITE)
 - Ouvrez BentoPack Studio.
-- Glissez-déposez une planche de sprites ou un fichier Aseprite.
-- Cliquez sur le bouton "M8 Tight Polygon Mesh".
-- Montrez le Marching Squares et la triangulation automatique en temps réel.
+- Glissez-déposez le fichier Aseprite ou les spritesheets brutes.
+- Cliquez sur "Maillage Intelligent CDT" :
+  * Montrez la détection de crêtes internes RGB euclidienne (qui sépare les vêtements, yeux et armes).
+  * Donnez un coup de Couteau Laser (✂️) interactif en direct pour créer une pliure d'articulation.
+  * Cochez "Appliquer à toutes les frames de l'animation" : tout le cycle se maille en 50 ms !
 - Montrez la boîte de dialogue d'exportation réorganisée en étapes avec le sélecteur Unity / Godot / Unreal.
 
 ⏱️ 6:45 - 8:15 | L'INTÉGRATION SANS FRICTION DANS LE MOTEUR
 - Montrez le glisser-déposer du fichier .bento dans Unity :
   "Pas de DLL custom, pas de script bizarre dans vos builds. Ça génère du Sprite et du AnimationClip 100% natifs."
 - Montrez la même chose dans Godot 4 avec les SpriteFrames générés automatiquement.
+- Faites une retouche dans Aseprite et Ctrl+S : montrez le Hot-Reload "Zéro Clic" instantané !
 
 ⏱️ 8:15 - 9:30 | CONCLUSION & APPEL À L'ACTION (CTA)
 - "Les addons d'importation pour Unity, Godot 4 et Unreal Engine 5 sont 100% GRATUITS et open-source sur GitHub et OpenUPM.
@@ -298,16 +313,30 @@ de la puissance de votre carte graphique dans le vide. Regardez cette image."
 
 ---
 
+### 5.3 Les 3 Pièges de Capture à Éviter Absolument
+
+1. 🚫 **Piège n°1 : Le flou de mise à l'échelle bilinéaire.**  
+   Ne capturez jamais une fenêtre de pixel art en résolution non entière sans Integer Scaling, sinon les pixels bavent et perdent leur attrait visuel rétro.
+2. 🚫 **Piège n°2 : L'Overdraw Unity trop transparent.**  
+   Dans Unity, si l'overdraw est difficile à voir, augmentez temporairement le nombre de sprites à 400 ou 500 pour que le cumul additif crée cette saturation blanche aveuglante qui prouve visuellement le goulot d'étranglement.
+3. 🚫 **Piège n°3 : Oublier d'afficher les compteurs FPS / Profiler.**  
+   Les spectateurs sont sceptiques. N'affirmez pas que *"c'est plus rapide"*, affichez toujours le module GPU du Profiler et le compteur FPS en surimpression vidéo !
+
+---
+
 ## 6. F.A.Q. Technique pour Sceptiques & Tech Leads
 
 #### Q1 : *"Rajouter des triangles ne va-t-il pas surcharger le Vertex Shader ?"*
-> **Réponse :** Dans un jeu 2D moderne, le goulot d'étranglement n'est **JAMAIS** le nombre de sommets (Vertex Bound), mais **TOUJOURS** le remplissage de pixels (Fillrate / Pixel Bound). Passer de 2 triangles (quad) à 8 ou 12 triangles par sprite coûte quelques fractions de microseconde au Vertex Shader, mais économise des millions de calculs de pixels transparents dans le Fragment Shader. Le ratio gain/coût est de **l'ordre de 50 pour 1**.
+> **Réponse :** Dans un jeu 2D moderne, le goulot d'étranglement n'est **JAMAIS** le nombre de sommets (Vertex Bound), mais **TOUJOURS** le remplissage de pixels (Fillrate / Pixel Bound). Passer de 2 triangles (quad) à 8 ou 14 triangles par sprite coûte quelques fractions de microseconde au Vertex Shader, mais économise des millions de calculs de pixels transparents dans le Fragment Shader. Le ratio gain/coût mesuré est de **l'ordre de 50 pour 1**.
 
-#### Q2 : *"Unity n'a-t-il pas déjà un générateur d'Outline dans son Sprite Editor ?"*
-> **Réponse :** Le Sprite Editor de Unity propose effectivement une option de géométrie personnalisée, mais elle est lente, manuelle, produit souvent des triangles dégénérés et ne gère pas l'anti-jittering sur les animations multi-frames. BentoPack automatise le processus par lot en quelques millisecondes avec des algorithmes certifiés (Marching Squares étanche et Ear-Clipping triangulé).
+#### Q2 : *"Quelle est la différence entre le contour Marching Squares et le Smart CDT Mesh M19 ?"*
+> **Réponse :** Le Marching Squares historique découpe uniquement le contour extérieur (silhouette). Le nouveau moteur **CDT (Constrained Delaunay Triangulation)** de BentoPack analyse en plus les transitions de contraste internes (via distance colorimétrique RGB ou gradient Sobel) et insère des sommets et arêtes intérieures le long des pliures et vêtements. Cela permet d'animer le maillage via des vertex shaders (shaders de vent, flottaison) sans distorsion désagréable des pixels.
 
-#### Q3 : *"Mes hitboxes et points de pivot vont-ils bouger si un graphiste met à jour l'animation ?"*
+#### Q3 : *"Unity n'a-t-il pas déjà un générateur d'Outline dans son Sprite Editor ?"*
+> **Réponse :** Le Sprite Editor de Unity propose une option manuelle d'outline, mais elle est lente, instable, produit régulièrement des triangles dégénérés et ne gère absolument pas l'anti-jittering sur les animations multi-frames. BentoPack automatise le processus par lot en quelques millisecondes avec des algorithmes certifiés (Bowyer-Watson étanche et Ramer-Douglas-Peucker).
+
+#### Q4 : *"Mes hitboxes et points de pivot vont-ils bouger si un graphiste met à jour l'animation ?"*
 > **Réponse :** Non. BentoPack verrouille mathématiquement l'enveloppe englobante de l'animation (*Animation Envelope Locking*). Même si un sprite est rogné ou agrandi d'une frame à l'autre, son point de pivot normalisé et ses coordonnées d'ancrage restent parfaitement stables, garantissant que vos colliders et sockets d'armes ne dérivent jamais d'un demi-pixel.
 
-#### Q4 : *"L'addon Unity utilise-t-il des composants propriétaires dans les builds ?"*
+#### Q5 : *"L'addon Unity utilise-t-il des composants propriétaires dans les builds ?"*
 > **Réponse :** Zéro runtime overhead. L'addon est un importateur d'éditeur pur (`ScriptedImporter`). Il génère des primitives standard `UnityEngine.Sprite`, `UnityEngine.AnimationClip` et `UnityEngine.Texture2D`. Si vous retirez l'addon de votre projet, votre jeu continue de compiler et de tourner sans aucune erreur.

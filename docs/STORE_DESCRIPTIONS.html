@@ -221,17 +221,17 @@
       <div class="copyable-box">BentoPack Studio</div>
 
       <div class="field-title">Hook / Subtitle (Steam: Max 160 characters)</div>
-      <div class="copyable-box">High-performance 2D texture atlas, tight polygon mesh & sprite animation studio for game developers.</div>
+      <div class="copyable-box">High-performance 2D texture atlas, tight CDT polygon mesh & sprite animation studio for game developers.</div>
 
       <div class="field-title">Short Description (Steam / itch: Max 300 characters)</div>
-      <div class="copyable-box">BentoPack Studio is the ultimate 2D sprite workstation: zero-waste MaxRects atlas packing, tight polygon meshes slashing 60–80% GPU overdraw, native KTX2 VRAM compression, pixel editing, and one-click export bridges for Godot 4, Unity & Unreal Engine 5.</div>
+      <div class="copyable-box">BentoPack Studio is the ultimate 2D sprite workstation: zero-waste MaxRects atlas packing, smart CDT polygon meshes slashing 60–80% GPU overdraw, native KTX2 VRAM compression, multi-layer Aseprite workflows, and instant zero-click export bridges for Godot 4, Unity & Unreal Engine 5.</div>
 
       <div class="field-title">Full Store Description (Formatted Markdown)</div>
       <div class="copyable-box"># 🍱 BentoPack Studio — The High-Performance 2D Sprite & Texture Pipeline
 
 Stop wasting GPU fillrate, memory, and production time on sub-optimal sprite sheets. **BentoPack Studio** is a modern, standalone 2D texture atlas packer, polygon mesh generator, and animation sequencer engineered from the ground up for indie developers and professional game studios.
 
-From raw pixel art and frame sequences to production-ready game engine assets, BentoPack automates trimming, tight polygonal triangulation, GPU VRAM compression, and multi-animation structuring with zero compromise on visual fidelity.
+From raw pixel art and multi-layer Aseprite files to production-ready game engine assets, BentoPack automates trimming, Constrained Delaunay Triangulation (CDT), GPU VRAM compression, and multi-animation structuring with zero compromise on visual fidelity.
 
 ---
 
@@ -240,14 +240,16 @@ From raw pixel art and frame sequences to production-ready game engine assets, B
 ### 📦 1. Zero-Waste Atlas Packing (MaxRects & Polygon Nesting)
 * **Cutting-Edge Packing Heuristics:** Best Short Side Fit (BSSF), Best Area Fit (BAF), Best Long Side Fit (BLSF), Bottom-Left, and Shelf algorithms.
 * **Lossless Frame Deduplication:** Automatically detects identical frames across all sequences and shares atlas texture regions while preserving full animation timings.
-* **Hardware-Optimized Constraints:** Full support for Power of Two (POT 2^n), Force Square (1:1), Inner Padding, and Border Extrude to eliminate texture filtering bleeding artifacts.
+* **Hardware-Optimized Constraints:** Full support for Power of Two (POT 2^n), Force Square (1:1), Inner Padding, and Border Extrude (1–4px) to eliminate texture filtering bleeding artifacts.
 * **WYSIWYG Mode:** Preserve and tweak hand-crafted sprite sheet layouts without altering source frames.
 
-### 📐 2. M8 Tight Polygon Meshes (Save 60% to 80% GPU Overdraw)
+### 📐 2. Smart CDT Polygon Meshes (Save 60% to 80% GPU Overdraw)
 * **Say Goodbye to Transparent Quad Overdraw:** Standard rectangular quads waste millions of GPU pixel fragment shader cycles drawing invisible transparent pixels.
-* **Instant Contour Vectorization:** Built-in Marching Squares and Ramer-Douglas-Peucker (RDP) contour simplification.
-* **Constrained Ear-Clipping Triangulation:** Automatically builds lightweight 2D meshes tightly hugging your sprites' opaque contours.
-* **Game Engine Ready:** Exports vertex coordinates, UV maps, and index buffers natively tailored for Unity (Sprite.OverrideGeometry), Godot 4 (ArrayMesh), and Unreal Engine (Paper2D RenderGeometry).
+* **Constrained Delaunay Triangulation (CDT):** Builds watertight boundary polygons and internal triangulation using robust Bowyer-Watson algorithms.
+* **Multi-Channel Chromatic Ridge Detection:** Automatically identifies interior folds, clothing borders, and high-contrast lines using Euclidean RGB Color Distance or Luminance Sobel operators.
+* **Interactive Mesh Tools & Laser Knife:** Add, snap, or remove interior Steiner vertices with instant re-triangulation. Use the dynamic Laser Knife tool to cut fold lines and joints in a single swipe!
+* **Batch Animation Propagation:** Apply custom contours and CDT meshes across all frames of an animation sequence with a single click.
+* **Game Engine Ready:** Exports vertex coordinates, UV maps, and index buffers natively tailored for Unity (`Sprite.OverrideGeometry`), Godot 4 (`ArrayMesh`), and Unreal Engine (`Paper2D RenderGeometry`).
 
 ### 🚀 3. Native GPU VRAM Compression (Khronos KTX2 & Basis Universal)
 * **Direct Hardware Upload:** Eliminate CPU decompression overhead and reduce runtime mobile/console RAM footprint by up to 87.5%.
@@ -256,72 +258,89 @@ From raw pixel art and frame sequences to production-ready game engine assets, B
 * **Zstandard Supercompression:** Lossless Deflate/Zstd secondary compression (levels 1–22).
 * **Live VRAM Telemetry:** Real-time preview calculating exact GPU memory consumption and percentage savings directly in the export dialog.
 
-### 🎬 4. Animation Filmstrip & Sequence Workstation
+### 🎨 4. Native Aseprite Integration & Multi-Layer Pixel Editor
+* **Direct Binary Aseprite Ingestion:** Drag and drop `.ase` and `.aseprite` files directly — decodes layers, cels, blending modes, and animation tags without manual export passes.
+* **Modular Skin & Equipment Profiles:** Manage modular layers (armor, weapons, headgear) and generate combinatory baked sheets or decoupled overlays with shared pivots.
+* **Full Layer Stack Workstation:** In-app `LayerStackWidget` supporting layer visibility, opacity, composition modes, merge down, flatten, and onion skinning.
+* **Non-Destructive Filter Suite:** Chroma-Key Background Removal, CIELAB Despill, Outline Generator, Palette Swapping, and Color Adjustments with live preview and full Undo/Redo.
+
+### 🎬 5. Animation Filmstrip & Sequence Workstation
 * **Multi-Animation Management:** Organize walk cycles, combat moves, and FX within a unified project workspace.
 * **Sub-Pixel Pivot Reticle:** Intuitive alignment reticle with automatic anti-jittering envelope calculation.
 * **Flexible Playback Modes:** Forward Loop, Play Once, and automated Ping-Pong cycles with independent FPS timing per sequence.
 * **Direct Decompilation:** Drag and drop multi-frame animated GIFs or sprite sheets for instant automated frame extraction.
 
-### 🎨 5. Embedded Pixel Art Editor & Smart Shaders
-* **Fine-Tuned Sprite Editing:** Precision pixel manipulation with onion skinning, layers, and retro palettes.
-* **Non-Destructive Filter Suite:** Chroma-Key Background Removal, Despill / Anti-Halo, Outline Generator, and Palette Swapping / Color Adjustments.
+### 🔄 6. Zero-Click Hot-Reload & Seamless Engine Bridges
+* **Instant Engine Export Bridges:**
+  * **Godot 4.x:** Native `.tres` (`SpriteFrames`) with embedded `AtlasTexture` resources and companion `ArrayMesh`.
+  * **Unity 2D:** Tight Sprite Mesh `.unity.json` metadata compatible with URP, HDRP, and Built-in pipelines (`SpriteMeshType.Tight`).
+  * **Unreal Engine 5:** Dedicated `.paper2d.json` descriptors with render and collision polygonal geometry.
+  * **LibGDX & Spine 2D:** Universal `.atlas` key-value text format.
+  * **TexturePacker / JSON:** Universal standard for Phaser, PixiJS, Defold, Raylib, and Bevy.
+* **Zero-Click Watch Daemon (`bentopack-cli --watch`):** Save your artwork in Aseprite (`Ctrl+S`) — BentoPack detects file changes, debounces writes, recompiles the atlas and CDT mesh, and updates your game engine project folder in sub-20ms without touching your mouse!
 
-### 🔄 6. Seamless Multi-Engine Export & Live Watch Daemon
-Export perfectly formatted assets in a structured, step-by-step dialog:
-* **Godot 4.x:** Native .tres (SpriteFrames) with embedded AtlasTexture resources and companion ArrayMesh.
-* **Unity 2D:** Tight Sprite Mesh .unity.json metadata compatible with URP, HDRP, and Built-in pipelines (SpriteMeshType.Tight).
-* **Unreal Engine 5:** Dedicated .paper2d.json descriptors with render and collision polygonal geometry.
-* **LibGDX & Spine 2D:** Universal .atlas key-value text format.
-* **Aseprite Binary:** Native .ase / .aseprite project files preserving layers, cels, and animation tags.
-* **TexturePacker / JSON:** Universal standard for Phaser, PixiJS, Defold, Raylib, and Bevy.
-* **Animated GIF:** Optimized web and social media sequences with alpha transparency.
-* **Automated Headless Watch Daemon (`bentopack-cli --watch`):** Save frames in Aseprite, Photoshop, or Krita — BentoPack watches your source folder, debounces writes, and silently compiles updated atlases and meshes into your engine project folder in sub-20ms!
-
-### 🛡️ 7. Git Version Control & 100% Native Architecture
+### 🛡️ 7. Git Version Control & Headless CI Automation
 * **Embedded Git Workspace:** Commit, branch, compare, and revert project revisions directly inside the editor without external tools (powered by LibGit2).
-* **Multi-Platform Native Performance:** Windows (10/11), Linux (Steam Deck verified, AppImage/deb/rpm), macOS (Apple Silicon native M1/M2/M3/M4 & Intel), and Haiku OS (.hpkg). Zero Electron bloat, 80ms cold startup!</div>
+* **Robust Headless CLI:** Automate your studio's build pipeline with `bentopack-cli` across GitHub Actions, GitLab CI, or local build scripts.
+* **100% Native & Ultra-Fast:** Zero Electron bloat, 80ms cold startup, runs standalone without installer clutter.
+
+---
+
+## 🥊 Why Game Developers Choose BentoPack Over Legacy Tools
+
+| Feature | BentoPack Studio | TexturePacker | Vanilla Aseprite |
+|---|:---:|:---:|:---:|
+| **Pricing Model** | **One-time buy (No subscription)** | Paid / Yearly Sub | One-time buy |
+| **GPU Overdraw Mesh** | **✅ Smart CDT (60–80% savings)** | ⚠️ Basic Polygon | ❌ Quad only (0% savings) |
+| **Internal Ridges & Laser Knife** | **✅ Yes (RGB & Sobel)** | ❌ No | ❌ No |
+| **Native Aseprite Binary Import** | **✅ Yes (.ase/.aseprite)** | ⚠️ Basic JSON | ✅ Native |
+| **Multi-Layer & Skin Variants** | **✅ Yes (Baked & Modular)** | ❌ No | ⚠️ Manual layers |
+| **Khronos KTX2 / Basis VRAM** | **✅ Yes (Direct GPU)** | ⚠️ Limited PVR | ❌ No |
+| **Native Godot 4 / Unity / UE5 Bridges** | **✅ Yes (100% Free Addons)** | ⚠️ Generic data | ❌ No |
+| **Zero-Click Hot Reload Daemon** | **✅ Built-in CLI & GUI** | ⚠️ External scripts | ❌ No |
+| **Integrated Git Version Control** | **✅ LibGit2 Time-Travel** | ❌ No | ❌ No |</div>
 
       <div class="field-title">Screenshots Checklist (Desktop Application)</div>
       <div class="screenshot-grid">
         <div class="screenshot-placeholder">
           <div class="screenshot-title">app_screen_01_main_workspace_packing.png</div>
           <div class="screenshot-res">1920 x 1080 px • PNG 24-bit</div>
-          <div class="screenshot-desc">Main window overview showing packed atlas texture with segmented sprite boxes, left frame list, and bottom zoom slider.</div>
-          <div class="screenshot-caption">Caption: "Intuitive workspace with automated frame slicing, bounding boxes, and instant atlas packing."</div>
+          <div class="screenshot-desc">Main window overview showing packed atlas texture with segmented sprite boxes, left frame list, and active bottom timeline.</div>
+          <div class="screenshot-caption">Caption: "Zero-waste MaxRects packing, interactive bounding boxes, and instant multi-animation sequencer."</div>
         </div>
 
         <div class="screenshot-placeholder">
-          <div class="screenshot-title">app_screen_02_tight_polygon_mesh_overdraw.png</div>
+          <div class="screenshot-title">app_screen_02_cdt_smart_mesh_ridges.png</div>
           <div class="screenshot-res">1920 x 1080 px • PNG 24-bit</div>
-          <div class="screenshot-desc">Tight Polygon Mesh dialog showing the triangulated wireframe mesh surrounding the sprite silhouette and the -70% Overdraw metric.</div>
-          <div class="screenshot-caption">Caption: "Eliminate GPU overdraw by generating tight polygon meshes that hug opaque pixels."</div>
+          <div class="screenshot-desc">Smart CDT Polygon Mesh dialog showing chromatic edge detection (RGB), interior Steiner vertices, and interactive laser knife.</div>
+          <div class="screenshot-caption">Caption: "Smart Constrained Delaunay Triangulation (CDT) slashing 60–80% GPU overdraw with interactive laser cutting."</div>
         </div>
 
         <div class="screenshot-placeholder">
-          <div class="screenshot-title">app_screen_03_vram_ktx2_telemetry.png</div>
+          <div class="screenshot-title">app_screen_03_aseprite_layers_skins.png</div>
           <div class="screenshot-res">1920 x 1080 px • PNG 24-bit</div>
-          <div class="screenshot-desc">Export dialog showcasing KTX2 Universal (UASTC / ETC1S) compression and live GPU VRAM telemetry (-75% savings).</div>
+          <div class="screenshot-desc">Pixel Editor with LayerStackWidget open, displaying multi-layer Aseprite layers (Armor, Weapon, FX) and modular skin profiles.</div>
+          <div class="screenshot-caption">Caption: "Direct binary Aseprite import, full layer stack editing, and modular equipment skin profiles."</div>
+        </div>
+
+        <div class="screenshot-placeholder">
+          <div class="screenshot-title">app_screen_04_vram_ktx2_telemetry.png</div>
+          <div class="screenshot-res">1920 x 1080 px • PNG 24-bit</div>
+          <div class="screenshot-desc">Export dialog showcasing KTX2 Universal (UASTC / ETC1S) compression and live GPU VRAM telemetry (-85% savings).</div>
           <div class="screenshot-caption">Caption: "Native KTX2 / Basis Universal GPU compression with real-time VRAM telemetry."</div>
-        </div>
-
-        <div class="screenshot-placeholder">
-          <div class="screenshot-title">app_screen_04_animation_filmstrip_timeline.png</div>
-          <div class="screenshot-res">1920 x 1080 px • PNG 24-bit</div>
-          <div class="screenshot-desc">Close-up of the bottom animation dock: Filmstrip thumbnails, playback controls, loop modes (Ping-Pong), and FPS settings.</div>
-          <div class="screenshot-caption">Caption: "Multi-sequence animation timeline with sub-pixel pivots, ping-pong looping, and anti-jittering."</div>
         </div>
 
         <div class="screenshot-placeholder">
           <div class="screenshot-title">app_screen_05_pixel_editor_filters.png</div>
           <div class="screenshot-res">1920 x 1080 px • PNG 24-bit</div>
-          <div class="screenshot-desc">Pixel Editor dialog with magnified grid (>=400%), retro palettes, and the non-destructive filter preview (Outline / Color Swap).</div>
-          <div class="screenshot-caption">Caption: "Built-in pixel editor and non-destructive filter suite (Chroma Key, Outline, Despill, Color Swap)."</div>
+          <div class="screenshot-desc">Pixel Editor dialog with magnified grid (>=400%), retro palettes, and the non-destructive filter preview (CIELAB Despill & Outline).</div>
+          <div class="screenshot-caption">Caption: "Built-in pixel editor and non-destructive filter suite (Chroma Key, Outline, CIELAB Despill, Color Swap)."</div>
         </div>
 
         <div class="screenshot-placeholder">
           <div class="screenshot-title">app_screen_06_step_export_dialog.png</div>
           <div class="screenshot-res">1920 x 1080 px • PNG 24-bit</div>
-          <div class="screenshot-desc">New reorganized Export Dialog: Destination folder + project name, target format dropdown, and dynamic contextual options.</div>
+          <div class="screenshot-desc">Reorganized Export Dialog: Destination folder + project name, target format dropdown (Godot, Unity, Unreal, Spine, JSON), and dynamic options.</div>
           <div class="screenshot-caption">Caption: "Streamlined step-by-step export dialog with intelligent format-specific option filtering."</div>
         </div>
       </div>

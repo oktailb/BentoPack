@@ -44,9 +44,9 @@
 
 * **Nom du Produit :** `BentoPack Studio`
 * **Sous-titre / Accroche (Steam Subtitle - max 160 caractères) :**
-  > *High-performance 2D texture atlas, tight polygon mesh & sprite animation studio for game developers.*
+  > *High-performance 2D texture atlas, tight CDT polygon mesh & sprite animation studio for game developers.*
 * **Description Courte (Steam Short Description / itch.io tagline - max 300 caractères) :**
-  > *BentoPack Studio is the ultimate 2D sprite workstation: zero-waste MaxRects atlas packing, tight polygon meshes slashing 60–80% GPU overdraw, native KTX2 VRAM compression, pixel editing, and one-click export bridges for Godot 4, Unity & Unreal Engine 5.*
+  > *BentoPack Studio is the ultimate 2D sprite workstation: zero-waste MaxRects atlas packing, smart CDT polygon meshes slashing 60–80% GPU overdraw, native KTX2 VRAM compression, multi-layer Aseprite workflows, and instant zero-click export bridges for Godot 4, Unity & Unreal Engine 5.*
 
 ---
 
@@ -57,7 +57,7 @@
 
 Stop wasting GPU fillrate, memory, and production time on sub-optimal sprite sheets. **BentoPack Studio** is a modern, standalone 2D texture atlas packer, polygon mesh generator, and animation sequencer engineered from the ground up for indie developers and professional game studios.
 
-From raw pixel art and frame sequences to production-ready game engine assets, BentoPack automates trimming, tight polygonal triangulation, GPU VRAM compression, and multi-animation structuring with zero compromise on visual fidelity.
+From raw pixel art and multi-layer Aseprite files to production-ready game engine assets, BentoPack automates trimming, Constrained Delaunay Triangulation (CDT), GPU VRAM compression, and multi-animation structuring with zero compromise on visual fidelity.
 
 ---
 
@@ -66,13 +66,15 @@ From raw pixel art and frame sequences to production-ready game engine assets, B
 ### 📦 1. Zero-Waste Atlas Packing (MaxRects & Polygon Nesting)
 * **Cutting-Edge Packing Heuristics:** Best Short Side Fit (BSSF), Best Area Fit (BAF), Best Long Side Fit (BLSF), Bottom-Left, and Shelf algorithms.
 * **Lossless Frame Deduplication:** Automatically detects identical frames across all sequences and shares atlas texture regions while preserving full animation timings.
-* **Hardware-Optimized Constraints:** Full support for Power of Two (POT 2^n), Force Square (1:1), Inner Padding, and Border Extrude to eliminate texture filtering bleeding artifacts.
+* **Hardware-Optimized Constraints:** Full support for Power of Two (POT 2^n), Force Square (1:1), Inner Padding, and Border Extrude (1–4px) to eliminate texture filtering bleeding artifacts.
 * **WYSIWYG Mode:** Preserve and tweak hand-crafted sprite sheet layouts without altering source frames.
 
-### 📐 2. M8 Tight Polygon Meshes (Save 60% to 80% GPU Overdraw)
+### 📐 2. Smart CDT Polygon Meshes (Save 60% to 80% GPU Overdraw)
 * **Say Goodbye to Transparent Quad Overdraw:** Standard rectangular quads waste millions of GPU pixel fragment shader cycles drawing invisible transparent pixels.
-* **Instant Contour Vectorization:** Built-in Marching Squares and Ramer-Douglas-Peucker (RDP) contour simplification.
-* **Constrained Ear-Clipping Triangulation:** Automatically builds lightweight 2D meshes tightly hugging your sprites' opaque contours.
+* **Constrained Delaunay Triangulation (CDT):** Builds watertight boundary polygons and internal triangulation using robust Bowyer-Watson algorithms.
+* **Multi-Channel Chromatic Ridge Detection:** Automatically identifies interior folds, clothing borders, and high-contrast lines using Euclidean RGB Color Distance or Luminance Sobel operators.
+* **Interactive Mesh Tools & Laser Knife:** Add, snap, or remove interior Steiner vertices with instant re-triangulation. Use the dynamic Laser Knife tool to cut fold lines and joints in a single swipe!
+* **Batch Animation Propagation:** Apply custom contours and CDT meshes across all frames of an animation sequence with a single click.
 * **Game Engine Ready:** Exports vertex coordinates, UV maps, and index buffers natively tailored for Unity (`Sprite.OverrideGeometry`), Godot 4 (`ArrayMesh`), and Unreal Engine (`Paper2D RenderGeometry`).
 
 ### 🚀 3. Native GPU VRAM Compression (Khronos KTX2 & Basis Universal)
@@ -82,31 +84,47 @@ From raw pixel art and frame sequences to production-ready game engine assets, B
 * **Zstandard Supercompression:** Lossless Deflate/Zstd secondary compression (levels 1–22).
 * **Live VRAM Telemetry:** Real-time preview calculating exact GPU memory consumption and percentage savings directly in the export dialog.
 
-### 🎬 4. Animation Filmstrip & Sequence Workstation
+### 🎨 4. Native Aseprite Integration & Multi-Layer Pixel Editor
+* **Direct Binary Aseprite Ingestion:** Drag and drop `.ase` and `.aseprite` files directly — decodes layers, cels, blending modes, and animation tags without manual export passes.
+* **Modular Skin & Equipment Profiles:** Manage modular layers (armor, weapons, headgear) and generate combinatory baked sheets or decoupled overlays with shared pivots.
+* **Full Layer Stack Workstation:** In-app `LayerStackWidget` supporting layer visibility, opacity, composition modes, merge down, flatten, and onion skinning.
+* **Non-Destructive Filter Suite:** Chroma-Key Background Removal, CIELAB Despill, Outline Generator, Palette Swapping, and Color Adjustments with live preview and full Undo/Redo.
+
+### 🎬 5. Animation Filmstrip & Sequence Workstation
 * **Multi-Animation Management:** Organize walk cycles, combat moves, and FX within a unified project workspace.
 * **Sub-Pixel Pivot Reticle:** Intuitive alignment reticle with automatic anti-jittering envelope calculation.
 * **Flexible Playback Modes:** Forward Loop, Play Once, and automated Ping-Pong cycles with independent FPS timing per sequence.
 * **Direct Decompilation:** Drag and drop multi-frame animated GIFs or sprite sheets for instant automated frame extraction.
 
-### 🎨 5. Embedded Pixel Art Editor & Smart Shaders
-* **Fine-Tuned Sprite Editing:** Precision pixel manipulation with onion skinning, layers, and retro palettes.
-* **Non-Destructive Filter Suite:** Chroma-Key Background Removal, Despill / Anti-Halo, Outline Generator, and Palette Swapping / Color Adjustments.
+### 🔄 6. Zero-Click Hot-Reload & Seamless Engine Bridges
+* **Instant Engine Export Bridges:**
+  * **Godot 4.x:** Native `.tres` (`SpriteFrames`) with embedded `AtlasTexture` resources and companion `ArrayMesh`.
+  * **Unity 2D:** Tight Sprite Mesh `.unity.json` metadata compatible with URP, HDRP, and Built-in pipelines (`SpriteMeshType.Tight`).
+  * **Unreal Engine 5:** Dedicated `.paper2d.json` descriptors with render and collision polygonal geometry.
+  * **LibGDX & Spine 2D:** Universal `.atlas` key-value text format.
+  * **TexturePacker / JSON:** Universal standard for Phaser, PixiJS, Defold, Raylib, and Bevy.
+* **Zero-Click Watch Daemon (`bentopack-cli --watch`):** Save your artwork in Aseprite (`Ctrl+S`) — BentoPack detects file changes, debounces writes, recompiles the atlas and CDT mesh, and updates your game engine project folder in sub-20ms without touching your mouse!
 
-### 🔄 6. Seamless Multi-Engine Export & Live Watch Daemon
-Export perfectly formatted assets in a structured, step-by-step dialog:
-* **Godot 4.x:** Native `.tres` (`SpriteFrames`) with embedded `AtlasTexture` resources and companion `ArrayMesh`.
-* **Unity 2D:** Tight Sprite Mesh `.unity.json` metadata compatible with URP, HDRP, and Built-in pipelines (`SpriteMeshType.Tight`).
-* **Unreal Engine 5:** Dedicated `.paper2d.json` descriptors with render and collision polygonal geometry.
-* **LibGDX & Spine 2D:** Universal `.atlas` key-value text format.
-* **Aseprite Binary:** Native `.ase` / `.aseprite` project files preserving layers, cels, and animation tags.
-* **TexturePacker / JSON:** Universal standard for Phaser, PixiJS, Defold, Raylib, and Bevy.
-* **Animated GIF:** Optimized web and social media sequences with alpha transparency.
-* **Automated Headless Watch Daemon (`bentopack-cli --watch`):** Save frames in Aseprite, Photoshop, or Krita — BentoPack watches your source folder, debounces writes, and silently compiles updated atlases and meshes into your engine project folder in sub-20ms!
-
-### 🛡️ 7. Git Version Control & Headless CLI Automation
+### 🛡️ 7. Git Version Control & Headless CI Automation
 * **Embedded Git Workspace:** Commit, branch, compare, and revert project revisions directly inside the editor without external tools (powered by LibGit2).
 * **Robust Headless CLI:** Automate your studio's build pipeline with `bentopack-cli` across GitHub Actions, GitLab CI, or local build scripts.
-* **100% Native & Portable:** Zero Electron bloat, 80ms cold startup, runs standalone without installer clutter.
+* **100% Native & Ultra-Fast:** Zero Electron bloat, 80ms cold startup, runs standalone without installer clutter.
+
+---
+
+## 🥊 Why Game Developers Choose BentoPack Over Legacy Tools
+
+| Feature | BentoPack Studio | TexturePacker | Vanilla Aseprite |
+|---|:---:|:---:|:---:|
+| **Pricing Model** | **One-time buy (No subscription)** | Paid / Yearly Sub | One-time buy |
+| **GPU Overdraw Mesh** | **✅ Smart CDT (60–80% savings)** | ⚠️ Basic Polygon | ❌ Quad only (0% savings) |
+| **Internal Ridges & Laser Knife** | **✅ Yes (RGB & Sobel)** | ❌ No | ❌ No |
+| **Native Aseprite Binary Import** | **✅ Yes (.ase/.aseprite)** | ⚠️ Basic JSON | ✅ Native |
+| **Multi-Layer & Skin Variants** | **✅ Yes (Baked & Modular)** | ❌ No | ⚠️ Manual layers |
+| **Khronos KTX2 / Basis VRAM** | **✅ Yes (Direct GPU)** | ⚠️ Limited PVR | ❌ No |
+| **Native Godot 4 / Unity / UE5 Bridges** | **✅ Yes (100% Free Addons)** | ⚠️ Generic data | ❌ No |
+| **Zero-Click Hot Reload Daemon** | **✅ Built-in CLI & GUI** | ⚠️ External scripts | ❌ No |
+| **Integrated Git Version Control** | **✅ LibGit2 Time-Travel** | ❌ No | ❌ No |
 ```
 
 ---
@@ -127,18 +145,18 @@ Export perfectly formatted assets in a structured, step-by-step dialog:
 
 ---
 
-## 1.4 Checklist des Captures d'Écran Desktop
+## 1.4 Checklist des Captures d'Écran Desktop (Pack Visuel Maître)
 
 Capturez ces visuels en résolution **1920x1080** (ou 4K) en mode sombre pour une clarté maximale :
 
-* [ ] `app_screen_01_main_workspace_packing.png` : Fenêtre principale avec un atlas dense de sprites pixel art, la liste des frames et la timeline.
-* [ ] `app_screen_02_tight_polygon_mesh_overdraw.png` : Boîte de dialogue du maillage serré (M8 Tight Mesh) affichant le maillage triangulé épousant la silhouette et la métrique : *"-72% GPU Overdraw Reduction"*.
-* [ ] `app_screen_03_vram_ktx2_telemetry.png` : Dialogue d'export avec compression KTX2 et télémétrie GPU en direct (*-75% vs RGBA*).
-* [ ] `app_screen_04_animation_filmstrip_timeline.png` : Dock inférieur Filmstrip avec vignettes ordonnées, lecteur animé et réglages FPS.
-* [ ] `app_screen_05_pixel_editor_filters.png` : Atelier Pixel Editor avec grille zoomée et aperçu avant/après d'un filtre (Outline ou Color Swap).
-* [ ] `app_screen_06_step_export_dialog.png` : Boîte de dialogue d'exportation en 3 étapes avec options contextuelles dynamiques.
-* [ ] `app_screen_07_git_version_control.png` : Dock latéral d'historique Git avec arbre des commits et basculement de branche.
-* [ ] `app_screen_08_cli_batch_automation.png` : Console avec logs de `bentopack-cli` automatisant le build.
+* [ ] `app_screen_01_main_workspace_packing.png` : **(Hero #1)** Fenêtre principale avec un atlas dense de sprites pixel art, la liste des frames, et la timeline filmstrip en lecture active. Badge en surimpression : *"Zero-Waste MaxRects Packing"*.
+* [ ] `app_screen_02_cdt_smart_mesh_ridges.png` : **(Hero #2 — Nouveauté M19)** Panneau de Maillage Intelligent CDT affichant la silhouette triangulée et les arêtes internes de contraste chromatique (RGB) épousant les vêtements/yeux, avec l'outil couteau laser actif. Badge : *"-76% GPU Overdraw & Smart CDT Mesh"*.
+* [ ] `app_screen_03_aseprite_layers_skins.png` : **(Hero #3 — Nouveauté M17/M18)** Atelier Pixel Editor avec le dock `LayerStackWidget` ouvert, montrant les calques Aseprite (Corps, Armure, Épée, Effet Magique) et les profils de skins modulaires.
+* [ ] `app_screen_04_vram_ktx2_telemetry.png` : **(Hero #4)** Boîte de dialogue d'exportation avec compression KTX2 Basis Universal active et télémétrie GPU en direct (*"GPU Memory: 1.2 MB vs 8.0 MB RGBA (-85%)"*).
+* [ ] `app_screen_05_pixel_editor_filters_preview.png` : Zoom sur l'Éditeur de Pixels (zoom 600%) montrant la grille de pixels, la palette rétro, et le menu contextuel de filtres en live preview (Despill CIELAB & Outline).
+* [ ] `app_screen_06_step_export_dialog_engines.png` : Boîte de dialogue d'exportation en 3 étapes avec les sélecteurs de formats moteurs (Godot 4 `.tres`, Unity `.unity.json`, Unreal `.paper2d.json`, Spine `.atlas`).
+* [ ] `app_screen_07_git_version_control.png` : Dock latéral d'historique Git avec arbre visuel des commits, messages de versions et boutons de rollback.
+* [ ] `app_screen_08_cli_watch_daemon.png` : Terminal montrant `bentopack-cli --watch` qui recompile et met à jour le projet Godot 4 en 18 millisecondes dès que l'artiste fait `Ctrl+S` dans Aseprite.
 
 ---
 
@@ -349,19 +367,115 @@ Unleash the full potential of 2D game development in Unreal Engine 5. The **Bent
 
 ---
 
-# 5. Guide & Bonnes Pratiques de Prise de Vue (Screenshots Guidelines)
+# 5. Pack Médias, Visuels Clés & Stratégie Vidéo (Conversion Maximale)
 
-Pour que vos captures d'écran se démarquent sur les marketplaces et inspirent immédiatement confiance et professionnalisme :
+Pour maximiser le taux de conversion sur Steam, itch.io, l'Unity Asset Store, Godot AssetLib et Epic Fab, vos visuels doivent raconter une histoire technique immédiate : **"Moins de lag GPU, aucun abonnement, intégration moteur instantanée"**.
 
-1. **Résolution & Format :** `1920x1080` (Full HD) ou `2560x1440` (QHD) en format PNG 24-bit sans compression destructive.
-2. **Pas de flou de redimensionnement :** Si vous travaillez sur écran Retina / 4K, appliquez un filtre *Nearest Neighbor* (ou Integer Scaling) pour conserver la netteté parfaite des pixels de pixel art.
-3. **Thème Sombre Généralisé :** Utilisez le thème sombre moderne de BentoPack Studio et des moteurs (Dark Theme d'Unreal, Unity Dark Skin, Godot Dark).
-4. **Visuels de Bannières & Capsules (Steam & Stores) :**
-   * **Steam Header Capsule :** `460 x 215 px` (Logo BentoPack Studio centré + illustration de sprites).
-   * **Steam Main Capsule :** `616 x 353 px`.
-   * **Steam Hero Graphic :** `374 x 448 px`.
-   * **Unity Cover Image :** `1200 x 630 px`.
-   * **Fab / Unreal Featured Banner :** `1920 x 1080 px`.
+---
+
+## 5.1 Les 5 Visuels "Héros" Indispensables (Génèrent 80% des Clics)
+
+Ces 5 visuels doivent impérativement composer les 5 premières images de la galerie de chaque store :
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                   LES 5 VISUELS CLÉS DE CONVERSION                     │
+├─────┬─────────────────────────────────┬────────────────────────────────┤
+│ N°  │ Type de Visuel                  │ Objectif Psychologique         │
+├─────┼─────────────────────────────────┼────────────────────────────────┤
+│ #1  │ Split-Screen Overdraw Choc      │ Preuve technique irréfutable   │
+│ #2  │ CDT Smart Mesh & Laser Knife    │ Démonstration de supériorité   │
+│ #3  │ Zero-Click Hot Reload Aseprite  │ Ergonomie & gain de temps pur  │
+│ #4  │ Télémétrie VRAM KTX2 (-85%)     │ Rassure les Lead Tech & Mobile │
+│ #5  │ Calques Aseprite & Skins        │ Confort de travail des artistes│
+└─────┴─────────────────────────────────┴────────────────────────────────┘
+```
+
+### 1. Visuel Héro #1 : Le Split-Screen Overdraw Choc
+* **Composition :** Écran divisé 50/50 dans Unity Scene View ou Godot 4.
+  * *À gauche :* Mode Quads classiques standard (`Full Rect`), baigné d'un halo blanc aveuglant / rose fluo saturé d'overdraw.
+  * *À droite :* BentoPack Tight Mesh polygonal, vert foncé et bleu nuit calme, avec fond noir pur.
+* **Badges incrustés en gros caractères :**
+  * Gauche : `❌ Standard Quads (Overdraw Bottleneck - 54 FPS)`
+  * Droite : `✅ BentoPack CDT Mesh (-74% GPU Overdraw - 210 FPS)`
+* **Emplacement :** Position n°1 sur Steam, bannière principale de l'Unity Asset Store et de Godot AssetLib.
+
+### 2. Visuel Héro #2 : Le Maillage Intelligent CDT & Couteau Laser (M19)
+* **Composition :** Vue rapprochée de l'interface BentoPack Studio sur un sprite pixel art détaillé (ex. le chevalier *Gallus*).
+* **Éléments visibles :**
+  * Le contour polygonal cyan ajusté au sub-pixel.
+  * Les arêtes intérieures Delaunay (CDT) reliant les crêtes de fort contraste chromatique (RGB).
+  * L'outil **Couteau Laser (✂️)** en cours de tracé (rayon rouge contrasté) coupant une articulation pour marquer une pliure d'animation.
+* **Badge incrusté :** `⚡ Smart CDT Triangulation • RGB Ridge Detection • Interactive Laser Knife`.
+
+### 3. Visuel Héro #3 : Le Hot-Reload Zéro-Clic en Direct (Aseprite ➔ Moteur)
+* **Format idéal :** GIF animé haute résolution ou WebP 60 FPS (pour itch.io, Reddit r/gamedev, X/Twitter et la description Steam).
+* **Scénario de 4 secondes :**
+  * 0.0s – 1.5s : L'artiste retouche la couleur de l'épée dans Aseprite et appuie sur `Ctrl+S`.
+  * 1.5s – 2.5s : BentoPack en arrière-plan recompile l'atlas et le maillage en 18 ms.
+  * 2.5s – 4.0s : La fenêtre Unity / Godot en cours de lecture se met à jour instantanément sans redémarrer le jeu.
+* **Texte d'accroche :** `Save in Aseprite (Ctrl+S) ➔ Live In Game in 18ms. Zero clicks.`
+
+### 4. Visuel Héro #4 : Télémétrie VRAM GPU KTX2 (Khronos Basis Universal)
+* **Composition :** Boîte de dialogue d'exportation ouverte, mettant en avant la section VRAM et le sélecteur KTX2 UASTC / ETC1S.
+* **Jauge graphique en surbrillance :**
+  * Barre rouge : `RGBA 32-bit: 8.0 MB VRAM`
+  * Barre verte : `KTX2 UASTC: 1.2 MB VRAM (-85.0% Direct GPU Upload)`
+* **Impact :** Déclenche immédiatement l'achat pour tous les développeurs ciblant Nintendo Switch, Steam Deck, WebGL ou mobile iOS/Android.
+
+### 5. Visuel Héro #5 : Import Multi-Calques Aseprite & Profils de Skins (M17/M18)
+* **Composition :** Éditeur de Pixels avec le dock latéral des calques (`LayerStackWidget`) affichant l'arborescence :
+  * `[👁️] 04_Magic_Aura (Screen, 80%)`
+  * `[👁️] 03_Golden_Armor (Normal, 100%)`
+  * `[👁️] 02_Sword_Slash (Normal, 100%)`
+  * `[👁️] 01_Base_Hero_Body (Normal, 100%)`
+* **Badge incrusté :** `Native .ase/.aseprite Decoupling • Modular Skins & Equipment Profiling`.
+
+---
+
+## 5.2 Les 3 Boucles Vidéo / GIFs Animés Clés (Pour Réseaux & Stores)
+
+* **Boucle 1 : `demo_knife_cdt_cut.webp` (5s) :**
+  * Tracé d'un trait de coupe avec le couteau laser et re-triangulation instantanée de Delaunay sans saccade.
+* **Boucle 2 : `demo_zero_click_reload.webp` (4s) :**
+  * Split-screen Aseprite + Godot 4 : `Ctrl+S` -> Rafraîchissement direct de l'animation en jeu.
+* **Boucle 3 : `demo_timeline_onion_skin.webp` (4s) :**
+  * Lecture fluide de la timeline avec scrubber interactif et réticule de pivot anti-jittering.
+
+---
+
+## 5.3 Dimensions & Spécifications Graphiques par Plateforme
+
+| Plateforme | Type d'Asset | Dimensions Recommandées | Contenu Requis |
+|---|---|---|---|
+| **Steam** | Header Capsule | `460 x 215 px` | Logo BentoPack Studio + Sprite phare + Fond sombre contrasté |
+| **Steam** | Main Capsule | `616 x 353 px` | Logo + Slogan *"The High-Performance 2D Sprite Pipeline"* |
+| **Steam** | Vertical Hero | `374 x 448 px` | Illustration grand format avec maillage polygonal cyan |
+| **Steam** | Page Background | `1438 x 810 px` | Texture d'ambiance sombre non distrayante |
+| **Itch.io** | Cover Image | `630 x 500 px` | Image d'accroche principale avec logo et badges moteurs |
+| **Itch.io** | Banner Header | `960 x 400 px` | Bandeau immersif stylisé |
+| **Unity Asset Store** | Cover Image | `1200 x 630 px` | Visuel Héro #1 (Split-Screen Overdraw) |
+| **Unity Asset Store** | Icon | `160 x 160 px` | Logo carré BentoPack net sans texte |
+| **Epic Fab (UE5)** | Key Art Thumbnail| `1920 x 1080 px` (16:9) | Sprite UE5 Paper2D avec fil de fer `RenderGeometry` |
+| **Godot AssetLib** | Preview Icon | `128 x 128 px` | Icône officielle BentoPack pour l'interface de Godot |
+
+---
+
+## 5.4 Script Vidéo Viral Court (60s pour TikTok / Shorts / X)
+
+Ce format court à montage rythmé est prouvé pour générer des dizaines de milliers de vues organiques auprès de la communauté `#gamedev` :
+
+* **0:00 - 0:08 (Le Hook Visuel) :**
+  * Gros plan sur l'écran Unity en mode Overdraw tout blanc : *"Pourquoi votre jeu 2D rame-t-il sur Steam Deck et Switch alors que vos sprites font 64x64 pixels ?"*
+* **0:08 - 0:20 (L'Explication) :**
+  * Zoom sur le sprite : *"Parce que 70% de vos quads sont transparents, et votre GPU recalcule ce vide 20 fois par frame."*
+* **0:20 - 0:40 (La Démonstration BentoPack) :**
+  * *"Voici BentoPack. Un clic sur CDT Mesh : il vectorise la silhouette et triangule l'intérieur le long des arêtes de contraste."*
+  * Démonstration en 1 coup de couteau laser.
+* **0:40 - 0:52 (Le Verdict en Jeu) :**
+  * Retour dans Unity / Godot : l'overdraw devient noir et bleu, les FPS passent de 50 à 210.
+* **0:52 - 1:00 (Call to Action) :**
+  * *"Les plugins Unity, Godot 4 et Unreal sont 100% gratuits et open-source. Lien en bio ou sur GitHub !"*
 
 ---
 
