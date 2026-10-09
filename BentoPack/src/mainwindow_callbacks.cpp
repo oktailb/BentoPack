@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -171,7 +171,15 @@ void MainWindow::on_actionExport_triggered()
         return;
     }
 
-    ExportDialog dlg(m_document, QString(), this, m_projectController.get());
+    QString defaultPath = m_projectController->currentFilePath();
+    if (defaultPath.isEmpty()) {
+        defaultPath = m_projectController->currentProjectPath();
+    }
+    if (defaultPath.isEmpty() && m_document) {
+        defaultPath = m_document->filePath();
+    }
+
+    ExportDialog dlg(m_document, defaultPath, this, m_projectController.get());
     dlg.exec();
 }
 

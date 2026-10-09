@@ -55,12 +55,24 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
         }
     }
 
-    // Determine initial directory, base name, and format
+    // Determine initial directory, base name, and format from source file being exported
     QString initialDir;
     QString initialBaseName;
 
-    if (!defaultPath.isEmpty()) {
-        QFileInfo fi(defaultPath);
+    QString sourcePath = defaultPath;
+    if (sourcePath.isEmpty() && m_controller && !m_controller->currentFilePath().isEmpty()) {
+        sourcePath = m_controller->currentFilePath();
+    }
+    if (sourcePath.isEmpty() && m_controller && !m_controller->currentProjectPath().isEmpty()) {
+        sourcePath = m_controller->currentProjectPath();
+    }
+    if (sourcePath.isEmpty() && m_document && !m_document->filePath().isEmpty()) {
+        sourcePath = m_document->filePath();
+    }
+
+    bool formatMatched = false;
+    if (!sourcePath.isEmpty()) {
+        QFileInfo fi(sourcePath);
         initialDir = fi.absolutePath();
         initialBaseName = fi.completeBaseName();
         if (initialBaseName.endsWith(QStringLiteral(".unity"), Qt::CaseInsensitive)) initialBaseName.chop(6);
@@ -75,16 +87,18 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
                 for (const QString &extSfx : ext->supportedExtensions()) {
                     if (extSfx.compare(sfx, Qt::CaseInsensitive) == 0) {
                         ui->comboFormat->setCurrentIndex(i);
+                        formatMatched = true;
                         break;
                     }
                 }
+                if (formatMatched) break;
             }
         }
-    } else if (m_document && !m_document->filePath().isEmpty()) {
-        QFileInfo fi(m_document->filePath());
-        initialDir = fi.absolutePath();
-        initialBaseName = fi.completeBaseName();
     } else {
+        initialDir = QDir::currentPath();
+    }
+
+    if (initialDir.isEmpty() || initialDir == QStringLiteral(".")) {
         initialDir = QDir::currentPath();
     }
 
@@ -156,7 +170,7 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
 
     // Load defaults from AppConfig
     const auto &expCfg = AppConfig::instance().exportSettings();
-    if (!expCfg.defaultFormatId.isEmpty()) {
+    if (!formatMatched && !expCfg.defaultFormatId.isEmpty()) {
         int idx = ui->comboFormat->findData(expCfg.defaultFormatId);
         if (idx >= 0) {
             ui->comboFormat->setCurrentIndex(idx);

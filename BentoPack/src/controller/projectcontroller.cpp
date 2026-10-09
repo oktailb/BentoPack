@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -170,6 +170,9 @@ bool ProjectController::openProject(const QString &sspPath, QString *errorMsg)
 
     m_currentProjectPath = QFileInfo(sspPath).absoluteFilePath();
     m_currentFilePath = m_currentProjectPath;
+    if (m_document) {
+        m_document->setFilePath(m_currentFilePath);
+    }
     addRecentProject(m_currentProjectPath);
 
     if (m_undoStack) {
@@ -361,6 +364,9 @@ bool ProjectController::openFile(const QString &filePath, QString *errorMsg)
 
     m_currentFilePath = filePath;
     m_currentProjectPath.clear();
+    if (m_document) {
+        m_document->setFilePath(filePath);
+    }
     addRecentFile(filePath);
 
     m_isProjectLoading = true;
@@ -503,6 +509,9 @@ bool ProjectController::exportData(const QString &filePath, const ExportOptions 
     }
 
     m_currentFilePath = filePath;
+    if (m_document) {
+        m_document->setFilePath(filePath);
+    }
     addRecentFile(filePath);
     emit statusMessage(tr("Saved %1 successfully.").arg(QFileInfo(filePath).fileName()));
     emit fileSaved(filePath);

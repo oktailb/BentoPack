@@ -262,6 +262,21 @@ void TestGuiIntegration::testExportDialogOptionsAndDefaults()
     txtBaseName->setText(QStringLiteral("my_character"));
     QVERIFY(dlg.exportFilePath().contains(QStringLiteral("my_character")));
     QVERIFY(dlg.exportFilePath().contains(QStringLiteral("output_test")));
+
+    // Test default path and base name inferred from document's filePath
+    {
+        SpriteDocument fileDoc;
+        fileDoc.setFilePath(QStringLiteral("/home/sample_user/sprites/warrior.aseprite"));
+        ExportDialog defaultDlg(&fileDoc);
+        auto *outDir = defaultDlg.findChild<QLineEdit*>(QStringLiteral("txtOutputDir"));
+        auto *baseName = defaultDlg.findChild<QLineEdit*>(QStringLiteral("txtBaseName"));
+        QVERIFY(outDir != nullptr);
+        QVERIFY(baseName != nullptr);
+        QCOMPARE(outDir->text(), QDir::toNativeSeparators(QStringLiteral("/home/sample_user/sprites")));
+        QCOMPARE(baseName->text(), QStringLiteral("warrior"));
+        QVERIFY(defaultDlg.exportFilePath().startsWith(QDir::toNativeSeparators(QStringLiteral("/home/sample_user/sprites"))));
+        QVERIFY(defaultDlg.exportFilePath().contains(QStringLiteral("warrior")));
+    }
 }
 
 void TestGuiIntegration::testBranchSelectionDialog()
