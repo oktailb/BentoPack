@@ -229,6 +229,7 @@ void PixelCanvas::setImage(const QImage &image)
     if (!m_layers.isEmpty()) {
         ensureActiveCelAllocated();
         m_layers[m_activeLayerIndex].image = m_image;
+        m_layers[m_activeLayerIndex].offset = QPoint(0, 0);
         recomposite();
     }
     deselect();
@@ -248,7 +249,7 @@ void PixelCanvas::ensureActiveCelAllocated()
     QSize sz;
     for (const auto &l : m_layers) {
         if (!l.image.isNull()) {
-            sz = sz.expandedTo(l.image.size());
+            sz = sz.expandedTo(QSize(l.offset.x() + l.image.width(), l.offset.y() + l.image.height()));
         }
     }
     if (sz.isEmpty()) {
@@ -257,14 +258,15 @@ void PixelCanvas::ensureActiveCelAllocated()
     if (sz.isEmpty()) sz = QSize(32, 32);
 
     CanvasLayer &cur = m_layers[m_activeLayerIndex];
-    if (cur.image.isNull() || cur.image.format() != QImage::Format_ARGB32) {
+    if (cur.image.isNull() || cur.image.format() != QImage::Format_ARGB32 || cur.offset != QPoint(0, 0) || cur.image.size() != sz) {
         QImage newImg(sz, QImage::Format_ARGB32);
         newImg.fill(Qt::transparent);
         if (!cur.image.isNull()) {
             QPainter p(&newImg);
-            p.drawImage(0, 0, cur.image);
+            p.drawImage(cur.offset, cur.image);
         }
         cur.image = newImg;
+        cur.offset = QPoint(0, 0);
     }
 }
 
@@ -298,6 +300,33 @@ void PixelCanvas::setLayers(const QList<CanvasLayer> &layers, int activeIndex)
 {
     commitFloatingSelection();
     m_layers = layers;
+
+    // Calculate maximum bounding canvas size across all layers including offsets
+    QSize sz;
+    for (const auto &l : m_layers) {
+        if (!l.image.isNull()) {
+            sz = sz.expandedTo(QSize(l.offset.x() + l.image.width(), l.offset.y() + l.image.height()));
+        }
+    }
+    if (sz.isEmpty() && !m_image.isNull()) {
+        sz = m_image.size();
+    }
+    if (sz.isEmpty()) sz = QSize(32, 32);
+
+    // Normalize all layers to uniform canvas size and Format_ARGB32, baking offsets so drawing tools operate correctly
+    for (auto &l : m_layers) {
+        if (l.image.isNull() || l.image.format() != QImage::Format_ARGB32 || l.offset != QPoint(0, 0) || l.image.size() != sz) {
+            QImage normImg(sz, QImage::Format_ARGB32);
+            normImg.fill(Qt::transparent);
+            if (!l.image.isNull()) {
+                QPainter p(&normImg);
+                p.drawImage(l.offset, l.image);
+            }
+            l.image = normImg;
+            l.offset = QPoint(0, 0);
+        }
+    }
+
     int maxIdx = static_cast<int>(m_layers.size() - 1);
     m_activeLayerIndex = std::clamp(activeIndex, 0, std::max(0, maxIdx));
     ensureActiveCelAllocated();
@@ -408,14 +437,16 @@ void PixelCanvas::addLayer(const QString &name)
     QSize sz;
     for (const auto &l : m_layers) {
         if (!l.image.isNull()) {
-            sz = sz.expandedTo(l.image.size());
+            sz = sz.expandedTo(QSize(l.offset.x() + l.image.width(), l.offset.y() + l.image.height()));
         }
     }
     if (sz.isEmpty()) {
         sz = m_image.isNull() ? QSize(32, 32) : m_image.size();
     }
+    if (sz.isEmpty()) sz = QSize(32, 32);
     layer.image = QImage(sz, QImage::Format_ARGB32);
     layer.image.fill(Qt::transparent);
+    layer.offset = QPoint(0, 0);
 
     int insertPos = (m_activeLayerIndex >= 0 && m_activeLayerIndex < m_layers.size())
                     ? m_activeLayerIndex + 1
@@ -553,7 +584,7 @@ void PixelCanvas::recomposite()
     QSize sz;
     for (const auto &l : m_layers) {
         if (!l.image.isNull()) {
-            sz = sz.expandedTo(l.image.size());
+            sz = sz.expandedTo(QSize(l.offset.x() + l.image.width(), l.offset.y() + l.image.height()));
         }
     }
     if (sz.isEmpty()) {

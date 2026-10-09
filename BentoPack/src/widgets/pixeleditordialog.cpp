@@ -59,7 +59,7 @@ static QImage compositeCelsForFrame(const QList<SpriteLayer> &layers, const QLis
     QSize sz;
     for (const auto &cel : cels) {
         if (!cel.image.isNull()) {
-            sz = sz.expandedTo(cel.image.size());
+            sz = sz.expandedTo(QSize(cel.x + cel.image.width(), cel.y + cel.image.height()));
         }
     }
     if (sz.isEmpty()) sz = QSize(32, 32);
@@ -1685,6 +1685,7 @@ void PixelEditorDialog::loadFrame(int index)
     QPoint envPivot;
     QPoint curFrameOffset;
     computeAnimationEnvelope(envSize, envPivot, curFrameOffset);
+    m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
 
     // Multi-Layer Initialization (M18)
     bool hasLayers = false;
@@ -1706,6 +1707,17 @@ void PixelEditorDialog::loadFrame(int index)
             celsToUse = m_document->frameCels(index);
         }
 
+        QSize targetCanvasSize = frameImg.size();
+        if (targetCanvasSize.isEmpty() && m_document && index < m_document->boxes().size()) {
+            targetCanvasSize = m_document->box(index).rect.size();
+        }
+        for (const auto &cel : celsToUse) {
+            if (!cel.image.isNull()) {
+                targetCanvasSize = targetCanvasSize.expandedTo(QSize(cel.x + cel.image.width(), cel.y + cel.image.height()));
+            }
+        }
+        if (targetCanvasSize.isEmpty()) targetCanvasSize = QSize(32, 32);
+
         QList<CanvasLayer> canvasLayers;
         canvasLayers.reserve(layersToUse.size());
         for (int l = 0; l < layersToUse.size(); ++l) {
@@ -1719,21 +1731,28 @@ void PixelEditorDialog::loadFrame(int index)
             cl.zOrder = docL.zOrder;
             cl.blendMode = docL.blendMode;
 
+            QImage layerCanvas(targetCanvasSize, QImage::Format_ARGB32);
+            layerCanvas.fill(Qt::transparent);
+
+            bool foundCel = false;
             for (const auto &cel : celsToUse) {
                 if (cel.layerIndex == l || (!docL.id.isEmpty() && cel.layerId == docL.id)) {
-                    cl.image = cel.image;
-                    cl.offset = QPoint(cel.x, cel.y);
+                    if (!cel.image.isNull()) {
+                        QPainter p(&layerCanvas);
+                        p.drawImage(QPoint(cel.x, cel.y), cel.image);
+                        p.end();
+                    }
+                    foundCel = true;
                     break;
                 }
             }
-            if (cl.image.isNull()) {
-                if (l == 0 && !frameImg.isNull()) {
-                    cl.image = frameImg;
-                } else {
-                    cl.image = QImage(frameImg.size().isEmpty() ? QSize(32, 32) : frameImg.size(), QImage::Format_ARGB32);
-                    cl.image.fill(Qt::transparent);
-                }
+            if (!foundCel && l == 0 && !frameImg.isNull()) {
+                QPainter p(&layerCanvas);
+                p.drawImage(0, 0, frameImg);
+                p.end();
             }
+            cl.image = layerCanvas;
+            cl.offset = QPoint(0, 0);
             canvasLayers.append(cl);
         }
 
@@ -1752,7 +1771,7 @@ void PixelEditorDialog::loadFrame(int index)
         cl.locked = false;
         cl.opacity = 255;
         cl.zOrder = 0;
-        cl.image = frameImg;
+        cl.image = (frameImg.format() == QImage::Format_ARGB32) ? frameImg : frameImg.convertToFormat(QImage::Format_ARGB32);
         cl.offset = QPoint(0, 0);
 
         m_canvas->setLayers({cl}, 0);
