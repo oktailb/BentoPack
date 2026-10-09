@@ -256,6 +256,7 @@ private:
     // Contextual: Smart Mesh CDT (M19)
     QLabel*                 m_meshNoticeLabel = nullptr;
     QWidget*                m_meshControlsContainer = nullptr;
+    QGroupBox*              m_meshModeGroup_box = nullptr;
     QButtonGroup*           m_meshModeGroup = nullptr;
     QRadioButton*           m_radioMeshSelectMove = nullptr;
     QRadioButton*           m_radioMeshAddInterior = nullptr;
@@ -263,36 +264,52 @@ private:
     QRadioButton*           m_radioMeshDelete = nullptr;
     QRadioButton*           m_radioMeshCutLine = nullptr;
     QPushButton*            m_btnDeleteSelectedVertex = nullptr;
+    QGroupBox*              m_cdtGroup = nullptr;
+    QLabel*                 m_lblContrastModeTitle = nullptr;
     QComboBox*              m_comboContrastMode = nullptr;
+    QLabel*                 m_lblSteinerDensityTitle = nullptr;
     QSlider*                m_sliderSteinerDensity = nullptr;
     QLabel*                 m_lblSteinerDensityVal = nullptr;
+    QLabel*                 m_lblMinAngleTitle = nullptr;
     QSlider*                m_sliderMinAngle = nullptr;
     QLabel*                 m_lblMinAngleVal = nullptr;
+    QLabel*                 m_lblContrastSensitivityTitle = nullptr;
     QSlider*                m_sliderContrastSensitivity = nullptr;
     QLabel*                 m_lblContrastSensitivityVal = nullptr;
     QPushButton*            m_btnGenerateSmartMesh = nullptr;
     QPushButton*            m_btnResetToOutline = nullptr;
     QCheckBox*              m_meshApplyAllFramesCheck = nullptr;
+    QGroupBox*              m_meshStatsGroup = nullptr;
+    QLabel*                 m_lblMeshBoundaryTitle = nullptr;
     QLabel*                 m_lblMeshBoundaryVerts = nullptr;
+    QLabel*                 m_lblMeshInteriorTitle = nullptr;
     QLabel*                 m_lblMeshInteriorVerts = nullptr;
+    QLabel*                 m_lblMeshTrianglesTitle = nullptr;
     QLabel*                 m_lblMeshTriangles = nullptr;
+    QLabel*                 m_lblMeshOverdrawTitle = nullptr;
     QLabel*                 m_lblMeshOverdrawSavings = nullptr;
 
     // Contextual: Eraser
+    QGroupBox*              m_eraserGroup = nullptr;
     QCheckBox*              m_eraserApplyAllFramesCheck = nullptr;
     QCheckBox*              m_eraserAllLayersCheck = nullptr;
+    QLabel*                 m_eraserTipLabel = nullptr;
 
     // Contextual: Selection
+    QGroupBox*              m_selGroup = nullptr;
     QPushButton*            m_btnSelectAll = nullptr;
     QPushButton*            m_btnDeselect = nullptr;
     QPushButton*            m_btnClearSelection = nullptr;
     QPushButton*            m_btnCopySel = nullptr;
     QPushButton*            m_btnCutSel = nullptr;
     QPushButton*            m_btnPasteSel = nullptr;
+    QLabel*                 m_selTipLabel = nullptr;
 
     // Contextual: Eyedropper
+    QGroupBox*              m_eyeGroup = nullptr;
     QRadioButton*           m_radioSampleActiveLayer = nullptr;
     QRadioButton*           m_radioSampleAllLayers = nullptr;
+    QLabel*                 m_eyeTipLabel = nullptr;
 
     // Palette & Colors
     QGroupBox*              m_colorsGroup = nullptr;

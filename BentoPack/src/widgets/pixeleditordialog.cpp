@@ -510,7 +510,7 @@ QWidget* PixelEditorDialog::createHeaderBar()
     layout->addWidget(m_btnGrid);
 
     m_btnShowPivot = new QToolButton(bar);
-    m_btnShowPivot->setText(QStringLiteral("⌖ Pivot"));
+    m_btnShowPivot->setText(QStringLiteral("⌖ ") + tr("Pivot"));
     m_btnShowPivot->setToolTip(tr("Show / Hide Pivot Anchor Marker"));
     m_btnShowPivot->setCheckable(true);
     m_btnShowPivot->setChecked(true);
@@ -915,13 +915,13 @@ QWidget* PixelEditorDialog::createPalettePanel()
     eraserLayout->setContentsMargins(0, 0, 0, 0);
     eraserLayout->setSpacing(6);
 
-    QGroupBox *eraserGroup = new QGroupBox(tr("Eraser Options"), m_eraserOptionsPage);
-    eraserGroup->setStyleSheet(groupBoxStyle);
-    QVBoxLayout *egLayout = new QVBoxLayout(eraserGroup);
+    m_eraserGroup = new QGroupBox(tr("Eraser Options"), m_eraserOptionsPage);
+    m_eraserGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *egLayout = new QVBoxLayout(m_eraserGroup);
     egLayout->setContentsMargins(8, 10, 8, 10);
     egLayout->setSpacing(8);
 
-    m_eraserApplyAllFramesCheck = new QCheckBox(tr("Erase across all frames (Timeline)"), eraserGroup);
+    m_eraserApplyAllFramesCheck = new QCheckBox(tr("Erase across all frames (Timeline)"), m_eraserGroup);
     m_eraserApplyAllFramesCheck->setToolTip(tr("Erase pixels across all frames of current animation aligned by pivot"));
     connect(m_eraserApplyAllFramesCheck, &QCheckBox::toggled, this, [this](bool checked) {
         if (m_applyToAllFramesCheck && m_applyToAllFramesCheck->isChecked() != checked) {
@@ -938,17 +938,17 @@ QWidget* PixelEditorDialog::createPalettePanel()
     });
     egLayout->addWidget(m_eraserApplyAllFramesCheck);
 
-    m_eraserAllLayersCheck = new QCheckBox(tr("Erase across all visible layers"), eraserGroup);
+    m_eraserAllLayersCheck = new QCheckBox(tr("Erase across all visible layers"), m_eraserGroup);
     m_eraserAllLayersCheck->setToolTip(tr("When checked, clears pixels on all visible layers simultaneously instead of only active layer"));
     egLayout->addWidget(m_eraserAllLayersCheck);
 
-    QLabel *eraserTip = new QLabel(tr("💡 <b>Tip:</b> 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold <b>Shift</b> to draw straight lines."), eraserGroup);
-    eraserTip->setWordWrap(true);
-    eraserTip->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
-    egLayout->addWidget(eraserTip);
+    m_eraserTipLabel = new QLabel(tr("💡 <b>Tip:</b> 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold <b>Shift</b> to draw straight lines."), m_eraserGroup);
+    m_eraserTipLabel->setWordWrap(true);
+    m_eraserTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    egLayout->addWidget(m_eraserTipLabel);
 
     egLayout->addStretch();
-    eraserLayout->addWidget(eraserGroup);
+    eraserLayout->addWidget(m_eraserGroup);
     m_contextualStack->addWidget(m_eraserOptionsPage);
 
     // --- PAGE 2: Selection Actions & Options (SelectRect / SelectColor) ---
@@ -957,9 +957,9 @@ QWidget* PixelEditorDialog::createPalettePanel()
     selLayout->setContentsMargins(0, 0, 0, 0);
     selLayout->setSpacing(6);
 
-    QGroupBox *selGroup = new QGroupBox(tr("Selection Actions"), m_selectionOptionsPage);
-    selGroup->setStyleSheet(groupBoxStyle);
-    QVBoxLayout *sgLayout = new QVBoxLayout(selGroup);
+    m_selGroup = new QGroupBox(tr("Selection Actions"), m_selectionOptionsPage);
+    m_selGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *sgLayout = new QVBoxLayout(m_selGroup);
     sgLayout->setContentsMargins(8, 10, 8, 10);
     sgLayout->setSpacing(6);
 
@@ -975,45 +975,45 @@ QWidget* PixelEditorDialog::createPalettePanel()
         "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
     );
 
-    m_btnSelectAll = new QPushButton(tr("⬚ Select All (Ctrl+A)"), selGroup);
+    m_btnSelectAll = new QPushButton(tr("⬚ Select All (Ctrl+A)"), m_selGroup);
     m_btnSelectAll->setStyleSheet(actionBtnStyle);
     connect(m_btnSelectAll, &QPushButton::clicked, this, [this]() { m_canvas->selectAll(); });
     sgLayout->addWidget(m_btnSelectAll);
 
-    m_btnDeselect = new QPushButton(tr("✕ Deselect (Esc)"), selGroup);
+    m_btnDeselect = new QPushButton(tr("✕ Deselect (Esc)"), m_selGroup);
     m_btnDeselect->setStyleSheet(actionBtnStyle);
     connect(m_btnDeselect, &QPushButton::clicked, this, [this]() { m_canvas->deselect(); });
     sgLayout->addWidget(m_btnDeselect);
 
-    m_btnClearSelection = new QPushButton(tr("🗑 Delete Contents (Del)"), selGroup);
+    m_btnClearSelection = new QPushButton(tr("🗑 Delete Contents (Del)"), m_selGroup);
     m_btnClearSelection->setStyleSheet(actionBtnStyle);
     connect(m_btnClearSelection, &QPushButton::clicked, this, [this]() { m_canvas->clearSelection(); });
     sgLayout->addWidget(m_btnClearSelection);
 
     QHBoxLayout *cbRow = new QHBoxLayout();
-    m_btnCopySel = new QPushButton(tr("📋 Copy"), selGroup);
+    m_btnCopySel = new QPushButton(tr("📋 Copy"), m_selGroup);
     m_btnCopySel->setStyleSheet(actionBtnStyle);
     connect(m_btnCopySel, &QPushButton::clicked, this, [this]() { m_canvas->copySelection(); });
     cbRow->addWidget(m_btnCopySel);
 
-    m_btnCutSel = new QPushButton(tr("✂ Cut"), selGroup);
+    m_btnCutSel = new QPushButton(tr("✂ Cut"), m_selGroup);
     m_btnCutSel->setStyleSheet(actionBtnStyle);
     connect(m_btnCutSel, &QPushButton::clicked, this, [this]() { m_canvas->cutSelection(); });
     cbRow->addWidget(m_btnCutSel);
 
-    m_btnPasteSel = new QPushButton(tr("📥 Paste"), selGroup);
+    m_btnPasteSel = new QPushButton(tr("📥 Paste"), m_selGroup);
     m_btnPasteSel->setStyleSheet(actionBtnStyle);
     connect(m_btnPasteSel, &QPushButton::clicked, this, [this]() { m_canvas->pasteClipboard(); });
     cbRow->addWidget(m_btnPasteSel);
     sgLayout->addLayout(cbRow);
 
-    QLabel *selTip = new QLabel(tr("💡 <b>Tip:</b> Drag selection to move floating pixels. Press <b>Enter</b> or click outside to commit."), selGroup);
-    selTip->setWordWrap(true);
-    selTip->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
-    sgLayout->addWidget(selTip);
+    m_selTipLabel = new QLabel(tr("💡 <b>Tip:</b> Drag selection to move floating pixels. Press <b>Enter</b> or click outside to commit."), m_selGroup);
+    m_selTipLabel->setWordWrap(true);
+    m_selTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    sgLayout->addWidget(m_selTipLabel);
 
     sgLayout->addStretch();
-    selLayout->addWidget(selGroup);
+    selLayout->addWidget(m_selGroup);
     m_contextualStack->addWidget(m_selectionOptionsPage);
 
     // --- PAGE 3: Eyedropper Options (Eyedropper) ---
@@ -1022,26 +1022,26 @@ QWidget* PixelEditorDialog::createPalettePanel()
     eyeLayout->setContentsMargins(0, 0, 0, 0);
     eyeLayout->setSpacing(6);
 
-    QGroupBox *eyeGroup = new QGroupBox(tr("Eyedropper Sampling"), m_eyedropperOptionsPage);
-    eyeGroup->setStyleSheet(groupBoxStyle);
-    QVBoxLayout *egEyeLayout = new QVBoxLayout(eyeGroup);
+    m_eyeGroup = new QGroupBox(tr("Eyedropper Sampling"), m_eyedropperOptionsPage);
+    m_eyeGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *egEyeLayout = new QVBoxLayout(m_eyeGroup);
     egEyeLayout->setContentsMargins(8, 10, 8, 10);
     egEyeLayout->setSpacing(8);
 
-    m_radioSampleAllLayers = new QRadioButton(tr("Sample All Visible Layers (Composite)"), eyeGroup);
+    m_radioSampleAllLayers = new QRadioButton(tr("Sample All Visible Layers (Composite)"), m_eyeGroup);
     m_radioSampleAllLayers->setChecked(true);
     egEyeLayout->addWidget(m_radioSampleAllLayers);
 
-    m_radioSampleActiveLayer = new QRadioButton(tr("Sample Active Layer Only"), eyeGroup);
+    m_radioSampleActiveLayer = new QRadioButton(tr("Sample Active Layer Only"), m_eyeGroup);
     egEyeLayout->addWidget(m_radioSampleActiveLayer);
 
-    QLabel *eyeTip = new QLabel(tr("💡 <b>Tip:</b> Click on any pixel to set primary color. Hold <b>Alt</b> while using any tool to temporarily sample color."), eyeGroup);
-    eyeTip->setWordWrap(true);
-    eyeTip->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
-    egEyeLayout->addWidget(eyeTip);
+    m_eyeTipLabel = new QLabel(tr("💡 <b>Tip:</b> Click on any pixel to set primary color. Hold <b>Alt</b> while using any tool to temporarily sample color."), m_eyeGroup);
+    m_eyeTipLabel->setWordWrap(true);
+    m_eyeTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    egEyeLayout->addWidget(m_eyeTipLabel);
 
     egEyeLayout->addStretch();
-    eyeLayout->addWidget(eyeGroup);
+    eyeLayout->addWidget(m_eyeGroup);
     m_contextualStack->addWidget(m_eyedropperOptionsPage);
 
     // --- PAGE 4: Polygon Mesh & Smart CDT Options (PolygonEdit) ---
@@ -1051,7 +1051,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     meshLayout->setSpacing(6);
 
     // Warning banner when frame has no polygonal mesh
-    m_meshNoticeLabel = new QLabel(tr("⚠️ <b>Aucun découpage polygonal</b> pour ce sprite.<br>Le découpage polygonal doit déjà exister préalablement (générez-le depuis la boîte à outils principale : Outils > Maillage Polygonal)."), m_meshOptionsPage);
+    m_meshNoticeLabel = new QLabel(tr("⚠️ <b>No polygon mesh</b> for this sprite.<br>A polygon mesh must already exist (generate it from the main toolbox: Tools > Polygon Mesh)."), m_meshOptionsPage);
     m_meshNoticeLabel->setWordWrap(true);
     m_meshNoticeLabel->setStyleSheet(QStringLiteral("background-color: rgba(230, 150, 0, 0.15); border: 1px solid rgba(230, 150, 0, 0.5); border-radius: 6px; padding: 8px; font-size: 11px;"));
     m_meshNoticeLabel->setVisible(false);
@@ -1063,18 +1063,18 @@ QWidget* PixelEditorDialog::createPalettePanel()
     mcLayout->setSpacing(6);
 
     // Group 1: Vertex Editing Mode
-    QGroupBox *modeGroup = new QGroupBox(tr("Mode d'Édition des Sommets"), m_meshControlsContainer);
-    modeGroup->setStyleSheet(groupBoxStyle);
-    QVBoxLayout *mgLayout = new QVBoxLayout(modeGroup);
+    m_meshModeGroup_box = new QGroupBox(tr("Vertex Editing Mode"), m_meshControlsContainer);
+    m_meshModeGroup_box->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *mgLayout = new QVBoxLayout(m_meshModeGroup_box);
     mgLayout->setContentsMargins(8, 10, 8, 10);
     mgLayout->setSpacing(6);
 
     m_meshModeGroup = new QButtonGroup(this);
-    m_radioMeshSelectMove = new QRadioButton(tr("✥ Déplacer / Sélectionner"), modeGroup);
-    m_radioMeshAddInterior = new QRadioButton(tr("➕ Ajouter point intérieur"), modeGroup);
-    m_radioMeshAddExterior = new QRadioButton(tr("🔲 Ajouter point contour"), modeGroup);
-    m_radioMeshCutLine = new QRadioButton(tr("✂️ Trait de coupe (Couteau)"), modeGroup);
-    m_radioMeshDelete = new QRadioButton(tr("✖ Supprimer point"), modeGroup);
+    m_radioMeshSelectMove = new QRadioButton(tr("✥ Move / Select"), m_meshModeGroup_box);
+    m_radioMeshAddInterior = new QRadioButton(tr("➕ Add Interior Point"), m_meshModeGroup_box);
+    m_radioMeshAddExterior = new QRadioButton(tr("🔲 Add Outline Point"), m_meshModeGroup_box);
+    m_radioMeshCutLine = new QRadioButton(tr("✂️ Cut Line (Knife)"), m_meshModeGroup_box);
+    m_radioMeshDelete = new QRadioButton(tr("✖ Delete Point"), m_meshModeGroup_box);
 
     m_radioMeshSelectMove->setChecked(true);
     m_meshModeGroup->addButton(m_radioMeshSelectMove, static_cast<int>(PolygonEditMode::SelectOrMove));
@@ -1091,42 +1091,42 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     connect(m_meshModeGroup, &QButtonGroup::idClicked, this, &PixelEditorDialog::onMeshEditModeChanged);
 
-    m_btnDeleteSelectedVertex = new QPushButton(tr("🗑 Supprimer le sommet (Suppr)"), modeGroup);
+    m_btnDeleteSelectedVertex = new QPushButton(tr("🗑 Delete Vertex (Del)"), m_meshModeGroup_box);
     m_btnDeleteSelectedVertex->setEnabled(false);
     connect(m_btnDeleteSelectedVertex, &QPushButton::clicked, this, &PixelEditorDialog::onDeleteSelectedVertexRequested);
     mgLayout->addWidget(m_btnDeleteSelectedVertex);
 
-    mcLayout->addWidget(modeGroup);
+    mcLayout->addWidget(m_meshModeGroup_box);
 
     // Group 2: Smart Mesh CDT Generation
-    QGroupBox *cdtGroup = new QGroupBox(tr("Génération CDT & Points de Steiner"), m_meshControlsContainer);
-    cdtGroup->setStyleSheet(groupBoxStyle);
-    QVBoxLayout *cgLayout = new QVBoxLayout(cdtGroup);
+    m_cdtGroup = new QGroupBox(tr("CDT Generation & Steiner Points"), m_meshControlsContainer);
+    m_cdtGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *cgLayout = new QVBoxLayout(m_cdtGroup);
     cgLayout->setContentsMargins(8, 10, 8, 10);
     cgLayout->setSpacing(6);
 
     // Contrast detection mode combo
     QHBoxLayout *cmHeader = new QHBoxLayout();
-    QLabel *lblCmTitle = new QLabel(tr("Mode détection :"), cdtGroup);
-    m_comboContrastMode = new QComboBox(cdtGroup);
-    m_comboContrastMode->addItem(tr("🎨 Distance Couleur (RGB)"), static_cast<int>(BentoPackGeometry::ContrastMode::RgbColorDistance));
-    m_comboContrastMode->addItem(tr("💡 Luminance (Sobel classique)"), static_cast<int>(BentoPackGeometry::ContrastMode::SobelLuminance));
+    m_lblContrastModeTitle = new QLabel(tr("Detection Mode:"), m_cdtGroup);
+    m_comboContrastMode = new QComboBox(m_cdtGroup);
+    m_comboContrastMode->addItem(tr("🎨 Color Distance (RGB)"), static_cast<int>(BentoPackGeometry::ContrastMode::RgbColorDistance));
+    m_comboContrastMode->addItem(tr("💡 Luminance (Classic Sobel)"), static_cast<int>(BentoPackGeometry::ContrastMode::SobelLuminance));
     m_comboContrastMode->setCurrentIndex(0);
-    cmHeader->addWidget(lblCmTitle);
+    cmHeader->addWidget(m_lblContrastModeTitle);
     cmHeader->addWidget(m_comboContrastMode);
     cgLayout->addLayout(cmHeader);
 
     // Steiner density slider
     QHBoxLayout *sdHeader = new QHBoxLayout();
-    QLabel *lblSdTitle = new QLabel(tr("Densité de Steiner :"), cdtGroup);
-    m_lblSteinerDensityVal = new QLabel(QStringLiteral("30%"), cdtGroup);
+    m_lblSteinerDensityTitle = new QLabel(tr("Steiner Density:"), m_cdtGroup);
+    m_lblSteinerDensityVal = new QLabel(QStringLiteral("30%"), m_cdtGroup);
     m_lblSteinerDensityVal->setStyleSheet(QStringLiteral("font-weight: bold; color: palette(highlight);"));
-    sdHeader->addWidget(lblSdTitle);
+    sdHeader->addWidget(m_lblSteinerDensityTitle);
     sdHeader->addStretch();
     sdHeader->addWidget(m_lblSteinerDensityVal);
     cgLayout->addLayout(sdHeader);
 
-    m_sliderSteinerDensity = new QSlider(Qt::Horizontal, cdtGroup);
+    m_sliderSteinerDensity = new QSlider(Qt::Horizontal, m_cdtGroup);
     m_sliderSteinerDensity->setRange(0, 100);
     m_sliderSteinerDensity->setValue(30);
     connect(m_sliderSteinerDensity, &QSlider::valueChanged, this, [this](int val) {
@@ -1136,15 +1136,15 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     // Min angle slider
     QHBoxLayout *maHeader = new QHBoxLayout();
-    QLabel *lblMaTitle = new QLabel(tr("Angle minimal garanti :"), cdtGroup);
-    m_lblMinAngleVal = new QLabel(QStringLiteral("25°"), cdtGroup);
+    m_lblMinAngleTitle = new QLabel(tr("Guaranteed Minimum Angle:"), m_cdtGroup);
+    m_lblMinAngleVal = new QLabel(QStringLiteral("25°"), m_cdtGroup);
     m_lblMinAngleVal->setStyleSheet(QStringLiteral("font-weight: bold; color: palette(highlight);"));
-    maHeader->addWidget(lblMaTitle);
+    maHeader->addWidget(m_lblMinAngleTitle);
     maHeader->addStretch();
     maHeader->addWidget(m_lblMinAngleVal);
     cgLayout->addLayout(maHeader);
 
-    m_sliderMinAngle = new QSlider(Qt::Horizontal, cdtGroup);
+    m_sliderMinAngle = new QSlider(Qt::Horizontal, m_cdtGroup);
     m_sliderMinAngle->setRange(15, 35);
     m_sliderMinAngle->setValue(25);
     connect(m_sliderMinAngle, &QSlider::valueChanged, this, [this](int val) {
@@ -1154,15 +1154,15 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     // Contrast sensitivity slider
     QHBoxLayout *csHeader = new QHBoxLayout();
-    QLabel *lblCsTitle = new QLabel(tr("Contraste interne :"), cdtGroup);
-    m_lblContrastSensitivityVal = new QLabel(QStringLiteral("50%"), cdtGroup);
+    m_lblContrastSensitivityTitle = new QLabel(tr("Internal Contrast:"), m_cdtGroup);
+    m_lblContrastSensitivityVal = new QLabel(QStringLiteral("50%"), m_cdtGroup);
     m_lblContrastSensitivityVal->setStyleSheet(QStringLiteral("font-weight: bold; color: palette(highlight);"));
-    csHeader->addWidget(lblCsTitle);
+    csHeader->addWidget(m_lblContrastSensitivityTitle);
     csHeader->addStretch();
     csHeader->addWidget(m_lblContrastSensitivityVal);
     cgLayout->addLayout(csHeader);
 
-    m_sliderContrastSensitivity = new QSlider(Qt::Horizontal, cdtGroup);
+    m_sliderContrastSensitivity = new QSlider(Qt::Horizontal, m_cdtGroup);
     m_sliderContrastSensitivity->setRange(0, 100);
     m_sliderContrastSensitivity->setValue(50);
     connect(m_sliderContrastSensitivity, &QSlider::valueChanged, this, [this](int val) {
@@ -1171,10 +1171,10 @@ QWidget* PixelEditorDialog::createPalettePanel()
     cgLayout->addWidget(m_sliderContrastSensitivity);
 
     // Action buttons
-    m_meshApplyAllFramesCheck = new QCheckBox(tr("Appliquer à toute l'animation"), cdtGroup);
+    m_meshApplyAllFramesCheck = new QCheckBox(tr("Apply to all animation frames"), m_cdtGroup);
     m_meshApplyAllFramesCheck->setObjectName(QStringLiteral("meshApplyAllFramesCheck"));
     m_meshApplyAllFramesCheck->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: 600;"));
-    m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation courante"));
+    m_meshApplyAllFramesCheck->setToolTip(tr("Apply CDT mesh generation to all frames of the current animation"));
     if (m_applyToAllFramesCheck) {
         m_meshApplyAllFramesCheck->setChecked(m_applyToAllFramesCheck->isChecked());
     }
@@ -1185,45 +1185,49 @@ QWidget* PixelEditorDialog::createPalettePanel()
     });
     cgLayout->addWidget(m_meshApplyAllFramesCheck);
 
-    m_btnGenerateSmartMesh = new QPushButton(tr("⚡ Générer Maillage CDT"), cdtGroup);
+    m_btnGenerateSmartMesh = new QPushButton(tr("⚡ Generate CDT Mesh"), m_cdtGroup);
     m_btnGenerateSmartMesh->setStyleSheet(QStringLiteral("QPushButton { font-weight: bold; padding: 5px; }"));
     connect(m_btnGenerateSmartMesh, &QPushButton::clicked, this, &PixelEditorDialog::onGenerateSmartMeshRequested);
     cgLayout->addWidget(m_btnGenerateSmartMesh);
 
-    m_btnResetToOutline = new QPushButton(tr("↺ Réinitialiser au contour"), cdtGroup);
+    m_btnResetToOutline = new QPushButton(tr("↺ Reset to Outline"), m_cdtGroup);
     connect(m_btnResetToOutline, &QPushButton::clicked, this, &PixelEditorDialog::onResetMeshToOutlineRequested);
     cgLayout->addWidget(m_btnResetToOutline);
 
-    mcLayout->addWidget(cdtGroup);
+    mcLayout->addWidget(m_cdtGroup);
 
     // Group 3: Mesh Statistics
-    QGroupBox *statsGroup = new QGroupBox(tr("Statistiques du Maillage"), m_meshControlsContainer);
-    statsGroup->setStyleSheet(groupBoxStyle);
-    QGridLayout *sgGrid = new QGridLayout(statsGroup);
+    m_meshStatsGroup = new QGroupBox(tr("Mesh Statistics"), m_meshControlsContainer);
+    m_meshStatsGroup->setStyleSheet(groupBoxStyle);
+    QGridLayout *sgGrid = new QGridLayout(m_meshStatsGroup);
     sgGrid->setContentsMargins(8, 8, 8, 8);
     sgGrid->setSpacing(4);
 
-    sgGrid->addWidget(new QLabel(tr("Sommets contour :"), statsGroup), 0, 0);
-    m_lblMeshBoundaryVerts = new QLabel(QStringLiteral("0"), statsGroup);
+    m_lblMeshBoundaryTitle = new QLabel(tr("Outline vertices:"), m_meshStatsGroup);
+    sgGrid->addWidget(m_lblMeshBoundaryTitle, 0, 0);
+    m_lblMeshBoundaryVerts = new QLabel(QStringLiteral("0"), m_meshStatsGroup);
     m_lblMeshBoundaryVerts->setStyleSheet(QStringLiteral("font-weight: bold;"));
     sgGrid->addWidget(m_lblMeshBoundaryVerts, 0, 1);
 
-    sgGrid->addWidget(new QLabel(tr("Sommets intérieurs :"), statsGroup), 1, 0);
-    m_lblMeshInteriorVerts = new QLabel(QStringLiteral("0"), statsGroup);
+    m_lblMeshInteriorTitle = new QLabel(tr("Interior vertices:"), m_meshStatsGroup);
+    sgGrid->addWidget(m_lblMeshInteriorTitle, 1, 0);
+    m_lblMeshInteriorVerts = new QLabel(QStringLiteral("0"), m_meshStatsGroup);
     m_lblMeshInteriorVerts->setStyleSheet(QStringLiteral("font-weight: bold; color: #00E5FF;"));
     sgGrid->addWidget(m_lblMeshInteriorVerts, 1, 1);
 
-    sgGrid->addWidget(new QLabel(tr("Triangles CDT :"), statsGroup), 2, 0);
-    m_lblMeshTriangles = new QLabel(QStringLiteral("0"), statsGroup);
+    m_lblMeshTrianglesTitle = new QLabel(tr("CDT triangles:"), m_meshStatsGroup);
+    sgGrid->addWidget(m_lblMeshTrianglesTitle, 2, 0);
+    m_lblMeshTriangles = new QLabel(QStringLiteral("0"), m_meshStatsGroup);
     m_lblMeshTriangles->setStyleSheet(QStringLiteral("font-weight: bold;"));
     sgGrid->addWidget(m_lblMeshTriangles, 2, 1);
 
-    sgGrid->addWidget(new QLabel(tr("Gain Overdraw :"), statsGroup), 3, 0);
-    m_lblMeshOverdrawSavings = new QLabel(QStringLiteral("0.0%"), statsGroup);
+    m_lblMeshOverdrawTitle = new QLabel(tr("Overdraw savings:"), m_meshStatsGroup);
+    sgGrid->addWidget(m_lblMeshOverdrawTitle, 3, 0);
+    m_lblMeshOverdrawSavings = new QLabel(QStringLiteral("0.0%"), m_meshStatsGroup);
     m_lblMeshOverdrawSavings->setStyleSheet(QStringLiteral("font-weight: bold; color: #00E676;"));
     sgGrid->addWidget(m_lblMeshOverdrawSavings, 3, 1);
 
-    mcLayout->addWidget(statsGroup);
+    mcLayout->addWidget(m_meshStatsGroup);
     mcLayout->addStretch();
 
     meshLayout->addWidget(m_meshControlsContainer);
@@ -1777,7 +1781,7 @@ void PixelEditorDialog::loadFrame(int index)
         m_meshControlsContainer->setEnabled(hasPoly);
     }
     if (m_btnToolPolygon) {
-        m_btnToolPolygon->setToolTip(hasPoly ? tr("Éditeur de Maillage Polygonal CDT (◆)") : tr("Aucun maillage polygonal sur cette frame"));
+        m_btnToolPolygon->setToolTip(hasPoly ? tr("CDT Polygon Mesh Editor (◆)") : tr("No polygon mesh on this frame"));
     }
     updateMeshStatsUI();
 
@@ -1883,11 +1887,11 @@ void PixelEditorDialog::populateAnimationCombo()
     }
     if (m_meshApplyAllFramesCheck) {
         if (!m_activeAnimName.isEmpty()) {
-            m_meshApplyAllFramesCheck->setText(tr("Appliquer aux frames de '%1'").arg(m_activeAnimName));
-            m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation '%1'").arg(m_activeAnimName));
+            m_meshApplyAllFramesCheck->setText(tr("Apply to '%1' frames").arg(m_activeAnimName));
+            m_meshApplyAllFramesCheck->setToolTip(tr("Apply CDT mesh generation to all frames of animation '%1'").arg(m_activeAnimName));
         } else {
-            m_meshApplyAllFramesCheck->setText(tr("Appliquer à toute l'animation"));
-            m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation courante"));
+            m_meshApplyAllFramesCheck->setText(tr("Apply to all animation frames"));
+            m_meshApplyAllFramesCheck->setToolTip(tr("Apply CDT mesh generation to all frames of the current animation"));
         }
     }
 }
@@ -1923,11 +1927,11 @@ void PixelEditorDialog::onAnimationFilterChanged(int index)
         }
         if (m_meshApplyAllFramesCheck) {
             if (!m_activeAnimName.isEmpty()) {
-                m_meshApplyAllFramesCheck->setText(tr("Appliquer aux frames de '%1'").arg(m_activeAnimName));
-                m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation '%1'").arg(m_activeAnimName));
+                m_meshApplyAllFramesCheck->setText(tr("Apply to '%1' frames").arg(m_activeAnimName));
+                m_meshApplyAllFramesCheck->setToolTip(tr("Apply CDT mesh generation to all frames of animation '%1'").arg(m_activeAnimName));
             } else {
-                m_meshApplyAllFramesCheck->setText(tr("Appliquer à toute l'animation"));
-                m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation courante"));
+                m_meshApplyAllFramesCheck->setText(tr("Apply to all animation frames"));
+                m_meshApplyAllFramesCheck->setToolTip(tr("Apply CDT mesh generation to all frames of the current animation"));
             }
         }
         if (m_canvas && m_frameInfoLabel) {
@@ -3324,7 +3328,7 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnSelectColor) m_btnSelectColor->setToolTip(tr("Magic Wand (Color Selection) [W]"));
     if (m_btnToolPolygon) {
         bool hasPoly = (m_canvas && m_canvas->hasPolygonMesh());
-        m_btnToolPolygon->setToolTip(hasPoly ? tr("Éditeur de Maillage Polygonal CDT (◆)") : tr("Aucun maillage polygonal sur cette frame"));
+        m_btnToolPolygon->setToolTip(hasPoly ? tr("CDT Polygon Mesh Editor (◆)") : tr("No polygon mesh on this frame"));
     }
 
     if (m_btnFlipH) m_btnFlipH->setToolTip(tr("Flip Horizontal"));
@@ -3360,11 +3364,11 @@ void PixelEditorDialog::retranslateUi()
     }
     if (m_meshApplyAllFramesCheck) {
         if (!m_activeAnimName.isEmpty()) {
-            m_meshApplyAllFramesCheck->setText(tr("Appliquer aux frames de '%1'").arg(m_activeAnimName));
-            m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation '%1'").arg(m_activeAnimName));
+            m_meshApplyAllFramesCheck->setText(tr("Apply to '%1' frames").arg(m_activeAnimName));
+            m_meshApplyAllFramesCheck->setToolTip(tr("Apply CDT mesh generation to all frames of animation '%1'").arg(m_activeAnimName));
         } else {
-            m_meshApplyAllFramesCheck->setText(tr("Appliquer à toute l'animation"));
-            m_meshApplyAllFramesCheck->setToolTip(tr("Appliquer la génération de maillage CDT à toutes les frames de l'animation courante"));
+            m_meshApplyAllFramesCheck->setText(tr("Apply to all animation frames"));
+            m_meshApplyAllFramesCheck->setToolTip(tr("Apply CDT mesh generation to all frames of the current animation"));
         }
     }
     if (m_btnFilters) {
@@ -3412,6 +3416,74 @@ void PixelEditorDialog::retranslateUi()
         m_rightTabWidget->setTabText(0, tr("Tool Options"));
         m_rightTabWidget->setTabText(1, tr("Layers"));
     }
+
+    // Tool Options - Eraser
+    if (m_eraserGroup) m_eraserGroup->setTitle(tr("Eraser Options"));
+    if (m_eraserApplyAllFramesCheck) {
+        m_eraserApplyAllFramesCheck->setText(tr("Erase across all frames (Timeline)"));
+        m_eraserApplyAllFramesCheck->setToolTip(tr("Erase pixels across all frames of current animation aligned by pivot"));
+    }
+    if (m_eraserAllLayersCheck) {
+        m_eraserAllLayersCheck->setText(tr("Erase across all visible layers"));
+        m_eraserAllLayersCheck->setToolTip(tr("When checked, clears pixels on all visible layers simultaneously instead of only active layer"));
+    }
+    if (m_eraserTipLabel) {
+        m_eraserTipLabel->setText(tr("💡 <b>Tip:</b> 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold <b>Shift</b> to draw straight lines."));
+    }
+
+    // Tool Options - Selection Actions
+    if (m_selGroup) m_selGroup->setTitle(tr("Selection Actions"));
+    if (m_btnSelectAll) m_btnSelectAll->setText(tr("⬚ Select All (Ctrl+A)"));
+    if (m_btnDeselect) m_btnDeselect->setText(tr("✕ Deselect (Esc)"));
+    if (m_btnClearSelection) m_btnClearSelection->setText(tr("🗑 Delete Contents (Del)"));
+    if (m_btnCopySel) m_btnCopySel->setText(tr("📋 Copy"));
+    if (m_btnCutSel) m_btnCutSel->setText(tr("✂ Cut"));
+    if (m_btnPasteSel) m_btnPasteSel->setText(tr("📥 Paste"));
+    if (m_selTipLabel) {
+        m_selTipLabel->setText(tr("💡 <b>Tip:</b> Drag selection to move floating pixels. Press <b>Enter</b> or click outside to commit."));
+    }
+
+    // Tool Options - Eyedropper Sampling
+    if (m_eyeGroup) m_eyeGroup->setTitle(tr("Eyedropper Sampling"));
+    if (m_radioSampleAllLayers) m_radioSampleAllLayers->setText(tr("Sample All Visible Layers (Composite)"));
+    if (m_radioSampleActiveLayer) m_radioSampleActiveLayer->setText(tr("Sample Active Layer Only"));
+    if (m_eyeTipLabel) {
+        m_eyeTipLabel->setText(tr("💡 <b>Tip:</b> Click on any pixel to set primary color. Hold <b>Alt</b> while using any tool to temporarily sample color."));
+    }
+
+    // Tool Options - Polygon Mesh & Smart CDT Options
+    if (m_meshNoticeLabel) {
+        m_meshNoticeLabel->setText(tr("⚠️ <b>No polygon mesh</b> for this sprite.<br>A polygon mesh must already exist (generate it from the main toolbox: Tools > Polygon Mesh)."));
+    }
+    if (m_meshModeGroup_box) m_meshModeGroup_box->setTitle(tr("Vertex Editing Mode"));
+    if (m_radioMeshSelectMove) m_radioMeshSelectMove->setText(tr("✥ Move / Select"));
+    if (m_radioMeshAddInterior) m_radioMeshAddInterior->setText(tr("➕ Add Interior Point"));
+    if (m_radioMeshAddExterior) m_radioMeshAddExterior->setText(tr("🔲 Add Outline Point"));
+    if (m_radioMeshCutLine) m_radioMeshCutLine->setText(tr("✂️ Cut Line (Knife)"));
+    if (m_radioMeshDelete) m_radioMeshDelete->setText(tr("✖ Delete Point"));
+    if (m_btnDeleteSelectedVertex) m_btnDeleteSelectedVertex->setText(tr("🗑 Delete Vertex (Del)"));
+
+    if (m_cdtGroup) m_cdtGroup->setTitle(tr("CDT Generation & Steiner Points"));
+    if (m_lblContrastModeTitle) m_lblContrastModeTitle->setText(tr("Detection Mode:"));
+    if (m_comboContrastMode) {
+        int curIdx = m_comboContrastMode->currentIndex();
+        m_comboContrastMode->blockSignals(true);
+        m_comboContrastMode->setItemText(0, tr("🎨 Color Distance (RGB)"));
+        m_comboContrastMode->setItemText(1, tr("💡 Luminance (Classic Sobel)"));
+        m_comboContrastMode->setCurrentIndex(curIdx);
+        m_comboContrastMode->blockSignals(false);
+    }
+    if (m_lblSteinerDensityTitle) m_lblSteinerDensityTitle->setText(tr("Steiner Density:"));
+    if (m_lblMinAngleTitle) m_lblMinAngleTitle->setText(tr("Guaranteed Minimum Angle:"));
+    if (m_lblContrastSensitivityTitle) m_lblContrastSensitivityTitle->setText(tr("Internal Contrast:"));
+    if (m_btnGenerateSmartMesh) m_btnGenerateSmartMesh->setText(tr("⚡ Generate CDT Mesh"));
+    if (m_btnResetToOutline) m_btnResetToOutline->setText(tr("↺ Reset to Outline"));
+
+    if (m_meshStatsGroup) m_meshStatsGroup->setTitle(tr("Mesh Statistics"));
+    if (m_lblMeshBoundaryTitle) m_lblMeshBoundaryTitle->setText(tr("Outline vertices:"));
+    if (m_lblMeshInteriorTitle) m_lblMeshInteriorTitle->setText(tr("Interior vertices:"));
+    if (m_lblMeshTrianglesTitle) m_lblMeshTrianglesTitle->setText(tr("CDT triangles:"));
+    if (m_lblMeshOverdrawTitle) m_lblMeshOverdrawTitle->setText(tr("Overdraw savings:"));
 
     // Layer Stack (M18)
     if (m_layerStackGroup) m_layerStackGroup->setTitle(tr("Layers"));
@@ -4000,7 +4072,7 @@ void PixelEditorDialog::onGenerateSmartMeshRequested()
     QList<int> oldTris = m_canvas->meshTriangles();
 
     m_canvas->setPolygonMeshData(result.outerPolygon, result.vertices, result.triangles);
-    m_canvas->pushMeshSnapshot(tr("Génération Maillage CDT"), oldPoly, oldVerts, oldTris);
+    m_canvas->pushMeshSnapshot(tr("Generate CDT Mesh"), oldPoly, oldVerts, oldTris);
     m_sessionModifiedPolygons[m_currentFrameIndex] = result.outerPolygon;
     m_sessionModifiedVertices[m_currentFrameIndex] = result.vertices;
     m_sessionModifiedTriangles[m_currentFrameIndex] = result.triangles;
@@ -4081,7 +4153,7 @@ void PixelEditorDialog::onResetMeshToOutlineRequested()
     QList<int> tris = BentoPackGeometry::Triangulator::triangulateCDT(poly, verts);
 
     m_canvas->setPolygonMeshData(poly, verts, tris);
-    m_canvas->pushMeshSnapshot(tr("Réinitialiser maillage au contour"), oldPoly, oldVerts, oldTris);
+    m_canvas->pushMeshSnapshot(tr("Reset Mesh to Outline"), oldPoly, oldVerts, oldTris);
     m_sessionModifiedPolygons[m_currentFrameIndex] = poly;
     m_sessionModifiedVertices[m_currentFrameIndex] = verts;
     m_sessionModifiedTriangles[m_currentFrameIndex] = tris;

@@ -1967,7 +1967,7 @@ void PixelCanvas::applyCutLine(const QPointF &startPt, const QPointF &endPt)
 
     m_selectedVertexIndex = m_meshVertices.size() - 1;
     retriangulateMesh();
-    pushMeshSnapshot(tr("Trait de coupe maillage"), oldPoly, oldVerts, oldTris);
+    pushMeshSnapshot(tr("Mesh Cut Line"), oldPoly, oldVerts, oldTris);
     emit selectedVertexChanged(m_selectedVertexIndex, true);
 }
 
