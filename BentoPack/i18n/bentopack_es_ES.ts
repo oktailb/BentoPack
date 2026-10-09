@@ -434,6 +434,14 @@
         <translation>Eliminación de Fondo</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>El fondo ya es transparente (omitir reemplazo de color)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>No reemplazar ningún color de fondo con alfa; realizar la detección de sprites directamente en el fondo transparente existente</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Color de Fondo Detectado</translation>
     </message>
@@ -1853,6 +1861,14 @@ Haga clic en un nodo para ver sus detalles.</translation>
         <translation>Reducir la porción seleccionada a los píxeles opacos</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Detectar sprites</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Detectar y recortar automáticamente sprites desde el atlas transparente</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Quitar Fondo</translation>
     </message>
@@ -2397,6 +2413,10 @@ Fecha: %2
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Plugin de empaquetado de atlas no encontrado.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Detectar sprites...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Debe realizarse un reempaquetado del atlas para resolver fotogramas superpuestos
         <translation>Quitando el fondo en segundo plano...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Detectando sprites...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1 sprite(s) detectado(s).</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Detectando sprites en segundo plano...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Abrir %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Fondo eliminado correctamente.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1 sprite(s) detectado(s) con éxito.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4366,6 +4402,72 @@ Instale el paquete:
     <message>
         <source>Restore Defaults</source>
         <translation>Restaurar Valores Predeterminados</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Detección de sprites</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Parámetros de detección</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Umbral alfa:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Valor alfa mínimo (1-255) para considerar un píxel como contenido sólido del sprite</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Tolerancia de fila vertical:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Tolerancia de agrupación en filas verticales (0-100 px) para agrupar tiras de sprites</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Tolerancia de superposición:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Proporción máxima de superposición horizontal/vertical permitida (0.00-1.00) entre sprites distintos</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Tamaño mínimo de corte (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Ignorar regiones detectadas con un ancho o alto inferior a este valor en píxeles</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Recorte inteligente (Cajas delimitadoras ajustadas)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Reducir automáticamente las cajas delimitadoras para ajustar con precisión los píxeles opacos</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1 fotograma(s) detectado(s)</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Detección de sprites...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Detecta y recorta cajas delimitadoras de sprites desde el atlas sin modificar el fondo ni los colores de los píxeles.</translation>
     </message>
 </context>
 <context>

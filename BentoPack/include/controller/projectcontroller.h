@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ class SpriteDocument;
 class QUndoStack;
 
 struct BENTOPACK_CORE_EXPORT AsyncExtractionResult {
-    enum JobType { JobOpen, JobRemoveBackground };
+    enum JobType { JobOpen, JobRemoveBackground, JobDetectSprites };
     JobType type = JobOpen;
     QImage atlas;
     QList<QImage> frameImages;
@@ -118,6 +118,21 @@ public:
                                              bool smartCrop = false,
                                              double overlapThreshold = 0.5);
 
+    /**
+     * @brief Detects and slices sprites from the document's atlas without modifying pixel colors.
+     */
+    bool detectSpritesAndRefresh(int alphaThreshold = 10,
+                                 int verticalTolerance = 5,
+                                 bool smartCrop = false,
+                                 double overlapThreshold = 0.5,
+                                 int minSliceSize = 1);
+
+    void detectSpritesAndRefreshAsync(int alphaThreshold = 10,
+                                      int verticalTolerance = 5,
+                                      bool smartCrop = false,
+                                      double overlapThreshold = 0.5,
+                                      int minSliceSize = 1);
+
     QMap<int, QString> undoCommitHistory() const { return m_undoCommitHistory; }
 
 signals:
@@ -133,6 +148,7 @@ signals:
     void statusMessage(const QString &message);
     void progressChanged(int percent);
     void backgroundRemoved();
+    void spritesDetected();
     void processingStarted();
     void processingFinished();
 

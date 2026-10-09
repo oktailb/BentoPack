@@ -434,6 +434,14 @@
         <translation>Usuwanie tła</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>Tło jest już przezroczyste (pomiń zastępowanie kolorów)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Nie zastępuj żadnego koloru tła przezroczystością; wykryj sprite&apos;y bezpośrednio na istniejącym przezroczystym tle</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Wykryty kolor tła</translation>
     </message>
@@ -1853,6 +1861,14 @@ Kliknij węzeł, aby wyświetlić szczegóły.</translation>
         <translation>Dopasuj zaznaczony wycinek do nieprzezroczystych pikseli</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Wykryj sprite&apos;y</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Automatycznie wykrywaj i wycinaj sprite&apos;y z przezroczystego atlasu</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Usuń tło</translation>
     </message>
@@ -2397,6 +2413,10 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Nie znaleziono wtyczki pakowania atlasu.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Wykryj sprite&apos;y...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Czy chcesz przepakować atlas teraz?</translation>
         <translation>Usuwanie tła w tle...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Wykrywanie sprite&apos;ów...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>Wykryto %1 sprite(&apos;ów).</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Wykrywanie sprite&apos;ów w tle...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Otwórz %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Pomyślnie usunięto tło.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>Pomyślnie wykryto %1 sprite(&apos;ów).</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4368,6 +4404,72 @@ Zainstaluj pakiet:
     <message>
         <source>Restore Defaults</source>
         <translation>Przywróć domyślne</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Wykrywanie sprite&apos;ów</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Parametry wykrywania</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Próg alfa:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Minimalna wartość alfa (1-255), aby uznać piksel za nieprzezroczystą zawartość sprite&apos;a</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Tolerancja wierszy pionowych:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Tolerancja grupowania wierszy pionowych (0-100 px) dla klastrowania pasów sprite&apos;ów</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Tolerancja nachodzenia:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Maksymalny dozwolony współczynnik nachodzenia poziomego/pionowego (0.00-1.00) między różnymi sprite&apos;ami</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Minimalny rozmiar wycinka (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Ignoruj wykryte obszary mniejsze niż ta szerokość lub wysokość w pikselach</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Inteligentne przycinanie (Dopasowane ramki)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Automatycznie zmniejszaj ramki, aby ściśle otaczały nieprzezroczyste piksele</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>Wykryto %1 klatek</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Wykrywanie sprite&apos;ów...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Wykrywa i wycina ramki sprite&apos;ów z atlasu bez modyfikowania tła lub kolorów pikseli.</translation>
     </message>
 </context>
 <context>

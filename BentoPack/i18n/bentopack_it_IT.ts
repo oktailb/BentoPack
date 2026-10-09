@@ -434,6 +434,14 @@
         <translation>Rimozione sfondo</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>Lo sfondo è già trasparente (salta sostituzione colore)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Non sostituire alcun colore di sfondo con alfa; esegui il rilevamento sprite direttamente sullo sfondo trasparente esistente</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Colore di sfondo rilevato</translation>
     </message>
@@ -1853,6 +1861,14 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
         <translation>Riduci il riquadro selezionato ai pixel opachi</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Rileva sprite</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Rileva e ritaglia automaticamente gli sprite dall&apos;atlas trasparente</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Rimuovi sfondo</translation>
     </message>
@@ -2397,6 +2413,10 @@ Vuoi salvarle prima di procedere?</translation>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Plugin di impacchettamento atlas non trovato.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Rileva sprite...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
         <translation>Rimozione dello sfondo in background...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Rilevamento sprite in corso...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1 sprite rilevati.</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Rilevamento sprite in background...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Apri %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Sfondo rimosso con successo.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1 sprite rilevati con successo.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4366,6 +4402,72 @@ Installa il pacchetto:
     <message>
         <source>Restore Defaults</source>
         <translation>Ripristina predefiniti</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Rilevamento sprite</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Parametri di rilevamento</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Soglia alfa:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Valore alfa minimo (1-255) per considerare un pixel come contenuto solido dello sprite</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Tolleranza riga verticale:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Tolleranza di raggruppamento in righe verticali (0-100 px) per strisce di sprite</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Tolleranza di sovrapposizione:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Rapporto massimo di sovrapposizione orizzontale/verticale consentito (0.00-1.00) tra sprite distinti</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Dimensione minima ritaglio (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Ignora le regioni rilevate più piccole di questa larghezza o altezza in pixel</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Ritaglio intelligente (Bounding box aderenti)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Riduci automaticamente i riquadri di delimitazione per avvolgere strettamente i pixel opachi</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1 fotogrammi rilevati</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Rilevamento sprite...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Rileva e ritaglia i riquadri di delimitazione degli sprite dall&apos;atlas senza modificare lo sfondo o i colori dei pixel.</translation>
     </message>
 </context>
 <context>

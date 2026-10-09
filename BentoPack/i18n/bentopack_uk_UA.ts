@@ -434,6 +434,14 @@
         <translation>Видалення фону</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>Тло вже прозоре (пропустити заміну кольору)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Не замінювати колір тла на прозорість; виконувати виявлення спрайтів безпосередньо на наявному прозорому тлі</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Виявлений колір фону</translation>
     </message>
@@ -1853,6 +1861,14 @@ Strict removal clears the pixel.</source>
         <translation>Підігнати вибрану рамку під непрозорі пікселі</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Виявити спрайти</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Автоматично виявляти та нарізати спрайти з прозорого атласу</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Видалити фон</translation>
     </message>
@@ -2397,6 +2413,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Плагін пакування атласу не знайдено.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Виявити спрайти...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Would you like to repack the atlas now?</source>
         <translation>Видалення фону у фоновому режимі...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Виявлення спрайтів...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>Виявлено спрайтів: %1.</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Виявлення спрайтів у фоновому режимі...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Відкрити %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Фон успішно видалено.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>Успішно виявлено спрайтів: %1.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4368,6 +4404,72 @@ Install package:
     <message>
         <source>Restore Defaults</source>
         <translation>Відновити типові</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Виявлення спрайтів</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Параметри виявлення</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Поріг альфа:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Мінімальне значення альфа (1-255) для врахування пікселя як непрозорої частини спрайту</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Допуск вертикальних рядків:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Допуск групування вертикальних рядків (0-100 px) для кластеризації смуг спрайтів</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Допуск перекриття:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Максимально дозволене співвідношення горизонтального/вертикального перекриття (0.00-1.00) між спрайтами</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Мін. розмір фрагмента (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Ігнорувати виявлені області, менші за цю ширину або висоту в пікселях</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Розумне кадрування (Щільні межі)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Автоматично стискати обмежувальні рамки для щільного охоплення непрозорих пікселів</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>Виявлено кадрів: %1</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Виявлення спрайтів...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Виявляє та нарізає обмежувальні рамки спрайтів з атласу без зміни тла чи кольорів пікселів.</translation>
     </message>
 </context>
 <context>

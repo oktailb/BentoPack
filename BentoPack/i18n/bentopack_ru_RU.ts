@@ -434,6 +434,14 @@
         <translation>Удаление фона</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>Фон уже прозрачный (пропустить замену цвета)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Не заменять цвет фона на прозрачность; выполнять обнаружение спрайтов прямо на существующем прозрачном фоне</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Обнаруженный цвет фона</translation>
     </message>
@@ -1853,6 +1861,14 @@ Strict removal clears the pixel.</source>
         <translation>Уменьшить выбранную область до непрозрачных пикселей</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Обнаружить спрайты</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Автоматически обнаруживать и нарезать спрайты из прозрачного атласа</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Удалить фон</translation>
     </message>
@@ -2397,6 +2413,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Плагин упаковки атласа не найден.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Обнаружить спрайты...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Would you like to repack the atlas now?</source>
         <translation>Удаление фона в фоновом режиме...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Обнаружение спрайтов...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>Обнаружено спрайтов: %1.</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Обнаружение спрайтов в фоновом режиме...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Открыть %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Фон успешно удалён.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>Успешно обнаружено спрайтов: %1.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4368,6 +4404,72 @@ Install package:
     <message>
         <source>Restore Defaults</source>
         <translation>Восстановить настройки по умолчанию</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Обнаружение спрайтов</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Параметры обнаружения</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Порог прозрачности (Alpha):</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Минимальное значение альфа (1-255) для учета пикселя как непрозрачной части спрайта</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Допуск по вертикальным строкам:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Допуск группировки по вертикальным строкам (0-100 px) для кластеризации полос спрайтов</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Допуск перекрытия:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Максимально допустимый коэффициент горизонтального/вертикального перекрытия (0.00-1.00) между спрайтами</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Мин. размер фрагмента (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Игнорировать обнаруженные области меньше указанной ширины или высоты в пикселях</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Умная обрезка (Плотные рамки)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Автоматически сжимать ограничивающие рамки для плотного охвата непрозрачных пикселей</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>Обнаружено кадров: %1</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Обнаружение спрайтов...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Обнаруживает и нарезает рамки спрайтов из атласа без изменения фона или цветов пикселей.</translation>
     </message>
 </context>
 <context>

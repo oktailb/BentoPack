@@ -434,6 +434,14 @@
         <translation>Hintergrundentfernung</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>Hintergrund ist bereits transparent (Farbersetzung überspringen)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Keine Hintergrundfarbe durch Alpha ersetzen; Spriterkennung direkt auf dem vorhandenen transparenten Hintergrund durchführen</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Erkannte Hintergrundfarbe</translation>
     </message>
@@ -1853,6 +1861,14 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
         <translation>Ausgewähltes Slice auf undurchsichtige Pixel verkleinern</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Sprites erkennen</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Sprites automatisch aus transparentem Atlas erkennen und ausschneiden</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Hintergrund entfernen</translation>
     </message>
@@ -2397,6 +2413,10 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Atlas-Pack-Plugin nicht gefunden.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Sprites erkennen...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Möchten Sie den Atlas jetzt neu packen?</translation>
         <translation>Hintergrund wird im Hintergrund entfernt...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Sprites werden erkannt...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1 Sprite(s) erkannt.</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Sprites werden im Hintergrund erkannt...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>%1 öffnen</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Hintergrund erfolgreich entfernt.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1 Sprite(s) erfolgreich erkannt.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4366,6 +4402,72 @@ Paket installieren:
     <message>
         <source>Restore Defaults</source>
         <translation>Standardwerte wiederherstellen</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Spriterkennung</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Erkennungsparameter</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Alpha-Schwellenwert:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Minimaler Alpha-Wert (1-255), um ein Pixel als soliden Sprite-Inhalt zu betrachten</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Toleranz für vertikale Zeilen:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Toleranz für vertikale Zeilengruppierung (0-100 px) zur Sprite-Streifen-Gruppierung</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Überlappungstoleranz:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Maximal zulässiges horizontales/vertikales Überlappungsverhältnis (0.00-1.00) zwischen verschiedenen Sprites</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Minimale Schnittgröße (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Erkannte Bereiche ignorieren, die kleiner als diese Breite oder Höhe in Pixeln sind</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Smart Crop (Eng anliegende Bounding-Boxes)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Bounding-Boxes automatisch verkleinern, um opake Pixel eng zu umschließen</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1 Frame(s) erkannt</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Spriterkennung...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Erkennt und schneidet Sprite-Bounding-Boxes aus dem Atlas, ohne Hintergrund oder Pixelfarben zu verändern.</translation>
     </message>
 </context>
 <context>

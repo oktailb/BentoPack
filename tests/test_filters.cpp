@@ -22,10 +22,13 @@
 #include "retropalettefilterdialog.h"
 #include "atlaspackingdialog.h"
 #include "atlaspackingfilter.h"
+#include "spritedetectiondialog.h"
+#include "spritedetectionfilter.h"
 #include "commands/filtercommands.h"
 #include "widgets/filtermenubuilder.h"
 #include "aboutdialog.h"
 #include "localizationmanager.h"
+#include "config/appconfig.h"
 
 class TestFilters : public QObject
 {
@@ -45,6 +48,7 @@ private slots:
     void testApplyFilterCommandUndoRedo();
     void testFilterAutoDetectBoxes();
     void testAtlasPackingFilterInteractive();
+    void testSpriteDetectionFilterInteractive();
     void testAboutDialogDarkModeAndPricing();
 };
 
@@ -70,7 +74,7 @@ void TestFilters::testFilterRegistry()
 
     // Multiple calls to init/load should never create duplicates
     reg.initDefaultFilters();
-    QCOMPARE(reg.filters().size(), 9);
+    QCOMPARE(reg.filters().size(), 10);
     QVERIFY(reg.findFilter(QStringLiteral("background_removal")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("despill")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("outline")) != nullptr);
@@ -80,6 +84,7 @@ void TestFilters::testFilterRegistry()
     QVERIFY(reg.findFilter(QStringLiteral("retro_palette")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("atlas_packing")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("tight_polygon_packing")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("sprite_detection")) != nullptr);
 
     QStringList cats = reg.categories();
     QVERIFY(!cats.isEmpty());
@@ -96,8 +101,8 @@ void TestFilters::testFilterRegistry()
             filterActionCount++;
         }
     }
-    // Exactly 9 filter actions without any duplicates
-    QCOMPARE(filterActionCount, 9);
+    // Exactly 10 filter actions without any duplicates
+    QCOMPARE(filterActionCount, 10);
 
     // Test taxonomy and modifier flags
     FilterPlugin *bgRem = reg.findFilter(QStringLiteral("background_removal"));
@@ -125,6 +130,12 @@ void TestFilters::testFilterRegistry()
     QVERIFY(tightPack != nullptr);
     QVERIFY(tightPack->isAtlasModifier());
     QVERIFY(tightPack->isGeometryModifier());
+
+    FilterPlugin *spriteDetect = reg.findFilter(QStringLiteral("sprite_detection"));
+    QVERIFY(spriteDetect != nullptr);
+    QVERIFY(spriteDetect->isGeometryModifier());
+    QVERIFY(!spriteDetect->isPixelModifier());
+    QVERIFY(!spriteDetect->isAtlasModifier());
 
     QList<FilterPlugin*> pixelMods = reg.filtersByModifier(FilterPlugin::PixelModifier);
     QVERIFY(!pixelMods.isEmpty());
@@ -596,6 +607,64 @@ void TestFilters::testAtlasPackingFilterInteractive()
     // Verify document remains in the 3-frame packed state without corruption
     QCOMPARE(doc.frameCount(), 3);
     QCOMPARE(doc.animation(QStringLiteral("walk")).frameIndices, (QList<int>{0, 1, 0, 2, 0, 1}));
+}
+
+void TestFilters::testSpriteDetectionFilterInteractive()
+{
+    SpriteDocument doc;
+    QUndoStack stack;
+
+    // Create an atlas that ALREADY has a transparent background (0, 0, 0, 0)
+    QImage atlas(100, 100, QImage::Format_ARGB32);
+    atlas.fill(qRgba(0, 0, 0, 0));
+
+    // Draw two opaque sprite rectangles
+    // Sprite 1: (10, 10, 20, 20) in red
+    for (int y = 10; y < 30; ++y) {
+        for (int x = 10; x < 30; ++x) {
+            atlas.setPixel(x, y, qRgb(255, 0, 0));
+        }
+    }
+    // Sprite 2: (60, 20, 25, 25) in blue
+    for (int y = 20; y < 45; ++y) {
+        for (int x = 60; x < 85; ++x) {
+            atlas.setPixel(x, y, qRgb(0, 0, 255));
+        }
+    }
+
+    doc.setAtlas(atlas);
+    QCOMPARE(doc.frameCount(), 0);
+
+    // 1. Direct Sprite Detection without background removal
+    SpriteDetectionDialog dlg(&doc, &stack);
+    QVERIFY(dlg.isSmartCropEnabled());
+    QCOMPARE(dlg.alphaThreshold(), AppConfig::instance().atlas().defaultAlphaThreshold);
+
+    dlg.accept();
+
+    // Verify 2 frames detected
+    QCOMPARE(doc.frameCount(), 2);
+    QCOMPARE(doc.boxes().size(), 2);
+
+    // Verify atlas pixels were NOT touched or corrupted
+    QCOMPARE(qAlpha(doc.atlas().pixel(0, 0)), 0);
+    QCOMPARE(doc.atlas().pixel(10, 10), qRgb(255, 0, 0));
+    QCOMPARE(doc.atlas().pixel(60, 20), qRgb(0, 0, 255));
+
+    // Verify bounding boxes wrap the sprites correctly
+    QRect r1 = doc.boxes()[0].rect;
+    QRect r2 = doc.boxes()[1].rect;
+    QVERIFY(r1.contains(QPoint(10, 10)) || r2.contains(QPoint(10, 10)));
+    QVERIFY(r1.contains(QPoint(60, 20)) || r2.contains(QPoint(60, 20)));
+
+    // 2. Undo & Redo
+    stack.undo();
+    QCOMPARE(doc.frameCount(), 0);
+    QCOMPARE(doc.boxes().size(), 0);
+
+    stack.redo();
+    QCOMPARE(doc.frameCount(), 2);
+    QCOMPARE(doc.boxes().size(), 2);
 }
 
 void TestFilters::testAboutDialogDarkModeAndPricing()

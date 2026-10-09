@@ -434,6 +434,14 @@
         <translation>Background Removal</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>Background is already transparent (skip color replacement)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Detected Background Color</translation>
     </message>
@@ -1853,6 +1861,14 @@ Click a node to view its details.</translation>
         <translation>Shrink selected slice to opaque pixels</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Detect Sprites</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Automatically detect and slice sprites from transparent atlas</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Remove BG</translation>
     </message>
@@ -2039,6 +2055,10 @@ Click a node to view its details.</translation>
     <message>
         <source>KEY_CTX_ERASE_PIXELS</source>
         <translation>Erase Pixels &amp; Delete Frames</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Detect Sprites...</translation>
     </message>
     <message>
         <source>KEY_CTX_REMOVE_BG</source>
@@ -3546,12 +3566,28 @@ Would you like to repack the atlas now?</translation>
         <translation>Removing background in background...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Detecting sprites...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1 sprite(s) detected.</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Detecting sprites in background...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Open %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Background removed successfully.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1 sprite(s) detected successfully.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4366,6 +4402,72 @@ Install package:
     <message>
         <source>Restore Defaults</source>
         <translation>Restore Defaults</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Sprite Detection</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Detection Parameters</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Alpha Threshold:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Minimum alpha value (1-255) to consider a pixel as solid sprite content</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Vertical Row Tolerance:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Overlap Tolerance:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Min Slice Size (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Ignore detected regions smaller than this width or height in pixels</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Smart Crop (Tight Bounding Boxes)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Automatically shrink bounding boxes to tightly wrap opaque pixels</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1 frame(s) detected</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Sprite Detection...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</translation>
     </message>
 </context>
 <context>

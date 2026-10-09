@@ -434,6 +434,14 @@
         <translation>ดำเนินการ: Background Removal</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>พื้นหลังโปร่งใสอยู่แล้ว (ข้ามการแทนที่สี)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>ไม่แทนที่สีพื้นหลังด้วยอัลฟา; ตรวจหาสไปรต์โดยตรงบนพื้นหลังโปร่งใสที่มีอยู่</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>ดำเนินการ: Detected Background Color</translation>
     </message>
@@ -1853,6 +1861,14 @@ Strict removal clears the pixel.</translation>
         <translation>ย่อสไลซ์ที่เลือกให้พอดีกับพิกเซลทึบ</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>ตรวจหาสไปรต์</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>ตรวจหาและตัดสไปรต์โดยอัตโนมัติจากแอตลาสที่โปร่งใส</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>ลบพื้นหลัง</translation>
     </message>
@@ -2397,6 +2413,10 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>ไม่พบปลั๊กอินการแพ็กแอตลาส</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>ตรวจหาสไปรต์...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Would you like to repack the atlas now?</translation>
         <translation>ดำเนินการ: Removing background in background...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>กำลังตรวจหาสไปรต์...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>ตรวจพบ %1 สไปรต์</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>กำลังตรวจหาสไปรต์ในพื้นหลัง...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>เปิด %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>ดำเนินการ: Background removed successfully.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>ตรวจพบ %1 สไปรต์สำเร็จ</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4364,6 +4400,72 @@ Install package:
     <message>
         <source>Restore Defaults</source>
         <translation>คืนค่าเริ่มต้น</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>การตรวจหาสไปรต์</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>พารามิเตอร์การตรวจหา</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>เกณฑ์อัลฟา:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>ค่าอัลฟาขั้นต่ำ (1-255) เพื่อพิจารณาว่าพิกเซลเป็นเนื้อหาของสไปรต์</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>ความคลาดเคลื่อนแถวแนวตั้ง:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>ความคลาดเคลื่อนในการจัดกลุ่มแถวแนวตั้ง (0-100 px) สำหรับการจัดกลุ่มแถบสไปรต์</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>ความคลาดเคลื่อนการทับซ้อน:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>อัตราส่วนการทับซ้อนแนวนอน/แนวตั้งสูงสุดที่อนุญาต (0.00-1.00) ระหว่างสไปรต์ที่ต่างกัน</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>ขนาดการตัดขั้นต่ำ (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>ละเว้นพื้นที่ที่ตรวจพบซึ่งเล็กกว่าความกว้างหรือความสูงนี้ในหน่วยพิกเซล</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>การครอบตัดอัจฉริยะ (กล่องขอบเขตพอดี)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>ย่อกล่องขอบเขตโดยอัตโนมัติเพื่อโอบล้อมพิกเซลทึบแสงอย่างแนบสนิท</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>ตรวจพบ %1 เฟรม</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>การตรวจหาสไปรต์...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>ตรวจหาและตัดกล่องขอบเขตของสไปรต์จากแอตลาสโดยไม่แก้ไขพื้นหลังหรือสีพิกเซล</translation>
     </message>
 </context>
 <context>

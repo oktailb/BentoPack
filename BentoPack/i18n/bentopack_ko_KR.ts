@@ -434,6 +434,14 @@
         <translation>배경 제거</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>배경이 이미 투명합니다 (색상 대체 건너뛰기)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>배경색을 알파로 대체하지 않고 기존 투명 배경에서 직접 스프라이트 감지를 수행합니다</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>감지된 배경색</translation>
     </message>
@@ -1853,6 +1861,14 @@ Strict removal clears the pixel.</source>
         <translation>선택한 슬라이스를 불투명 픽셀로 축소</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>스프라이트 감지</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>투명 아틀라스에서 스프라이트를 자동으로 감지하고 슬라이스합니다</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>배경 제거</translation>
     </message>
@@ -2397,6 +2413,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>아틀라스 패킹 플러그인을 찾을 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>스프라이트 감지...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Would you like to repack the atlas now?</source>
         <translation>백그라운드에서 배경 제거 중...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>스프라이트 감지 중...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1개의 스프라이트가 감지되었습니다.</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>백그라운드에서 스프라이트 감지 중...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>%1 열기</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>배경이 성공적으로 제거되었습니다.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1개의 스프라이트가 성공적으로 감지되었습니다.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4364,6 +4400,72 @@ Install package:
     <message>
         <source>Restore Defaults</source>
         <translation>기본값 복원</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>스프라이트 감지</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>감지 매개변수</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>알파 임계값:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>픽셀을 불투명 스프라이트 콘텐츠로 간주하는 최소 알파 값 (1-255)</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>수직 행 허용 오차:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>스프라이트 스트립 클러스터링을 위한 수직 행 그룹화 허용 오차 (0-100 px)</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>겹침 허용 오차:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>개별 스프라이트 간 허용되는 최대 수평/수직 겹침 비율 (0.00-1.00)</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>최소 슬라이스 크기 (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>이 너비 또는 높이(픽셀)보다 작은 감지된 영역을 무시합니다</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>스마트 크롭 (밀착 경계 상자)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>불투명 픽셀을 단단히 감싸도록 경계 상자를 자동으로 축소합니다</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1개 프레임 감지됨</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>스프라이트 감지...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>배경이나 픽셀 색상을 변경하지 않고 아틀라스에서 스프라이트 경계 상자를 감지하고 슬라이스합니다.</translation>
     </message>
 </context>
 <context>

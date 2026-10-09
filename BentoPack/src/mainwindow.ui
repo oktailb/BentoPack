@@ -859,6 +859,7 @@
    <addaction name="actionToolSelect"/>
    <addaction name="actionToolAddSlice"/>
    <addaction name="actionTrimSlice"/>
+   <addaction name="actionDetectSprites"/>
    <addaction name="actionRemoveBg"/>
    <addaction name="separator"/>
    <addaction name="actionZoomIn"/>
@@ -1003,6 +1004,14 @@
    </property>
    <property name="toolTip">
     <string>KEY_TOOLTIP_TOOL_TRIM</string>
+   </property>
+  </action>
+  <action name="actionDetectSprites">
+   <property name="text">
+    <string>KEY_TOOL_DETECT_SPRITES</string>
+   </property>
+   <property name="toolTip">
+    <string>KEY_TOOLTIP_TOOL_DETECT_SPRITES</string>
    </property>
   </action>
   <action name="actionRemoveBg">

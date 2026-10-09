@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -144,6 +144,10 @@ void MainWindow::onBoxContextMenuRequested(int index, const QPoint &screenPos)
 
     menu.addSeparator();
 
+    QAction *detectSpritesAction = menu.addAction(tr("KEY_CTX_DETECT_SPRITES"));
+    detectSpritesAction->setEnabled(m_document && !m_document->atlas().isNull());
+    connect(detectSpritesAction, &QAction::triggered, this, &MainWindow::detectSpritesAndRefresh);
+
     QAction *removeBgAction = menu.addAction(tr("KEY_CTX_REMOVE_BG"));
     removeBgAction->setEnabled(m_document && !m_document->atlas().isNull());
     connect(removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
@@ -242,6 +246,10 @@ void MainWindow::onAtlasContextMenuRequested(const QPoint &pos)
 
     menu.addSeparator();
 
+    QAction *detectSpritesAction = menu.addAction(tr("KEY_CTX_DETECT_SPRITES"));
+    detectSpritesAction->setEnabled(m_document && !m_document->atlas().isNull());
+    connect(detectSpritesAction, &QAction::triggered, this, &MainWindow::detectSpritesAndRefresh);
+
     QAction *removeBgAction = menu.addAction(tr("KEY_CTX_REMOVE_BG"));
     removeBgAction->setEnabled(m_document && !m_document->atlas().isNull());
     connect(removeBgAction, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
@@ -256,6 +264,20 @@ void MainWindow::removeAtlasBackgroundAndRefresh()
 {
     if (m_document && !m_document->atlas().isNull()) {
         FilterPlugin *plugin = FilterRegistry::instance().findFilter(QStringLiteral("background_removal"));
+        if (plugin) {
+            FilterDialogBase *dlg = plugin->createDialog(m_document, m_undoStack, this);
+            if (dlg) {
+                dlg->exec();
+                dlg->deleteLater();
+            }
+        }
+    }
+}
+
+void MainWindow::detectSpritesAndRefresh()
+{
+    if (m_document && !m_document->atlas().isNull()) {
+        FilterPlugin *plugin = FilterRegistry::instance().findFilter(QStringLiteral("sprite_detection"));
         if (plugin) {
             FilterDialogBase *dlg = plugin->createDialog(m_document, m_undoStack, this);
             if (dlg) {

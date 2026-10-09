@@ -434,6 +434,14 @@
         <translation>Remoção de Fundo</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>O plano de fundo já é transparente (ignorar substituição de cor)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Não substituir nenhuma cor de fundo por alfa; realizar detecção de sprites diretamente no fundo transparente existente</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Cor de Fundo Detectada</translation>
     </message>
@@ -1853,6 +1861,14 @@ Clique em um nó para ver os detalhes.</translation>
         <translation>Encolher a fatia selecionada para os pixels opacos</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Detectar Sprites</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Detectar e recortar sprites automaticamente do atlas transparente</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Remover Fundo</translation>
     </message>
@@ -2397,6 +2413,10 @@ Deseja salvá-las antes de prosseguir?</translation>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Plugin de empacotamento do atlas não encontrado.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Detectar Sprites...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Deseja reempacotar o atlas agora?</translation>
         <translation>Removendo fundo em segundo plano...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Detectando sprites...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1 sprite(s) detectado(s).</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Detectando sprites em segundo plano...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Abrir %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Fundo removido com sucesso.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1 sprite(s) detectado(s) com sucesso.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4366,6 +4402,72 @@ Instale o pacote:
     <message>
         <source>Restore Defaults</source>
         <translation>Restaurar Padrões</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Detecção de Sprites</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Parâmetros de Detecção</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Limiar Alfa:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Valor alfa mínimo (1-255) para considerar um pixel como conteúdo sólido do sprite</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Tolerância de Linha Vertical:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Tolerância de agrupamento de linhas verticais (0-100 px) para tiras de sprites</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Tolerância de Sobreposição:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Proporção máxima de sobreposição horizontal/vertical permitida (0.00-1.00) entre sprites distintos</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Tamanho Mínimo de Recorte (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Ignorar regiões detectadas menores que esta largura ou altura em pixels</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Recorte Inteligente (Caixas Delimitadoras Ajustadas)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Reduzir caixas delimitadoras automaticamente para envolver pixels opacos com precisão</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1 quadro(s) detectado(s)</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Detecção de Sprites...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Detecta e recorta caixas delimitadoras de sprites do atlas sem modificar o fundo ou as cores dos pixels.</translation>
     </message>
 </context>
 <context>

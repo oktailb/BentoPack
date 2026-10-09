@@ -21,6 +21,7 @@ set(ALL_FILTER_PLUGINS
     filter_retropalette
     filter_atlaspacking
     filter_tightpolygonpacking
+    filter_spritedetection
 )
 
 set(PLUGIN_INCLUDES
@@ -41,6 +42,7 @@ set(PLUGIN_INCLUDES
     ${CMAKE_SOURCE_DIR}/plugins/filters/retropalette
     ${CMAKE_SOURCE_DIR}/plugins/filters/atlaspacking
     ${CMAKE_SOURCE_DIR}/plugins/filters/tightpolygonpacking
+    ${CMAKE_SOURCE_DIR}/plugins/filters/spritedetection
 )
 
 # 1. test_extractors

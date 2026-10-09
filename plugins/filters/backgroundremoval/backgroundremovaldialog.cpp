@@ -76,13 +76,22 @@ double BackgroundRemovalDialog::overlapThreshold() const
     return m_overlapSpin ? m_overlapSpin->value() : 0.10;
 }
 
+bool BackgroundRemovalDialog::isSkipBackgroundRemoval() const
+{
+    return m_skipBgRemovalCheck && m_skipBgRemovalCheck->isChecked();
+}
+
 void BackgroundRemovalDialog::setupFilterUI()
 {
     const auto &cfg = AppConfig::instance();
 
+    m_skipBgRemovalCheck = new QCheckBox(tr("Background is already transparent (skip color replacement)"), this);
+    m_skipBgRemovalCheck->setToolTip(tr("Do not replace any background color with alpha; perform sprite detection directly on existing transparent background"));
+    contentLayout()->addWidget(m_skipBgRemovalCheck);
+
     // --- 1. Detected Background Color GroupBox ---
-    QGroupBox *colorGroup = new QGroupBox(tr("Detected Background Color"), this);
-    QHBoxLayout *colorLayout = new QHBoxLayout(colorGroup);
+    m_colorGroup = new QGroupBox(tr("Detected Background Color"), this);
+    QHBoxLayout *colorLayout = new QHBoxLayout(m_colorGroup);
 
     m_swatchLabel = new QLabel(this);
     m_swatchLabel->setFixedSize(36, 24);
@@ -102,7 +111,7 @@ void BackgroundRemovalDialog::setupFilterUI()
     colorLayout->addWidget(m_swatchLabel);
     colorLayout->addWidget(m_colorInfoLabel);
     colorLayout->addStretch();
-    contentLayout()->addWidget(colorGroup);
+    contentLayout()->addWidget(m_colorGroup);
 
     // --- 2. Parameters GroupBox ---
     QGroupBox *paramGroup = new QGroupBox(tr("Removal Parameters"), this);
@@ -125,6 +134,14 @@ void BackgroundRemovalDialog::setupFilterUI()
     colorTolRow->addWidget(m_colorToleranceSlider, 1);
     colorTolRow->addWidget(m_colorToleranceSpin);
     paramLayout->addLayout(colorTolRow);
+
+    connect(m_skipBgRemovalCheck, &QCheckBox::toggled, this, [this, lblTol](bool checked) {
+        if (m_colorGroup) m_colorGroup->setEnabled(!checked);
+        lblTol->setEnabled(!checked);
+        m_colorToleranceSlider->setEnabled(!checked);
+        m_colorToleranceSpin->setEnabled(!checked);
+        onParametersChanged();
+    });
 
     // Row: Alpha Threshold
     QHBoxLayout *alphaRow = new QHBoxLayout();
@@ -237,9 +254,13 @@ void BackgroundRemovalDialog::applyPreview()
 {
     if (!m_document || m_initialAtlas.isNull()) return;
 
-    // Step 1: Remove background from pristine initial atlas
-    m_previewAtlas = ProjectController::removeBackgroundFromImage(
-        m_initialAtlas, colorTolerance());
+    // Step 1: Remove background from pristine initial atlas if not already transparent
+    if (isSkipBackgroundRemoval()) {
+        m_previewAtlas = m_initialAtlas;
+    } else {
+        m_previewAtlas = ProjectController::removeBackgroundFromImage(
+            m_initialAtlas, colorTolerance());
+    }
 
     // Step 2: Extract bounding boxes and individual sprite frames using factorized helper
     SpriteDetectionOptions opts;

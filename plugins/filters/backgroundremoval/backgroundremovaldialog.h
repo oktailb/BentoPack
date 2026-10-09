@@ -24,6 +24,7 @@ class QSpinBox;
 class QDoubleSpinBox;
 class QCheckBox;
 class QLabel;
+class QGroupBox;
 
 /**
  * @brief Floating interactive tool dialog for background removal with real-time live preview.
@@ -49,6 +50,7 @@ public:
     int verticalTolerance() const;
     bool isSmartCropEnabled() const;
     double overlapThreshold() const;
+    bool isSkipBackgroundRemoval() const;
 
 protected:
     // FilterDialogBase implementation
@@ -72,7 +74,8 @@ private:
     QList<QImage>                  m_previewFrames;
     QList<SpriteBox>                m_previewBoxes;
 
-    // Filter-specific UI Widgets
+    QGroupBox*                      m_colorGroup = nullptr;
+    QCheckBox*                      m_skipBgRemovalCheck = nullptr;
     QLabel*                         m_swatchLabel = nullptr;
     QLabel*                         m_colorInfoLabel = nullptr;
 

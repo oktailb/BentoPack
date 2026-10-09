@@ -434,6 +434,14 @@
         <translation>背景移除</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>背景已是透明 (略過色彩取代)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>不將任何背景顏色取代為透明度；直接在現有透明背景上執行精靈偵測</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>檢測到的背景色</translation>
     </message>
@@ -1853,6 +1861,14 @@ Strict removal clears the pixel.</source>
         <translation>將選定的切片縮小至不透明像素的邊界</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>偵測精靈</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>從透明圖集中自動偵測並切片精靈</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>移除背景</translation>
     </message>
@@ -2397,6 +2413,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>未找到圖集打包外掛模組。</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>偵測精靈...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Would you like to repack the atlas now?</source>
         <translation>在後台移除背景...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>正在偵測精靈...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>已偵測到 %1 個精靈。</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>正在背景偵測精靈...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>打開 %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>成功移除背景。</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>成功偵測到 %1 個精靈。</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4364,6 +4400,72 @@ Install package:
     <message>
         <source>Restore Defaults</source>
         <translation>恢復預設</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>精靈偵測</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>偵測參數</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Alpha 臨界值:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>將像素視為不透明精靈內容的最小 Alpha 值 (1-255)</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>垂直列容許度:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>用於精靈條帶分群的垂直列分組容許度 (0-100 px)</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>重疊容許度:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>不同精靈之間允許的最大水平/垂直重疊比例 (0.00-1.00)</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>最小切片大小 (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>略過小於此寬度或高度（像素）的偵測區域</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>智慧裁剪 (緊湊邊界框)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>自動縮小邊界框以緊密貼合不透明像素</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>已偵測到 %1 影格</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>精靈偵測...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>從圖集中偵測並切片精靈邊界框，不修改背景或像素色彩。</translation>
     </message>
 </context>
 <context>

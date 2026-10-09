@@ -434,6 +434,14 @@
         <translation>Thao tác: Background Removal</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>Hình nền đã trong suốt (bỏ qua thay thế màu)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Không thay thế bất kỳ màu nền nào bằng alpha; thực hiện phát hiện sprite trực tiếp trên nền trong suốt hiện có</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Thao tác: Detected Background Color</translation>
     </message>
@@ -1853,6 +1861,14 @@ Bấm vào một nút để xem chi tiết.</translation>
         <translation>Thu nhỏ lát cắt đã chọn vừa với pixel không trong suốt</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Phát hiện Sprite</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Tự động phát hiện và cắt sprite từ tập bản đồ trong suốt</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Xóa nền</translation>
     </message>
@@ -2397,6 +2413,10 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Không tìm thấy plugin đóng gói atlas.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Phát hiện Sprite...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Would you like to repack the atlas now?</translation>
         <translation>Thao tác: Removing background in background...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Đang phát hiện sprite...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>Đã phát hiện %1 sprite.</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Đang phát hiện sprite ở chế độ nền...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Mở %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Thao tác: Background removed successfully.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>Đã phát hiện thành công %1 sprite.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4364,6 +4400,72 @@ Cài đặt gói:
     <message>
         <source>Restore Defaults</source>
         <translation>Khôi phục mặc định</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Phát hiện Sprite</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Thông số phát hiện</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Ngưỡng Alpha:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Giá trị alpha tối thiểu (1-255) để coi một pixel là nội dung sprite đặc</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Dung sai hàng dọc:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Dung sai nhóm hàng dọc (0-100 px) để phân cụm dải sprite</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Dung sai chồng lấn:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Tỷ lệ chồng lấn ngang/dọc tối đa cho phép (0.00-1.00) giữa các sprite khác nhau</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Kích thước lát cắt tối thiểu (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Bỏ qua các vùng được phát hiện nhỏ hơn chiều rộng hoặc chiều cao này tính bằng pixel</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Cắt thông minh (Hộp bao khít)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Tự động thu nhỏ hộp bao để ôm khít các pixel mờ đục</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>Đã phát hiện %1 khung hình</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Phát hiện Sprite...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Phát hiện và cắt các hộp bao sprite từ tập bản đồ mà không sửa đổi nền hoặc màu pixel.</translation>
     </message>
 </context>
 <context>

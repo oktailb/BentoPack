@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -186,6 +186,7 @@ private slots:
 
     // Image processing
     void removeAtlasBackgroundAndRefresh();
+    void detectSpritesAndRefresh();
 
     // Pivot controls
     void on_btnPivotGround_clicked();

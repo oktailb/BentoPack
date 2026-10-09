@@ -343,6 +343,7 @@ void MainWindow::setupErgonomicLayout()
     ui->actionToolSelect->setIcon(QIcon(":/drawer/icons/tool_select.png"));
     ui->actionToolAddSlice->setIcon(QIcon(":/drawer/icons/tool_slice.png"));
     ui->actionTrimSlice->setIcon(QIcon(":/drawer/icons/tool_trim.png"));
+    ui->actionDetectSprites->setIcon(QIcon::fromTheme(QStringLiteral("view-grid"), QIcon(":/drawer/icons/tool_slice.png")));
     ui->actionRemoveBg->setIcon(QIcon(":/drawer/icons/tool_remove_bg.png"));
 
     ui->actionZoomIn->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in"), QIcon(":/drawer/plus.png")));
@@ -354,6 +355,7 @@ void MainWindow::setupErgonomicLayout()
     toolGroup->addAction(ui->actionToolAddSlice);
     ui->actionToolSelect->setChecked(true);
 
+    connect(ui->actionDetectSprites, &QAction::triggered, this, &MainWindow::detectSpritesAndRefresh);
     connect(ui->actionRemoveBg, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
 
     // Setup Affichage (View) Menu with toggle actions for all docks

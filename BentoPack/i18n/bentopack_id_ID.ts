@@ -434,6 +434,14 @@
         <translation>Penghapusan Latar Belakang</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>Latar belakang sudah transparan (lewati penggantian warna)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Jangan mengganti warna latar belakang apa pun dengan alfa; lakukan deteksi sprite langsung pada latar belakang transparan yang ada</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Warna Latar Belakang Terdeteksi</translation>
     </message>
@@ -1853,6 +1861,14 @@ Klik simpul untuk melihat detailnya.</translation>
         <translation>Ciutkan irisan yang dipilih ke piksel buram</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Deteksi Sprite</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Deteksi dan potong sprite secara otomatis dari atlas transparan</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Hapus Latar Belakang</translation>
     </message>
@@ -2397,6 +2413,10 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>Plugin pengemasan atlas tidak ditemukan.</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Deteksi Sprite...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
         <translation>Menghapus latar belakang di latar belakang...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Mendeteksi sprite...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1 sprite terdeteksi.</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Mendeteksi sprite di latar belakang...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Buka %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Latar belakang berhasil dihapus.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1 sprite berhasil terdeteksi.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4364,6 +4400,72 @@ Pasang paket:
     <message>
         <source>Restore Defaults</source>
         <translation>Pulihkan Default</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Deteksi Sprite</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Parameter Deteksi</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Ambang Batas Alfa:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Nilai alfa minimum (1-255) untuk menganggap piksel sebagai konten sprite padat</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Toleransi Baris Vertikal:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Toleransi pengelompokan baris vertikal (0-100 px) untuk pengelompokan strip sprite</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Toleransi Tumpang Tindih:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Rasio tumpang tindih horizontal/vertikal maksimum yang diizinkan (0.00-1.00) antara sprite yang berbeda</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Ukuran Irisan Minimum (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Abaikan wilayah terdeteksi yang lebih kecil dari lebar atau tinggi ini dalam piksel</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Pangkas Cerdas (Kotak Batas Pas)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Kecilkan kotak pembatas secara otomatis untuk membungkus piksel buram secara pas</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1 bingkai terdeteksi</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Deteksi Sprite...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Mendeteksi dan mengiris kotak pembatas sprite dari atlas tanpa memodifikasi latar belakang atau warna piksel.</translation>
     </message>
 </context>
 <context>

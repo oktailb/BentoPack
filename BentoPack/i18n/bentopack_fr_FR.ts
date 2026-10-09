@@ -434,6 +434,14 @@
         <translation>Suppression d&apos;arrière-plan</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>L&apos;arrière-plan est déjà transparent (ignorer le remplacement de couleur)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>Ne remplacer aucune couleur d&apos;arrière-plan par de l&apos;alpha ; détecter les sprites directement sur la transparence existante</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>Couleur d&apos;arrière-plan détectée</translation>
     </message>
@@ -1853,6 +1861,14 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
         <translation>Ajuster la boîte sélectionnée aux pixels opaques</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>Détecter sprites</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>Détecter et découper automatiquement les sprites sur l&apos;atlas transparent</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>Supprimer fond</translation>
     </message>
@@ -2035,6 +2051,10 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     <message>
         <source>KEY_CTX_ERASE_PIXELS</source>
         <translation>Effacer les pixels et supprimer les boîtes</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>Détecter les sprites...</translation>
     </message>
     <message>
         <source>KEY_CTX_REMOVE_BG</source>
@@ -3546,12 +3566,28 @@ Souhaitez-vous recompacter l&apos;atlas maintenant ?</translation>
         <translation>Suppression de l&apos;arrière-plan en tâche de fond...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>Détection des sprites...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1 sprite(s) détecté(s).</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>Détection des sprites en arrière-plan...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>Ouvrir %1</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>Arrière-plan supprimé avec succès.</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1 sprite(s) détecté(s) avec succès.</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4366,6 +4402,72 @@ Installez le paquet :
     <message>
         <source>Restore Defaults</source>
         <translation>Restaurer les valeurs par défaut</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>Détection des sprites</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>Paramètres de détection</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>Seuil alpha :</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>Valeur alpha minimale (1-255) pour considérer un pixel comme contenu opaque du sprite</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>Tolérance de ligne verticale :</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>Tolérance de regroupement en lignes verticales (0-100 px) pour l&apos;alignement en bandes de sprites</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>Tolérance de chevauchement :</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>Ratio de chevauchement horizontal/vertical maximal toléré (0.00-1.00) entre sprites distincts</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>Taille minimale de découpe (px) :</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>Ignorer les régions détectées plus petites que cette largeur ou hauteur en pixels</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>Recadrage intelligent (Boîtes englobantes ajustées)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>Réduire automatiquement les boîtes englobantes pour entourer au plus près les pixels opaques</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1 frame(s) détectée(s)</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>Détection des sprites...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>Détecte et découpe les boîtes englobantes des sprites depuis l&apos;atlas sans modifier l&apos;arrière-plan ni les couleurs.</translation>
     </message>
 </context>
 <context>

@@ -652,25 +652,13 @@ bool ProjectController::removeAtlasBackgroundAndRefresh(int alphaThreshold,
     emit statusMessage(tr("Removing background..."));
     int defaultTol = AppConfig::instance().project().backgroundRemovalTolerance;
     QImage cleanedImage = removeBackgroundFromImage(m_document->atlas(), defaultTol);
-
-    if (alphaThreshold < 0) {
-        alphaThreshold = AppConfig::instance().atlas().defaultAlphaThreshold;
-    }
-
-    QList<QImage> frameImages;
-    QList<SpriteBox> boxes;
-    SpriteDetectionOptions opts;
-    opts.alphaThreshold = alphaThreshold;
-    opts.verticalTolerance = verticalTolerance;
-    opts.smartCrop = smartCrop;
-    opts.overlapThreshold = overlapThreshold;
-
-    if (!SpriteDetector::detectToImages(cleanedImage, frameImages, boxes, opts)) {
-        return false;
-    }
+    if (cleanedImage.isNull()) return false;
 
     m_document->setAtlas(cleanedImage);
-    m_document->setFrames(frameImages, boxes);
+
+    if (!detectSpritesAndRefresh(alphaThreshold, verticalTolerance, smartCrop, overlapThreshold)) {
+        return false;
+    }
 
     emit backgroundRemoved();
     emit statusMessage(tr("Background removed."));
@@ -717,6 +705,82 @@ void ProjectController::removeAtlasBackgroundAndRefreshAsync(int alphaThreshold,
         }
 
         result.atlas = cleaned;
+        result.success = true;
+        return result;
+    });
+
+    m_watcher.setFuture(future);
+}
+
+bool ProjectController::detectSpritesAndRefresh(int alphaThreshold,
+                                                int verticalTolerance,
+                                                bool smartCrop,
+                                                double overlapThreshold,
+                                                int minSliceSize)
+{
+    if (!m_document || m_document->atlas().isNull()) return false;
+
+    emit statusMessage(tr("Detecting sprites..."));
+
+    if (alphaThreshold < 0) {
+        alphaThreshold = AppConfig::instance().atlas().defaultAlphaThreshold;
+    }
+
+    QList<QImage> frameImages;
+    QList<SpriteBox> boxes;
+    SpriteDetectionOptions opts;
+    opts.alphaThreshold = alphaThreshold;
+    opts.verticalTolerance = verticalTolerance;
+    opts.smartCrop = smartCrop;
+    opts.overlapThreshold = overlapThreshold;
+    opts.minSliceSize = minSliceSize > 0 ? minSliceSize : AppConfig::instance().atlas().minSliceSize;
+
+    if (!SpriteDetector::detectToImages(m_document->atlas(), frameImages, boxes, opts)) {
+        return false;
+    }
+
+    m_document->setFrames(frameImages, boxes);
+
+    emit spritesDetected();
+    emit statusMessage(tr("%1 sprite(s) detected.").arg(boxes.size()));
+    return true;
+}
+
+void ProjectController::detectSpritesAndRefreshAsync(int alphaThreshold,
+                                                     int verticalTolerance,
+                                                     bool smartCrop,
+                                                     double overlapThreshold,
+                                                     int minSliceSize)
+{
+    if (m_isProcessing || !m_document || m_document->atlas().isNull()) return;
+
+    m_isProcessing = true;
+    emit processingStarted();
+    emit statusMessage(tr("Detecting sprites in background..."));
+    emit progressChanged(20);
+
+    QImage atlasCopy = m_document->atlas();
+    const int actualAlpha = (alphaThreshold < 0) ? AppConfig::instance().atlas().defaultAlphaThreshold : alphaThreshold;
+    const int actualMinSize = minSliceSize > 0 ? minSliceSize : AppConfig::instance().atlas().minSliceSize;
+
+    QFuture<AsyncExtractionResult> future = QtConcurrent::run([atlasCopy, actualAlpha, verticalTolerance, smartCrop, overlapThreshold, actualMinSize]() -> AsyncExtractionResult {
+        AsyncExtractionResult result;
+        result.type = AsyncExtractionResult::JobDetectSprites;
+
+        SpriteDetectionOptions opts;
+        opts.alphaThreshold = actualAlpha;
+        opts.verticalTolerance = verticalTolerance;
+        opts.smartCrop = smartCrop;
+        opts.overlapThreshold = overlapThreshold;
+        opts.minSliceSize = actualMinSize;
+
+        if (!SpriteDetector::detectToImages(atlasCopy, result.frameImages, result.boxes, opts)) {
+            result.success = false;
+            result.errorMessage = QObject::tr("Failed to segment sprite frames.");
+            return result;
+        }
+
+        result.atlas = atlasCopy;
         result.success = true;
         return result;
     });
@@ -772,6 +836,10 @@ void ProjectController::onAsyncJobFinished()
         emit statusMessage(tr("Background removed successfully."));
         emit progressChanged(100);
         emit backgroundRemoved();
+    } else if (res.type == AsyncExtractionResult::JobDetectSprites) {
+        emit statusMessage(tr("%1 sprite(s) detected successfully.").arg(res.frameImages.size()));
+        emit progressChanged(100);
+        emit spritesDetected();
     }
 }
 

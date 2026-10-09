@@ -434,6 +434,14 @@
         <translation>背景の削除</translation>
     </message>
     <message>
+        <source>Background is already transparent (skip color replacement)</source>
+        <translation>背景は既に透明です (色の置換をスキップ)</translation>
+    </message>
+    <message>
+        <source>Do not replace any background color with alpha; perform sprite detection directly on existing transparent background</source>
+        <translation>背景色をアルファに置き換えません。既存の透明背景上で直接スプライト検出を実行します</translation>
+    </message>
+    <message>
         <source>Detected Background Color</source>
         <translation>検出された背景色</translation>
     </message>
@@ -1913,6 +1921,14 @@ Strict removal clears the pixel.</source>
         <translation>選択したスライスを不透明ピクセルに合わせて縮小</translation>
     </message>
     <message>
+        <source>KEY_TOOL_DETECT_SPRITES</source>
+        <translation>スプライト検出</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
+        <translation>透明なアトラスからスプライトを自動検出して切り出します</translation>
+    </message>
+    <message>
         <source>KEY_TOOL_REMOVE_BG</source>
         <translation>背景削除</translation>
     </message>
@@ -2397,6 +2413,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Atlas packing plugin not found.</source>
         <translation>アトラスパッキングプラグインが見つかりません。</translation>
+    </message>
+    <message>
+        <source>KEY_CTX_DETECT_SPRITES</source>
+        <translation>スプライト検出...</translation>
     </message>
     <message>
         <source>KEY_CTX_PIVOT_SUBMENU</source>
@@ -3546,12 +3566,28 @@ Would you like to repack the atlas now?</source>
         <translation>バックグラウンドで背景を削除しています...</translation>
     </message>
     <message>
+        <source>Detecting sprites...</source>
+        <translation>スプライトを検出中...</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected.</source>
+        <translation>%1 個のスプライトを検出しました。</translation>
+    </message>
+    <message>
+        <source>Detecting sprites in background...</source>
+        <translation>バックグラウンドでスプライトを検出中...</translation>
+    </message>
+    <message>
         <source>Open %1</source>
         <translation>%1 を開く</translation>
     </message>
     <message>
         <source>Background removed successfully.</source>
         <translation>背景の削除が正常に完了しました。</translation>
+    </message>
+    <message>
+        <source>%1 sprite(s) detected successfully.</source>
+        <translation>%1 個のスプライトが正常に検出されました。</translation>
     </message>
     <message>
         <source>Action executed</source>
@@ -4364,6 +4400,72 @@ Install package:
     <message>
         <source>Restore Defaults</source>
         <translation>デフォルトに戻す</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionDialog</name>
+    <message>
+        <source>Sprite Detection</source>
+        <translation>スプライト検出</translation>
+    </message>
+    <message>
+        <source>Detection Parameters</source>
+        <translation>検出パラメーター</translation>
+    </message>
+    <message>
+        <source>Alpha Threshold:</source>
+        <translation>アルファしきい値:</translation>
+    </message>
+    <message>
+        <source>Minimum alpha value (1-255) to consider a pixel as solid sprite content</source>
+        <translation>ピクセルを不透明なスプライト部分とみなす最小アルファ値 (1-255)</translation>
+    </message>
+    <message>
+        <source>Vertical Row Tolerance:</source>
+        <translation>垂直行の許容値:</translation>
+    </message>
+    <message>
+        <source>Vertical row grouping tolerance (0-100 px) for sprite strip clustering</source>
+        <translation>スプライトストリップをクラスタリングするための垂直行グループ化の許容値 (0-100 px)</translation>
+    </message>
+    <message>
+        <source>Overlap Tolerance:</source>
+        <translation>重複の許容値:</translation>
+    </message>
+    <message>
+        <source>Maximum allowed horizontal/vertical overlap ratio (0.00-1.00) between distinct sprites</source>
+        <translation>個々のスプライト間で許容される最大水平/垂直重複比率 (0.00-1.00)</translation>
+    </message>
+    <message>
+        <source>Min Slice Size (px):</source>
+        <translation>最小スライスサイズ (px):</translation>
+    </message>
+    <message>
+        <source>Ignore detected regions smaller than this width or height in pixels</source>
+        <translation>この幅または高さ（ピクセル）より小さい検出領域を無視します</translation>
+    </message>
+    <message>
+        <source>Smart Crop (Tight Bounding Boxes)</source>
+        <translation>スマートクロップ (ぴったりしたバウンディングボックス)</translation>
+    </message>
+    <message>
+        <source>Automatically shrink bounding boxes to tightly wrap opaque pixels</source>
+        <translation>不透明ピクセルをぴったり囲むようにバウンディングボックスを自動縮小します</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) detected</source>
+        <translation>%1 フレームを検出しました</translation>
+    </message>
+</context>
+<context>
+    <name>SpriteDetectionFilter</name>
+    <message>
+        <source>Sprite Detection...</source>
+        <translation>スプライト検出...</translation>
+    </message>
+    <message>
+        <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
+        <translation>背景やピクセル色を変更することなく、アトラスからスプライトのバウンディングボックスを検出して切り出します。</translation>
     </message>
 </context>
 <context>
