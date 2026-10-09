@@ -254,7 +254,7 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     QList<QPolygonF> docPolygons;
     docPolygons.reserve(doc.frameCount());
     for (int i = 0; i < doc.frameCount(); ++i) {
-        docPolygons.append(doc.box(i).hasPolygonMesh ? doc.box(i).polygon : QPolygonF());
+        docPolygons.append(doc.box(i).polygon.size() >= 3 ? doc.box(i).polygon : QPolygonF());
     }
 
     AtlasPackResult packResult;
@@ -274,7 +274,7 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         packResult.uniqueFramesCount = doc.frameCount();
         packResult.success = true;
     } else {
-        packResult = AtlasPacker::pack(doc.frames(), packOpts, docPolygons);
+        packResult = AtlasPacker::pack(doc.polygonClippedFrames(), packOpts, docPolygons);
     }
 
     if (!packResult.success) {

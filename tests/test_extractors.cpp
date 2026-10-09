@@ -39,6 +39,7 @@ private slots:
   void testLibGdxExtractorReadWrite();
   void testAsepriteExtractorRead();
   void testAsepriteMultiLayerAndSkinVariants();
+  void testAsepriteExtractorWritePolygonClipping();
   void testGifExtractorRead();
   void testGifExtractorWriteMultiAnimations();
   void testErrorHandlingNonExistentFile();
@@ -1265,6 +1266,69 @@ void TestExtractors::testAsepriteMultiLayerAndSkinVariants() {
     qDebug() << "Odin Aseprite fixtures passed:" << passed << "out of" << files.size();
     QVERIFY(passed >= 30); // At least majority of complex fixtures pass
   }
+}
+
+void TestExtractors::testAsepriteExtractorWritePolygonClipping() {
+  SpriteDocument doc;
+  QList<QImage> frames;
+  QList<SpriteBox> boxes;
+
+  // Frame 0: 32x32 completely red (representing a frame on a polygonally packed atlas)
+  QImage img0(32, 32, QImage::Format_ARGB32);
+  img0.fill(QColor(255, 0, 0, 255));
+  SpriteBox box0(QRect(0, 0, 32, 32));
+  box0.index = 0;
+  // Polygon 0: Upper-left triangle (0,0)-(32,0)-(0,32)
+  box0.polygon << QPointF(0, 0) << QPointF(32, 0) << QPointF(0, 32);
+  frames.append(img0);
+  boxes.append(box0);
+
+  // Frame 1: 32x32 completely blue
+  QImage img1(32, 32, QImage::Format_ARGB32);
+  img1.fill(QColor(0, 0, 255, 255));
+  SpriteBox box1(QRect(0, 0, 32, 32));
+  box1.index = 1;
+  // Polygon 1: Lower-right triangle (32,32)-(32,0)-(0,32)
+  box1.polygon << QPointF(32, 32) << QPointF(32, 0) << QPointF(0, 32);
+  frames.append(img1);
+  boxes.append(box1);
+
+  doc.setFrames(frames, boxes);
+
+  QTemporaryDir tempDir;
+  QVERIFY(tempDir.isValid());
+  QString aseFile = tempDir.filePath(QStringLiteral("polygon_clipped.ase"));
+
+  AsepriteExtractor extractor;
+  ExportOptions opts;
+  ExtractorError writeErr;
+  bool ok = extractor.write(aseFile, doc, opts, &writeErr);
+  QVERIFY2(ok, qPrintable(writeErr.toString()));
+
+  // Re-read with AsepriteExtractor
+  SpriteDocument readDoc;
+  ExtractorError readErr;
+  bool readOk = extractor.read(aseFile, readDoc, &readErr);
+  QVERIFY2(readOk, qPrintable(readErr.toString()));
+  QCOMPARE(readDoc.frameCount(), 2);
+
+  // Frame 0: Inside polygon (2, 2) should be Red; Outside polygon (30, 30) should be transparent (clipped)
+  QImage f0 = readDoc.frame(0);
+  QCOMPARE(f0.size(), QSize(32, 32));
+  QRgb f0_inside = f0.pixel(2, 2);
+  QVERIFY(qAlpha(f0_inside) > 200);
+  QVERIFY(qRed(f0_inside) > 200);
+  QRgb f0_outside = f0.pixel(30, 30);
+  QCOMPARE(qAlpha(f0_outside), 0);
+
+  // Frame 1: Inside polygon (30, 30) should be Blue; Outside polygon (2, 2) should be transparent (clipped)
+  QImage f1 = readDoc.frame(1);
+  QCOMPARE(f1.size(), QSize(32, 32));
+  QRgb f1_inside = f1.pixel(30, 30);
+  QVERIFY(qAlpha(f1_inside) > 200);
+  QVERIFY(qBlue(f1_inside) > 200);
+  QRgb f1_outside = f1.pixel(2, 2);
+  QCOMPARE(qAlpha(f1_outside), 0);
 }
 
 int main(int argc, char *argv[]) {

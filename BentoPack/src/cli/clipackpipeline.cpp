@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -100,7 +100,7 @@ bool CliPackPipeline::collectInputImages(const QStringList &inputPaths,
                     return false;
                 }
                 for (int i = 0; i < doc.frameCount(); ++i) {
-                    outFrames.append(doc.frame(i));
+                    outFrames.append(doc.polygonClippedFrame(i));
                     outNames.append(QStringLiteral("frame_%1").arg(i));
                     outPivots.append(doc.boxPivot(i));
                 }

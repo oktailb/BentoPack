@@ -197,7 +197,7 @@ MultiAtlasPackResult MultiAtlasPacker::pack(const SpriteDocument &doc,
 
     QList<QImage> albedoFrames = doc.framesForMap(MaterialMapType::Albedo);
     if (albedoFrames.isEmpty()) {
-        albedoFrames = doc.frames();
+        albedoFrames = doc.polygonClippedFrames();
     }
 
     if (albedoFrames.isEmpty()) {
@@ -208,7 +208,7 @@ MultiAtlasPackResult MultiAtlasPacker::pack(const SpriteDocument &doc,
     QList<QPolygonF> docPolygons;
     docPolygons.reserve(doc.frameCount());
     for (int i = 0; i < doc.frameCount(); ++i) {
-        docPolygons.append(doc.box(i).hasPolygonMesh ? doc.box(i).polygon : QPolygonF());
+        docPolygons.append(doc.box(i).polygon.size() >= 3 ? doc.box(i).polygon : QPolygonF());
     }
 
     // 1. Pack Master Atlas (Albedo)

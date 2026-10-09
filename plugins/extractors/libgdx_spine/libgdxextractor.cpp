@@ -379,7 +379,7 @@ bool LibGdxExtractor::write(const QString &filePath, const SpriteDocument &inDoc
         atlasImg.fill(Qt::transparent);
         QPainter p(&atlasImg);
         for (int i = 0; i < inDoc.frameCount(); ++i) {
-            p.drawImage(inDoc.box(i).rect.topLeft(), inDoc.frame(i));
+            p.drawImage(inDoc.box(i).rect.topLeft(), inDoc.polygonClippedFrame(i));
         }
         p.end();
     }

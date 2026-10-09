@@ -250,7 +250,7 @@ QList<QImage> SpriteDocument::polygonClippedFrames() const
     QList<QImage> result;
     result.reserve(m_frames.size());
     for (int i = 0; i < m_frames.size(); ++i) {
-        if (i < m_boxes.size() && m_boxes[i].hasPolygonMesh && m_boxes[i].polygon.size() >= 3) {
+        if (i < m_boxes.size() && m_boxes[i].polygon.size() >= 3) {
             result.append(polygonClippedFrame(i));
         } else {
             result.append(m_frames.at(i));
@@ -1368,7 +1368,7 @@ QImage SpriteDocument::compositeFrameForMap(int frameIndex, MaterialMapType mapT
 QList<QImage> SpriteDocument::framesForMap(MaterialMapType mapType) const
 {
     if (mapType == MaterialMapType::Albedo) {
-        return m_frames;
+        return polygonClippedFrames();
     }
     if (!hasAuxiliaryMap(mapType)) {
         return QList<QImage>();

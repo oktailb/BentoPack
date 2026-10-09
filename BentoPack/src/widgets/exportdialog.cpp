@@ -514,10 +514,10 @@ void ExportDialog::updateStats()
     QList<QPolygonF> docPolygons;
     docPolygons.reserve(m_document->frameCount());
     for (int i = 0; i < m_document->frameCount(); ++i) {
-        docPolygons.append(m_document->box(i).hasPolygonMesh ? m_document->box(i).polygon : QPolygonF());
+        docPolygons.append(m_document->box(i).polygon.size() >= 3 ? m_document->box(i).polygon : QPolygonF());
     }
 
-    AtlasPackResult res = AtlasPacker::pack(m_document->frames(), opts.packOptions, docPolygons);
+    AtlasPackResult res = AtlasPacker::pack(m_document->polygonClippedFrames(), opts.packOptions, docPolygons);
 
     if (res.success) {
         int w = res.dimensions.width();
