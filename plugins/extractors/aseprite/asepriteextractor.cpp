@@ -680,7 +680,7 @@ bool AsepriteExtractor::write(const QString &filePath, const SpriteDocument &inD
     int canvasH = inDoc.maxFrameHeight();
     if (canvasW <= 0 || canvasH <= 0) {
         for (int i = 0; i < numFrames; ++i) {
-            QImage f = inDoc.frame(i);
+            QImage f = inDoc.polygonClippedFrame(i);
             canvasW = qMax(canvasW, f.width());
             canvasH = qMax(canvasH, f.height());
         }
@@ -837,12 +837,33 @@ bool AsepriteExtractor::write(const QString &filePath, const SpriteDocument &inD
         }
 
         // Cel chunks (0x2005)
+        bool hasPoly = (f < inDoc.boxes().size() && inDoc.box(f).polygon.size() >= 3);
         if (hasDocCels) {
             for (const SpriteCel &sc : inDoc.frameCels(f)) {
-                writeCompressedCel(sc.layerIndex, sc.x, sc.y, sc.opacity, sc.image);
+                if (hasPoly && !sc.image.isNull()) {
+                    QPolygonF celPoly = inDoc.box(f).polygon.translated(-sc.x, -sc.y);
+                    QImage mask(sc.image.size(), QImage::Format_ARGB32_Premultiplied);
+                    mask.fill(Qt::transparent);
+                    {
+                        QPainter mp(&mask);
+                        mp.setRenderHint(QPainter::Antialiasing, false);
+                        mp.setBrush(Qt::white);
+                        mp.setPen(QPen(Qt::white, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+                        mp.drawPolygon(celPoly);
+                    }
+                    QImage clipped = sc.image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+                    {
+                        QPainter p(&clipped);
+                        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                        p.drawImage(0, 0, mask);
+                    }
+                    writeCompressedCel(sc.layerIndex, sc.x, sc.y, sc.opacity, clipped);
+                } else {
+                    writeCompressedCel(sc.layerIndex, sc.x, sc.y, sc.opacity, sc.image);
+                }
             }
         } else {
-            writeCompressedCel(0, 0, 0, 255, inDoc.frame(f));
+            writeCompressedCel(0, 0, 0, 255, inDoc.polygonClippedFrame(f));
         }
 
         // Frame 0: Optional Frame Tags chunk (0x2018)

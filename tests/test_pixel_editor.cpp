@@ -16,6 +16,7 @@
 #include "filters/filterplugin.h"
 #include "widgets/filterdialogbase.h"
 #include "widgets/layerstackwidget.h"
+#include "asepriteextractor.h"
 #include <QMenu>
 #include <QTimer>
 
@@ -91,6 +92,9 @@ private slots:
     // 10. Intelligent Polygon Mesh Interactive Editing (M19)
     void testPixelEditorPolygonMeshInteractiveEditingAndUndo();
     void testSmartMeshGenerationApplyToAllAnimationFrames();
+
+    // 11. Multi-Layer Aseprite File Loading & Cel Offset Handling
+    void testMultiLayerAsepriteSampleLoadingAndPixelEditor();
 };
 
 void TestPixelEditor::initTestCase()
@@ -2618,6 +2622,93 @@ void TestPixelEditor::testSmartMeshGenerationApplyToAllAnimationFrames()
 
     // Apply changes to document
     QVERIFY(dlg.applyChanges());
+}
+
+void TestPixelEditor::testMultiLayerAsepriteSampleLoadingAndPixelEditor()
+{
+    QString samplePath;
+    const QStringList candidates = {
+        QStringLiteral(SAMPLE_DIR "/Sprite-0001.aseprite"),
+        QDir::current().filePath(QStringLiteral("sample/Sprite-0001.aseprite")),
+        QDir::current().filePath(QStringLiteral("../sample/Sprite-0001.aseprite")),
+        QDir::current().filePath(QStringLiteral("../../sample/Sprite-0001.aseprite"))
+    };
+    for (const auto &cand : candidates) {
+        if (QFile::exists(cand)) {
+            samplePath = QFileInfo(cand).canonicalFilePath();
+            break;
+        }
+    }
+
+    if (samplePath.isEmpty()) {
+        QSKIP("sample/Sprite-0001.aseprite not found");
+    }
+
+    AsepriteExtractor extractor;
+    SpriteDocument doc;
+    ExtractorError err;
+    bool ok = extractor.read(samplePath, doc, &err);
+    QVERIFY2(ok, qPrintable(err.toString()));
+
+    QCOMPARE(doc.frameCount(), 1);
+    QCOMPARE(doc.layerCount(), 3);
+    QVERIFY(doc.hasLayers());
+    QVERIFY(doc.hasFrameCels(0));
+    QCOMPARE(doc.frameCels(0).size(), 3);
+
+    QImage expectedFrame = doc.frame(0).convertToFormat(QImage::Format_ARGB32);
+    QCOMPARE(expectedFrame.size(), QSize(32, 32));
+
+    // Open in PixelEditorDialog
+    PixelEditorDialog dlg(&doc, nullptr, 0);
+    QVERIFY(dlg.canvas() != nullptr);
+
+    // Canvas must reflect full 32x32 size without clipping
+    QCOMPARE(dlg.canvas()->layerCount(), 3);
+    QCOMPARE(dlg.canvas()->canvasSize(), QSize(32, 32));
+    QCOMPARE(dlg.canvas()->image().size(), QSize(32, 32));
+
+    // Composite in PixelCanvas must exactly match the document's composite frame
+    QImage canvasComposite = dlg.canvas()->image();
+    QCOMPARE(canvasComposite, expectedFrame);
+
+    // Verify all 3 layers have 32x32 image with zero offset in CanvasLayer
+    const auto canvasLayers = dlg.canvas()->layers();
+    QCOMPARE(canvasLayers.size(), 3);
+    for (int l = 0; l < 3; ++l) {
+        QCOMPARE(canvasLayers[l].image.size(), QSize(32, 32));
+        QCOMPARE(canvasLayers[l].offset, QPoint(0, 0));
+    }
+
+    // Switch active layer to Calque 2 (layer 1)
+    dlg.canvas()->setActiveLayerIndex(1);
+    QCOMPARE(dlg.canvas()->activeLayerIndex(), 1);
+    // Composite must remain completely intact
+    QCOMPARE(dlg.canvas()->image(), expectedFrame);
+
+    // Switch active layer to Calque 3 (layer 2)
+    dlg.canvas()->setActiveLayerIndex(2);
+    QCOMPARE(dlg.canvas()->activeLayerIndex(), 2);
+    QCOMPARE(dlg.canvas()->image(), expectedFrame);
+
+    // Switch back to Calque 1 (layer 0)
+    dlg.canvas()->setActiveLayerIndex(0);
+    QCOMPARE(dlg.canvas()->activeLayerIndex(), 0);
+    QCOMPARE(dlg.canvas()->image(), expectedFrame);
+
+    // Test drawing on Calque 2 (layer 1) at (0, 0)
+    dlg.canvas()->setActiveLayerIndex(1);
+    dlg.canvas()->setCurrentTool(PixelTool::Pencil);
+    dlg.canvas()->setPrimaryColor(Qt::magenta);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonPress, QPointF(0, 0), Qt::LeftButton);
+    sendMouseEvent(dlg.canvas(), QEvent::MouseButtonRelease, QPointF(0, 0), Qt::LeftButton);
+
+    QCOMPARE(dlg.canvas()->activeLayerImage().pixelColor(0, 0), QColor(Qt::magenta));
+    QCOMPARE(dlg.canvas()->image().pixelColor(0, 0), QColor(Qt::magenta));
+
+    // Apply changes and verify round-trip to document
+    dlg.applyButton()->click();
+    QCOMPARE(doc.compositeFrame(0).pixelColor(0, 0), QColor(Qt::magenta));
 }
 
 int main(int argc, char *argv[])

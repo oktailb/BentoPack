@@ -266,7 +266,7 @@ bool GifExtractor::writeSingleAnimation(const QString &targetFilePath,
     // Fallback si l'enveloppe n'est pas calculable
     if (canvasW <= 0 || canvasH <= 0) {
         for (int idx : frameSeq) {
-            QImage f = doc.frame(idx);
+            QImage f = doc.polygonClippedFrame(idx);
             if (!f.isNull()) {
                 if (f.width() > canvasW) canvasW = f.width();
                 if (f.height() > canvasH) canvasH = f.height();
