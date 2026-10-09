@@ -6,8 +6,8 @@
 [![Qt 6](https://img.shields.io/badge/Qt-6.5+-41CD52.svg?logo=qt)](https://www.qt.io/)
 [![CMake](https://img.shields.io/badge/CMake-3.20+-064F8C.svg?logo=cmake)](https://cmake.org/)
 
-> **BentoPack** is a fast, modular, and modern desktop application tailored for game developers, pixel artists, and 2D animators to pack, slice, arrange, and export high-density 2D sprite sheets, tight polygonal meshes, and animated textures.
-The entire project (UI, CLI, core engine, plugins, filters, and engine exporters) is 100% Free and Open Source under the **Apache License 2.0**. Official pre-compiled, auto-updating binaries are available for purchase on Steam and Itch.io (19 €) for convenient 1-click desktop use.
+> **BentoPack** is a fast, modular, and modern desktop application tailored for game developers, pixel artists, and 2D animators to pack, slice, arrange, edit, and export high-density 2D sprite sheets, tight polygonal meshes, and animated textures.
+The entire project (UI, CLI, core engine, plugins, filters, and engine exporters) is 100% Free and Open Source under the **Apache License 2.0**. Official pre-compiled, auto-updating binaries are available for purchase on Steam and Itch.io for convenient 1-click desktop use.
 
 ---
 
@@ -17,59 +17,84 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 
 ## ✨ Key Features
 
-### 📥 Intelligent Extraction & Import
-* **Smart Sprite Sheet Slicing:** Automatic sprite detection and extraction with configurable alpha and color tolerance.
+### 📥 Intelligent Extraction & Codec Plugins
+* **Native Aseprite (`.ase` / `.aseprite`) File Extraction:** Direct extraction of multi-layer, cel, frame, and animation tag definitions without requiring Aseprite installed. Automatically preserves blend modes and opacity.
 * **Animated GIF Decompilation:** Instant extraction of multi-frame animated GIFs into ordered frame sequences.
-* **Format Parsers:** Import existing sprite atlases with associated **JSON** (TexturePacker / Aseprite) or **Godot 4 `.tres`** metadata.
-* **Non-Destructive Filter & Cleanup Suite:** Extensible filter plugin system featuring real-time debounced live preview, non-destructive rollback, and full `QUndoStack` integration across 9 specialized filters:
+* **Smart Sprite Sheet Slicing:** Automatic sprite detection and extraction with configurable alpha and color tolerance ($O(N)$ spatial grid).
+* **Format Parsers & Importers:** Import existing sprite atlases with associated **JSON** (TexturePacker / Aseprite / Spine 2D / LibGDX) or **Godot 4 `.tres`** metadata.
+
+![Aseprite Native Multi-Layer & Tag Import](docs/screenshots/12_aseprite_native_import.webp)
+<!-- 📸 SCREENSHOT À PRENDRE CE SOIR : Boîte de dialogue ou vue principale lors de l'import d'un fichier .aseprite animé avec ses calques et ses tags d'animations visibles -->
+
+### 🖌️ Surgical Pixel-by-Pixel Editor & Layer Studio (M4 & M18)
+* **High-Precision Canvas (`Ctrl+E`):** Fast, non-interpolated pixel art editor (`SmoothPixmapTransform = false`) with configurable pixel grid ($\ge 400\%$) for surgical touch-ups without switching to GIMP or Photoshop.
+* **Complete Multi-Layer Architecture (`LayerStackWidget`):** Non-destructive layer stack with layer creation, duplication, deletion, drag-and-drop reordering, visibility toggle, opacity slider (0–100%), and 12 blend modes (*Normal, Multiply, Screen, Overlay, Darken, Lighten, Color Dodge, Color Burn, Hard Light, Soft Light, Difference, Exclusion*), plus *Merge Down* and *Flatten Image*.
+* **Onion Skinning:** Configurable forward and backward frame ghosting with custom opacity and tint for fluid animation inbetweening and sub-pixel alignment.
+* **Continuous Bresenham Drawing:** 1px pencil and 1px eraser guarantee continuous unbroken lines even during fast mouse sweeps.
+* **Instant Sampling & Flood Fill:** Eyedropper (`Alt+Click` or `I`) and 4-way flood fill bucket bounded by sprite limits and active selection.
+* **Flexible Selections & Floating Stamp:** Rectangular marquee and magic wand color selection; Cut (`Ctrl+X`), Copy (`Ctrl+C`), and Paste (`Ctrl+V`) with draggable floating stamp preview.
+* **Modular 16 Retro & Arcade Palettes (`.gpl`):** Standard GIMP/Aseprite palette system dynamically loaded from disk:
+  * **Nintendo:** NES / Famicom (54), SNES / 16-bit (32), Game Boy DMG (4), Game Boy Pocket (4)
+  * **Sega:** Master System 8-bit (64), Mega Drive / Genesis 16-bit (64), Saturn / 32-bit (64)
+  * **SNK:** Neo Geo AES / MVS Arcade (64)
+  * **Computers & Fantasy:** Commodore 64 (16), Amiga OCS (32), NEC PC-Engine (32), IBM CGA Modes 1 & 2 (4), PICO-8 (16), Endesga EDG 32 (32), and Bento Studio Standard (36).
+  * **Custom Palettes:** Auto-scanning of user palettes from `%APPDATA%/BentoPack/palettes/` and local `palettes/` folder (`.gpl`, `.hex`, `.pal`, or image sampling).
+* **Integrated CDT Mesh & Laser Knife:** Direct polygon vertex editing and interactive edge-cutting knife tool inside the pixel editor.
+* **Tabbed Ergonomics:** Right column split into distinct tabs separating tool options from the layer stack for clean workflow.
+* **Inter-Frame Navigation:** `[◀ Previous]` and `[Next ▶]` buttons (`Page Up` / `Page Down`) allow touching up entire animation cycles frame by frame in a single session.
+* **Two-Tier Undo/Redo:** Local stack for fine brush strokes and compound `EditSpritePixelsCommand` synchronizing frame and atlas texture seamlessly with `CompositionMode_Source`.
+
+![Pixel Editor with Multi-Layer Stack & Onion Skinning](docs/screenshots/13_pixel_editor_layers_and_onion_skin.webp)
+<!-- 📸 SCREENSHOT À PRENDRE CE SOIR : Éditeur de pixels (PixelEditorDialog) avec onglets calques actifs à droite, onion skin visible sur le canvas et palette rétro sélectionnée -->
+
+### 📐 2D Polygon & Intelligent CDT Mesh Packing (M8 & M19)
+* **Alpha Contour Extraction:** Automatic watertight Marching Squares contouring on sprite alpha silhouettes.
+* **Intelligent Simplification:** Ramer-Douglas-Peucker (RDP) boundary reduction with outward normal dilation (0–8px padding) to prevent edge pixel clipping, with customizable vertex budget (3–48 vertices).
+* **Constrained Delaunay Triangulation (CDT):** Feature-preserving mesh generation supporting Color Distance Mode and Sobel Edge Filter Mode.
+* **Interactive Knife / Cut Tool (`mesh_knife`):** Draw laser cut lines across polygons to manually slice geometry and instantly re-triangulate concave or complex sections.
+* **Direct Canvas Vertex Editing:** Click-drag individual vertices, multi-select vertices with `Shift` or `Ctrl`, nudge with arrow keys, double-click edge to insert a vertex, and hit `Delete` to remove vertices with automatic re-triangulation.
+* **Batch Animation Propagation:** One-click option to apply the tuned polygon mesh across all frames of an animation sequence.
+* **High-Density Tight Polygon Packing (Nesting):** Compaction allowing bounding boxes to overlap without pixel collisions. Multi-threaded candidate evaluation with configurable thread count (up to hardware cores) and sub-20ms instant calculation.
+* **GPU Overdraw Reduction:** Slashes up to 60–80% of transparent pixel fillrate on mobile and desktop GPUs.
+* **Multi-Engine Exports:** Godot 4 `_mesh.tres` (`ArrayMesh`), Unity `.unity.json` (`SpriteMeshType.Tight`), and Unreal Engine Paper2D `.paper2d.json`.
+
+![Intelligent CDT Polygon Mesh & Laser Knife Tool](docs/screenshots/14_mesh_knife_cdt_editor.webp)
+<!-- 📸 SCREENSHOT À PRENDRE CE SOIR : Dialogue de maillage CDT ou Pixel Editor affichant la triangulation fil de fer cyan/vert et l'outil couteau laser en cours de tracé -->
+
+### 🎨 Non-Destructive Filter & Cleanup Suite (M7)
+* **Frame Context Menu & Targeted Scope:** Right-click directly on any sprite in the atlas or timeline to apply filters to the current selection, the whole frame, or batch-apply to all frames in the animation.
+* **Live Debounced Preview & Universal Undo:** Real-time feedback with non-destructive rollback via `QUndoStack` (`ApplyFilterCommand`) across 9 specialized filters:
   * **Chroma Background Removal (`Ctrl+Shift+B`):** Dominant color auto-detection, alpha thresholding, and smart crop.
   * **Despill / Anti-Halo:** Clean up 1-pixel colored fringes left by antialiased edges using *Color Clamping* or strict removal.
   * **Outline & Silhouette Generator:** 1-4px customizable stroke (4-connected or 8-connected) and solid hit-flash silhouette masks.
   * **Color Swap (Alt-Skins):** Instant palette replacement preserving pixel art shading gradients (HSV).
   * **Color Adjustment:** Real-time Hue, Saturation, Value, Brightness, and Contrast grading.
-  * **Retro Palette & Dithering:** Color quantization and Floyd-Steinberg dithering to authentic retro systems (NES, SNES, Game Boy, Amiga, Pico-8, C64).
+  * **Retro Palette & Bayer Dithering:** Color quantization to 16 historical hardware palettes with Bayer dithering (2x2, 4x4, 8x8) or Floyd-Steinberg, with adjustable strength slider.
   * **Pixel Art Rescale:** Pixel-perfect integer rescaling without bilinear blurring.
   * **Atlas Bin-Packing (MaxRects) (`Ctrl+Shift+P`):** Multi-heuristic 2D box packing (Best Short Side Fit, Best Area Fit, Best Long Side Fit, Bottom Left, Contact Point).
   * **Tight Polygon Packing (Nesting) (`Ctrl+Shift+T`):** Multi-threaded high-density concave/convex polygon packing allowing bounding boxes to overlap.
 
-![Background Removal Demo](RemoveBackground.webp)
+![Retro Palette Quantization & Bayer Dithering](docs/screenshots/15_retro_palette_dithering.webp)
+<!-- 📸 SCREENSHOT À PRENDRE CE SOIR : Dialogue du filtre RetroPalette affichant une palette rétro (Sega, Neo Geo, NES...) avec tramage Bayer actif et aperçu avant/après -->
 
-### 🎬 Timeline & Animation Filmstrip
+### 🎬 Timeline & Animation Filmstrip (M2)
 * **Filmstrip Dock:** Intuitive bottom timeline with thumbnail filmstrip, scrub bar, and drag-and-drop frame reordering.
 * **Frame Merging & Compositing:** Drag and drop one frame onto another to fuse them into a single layered sprite.
 * **Batch Editing:** Multi-selection operations including group deletion, invert selection, and reverse frame ordering (ideal for ping-pong loops).
-* **Real-time Playback:** High-precision preview engine with configurable FPS (1 to 60 FPS), loop controls, and aspect-ratio stabilization.
+* **Real-time Playback:** High-precision preview engine with configurable FPS (1 to 60 FPS), loop controls (Loop, Once, Ping-Pong), and aspect-ratio stabilization.
 
 ![Frame Fusion Demo](Fusion.gif)
 
-### 🎯 Interactive Anchor Points & Pivots
+### 🎯 Interactive Anchor Points & Pivots (M3)
 * **Zero-Jittering Animation Stabilization:** Shared animation envelope alignment guarantees rock-solid anchored characters during motion, attacks, or jumps without visual shaking or sliding.
 * **Dual-Surface Direct Editing:** Move the high-contrast reticle directly within the atlas slices or right inside the live animation preview with real-time coordinate updates and Shift+Click snapping.
 * **Instant Cardinal Presets & Batch Actions:** One-click shortcuts for Ground/Bottom-Center, Center, and Top-Left (UI), with batch propagation to entire animations or the full project.
 * **Intelligent Preview Navigation:** Automatic optimal framing (*Fit In View*), 5000% razor-sharp pixel art wheel zoom, and pan controls.
 
-### 🍱 Native `.bento` Project Architecture
+### 🍱 Native `.bento` Project Architecture (M5)
 * **All-in-One Compressed Format:** `.bento` project files package project metadata, frame descriptors, and source assets into a structured ZIP archive.
 * **Atomic Transactions & Crash Recovery:** Atomic file writing with journaled crash-recovery safeguard prevents project corruption.
 * **Embedded Git Time-Travel:** Integrated non-destructive versioning engine powered by LibGit2. Browse commit history, inspect visual diffs, and revert to previous states without leaving the app.
-
-### 📐 2D Polygon & Tight Mesh Packing (M8)
-* **Alpha Contour Extraction:** Automatic watertight Marching Squares contouring on sprite alpha silhouettes.
-* **Intelligent Simplification:** Ramer-Douglas-Peucker (RDP) boundary reduction with outward normal dilation (0–8px padding) to prevent edge pixel clipping, with customizable vertex budget (3–48 vertices).
-* **Non-Convex Triangulation:** Robust Ear-Clipping triangulation generating GPU index buffers and slashing up to 60–80% of GPU transparent pixel overdraw.
-* **HMI Live Visualization & Controls:** Real-time wireframe view directly on the atlas canvas (cyan mesh lines, neon green boundary, and vertex handles). Toggleable in the View menu. Dedicated tuning dialog (`Ctrl+M` / right-click) with 400% zoomed interactive preview, slider controls, and live fillrate savings telemetry.
-* **Direct Canvas Vertex Editing:** Click-drag individual vertices, multi-select vertices with `Shift` or `Ctrl`, nudge with arrow keys, double-click edge to insert a vertex, and hit `Delete` to remove vertices with automatic re-triangulation.
-* **High-Density Tight Polygon Packing:** Compaction allowing bounding boxes to overlap without pixel collisions. Multi-threaded candidate evaluation with configurable thread count (up to hardware cores) and sub-20ms instant calculation.
-* **Reversible & Persistent:** Full `QUndoStack` integration (`SetPolygonMeshCommand`) and lossless `.bento` project serialization.
-
-### 🖌️ Surgical Pixel-by-Pixel Editor (M4)
-* **High-Precision Canvas (`Ctrl+E`):** Fast, non-interpolated pixel art editor (`SmoothPixmapTransform = false`) for surgical touch-ups without switching to GIMP or Photoshop.
-* **Continuous Bresenham Drawing:** 1px pencil and 1px eraser guarantee continuous unbroken lines even during fast mouse sweeps.
-* **Instant Sampling & Flood Fill:** Eyedropper (`Alt+Click` or `I`) and 4-way flood fill bucket bounded by sprite limits and active selection.
-* **Flexible Selections & Floating Stamp:** Rectangular marquee and magic wand color selection; Cut (`Ctrl+X`), Copy (`Ctrl+C`), and Paste (`Ctrl+V`) with draggable floating stamp preview.
-* **Authentic Retro & Dynamic Palettes:** Real-time auto-extraction of unique sprite colors, alongside authentic historical palettes: **NES / Famicom** (54), **SNES / Super Famicom** (32), **Amiga OCS** (32), **NEC PC-Engine** (32), **Game Boy DMG** (4), **Pico-8** (16), and **Commodore 64** (16).
-* **Inter-Frame Navigation:** `[◀ Previous]` and `[Next ▶]` buttons (`Page Up` / `Page Down`) allow touching up entire walk cycles frame by frame in a single session.
-* **Two-Tier Undo/Redo:** Local stack for fine brush strokes and compound `EditSpritePixelsCommand` synchronizing frame and atlas texture seamlessly with `CompositionMode_Source`.
 
 ### 📤 Multi-Engine Export
 * **PNG Sprite Atlas:** Optimized packing of extracted frames into a consolidated texture sheet.
@@ -90,6 +115,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 
 ### ⚙️ Comprehensive Settings & Preferences Center
 * **Modular 6-Category Configuration:** Clean searchable preferences interface with responsive filtering.
+* **Multilingual UI (i18n):** Complete localization in English, French (Français), and Japanese (日本語) with hot-switch in Preferences.
 * **Startup & Automation:** Auto-reopen last active `.bento` project and optional background check for newer GitHub releases.
 * **Export & VRAM Defaults:** Pre-configure favorite target engines, texture format, packing algorithm, and Zstd level.
 * **Plugin Management:** Real-time inspection of loaded filter and extractor plugins with metadata, supported extensions, and hot-reload.
@@ -169,7 +195,7 @@ ctest --test-dir build --output-on-failure -C Release
 
 ## 🧪 Automated Testing
 
-BentoPack includes a modular test suite using `QtTest` and `CTest`, validating core models, extractors, controllers, and project serialization:
+BentoPack includes an exhaustive test suite powered by `QtTest` and `CTest`, validating core models, codecs, controllers, plugins, filters, and multithreaded pipelines across 15 dedicated suites (**100% CTest pass rate**):
 
 ```bash
 ctest --test-dir build --output-on-failure --verbose
@@ -178,12 +204,20 @@ ctest --test-dir build --output-on-failure --verbose
 | Test Suite | Description |
 | :--- | :--- |
 | `test_core` | Frame data structures, color detection, and algorithm utilities |
-| `test_project` | `.bento` serialization, atomic saves, journal recovery, and LibGit2 versioning |
-| `test_extractors` | GIF, JSON, Godot 4 `.tres`, and Sprite Sheet detectors using sample assets |
-| `test_controllers` | Undo/Redo commands, frame merging, selection, and timeline controller logic |
-| `test_cli` | Headless CLI parser, TexturePacker & Aseprite emulation, Godot 4 UID/scene generation, native commands, and POSIX exit codes |
-| `test_mesh` | Watertight Marching Squares contouring, RDP boundary reduction, Ear-Clipping triangulation, canvas vertex manipulation, multithreaded tight polygon packing, and Unity/Unreal/Godot mesh exports (22 tests) |
-| `test_vram_compression` | Khronos KTX2 containers, UASTC 4x4 & ETC1S compression, Zstd supercompression ratio, RGBA transcoding roundtrip, and CLI KTX2 export pipelines (12 tests) |
+| `test_project` | `.bento` serialization, atomic saves, journal crash recovery, and LibGit2 versioning |
+| `test_extractors` | Native Aseprite (`.ase`/`.aseprite`), GIF, JSON, Godot 4 `.tres`, and Sprite Sheet detectors using sample assets |
+| `test_controller_project` | Project lifecycle, document state management, and file operations |
+| `test_controller_animation` | Timeline controller, FPS pacing, loop modes, and frame reordering |
+| `test_controller_atlas` | Atlas slicing, box editing, pivot alignment, and nudge operations |
+| `test_filters` | Image processing pipeline: Despill, Outline, Color Swap, Color Adjust, Pixel Rescale, Retro Palette & Bayer dithering (13 tests) |
+| `test_mesh` | Watertight Marching Squares, RDP boundary reduction, Constrained Delaunay Triangulation (CDT), knife tool, tight polygon packing, and engine exports (22 tests) |
+| `test_pixel_editor` | 1px Bresenham drawing, multi-layer stack, onion skinning, 16 dynamic retro `.gpl` palettes, CDT mesh synchronization (47 tests) |
+| `test_vram_compression` | Khronos KTX2 containers, UASTC 4x4 & ETC1S compression, Zstd supercompression, and GPU transcoding roundtrips (12 tests) |
+| `test_cli` | Headless CLI parser, TexturePacker & Aseprite batch emulation, Godot 4 generator, and POSIX exit codes |
+| `test_app_config` | Settings manager, persistence, preferences serialization, and theme/i18n options |
+| `test_robustness` | Corrupted inputs, zero-size images, memory limit guards, and stress resilience |
+| `test_gui_integration` | Dialog workflows, UI state synchronization, and widget interaction validation |
+| `test_concurrency_and_security` | Thread safety, race-condition mitigation, and safe path traversal checks |
 
 ---
 
@@ -282,12 +316,12 @@ BentoPack bridges the gap between raw asset extraction/cleanup (historically han
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **License & Pricing** | **Open-Source (Apache 2.0)** | Commercial (~40€) | Commercial (~20€) / Source | **Open-Source (MIT)** | Free (Abandoned) | Open-Source (MIT) | Integrated (MIT) |
 | **Core Technology** | C++17 / Qt 6 | C++ / Qt | C++ / Skia | GDScript / Godot Engine | Adobe AIR / Flash | Electron / Web | C++ / Godot Core |
-| **Smart Atlas Slicing** | 🟢 **Advanced (O(N) SpatialGrid)** | 🔴 None (requires loose images) | 🟡 Basic | 🔴 None (canvas drawing) | 🟢 Historic pioneer | 🔴 None (requires loose files) | 🟡 Basic (Grid / Alpha) |
-| **Live Filters & Background Cleanup** | 🟢 **Yes (Plugin Registry, Despill, Outline, Color Swap)** | 🔴 None | 🔴 Manual | 🟡 Basic image effects | 🟢 Historic (BG only) | 🔴 None | 🔴 None |
+| **Smart Atlas Slicing & Import** | 🟢 **Advanced (O(N) SpatialGrid, Native Aseprite `.ase`, GIF, JSON)** | 🔴 None (requires loose images) | 🟡 Basic | 🔴 None (canvas drawing) | 🟢 Historic pioneer | 🔴 None (requires loose files) | 🟡 Basic (Grid / Alpha) |
+| **Live Filters & Background Cleanup** | 🟢 **Yes (Plugin Registry, Despill, Outline, Color Swap, Bayer Dither)** | 🔴 None | 🔴 Manual | 🟡 Basic image effects | 🟢 Historic (BG only) | 🔴 None | 🔴 None |
 | **Timeline & Filmstrip** | 🟢 **Yes (Filmstrip, Ping-Pong)** | 🔴 None (Static preview) | 🟢 **Full animation studio** | 🟢 **Full animation studio** | 🔴 None | 🔴 None | 🟢 Engine-integrated |
 | **Packing Algorithms** | 🟢 **MaxRects (5 heuristics), Tight Polygon Nesting (Multithreaded), Shelf, Grid, Auto-Alias, Extrude** | 🟢 **Industry Leader (MaxRects, Polygon)** | 🟡 Basic Sprite Sheet | 🟡 Basic Sprite Sheet | 🟡 Basic Shelf | 🟢 MaxRects | 🔴 Manual atlas |
-| **2D Mesh & Tight Polygon Slicing** | 🟢 **Yes (Marching Squares, Ear-Clipping, Vertex Editor, Godot/Unity/Unreal)** | 🟢 Commercial Feature | 🔴 None | 🔴 None | 🔴 None | 🔴 None | 🟡 Collision Polygon only |
-| **Surgical Pixel Editor** | 🟢 **Yes (Bresenham 1px, Wand, Retro Palettes, Stamp)** | 🔴 None | 🟢 **Full illustration editor** | 🟢 **Full illustration editor** | 🔴 None | 🔴 None | 🔴 None |
+| **2D Mesh & Tight Polygon Slicing** | 🟢 **Yes (Marching Squares, Ear-Clipping, CDT, Knife Tool, Godot/Unity/Unreal)** | 🟢 Commercial Feature | 🔴 None | 🔴 None | 🔴 None | 🔴 None | 🟡 Collision Polygon only |
+| **Surgical Pixel Editor** | 🟢 **Yes (Bresenham 1px, Multi-Layers, Onion Skin, 16 Retro Palettes, CDT Mesh)** | 🔴 None | 🟢 **Full illustration editor** | 🟢 **Full illustration editor** | 🔴 None | 🔴 None | 🔴 None |
 | **Anchor Points / Pivots** | 🟢 **Yes (Interactive Reticle, Zero-Jittering, Godot 4 / JSON)** | 🟢 Yes (All presets) | 🟢 Yes (Canvas origin) | 🟡 Canvas origin | 🟡 Basic | 🟢 Yes | 🟢 Yes |
 | **Embedded Time-Travel** | 🟢 **Unique (Git / LibGit2 dock)** | 🔴 None | 🔴 Local undo only | 🔴 Local undo only | 🔴 None | 🔴 None | 🟡 External Git |
 | **Godot 4 Integration** | 🟢 **Native (`.tres` SpriteFrames & `.tscn`)** | 🟢 Supported | 🟡 Via community plugins | 🟢 **Native (Built in Godot)** | 🔴 None | 🟡 JSON export | 🟢 Native |
@@ -299,32 +333,13 @@ BentoPack bridges the gap between raw asset extraction/cleanup (historically han
 
 ---
 
-## 🗺️ Roadmap
-
-- [x] **M0 — Architecture & Decoupling:** Standalone stateless codecs, `SpriteDocument` single source of truth, autonomous controllers
-- [x] **M1 — Interactive Atlas Slicing:** 8 cosmetic handles, mouse-centered zoom, group drag, pixel-perfect nudge, alpha trim, frame merging
-- [x] **M2 — Timeline & Animation Manager:** Filmstrip ribbon, scrubber with milliseconds counter, loop modes (Loop, Once, Ping-Pong), auto-play
-- [x] **M5 — Native `.bento` Project Format & Time-Travel:** ZIP container atomic saves, crash detection & recovery lock, LibGit2 continuous Git history dock
-- [x] **M7 — Advanced Filter System & Cleanup:** Plugin registry (`FilterPlugin` / `FilterRegistry`), universal Undo (`ApplyFilterCommand`), live preview (`FilterDialogBase`), Despill/Anti-Halo (color clamping), Outline & Silhouettes, Color Swap (HSV shading)
-- [x] **M3 — Interactive Pivots & Alignment:** High-contrast double-ring reticle, interactive pivot drag in atlas & live preview, Shift+Click snapping, zero-jittering animation envelope stabilization, ground line, cardinal presets (Bottom-Center, Center, Top-Left, UI), batch application, optimal fit & 5000% zoom, engine offset export (Godot 4 margin Rect2 / JSON / .bento)
-- [x] **M6 — Advanced Bin-Packing:** MaxRects (5 heuristics: BestShortSideFit, BestAreaFit, BestLongSideFit, BottomLeft, ContactPoint), padding, 1-2px extrusion anti-bleeding, Power-Of-Two / AnySize, auto-alias visual frame deduplication
-- [x] **M-CLI — Headless Command-Line Interface:** `bentopack-cli` with multi-flavor dispatch (TexturePacker drop-in, Aseprite batch, Godot 4 pipeline, native slice/filter/ssp), POSIX codes, JSON output, automated benchmarks & regression tracking
-- [x] **M8 — Polygon & Tight Mesh Packing:** Watertight Marching Squares, Ramer-Douglas-Peucker boundary reduction with outward dilation, Ear-Clipping triangulation, interactive canvas vertex editor (drag, multi-select, insert, delete), multithreaded tight polygon nesting (configurable CPU threads), and multi-engine exports (Godot 4 `_mesh.tres`, Unity `.unity.json`, Unreal Paper2D `.paper2d.json`, TexturePacker JSON)
-- [x] **M9 — VRAM Texture Compression & GPU Formats:** Universal Khronos KTX2 & Basis Universal (v2.50) integration, UASTC 4x4 (75.0% VRAM reduction) & ETC1S (87.5% VRAM reduction), lossless Zstandard supercompression, live VRAM telemetry in ExportDialog, CLI automation flags, 12 automated unit tests (100% CTest).
-- [x] **M4 — Surgical Pixel Art Cleanup Editor:** Continuous 1px Bresenham pencil, 1px eraser (alpha 0), eyedropper, flood fill, rectangular/color wand selection, floating stamp clipboard, retro palettes (NES, SNES, Amiga, NEC, GB, Pico-8, C64) & dynamic sprite colors, pixel grid (≥400%), inter-frame navigation, reversible atlas synchronization
-- [x] **M11 — Dynamic Plugin Architecture & Third-Party SDK:** Fully modular Qt6 dynamic plugin ecosystem (`QPluginLoader`), shared core library (`libBentoPackCore`), standalone external filter (`plugins/filters/`) and extractor (`plugins/extractors/`) modules, exported CMake package config (`BentoPackConfig.cmake`), and developer SDK templates (`examples/`).
-
----
-
----
-
 ## 📄 Licensing & Distribution Model
 
 BentoPack is distributed as **100% Free and Open Source Software (FOSS)**:
 
 * **Entire Codebase (Apache License 2.0):**
   The entire application, CLI, algorithmic engine, filters, extractors, and engine addons are licensed under the permissive **Apache License 2.0**. You are free to compile, modify, inspect, and use BentoPack in any personal or commercial game project without royalty fees, revenue restrictions, or gatekeeper locks. See [LICENSE](file:///LICENSE).
-* **Official Binaries (Store Convenience — 19 €):**
-  For creators who prefer an out-of-the-box experience without building from source, official pre-compiled binaries featuring 1-click installers, code signing, and automatic updates are available on **Steam** and **Itch.io** (19 €). Purchases directly support ongoing open-source development.
+* **Official Binaries (Store Convenience):**
+  For creators who prefer an out-of-the-box experience without building from source, official pre-compiled binaries featuring 1-click installers, code signing, and automatic updates are available on **Steam** and **Itch.io**. Purchases directly support ongoing open-source development.
 
 **Developer:** Vincent LECOQ
