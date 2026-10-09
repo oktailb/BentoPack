@@ -280,3 +280,59 @@ Pour garantir la fluidité sur des atlas de très haute résolution (8K, 16K) :
 | **Sur-Animation** | Poids de sommets pour vertex shaders et sockets d'attache d'accessoires. | Moteur d'animation squelettique 2D concurrent de Spine. |
 | **Grands Atlas** | Partitionnement multi-pages avec respect de la cohésion des animations. | Moteur de streaming virtuel de sous-tuiles. |
 | **Hot-Reload** | Watcher en tâche de fond avec debouncing et ré-export sans clic. | Modification directe de la mémoire vive interne du moteur de jeu. |
+
+---
+
+## 🕹️ Liste de Noël des Vieux Puristes & Rétro-Archivistes (M-RETRO / Horizons Futurs)
+
+> **Vision à long terme :** Faire de BentoPack le pont définitif entre 40 ans d'histoire du pixel art et les pipelines modernes, en envoyant définitivement à la retraite les utilitaires préhistoriques Windows 98 / XP (*YY-CHR*, *Tile Molester*, scripts Python bricolés).
+
+### 1. 📥 Module d'Import Tuiles Brutes & Dumps ROM (*Raw Planar/Chunky Tile Streams*)
+* **Décodeur Universel de Bitplanes & Tuiles (`.chr` / `.bin`) :**
+  * Dialogue d'importation chirurgical : choix de l'offset mémoire (hexadécimal), taille de tuile ($8\times 8$ ou $16\times 16$), et format de décodage :
+    * **NES / Famicom (2bpp Planar) :** 16 octets/tuile (8 octets plan 0 + 8 octets plan 1).
+    * **Game Boy / GBC (2bpp Interleaved) :** 16 octets/tuile (plans entrelacés ligne par ligne).
+    * **Super Nintendo / SNES (4bpp Planar) :** 32 octets/tuile (plans 0/1 entrelacés puis 2/3).
+    * **Sega Mega Drive / Genesis (4bpp Chunky / Nibbles linéaires) :** 32 octets/tuile (2 pixels par octet, valeurs 0–15).
+    * **Master System / Game Gear (4bpp Planar Chunky) :** 4 octets par ligne de 8 pixels.
+  * **Application directe des palettes rétro BentoPack :** Prévisualisation instantanée via l'une des 16 palettes `.gpl` intégrées (NES, SNES, Genesis, GB...).
+* **Importateur de Dumps VRAM Émulateurs (Savestates & Snapshots VRAM) :**
+  * Glisser-déposer d'un couple `VRAM.bin` + `Palette.pal` / `CRAM.bin` issu des émulateurs de référence (**Mesen**, **bsnes/Snes9x**, **BlastEm**, **mGBA**).
+  * Reconstitution instantanée de la mémoire vidéo avec fond transparent sans pollution de décor.
+
+### 2. 💾 Formats Cultes Micro & DOS (Amiga, Atari, PC 90s)
+* **Amiga IFF / ILBM (`.iff`, `.lbm`) :**
+  * Le standard sacré de **Deluxe Paint**.
+  * Décodage des bitplanes entrelacés (1 à 8 bpp), modes EHB (*Extra Half-Brite*), et palettes dynamiques embarquées.
+* **ZSoft PCX (`.pcx`) :**
+  * Le format roi du jeu DOS des années 90 (*Doom, Duke Nukem 3D, Commander Keen, Mortal Kombat PC*).
+  * RLE 8-bit indexé avec bloc palette 256 couleurs en queue de fichier.
+
+### 3. 📱 Formats Structurés Portables & Fantasy Consoles
+* **Nintendo Nitro SDK (`.ncgr` + `.ncer` + `.nclr`) — GBA & Nintendo DS :**
+  * Extraction et liaison directe : `.ncgr` (tuiles graphiques) + `.nclr` (palette) + `.ncer` (cellules/meta-sprites assemblés avec offsets relatifs).
+  * Recréation immédiate des frames d'animation et de leurs points de pivot sans découpage manuel.
+* **Fantasy Consoles (PICO-8 & TIC-80) :**
+  * Import direct des cartouches PICO-8 (`.p8`) en parsant les sections texte `__gfx__` (sprites 128×128 en 4bpp) et `__gff__` (flags de sprites).
+  * Import des cartouches TIC-80 (`.tic`).
+
+### 4. 🌊 Palette Cycling & Color Shifting (Animation de Palettes d'Époque)
+* Outil de visualisation et de prévisualisation du *Color Cycling* (effets d'eau qui coule, cascades, néons ou lave animés sans multiplier les frames, façon Mark Ferrari / Deluxe Paint).
+* Export de la table de cyclage vers Godot / Unity sous forme de mini-LUT ou de texture 1D pour consommation par un shader d'indexation.
+
+### 5. 📏 Linter de Contraintes Matérielles Rétro (*Hardware Constraints Linter*)
+* Mode d'analyse non destructif pour développeurs homebrew et demakes :
+  * **Limite de sprites par scanline :** Avertissement visuel si plus de 8 sprites 8px s'alignent horizontalement (dépassement PPU NES/SMS/GB provoquant historiquement du flickering).
+  * **Budget de tuiles VRAM :** Jauge indiquant le pourcentage de VRAM consommé par rapport à la capacité d'une cartouche cible (ex. 128 ou 256 tuiles max).
+
+### 6. ⚙️ Générateur de Code Source C / ASM (Export Direct sans Moteur)
+* Pour les projets homebrew bare-metal ou ciblant les SDK rétro :
+  * **Tableaux C bruts :** Export sous forme de fichier d'en-tête `.h` (`const uint8_t sprite_walk[] = { 0x00, 0x1F, ... };`) prêt pour **SGDK** (Mega Drive), **GBDK / GB Studio** (Game Boy) ou **cc65** (NES).
+  * **Directives Assembleur :** Export sous forme de données `.asm` (`.byte` ou `dc.b`) pour architectures 6502, Z80 ou 68000.
+
+---
+
+### 🛡️ Garde-Fou Senior pour la Liste de Noël
+> [!WARNING]
+> **Règle d'or :** BentoPack **n'est pas** un émulateur, ni un assembleur de ROMs.
+> Toutes ces fonctionnalités rétro doivent être implémentées sous forme de **plugins d'extraction I/O (`ExtractorPlugin`)** ou d'**exportateurs de texte**, sans jamais alourdir le noyau C++ `BentoPackCore`. BentoPack reste un outil de packaging et d'interfaçage graphique ultra-rapide.
