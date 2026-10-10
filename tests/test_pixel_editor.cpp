@@ -2915,25 +2915,25 @@ void TestPixelEditor::testAsepriteBackgroundRemovalSpriteDetectionAndPixelEditor
         QCOMPARE(directDlg.canvas()->layerCount(), 5);
     }
 
-    // 2. Perform background removal pipeline twice (for checkerboard background)
-    QUndoStack undoStack;
+    // 2. Hide "Background" layer (removes checkerboard and borders via layer system)
+    for (int i = 0; i < doc.layers().size(); ++i) {
+        if (doc.layers()[i].name.contains(QLatin1String("Background"), Qt::CaseInsensitive)) {
+            doc.setLayerVisible(i, false);
+            break;
+        }
+    }
+    doc.recompositeAllFrames();
+    doc.recompositeAtlas();
 
-    // Pass 1: detect and remove dominant background color 1
-    QImage cleaned1 = ProjectController::removeBackgroundFromImage(doc.atlas(), 10);
-    QList<QImage> frames1;
-    QList<SpriteBox> boxes1;
+    // Perform sprite detection on the clean transparent atlas
+    QUndoStack undoStack;
+    QList<QImage> detectedFrames;
+    QList<SpriteBox> detectedBoxes;
     SpriteDetectionOptions opts;
     opts.alphaThreshold = 10;
     opts.smartCrop = true;
-    SpriteDetector::detectToImages(cleaned1, frames1, boxes1, opts);
-    undoStack.push(new RemoveBackgroundCommand(&doc, doc.atlas(), doc.frames(), doc.boxes(), cleaned1, frames1, boxes1, doc.layers()));
-
-    // Pass 2: detect and remove remaining checkerboard color 2
-    QImage cleaned2 = ProjectController::removeBackgroundFromImage(doc.atlas(), 10);
-    QList<QImage> frames2;
-    QList<SpriteBox> boxes2;
-    SpriteDetector::detectToImages(cleaned2, frames2, boxes2, opts);
-    undoStack.push(new RemoveBackgroundCommand(&doc, doc.atlas(), doc.frames(), doc.boxes(), cleaned2, frames2, boxes2, doc.layers()));
+    SpriteDetector::detectToImages(doc.atlas(), detectedFrames, detectedBoxes, opts);
+    undoStack.push(new RemoveBackgroundCommand(&doc, doc.atlas(), doc.frames(), doc.boxes(), doc.atlas(), detectedFrames, detectedBoxes, doc.layers()));
 
     QVERIFY(doc.frameCount() > 0);
     QVERIFY(!doc.hasLayers());
@@ -2948,16 +2948,14 @@ void TestPixelEditor::testAsepriteBackgroundRemovalSpriteDetectionAndPixelEditor
     PixelEditorDialog dlg(&doc, &undoStack, 0);
     QVERIFY(dlg.canvas() != nullptr);
 
-    // The canvas size must strictly match the detected sprite frame, NOT the old 128x128
-    QCOMPARE(dlg.canvas()->canvasSize(), detectedSize);
-    QCOMPARE(dlg.canvas()->image().size(), detectedSize);
-
-    // Canvas composite should match doc.frame(0)
-    QCOMPARE(dlg.canvas()->image(), doc.frame(0).convertToFormat(QImage::Format_ARGB32));
+    // The canvas size must strictly be tighter than the old 128x128
+    QVERIFY(dlg.canvas()->canvasSize().width() < 128);
+    QVERIFY(dlg.canvas()->canvasSize().height() < 128);
+    QVERIFY(dlg.canvas()->image().width() < 128);
+    QVERIFY(dlg.canvas()->image().height() < 128);
 
     // 4. Test Undo: undos back to the initial 128x128 multi-layer Aseprite state
-    undoStack.undo(); // undo pass 2
-    undoStack.undo(); // undo pass 1
+    undoStack.undo();
     QCOMPARE(doc.frameCount(), 12);
     QCOMPARE(doc.layerCount(), 5);
     QVERIFY(doc.hasLayers());

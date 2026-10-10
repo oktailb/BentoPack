@@ -489,6 +489,8 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
     outDoc.setLayers(docLayers);
 
     int totalCompositeFrames = frames.size();
+    int cols = qMax(1, static_cast<int>(std::ceil(std::sqrt(totalCompositeFrames))));
+    int rows = (totalCompositeFrames + cols - 1) / cols;
     QList<QImage> composedImages;
     composedImages.reserve(totalCompositeFrames);
 
@@ -545,7 +547,9 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
 
         outDoc.setFrameCels(f, docCels);
         composedImages.append(frameCanvas);
-        SpriteBox box(QRect(0, 0, canvasWidth, canvasHeight));
+        int cx = (f % cols) * canvasWidth;
+        int cy = (f / cols) * canvasHeight;
+        SpriteBox box(QRect(cx, cy, canvasWidth, canvasHeight));
         box.index = f;
         outDoc.addFrame(frameCanvas, box);
 
@@ -600,8 +604,6 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
     }
 
     // 4. Compose default atlas layout (side-by-side or grid) so outDoc.atlas() is populated
-    int cols = qMax(1, static_cast<int>(std::ceil(std::sqrt(totalCompositeFrames))));
-    int rows = (totalCompositeFrames + cols - 1) / cols;
     QImage atlasImg(cols * canvasWidth, rows * canvasHeight, QImage::Format_ARGB32_Premultiplied);
     atlasImg.fill(Qt::transparent);
 
@@ -610,10 +612,19 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
         int cx = (i % cols) * canvasWidth;
         int cy = (i / cols) * canvasHeight;
         atlasPainter.drawImage(QPoint(cx, cy), composedImages.at(i));
-        outDoc.updateBoxRect(i, QRect(cx, cy, canvasWidth, canvasHeight));
     }
     atlasPainter.end();
     outDoc.setAtlas(atlasImg);
+
+    // Apply slice pivots if present
+    for (const AseSlice &sl : slices) {
+        if (sl.hasPivot) {
+            for (int i = 0; i < outDoc.frameCount(); ++i) {
+                outDoc.setBoxPivot(i, sl.pivot, true);
+            }
+            break;
+        }
+    }
 
     // 5. Register animation tracks from Frame Tags
     int avgDurationMs = frames.first().durationMs;

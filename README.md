@@ -24,7 +24,6 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 * **Format Parsers & Importers:** Import existing sprite atlases with associated **JSON** (TexturePacker / Aseprite / Spine 2D / LibGDX) or **Godot 4 `.tres`** metadata.
 
 ![Aseprite Native Multi-Layer & Tag Import](docs/screenshots/12_aseprite_native_import.webp)
-<!-- 📸 SCREENSHOT À PRENDRE CE SOIR : Boîte de dialogue ou vue principale lors de l'import d'un fichier .aseprite animé avec ses calques et ses tags d'animations visibles -->
 
 ### 🖌️ Surgical Pixel-by-Pixel Editor & Layer Studio (M4 & M18)
 * **High-Precision Canvas (`Ctrl+E`):** Fast, non-interpolated pixel art editor (`SmoothPixmapTransform = false`) with configurable pixel grid ($\ge 400\%$) for surgical touch-ups without switching to GIMP or Photoshop.
@@ -45,7 +44,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 * **Two-Tier Undo/Redo:** Local stack for fine brush strokes and compound `EditSpritePixelsCommand` synchronizing frame and atlas texture seamlessly with `CompositionMode_Source`.
 
 ![Pixel Editor with Multi-Layer Stack & Onion Skinning](docs/screenshots/13_pixel_editor_layers_and_onion_skin.webp)
-<!-- 📸 SCREENSHOT À PRENDRE CE SOIR : Éditeur de pixels (PixelEditorDialog) avec onglets calques actifs à droite, onion skin visible sur le canvas et palette rétro sélectionnée -->
+
 
 ### 📐 2D Polygon & Intelligent CDT Mesh Packing (M8 & M19)
 * **Alpha Contour Extraction:** Automatic watertight Marching Squares contouring on sprite alpha silhouettes.
@@ -59,7 +58,6 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 * **Multi-Engine Exports:** Godot 4 `_mesh.tres` (`ArrayMesh`), Unity `.unity.json` (`SpriteMeshType.Tight`), and Unreal Engine Paper2D `.paper2d.json`.
 
 ![Intelligent CDT Polygon Mesh & Laser Knife Tool](docs/screenshots/14_mesh_knife_cdt_editor.webp)
-<!-- 📸 SCREENSHOT À PRENDRE CE SOIR : Dialogue de maillage CDT ou Pixel Editor affichant la triangulation fil de fer cyan/vert et l'outil couteau laser en cours de tracé -->
 
 ### 🎨 Non-Destructive Filter & Cleanup Suite (M7)
 * **Frame Context Menu & Targeted Scope:** Right-click directly on any sprite in the atlas or timeline to apply filters to the current selection, the whole frame, or batch-apply to all frames in the animation.
@@ -75,7 +73,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
   * **Tight Polygon Packing (Nesting) (`Ctrl+Shift+T`):** Multi-threaded high-density concave/convex polygon packing allowing bounding boxes to overlap.
 
 ![Retro Palette Quantization & Bayer Dithering](docs/screenshots/15_retro_palette_dithering.webp)
-<!-- 📸 SCREENSHOT À PRENDRE CE SOIR : Dialogue du filtre RetroPalette affichant une palette rétro (Sega, Neo Geo, NES...) avec tramage Bayer actif et aperçu avant/après -->
+
 
 ### 🎬 Timeline & Animation Filmstrip (M2)
 * **Filmstrip Dock:** Intuitive bottom timeline with thumbnail filmstrip, scrub bar, and drag-and-drop frame reordering.
@@ -83,7 +81,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 * **Batch Editing:** Multi-selection operations including group deletion, invert selection, and reverse frame ordering (ideal for ping-pong loops).
 * **Real-time Playback:** High-precision preview engine with configurable FPS (1 to 60 FPS), loop controls (Loop, Once, Ping-Pong), and aspect-ratio stabilization.
 
-![Frame Fusion Demo](Fusion.gif)
+![Frame Fusion Demo](docs/screenshots/16_sprite_fusion.webp)
 
 ### 🎯 Interactive Anchor Points & Pivots (M3)
 * **Zero-Jittering Animation Stabilization:** Shared animation envelope alignment guarantees rock-solid anchored characters during motion, attacks, or jumps without visual shaking or sliding.
