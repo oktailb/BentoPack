@@ -276,6 +276,20 @@ qt6_add_resources(BentoPackWidgets "images"
     icons/bentopack.webp
     icons/gallus_tech.webp
     icons/gallus_tech.png
+    icons/pencil.png
+    icons/eraser.png
+    icons/paint_bucket.png
+    icons/pipette.png
+    icons/polygons.png
+    icons/select_rectangular.png
+    icons/magic_wand.png
+    icons/flip_horizontal.png
+    icons/flip_vertical.png
+    icons/rotate_right.png
+    icons/rotate_left.png
+    icons/delete_selection.png
+    icons/undo.png
+    icons/redo.png
 )
 
 target_include_directories(BentoPackWidgets PUBLIC

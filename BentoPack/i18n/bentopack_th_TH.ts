@@ -3007,14 +3007,6 @@ Strict removal clears the pixel.</translation>
         <translation>พื้นหลัง</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>ตัวแก้ไขโพลีกอนเมช CDT (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>ไม่มีโพลีกอนเมชในเฟรมนี้</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>อนุญาตให้แก้ไขพิกเซลนอกรูปหลายเหลี่ยม (ไม่เลือก: ปิดการแก้ไขนอกรูปหลายเหลี่ยม)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Strict removal clears the pixel.</translation>
         <translation>นำการแก้ไข (การวาด, พลิก, เติมสี, ฟิลเตอร์) ไปใช้กับทุกเฟรมที่จัดแนวตามจุดหมุน</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>เครื่องมือ</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>ตัวเลือกและเลเยอร์</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>แผงเครื่องมือ</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>แผงตัวเลือก &amp;&amp; เลเยอร์</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>รีเซ็ตเค้าโครงแผงควบคุม</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>แอนิเมชัน:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Fut:</source>
         <translation>อนาคต:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>แผงควบคุม ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>แสดงหรือซ่อนแผงด้านข้าง หรือรีเซ็ตเค้าโครงเริ่มต้น</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Tool Options</source>
         <translation>ตัวเลือกเครื่องมือ</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>ตัวแก้ไขตาข่ายโพลีกอน CDT (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>ตัวแก้ไขตาข่ายโพลีกอน CDT (ไม่มีตาข่ายโพลีกอนในเฟรมนี้) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

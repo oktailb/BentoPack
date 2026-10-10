@@ -3007,14 +3007,6 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Latar Belakang</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>Editor Jaring Poligon CDT (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>Tidak ada jaring poligon pada bingkai ini</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Izinkan pengeditan piksel di luar batas poligon (Tidak dicentang: dinonaktifkan)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Terapkan edit (gambar, balik, isi, filter) ke semua bingkai yang disejajarkan oleh poros</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>Alat</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>Opsi &amp; Lapisan</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>Panel Alat</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>Panel Opsi &amp;&amp; Lapisan</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>Atur Ulang Tata Letak Panel</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>Anim:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>Fut:</source>
         <translation>Depan:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>Panel ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>Tampilkan atau sembunyikan panel samping, atau atur ulang tata letak default</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>Tool Options</source>
         <translation>Opsi Alat</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>Editor Mesh Poligon CDT (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>Editor Mesh Poligon CDT (Tidak ada mesh poligon pada bingkai ini) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

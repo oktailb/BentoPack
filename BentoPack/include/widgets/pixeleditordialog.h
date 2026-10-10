@@ -36,6 +36,8 @@
 #include <QStackedWidget>
 #include <QTabWidget>
 #include <QRadioButton>
+#include <QMainWindow>
+#include <QDockWidget>
 #include "image/colorpalettepresets.h"
 #include "widgets/colorpickerwidget.h"
 #include "widgets/layerstackwidget.h"
@@ -105,12 +107,20 @@ public:
     bool openAtlasPackingDialog(bool nonInteractive = false);
     bool performAtlasRepack(const QMap<int, QImage> &modifiedFrames, const QMap<int, QPolygonF> &modifiedPolygons);
 
+    QMainWindow* dockMainWindow() const { return m_dockMainWindow; }
+    QDockWidget* toolsDock() const { return m_dockTools; }
+    QDockWidget* optionsDock() const { return m_dockOptions; }
+    QToolButton* panelsButton() const { return m_btnPanels; }
+    void resetDefaultLayout();
+    void saveLayoutState();
+
 public slots:
     void onPreviousFrame();
     void onNextFrame();
     void loadFrame(int index);
     void onGenerateSmartMeshRequested();
     void onResetMeshToOutlineRequested();
+    void updateToolIcons();
 
 private slots:
     void onToolButtonClicked(int id);
@@ -170,6 +180,7 @@ protected:
     void changeEvent(QEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void showEvent(QShowEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     void setupUi();
@@ -211,7 +222,11 @@ private:
     QString                 m_activeAnimName;
     QList<int>              m_activeSequence;
 
-    // UI Widgets
+    // UI Widgets & Docking
+    QMainWindow*            m_dockMainWindow = nullptr;
+    QDockWidget*            m_dockTools = nullptr;
+    QDockWidget*            m_dockOptions = nullptr;
+    QToolButton*            m_btnPanels = nullptr;
     PixelCanvas*            m_canvas = nullptr;
     QScrollArea*            m_scrollArea = nullptr;
     QLabel*                 m_frameInfoLabel = nullptr;

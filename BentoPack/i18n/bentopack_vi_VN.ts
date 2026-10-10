@@ -3007,14 +3007,6 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Nền</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>Trình chỉnh sửa lưới đa giác CDT (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>Không có lưới đa giác trên khung hình này</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Cho phép sửa pixel ngoài đa giác (Bỏ chọn: vô hiệu hóa sửa ngoài đa giác)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Áp dụng chỉnh sửa (vẽ, lật, tô, bộ lọc) cho tất cả khung hình căn chỉnh theo điểm gốc</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>Công cụ</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>Tùy chọn &amp; Lớp</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>Bảng công cụ</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>Bảng tùy chọn &amp;&amp; lớp</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>Đặt lại bố cục bảng điều khiển</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>Hoạt ảnh:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>Fut:</source>
         <translation>T.lai:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>Bảng điều khiển ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>Hiện hoặc ẩn các bảng bên, hoặc đặt lại bố cục mặc định</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>Tool Options</source>
         <translation>Tùy chọn công cụ</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>Trình chỉnh sửa lưới đa giác CDT (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>Trình chỉnh sửa lưới đa giác CDT (Không có lưới đa giác trên khung hình này) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

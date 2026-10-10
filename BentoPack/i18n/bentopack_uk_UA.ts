@@ -3007,14 +3007,6 @@ Strict removal clears the pixel.</source>
         <translation>Тло</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>Редактор полігональної сітки CDT (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>Немає полігональної сітки на цьому кадрі</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Дозволити редагування пікселів за межами полігону (не вибрано: редагування за межами полігону вимкнено)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Strict removal clears the pixel.</source>
         <translation>Застосувати зміни (малювання, віддзеркалення, заливка, фільтри) до всіх кадрів, вирівняних за опорною точкою</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>Інструменти</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>Параметри та шари</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>Панель інструментів</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>Панель параметрів &amp;&amp; шарів</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>Скинути розташування панелей</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>Анім:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Fut:</source>
         <translation>Майб:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>Панелі ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>Показати або приховати бічні панелі або скинути стандартне розташування</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Tool Options</source>
         <translation>Параметри інструмента</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>Редактор полігональної сітки CDT (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>Редактор полігональної сітки CDT (немає сітки на цьому кадрі) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

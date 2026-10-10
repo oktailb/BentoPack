@@ -3007,14 +3007,6 @@ Strict removal clears the pixel.</source>
         <translation>배경</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>CDT 다각형 메시 에디터 (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>이 프레임에 다각형 메시가 없습니다</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>폴리곤 경계 외부 편집 허용 (체크 해제 시: 폴리곤 외부 편집 비활성화)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Strict removal clears the pixel.</source>
         <translation>피벗을 기준으로 정렬된 모든 프레임에 편집(드로잉, 뒤집기, 채우기, 필터) 적용</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>도구</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>옵션 및 레이어</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>도구 패널</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>옵션 &amp;&amp; 레이어 패널</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>패널 레이아웃 재설정</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>애니메이션:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Fut:</source>
         <translation>미래:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>패널 ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>사이드 패널 표시/숨기기 또는 기본 레이아웃으로 재설정</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Tool Options</source>
         <translation>도구 옵션</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>CDT 폴리곤 메시 편집기 (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>CDT 폴리곤 메시 편집기 (이 프레임에 폴리곤 메시 없음) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

@@ -8,14 +8,10 @@
 
 ## 🎨 1. Ergonomie UI & Graphisme (Priorité Immédiate)
 
-- [ ] **Remplacement des glyphes / emojis UTF-8 des outils :**
-  - **Constat :** Les emojis textuels (`🔲`, `✖`, `✂️`, drapeaux) souffrent d'un rendu variable ou dégradé (noir & blanc, crénelage) selon la version de Windows et les polices système de rendu.
-  - **Action :** Créer de vraies icônes vectorielles SVG ou pixmaps haute résolution stables :
-    - Outil d'ajout de sommet CDT (`point_add.svg` ou pixmap pixel-art)
-    - Outil de suppression de sommet (`point_del.svg`)
-    - Outil de couteau / trait de coupe laser (`mesh_knife.svg`)
-    - Boutons des drapeaux de langues et actions de filtres
-  - *Note créative :* Le fin du fin sera de dessiner et peaufiner ces icônes pixel-art directement dans l'Éditeur de Pixels de BentoPack !
+- [x] **Remplacement des glyphes / emojis UTF-8 des outils dans le Pixel Editor :**
+  - **Livrable :** Intégration des icônes PNG 512x512 dans `BentoPack/icons/` (Crayon, Gomme, Seau, Pipette, Sélection rectangulaire, Baguette magique, Flip H/V, Rotation 90°, Supprimer sélection, Undo/Redo).
+  - Embarquement automatique dans le binaire via `qt6_add_resources`.
+  - Inversion chromatique dynamique temps réel selon le thème clair/sombre de l'OS (`isSystemDarkMode`), avec génération multi-résolutions anti-crénelage pour écrans High-DPI et état checked contrasté.
 - [ ] **Harmonisation des bulles d'aide (Tooltips) :**
   - Vérifier que chaque bouton d'outil dans `PixelEditorDialog`, la timeline et le dock de calques dispose d'un tooltip descriptif avec rappel de son raccourci clavier.
 - [ ] **Feedback visuel sur les sélections d'outils :**

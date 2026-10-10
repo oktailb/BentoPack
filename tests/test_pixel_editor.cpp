@@ -95,6 +95,12 @@ private slots:
 
     // 11. Multi-Layer Aseprite File Loading & Cel Offset Handling
     void testMultiLayerAsepriteSampleLoadingAndPixelEditor();
+
+    // 12. Themed Tool Icons (Day / Night Mode)
+    void testThemedToolIconsDayNightMode();
+
+    // 13. Side Panels Docking, Resizing & Layout Persistence
+    void testPixelEditorDockablePanelsAndLayoutPersistence();
 };
 
 void TestPixelEditor::initTestCase()
@@ -2709,6 +2715,167 @@ void TestPixelEditor::testMultiLayerAsepriteSampleLoadingAndPixelEditor()
     // Apply changes and verify round-trip to document
     dlg.applyButton()->click();
     QCOMPARE(doc.compositeFrame(0).pixelColor(0, 0), QColor(Qt::magenta));
+}
+
+void TestPixelEditor::testThemedToolIconsDayNightMode()
+{
+    SpriteDocument doc;
+    QImage frame(16, 16, QImage::Format_ARGB32);
+    frame.fill(Qt::transparent);
+    SpriteBox box;
+    box.rect = QRect(0, 0, 16, 16);
+    doc.setFrames({frame}, {box});
+
+    QPalette origPal = qApp->palette();
+
+    // 1. Day / Light Mode: White/light background, dark text -> icons must be black/dark
+    QPalette lightPal;
+    lightPal.setColor(QPalette::Window, QColor("#f8fafc"));
+    lightPal.setColor(QPalette::WindowText, QColor("#1e293b"));
+    lightPal.setColor(QPalette::Button, QColor("#f1f5f9"));
+    lightPal.setColor(QPalette::ButtonText, QColor("#1e293b"));
+    qApp->setPalette(lightPal);
+
+    PixelEditorDialog dlg(&doc, 0);
+    dlg.updateToolIcons();
+
+    QAbstractButton *btnPencil = dlg.toolButtonGroup()->button(static_cast<int>(PixelTool::Pencil));
+    QVERIFY(btnPencil != nullptr);
+    QIcon iconLight = btnPencil->icon();
+    QVERIFY(!iconLight.isNull());
+
+    QPixmap pixLight = iconLight.pixmap(24, 24, QIcon::Normal, QIcon::Off);
+    QVERIFY(!pixLight.isNull());
+    QImage imgLight = pixLight.toImage();
+
+    bool hasDarkPixel = false;
+    for (int y = 0; y < imgLight.height(); ++y) {
+        for (int x = 0; x < imgLight.width(); ++x) {
+            QRgb c = imgLight.pixel(x, y);
+            if (qAlpha(c) > 100 && qRed(c) < 100 && qGreen(c) < 100 && qBlue(c) < 100) {
+                hasDarkPixel = true;
+                break;
+            }
+        }
+        if (hasDarkPixel) break;
+    }
+    QVERIFY(hasDarkPixel);
+
+    // 2. Night / Dark Mode: Dark background, light text -> icons must be inverted (white/bright)
+    QPalette darkPal;
+    darkPal.setColor(QPalette::Window, QColor("#181920"));
+    darkPal.setColor(QPalette::WindowText, QColor("#e2e8f0"));
+    darkPal.setColor(QPalette::Button, QColor("#262936"));
+    darkPal.setColor(QPalette::ButtonText, QColor("#e2e8f0"));
+    qApp->setPalette(darkPal);
+
+    dlg.updateToolIcons();
+
+    QIcon iconDark = btnPencil->icon();
+    QVERIFY(!iconDark.isNull());
+
+    QPixmap pixDark = iconDark.pixmap(24, 24, QIcon::Normal, QIcon::Off);
+    QVERIFY(!pixDark.isNull());
+    QImage imgDark = pixDark.toImage();
+
+    bool hasLightPixel = false;
+    for (int y = 0; y < imgDark.height(); ++y) {
+        for (int x = 0; x < imgDark.width(); ++x) {
+            QRgb c = imgDark.pixel(x, y);
+            if (qAlpha(c) > 100 && qRed(c) > 180 && qGreen(c) > 180 && qBlue(c) > 180) {
+                hasLightPixel = true;
+                break;
+            }
+        }
+        if (hasLightPixel) break;
+    }
+    QVERIFY(hasLightPixel);
+
+    // Restore original palette
+    qApp->setPalette(origPal);
+}
+
+void TestPixelEditor::testPixelEditorDockablePanelsAndLayoutPersistence()
+{
+    SpriteDocument doc;
+    QImage testImg(32, 32, QImage::Format_ARGB32_Premultiplied);
+    testImg.fill(Qt::transparent);
+    doc.addFrame(testImg);
+
+    PixelEditorDialog dlg(&doc, nullptr, 0);
+    dlg.show();
+
+    // 1. Verify embedded QMainWindow and dock widgets existence
+    QMainWindow *dockWin = dlg.dockMainWindow();
+    QVERIFY(dockWin != nullptr);
+    QVERIFY(dockWin->centralWidget() != nullptr);
+
+    QDockWidget *toolsDock = dlg.toolsDock();
+    QDockWidget *optionsDock = dlg.optionsDock();
+    QVERIFY(toolsDock != nullptr);
+    QVERIFY(optionsDock != nullptr);
+
+    // 2. Verify DockWidget features matching MainWindow
+    QDockWidget::DockWidgetFeatures expectedFeatures =
+        QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable;
+    QCOMPARE(toolsDock->features(), expectedFeatures);
+    QCOMPARE(optionsDock->features(), expectedFeatures);
+
+    // 3. Verify floatability
+    toolsDock->setFloating(true);
+    QVERIFY(toolsDock->isFloating());
+    optionsDock->setFloating(true);
+    QVERIFY(optionsDock->isFloating());
+
+    // 4. Verify toggleViewAction and closability
+    QAction *toolsToggle = toolsDock->toggleViewAction();
+    QAction *optionsToggle = optionsDock->toggleViewAction();
+    QVERIFY(toolsToggle != nullptr);
+    QVERIFY(optionsToggle != nullptr);
+
+    toolsDock->close();
+    QVERIFY(!toolsDock->isVisible());
+    toolsToggle->trigger();
+    QVERIFY(toolsDock->isVisible());
+
+    optionsDock->close();
+    QVERIFY(!optionsDock->isVisible());
+    optionsToggle->trigger();
+    QVERIFY(optionsDock->isVisible());
+
+    // 5. Verify panels popup menu on header bar
+    QToolButton *btnPanels = dlg.panelsButton();
+    QVERIFY(btnPanels != nullptr);
+    QVERIFY(btnPanels->menu() != nullptr);
+    QVERIFY(btnPanels->menu()->actions().size() >= 3);
+
+    // 6. Test resetDefaultLayout()
+    dlg.resetDefaultLayout();
+    QVERIFY(toolsDock->isVisible());
+    QVERIFY(!toolsDock->isFloating());
+    QVERIFY(optionsDock->isVisible());
+    QVERIFY(!optionsDock->isFloating());
+    QCOMPARE(dockWin->dockWidgetArea(toolsDock), Qt::LeftDockWidgetArea);
+    QCOMPARE(dockWin->dockWidgetArea(optionsDock), Qt::RightDockWidgetArea);
+
+    // 7. Verify resizability: neither dock widget nor contents have rigid fixed width
+    QWidget *toolWidget = toolsDock->widget();
+    QVERIFY(toolWidget != nullptr);
+    QVERIFY(toolWidget->maximumWidth() > 1000 || toolWidget->maximumWidth() == QWIDGETSIZE_MAX);
+
+    QWidget *optWidget = optionsDock->widget();
+    QVERIFY(optWidget != nullptr);
+    QVERIFY(optWidget->maximumWidth() > 1000 || optWidget->maximumWidth() == QWIDGETSIZE_MAX);
+
+    // 8. Test layout persistence in QSettings
+    dlg.saveLayoutState();
+    QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+    QByteArray savedDockState = settings.value(QStringLiteral("pixelEditor/dockState")).toByteArray();
+    QVERIFY(!savedDockState.isEmpty());
+
+    // Restoring state should return true
+    bool restored = dockWin->restoreState(savedDockState);
+    QVERIFY(restored);
 }
 
 int main(int argc, char *argv[])

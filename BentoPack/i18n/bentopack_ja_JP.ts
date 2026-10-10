@@ -3007,14 +3007,6 @@ Strict removal clears the pixel.</source>
         <translation>背景</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>CDTポリゴンメッシュエディター (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>このフレームにはポリゴンメッシュがありません</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>ポリゴン境界外のピクセル編集を許可します (オフ: ポリゴン外の編集は無効)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Strict removal clears the pixel.</source>
         <translation>ピボットを基準にしてすべてのフレームに編集 (描画、反転、塗りつぶし、フィルター) を適用</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>ツール</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>オプションとレイヤー</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>ツールパネル</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>オプション &amp;&amp; レイヤーパネル</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>パネル配置をリセット</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>アニメ:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Fut:</source>
         <translation>未来:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>パネル ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>サイドパネルを表示/非表示、またはデフォルトの配置にリセット</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Tool Options</source>
         <translation>ツールオプション</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>CDTポリゴンメッシュエディター (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>CDTポリゴンメッシュエディター (このフレームにはポリゴンメッシュがありません) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

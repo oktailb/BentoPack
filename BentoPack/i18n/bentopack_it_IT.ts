@@ -3007,14 +3007,6 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Sfondo</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>Editor mesh poligonale CDT (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>Nessuna mesh poligonale su questo fotogramma</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Consenti modifica dei pixel fuori dal poligono (Non selezionato: modifica esterna disabilitata)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Applica modifiche (disegno, ribalta, riempimento, filtri) a tutti i fotogrammi allineati tramite perno</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>Strumenti</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>Opzioni e Livelli</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>Pannello Strumenti</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>Pannello Opzioni &amp;&amp; Livelli</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>Reimposta disposizione dei pannelli</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>Anim:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Vuoi salvarle prima di procedere?</translation>
     <message>
         <source>Fut:</source>
         <translation>Fut:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>Pannelli ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>Mostra o nascondi i pannelli laterali o ripristina il layout predefinito</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Vuoi salvarle prima di procedere?</translation>
     <message>
         <source>Tool Options</source>
         <translation>Opzioni strumento</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>Editor mesh poligonale CDT (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>Editor mesh poligonale CDT (nessuna mesh poligonale in questo fotogramma) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

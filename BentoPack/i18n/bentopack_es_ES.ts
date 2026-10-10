@@ -3007,14 +3007,6 @@ Fecha: %2
         <translation>Fondo</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>Editor de malla poligonal CDT (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>No hay malla poligonal en este fotograma</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Permitir editar píxeles fuera de los límites del polígono (Desmarcado: deshabilitado fuera del polígono)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Fecha: %2
         <translation>Aplicar modificaciones (dibujo, volteo, relleno, filtros) a todos los fotogramas alineados por el pivote</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>Herramientas</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>Opciones y capas</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>Panel de herramientas</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>Panel de Opciones &amp;&amp; Capas</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>Restablecer disposición de paneles</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>Anim:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Fecha: %2
     <message>
         <source>Fut:</source>
         <translation>Fut:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>Paneles ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>Mostrar u ocultar paneles laterales o restablecer disposición predeterminada</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Fecha: %2
     <message>
         <source>Tool Options</source>
         <translation>Opciones de herramienta</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>Editor de malla poligonal CDT (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>Editor de malla poligonal CDT (sin malla poligonal en este fotograma) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

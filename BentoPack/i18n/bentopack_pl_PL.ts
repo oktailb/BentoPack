@@ -3007,14 +3007,6 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Tło</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>Edytor siatki wielokątnej CDT (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>Brak siatki wielokątnej na tej klatce</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Zezwól na edycję pikseli poza wielokątem (Niezaznaczone: edycja poza wielokątem zablokowana)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Zastosuj modyfikacje (rysunek, odbicie, wypełnienie, filtry) do wszystkich klatek wyrównanych według punktu obrotu</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>Narzędzia</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>Opcje i warstwy</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>Panel narzędzi</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>Panel opcji &amp;&amp; warstw</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>Resetuj układ paneli</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>Anim:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     <message>
         <source>Fut:</source>
         <translation>Przyszł:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>Panele ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>Pokaż lub ukryj panele boczne lub zresetuj domyślny układ</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     <message>
         <source>Tool Options</source>
         <translation>Opcje narzędzia</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>Edytor siatki wielokątnej CDT (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>Edytor siatki wielokątnej CDT (brak siatki na tej klatce) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

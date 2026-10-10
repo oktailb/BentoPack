@@ -3007,14 +3007,6 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Arrière-plan</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>Éditeur de Maillage Polygonal CDT (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>Aucun maillage polygonal sur cette frame</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Autoriser l&apos;édition de pixels hors du polygone (Décoché : édition hors polygone interdite)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Appliquer les modifications (dessin, miroir, remplissage, filtres) sur toutes les frames selon le pivot</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>Outils</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>Options &amp; Calques</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>Panneau Outils</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>Panneau Options &amp;&amp; Calques</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>Réinitialiser la disposition des panneaux</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>Anim :</translation>
     </message>
@@ -3061,6 +3073,14 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <source>Fut:</source>
         <translation>Fut :</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>Panneaux ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>Afficher ou masquer les panneaux latéraux, ou réinitialiser la disposition</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <source>Tool Options</source>
         <translation>Options de l&apos;outil</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>Éditeur de maillage polygonal CDT (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>Éditeur de maillage polygonal CDT (aucun maillage sur ce frame) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

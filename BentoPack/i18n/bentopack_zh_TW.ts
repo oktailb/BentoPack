@@ -3007,14 +3007,6 @@ Strict removal clears the pixel.</source>
         <translation>背景</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>CDT 多邊形網格編輯器 (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>此影格沒有多邊形網格</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>允許編輯多邊形邊界之外的像素（未勾選：禁用外部編輯）</translation>
     </message>
@@ -3047,6 +3039,26 @@ Strict removal clears the pixel.</source>
         <translation>按中心軸對齊將編輯 (繪圖、翻轉、填色、濾鏡) 套用到所有影格</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>工具</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>選項與圖層</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>工具面板</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>選項 &amp;&amp; 圖層面板</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>重設面板版面配置</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>動畫:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Fut:</source>
         <translation>未來:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>面板 ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>顯示或隱藏側邊面板，或重設預設版面配置</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Tool Options</source>
         <translation>工具選項</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>CDT多邊形網格編輯器 (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>CDT多邊形網格編輯器 (此影格無多邊形網格) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

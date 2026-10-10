@@ -3007,14 +3007,6 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Hintergrund</translation>
     </message>
     <message>
-        <source>CDT Polygon Mesh Editor (◆)</source>
-        <translation>CDT-Polygonnetz-Editor (◆)</translation>
-    </message>
-    <message>
-        <source>No polygon mesh on this frame</source>
-        <translation>Kein Polygonnetz auf diesem Frame</translation>
-    </message>
-    <message>
         <source>Allow editing pixels outside polygon boundaries (Unchecked: editing outside polygon is disabled)</source>
         <translation>Pixelbearbeitung außerhalb der Polygongrenzen zulassen (Deaktiviert: Bearbeitung außerhalb ist gesperrt)</translation>
     </message>
@@ -3047,6 +3039,26 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Änderungen (Zeichnen, Spiegeln, Füllen, Filter) auf alle am Pivot ausgerichteten Frames anwenden</translation>
     </message>
     <message>
+        <source>Tools</source>
+        <translation>Werkzeuge</translation>
+    </message>
+    <message>
+        <source>Options &amp; Layers</source>
+        <translation>Optionen &amp; Ebenen</translation>
+    </message>
+    <message>
+        <source>Tools Panel</source>
+        <translation>Werkzeugleiste</translation>
+    </message>
+    <message>
+        <source>Options &amp;&amp; Layers Panel</source>
+        <translation>Optionen- &amp;&amp; Ebenenbereich</translation>
+    </message>
+    <message>
+        <source>Reset Panels Layout</source>
+        <translation>Panel-Layout zurücksetzen</translation>
+    </message>
+    <message>
         <source>Anim:</source>
         <translation>Anim:</translation>
     </message>
@@ -3061,6 +3073,14 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
     <message>
         <source>Fut:</source>
         <translation>Zuk:</translation>
+    </message>
+    <message>
+        <source>Panels ▾</source>
+        <translation>Panels ▾</translation>
+    </message>
+    <message>
+        <source>Show or hide side panels, or reset default layout</source>
+        <translation>Seitenpanels ein-/ausblenden oder Standardlayout wiederherstellen</translation>
     </message>
     <message>
         <source>Polygon &amp; Smart CDT Mesh Editor [D]</source>
@@ -3169,6 +3189,14 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
     <message>
         <source>Tool Options</source>
         <translation>Werkzeugoptionen</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (◆) [D]</source>
+        <translation>CDT-Polygonnetz-Editor (◆) [D]</translation>
+    </message>
+    <message>
+        <source>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</source>
+        <translation>CDT-Polygonnetz-Editor (kein Polygonnetz für diesen Frame) [D]</translation>
     </message>
     <message>
         <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>

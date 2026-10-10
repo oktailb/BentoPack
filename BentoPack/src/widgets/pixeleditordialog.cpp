@@ -41,9 +41,66 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QPointer>
 #include <QQueue>
+#include <QGuiApplication>
+#include <QStyleHints>
+#include <QSettings>
+#include <QCloseEvent>
 #include <algorithm>
 
 namespace {
+
+static bool isSystemDarkMode(const QWidget *widget = nullptr)
+{
+    if (QGuiApplication::styleHints() && QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+        return true;
+    }
+    const QPalette pal = qApp ? qApp->palette() : (widget ? widget->palette() : QPalette());
+    const int winLight = pal.color(QPalette::Window).lightness();
+    const int textLight = pal.color(QPalette::WindowText).lightness();
+    const int btnTextLight = pal.color(QPalette::ButtonText).lightness();
+    const int btnLight = pal.color(QPalette::Button).lightness();
+    return (winLight < 140) || (textLight > 140) || (btnTextLight > btnLight);
+}
+
+static QIcon createThemedToolIcon(const QString &resourcePath, bool isDark)
+{
+    QImage baseImg(resourcePath);
+    if (baseImg.isNull()) {
+        return QIcon();
+    }
+
+    if (baseImg.format() != QImage::Format_ARGB32 && baseImg.format() != QImage::Format_ARGB32_Premultiplied) {
+        baseImg = baseImg.convertToFormat(QImage::Format_ARGB32);
+    }
+
+    // Inverted version (pure black becomes pure white, preserving alpha anti-aliasing)
+    QImage whiteImg = baseImg.copy();
+    for (int y = 0; y < whiteImg.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb*>(whiteImg.scanLine(y));
+        for (int x = 0; x < whiteImg.width(); ++x) {
+            QRgb pixel = line[x];
+            int a = qAlpha(pixel);
+            if (a > 0) {
+                line[x] = qRgba(255 - qRed(pixel), 255 - qGreen(pixel), 255 - qBlue(pixel), a);
+            }
+        }
+    }
+
+    QIcon icon;
+    const int sizes[] = { 20, 22, 24, 32, 44, 48, 512 };
+    for (int s : sizes) {
+        QPixmap w = QPixmap::fromImage(whiteImg.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QPixmap b = QPixmap::fromImage(baseImg.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        if (isDark) {
+            icon.addPixmap(w, QIcon::Normal, QIcon::Off);
+            icon.addPixmap(w, QIcon::Normal, QIcon::On);
+        } else {
+            icon.addPixmap(b, QIcon::Normal, QIcon::Off);
+            icon.addPixmap(w, QIcon::Normal, QIcon::On);
+        }
+    }
+    return icon;
+}
 
 struct FrameBackup {
     int frameIndex = 0;
@@ -217,6 +274,20 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
 
     setupUi();
 
+    QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+    QByteArray savedGeometry = settings.value(QStringLiteral("pixelEditor/geometry")).toByteArray();
+    QByteArray savedDockState = settings.value(QStringLiteral("pixelEditor/dockState")).toByteArray();
+    if (!savedGeometry.isEmpty()) {
+        restoreGeometry(savedGeometry);
+    }
+    bool stateRestored = false;
+    if (!savedDockState.isEmpty() && m_dockMainWindow) {
+        stateRestored = m_dockMainWindow->restoreState(savedDockState);
+    }
+    if (!stateRestored) {
+        resetDefaultLayout();
+    }
+
     populateAnimationCombo();
 
     if (m_document && m_document->frameCount() > 0) {
@@ -233,6 +304,7 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
 
 PixelEditorDialog::~PixelEditorDialog()
 {
+    saveLayoutState();
     if (m_canvas && m_canvas->undoStack()) {
         m_canvas->undoStack()->disconnect(this);
     }
@@ -244,32 +316,84 @@ void PixelEditorDialog::setupUi()
     mainLayout->setContentsMargins(8, 8, 8, 8);
     mainLayout->setSpacing(6);
 
-    // 1. Header Bar (Navigation & Canvas Controls)
-    mainLayout->addWidget(createHeaderBar());
+    // 1. Header Bar (Navigation, Animation Selector & Panels button)
+    QWidget *headerBar = createHeaderBar();
 
-    // 2. Central Area (Toolbar + Canvas + Palette Panel)
-    QHBoxLayout *centerLayout = new QHBoxLayout();
-    centerLayout->setSpacing(6);
+    // 2. Central Area: Embedded QMainWindow with Dockable Panels
+    m_dockMainWindow = new QMainWindow(this);
+    m_dockMainWindow->setWindowFlags(Qt::Widget);
+    m_dockMainWindow->setDockNestingEnabled(true);
+    m_dockMainWindow->setStyleSheet(QStringLiteral(
+        "QMainWindow::separator {"
+        "  width: 5px;"
+        "  height: 5px;"
+        "  background: palette(mid);"
+        "}"
+        "QMainWindow::separator:hover {"
+        "  background: palette(highlight);"
+        "}"
+    ));
 
-    // Left Toolbar (2-column ergonomic palette)
-    centerLayout->addWidget(createToolBar());
-
-    // Canvas inside ScrollArea
-    m_scrollArea = new QScrollArea(this);
+    // Canvas inside ScrollArea as Central Widget
+    m_scrollArea = new QScrollArea(m_dockMainWindow);
     m_scrollArea->setWidgetResizable(false);
     m_scrollArea->setAlignment(Qt::AlignCenter);
     m_scrollArea->setStyleSheet(QStringLiteral("QScrollArea { background-color: #14151a; border: 1px solid #2d2e38; border-radius: 6px; }"));
 
     m_canvas = new PixelCanvas(this);
     m_scrollArea->setWidget(m_canvas);
-    centerLayout->addWidget(m_scrollArea, 1);
+    m_dockMainWindow->setCentralWidget(m_scrollArea);
 
-    // Right Palette & Preview Panel
-    centerLayout->addWidget(createPalettePanel());
+    // Left Toolbar Dock (Tools)
+    m_dockTools = new QDockWidget(tr("Tools"), m_dockMainWindow);
+    m_dockTools->setObjectName(QStringLiteral("pixelEditorDockTools"));
+    m_dockTools->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
+    m_dockTools->setAllowedAreas(Qt::AllDockWidgetAreas);
 
-    mainLayout->addLayout(centerLayout, 1);
+    QScrollArea *toolsScroll = new QScrollArea(m_dockTools);
+    toolsScroll->setWidgetResizable(true);
+    toolsScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    toolsScroll->setStyleSheet(QStringLiteral("QScrollArea { background-color: transparent; border: none; }"));
+    toolsScroll->setWidget(createToolBar());
+    m_dockTools->setWidget(toolsScroll);
+    m_dockMainWindow->addDockWidget(Qt::LeftDockWidgetArea, m_dockTools);
 
-    // 3. Bottom Bar (Status & Buttons)
+    // Right Palette & Options Dock
+    m_dockOptions = new QDockWidget(tr("Options & Layers"), m_dockMainWindow);
+    m_dockOptions->setObjectName(QStringLiteral("pixelEditorDockOptions"));
+    m_dockOptions->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
+    m_dockOptions->setAllowedAreas(Qt::AllDockWidgetAreas);
+    m_dockOptions->setWidget(createPalettePanel());
+    m_dockMainWindow->addDockWidget(Qt::RightDockWidgetArea, m_dockOptions);
+
+    // Configure Panels menu
+    if (m_btnPanels) {
+        QMenu *panelsMenu = new QMenu(m_btnPanels);
+        QAction *toolsAct = m_dockTools->toggleViewAction();
+        toolsAct->setText(tr("Tools Panel"));
+        panelsMenu->addAction(toolsAct);
+
+        QAction *optAct = m_dockOptions->toggleViewAction();
+        optAct->setText(tr("Options && Layers Panel"));
+        panelsMenu->addAction(optAct);
+
+        panelsMenu->addSeparator();
+        QAction *resetAct = panelsMenu->addAction(tr("Reset Panels Layout"));
+        connect(resetAct, &QAction::triggered, this, &PixelEditorDialog::resetDefaultLayout);
+        m_btnPanels->setMenu(panelsMenu);
+    }
+
+    // Auto-save dock layout whenever panels are moved, closed, docked or floated
+    const auto docks = {m_dockTools, m_dockOptions};
+    for (QDockWidget *dock : docks) {
+        if (!dock) continue;
+        connect(dock, &QDockWidget::visibilityChanged, this, [this](bool) { saveLayoutState(); });
+        connect(dock, &QDockWidget::dockLocationChanged, this, [this](Qt::DockWidgetArea) { saveLayoutState(); });
+        connect(dock, &QDockWidget::topLevelChanged, this, [this](bool) { saveLayoutState(); });
+    }
+
+    mainLayout->addWidget(headerBar);
+    mainLayout->addWidget(m_dockMainWindow, 1);
     mainLayout->addWidget(createBottomBar());
 
     // Connect canvas signals
@@ -562,14 +686,27 @@ QWidget* PixelEditorDialog::createHeaderBar()
     connect(m_btnFit, &QToolButton::clicked, this, [this]() { m_canvas->zoomFit(m_scrollArea->viewport()->size()); });
     layout->addWidget(m_btnFit);
 
+    QFrame *panelSep = new QFrame(bar);
+    panelSep->setFrameShape(QFrame::VLine);
+    layout->addWidget(panelSep);
+
+    m_btnPanels = new QToolButton(bar);
+    m_btnPanels->setText(tr("Panels ▾"));
+    m_btnPanels->setToolTip(tr("Show or hide side panels, or reset default layout"));
+    m_btnPanels->setPopupMode(QToolButton::InstantPopup);
+    m_btnPanels->setFixedSize(76, 28);
+    m_btnPanels->setStyleSheet(viewBtnStyle);
+    layout->addWidget(m_btnPanels);
+
     return bar;
 }
 
 QWidget* PixelEditorDialog::createToolBar()
 {
     QWidget *panel = new QWidget(this);
-    panel->setFixedWidth(96);
+    panel->setMinimumWidth(88);
     QGridLayout *layout = new QGridLayout(panel);
+    layout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     layout->setContentsMargins(2, 2, 2, 2);
     layout->setSpacing(4);
 
@@ -680,13 +817,15 @@ QWidget* PixelEditorDialog::createToolBar()
     // Spacer
     layout->addItem(new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 11, 0, 1, 2);
 
+    updateToolIcons();
+
     return panel;
 }
 
 QWidget* PixelEditorDialog::createPalettePanel()
 {
     QScrollArea *scrollPanel = new QScrollArea(this);
-    scrollPanel->setFixedWidth(310);
+    scrollPanel->setMinimumWidth(260);
     scrollPanel->setWidgetResizable(true);
     scrollPanel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollPanel->setStyleSheet(QStringLiteral("QScrollArea { background-color: transparent; border: none; }"));
@@ -1800,7 +1939,7 @@ void PixelEditorDialog::loadFrame(int index)
         m_meshControlsContainer->setEnabled(hasPoly);
     }
     if (m_btnToolPolygon) {
-        m_btnToolPolygon->setToolTip(hasPoly ? tr("CDT Polygon Mesh Editor (◆)") : tr("No polygon mesh on this frame"));
+        m_btnToolPolygon->setToolTip(hasPoly ? tr("CDT Polygon Mesh Editor (◆) [D]") : tr("CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]"));
     }
     updateMeshStatsUI();
 
@@ -3274,6 +3413,10 @@ void PixelEditorDialog::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         retranslateUi();
+    } else if (event->type() == QEvent::PaletteChange ||
+               event->type() == QEvent::ApplicationPaletteChange ||
+               event->type() == QEvent::ThemeChange) {
+        updateToolIcons();
     }
     QDialog::changeEvent(event);
 }
@@ -3295,6 +3438,7 @@ void PixelEditorDialog::keyPressEvent(QKeyEvent *event)
 void PixelEditorDialog::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
+    updateToolIcons();
     if (!m_firstShowFitDone) {
         m_firstShowFitDone = true;
         if (m_canvas && m_scrollArea && m_scrollArea->viewport()->width() > 50 && m_scrollArea->viewport()->height() > 50) {
@@ -3303,9 +3447,87 @@ void PixelEditorDialog::showEvent(QShowEvent *event)
     }
 }
 
+void PixelEditorDialog::closeEvent(QCloseEvent *event)
+{
+    saveLayoutState();
+    QDialog::closeEvent(event);
+}
+
+void PixelEditorDialog::resetDefaultLayout()
+{
+    if (!m_dockMainWindow) return;
+
+    if (m_dockTools) {
+        m_dockTools->setFloating(false);
+        m_dockMainWindow->addDockWidget(Qt::LeftDockWidgetArea, m_dockTools);
+        m_dockTools->setVisible(true);
+        m_dockTools->show();
+    }
+    if (m_dockOptions) {
+        m_dockOptions->setFloating(false);
+        m_dockMainWindow->addDockWidget(Qt::RightDockWidgetArea, m_dockOptions);
+        m_dockOptions->setVisible(true);
+        m_dockOptions->show();
+    }
+    if (m_dockTools && m_dockOptions) {
+        m_dockMainWindow->resizeDocks({m_dockTools}, {96}, Qt::Horizontal);
+        m_dockMainWindow->resizeDocks({m_dockOptions}, {320}, Qt::Horizontal);
+    }
+    saveLayoutState();
+}
+
+void PixelEditorDialog::saveLayoutState()
+{
+    QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+    settings.setValue(QStringLiteral("pixelEditor/geometry"), saveGeometry());
+    if (m_dockMainWindow) {
+        settings.setValue(QStringLiteral("pixelEditor/dockState"), m_dockMainWindow->saveState());
+    }
+}
+
+void PixelEditorDialog::updateToolIcons()
+{
+    const bool dark = isSystemDarkMode(this);
+
+    auto applyBtnIcon = [dark](QToolButton *btn, const QString &resPath, int iconSize = 22) {
+        if (!btn) return;
+        QIcon icon = createThemedToolIcon(resPath, dark);
+        if (!icon.isNull()) {
+            btn->setIcon(icon);
+            btn->setIconSize(QSize(iconSize, iconSize));
+            btn->setText(QString());
+        }
+    };
+
+    applyBtnIcon(m_btnPencil, QStringLiteral(":/drawer/icons/pencil.png"));
+    applyBtnIcon(m_btnEraser, QStringLiteral(":/drawer/icons/eraser.png"));
+    applyBtnIcon(m_btnBucket, QStringLiteral(":/drawer/icons/paint_bucket.png"));
+    applyBtnIcon(m_btnEyedropper, QStringLiteral(":/drawer/icons/pipette.png"));
+    applyBtnIcon(m_btnToolPolygon, QStringLiteral(":/drawer/icons/polygons.png"));
+    applyBtnIcon(m_btnSelectRect, QStringLiteral(":/drawer/icons/select_rectangular.png"));
+    applyBtnIcon(m_btnSelectColor, QStringLiteral(":/drawer/icons/magic_wand.png"));
+    applyBtnIcon(m_btnFlipH, QStringLiteral(":/drawer/icons/flip_horizontal.png"));
+    applyBtnIcon(m_btnFlipV, QStringLiteral(":/drawer/icons/flip_vertical.png"));
+    applyBtnIcon(m_btnRotate, QStringLiteral(":/drawer/icons/rotate_right.png"));
+    applyBtnIcon(m_btnClearSel, QStringLiteral(":/drawer/icons/delete_selection.png"));
+    applyBtnIcon(m_btnUndo, QStringLiteral(":/drawer/icons/undo.png"));
+    applyBtnIcon(m_btnRedo, QStringLiteral(":/drawer/icons/redo.png"));
+}
+
 void PixelEditorDialog::retranslateUi()
 {
     setWindowTitle(tr("Pixel Editor — BentoPack"));
+
+    if (m_dockTools) {
+        m_dockTools->setWindowTitle(tr("Tools"));
+    }
+    if (m_dockOptions) {
+        m_dockOptions->setWindowTitle(tr("Options & Layers"));
+    }
+    if (m_btnPanels) {
+        m_btnPanels->setText(tr("Panels ▾"));
+        m_btnPanels->setToolTip(tr("Show or hide side panels, or reset default layout"));
+    }
 
     if (m_prevFrameBtn) {
         m_prevFrameBtn->setText(QStringLiteral("◀"));
@@ -3347,7 +3569,7 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnSelectColor) m_btnSelectColor->setToolTip(tr("Magic Wand (Color Selection) [W]"));
     if (m_btnToolPolygon) {
         bool hasPoly = (m_canvas && m_canvas->hasPolygonMesh());
-        m_btnToolPolygon->setToolTip(hasPoly ? tr("CDT Polygon Mesh Editor (◆)") : tr("No polygon mesh on this frame"));
+        m_btnToolPolygon->setToolTip(hasPoly ? tr("CDT Polygon Mesh Editor (◆) [D]") : tr("Polygon & Smart CDT Mesh Editor [D]"));
     }
 
     if (m_btnFlipH) m_btnFlipH->setToolTip(tr("Flip Horizontal"));
