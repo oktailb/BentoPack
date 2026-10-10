@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,6 +41,9 @@ public:
                        const QList<QImage> &newFrames,
                        const QList<SpriteBox> &newBoxes,
                        const QMap<QString, SpriteAnimation> &newAnimations = QMap<QString, SpriteAnimation>(),
+                       const QList<SpriteLayer> &oldLayers = {},
+                       const QMap<int, QList<SpriteCel>> &oldFrameCels = {},
+                       const QMap<QString, SkinProfile> &oldSkinProfiles = {},
                        QUndoCommand *parent = nullptr);
 
     void undo() override;
@@ -57,6 +60,10 @@ private:
     QList<QImage>                  m_newFrames;
     QList<SpriteBox>                m_newBoxes;
     QMap<QString, SpriteAnimation>  m_newAnimations;
+
+    QList<SpriteLayer>              m_layersBackup;
+    QMap<int, QList<SpriteCel>>     m_frameCelsBackup;
+    QMap<QString, SkinProfile>      m_skinProfilesBackup;
 };
 
 #endif // FILTERCOMMANDS_H

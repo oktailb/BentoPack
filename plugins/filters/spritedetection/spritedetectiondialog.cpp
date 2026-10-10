@@ -196,7 +196,8 @@ QUndoCommand* SpriteDetectionDialog::createUndoCommand()
         m_document,
         tr("Sprite Detection"),
         m_initialAtlas, m_initialFrames, m_initialBoxes, m_initialAnimations,
-        m_previewAtlas, m_previewFrames, m_previewBoxes, m_initialAnimations
+        m_previewAtlas, m_previewFrames, m_previewBoxes, m_initialAnimations,
+        m_initialLayers, m_initialFrameCels, m_initialSkinProfiles
     );
 }
 

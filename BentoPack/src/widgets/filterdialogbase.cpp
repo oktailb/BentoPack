@@ -43,6 +43,13 @@ FilterDialogBase::FilterDialogBase(SpriteDocument *doc, QUndoStack *undoStack, Q
         m_initialFrames = m_document->polygonClippedFrames();
         m_initialBoxes = m_document->boxes();
         m_initialAnimations = m_document->animations();
+        m_initialLayers = m_document->layers();
+        for (int i = 0; i < m_document->frameCount(); ++i) {
+            if (m_document->hasFrameCels(i)) {
+                m_initialFrameCels[i] = m_document->frameCels(i);
+            }
+        }
+        m_initialSkinProfiles = m_document->skinProfiles();
     }
 
     setupBaseUI();
@@ -209,6 +216,15 @@ void FilterDialogBase::restoreInitialState()
 
     m_document->setAtlas(m_initialAtlas);
     m_document->setFrames(m_initialFrames, m_initialBoxes);
+    if (!m_initialLayers.isEmpty()) {
+        m_document->setLayers(m_initialLayers);
+        for (auto it = m_initialFrameCels.begin(); it != m_initialFrameCels.end(); ++it) {
+            m_document->setFrameCels(it.key(), it.value());
+        }
+    }
+    if (!m_initialSkinProfiles.isEmpty()) {
+        m_document->setSkinProfiles(m_initialSkinProfiles);
+    }
     m_document->setAnimations(m_initialAnimations);
     m_previewApplied = false;
 

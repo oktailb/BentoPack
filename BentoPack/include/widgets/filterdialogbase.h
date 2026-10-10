@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,6 +105,13 @@ protected:
     QList<QImage>                  m_initialFrames;
     QList<SpriteBox>                m_initialBoxes;
     QMap<QString, SpriteAnimation>  m_initialAnimations;
+    QList<SpriteLayer>              m_initialLayers;
+    QMap<int, QList<SpriteCel>>     m_initialFrameCels;
+    QMap<QString, SkinProfile>      m_initialSkinProfiles;
+
+    const QList<SpriteLayer>& initialLayers() const { return m_initialLayers; }
+    const QMap<int, QList<SpriteCel>>& initialFrameCels() const { return m_initialFrameCels; }
+    const QMap<QString, SkinProfile>& initialSkinProfiles() const { return m_initialSkinProfiles; }
 
     // Preview state flag
     bool                            m_previewApplied = false;

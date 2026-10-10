@@ -269,8 +269,19 @@ void SpriteDocument::setFrames(const QList<QImage> &frames, const QList<SpriteBo
             m_selectedFrameIndices.append(i);
         }
     }
+    const bool hadLayers = !m_layers.isEmpty() || !m_frameCels.isEmpty();
+    const bool hadSkins = !m_skinProfiles.isEmpty();
+    m_frameCels.clear();
+    m_layers.clear();
+    m_skinProfiles.clear();
     recalculateMaxFrameDimensions();
     emit framesChanged();
+    if (hadLayers) {
+        emit layersChanged();
+    }
+    if (hadSkins) {
+        emit skinProfilesChanged();
+    }
 }
 
 void SpriteDocument::addFrame(const QImage &image, const SpriteBox &box)

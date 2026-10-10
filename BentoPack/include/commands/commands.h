@@ -262,6 +262,9 @@ public:
     RemoveBackgroundCommand(SpriteDocument *doc,
                             const QImage &oldAtlas, const QList<QImage> &oldFrames, const QList<SpriteBox> &oldBoxes,
                             const QImage &newAtlas, const QList<QImage> &newFrames, const QList<SpriteBox> &newBoxes,
+                            const QList<SpriteLayer> &oldLayers = {},
+                            const QMap<int, QList<SpriteCel>> &oldFrameCels = {},
+                            const QMap<QString, SkinProfile> &oldSkinProfiles = {},
                             QUndoCommand *parent = nullptr);
 
     RemoveBackgroundCommand(SpriteDocument *doc,
@@ -280,6 +283,9 @@ private:
     QList<QImage>                  m_newFrames;
     QList<SpriteBox>                m_newBoxes;
     QMap<QString, SpriteAnimation>  m_animationsBackup;
+    QList<SpriteLayer>              m_layersBackup;
+    QMap<int, QList<SpriteCel>>     m_frameCelsBackup;
+    QMap<QString, SkinProfile>      m_skinProfilesBackup;
 };
 
 /**

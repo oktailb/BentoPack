@@ -595,7 +595,10 @@ QUndoCommand* AtlasPackingDialog::createUndoCommand()
                                   m_previewAtlas,
                                   m_previewFrames,
                                   m_previewBoxes,
-                                  m_previewAnimations);
+                                  m_previewAnimations,
+                                  m_initialLayers,
+                                  m_initialFrameCels,
+                                  m_initialSkinProfiles);
 }
 
 void AtlasPackingDialog::resetDefaults()

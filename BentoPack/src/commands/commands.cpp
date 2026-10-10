@@ -396,6 +396,9 @@ void AddSliceCommand::undo()
 RemoveBackgroundCommand::RemoveBackgroundCommand(SpriteDocument *doc,
                                                  const QImage &oldAtlas, const QList<QImage> &oldFrames, const QList<SpriteBox> &oldBoxes,
                                                  const QImage &newAtlas, const QList<QImage> &newFrames, const QList<SpriteBox> &newBoxes,
+                                                 const QList<SpriteLayer> &oldLayers,
+                                                 const QMap<int, QList<SpriteCel>> &oldFrameCels,
+                                                 const QMap<QString, SkinProfile> &oldSkinProfiles,
                                                  QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_doc(doc)
@@ -405,10 +408,26 @@ RemoveBackgroundCommand::RemoveBackgroundCommand(SpriteDocument *doc,
     , m_newAtlas(newAtlas)
     , m_newFrames(newFrames)
     , m_newBoxes(newBoxes)
+    , m_layersBackup(oldLayers)
+    , m_frameCelsBackup(oldFrameCels)
+    , m_skinProfilesBackup(oldSkinProfiles)
 {
     setText(QObject::tr("Remove Background"));
     if (m_doc) {
         m_animationsBackup = m_doc->animations();
+        if (m_layersBackup.isEmpty() && m_doc->hasLayers()) {
+            m_layersBackup = m_doc->layers();
+        }
+        if (m_frameCelsBackup.isEmpty()) {
+            for (int i = 0; i < m_doc->frameCount(); ++i) {
+                if (m_doc->hasFrameCels(i)) {
+                    m_frameCelsBackup[i] = m_doc->frameCels(i);
+                }
+            }
+        }
+        if (m_skinProfilesBackup.isEmpty() && m_doc->hasSkinProfiles()) {
+            m_skinProfilesBackup = m_doc->skinProfiles();
+        }
     }
 }
 
@@ -419,7 +438,11 @@ RemoveBackgroundCommand::RemoveBackgroundCommand(SpriteDocument *doc,
                               doc ? doc->atlas() : QImage(),
                               doc ? doc->frames() : QList<QImage>(),
                               doc ? doc->boxes() : QList<SpriteBox>(),
-                              newAtlas, newFrames, newBoxes, parent)
+                              newAtlas, newFrames, newBoxes,
+                              doc ? doc->layers() : QList<SpriteLayer>(),
+                              {},
+                              doc ? doc->skinProfiles() : QMap<QString, SkinProfile>(),
+                              parent)
 {
 }
 
@@ -435,6 +458,15 @@ void RemoveBackgroundCommand::undo()
     if (!m_doc) return;
     m_doc->setAtlas(m_oldAtlas);
     m_doc->setFrames(m_oldFrames, m_oldBoxes);
+    if (!m_layersBackup.isEmpty()) {
+        m_doc->setLayers(m_layersBackup);
+        for (auto it = m_frameCelsBackup.begin(); it != m_frameCelsBackup.end(); ++it) {
+            m_doc->setFrameCels(it.key(), it.value());
+        }
+    }
+    if (!m_skinProfilesBackup.isEmpty()) {
+        m_doc->setSkinProfiles(m_skinProfilesBackup);
+    }
     m_doc->setAnimations(m_animationsBackup);
 }
 

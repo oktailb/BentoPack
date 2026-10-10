@@ -289,7 +289,8 @@ QUndoCommand* BackgroundRemovalDialog::createUndoCommand()
     return new RemoveBackgroundCommand(
         m_document,
         m_initialAtlas, m_initialFrames, m_initialBoxes,
-        m_previewAtlas, m_previewFrames, m_previewBoxes
+        m_previewAtlas, m_previewFrames, m_previewBoxes,
+        m_initialLayers, m_initialFrameCels, m_initialSkinProfiles
     );
 }
 
