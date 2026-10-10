@@ -287,6 +287,11 @@ public:
     void removeLayer(int layerIndex);
     SpriteLayer layer(int layerIndex) const;
     void setLayerVisible(int layerIndex, bool visible);
+    void setLayerLocked(int layerIndex, bool locked);
+    void setLayerOpacity(int layerIndex, quint8 opacity);
+    void setLayerBlendMode(int layerIndex, QPainter::CompositionMode blendMode);
+    void setLayerName(int layerIndex, const QString &name);
+    void moveLayer(int fromIndex, int toIndex);
     int findLayerIndexById(const QString &layerId) const;
 
     // Cels (M17)

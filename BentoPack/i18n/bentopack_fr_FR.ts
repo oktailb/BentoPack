@@ -1210,6 +1210,10 @@ La suppression stricte efface le pixel.</translation>
         <translation>VRAM GPU : %1 Mo (%2, -%3% matériel) | Fichier : %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Dimensions : %1 x %2 px (Atlas actuel)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>Timing</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">Calques</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">Calque %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

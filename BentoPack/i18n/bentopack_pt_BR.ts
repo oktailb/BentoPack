@@ -1214,6 +1214,10 @@ A remoção estrita limpa o pixel.</translation>
         <translation>VRAM GPU: %1 MB (%2, -%3% hardware) | Arquivo: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Dimensões: %1 x %2 px (Atlas atual)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Clique em um nó para ver os detalhes.</translation>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>Tempo</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">Camadas</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">Camada %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

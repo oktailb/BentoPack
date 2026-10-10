@@ -1210,6 +1210,10 @@ La rimozione rigida cancella il pixel.</translation>
         <translation>GPU VRAM: %1 MB (%2, -%3% hardware) | File: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Dimensioni: %1 x %2 px (Atlas corrente)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>Temporizzazione</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">Livelli</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">Livello %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

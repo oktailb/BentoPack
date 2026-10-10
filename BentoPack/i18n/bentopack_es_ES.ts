@@ -1210,6 +1210,10 @@ La eliminación estricta borra el píxel.</translation>
         <translation>VRAM GPU: %1 MB (%2, -%3% hardware) | Archivo: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Dimensiones: %1 x %2 px (Atlas Actual)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Haga clic en un nodo para ver sus detalles.</translation>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>Intervalo</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">Capas</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">Capa %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

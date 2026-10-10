@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QPainter>
 #include "widgets/pixelcanvas.h"
+#include "model/spritedocument.h"
 #include "bentopackwidgets_export.h"
 
 /**
@@ -44,6 +45,12 @@ public:
     ~LayerStackWidget() override = default;
 
     void setLayers(const QList<CanvasLayer> &layers, int activeIndex = 0);
+    void setSpriteLayers(const QList<SpriteLayer> &layers, int activeIndex = -1);
+    QList<SpriteLayer> spriteLayers() const;
+
+    void setDocumentMode(bool documentMode);
+    bool isDocumentMode() const { return m_documentMode; }
+
     int activeIndex() const { return m_activeIndex; }
     void setActiveIndex(int index);
     void setActiveLayerIndex(int index) { setActiveIndex(index); }
@@ -105,6 +112,7 @@ private:
     QList<CanvasLayer>  m_layers;
     int                 m_activeIndex = 0;
     bool                m_updating = false;
+    bool                m_documentMode = false;
 
     // Header Controls (Active Layer Properties)
     QComboBox*          m_blendCombo = nullptr;

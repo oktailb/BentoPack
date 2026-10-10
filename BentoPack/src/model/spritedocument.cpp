@@ -1053,6 +1053,82 @@ void SpriteDocument::setLayerVisible(int layerIndex, bool visible)
     }
 }
 
+void SpriteDocument::setLayerLocked(int layerIndex, bool locked)
+{
+    if (layerIndex >= 0 && layerIndex < m_layers.size()) {
+        if (m_layers[layerIndex].locked != locked) {
+            m_layers[layerIndex].locked = locked;
+            emit layersChanged();
+        }
+    }
+}
+
+void SpriteDocument::setLayerOpacity(int layerIndex, quint8 opacity)
+{
+    if (layerIndex >= 0 && layerIndex < m_layers.size()) {
+        if (m_layers[layerIndex].opacity != opacity) {
+            m_layers[layerIndex].opacity = opacity;
+            emit layersChanged();
+        }
+    }
+}
+
+void SpriteDocument::setLayerBlendMode(int layerIndex, QPainter::CompositionMode blendMode)
+{
+    if (layerIndex >= 0 && layerIndex < m_layers.size()) {
+        if (m_layers[layerIndex].blendMode != blendMode) {
+            m_layers[layerIndex].blendMode = blendMode;
+            emit layersChanged();
+        }
+    }
+}
+
+void SpriteDocument::setLayerName(int layerIndex, const QString &name)
+{
+    if (layerIndex >= 0 && layerIndex < m_layers.size()) {
+        if (m_layers[layerIndex].name != name) {
+            m_layers[layerIndex].name = name;
+            emit layersChanged();
+        }
+    }
+}
+
+void SpriteDocument::moveLayer(int fromIndex, int toIndex)
+{
+    if (fromIndex < 0 || fromIndex >= m_layers.size() || toIndex < 0 || toIndex >= m_layers.size() || fromIndex == toIndex) {
+        return;
+    }
+    m_layers.move(fromIndex, toIndex);
+    for (int i = 0; i < m_layers.size(); ++i) {
+        m_layers[i].zOrder = i;
+    }
+
+    for (auto it = m_frameCels.begin(); it != m_frameCels.end(); ++it) {
+        QList<SpriteCel> &cels = it.value();
+        for (SpriteCel &cel : cels) {
+            if (!cel.layerId.isEmpty()) {
+                int newIdx = findLayerIndexById(cel.layerId);
+                if (newIdx >= 0) {
+                    cel.layerIndex = newIdx;
+                    continue;
+                }
+            }
+            if (cel.layerIndex == fromIndex) {
+                cel.layerIndex = toIndex;
+            } else if (fromIndex < toIndex) {
+                if (cel.layerIndex > fromIndex && cel.layerIndex <= toIndex) {
+                    cel.layerIndex--;
+                }
+            } else {
+                if (cel.layerIndex >= toIndex && cel.layerIndex < fromIndex) {
+                    cel.layerIndex++;
+                }
+            }
+        }
+    }
+    emit layersChanged();
+}
+
 int SpriteDocument::findLayerIndexById(const QString &layerId) const
 {
     for (int i = 0; i < m_layers.size(); ++i) {

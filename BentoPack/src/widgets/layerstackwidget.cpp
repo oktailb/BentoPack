@@ -172,6 +172,53 @@ void LayerStackWidget::setLayers(const QList<CanvasLayer> &layers, int activeInd
     updateHeaderControls();
 }
 
+void LayerStackWidget::setSpriteLayers(const QList<SpriteLayer> &layers, int activeIndex)
+{
+    QList<CanvasLayer> canvasLayers;
+    canvasLayers.reserve(layers.size());
+    for (const auto &sl : layers) {
+        CanvasLayer cl;
+        cl.id = sl.id;
+        cl.name = sl.name;
+        cl.visible = sl.visible;
+        cl.locked = sl.locked;
+        cl.opacity = sl.opacity;
+        cl.zOrder = sl.zOrder;
+        cl.blendMode = sl.blendMode;
+        canvasLayers.append(cl);
+    }
+    int targetIdx = (activeIndex < 0) ? m_activeIndex : activeIndex;
+    setLayers(canvasLayers, targetIdx);
+}
+
+QList<SpriteLayer> LayerStackWidget::spriteLayers() const
+{
+    QList<SpriteLayer> result;
+    result.reserve(m_layers.size());
+    for (const auto &cl : m_layers) {
+        SpriteLayer sl;
+        sl.id = cl.id;
+        sl.name = cl.name;
+        sl.visible = cl.visible;
+        sl.locked = cl.locked;
+        sl.opacity = cl.opacity;
+        sl.zOrder = cl.zOrder;
+        sl.blendMode = cl.blendMode;
+        result.append(sl);
+    }
+    return result;
+}
+
+void LayerStackWidget::setDocumentMode(bool documentMode)
+{
+    m_documentMode = documentMode;
+    if (m_checkSampleAll) m_checkSampleAll->setVisible(!documentMode);
+    if (m_checkOnionCurrentOnly) m_checkOnionCurrentOnly->setVisible(!documentMode);
+    if (m_btnMergeDown) m_btnMergeDown->setVisible(!documentMode);
+    if (m_btnFlatten) m_btnFlatten->setVisible(!documentMode);
+    if (m_btnDuplicate) m_btnDuplicate->setVisible(!documentMode);
+}
+
 void LayerStackWidget::setActiveIndex(int index)
 {
     if (m_layers.isEmpty()) {

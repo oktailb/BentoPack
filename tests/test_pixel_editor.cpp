@@ -17,6 +17,8 @@
 #include "widgets/filterdialogbase.h"
 #include "widgets/layerstackwidget.h"
 #include "asepriteextractor.h"
+#include "controller/projectcontroller.h"
+#include "image/spritedetector.h"
 #include <QMenu>
 #include <QTimer>
 
@@ -101,6 +103,9 @@ private slots:
 
     // 13. Side Panels Docking, Resizing & Layout Persistence
     void testPixelEditorDockablePanelsAndLayoutPersistence();
+
+    // 14. Aseprite Background Removal, Sprite Detection and Pixel Editor Synchronization
+    void testAsepriteBackgroundRemovalSpriteDetectionAndPixelEditor();
 };
 
 void TestPixelEditor::initTestCase()
@@ -2876,6 +2881,95 @@ void TestPixelEditor::testPixelEditorDockablePanelsAndLayoutPersistence()
     // Restoring state should return true
     bool restored = dockWin->restoreState(savedDockState);
     QVERIFY(restored);
+}
+
+void TestPixelEditor::testAsepriteBackgroundRemovalSpriteDetectionAndPixelEditor()
+{
+    QString samplePath = QDir(QCoreApplication::applicationDirPath()).filePath(QStringLiteral("../sample/DemonKinBasicAtk001.aseprite"));
+    if (!QFile::exists(samplePath)) {
+        samplePath = QStringLiteral("sample/DemonKinBasicAtk001.aseprite");
+    }
+    if (!QFile::exists(samplePath)) {
+        samplePath = QStringLiteral("../sample/DemonKinBasicAtk001.aseprite");
+    }
+    if (!QFile::exists(samplePath)) {
+        QSKIP("sample/DemonKinBasicAtk001.aseprite not found");
+    }
+
+    AsepriteExtractor extractor;
+    SpriteDocument doc;
+    ExtractorError err;
+    bool ok = extractor.read(samplePath, doc, &err);
+    QVERIFY2(ok, qPrintable(err.toString()));
+
+    QCOMPARE(doc.frameCount(), 12);
+    QCOMPARE(doc.layerCount(), 5);
+    QVERIFY(doc.hasLayers());
+    QVERIFY(doc.hasFrameCels(0));
+    QCOMPARE(doc.frame(0).size(), QSize(128, 128));
+
+    // 1. Direct editing upon opening has correct 128x128 dimensions and 5 layers
+    {
+        PixelEditorDialog directDlg(&doc, nullptr, 0);
+        QCOMPARE(directDlg.canvas()->canvasSize(), QSize(128, 128));
+        QCOMPARE(directDlg.canvas()->layerCount(), 5);
+    }
+
+    // 2. Perform background removal pipeline twice (for checkerboard background)
+    QUndoStack undoStack;
+
+    // Pass 1: detect and remove dominant background color 1
+    QImage cleaned1 = ProjectController::removeBackgroundFromImage(doc.atlas(), 10);
+    QList<QImage> frames1;
+    QList<SpriteBox> boxes1;
+    SpriteDetectionOptions opts;
+    opts.alphaThreshold = 10;
+    opts.smartCrop = true;
+    SpriteDetector::detectToImages(cleaned1, frames1, boxes1, opts);
+    undoStack.push(new RemoveBackgroundCommand(&doc, doc.atlas(), doc.frames(), doc.boxes(), cleaned1, frames1, boxes1, doc.layers()));
+
+    // Pass 2: detect and remove remaining checkerboard color 2
+    QImage cleaned2 = ProjectController::removeBackgroundFromImage(doc.atlas(), 10);
+    QList<QImage> frames2;
+    QList<SpriteBox> boxes2;
+    SpriteDetector::detectToImages(cleaned2, frames2, boxes2, opts);
+    undoStack.push(new RemoveBackgroundCommand(&doc, doc.atlas(), doc.frames(), doc.boxes(), cleaned2, frames2, boxes2, doc.layers()));
+
+    QVERIFY(doc.frameCount() > 0);
+    QVERIFY(!doc.hasLayers());
+    QVERIFY(!doc.hasFrameCels(0));
+
+    // The detected sprite size must be tight (< 128x128)
+    QSize detectedSize = doc.frame(0).size();
+    QVERIFY(detectedSize.width() < 128);
+    QVERIFY(detectedSize.height() < 128);
+
+    // 3. Open in PixelEditorDialog after background removal & sprite detection
+    PixelEditorDialog dlg(&doc, &undoStack, 0);
+    QVERIFY(dlg.canvas() != nullptr);
+
+    // The canvas size must strictly match the detected sprite frame, NOT the old 128x128
+    QCOMPARE(dlg.canvas()->canvasSize(), detectedSize);
+    QCOMPARE(dlg.canvas()->image().size(), detectedSize);
+
+    // Canvas composite should match doc.frame(0)
+    QCOMPARE(dlg.canvas()->image(), doc.frame(0).convertToFormat(QImage::Format_ARGB32));
+
+    // 4. Test Undo: undos back to the initial 128x128 multi-layer Aseprite state
+    undoStack.undo(); // undo pass 2
+    undoStack.undo(); // undo pass 1
+    QCOMPARE(doc.frameCount(), 12);
+    QCOMPARE(doc.layerCount(), 5);
+    QVERIFY(doc.hasLayers());
+    QVERIFY(doc.hasFrameCels(0));
+    QCOMPARE(doc.frame(0).size(), QSize(128, 128));
+
+    // Re-verify PixelEditor after undo
+    {
+        PixelEditorDialog restoredDlg(&doc, nullptr, 0);
+        QCOMPARE(restoredDlg.canvas()->canvasSize(), QSize(128, 128));
+        QCOMPARE(restoredDlg.canvas()->layerCount(), 5);
+    }
 }
 
 int main(int argc, char *argv[])

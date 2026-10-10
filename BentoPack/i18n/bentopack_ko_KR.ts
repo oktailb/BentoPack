@@ -1210,6 +1210,10 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: %1 MB (%2, 하드웨어 -%3%) | 파일: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>크기: %1 x %2 px (현재 아틀라스)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>타이밍</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">레이어</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">레이어 %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

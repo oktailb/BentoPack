@@ -1210,6 +1210,10 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: %1 MB (%2, ハードウェア節約 -%3%) | ファイル: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>寸法：%1 x %2 px (現在のアトラス)</translation>
     </message>
@@ -1847,6 +1851,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>フレーム間隔：</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">レイヤー</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">レイヤー %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

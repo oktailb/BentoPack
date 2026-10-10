@@ -1210,6 +1210,10 @@ Strict removal clears the pixel.</translation>
         <translation>GPU VRAM: %1 MB (%2, -%3% phần cứng) | Tệp: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Kích thước: %1 x %2 px (Atlas hiện tại)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Bấm vào một nút để xem chi tiết.</translation>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>Thời lượng</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">Các lớp</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">Lớp %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

@@ -1210,6 +1210,10 @@ Strict removal clears the pixel.</source>
         <translation>GPU 显存：%1 MB (%2, 硬件节省 -%3%) | 文件：%4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>尺寸：%1 x %2 像素 (当前图集)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>时间间隔：</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">图层</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">图层 %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

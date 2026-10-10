@@ -1210,6 +1210,10 @@ Strict removal clears the pixel.</source>
         <translation>VRAM GPU: %1 MB (%2, -%3% sprzętowo) | Plik: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Wymiary: %1 x %2 px (Bieżący atlas)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Kliknij węzeł, aby wyświetlić szczegóły.</translation>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>Czas</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">Warstwy</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">Warstwa %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

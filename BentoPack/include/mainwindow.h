@@ -34,6 +34,7 @@
 #include "controller/animationcontroller.h"
 #include "controller/atlasviewcontroller.h"
 #include "widgets/timelinefilmstripwidget.h"
+#include "widgets/layerstackwidget.h"
 #include "bentopackwidgets_export.h"
 
 QT_BEGIN_NAMESPACE
@@ -43,6 +44,7 @@ class MainWindow;
 QT_END_NAMESPACE
 
 class GitHistoryDock;
+class QDockWidget;
 
 /**
  * @brief Custom item delegate for drawing visual feedback in the frame list view.
@@ -119,6 +121,8 @@ public:
     ProjectController* projectController() const { return m_projectController.get(); }
     AtlasViewController* atlasController() const { return m_atlasController.get(); }
     AnimationController* animationController() const { return m_animationController.get(); }
+    QDockWidget* layersDock() const { return m_layersDock; }
+    LayerStackWidget* layerStackWidget() const { return m_layerStackWidget; }
 
 protected:
     void closeEvent(QCloseEvent *e) override;
@@ -256,6 +260,8 @@ private:
     QSlider *zoomSlider = nullptr;
     QProgressBar *progressBar = nullptr;
     TimelineFilmstripWidget *m_timelineWidget = nullptr;
+    QDockWidget *m_layersDock = nullptr;
+    LayerStackWidget *m_layerStackWidget = nullptr;
     bool m_isSyncingSelection = false;
     bool m_isSyncingPivotUi = false;
 };

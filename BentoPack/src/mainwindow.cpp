@@ -39,6 +39,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QVersionNumber>
+#include <QUuid>
+#include <QDockWidget>
 #include "generated/version.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -82,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // Auto-save dock layout whenever panels are moved, closed, docked or floated
-    const auto docks = {ui->dockPreview, ui->dockAnimations, ui->dockTimeline, ui->dockAtlasFrames, qobject_cast<QDockWidget*>(m_gitDock)};
+    const auto docks = {ui->dockPreview, ui->dockAnimations, ui->dockTimeline, ui->dockAtlasFrames, qobject_cast<QDockWidget*>(m_gitDock), m_layersDock};
     for (QDockWidget *dock : docks) {
         if (!dock) continue;
         connect(dock, &QDockWidget::visibilityChanged, this, [this](bool) {
@@ -129,6 +131,9 @@ void MainWindow::setupControllers()
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+        if (m_layerStackWidget) {
+            m_layerStackWidget->setSpriteLayers(m_document->layers());
+        }
     });
 
     connect(m_projectController.get(), &ProjectController::projectLoaded, this, [this](const QString &/*sspPath*/) {
@@ -136,6 +141,9 @@ void MainWindow::setupControllers()
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+        if (m_layerStackWidget) {
+            m_layerStackWidget->setSpriteLayers(m_document->layers());
+        }
     });
 
     connect(m_document, &SpriteDocument::documentReset, this, [this]() {
@@ -143,6 +151,9 @@ void MainWindow::setupControllers()
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+        if (m_layerStackWidget) {
+            m_layerStackWidget->setSpriteLayers(m_document->layers());
+        }
     });
 
     connect(m_projectController.get(), &ProjectController::projectSaved, this, [this](const QString &/*sspPath*/) {
@@ -179,6 +190,9 @@ void MainWindow::setupControllers()
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
         if (m_timelineWidget) m_timelineWidget->refresh();
+        if (m_layerStackWidget) {
+            m_layerStackWidget->setSpriteLayers(m_document->layers());
+        }
     });
 
     connect(m_projectController.get(), &ProjectController::processingStarted, this, [this]() {
@@ -309,6 +323,12 @@ void MainWindow::setupControllers()
             }
         }
     });
+
+    connect(m_document, &SpriteDocument::layersChanged, this, [this]() {
+        if (m_layerStackWidget) {
+            m_layerStackWidget->setSpriteLayers(m_document->layers(), m_layerStackWidget->activeIndex());
+        }
+    });
 }
 
 void MainWindow::setupErgonomicLayout()
@@ -317,6 +337,133 @@ void MainWindow::setupErgonomicLayout()
     m_timelineWidget = new TimelineFilmstripWidget(this);
     m_timelineWidget->setDocument(m_document);
     ui->timelineLayout->addWidget(m_timelineWidget);
+
+    // Create Layers Dock and embed LayerStackWidget in document mode
+    m_layersDock = new QDockWidget(tr("Layers"), this);
+    m_layersDock->setObjectName(QStringLiteral("dockLayers"));
+    m_layerStackWidget = new LayerStackWidget(m_layersDock);
+    m_layerStackWidget->setDocumentMode(true);
+    m_layersDock->setWidget(m_layerStackWidget);
+    addDockWidget(Qt::BottomDockWidgetArea, m_layersDock);
+
+    connect(m_layerStackWidget, &LayerStackWidget::layerVisibilityChanged, this, [this](int index, bool visible) {
+        if (m_document) {
+            m_document->setLayerVisible(index, visible);
+            m_document->recompositeAllFrames();
+            m_document->recompositeAtlas();
+            if (m_atlasController) {
+                m_atlasController->setAtlasImage(m_document->atlas());
+            }
+            if (frameModel) frameModel->clearThumbnailCache();
+            populateFrameList(m_document->frames(), m_document->boxes());
+            if (m_timelineWidget) m_timelineWidget->refresh();
+        }
+    });
+
+    connect(m_layerStackWidget, &LayerStackWidget::layerLockChanged, this, [this](int index, bool locked) {
+        if (m_document) {
+            m_document->setLayerLocked(index, locked);
+        }
+    });
+
+    connect(m_layerStackWidget, &LayerStackWidget::layerOpacityChanged, this, [this](int index, quint8 opacity) {
+        if (m_document) {
+            m_document->setLayerOpacity(index, opacity);
+            m_document->recompositeAllFrames();
+            m_document->recompositeAtlas();
+            if (m_atlasController) {
+                m_atlasController->setAtlasImage(m_document->atlas());
+            }
+            if (frameModel) frameModel->clearThumbnailCache();
+            populateFrameList(m_document->frames(), m_document->boxes());
+            if (m_timelineWidget) m_timelineWidget->refresh();
+        }
+    });
+
+    connect(m_layerStackWidget, &LayerStackWidget::layerBlendModeChanged, this, [this](int index, QPainter::CompositionMode mode) {
+        if (m_document) {
+            m_document->setLayerBlendMode(index, mode);
+            m_document->recompositeAllFrames();
+            m_document->recompositeAtlas();
+            if (m_atlasController) {
+                m_atlasController->setAtlasImage(m_document->atlas());
+            }
+            if (frameModel) frameModel->clearThumbnailCache();
+            populateFrameList(m_document->frames(), m_document->boxes());
+            if (m_timelineWidget) m_timelineWidget->refresh();
+        }
+    });
+
+    connect(m_layerStackWidget, &LayerStackWidget::layerNameChanged, this, [this](int index, const QString &name) {
+        if (m_document) {
+            m_document->setLayerName(index, name);
+        }
+    });
+
+    connect(m_layerStackWidget, &LayerStackWidget::addLayerRequested, this, [this]() {
+        if (m_document) {
+            SpriteLayer newLyr;
+            newLyr.id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+            newLyr.name = tr("Layer %1").arg(m_document->layerCount() + 1);
+            newLyr.visible = true;
+            newLyr.opacity = 255;
+            newLyr.zOrder = m_document->layerCount();
+            m_document->addLayer(newLyr);
+        }
+    });
+
+    connect(m_layerStackWidget, &LayerStackWidget::removeLayerRequested, this, [this]() {
+        if (m_document && m_layerStackWidget) {
+            int active = m_layerStackWidget->activeIndex();
+            if (active >= 0 && active < m_document->layerCount() && m_document->layerCount() > 1) {
+                m_document->removeLayer(active);
+                m_document->recompositeAllFrames();
+                m_document->recompositeAtlas();
+                if (m_atlasController) {
+                    m_atlasController->setAtlasImage(m_document->atlas());
+                }
+                if (frameModel) frameModel->clearThumbnailCache();
+                populateFrameList(m_document->frames(), m_document->boxes());
+                if (m_timelineWidget) m_timelineWidget->refresh();
+            }
+        }
+    });
+
+    connect(m_layerStackWidget, &LayerStackWidget::moveLayerUpRequested, this, [this]() {
+        if (m_document && m_layerStackWidget) {
+            int active = m_layerStackWidget->activeIndex();
+            if (active >= 0 && active < m_document->layerCount() - 1) {
+                m_document->moveLayer(active, active + 1);
+                m_document->recompositeAllFrames();
+                m_document->recompositeAtlas();
+                if (m_atlasController) {
+                    m_atlasController->setAtlasImage(m_document->atlas());
+                }
+                if (frameModel) frameModel->clearThumbnailCache();
+                populateFrameList(m_document->frames(), m_document->boxes());
+                if (m_timelineWidget) m_timelineWidget->refresh();
+                m_layerStackWidget->setActiveIndex(active + 1);
+            }
+        }
+    });
+
+    connect(m_layerStackWidget, &LayerStackWidget::moveLayerDownRequested, this, [this]() {
+        if (m_document && m_layerStackWidget) {
+            int active = m_layerStackWidget->activeIndex();
+            if (active > 0 && active < m_document->layerCount()) {
+                m_document->moveLayer(active, active - 1);
+                m_document->recompositeAllFrames();
+                m_document->recompositeAtlas();
+                if (m_atlasController) {
+                    m_atlasController->setAtlasImage(m_document->atlas());
+                }
+                if (frameModel) frameModel->clearThumbnailCache();
+                populateFrameList(m_document->frames(), m_document->boxes());
+                if (m_timelineWidget) m_timelineWidget->refresh();
+                m_layerStackWidget->setActiveIndex(active - 1);
+            }
+        }
+    });
 
     // Attach timeline, scrubber, and loop mode to AnimationController
     if (m_animationController) {
@@ -589,6 +736,7 @@ void MainWindow::resetDefaultLayout()
     if (ui->dockAnimations) ui->dockAnimations->setVisible(true);
     if (ui->dockTimeline) ui->dockTimeline->setVisible(true);
     if (ui->dockAtlasFrames) ui->dockAtlasFrames->setVisible(true);
+    if (m_layersDock) m_layersDock->setVisible(true);
     if (m_gitDock) m_gitDock->setVisible(true);
     if (ui->mainToolBar) ui->mainToolBar->setVisible(true);
 
@@ -605,6 +753,10 @@ void MainWindow::resetDefaultLayout()
     addDockWidget(Qt::BottomDockWidgetArea, ui->dockTimeline);
     addDockWidget(Qt::BottomDockWidgetArea, ui->dockAtlasFrames);
     tabifyDockWidget(ui->dockTimeline, ui->dockAtlasFrames);
+    if (m_layersDock) {
+        addDockWidget(Qt::BottomDockWidgetArea, m_layersDock);
+        tabifyDockWidget(ui->dockTimeline, m_layersDock);
+    }
     ui->dockTimeline->raise();
 
     resizeDocks({ui->dockPreview, ui->dockAnimations}, {280, 320}, Qt::Vertical);
@@ -831,7 +983,11 @@ void MainWindow::openPixelEditorDialog(int index)
         target = sel.isEmpty() ? 0 : sel.first();
     }
     PixelEditorDialog dlg(m_document, m_undoStack, target, this);
-    dlg.exec();
+    if (dlg.exec() == QDialog::Accepted) {
+        if (m_layerStackWidget) {
+            m_layerStackWidget->setSpriteLayers(m_document->layers(), m_layerStackWidget->activeIndex());
+        }
+    }
 }
 
 void MainWindow::changeEvent(QEvent *event)
@@ -850,6 +1006,9 @@ void MainWindow::setupViewMenuActions()
     ui->menuAffichage->addAction(ui->dockAnimations->toggleViewAction());
     ui->menuAffichage->addAction(ui->dockTimeline->toggleViewAction());
     ui->menuAffichage->addAction(ui->dockAtlasFrames->toggleViewAction());
+    if (m_layersDock) {
+        ui->menuAffichage->addAction(m_layersDock->toggleViewAction());
+    }
     if (m_gitDock) {
         ui->menuAffichage->addAction(m_gitDock->toggleViewAction());
     }
@@ -880,6 +1039,13 @@ void MainWindow::retranslateUi()
     // Main Toolbar title
     if (ui->mainToolBar) {
         ui->mainToolBar->setWindowTitle(tr("KEY_TOOLBAR_MAIN"));
+    }
+
+    if (m_layersDock) {
+        m_layersDock->setWindowTitle(tr("Layers"));
+    }
+    if (m_layerStackWidget) {
+        m_layerStackWidget->retranslateUi();
     }
 
     // Animation list headers

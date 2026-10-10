@@ -506,6 +506,15 @@ void ExportDialog::updateStats()
         }
     };
 
+    QString layerInfo;
+    if (m_document && m_document->hasLayers()) {
+        int visibleCount = 0;
+        for (const auto &lyr : m_document->layers()) {
+            if (lyr.visible) visibleCount++;
+        }
+        layerInfo = tr(" | Layers: %1/%2 visible").arg(visibleCount).arg(m_document->layerCount());
+    }
+
     if (opts.packOptions.algorithm == AtlasPacker::KeepLayout) {
         if (!m_document->atlas().isNull()) {
             int w = m_document->atlas().width();
@@ -514,12 +523,12 @@ void ExportDialog::updateStats()
                 .arg(w)
                 .arg(h));
             ui->lblEfficiency->setText(tr("Packing Efficiency: Preserved as-is (WYSIWYG)"));
-            ui->lblFrames->setText(tr("Frames: %1 total").arg(m_document->frameCount()));
+            ui->lblFrames->setText(tr("Frames: %1 total").arg(m_document->frameCount()) + layerInfo);
             updateVramLabel(w, h);
         } else {
             ui->lblDimensions->setText(tr("Dimensions: No current atlas"));
             ui->lblEfficiency->setText(tr("Packing Efficiency: --"));
-            ui->lblFrames->setText(tr("Frames: %1 total").arg(m_document->frameCount()));
+            ui->lblFrames->setText(tr("Frames: %1 total").arg(m_document->frameCount()) + layerInfo);
             ui->lblVramSavings->setText(tr("GPU VRAM: --"));
         }
         return;
@@ -548,16 +557,16 @@ void ExportDialog::updateStats()
             ui->lblFrames->setText(tr("Frames: %1 total (%2 unique, %3 duplicates saved)")
                 .arg(m_document->frameCount())
                 .arg(res.uniqueFramesCount)
-                .arg(duplicates));
+                .arg(duplicates) + layerInfo);
         } else {
             ui->lblFrames->setText(tr("Frames: %1 total (all unique)")
-                .arg(m_document->frameCount()));
+                .arg(m_document->frameCount()) + layerInfo);
         }
         updateVramLabel(w, h);
     } else {
         ui->lblDimensions->setText(tr("Dimensions: Does not fit in maximum bounds!"));
         ui->lblEfficiency->setText(tr("Packing Efficiency: 0%"));
-        ui->lblFrames->setText(tr("Frames: %1").arg(m_document->frameCount()));
+        ui->lblFrames->setText(tr("Frames: %1").arg(m_document->frameCount()) + layerInfo);
         ui->lblVramSavings->setText(tr("GPU VRAM: --"));
     }
 }

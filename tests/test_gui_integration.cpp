@@ -10,6 +10,7 @@
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QDockWidget>
 
 #include "mainwindow.h"
 #include "widgets/exportdialog.h"
@@ -30,9 +31,11 @@ private slots:
     void testMainWindowTitleAndDirtyFlag();
     void testMainWindowDragAndDropMimeTypes();
     void testMainWindowPlaybackTriggers();
+    void testMainWindowLayersDockAndSynchronization();
 
     // ExportDialog Functional Tests
     void testExportDialogOptionsAndDefaults();
+    void testDocumentLayerVisibilityRecompositionAndExportStats();
 
     // BranchSelectionDialog Functional Tests
     void testBranchSelectionDialog();
@@ -306,6 +309,132 @@ void TestGuiIntegration::testBranchSelectionDialog()
     dlg.accept();
 
     QCOMPARE(dlg.selectedCommitHash(), QStringLiteral("commit_hash_beta_456"));
+}
+
+void TestGuiIntegration::testMainWindowLayersDockAndSynchronization()
+{
+    MainWindow mw;
+    mw.resize(1024, 768);
+
+    QVERIFY(mw.layersDock() != nullptr);
+    QCOMPARE(mw.layersDock()->objectName(), QStringLiteral("dockLayers"));
+    QVERIFY(mw.layerStackWidget() != nullptr);
+    QVERIFY(mw.layerStackWidget()->isDocumentMode());
+    QVERIFY(mw.layerStackWidget()->listWidget() != nullptr);
+    QVERIFY(mw.layersDock()->toggleViewAction() != nullptr);
+}
+
+void TestGuiIntegration::testDocumentLayerVisibilityRecompositionAndExportStats()
+{
+    SpriteDocument doc;
+
+    SpriteLayer lyrBg;
+    lyrBg.id = QStringLiteral("bg_layer");
+    lyrBg.name = QStringLiteral("Background");
+    lyrBg.visible = true;
+    lyrBg.zOrder = 0;
+
+    SpriteLayer lyrHero;
+    lyrHero.id = QStringLiteral("hero_layer");
+    lyrHero.name = QStringLiteral("Hero");
+    lyrHero.visible = true;
+    lyrHero.zOrder = 1;
+
+    doc.setLayers({lyrBg, lyrHero});
+    QCOMPARE(doc.layerCount(), 2);
+
+    // Frame 0: 32x32
+    QImage bgImg(32, 32, QImage::Format_ARGB32_Premultiplied);
+    bgImg.fill(QColor(255, 0, 0, 255)); // pure red background
+
+    QImage heroImg(32, 32, QImage::Format_ARGB32_Premultiplied);
+    heroImg.fill(Qt::transparent);
+    // Draw blue pixel at (16, 16) only
+    heroImg.setPixelColor(16, 16, QColor(0, 0, 255, 255));
+
+    SpriteBox box(QRect(0, 0, 32, 32));
+    doc.addFrame(QImage(32, 32, QImage::Format_ARGB32_Premultiplied), box);
+
+    SpriteCel celBg;
+    celBg.layerIndex = 0;
+    celBg.layerId = lyrBg.id;
+    celBg.image = bgImg;
+
+    SpriteCel celHero;
+    celHero.layerIndex = 1;
+    celHero.layerId = lyrHero.id;
+    celHero.image = heroImg;
+
+    doc.setFrameCels(0, {celBg, celHero});
+
+    // Initial recomposition
+    doc.recompositeAllFrames();
+    doc.recompositeAtlas();
+
+    // Check pixel at (0, 0) is red, and (16, 16) is blue
+    QImage comp1 = doc.frame(0);
+    QCOMPARE(comp1.pixelColor(0, 0), QColor(255, 0, 0, 255));
+    QCOMPARE(comp1.pixelColor(16, 16), QColor(0, 0, 255, 255));
+
+    // Verify ExportDialog stats shows 2/2 visible
+    // Verify ExportDialog stats shows 2/2 visible
+    {
+        ExportDialog exportDlg(&doc);
+        auto *comboFormat = exportDlg.findChild<QComboBox*>("comboFormat");
+        int godotIdx = comboFormat ? comboFormat->findData(QStringLiteral("godot_extractor")) : -1;
+        if (godotIdx >= 0) {
+            comboFormat->setCurrentIndex(godotIdx);
+        }
+        exportDlg.show();
+        QTest::qWait(100);
+        QLabel *lblFrames = exportDlg.findChild<QLabel*>("lblFrames");
+        QVERIFY(lblFrames != nullptr);
+        QVERIFY(lblFrames->text().contains(QStringLiteral("Layers: 2/2 visible")));
+    }
+
+    // Now hide background layer
+    doc.setLayerVisible(0, false);
+    QVERIFY(!doc.layer(0).visible);
+
+    doc.recompositeAllFrames();
+    doc.recompositeAtlas();
+
+    // Check pixel at (0, 0) is now completely transparent!
+    QImage comp2 = doc.frame(0);
+    QCOMPARE(comp2.pixelColor(0, 0).alpha(), 0);
+    QCOMPARE(comp2.pixelColor(16, 16), QColor(0, 0, 255, 255));
+
+    // Verify ExportDialog stats now shows 1/2 visible
+    {
+        ExportDialog exportDlg(&doc);
+        auto *comboFormat = exportDlg.findChild<QComboBox*>("comboFormat");
+        int godotIdx = comboFormat ? comboFormat->findData(QStringLiteral("godot_extractor")) : -1;
+        if (godotIdx >= 0) {
+            comboFormat->setCurrentIndex(godotIdx);
+        }
+        exportDlg.show();
+        QTest::qWait(100);
+        QLabel *lblFrames = exportDlg.findChild<QLabel*>("lblFrames");
+        QVERIFY(lblFrames != nullptr);
+        QVERIFY(lblFrames->text().contains(QStringLiteral("Layers: 1/2 visible")));
+    }
+
+    // Test lock, opacity, blendMode and moveLayer
+    doc.setLayerLocked(0, true);
+    QVERIFY(doc.layer(0).locked);
+
+    doc.setLayerOpacity(1, 128);
+    QCOMPARE(doc.layer(1).opacity, 128);
+
+    doc.setLayerBlendMode(1, QPainter::CompositionMode_Multiply);
+    QCOMPARE(doc.layer(1).blendMode, QPainter::CompositionMode_Multiply);
+
+    doc.setLayerName(0, QStringLiteral("NewBackgroundName"));
+    QCOMPARE(doc.layer(0).name, QStringLiteral("NewBackgroundName"));
+
+    doc.moveLayer(0, 1);
+    QCOMPARE(doc.layer(0).name, QStringLiteral("Hero"));
+    QCOMPARE(doc.layer(1).name, QStringLiteral("NewBackgroundName"));
 }
 
 int main(int argc, char *argv[])

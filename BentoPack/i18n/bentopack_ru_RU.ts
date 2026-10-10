@@ -1210,6 +1210,10 @@ Strict removal clears the pixel.</source>
         <translation>GPU VRAM: %1 МБ (%2, -%3% аппаратно) | Файл: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Размеры: %1 x %2 пикс. (Текущий атлас)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>Тайминг</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">Слои</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">Слой %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

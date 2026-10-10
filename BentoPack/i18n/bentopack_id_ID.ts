@@ -1210,6 +1210,10 @@ Penghapusan ketat menghapus piksel.</translation>
         <translation>VRAM GPU: %1 MB (%2, -%3% perangkat keras) | Berkas: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>Dimensi: %1 x %2 px (Atlas Saat Ini)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Klik simpul untuk melihat detailnya.</translation>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>Waktu</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">Lapisan</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">Lapisan %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>

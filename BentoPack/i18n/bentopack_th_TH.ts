@@ -1210,6 +1210,10 @@ Strict removal clears the pixel.</translation>
         <translation>GPU VRAM: %1 MB (%2, -%3% ฮาร์ดแวร์) | ไฟล์: %4 (%5)</translation>
     </message>
     <message>
+        <source> | Layers: %1/%2 visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
         <translation>ขนาด: %1 x %2 px (แอตลาสปัจจุบัน)</translation>
     </message>
@@ -1963,6 +1967,14 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>KEY_LABEL_TIMING</source>
         <translation>เวลา</translation>
+    </message>
+    <message>
+        <source>Layers</source>
+        <translation type="unfinished">เลเยอร์</translation>
+    </message>
+    <message>
+        <source>Layer %1</source>
+        <translation type="unfinished">เลเยอร์ %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
