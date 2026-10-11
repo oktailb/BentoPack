@@ -895,12 +895,21 @@ bool AsepriteExtractor::write(const QString &filePath, const SpriteDocument &inD
                 QByteArray tagUtf8 = anim.name.toUtf8();
                 quint16 fromF = 0;
                 quint16 toF = static_cast<quint16>(qMax(0, numFrames - 1));
+                quint8 loopDir = 0; // Forward
                 if (!anim.frameIndices.isEmpty()) {
-                    fromF = static_cast<quint16>(anim.frameIndices.first());
-                    toF = static_cast<quint16>(anim.frameIndices.last());
+                    int minF = anim.frameIndices.first();
+                    int maxF = anim.frameIndices.first();
+                    for (int idx : anim.frameIndices) {
+                        minF = qMin(minF, idx);
+                        maxF = qMax(maxF, idx);
+                    }
+                    fromF = static_cast<quint16>(minF);
+                    toF = static_cast<quint16>(maxF);
+                    if (anim.frameIndices.first() > anim.frameIndices.last()) {
+                        loopDir = 1; // Reverse
+                    }
                 }
 
-                quint8 loopDir = 0; // Forward
                 if (anim.loopMode == SpriteAnimation::PingPong) {
                     loopDir = 2; // Ping-pong
                 }

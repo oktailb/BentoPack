@@ -237,12 +237,39 @@ CliResult CliParser::parseAndExecute(const QStringList &args)
             return WatchDaemon::stopWatch(m_stopWatchDir);
         }
 
-        // Detect target output files
+        // Detect target output files and options with values
         if (arg == QStringLiteral("--sheet") && i + 1 < rawArgs.size()) {
-            m_watchSheetPath = rawArgs[i + 1];
+            m_watchSheetPath = rawArgs[++i];
+            cleanArgs.append(arg);
+            cleanArgs.append(m_watchSheetPath);
+            continue;
         }
         if (arg == QStringLiteral("--data") && i + 1 < rawArgs.size()) {
-            m_watchDataPath = rawArgs[i + 1];
+            m_watchDataPath = rawArgs[++i];
+            cleanArgs.append(arg);
+            cleanArgs.append(m_watchDataPath);
+            continue;
+        }
+        if ((arg == QStringLiteral("--format") || arg == QStringLiteral("--texture-format") ||
+             arg == QStringLiteral("--vram-format") || arg == QStringLiteral("--vram-quality") ||
+             arg == QStringLiteral("--zstd-level") || arg == QStringLiteral("--algorithm") ||
+             arg == QStringLiteral("--maxrects-heuristics") || arg == QStringLiteral("--size-constraints") ||
+             arg == QStringLiteral("--max-width") || arg == QStringLiteral("--max-height") ||
+             arg == QStringLiteral("--padding") || arg == QStringLiteral("--inner-padding") ||
+             arg == QStringLiteral("--shape-padding") || arg == QStringLiteral("--border-padding") ||
+             arg == QStringLiteral("--sheet-type") || arg == QStringLiteral("--extrude") ||
+             arg == QStringLiteral("--trim-mode") || arg == QStringLiteral("--trim-threshold") ||
+             arg == QStringLiteral("--godot-uid") || arg == QStringLiteral("--godot-scene") ||
+             arg == QStringLiteral("--opt")) && i + 1 < rawArgs.size()) {
+            cleanArgs.append(arg);
+            cleanArgs.append(rawArgs[++i]);
+            continue;
+        }
+        if ((arg == QStringLiteral("--max-size") || arg == QStringLiteral("--pivot-point")) && i + 2 < rawArgs.size()) {
+            cleanArgs.append(arg);
+            cleanArgs.append(rawArgs[++i]);
+            cleanArgs.append(rawArgs[++i]);
+            continue;
         }
 
         // If not a flag, collect as potential watch inputs

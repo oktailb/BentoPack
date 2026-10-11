@@ -380,6 +380,7 @@ CliResult CliPackPipeline::execute(const QStringList &args)
         boxes.reserve(packFrames.size());
         for (int i = 0; i < packFrames.size(); ++i) {
             SpriteBox b;
+            b.index = i;
             if (i < packRes.frameRects.size()) {
                 b.rect = packRes.frameRects[i];
             } else {
