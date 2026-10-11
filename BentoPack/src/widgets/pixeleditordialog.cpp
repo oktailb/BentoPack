@@ -51,9 +51,11 @@ namespace {
 
 static bool isSystemDarkMode(const QWidget *widget = nullptr)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     if (QGuiApplication::styleHints() && QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
         return true;
     }
+#endif
     const QPalette pal = qApp ? qApp->palette() : (widget ? widget->palette() : QPalette());
     const int winLight = pal.color(QPalette::Window).lightness();
     const int textLight = pal.color(QPalette::WindowText).lightness();
