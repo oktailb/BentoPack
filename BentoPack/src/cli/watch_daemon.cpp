@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -218,7 +218,9 @@ void WatchDaemon::addWatchPathRecursively(const QString &path)
                 QString ext = sfi.suffix().toLower();
                 if (ext == QStringLiteral("png") || ext == QStringLiteral("jpg") ||
                     ext == QStringLiteral("jpeg") || ext == QStringLiteral("gif") ||
-                    ext == QStringLiteral("ssp") || ext == QStringLiteral("json")) {
+                    ext == QStringLiteral("ssp") || ext == QStringLiteral("bento") ||
+                    ext == QStringLiteral("ase") || ext == QStringLiteral("aseprite") ||
+                    ext == QStringLiteral("json")) {
                     QString c = sfi.canonicalFilePath();
                     if (!c.isEmpty() && !m_watcher.files().contains(c)) {
                         m_watcher.addPath(c);

@@ -72,7 +72,8 @@ bool CliPackPipeline::collectInputImages(const QStringList &inputPaths,
 
         if (fi.isDir()) {
             QDirIterator it(fi.absoluteFilePath(),
-                            { QStringLiteral("*.png"), QStringLiteral("*.jpg"), QStringLiteral("*.jpeg"), QStringLiteral("*.bmp"), QStringLiteral("*.webp") },
+                            { QStringLiteral("*.png"), QStringLiteral("*.jpg"), QStringLiteral("*.jpeg"), QStringLiteral("*.bmp"), QStringLiteral("*.webp"),
+                              QStringLiteral("*.ase"), QStringLiteral("*.aseprite"), QStringLiteral("*.bento"), QStringLiteral("*.ssp") },
                             QDir::Files,
                             QDirIterator::Subdirectories);
             while (it.hasNext()) {
@@ -90,8 +91,9 @@ bool CliPackPipeline::collectInputImages(const QStringList &inputPaths,
             }
         } else {
             QString ext = fi.suffix().toLower();
-            if (ext == QStringLiteral("ssp") || ext == QStringLiteral("json") ||
-                ext == QStringLiteral("tres") || ext == QStringLiteral("gif")) {
+            if (ext == QStringLiteral("ssp") || ext == QStringLiteral("bento") ||
+                ext == QStringLiteral("ase") || ext == QStringLiteral("aseprite") ||
+                ext == QStringLiteral("json") || ext == QStringLiteral("tres") || ext == QStringLiteral("gif")) {
                 SpriteDocument doc;
                 ProjectController controller(&doc);
                 QString err;
