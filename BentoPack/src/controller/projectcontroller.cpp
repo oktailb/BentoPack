@@ -22,7 +22,10 @@
 #include "include/project/sessionmanager.h"
 #include "include/project/projectmanager.h"
 #include "packer/vramtexturecompressor.h"
+#include "include/commands/commands.h"
 #include <QUndoStack>
+#include <QUuid>
+#include <QPainter>
 #include <QSettings>
 #include <QFile>
 #include <QFileInfo>
@@ -406,31 +409,15 @@ void ProjectController::openFileAsync(const QString &filePath)
     QFileInfo fi(filePath);
     QString ext = fi.suffix().toLower();
 
-    // If it's a native project (.bentop)
+    // If it's a native project (.bento)
     if (ext == QStringLiteral("bento")) {
         openProject(filePath);
         return;
     }
 
-    // If it's a non-image file (e.g. JSON or GIF), fallback to synchronous read
-    if (ext == QStringLiteral("json") || ext == QStringLiteral("tres") || ext == QStringLiteral("gif") ||
-        ext == QStringLiteral("ase") || ext == QStringLiteral("aseprite") || ext == QStringLiteral("atlas")) {
-        emit processingStarted();
-        openFile(filePath);
-        emit processingFinished();
-        return;
-    }
-
-    Extractor *extractor = ExtractorRegistry::instance().findDecoder(filePath);
-    if (!extractor) {
-        QString err = tr("No suitable codec found for file: %1").arg(filePath);
-        emit fileLoadError(filePath, err);
-        return;
-    }
-
     m_isProcessing = true;
     emit processingStarted();
-    emit statusMessage(tr("Loading %1 in background...").arg(fi.fileName()));
+    emit statusMessage(tr("Loading %1...").arg(fi.fileName()));
     emit progressChanged(20);
 
     QFuture<AsyncExtractionResult> future = QtConcurrent::run([filePath]() -> AsyncExtractionResult {
@@ -438,25 +425,856 @@ void ProjectController::openFileAsync(const QString &filePath)
         result.type = AsyncExtractionResult::JobOpen;
         result.filePath = filePath;
 
+        SpriteDocument tempDoc;
+        QString err;
+        if (!decodeFileToDocument(filePath, tempDoc, &err)) {
+            result.success = false;
+            result.errorMessage = err;
+            return result;
+        }
+
+        result.atlas = tempDoc.atlas();
+        result.frameImages = tempDoc.frames();
+        result.boxes = tempDoc.boxes();
+        result.layers = tempDoc.layers();
+        for (int f = 0; f < tempDoc.frameCount(); ++f) {
+            if (tempDoc.hasFrameCels(f)) {
+                result.frameCels[f] = tempDoc.frameCels(f);
+            }
+        }
+        result.animations = tempDoc.animations();
+        result.skinProfiles = tempDoc.skinProfiles();
+        result.success = true;
+        return result;
+    });
+
+    m_watcher.setFuture(future);
+}
+
+bool ProjectController::decodeFileToDocument(const QString &filePath, SpriteDocument &outDoc, QString *errorMsg)
+{
+    if (filePath.isEmpty() || !QFile::exists(filePath)) {
+        QString err = tr("File does not exist: %1").arg(filePath);
+        if (errorMsg) *errorMsg = err;
+        return false;
+    }
+
+    Extractor *extractor = ExtractorRegistry::instance().findDecoder(filePath);
+    if (!extractor) {
         QString loadErr;
         QImage image = VramTextureCompressor::loadAtlasImage(filePath, &loadErr);
         if (image.isNull()) {
-            result.success = false;
-            result.errorMessage = QObject::tr("Failed to decode image from: %1").arg(filePath);
-            if (!loadErr.isEmpty()) {
-                result.errorMessage += QStringLiteral(" (%1)").arg(loadErr);
-            }
-            return result;
+            QString err = tr("No suitable codec found for file: %1").arg(filePath);
+            if (!loadErr.isEmpty()) err += QStringLiteral(" (%1)").arg(loadErr);
+            if (errorMsg) *errorMsg = err;
+            return false;
         }
-
         SpriteDetectionOptions detOpts;
-        if (!SpriteDetector::detectToImages(image, result.frameImages, result.boxes, detOpts)) {
-            result.success = false;
-            result.errorMessage = QObject::tr("Failed to segment sprite frames.");
-            return result;
+        QList<QImage> frameImages;
+        QList<SpriteBox> boxes;
+        SpriteDetector::detectToImages(image, frameImages, boxes, detOpts);
+        outDoc.setAtlas((image.format() == QImage::Format_ARGB32) ? image : image.convertToFormat(QImage::Format_ARGB32));
+        outDoc.setFrames(frameImages, boxes);
+        outDoc.setFilePath(filePath);
+        return true;
+    }
+
+    ExtractorError err;
+    if (!extractor->read(filePath, outDoc, &err)) {
+        QString fullError = err.toString();
+        if (errorMsg) *errorMsg = fullError;
+        return false;
+    }
+    outDoc.setFilePath(filePath);
+    return true;
+}
+
+bool ProjectController::replaceExistingAtlasWithMedia(const QString &filePath, QString *errorMsg)
+{
+    if (!m_document) {
+        if (errorMsg) *errorMsg = tr("No active SpriteDocument.");
+        return false;
+    }
+
+    SpriteDocument incomingDoc;
+    if (!decodeFileToDocument(filePath, incomingDoc, errorMsg)) {
+        return false;
+    }
+
+    QImage newAtlas = incomingDoc.atlas();
+    if (newAtlas.isNull()) {
+        if (errorMsg) *errorMsg = tr("Decoded atlas image is null.");
+        return false;
+    }
+
+    QList<QImage> newFrames;
+    QList<SpriteBox> newBoxes;
+    QList<SpriteLayer> newLayers;
+    QMap<int, QList<SpriteCel>> newFrameCels;
+    QMap<QString, SpriteAnimation> newAnimations;
+    QMap<QString, SkinProfile> newSkinProfiles;
+
+    const bool incomingHasStructure = (incomingDoc.hasLayers() || (incomingDoc.frameCount() > 1 && incomingDoc.frameCount() == incomingDoc.boxes().size()));
+
+    if (incomingHasStructure || m_document->frameCount() == 0) {
+        // Multi-frame or structured project incoming: take its frames and boxes
+        newFrames = incomingDoc.frames();
+        newBoxes = incomingDoc.boxes();
+        newLayers = incomingDoc.layers();
+        for (int f = 0; f < incomingDoc.frameCount(); ++f) {
+            if (incomingDoc.hasFrameCels(f)) {
+                newFrameCels[f] = incomingDoc.frameCels(f);
+            }
+        }
+        newAnimations = incomingDoc.animations();
+        newSkinProfiles = incomingDoc.skinProfiles();
+    } else {
+        // Flat atlas texture replacement on existing project:
+        // PRESERVE existing bounding boxes, pivots, and animations!
+        newBoxes = m_document->boxes();
+        newAnimations = m_document->animations();
+        newSkinProfiles = m_document->skinProfiles();
+        newLayers = m_document->layers();
+
+        if (!m_document->atlas().isNull() && m_document->atlas().size() != newAtlas.size() &&
+            m_document->atlas().width() > 0 && m_document->atlas().height() > 0) {
+            double scaleX = static_cast<double>(newAtlas.width()) / m_document->atlas().width();
+            double scaleY = static_cast<double>(newAtlas.height()) / m_document->atlas().height();
+            for (auto &b : newBoxes) {
+                b.rect = QRect(qRound(b.rect.x() * scaleX), qRound(b.rect.y() * scaleY),
+                               qRound(b.rect.width() * scaleX), qRound(b.rect.height() * scaleY));
+                b.pivot = QPoint(qRound(b.pivot.x() * scaleX), qRound(b.pivot.y() * scaleY));
+            }
         }
 
-        result.atlas = (image.format() == QImage::Format_ARGB32) ? image : image.convertToFormat(QImage::Format_ARGB32);
+        newFrames.reserve(newBoxes.size());
+        for (int f = 0; f < newBoxes.size(); ++f) {
+            QRect r = newBoxes[f].rect.intersected(newAtlas.rect());
+            if (!r.isEmpty()) {
+                newFrames.append(newAtlas.copy(r));
+            } else {
+                newFrames.append(QImage());
+            }
+        }
+
+        if (m_document->hasLayers()) {
+            for (int f = 0; f < newBoxes.size(); ++f) {
+                QList<SpriteCel> cels = m_document->frameCels(f);
+                if (!cels.isEmpty()) {
+                    cels[0].image = (f < newFrames.size()) ? newFrames[f] : QImage();
+                    newFrameCels[f] = cels;
+                }
+            }
+        }
+    }
+
+    if (m_undoStack) {
+        m_undoStack->push(new ReplaceAtlasMediaCommand(m_document,
+                                                       newAtlas,
+                                                       newFrames,
+                                                       newBoxes,
+                                                       newLayers,
+                                                       newFrameCels,
+                                                       newAnimations,
+                                                       newSkinProfiles));
+    } else {
+        m_document->setAtlas(newAtlas);
+        m_document->setFrames(newFrames, newBoxes);
+        m_document->setLayers(newLayers);
+        for (auto it = newFrameCels.begin(); it != newFrameCels.end(); ++it) {
+            m_document->setFrameCels(it.key(), it.value());
+        }
+        if (!newAnimations.isEmpty()) {
+            m_document->setAnimations(newAnimations);
+        }
+        if (!newSkinProfiles.isEmpty()) {
+            m_document->setSkinProfiles(newSkinProfiles);
+        }
+    }
+
+    setProjectModified(true);
+    if (m_sessionManager && m_sessionManager->hasActiveSession()) {
+        ProjectManager::saveProjectToSessionDir(*m_document, m_sessionManager->currentSessionDir());
+        m_sessionManager->gitCommit(tr("Replace atlas with %1").arg(QFileInfo(filePath).fileName()));
+    }
+
+    addRecentFile(filePath);
+    emit statusMessage(tr("Replaced atlas with %1 successfully.").arg(QFileInfo(filePath).fileName()));
+    emit fileLoaded(filePath);
+    return true;
+}
+
+static QImage compositeFrameFromCels(const QSize &frameSize,
+                                     const QList<SpriteLayer> &layers,
+                                     const QList<SpriteCel> &cels)
+{
+    if (frameSize.isEmpty()) return QImage();
+
+    QImage composite(frameSize, QImage::Format_ARGB32_Premultiplied);
+    composite.fill(Qt::transparent);
+
+    QPainter painter(&composite);
+
+    QList<int> sortedLayerIndices;
+    sortedLayerIndices.reserve(layers.size());
+    for (int i = 0; i < layers.size(); ++i) sortedLayerIndices.append(i);
+    std::stable_sort(sortedLayerIndices.begin(), sortedLayerIndices.end(), [&layers](int a, int b) {
+        return layers[a].zOrder < layers[b].zOrder;
+    });
+
+    for (int lIdx : sortedLayerIndices) {
+        const SpriteLayer &lyr = layers.at(lIdx);
+        if (!lyr.visible) continue;
+
+        SpriteCel currentCel;
+        bool found = false;
+        for (const auto &c : cels) {
+            if (c.layerIndex == lIdx || (!lyr.id.isEmpty() && c.layerId == lyr.id)) {
+                currentCel = c;
+                found = true;
+                break;
+            }
+        }
+        if (!found || currentCel.isNull()) continue;
+
+        painter.setCompositionMode(lyr.blendMode);
+        double layerOp = (lyr.opacity / 255.0) * (currentCel.opacity / 255.0);
+        painter.setOpacity(std::clamp(layerOp, 0.0, 1.0));
+        painter.drawImage(QPoint(currentCel.x, currentCel.y), currentCel.image);
+    }
+    painter.end();
+    return composite.convertToFormat(QImage::Format_ARGB32);
+}
+
+static QImage compositeAtlasFromFrames(const QSize &atlasSize,
+                                       const QList<QImage> &frames,
+                                       const QList<SpriteBox> &boxes)
+{
+    if (atlasSize.isEmpty() || frames.isEmpty()) return QImage();
+
+    QImage newAtlas(atlasSize, QImage::Format_ARGB32_Premultiplied);
+    newAtlas.fill(Qt::transparent);
+
+    QPainter p(&newAtlas);
+    p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+    for (int i = 0; i < frames.size(); ++i) {
+        if (i < boxes.size() && !boxes[i].rect.isEmpty()) {
+            const QImage &img = frames[i];
+            if (!img.isNull()) {
+                p.drawImage(boxes[i].rect.topLeft(), img);
+            }
+        }
+    }
+    p.end();
+    return newAtlas.convertToFormat(QImage::Format_ARGB32);
+}
+
+bool ProjectController::addMediaAsNewLayers(const QString &filePath, QString *errorMsg, bool asCommonBackground)
+{
+    if (!m_document) {
+        if (errorMsg) *errorMsg = tr("No active SpriteDocument.");
+        return false;
+    }
+
+    SpriteDocument incomingDoc;
+    Extractor *extractor = ExtractorRegistry::instance().findDecoder(filePath);
+    if (extractor) {
+        ExtractorError exErr;
+        if (!extractor->read(filePath, incomingDoc, &exErr)) {
+            if (errorMsg) *errorMsg = exErr.toString();
+            return false;
+        }
+    } else {
+        QString loadErr;
+        QImage img = VramTextureCompressor::loadAtlasImage(filePath, &loadErr);
+        if (img.isNull()) {
+            if (errorMsg) *errorMsg = tr("Failed to load image: %1").arg(loadErr.isEmpty() ? filePath : loadErr);
+            return false;
+        }
+        incomingDoc.setAtlas((img.format() == QImage::Format_ARGB32) ? img : img.convertToFormat(QImage::Format_ARGB32));
+        incomingDoc.setFrames({incomingDoc.atlas()}, {SpriteBox(QRect(0, 0, img.width(), img.height()))});
+    }
+
+    // 1. Prepare layers and existing cels
+    QList<SpriteLayer> combinedLayers = m_document->layers();
+    QMap<int, QList<SpriteCel>> combinedCels;
+    for (int f = 0; f < m_document->frameCount(); ++f) {
+        if (m_document->hasFrameCels(f)) {
+            combinedCels[f] = m_document->frameCels(f);
+        }
+    }
+
+    // If current document had no layers, promote existing content to a "Base" layer first
+    if (combinedLayers.isEmpty() && m_document->frameCount() > 0) {
+        SpriteLayer baseLayer;
+        baseLayer.id = QStringLiteral("layer_base");
+        baseLayer.name = tr("Base");
+        baseLayer.visible = true;
+        baseLayer.locked = false;
+        baseLayer.opacity = 255;
+        baseLayer.zOrder = 0;
+        combinedLayers.append(baseLayer);
+
+        for (int f = 0; f < m_document->frameCount(); ++f) {
+            SpriteCel baseCel;
+            baseCel.layerIndex = 0;
+            baseCel.layerId = baseLayer.id;
+            baseCel.image = m_document->frame(f);
+            baseCel.x = 0;
+            baseCel.y = 0;
+            baseCel.opacity = 255;
+            combinedCels[f].append(baseCel);
+        }
+    }
+
+    // 2. Add incoming layers
+    if (asCommonBackground) {
+        // Option 4: Common background placed behind existing sprite layers
+        SpriteLayer bgLayer;
+        bgLayer.id = QStringLiteral("layer_bg_%1").arg(QUuid::createUuid().toString(QUuid::Id128).left(8));
+        bgLayer.name = tr("Background: %1").arg(QFileInfo(filePath).completeBaseName());
+        bgLayer.visible = true;
+        bgLayer.locked = false;
+        bgLayer.opacity = 255;
+        bgLayer.zOrder = 0;
+
+        for (auto &lyr : combinedLayers) {
+            lyr.zOrder += 1;
+        }
+        combinedLayers.prepend(bgLayer);
+
+        for (auto it = combinedCels.begin(); it != combinedCels.end(); ++it) {
+            for (auto &cel : it.value()) {
+                cel.layerIndex += 1;
+            }
+        }
+
+        QImage srcBg = !incomingDoc.atlas().isNull() ? incomingDoc.atlas() : (incomingDoc.frameCount() > 0 ? incomingDoc.frame(0) : QImage());
+        QMap<quint64, QImage> scaledBgCache;
+
+        for (int f = 0; f < m_document->frameCount(); ++f) {
+            QSize fSize = (f < m_document->boxes().size() && !m_document->box(f).rect.isEmpty())
+                              ? m_document->box(f).rect.size()
+                              : (f < m_document->frames().size() ? m_document->frame(f).size() : QSize(32, 32));
+            quint64 sizeKey = (static_cast<quint64>(fSize.width()) << 32) | static_cast<quint32>(fSize.height());
+
+            if (!scaledBgCache.contains(sizeKey)) {
+                QImage scaled = srcBg.scaled(fSize, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+                if (scaled.size() != fSize) {
+                    int ox = (scaled.width() - fSize.width()) / 2;
+                    int oy = (scaled.height() - fSize.height()) / 2;
+                    scaled = scaled.copy(ox, oy, fSize.width(), fSize.height());
+                }
+                scaledBgCache[sizeKey] = scaled.convertToFormat(QImage::Format_ARGB32);
+            }
+
+            SpriteCel bgCel;
+            bgCel.layerIndex = 0;
+            bgCel.layerId = bgLayer.id;
+            bgCel.opacity = 255;
+            bgCel.x = 0;
+            bgCel.y = 0;
+            bgCel.image = scaledBgCache.value(sizeKey);
+            combinedCels[f].prepend(bgCel);
+        }
+    } else if (incomingDoc.hasLayers()) {
+        // Multi-layer incoming document (e.g. Aseprite)
+        for (int l = 0; l < incomingDoc.layers().size(); ++l) {
+            SpriteLayer incLayer = incomingDoc.layer(l);
+            SpriteLayer newLayer = incLayer;
+            newLayer.id = QStringLiteral("layer_%1_%2").arg(QFileInfo(filePath).baseName()).arg(incLayer.id.isEmpty() ? QString::number(l) : incLayer.id);
+            newLayer.zOrder = combinedLayers.size();
+            int newLayerIdx = combinedLayers.size();
+            combinedLayers.append(newLayer);
+
+            const bool sameFrameCount = (incomingDoc.frameCount() == m_document->frameCount() && incomingDoc.frameCount() > 0);
+
+            for (int f = 0; f < m_document->frameCount(); ++f) {
+                if (sameFrameCount && incomingDoc.hasFrameCels(f)) {
+                    for (const SpriteCel &c : incomingDoc.frameCels(f)) {
+                        if (c.layerIndex == l || (!incLayer.id.isEmpty() && c.layerId == incLayer.id)) {
+                            SpriteCel celCopy = c;
+                            celCopy.layerIndex = newLayerIdx;
+                            celCopy.layerId = newLayer.id;
+                            combinedCels[f].append(celCopy);
+                            break;
+                        }
+                    }
+                } else {
+                    SpriteCel emptyCel;
+                    emptyCel.layerIndex = newLayerIdx;
+                    emptyCel.layerId = newLayer.id;
+                    emptyCel.opacity = 255;
+                    emptyCel.x = 0;
+                    emptyCel.y = 0;
+                    emptyCel.image = QImage(m_document->frame(f).size(), QImage::Format_ARGB32_Premultiplied);
+                    emptyCel.image.fill(Qt::transparent);
+                    combinedCels[f].append(emptyCel);
+                }
+            }
+        }
+    } else {
+        // Option 3: Whole-Atlas Layer Workflow
+        SpriteLayer newLayer;
+        newLayer.id = QStringLiteral("layer_%1_%2").arg(QFileInfo(filePath).baseName()).arg(QUuid::createUuid().toString(QUuid::Id128).left(8));
+        newLayer.name = QFileInfo(filePath).completeBaseName();
+        newLayer.visible = true;
+        newLayer.locked = false;
+        newLayer.opacity = 255;
+        newLayer.zOrder = combinedLayers.size();
+        int newLayerIdx = combinedLayers.size();
+        combinedLayers.append(newLayer);
+
+        QImage incomingAtlas = incomingDoc.atlas();
+        if (incomingAtlas.isNull() && incomingDoc.frameCount() > 0) {
+            incomingAtlas = incomingDoc.frame(0);
+        }
+
+        QSize targetAtlasSize = m_document->atlas().isNull() ? QSize() : m_document->atlas().size();
+        if (targetAtlasSize.isValid() && !targetAtlasSize.isEmpty() && !incomingAtlas.isNull() && incomingAtlas.size() != targetAtlasSize) {
+            incomingAtlas = incomingAtlas.scaled(targetAtlasSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+
+        for (int f = 0; f < m_document->frameCount(); ++f) {
+            SpriteCel cel;
+            cel.layerIndex = newLayerIdx;
+            cel.layerId = newLayer.id;
+            cel.opacity = 255;
+            cel.x = 0;
+            cel.y = 0;
+
+            QRect r = m_document->box(f).rect;
+            if (!r.isEmpty() && !incomingAtlas.isNull()) {
+                QRect clipped = r.intersected(incomingAtlas.rect());
+                if (!clipped.isEmpty()) {
+                    if (clipped.size() == r.size()) {
+                        cel.image = incomingAtlas.copy(clipped);
+                    } else {
+                        cel.image = QImage(r.size(), QImage::Format_ARGB32_Premultiplied);
+                        cel.image.fill(Qt::transparent);
+                        QPainter p(&cel.image);
+                        p.drawImage(clipped.topLeft() - r.topLeft(), incomingAtlas.copy(clipped));
+                        p.end();
+                    }
+                } else {
+                    cel.image = QImage(r.size(), QImage::Format_ARGB32_Premultiplied);
+                    cel.image.fill(Qt::transparent);
+                }
+            } else if (f < incomingDoc.frameCount()) {
+                cel.image = incomingDoc.frame(f);
+            } else {
+                cel.image = QImage(m_document->frame(f).size(), QImage::Format_ARGB32_Premultiplied);
+                cel.image.fill(Qt::transparent);
+            }
+
+            combinedCels[f].append(cel);
+        }
+    }
+
+    QList<QImage> compositedFrames;
+    compositedFrames.reserve(m_document->frameCount());
+    for (int f = 0; f < m_document->frameCount(); ++f) {
+        QSize fSize = (f < m_document->boxes().size() && !m_document->box(f).rect.isEmpty())
+                          ? m_document->box(f).rect.size()
+                          : (f < m_document->frames().size() ? m_document->frame(f).size() : QSize(32, 32));
+        QList<SpriteCel> cels = combinedCels.value(f);
+        compositedFrames.append(compositeFrameFromCels(fSize, combinedLayers, cels));
+    }
+    QImage compositedAtlas = compositeAtlasFromFrames(m_document->atlas().size(), compositedFrames, m_document->boxes());
+
+    if (m_undoStack) {
+        m_undoStack->push(new AddMediaLayersCommand(m_document, combinedLayers, combinedCels, QFileInfo(filePath).fileName(), compositedFrames, compositedAtlas));
+    } else {
+        m_document->setLayers(combinedLayers);
+        for (auto it = combinedCels.begin(); it != combinedCels.end(); ++it) {
+            m_document->setFrameCels(it.key(), it.value());
+        }
+        m_document->setCompositedFrames(compositedFrames);
+        m_document->setAtlas(compositedAtlas);
+    }
+
+    setProjectModified(true);
+    if (m_sessionManager && m_sessionManager->hasActiveSession()) {
+        ProjectManager::saveProjectToSessionDir(*m_document, m_sessionManager->currentSessionDir());
+        m_sessionManager->gitCommit(tr("Add layers from %1").arg(QFileInfo(filePath).fileName()));
+    }
+
+    addRecentFile(filePath);
+    emit statusMessage(asCommonBackground
+        ? tr("Added common background from %1 successfully.").arg(QFileInfo(filePath).fileName())
+        : tr("Added layers from %1 successfully.").arg(QFileInfo(filePath).fileName()));
+    emit fileLoaded(filePath);
+    return true;
+}
+
+void ProjectController::replaceExistingAtlasWithMediaAsync(const QString &filePath)
+{
+    if (m_isProcessing) return;
+
+    if (filePath.isEmpty() || !QFile::exists(filePath)) {
+        QString err = tr("File does not exist: %1").arg(filePath);
+        emit fileLoadError(filePath, err);
+        return;
+    }
+
+    if (!m_document) {
+        emit fileLoadError(filePath, tr("No active SpriteDocument."));
+        return;
+    }
+
+    QFileInfo fi(filePath);
+    m_isProcessing = true;
+    emit processingStarted();
+    emit statusMessage(tr("Replacing atlas with %1...").arg(fi.fileName()));
+    emit progressChanged(20);
+
+    QList<SpriteBox> docBoxes = m_document->boxes();
+    QSize docAtlasSize = m_document->atlas().size();
+    QMap<QString, SpriteAnimation> docAnims = m_document->animations();
+    QMap<QString, SkinProfile> docSkins = m_document->skinProfiles();
+    QList<SpriteLayer> docLayers = m_document->layers();
+    QMap<int, QList<SpriteCel>> docCels;
+    for (int f = 0; f < m_document->frameCount(); ++f) {
+        if (m_document->hasFrameCels(f)) {
+            docCels[f] = m_document->frameCels(f);
+        }
+    }
+
+    QFuture<AsyncExtractionResult> future = QtConcurrent::run([filePath, docBoxes, docAtlasSize, docAnims, docSkins, docLayers, docCels]() -> AsyncExtractionResult {
+        AsyncExtractionResult result;
+        result.type = AsyncExtractionResult::JobReplaceAtlas;
+        result.filePath = filePath;
+
+        SpriteDocument tempDoc;
+        Extractor *extractor = ExtractorRegistry::instance().findDecoder(filePath);
+        if (extractor) {
+            ExtractorError exErr;
+            if (!extractor->read(filePath, tempDoc, &exErr)) {
+                result.success = false;
+                result.errorMessage = exErr.toString();
+                return result;
+            }
+        } else {
+            QString loadErr;
+            QImage img = VramTextureCompressor::loadAtlasImage(filePath, &loadErr);
+            if (img.isNull()) {
+                result.success = false;
+                result.errorMessage = QObject::tr("Failed to load image: %1").arg(loadErr.isEmpty() ? filePath : loadErr);
+                return result;
+            }
+            tempDoc.setAtlas((img.format() == QImage::Format_ARGB32) ? img : img.convertToFormat(QImage::Format_ARGB32));
+        }
+
+        if (tempDoc.hasLayers()) {
+            result.atlas = tempDoc.atlas();
+            result.frameImages = tempDoc.frames();
+            result.boxes = tempDoc.boxes();
+            result.layers = tempDoc.layers();
+            for (int f = 0; f < tempDoc.frameCount(); ++f) {
+                if (tempDoc.hasFrameCels(f)) {
+                    result.frameCels[f] = tempDoc.frameCels(f);
+                }
+            }
+            result.animations = tempDoc.animations();
+            result.skinProfiles = tempDoc.skinProfiles();
+        } else {
+            // Flat atlas replacement: preserve existing bounding boxes, pivots, and animations
+            QImage newAtlas = tempDoc.atlas();
+            QList<SpriteBox> newBoxes = docBoxes;
+            QList<QImage> newFrames;
+            QMap<int, QList<SpriteCel>> newFrameCels;
+
+            if (!docAtlasSize.isEmpty() && docAtlasSize != newAtlas.size() &&
+                docAtlasSize.width() > 0 && docAtlasSize.height() > 0) {
+                double scaleX = static_cast<double>(newAtlas.width()) / docAtlasSize.width();
+                double scaleY = static_cast<double>(newAtlas.height()) / docAtlasSize.height();
+                for (auto &b : newBoxes) {
+                    b.rect = QRect(qRound(b.rect.x() * scaleX), qRound(b.rect.y() * scaleY),
+                                   qRound(b.rect.width() * scaleX), qRound(b.rect.height() * scaleY));
+                    b.pivot = QPoint(qRound(b.pivot.x() * scaleX), qRound(b.pivot.y() * scaleY));
+                }
+            }
+
+            newFrames.reserve(newBoxes.size());
+            for (int f = 0; f < newBoxes.size(); ++f) {
+                QRect r = newBoxes[f].rect.intersected(newAtlas.rect());
+                if (!r.isEmpty()) {
+                    newFrames.append(newAtlas.copy(r));
+                } else {
+                    newFrames.append(QImage());
+                }
+            }
+
+            if (!docLayers.isEmpty()) {
+                for (int f = 0; f < newBoxes.size(); ++f) {
+                    QList<SpriteCel> cels = docCels.value(f);
+                    if (!cels.isEmpty()) {
+                        cels[0].image = (f < newFrames.size()) ? newFrames[f] : QImage();
+                        newFrameCels[f] = cels;
+                    }
+                }
+            }
+
+            result.atlas = newAtlas;
+            result.frameImages = newFrames;
+            result.boxes = newBoxes;
+            result.layers = docLayers;
+            result.frameCels = newFrameCels;
+            result.animations = docAnims;
+            result.skinProfiles = docSkins;
+        }
+
+        result.success = true;
+        return result;
+    });
+
+    m_watcher.setFuture(future);
+}
+
+void ProjectController::addMediaAsNewLayersAsync(const QString &filePath, bool asCommonBackground)
+{
+    if (m_isProcessing) return;
+
+    if (filePath.isEmpty() || !QFile::exists(filePath)) {
+        QString err = tr("File does not exist: %1").arg(filePath);
+        emit fileLoadError(filePath, err);
+        return;
+    }
+
+    if (!m_document) {
+        emit fileLoadError(filePath, tr("No active SpriteDocument."));
+        return;
+    }
+
+    QFileInfo fi(filePath);
+    m_isProcessing = true;
+    emit processingStarted();
+    emit statusMessage(asCommonBackground
+        ? tr("Adding common background from %1...").arg(fi.fileName())
+        : tr("Importing layers from %1...").arg(fi.fileName()));
+    emit progressChanged(20);
+
+    QList<SpriteBox> docBoxes = m_document->boxes();
+    QList<QImage> docFrames = m_document->frames();
+    QList<SpriteLayer> docLayers = m_document->layers();
+    QImage docAtlas = m_document->atlas();
+    int frameCount = m_document->frameCount();
+    QMap<int, QList<SpriteCel>> docCels;
+    for (int f = 0; f < frameCount; ++f) {
+        if (m_document->hasFrameCels(f)) {
+            docCels[f] = m_document->frameCels(f);
+        }
+    }
+
+    QFuture<AsyncExtractionResult> future = QtConcurrent::run([filePath, asCommonBackground, docBoxes, docFrames, docLayers, docAtlas, frameCount, docCels]() -> AsyncExtractionResult {
+        AsyncExtractionResult result;
+        result.type = asCommonBackground ? AsyncExtractionResult::JobAddCommonBackground : AsyncExtractionResult::JobAddLayers;
+        result.filePath = filePath;
+
+        SpriteDocument incomingDoc;
+        Extractor *extractor = ExtractorRegistry::instance().findDecoder(filePath);
+        if (extractor) {
+            ExtractorError exErr;
+            if (!extractor->read(filePath, incomingDoc, &exErr)) {
+                result.success = false;
+                result.errorMessage = exErr.toString();
+                return result;
+            }
+        } else {
+            QString loadErr;
+            QImage img = VramTextureCompressor::loadAtlasImage(filePath, &loadErr);
+            if (img.isNull()) {
+                result.success = false;
+                result.errorMessage = QObject::tr("Failed to load image: %1").arg(loadErr.isEmpty() ? filePath : loadErr);
+                return result;
+            }
+            incomingDoc.setAtlas((img.format() == QImage::Format_ARGB32) ? img : img.convertToFormat(QImage::Format_ARGB32));
+            incomingDoc.setFrames({incomingDoc.atlas()}, {SpriteBox(QRect(0, 0, img.width(), img.height()))});
+        }
+
+        QList<SpriteLayer> combinedLayers = docLayers;
+        QMap<int, QList<SpriteCel>> combinedCels = docCels;
+
+        if (combinedLayers.isEmpty() && frameCount > 0) {
+            SpriteLayer baseLayer;
+            baseLayer.id = QStringLiteral("layer_base");
+            baseLayer.name = QObject::tr("Base");
+            baseLayer.visible = true;
+            baseLayer.locked = false;
+            baseLayer.opacity = 255;
+            baseLayer.zOrder = 0;
+            combinedLayers.append(baseLayer);
+
+            for (int f = 0; f < frameCount; ++f) {
+                SpriteCel baseCel;
+                baseCel.layerIndex = 0;
+                baseCel.layerId = baseLayer.id;
+                baseCel.image = (f < docFrames.size()) ? docFrames[f] : QImage();
+                baseCel.x = 0;
+                baseCel.y = 0;
+                baseCel.opacity = 255;
+                combinedCels[f].append(baseCel);
+            }
+        }
+
+        if (asCommonBackground) {
+            SpriteLayer bgLayer;
+            bgLayer.id = QStringLiteral("layer_bg_%1").arg(QUuid::createUuid().toString(QUuid::Id128).left(8));
+            bgLayer.name = QObject::tr("Background: %1").arg(QFileInfo(filePath).completeBaseName());
+            bgLayer.visible = true;
+            bgLayer.locked = false;
+            bgLayer.opacity = 255;
+            bgLayer.zOrder = 0;
+
+            for (auto &lyr : combinedLayers) {
+                lyr.zOrder += 1;
+            }
+            combinedLayers.prepend(bgLayer);
+
+            for (auto it = combinedCels.begin(); it != combinedCels.end(); ++it) {
+                for (auto &cel : it.value()) {
+                    cel.layerIndex += 1;
+                }
+            }
+
+            QImage srcBg = !incomingDoc.atlas().isNull() ? incomingDoc.atlas() : (incomingDoc.frameCount() > 0 ? incomingDoc.frame(0) : QImage());
+            QMap<quint64, QImage> scaledBgCache;
+
+            for (int f = 0; f < frameCount; ++f) {
+                QSize fSize = (f < docBoxes.size() && !docBoxes[f].rect.isEmpty())
+                                  ? docBoxes[f].rect.size()
+                                  : (f < docFrames.size() ? docFrames[f].size() : QSize(32, 32));
+                quint64 sizeKey = (static_cast<quint64>(fSize.width()) << 32) | static_cast<quint32>(fSize.height());
+
+                if (!scaledBgCache.contains(sizeKey)) {
+                    QImage scaled = srcBg.scaled(fSize, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+                    if (scaled.size() != fSize) {
+                        int ox = (scaled.width() - fSize.width()) / 2;
+                        int oy = (scaled.height() - fSize.height()) / 2;
+                        scaled = scaled.copy(ox, oy, fSize.width(), fSize.height());
+                    }
+                    scaledBgCache[sizeKey] = scaled.convertToFormat(QImage::Format_ARGB32);
+                }
+
+                SpriteCel bgCel;
+                bgCel.layerIndex = 0;
+                bgCel.layerId = bgLayer.id;
+                bgCel.opacity = 255;
+                bgCel.x = 0;
+                bgCel.y = 0;
+                bgCel.image = scaledBgCache.value(sizeKey);
+                combinedCels[f].prepend(bgCel);
+            }
+        } else if (incomingDoc.hasLayers()) {
+            for (int l = 0; l < incomingDoc.layers().size(); ++l) {
+                SpriteLayer incLayer = incomingDoc.layer(l);
+                SpriteLayer newLayer = incLayer;
+                newLayer.id = QStringLiteral("layer_%1_%2").arg(QFileInfo(filePath).baseName()).arg(incLayer.id.isEmpty() ? QString::number(l) : incLayer.id);
+                newLayer.zOrder = combinedLayers.size();
+                int newLayerIdx = combinedLayers.size();
+                combinedLayers.append(newLayer);
+
+                const bool sameFrameCount = (incomingDoc.frameCount() == frameCount && incomingDoc.frameCount() > 0);
+
+                for (int f = 0; f < frameCount; ++f) {
+                    if (sameFrameCount && incomingDoc.hasFrameCels(f)) {
+                        for (const SpriteCel &c : incomingDoc.frameCels(f)) {
+                            if (c.layerIndex == l || (!incLayer.id.isEmpty() && c.layerId == incLayer.id)) {
+                                SpriteCel celCopy = c;
+                                celCopy.layerIndex = newLayerIdx;
+                                celCopy.layerId = newLayer.id;
+                                combinedCels[f].append(celCopy);
+                                break;
+                            }
+                        }
+                    } else {
+                        SpriteCel emptyCel;
+                        emptyCel.layerIndex = newLayerIdx;
+                        emptyCel.layerId = newLayer.id;
+                        emptyCel.opacity = 255;
+                        emptyCel.x = 0;
+                        emptyCel.y = 0;
+                        emptyCel.image = QImage((f < docFrames.size()) ? docFrames[f].size() : QSize(32, 32), QImage::Format_ARGB32_Premultiplied);
+                        emptyCel.image.fill(Qt::transparent);
+                        combinedCels[f].append(emptyCel);
+                    }
+                }
+            }
+        } else {
+            SpriteLayer newLayer;
+            newLayer.id = QStringLiteral("layer_%1_%2").arg(QFileInfo(filePath).baseName()).arg(QUuid::createUuid().toString(QUuid::Id128).left(8));
+            newLayer.name = QFileInfo(filePath).completeBaseName();
+            newLayer.visible = true;
+            newLayer.locked = false;
+            newLayer.opacity = 255;
+            newLayer.zOrder = combinedLayers.size();
+            int newLayerIdx = combinedLayers.size();
+            combinedLayers.append(newLayer);
+
+            QImage incomingAtlas = incomingDoc.atlas();
+            if (incomingAtlas.isNull() && incomingDoc.frameCount() > 0) {
+                incomingAtlas = incomingDoc.frame(0);
+            }
+
+            QSize targetAtlasSize = docAtlas.isNull() ? QSize() : docAtlas.size();
+            if (targetAtlasSize.isValid() && !targetAtlasSize.isEmpty() && !incomingAtlas.isNull() && incomingAtlas.size() != targetAtlasSize) {
+                incomingAtlas = incomingAtlas.scaled(targetAtlasSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            }
+
+            for (int f = 0; f < frameCount; ++f) {
+                SpriteCel cel;
+                cel.layerIndex = newLayerIdx;
+                cel.layerId = newLayer.id;
+                cel.opacity = 255;
+                cel.x = 0;
+                cel.y = 0;
+
+                QRect r = (f < docBoxes.size()) ? docBoxes[f].rect : QRect();
+                if (!r.isEmpty() && !incomingAtlas.isNull()) {
+                    QRect clipped = r.intersected(incomingAtlas.rect());
+                    if (!clipped.isEmpty()) {
+                        if (clipped.size() == r.size()) {
+                            cel.image = incomingAtlas.copy(clipped);
+                        } else {
+                            cel.image = QImage(r.size(), QImage::Format_ARGB32_Premultiplied);
+                            cel.image.fill(Qt::transparent);
+                            QPainter p(&cel.image);
+                            p.drawImage(clipped.topLeft() - r.topLeft(), incomingAtlas.copy(clipped));
+                            p.end();
+                        }
+                    } else {
+                        cel.image = QImage(r.size(), QImage::Format_ARGB32_Premultiplied);
+                        cel.image.fill(Qt::transparent);
+                    }
+                } else if (f < incomingDoc.frameCount()) {
+                    cel.image = incomingDoc.frame(f);
+                } else {
+                    cel.image = QImage((f < docFrames.size()) ? docFrames[f].size() : QSize(32, 32), QImage::Format_ARGB32_Premultiplied);
+                    cel.image.fill(Qt::transparent);
+                }
+
+                combinedCels[f].append(cel);
+            }
+        }
+
+        // Pre-composite frames and atlas in worker thread
+        QList<QImage> compositedFrames;
+        compositedFrames.reserve(frameCount);
+        for (int f = 0; f < frameCount; ++f) {
+            QSize fSize = (f < docBoxes.size() && !docBoxes[f].rect.isEmpty())
+                              ? docBoxes[f].rect.size()
+                              : ((f < docFrames.size() && !docFrames[f].isNull()) ? docFrames[f].size() : QSize(32, 32));
+            QList<SpriteCel> cels = combinedCels.value(f);
+            compositedFrames.append(compositeFrameFromCels(fSize, combinedLayers, cels));
+        }
+
+        QImage compositedAtlas = compositeAtlasFromFrames(docAtlas.size(), compositedFrames, docBoxes);
+
+        result.layers = combinedLayers;
+        result.frameCels = combinedCels;
+        result.frameImages = compositedFrames;
+        result.atlas = compositedAtlas;
         result.success = true;
         return result;
     });
@@ -791,10 +1609,10 @@ void ProjectController::detectSpritesAndRefreshAsync(int alphaThreshold,
 void ProjectController::onAsyncJobFinished()
 {
     AsyncExtractionResult res = m_watcher.result();
-    m_isProcessing = false;
-    emit processingFinished();
 
     if (!res.success) {
+        m_isProcessing = false;
+        emit processingFinished();
         emit progressChanged(0);
         if (res.type == AsyncExtractionResult::JobOpen) {
             emit fileLoadError(res.filePath, res.errorMessage);
@@ -804,13 +1622,23 @@ void ProjectController::onAsyncJobFinished()
         return;
     }
 
-    if (m_document) {
-        m_document->setAtlas(res.atlas);
-        m_document->setFrames(res.frameImages, res.boxes);
-        m_document->setFilePath(res.filePath);
-    }
-
     if (res.type == AsyncExtractionResult::JobOpen) {
+        if (m_document) {
+            m_document->setAtlas(res.atlas);
+            m_document->setFrames(res.frameImages, res.boxes);
+            m_document->setLayers(res.layers);
+            for (auto it = res.frameCels.begin(); it != res.frameCels.end(); ++it) {
+                m_document->setFrameCels(it.key(), it.value());
+            }
+            if (!res.animations.isEmpty()) {
+                m_document->setAnimations(res.animations);
+            }
+            if (!res.skinProfiles.isEmpty()) {
+                m_document->setSkinProfiles(res.skinProfiles);
+            }
+            m_document->setFilePath(res.filePath);
+        }
+
         m_currentFilePath = res.filePath;
         m_currentProjectPath.clear();
         addRecentFile(res.filePath);
@@ -832,15 +1660,103 @@ void ProjectController::onAsyncJobFinished()
         emit statusMessage(tr("Loaded %1 successfully.").arg(QFileInfo(res.filePath).fileName()));
         emit progressChanged(100);
         emit fileLoaded(res.filePath);
+    } else if (res.type == AsyncExtractionResult::JobReplaceAtlas) {
+        if (m_document) {
+            if (m_undoStack) {
+                m_undoStack->push(new ReplaceAtlasMediaCommand(m_document,
+                                                               res.atlas,
+                                                               res.frameImages,
+                                                               res.boxes,
+                                                               res.layers,
+                                                               res.frameCels,
+                                                               res.animations,
+                                                               res.skinProfiles));
+            } else {
+                m_document->setAtlas(res.atlas);
+                m_document->setFrames(res.frameImages, res.boxes);
+                m_document->setLayers(res.layers);
+                for (auto it = res.frameCels.begin(); it != res.frameCels.end(); ++it) {
+                    m_document->setFrameCels(it.key(), it.value());
+                }
+                if (!res.animations.isEmpty()) {
+                    m_document->setAnimations(res.animations);
+                }
+                if (!res.skinProfiles.isEmpty()) {
+                    m_document->setSkinProfiles(res.skinProfiles);
+                }
+            }
+            setProjectModified(true);
+            if (m_sessionManager && m_sessionManager->hasActiveSession()) {
+                ProjectManager::saveProjectToSessionDir(*m_document, m_sessionManager->currentSessionDir());
+                m_sessionManager->gitCommit(tr("Replace atlas with %1").arg(QFileInfo(res.filePath).fileName()));
+            }
+            addRecentFile(res.filePath);
+            emit statusMessage(tr("Replaced atlas with %1 successfully.").arg(QFileInfo(res.filePath).fileName()));
+            emit progressChanged(100);
+            emit fileLoaded(res.filePath);
+        }
+    } else if (res.type == AsyncExtractionResult::JobAddLayers || res.type == AsyncExtractionResult::JobAddCommonBackground) {
+        if (m_document) {
+            const bool asCommonBackground = (res.type == AsyncExtractionResult::JobAddCommonBackground);
+            if (m_undoStack) {
+                m_undoStack->push(new AddMediaLayersCommand(m_document,
+                                                            res.layers,
+                                                            res.frameCels,
+                                                            QFileInfo(res.filePath).fileName(),
+                                                            res.frameImages,
+                                                            res.atlas));
+            } else {
+                m_document->setLayers(res.layers);
+                for (auto it = res.frameCels.begin(); it != res.frameCels.end(); ++it) {
+                    m_document->setFrameCels(it.key(), it.value());
+                }
+                if (!res.frameImages.isEmpty()) {
+                    m_document->setCompositedFrames(res.frameImages);
+                } else {
+                    m_document->recompositeAllFrames();
+                }
+                if (!res.atlas.isNull()) {
+                    m_document->setAtlas(res.atlas);
+                } else {
+                    m_document->recompositeAtlas();
+                }
+            }
+
+            setProjectModified(true);
+            if (m_sessionManager && m_sessionManager->hasActiveSession()) {
+                ProjectManager::saveProjectToSessionDir(*m_document, m_sessionManager->currentSessionDir());
+                m_sessionManager->gitCommit(tr("Add layers from %1").arg(QFileInfo(res.filePath).fileName()));
+            }
+
+            addRecentFile(res.filePath);
+            emit statusMessage(asCommonBackground
+                ? tr("Added common background from %1 successfully.").arg(QFileInfo(res.filePath).fileName())
+                : tr("Added layers from %1 successfully.").arg(QFileInfo(res.filePath).fileName()));
+            emit progressChanged(100);
+            emit fileLoaded(res.filePath);
+        }
     } else if (res.type == AsyncExtractionResult::JobRemoveBackground) {
+        if (m_document) {
+            m_document->setAtlas(res.atlas);
+            m_document->setFrames(res.frameImages, res.boxes);
+            m_document->setFilePath(res.filePath);
+        }
         emit statusMessage(tr("Background removed successfully."));
         emit progressChanged(100);
         emit backgroundRemoved();
     } else if (res.type == AsyncExtractionResult::JobDetectSprites) {
+        if (m_document) {
+            m_document->setAtlas(res.atlas);
+            m_document->setFrames(res.frameImages, res.boxes);
+            m_document->setFilePath(res.filePath);
+        }
         emit statusMessage(tr("%1 sprite(s) detected successfully.").arg(res.frameImages.size()));
         emit progressChanged(100);
         emit spritesDetected();
     }
+
+    m_isProcessing = false;
+    emit processingFinished();
 }
 
 void ProjectController::onUndoStackIndexChanged(int idx)

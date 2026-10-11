@@ -111,9 +111,38 @@ void TestGuiIntegration::testMainWindowDragAndDropMimeTypes()
         QDragEnterEvent event(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(&mw, &event);
         QVERIFY(event.isAccepted());
+
+        QDragMoveEvent moveEvent(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QApplication::sendEvent(&mw, &moveEvent);
+        QVERIFY(moveEvent.isAccepted());
+
+        // Also test directly on centralWidget to ensure event filter intercepts for child widgets
+        if (mw.centralWidget()) {
+            QDragEnterEvent childEnter(QPoint(10, 10), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+            QApplication::sendEvent(mw.centralWidget(), &childEnter);
+            QVERIFY(childEnter.isAccepted());
+
+            QDragMoveEvent childMove(QPoint(10, 10), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+            QApplication::sendEvent(mw.centralWidget(), &childMove);
+            QVERIFY(childMove.isAccepted());
+        }
     }
 
-    // 3. Non-URL mime data (plain text) -> rejected
+    // 3. Raw GNOME text/uri-list format
+    {
+        QMimeData mime;
+        mime.setData(QStringLiteral("text/uri-list"), "file:///path/to/hero.png\r\n");
+
+        QDragEnterEvent event(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QApplication::sendEvent(&mw, &event);
+        QVERIFY(event.isAccepted());
+
+        QDragMoveEvent moveEvent(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QApplication::sendEvent(&mw, &moveEvent);
+        QVERIFY(moveEvent.isAccepted());
+    }
+
+    // 4. Non-URL mime data (plain text) -> rejected
     {
         QMimeData mime;
         mime.setText(QStringLiteral("Some plain text without urls"));

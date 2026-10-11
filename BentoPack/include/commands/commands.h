@@ -372,5 +372,73 @@ private:
     QImage                      m_newAtlas;
 };
 
+/**
+ * @brief Command to replace the entire document atlas and frames with new incoming media.
+ */
+class BENTOPACK_CORE_EXPORT ReplaceAtlasMediaCommand : public QUndoCommand
+{
+public:
+    ReplaceAtlasMediaCommand(SpriteDocument *doc,
+                             const QImage &newAtlas,
+                             const QList<QImage> &newFrames,
+                             const QList<SpriteBox> &newBoxes,
+                             const QList<SpriteLayer> &newLayers = {},
+                             const QMap<int, QList<SpriteCel>> &newFrameCels = {},
+                             const QMap<QString, SpriteAnimation> &newAnimations = {},
+                             const QMap<QString, SkinProfile> &newSkinProfiles = {},
+                             QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument*                 m_doc;
+    QImage                          m_oldAtlas;
+    QList<QImage>                  m_oldFrames;
+    QList<SpriteBox>                m_oldBoxes;
+    QList<SpriteLayer>              m_oldLayers;
+    QMap<int, QList<SpriteCel>>     m_oldFrameCels;
+    QMap<QString, SpriteAnimation>  m_oldAnimations;
+    QMap<QString, SkinProfile>      m_oldSkinProfiles;
+
+    QImage                          m_newAtlas;
+    QList<QImage>                  m_newFrames;
+    QList<SpriteBox>                m_newBoxes;
+    QList<SpriteLayer>              m_newLayers;
+    QMap<int, QList<SpriteCel>>     m_newFrameCels;
+    QMap<QString, SpriteAnimation>  m_newAnimations;
+    QMap<QString, SkinProfile>      m_newSkinProfiles;
+};
+
+/**
+ * @brief Command to stack new media layers and cels on top of the existing document.
+ */
+class BENTOPACK_CORE_EXPORT AddMediaLayersCommand : public QUndoCommand
+{
+public:
+    AddMediaLayersCommand(SpriteDocument *doc,
+                          const QList<SpriteLayer> &newLayers,
+                          const QMap<int, QList<SpriteCel>> &newFrameCels,
+                          const QString &mediaName = QString(),
+                          const QList<QImage> &newFrames = {},
+                          const QImage &newAtlas = QImage(),
+                          QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument*                 m_doc;
+    QList<SpriteLayer>              m_oldLayers;
+    QMap<int, QList<SpriteCel>>     m_oldFrameCels;
+    QImage                          m_oldAtlas;
+    QList<QImage>                  m_oldFrames;
+
+    QList<SpriteLayer>              m_newLayers;
+    QMap<int, QList<SpriteCel>>     m_newFrameCels;
+    QList<QImage>                  m_newFrames;
+    QImage                          m_newAtlas;
+};
+
 #endif // COMMANDS_H
 

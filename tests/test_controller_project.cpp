@@ -15,6 +15,8 @@
 #include "project/sessionmanager.h"
 #include "filters/filterregistry.h"
 #include "extractor/extractorregistry.h"
+#include "widgets/openmediaconflictdialog.h"
+#include <QPushButton>
 
 class TestControllerProject : public QObject
 {
@@ -38,6 +40,10 @@ private slots:
     void testUndoRedoGitHeadSync();
     void testUndoGitWhenUndoStackEmpty();
     void testGitBranchingAndRedoSelection();
+    void testReplaceExistingAtlasWithMediaAndUndo();
+    void testAddMediaAsNewLayersAndUndo();
+    void testAddMediaAsCommonBackgroundAsync();
+    void testOpenMediaConflictDialogChoices();
 
 private:
     QString m_sampleDir;
@@ -579,6 +585,180 @@ void TestControllerProject::testGitBranchingAndRedoSelection()
     QCOMPARE(pc.sessionManager()->gitHeadCommitHash(), branch2Hash);
     QCOMPARE(doc.frameCount(), initialCount + 1);
     QCOMPARE(doc.box(initialCount).rect, QRect(50, 50, 20, 20));
+}
+
+void TestControllerProject::testReplaceExistingAtlasWithMediaAndUndo()
+{
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    ProjectController pc(&doc, &undoStack);
+
+    QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
+    if (!QFile::exists(heroPath)) {
+        heroPath = m_sampleDir + QStringLiteral("/hero.webp");
+    }
+    QString tilesPath = m_sampleDir + QStringLiteral("/tiles.png");
+    if (!QFile::exists(heroPath) || !QFile::exists(tilesPath)) {
+        QSKIP("Required sample images hero/tiles not found");
+    }
+
+    QString err;
+    QVERIFY(pc.openFile(heroPath, &err));
+    QVERIFY(doc.frameCount() > 0);
+    QVERIFY(!doc.atlas().isNull());
+
+    QImage oldAtlas = doc.atlas();
+    int oldFrameCount = doc.frameCount();
+
+    // 1. Replace existing atlas with tiles.png
+    QVERIFY(pc.replaceExistingAtlasWithMedia(tilesPath, &err));
+    QVERIFY(doc.frameCount() > 0);
+    QVERIFY(doc.atlas() != oldAtlas);
+
+    // 2. Undo: should restore hero atlas and frames
+    undoStack.undo();
+    QCOMPARE(doc.atlas(), oldAtlas);
+    QCOMPARE(doc.frameCount(), oldFrameCount);
+
+    // 3. Redo: should re-apply tiles atlas
+    undoStack.redo();
+    QVERIFY(doc.atlas() != oldAtlas);
+}
+
+void TestControllerProject::testAddMediaAsNewLayersAndUndo()
+{
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    ProjectController pc(&doc, &undoStack);
+
+    QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
+    if (!QFile::exists(heroPath)) {
+        heroPath = m_sampleDir + QStringLiteral("/hero.webp");
+    }
+    QString tilesPath = m_sampleDir + QStringLiteral("/tiles.png");
+    if (!QFile::exists(heroPath) || !QFile::exists(tilesPath)) {
+        QSKIP("Required sample images hero/tiles not found");
+    }
+
+    QString err;
+    QVERIFY(pc.openFile(heroPath, &err));
+    QCOMPARE(doc.layerCount(), 0);
+
+    // 1. Add tiles as new layers (Choice 3: Atlas Layer)
+    QVERIFY(pc.addMediaAsNewLayers(tilesPath, &err, false));
+    QVERIFY(doc.hasLayers());
+    // Initial content promoted to "Base", plus new layer for tiles => 2 layers
+    QCOMPARE(doc.layerCount(), 2);
+    QCOMPARE(doc.layer(0).name, QStringLiteral("Base"));
+    QVERIFY(doc.hasFrameCels(0));
+    // Verify that cel is sliced according to box(0).rect size, not the full tiles image size!
+    QCOMPARE(doc.frameCels(0).at(1).image.size(), doc.box(0).rect.size());
+
+    // 2. Undo: should restore to 0 layers (flat document)
+    undoStack.undo();
+    QCOMPARE(doc.layerCount(), 0);
+    QVERIFY(!doc.hasLayers());
+
+    // 3. Redo: should re-apply the 2 layers
+    undoStack.redo();
+    QCOMPARE(doc.layerCount(), 2);
+    QVERIFY(doc.hasLayers());
+}
+
+void TestControllerProject::testAddMediaAsCommonBackgroundAsync()
+{
+    SpriteDocument doc;
+    QUndoStack undoStack;
+    ProjectController pc(&doc, &undoStack);
+
+    QString heroPath = m_sampleDir + QStringLiteral("/hero.png");
+    if (!QFile::exists(heroPath)) {
+        heroPath = m_sampleDir + QStringLiteral("/hero.webp");
+    }
+    QString tilesPath = m_sampleDir + QStringLiteral("/tiles.png");
+    if (!QFile::exists(heroPath) || !QFile::exists(tilesPath)) {
+        QSKIP("Required sample images hero/tiles not found");
+    }
+
+    QString err;
+    QVERIFY(pc.openFile(heroPath, &err));
+    QCOMPARE(doc.layerCount(), 0);
+
+    QSignalSpy spyLoaded(&pc, &ProjectController::fileLoaded);
+    QSignalSpy spyProgress(&pc, &ProjectController::progressChanged);
+    QSignalSpy spyFinished(&pc, &ProjectController::processingFinished);
+
+    // Add tiles as common background asynchronously (Case 4)
+    pc.addMediaAsNewLayersAsync(tilesPath, true);
+    QVERIFY(spyFinished.wait(5000));
+    QCOMPARE(spyLoaded.count(), 1);
+
+    // Verify 100% progress was reported
+    QVERIFY(!spyProgress.isEmpty());
+    QCOMPARE(spyProgress.last().at(0).toInt(), 100);
+
+    // Initial content promoted to "Base", plus background layer at zOrder 0 => 2 layers
+    QCOMPARE(doc.layerCount(), 2);
+    QVERIFY(doc.hasLayers());
+    QCOMPARE(doc.layer(0).zOrder, 0);
+    QVERIFY(doc.layer(0).name.contains(QStringLiteral("Background")));
+    QCOMPARE(doc.layer(1).name, QStringLiteral("Base"));
+    QVERIFY(doc.hasFrameCels(0));
+    // Verify background cel is scaled to frame size
+    QCOMPARE(doc.frameCels(0).at(0).image.size(), doc.box(0).rect.size());
+
+    // Undo: should restore to 0 layers
+    undoStack.undo();
+    QCOMPARE(doc.layerCount(), 0);
+    QVERIFY(!doc.hasLayers());
+
+    // Redo: should re-apply the 2 layers
+    undoStack.redo();
+    QCOMPARE(doc.layerCount(), 2);
+    QVERIFY(doc.hasLayers());
+}
+
+void TestControllerProject::testOpenMediaConflictDialogChoices()
+{
+    OpenMediaConflictDialog dlg(QStringLiteral("sample/hero.png"));
+    QCOMPARE(dlg.selectedChoice(), OpenMediaConflictDialog::Choice::CloseAndOpenNew);
+
+    QPushButton *btn1 = dlg.findChild<QPushButton*>(QStringLiteral("btnChoiceCloseAndOpen"));
+    QPushButton *btn2 = dlg.findChild<QPushButton*>(QStringLiteral("btnChoiceReplaceAtlas"));
+    QPushButton *btn3 = dlg.findChild<QPushButton*>(QStringLiteral("btnChoiceAddNewLayers"));
+    QPushButton *btn4 = dlg.findChild<QPushButton*>(QStringLiteral("btnChoiceAddCommonBackground"));
+    QPushButton *btnCancel = dlg.findChild<QPushButton*>(QStringLiteral("btnCancel"));
+
+    QVERIFY(btn1 != nullptr);
+    QVERIFY(btn2 != nullptr);
+    QVERIFY(btn3 != nullptr);
+    QVERIFY(btn4 != nullptr);
+    QVERIFY(btnCancel != nullptr);
+
+    // Simulate clicking Option 2
+    btn2->click();
+    QCOMPARE(dlg.selectedChoice(), OpenMediaConflictDialog::Choice::ReplaceExistingAtlas);
+    QCOMPARE(dlg.result(), QDialog::Accepted);
+
+    // Simulate clicking Option 3
+    OpenMediaConflictDialog dlg3(QStringLiteral("sample/hero.png"));
+    QPushButton *b3 = dlg3.findChild<QPushButton*>(QStringLiteral("btnChoiceAddNewLayers"));
+    b3->click();
+    QCOMPARE(dlg3.selectedChoice(), OpenMediaConflictDialog::Choice::AddNewLayers);
+    QCOMPARE(dlg3.result(), QDialog::Accepted);
+
+    // Simulate clicking Option 4
+    OpenMediaConflictDialog dlg4(QStringLiteral("sample/hero.png"));
+    QPushButton *b4 = dlg4.findChild<QPushButton*>(QStringLiteral("btnChoiceAddCommonBackground"));
+    b4->click();
+    QCOMPARE(dlg4.selectedChoice(), OpenMediaConflictDialog::Choice::AddAsCommonBackground);
+    QCOMPARE(dlg4.result(), QDialog::Accepted);
+
+    // Simulate clicking Cancel
+    OpenMediaConflictDialog dlgCancel(QStringLiteral("sample/hero.png"));
+    QPushButton *bc = dlgCancel.findChild<QPushButton*>(QStringLiteral("btnCancel"));
+    bc->click();
+    QCOMPARE(dlgCancel.result(), QDialog::Rejected);
 }
 
 QTEST_MAIN(TestControllerProject)

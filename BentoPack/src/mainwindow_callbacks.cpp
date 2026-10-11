@@ -133,8 +133,6 @@ void MainWindow::on_actionExportAs_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    if (!maybeSave()) return;
-
     const QString title = tr("KEY_DIALOG_OPEN_TITLE");
     const QString formats = ExtractorRegistry::instance().openFilterString();
     QString fileName = QFileDialog::getOpenFileName(this, title, "", formats);

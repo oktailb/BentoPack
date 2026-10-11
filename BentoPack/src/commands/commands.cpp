@@ -692,3 +692,143 @@ void EditSpritePixelsCommand::undo()
     }
 }
 
+// ============================================================================
+// ReplaceAtlasMediaCommand
+// ============================================================================
+ReplaceAtlasMediaCommand::ReplaceAtlasMediaCommand(SpriteDocument *doc,
+                                                   const QImage &newAtlas,
+                                                   const QList<QImage> &newFrames,
+                                                   const QList<SpriteBox> &newBoxes,
+                                                   const QList<SpriteLayer> &newLayers,
+                                                   const QMap<int, QList<SpriteCel>> &newFrameCels,
+                                                   const QMap<QString, SpriteAnimation> &newAnimations,
+                                                   const QMap<QString, SkinProfile> &newSkinProfiles,
+                                                   QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+    , m_newAtlas(newAtlas)
+    , m_newFrames(newFrames)
+    , m_newBoxes(newBoxes)
+    , m_newLayers(newLayers)
+    , m_newFrameCels(newFrameCels)
+    , m_newAnimations(newAnimations)
+    , m_newSkinProfiles(newSkinProfiles)
+{
+    setText(QObject::tr("Replace Atlas Media"));
+    if (m_doc) {
+        m_oldAtlas = m_doc->atlas();
+        m_oldFrames = m_doc->frames();
+        m_oldBoxes = m_doc->boxes();
+        m_oldLayers = m_doc->layers();
+        for (int i = 0; i < m_doc->frameCount(); ++i) {
+            if (m_doc->hasFrameCels(i)) {
+                m_oldFrameCels[i] = m_doc->frameCels(i);
+            }
+        }
+        m_oldAnimations = m_doc->animations();
+        m_oldSkinProfiles = m_doc->skinProfiles();
+    }
+}
+
+void ReplaceAtlasMediaCommand::redo()
+{
+    if (!m_doc) return;
+    m_doc->setAtlas(m_newAtlas);
+    m_doc->setFrames(m_newFrames, m_newBoxes);
+    m_doc->setLayers(m_newLayers);
+    for (auto it = m_newFrameCels.begin(); it != m_newFrameCels.end(); ++it) {
+        m_doc->setFrameCels(it.key(), it.value());
+    }
+    if (!m_newAnimations.isEmpty()) {
+        m_doc->setAnimations(m_newAnimations);
+    }
+    if (!m_newSkinProfiles.isEmpty()) {
+        m_doc->setSkinProfiles(m_newSkinProfiles);
+    }
+}
+
+void ReplaceAtlasMediaCommand::undo()
+{
+    if (!m_doc) return;
+    m_doc->setAtlas(m_oldAtlas);
+    m_doc->setFrames(m_oldFrames, m_oldBoxes);
+    m_doc->setLayers(m_oldLayers);
+    for (auto it = m_oldFrameCels.begin(); it != m_oldFrameCels.end(); ++it) {
+        m_doc->setFrameCels(it.key(), it.value());
+    }
+    m_doc->setAnimations(m_oldAnimations);
+    m_doc->setSkinProfiles(m_oldSkinProfiles);
+}
+
+// ============================================================================
+// AddMediaLayersCommand
+// ============================================================================
+AddMediaLayersCommand::AddMediaLayersCommand(SpriteDocument *doc,
+                                             const QList<SpriteLayer> &newLayers,
+                                             const QMap<int, QList<SpriteCel>> &newFrameCels,
+                                             const QString &mediaName,
+                                             const QList<QImage> &newFrames,
+                                             const QImage &newAtlas,
+                                             QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+    , m_newLayers(newLayers)
+    , m_newFrameCels(newFrameCels)
+    , m_newFrames(newFrames)
+    , m_newAtlas(newAtlas)
+{
+    if (mediaName.isEmpty()) {
+        setText(QObject::tr("Add Media Layers"));
+    } else {
+        setText(QObject::tr("Add Layers from %1").arg(mediaName));
+    }
+    if (m_doc) {
+        m_oldLayers = m_doc->layers();
+        for (int i = 0; i < m_doc->frameCount(); ++i) {
+            if (m_doc->hasFrameCels(i)) {
+                m_oldFrameCels[i] = m_doc->frameCels(i);
+            }
+        }
+        m_oldAtlas = m_doc->atlas();
+        m_oldFrames = m_doc->frames();
+    }
+}
+
+void AddMediaLayersCommand::redo()
+{
+    if (!m_doc) return;
+    m_doc->setLayers(m_newLayers);
+    for (auto it = m_newFrameCels.begin(); it != m_newFrameCels.end(); ++it) {
+        m_doc->setFrameCels(it.key(), it.value());
+    }
+    if (!m_newFrames.isEmpty()) {
+        m_doc->setCompositedFrames(m_newFrames);
+    } else {
+        m_doc->recompositeAllFrames();
+    }
+    if (!m_newAtlas.isNull()) {
+        m_doc->setAtlas(m_newAtlas);
+    } else {
+        m_doc->recompositeAtlas();
+    }
+}
+
+void AddMediaLayersCommand::undo()
+{
+    if (!m_doc) return;
+    m_doc->setLayers(m_oldLayers);
+    for (auto it = m_oldFrameCels.begin(); it != m_oldFrameCels.end(); ++it) {
+        m_doc->setFrameCels(it.key(), it.value());
+    }
+    if (!m_oldFrames.isEmpty()) {
+        m_doc->setCompositedFrames(m_oldFrames);
+    } else if (m_doc->hasLayers()) {
+        m_doc->recompositeAllFrames();
+    }
+    if (!m_oldAtlas.isNull()) {
+        m_doc->setAtlas(m_oldAtlas);
+    } else if (m_doc->hasLayers()) {
+        m_doc->recompositeAtlas();
+    }
+}
+

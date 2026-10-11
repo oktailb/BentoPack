@@ -2496,6 +2496,57 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
     </message>
 </context>
 <context>
+    <name>OpenMediaConflictDialog</name>
+    <message>
+        <source>Open Media — Project Already Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A project is currently open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close Existing &amp; Open as New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update / Replace Existing Atlas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add as New Atlas Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add as Common Background / Overlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Abbrechen</translation>
+    </message>
+</context>
+<context>
     <name>OutlineFilter</name>
     <message>
         <source>Outline &amp; Silhouette Generator...</source>
@@ -3570,8 +3621,52 @@ Möchten Sie den Atlas jetzt neu packen?</translation>
         <translation>%1 erfolgreich geladen.</translation>
     </message>
     <message>
-        <source>Loading %1 in background...</source>
-        <translation>%1 wird im Hintergrund geladen...</translation>
+        <source>Decoded atlas image is null.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace atlas with %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replaced atlas with %1 successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to load image: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add layers from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Added common background from %1 successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Added layers from %1 successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replacing atlas with %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adding common background from %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Importing layers from %1...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3707,6 +3802,18 @@ Möchten Sie den Atlas jetzt neu packen?</translation>
         <translation>Hintergrund entfernen</translation>
     </message>
     <message>
+        <source>Replace Atlas Media</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Media Layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Layers from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Failed to decode image from: %1</source>
         <translation>Bild konnte nicht dekodiert werden von: %1</translation>
     </message>
@@ -3717,6 +3824,18 @@ Möchten Sie den Atlas jetzt neu packen?</translation>
     <message>
         <source>Failed to remove background from atlas.</source>
         <translation>Hintergrund konnte nicht vom Atlas entfernt werden.</translation>
+    </message>
+    <message>
+        <source>Failed to load image: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background: %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>

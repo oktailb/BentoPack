@@ -221,6 +221,7 @@ public:
     QImage polygonClippedFrame(int index) const;
     QList<QImage> polygonClippedFrames() const;
     void setFrames(const QList<QImage> &frames, const QList<SpriteBox> &boxes);
+    void setCompositedFrames(const QList<QImage> &frames);
     void addFrame(const QImage &image, const SpriteBox &box = SpriteBox());
     void insertFrame(int index, const QImage &image, const SpriteBox &box);
     void replaceFrame(int index, const QImage &image, const SpriteBox &box = SpriteBox());

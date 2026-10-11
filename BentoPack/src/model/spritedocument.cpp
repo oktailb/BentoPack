@@ -284,6 +284,13 @@ void SpriteDocument::setFrames(const QList<QImage> &frames, const QList<SpriteBo
     }
 }
 
+void SpriteDocument::setCompositedFrames(const QList<QImage> &frames)
+{
+    m_frames = frames;
+    recalculateMaxFrameDimensions();
+    emit framesChanged();
+}
+
 void SpriteDocument::addFrame(const QImage &image, const SpriteBox &box)
 {
     if (!image.isNull()) {

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -113,17 +113,53 @@ bool SpriteDetector::detectToImages(const QImage &sourceImage,
         ? AppConfig::instance().atlas().defaultVerticalTolerance
         : options.verticalTolerance;
 
-    std::vector<int> componentIdAtPixel(static_cast<size_t>(w * h), -1);
-    QList<QRect> componentRects;
-    std::vector<Point2D> stack;
-    stack.reserve(4096);
+    // Fast-path: If image has no alpha channel or is completely opaque (e.g. photos/wallpapers),
+    // it is guaranteed to be a single image component rather than segmented sprites.
+    if (!sourceImage.hasAlphaChannel()) {
+        SpriteBox singleBox;
+        singleBox.rect = QRect(0, 0, w, h);
+        outBoxes.append(singleBox);
+        outFrames.append(image);
+        if (progressCallback) progressCallback(100);
+        return true;
+    }
 
     std::vector<const QRgb*> scanLines(h);
     for (int y = 0; y < h; ++y) {
         scanLines[y] = reinterpret_cast<const QRgb*>(image.constScanLine(y));
     }
 
+    // Quick check if the image has any transparent pixels below alpha threshold
+    bool hasAnyTransparentPixel = false;
     for (int y = 0; y < h; ++y) {
+        const QRgb *lineY = scanLines[y];
+        for (int x = 0; x < w; ++x) {
+            if (qAlpha(lineY[x]) <= ALPHA_THRESHOLD) {
+                hasAnyTransparentPixel = true;
+                break;
+            }
+        }
+        if (hasAnyTransparentPixel) break;
+    }
+
+    if (!hasAnyTransparentPixel) {
+        SpriteBox singleBox;
+        singleBox.rect = QRect(0, 0, w, h);
+        outBoxes.append(singleBox);
+        outFrames.append(image);
+        if (progressCallback) progressCallback(100);
+        return true;
+    }
+
+    std::vector<int> componentIdAtPixel(static_cast<size_t>(w * h), -1);
+    QList<QRect> componentRects;
+    std::vector<Point2D> stack;
+    stack.reserve(4096);
+
+    for (int y = 0; y < h; ++y) {
+        if (progressCallback && (y % 100 == 0 || y == h - 1)) {
+            progressCallback(static_cast<int>((static_cast<double>(y) / h) * 50.0));
+        }
         const QRgb *lineY = scanLines[y];
         const int y_w = y * w;
         for (int x = 0; x < w; ++x) {

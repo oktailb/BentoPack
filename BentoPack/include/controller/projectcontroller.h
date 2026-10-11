@@ -32,11 +32,15 @@ class SpriteDocument;
 class QUndoStack;
 
 struct BENTOPACK_CORE_EXPORT AsyncExtractionResult {
-    enum JobType { JobOpen, JobRemoveBackground, JobDetectSprites };
+    enum JobType { JobOpen, JobRemoveBackground, JobDetectSprites, JobReplaceAtlas, JobAddLayers, JobAddCommonBackground };
     JobType type = JobOpen;
     QImage atlas;
     QList<QImage> frameImages;
     QList<SpriteBox> boxes;
+    QList<SpriteLayer> layers;
+    QMap<int, QList<SpriteCel>> frameCels;
+    QMap<QString, SpriteAnimation> animations;
+    QMap<QString, SkinProfile> skinProfiles;
     QString filePath;
     bool success = false;
     QString errorMessage;
@@ -73,6 +77,7 @@ public:
 
     bool isProjectModified() const { return m_isModified; }
     void setProjectModified(bool modified);
+    bool isProcessing() const { return m_isProcessing; }
 
     QString currentProjectPath() const;
     QString currentProjectName() const;
@@ -84,6 +89,11 @@ public:
 
     bool openFile(const QString &filePath, QString *errorMsg = nullptr);
     void openFileAsync(const QString &filePath);
+    bool replaceExistingAtlasWithMedia(const QString &filePath, QString *errorMsg = nullptr);
+    void replaceExistingAtlasWithMediaAsync(const QString &filePath);
+    bool addMediaAsNewLayers(const QString &filePath, QString *errorMsg = nullptr, bool asCommonBackground = false);
+    void addMediaAsNewLayersAsync(const QString &filePath, bool asCommonBackground = false);
+    static bool decodeFileToDocument(const QString &filePath, SpriteDocument &outDoc, QString *errorMsg = nullptr);
 
     bool save(const QString &filePath, QString *errorMsg = nullptr);
     bool exportData(const QString &filePath, const ExportOptions &options = ExportOptions{}, QString *errorMsg = nullptr);

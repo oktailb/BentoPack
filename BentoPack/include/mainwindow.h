@@ -128,6 +128,8 @@ protected:
     void closeEvent(QCloseEvent *e) override;
     void resizeEvent(QResizeEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
@@ -135,6 +137,7 @@ protected:
 
     void changeEvent(QEvent *event) override;
     void resetDefaultLayout();
+    void enableFileDropsRecursively(QWidget *widget);
 
 private slots:
     // Menu actions

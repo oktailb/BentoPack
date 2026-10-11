@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -126,8 +126,175 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     QMainWindow::keyPressEvent(event);
 }
 
+#include <QFileInfo>
+#include <QUrl>
+#include <QFile>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
+#include <QAbstractScrollArea>
+#include <QChildEvent>
+
+namespace {
+
+QString extractFilePathFromMimeData(const QMimeData *mime)
+{
+    if (!mime) return QString();
+
+    auto cleanPath = [](const QString &raw) -> QString {
+        QString p = raw.trimmed();
+        if (p.startsWith(QLatin1String("file://"), Qt::CaseInsensitive)) {
+            QUrl u(p);
+            p = u.toLocalFile();
+            if (p.isEmpty()) {
+                p = u.path();
+            }
+        }
+        if (p.startsWith(QLatin1String("/"))) {
+            p = QUrl::fromPercentEncoding(p.toUtf8());
+        }
+        return p;
+    };
+
+    if (mime->hasUrls()) {
+        const QList<QUrl> urls = mime->urls();
+        for (const QUrl &url : urls) {
+            QString path = url.toLocalFile();
+            if (path.isEmpty() && url.scheme() == QLatin1String("file")) {
+                path = url.path();
+            }
+            path = cleanPath(path);
+            if (!path.isEmpty() && QFile::exists(path)) {
+                return path;
+            }
+        }
+    }
+
+    if (mime->hasFormat(QStringLiteral("text/uri-list"))) {
+        QByteArray data = mime->data(QStringLiteral("text/uri-list"));
+        QList<QByteArray> lines = data.split('\n');
+        for (QByteArray line : lines) {
+            line = line.trimmed();
+            if (line.isEmpty() || line.startsWith('#')) continue;
+            QString str = QString::fromUtf8(line);
+            QString path = cleanPath(str);
+            if (!path.isEmpty() && QFile::exists(path)) {
+                return path;
+            }
+        }
+    }
+
+    if (mime->hasText()) {
+        QString text = mime->text().trimmed();
+        QString path = cleanPath(text);
+        if (!path.isEmpty() && QFile::exists(path)) {
+            return path;
+        }
+    }
+
+    // Fallback if QFile::exists failed but URL was present
+    if (mime->hasUrls()) {
+        const QList<QUrl> urls = mime->urls();
+        if (!urls.isEmpty()) {
+            QString path = urls.first().toLocalFile();
+            if (path.isEmpty() && urls.first().scheme() == QLatin1String("file")) {
+                path = urls.first().path();
+            }
+            path = cleanPath(path);
+            if (!path.isEmpty()) {
+                return path;
+            }
+        }
+    }
+
+    return QString();
+}
+
+bool hasDroppableFile(const QMimeData *mime)
+{
+    if (!mime) return false;
+    if (mime->hasUrls()) {
+        for (const QUrl &url : mime->urls()) {
+            if (url.isLocalFile() || url.scheme().isEmpty() || url.scheme() == QLatin1String("file")) {
+                return true;
+            }
+        }
+    }
+    if (mime->hasFormat(QStringLiteral("text/uri-list"))) {
+        return true;
+    }
+    if (mime->hasText()) {
+        QString text = mime->text().trimmed();
+        if (text.startsWith(QLatin1String("file://"), Qt::CaseInsensitive) ||
+            (text.startsWith(QLatin1Char('/')) && text.length() < 1024)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+} // namespace
+
+void MainWindow::enableFileDropsRecursively(QWidget *widget)
+{
+    if (!widget) return;
+    widget->setAcceptDrops(true);
+    widget->removeEventFilter(this);
+    widget->installEventFilter(this);
+
+    if (auto *scrollArea = qobject_cast<QAbstractScrollArea *>(widget)) {
+        if (QWidget *vp = scrollArea->viewport()) {
+            vp->setAcceptDrops(true);
+            vp->removeEventFilter(this);
+            vp->installEventFilter(this);
+        }
+    }
+
+    const auto childrenList = widget->children();
+    for (QObject *child : childrenList) {
+        if (QWidget *childWidget = qobject_cast<QWidget *>(child)) {
+            enableFileDropsRecursively(childWidget);
+        }
+    }
+}
+
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    // Global file drag-and-drop handling for all child widgets, central widget and viewports
+    if (event->type() == QEvent::DragEnter) {
+        QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
+        if (hasDroppableFile(de->mimeData())) {
+            de->acceptProposedAction();
+            return true;
+        }
+    } else if (event->type() == QEvent::DragMove) {
+        QDragMoveEvent *dme = static_cast<QDragMoveEvent *>(event);
+        if (hasDroppableFile(dme->mimeData())) {
+            dme->acceptProposedAction();
+            return true;
+        }
+    } else if (event->type() == QEvent::DragLeave) {
+        // Let leave event pass through cleanly
+    } else if (event->type() == QEvent::Drop) {
+        QDropEvent *de = static_cast<QDropEvent *>(event);
+        if (hasDroppableFile(de->mimeData())) {
+            QString path = extractFilePathFromMimeData(de->mimeData());
+            if (!path.isEmpty()) {
+                de->acceptProposedAction();
+                processFile(path);
+                return true;
+            }
+        }
+    } else if (event->type() == QEvent::ChildAdded) {
+        QChildEvent *ce = static_cast<QChildEvent *>(event);
+        if (ce && ce->child()) {
+            if (QWidget *cw = qobject_cast<QWidget *>(ce->child())) {
+                enableFileDropsRecursively(cw);
+            }
+        }
+    }
+
     if (watched == ui->framesList || watched == ui->framesList->viewport()) {
         if (event->type() == QEvent::KeyPress) {
             QKeyEvent *kEvent = static_cast<QKeyEvent *>(event);
@@ -201,26 +368,34 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasUrls()) {
-        const QList<QUrl> urls = event->mimeData()->urls();
-        if (!urls.isEmpty()) {
-            event->acceptProposedAction();
-            return;
-        }
+    if (hasDroppableFile(event->mimeData())) {
+        event->acceptProposedAction();
+        return;
     }
     QMainWindow::dragEnterEvent(event);
 }
 
+void MainWindow::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (hasDroppableFile(event->mimeData())) {
+        event->acceptProposedAction();
+        return;
+    }
+    QMainWindow::dragMoveEvent(event);
+}
+
+void MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    QMainWindow::dragLeaveEvent(event);
+}
+
 void MainWindow::dropEvent(QDropEvent *event)
 {
-    const QList<QUrl> urls = event->mimeData()->urls();
-    if (!urls.isEmpty()) {
-        QString localFile = urls.first().toLocalFile();
-        if (!localFile.isEmpty()) {
-            processFile(localFile);
-            event->acceptProposedAction();
-            return;
-        }
+    QString localFile = extractFilePathFromMimeData(event->mimeData());
+    if (!localFile.isEmpty()) {
+        event->acceptProposedAction();
+        processFile(localFile);
+        return;
     }
     QMainWindow::dropEvent(event);
 }

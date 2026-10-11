@@ -25,6 +25,7 @@
 #include "include/widgets/polygonmeshdialog.h"
 #include "include/widgets/pixeleditordialog.h"
 #include "include/widgets/branchselectiondialog.h"
+#include "include/widgets/openmediaconflictdialog.h"
 #include "include/widgets/filtermenubuilder.h"
 #include "include/filters/filterregistry.h"
 #include <QShortcut>
@@ -104,6 +105,9 @@ MainWindow::MainWindow(QWidget *parent)
     updateWindowTitle();
     updatePivotUiFromSelection();
 
+    // Enable drag-and-drop file imports across the entire window hierarchy
+    enableFileDropsRecursively(this);
+
     // Check for crash recovery / orphan sessions
     QTimer::singleShot(100, this, &MainWindow::checkCrashRecovery);
     QTimer::singleShot(250, this, &MainWindow::checkStartupPreferences);
@@ -127,33 +131,63 @@ void MainWindow::setupControllers()
     // Connect ProjectController
     connect(m_projectController.get(), &ProjectController::fileLoaded, this, [this](const QString &filePath) {
         updateWindowTitle();
-        statusLabel->setText(filePath);
+        if (m_document && !m_document->filePath().isEmpty() && m_document->filePath() == filePath) {
+            if (statusLabel) statusLabel->setText(filePath);
+        }
+        if (frameModel) {
+            frameModel->clearThumbnailCache();
+        }
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+        m_animationController->updatePreview();
+        if (m_timelineWidget) {
+            m_timelineWidget->refresh();
+        }
         if (m_layerStackWidget) {
             m_layerStackWidget->setSpriteLayers(m_document->layers());
+            if (m_layersDock && m_document && m_document->hasLayers()) {
+                m_layersDock->show();
+                m_layersDock->raise();
+            }
         }
+        refreshFrameListDisplay();
     });
 
     connect(m_projectController.get(), &ProjectController::projectLoaded, this, [this](const QString &/*sspPath*/) {
         updateWindowTitle();
+        if (frameModel) {
+            frameModel->clearThumbnailCache();
+        }
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+        m_animationController->updatePreview();
+        if (m_timelineWidget) {
+            m_timelineWidget->refresh();
+        }
         if (m_layerStackWidget) {
             m_layerStackWidget->setSpriteLayers(m_document->layers());
         }
+        refreshFrameListDisplay();
     });
 
     connect(m_document, &SpriteDocument::documentReset, this, [this]() {
         updateWindowTitle();
+        if (frameModel) {
+            frameModel->clearThumbnailCache();
+        }
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+        m_animationController->updatePreview();
+        if (m_timelineWidget) {
+            m_timelineWidget->refresh();
+        }
         if (m_layerStackWidget) {
             m_layerStackWidget->setSpriteLayers(m_document->layers());
         }
+        refreshFrameListDisplay();
     });
 
     connect(m_projectController.get(), &ProjectController::projectSaved, this, [this](const QString &/*sspPath*/) {
@@ -174,10 +208,18 @@ void MainWindow::setupControllers()
 
     connect(m_projectController.get(), &ProjectController::statusMessage, this, [this](const QString &msg) {
         if (statusLabel) statusLabel->setText(msg);
+        if (ui->statusBar) ui->statusBar->showMessage(msg, 5000);
     });
 
     connect(m_projectController.get(), &ProjectController::progressChanged, this, [this](int percent) {
-        if (progressBar) progressBar->setValue(percent);
+        if (progressBar) {
+            if (percent > 0) {
+                progressBar->setRange(0, 100);
+                progressBar->setValue(percent);
+            } else {
+                progressBar->setRange(0, 0);
+            }
+        }
     });
 
     connect(m_projectController.get(), &ProjectController::recentFilesChanged, this, [this]() {
@@ -189,18 +231,34 @@ void MainWindow::setupControllers()
         m_atlasController->setAtlasImage(m_document->atlas());
         populateFrameList(m_document->frames(), m_document->boxes());
         m_animationController->syncAnimationList();
+        m_animationController->updatePreview();
         if (m_timelineWidget) m_timelineWidget->refresh();
         if (m_layerStackWidget) {
             m_layerStackWidget->setSpriteLayers(m_document->layers());
         }
+        refreshFrameListDisplay();
     });
 
     connect(m_projectController.get(), &ProjectController::processingStarted, this, [this]() {
         QApplication::setOverrideCursor(Qt::WaitCursor);
+        if (progressBar) {
+            progressBar->setRange(0, 0);
+            progressBar->setVisible(true);
+        }
     });
 
     connect(m_projectController.get(), &ProjectController::processingFinished, this, [this]() {
         QApplication::restoreOverrideCursor();
+        if (progressBar) {
+            progressBar->setRange(0, 100);
+            progressBar->setValue(100);
+            QTimer::singleShot(800, this, [this]() {
+                if (progressBar && (!m_projectController || !m_projectController->isProcessing())) {
+                    progressBar->setValue(0);
+                    progressBar->setVisible(false);
+                }
+            });
+        }
     });
 
     // Connect AtlasViewController
@@ -774,6 +832,44 @@ void MainWindow::saveLayoutState()
 
 void MainWindow::processFile(const QString &fileName)
 {
+    if (fileName.isEmpty()) return;
+
+    if (m_document && !m_document->isEmpty()) {
+        OpenMediaConflictDialog dlg(fileName, this);
+        if (dlg.exec() != QDialog::Accepted) {
+            return;
+        }
+
+        switch (dlg.selectedChoice()) {
+        case OpenMediaConflictDialog::Choice::CloseAndOpenNew:
+            if (maybeSave()) {
+                if (m_projectController) {
+                    m_projectController->openFileAsync(fileName);
+                }
+            }
+            break;
+        case OpenMediaConflictDialog::Choice::ReplaceExistingAtlas: {
+            if (m_projectController) {
+                m_projectController->replaceExistingAtlasWithMediaAsync(fileName);
+            }
+            break;
+        }
+        case OpenMediaConflictDialog::Choice::AddNewLayers: {
+            if (m_projectController) {
+                m_projectController->addMediaAsNewLayersAsync(fileName, false);
+            }
+            break;
+        }
+        case OpenMediaConflictDialog::Choice::AddAsCommonBackground: {
+            if (m_projectController) {
+                m_projectController->addMediaAsNewLayersAsync(fileName, true);
+            }
+            break;
+        }
+        }
+        return;
+    }
+
     if (m_projectController) {
         m_projectController->openFileAsync(fileName);
     }

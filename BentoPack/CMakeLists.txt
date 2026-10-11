@@ -138,6 +138,7 @@ set(BentoPackWidgets_SRC
     src/widgets/layerstackwidget.cpp
     src/widgets/colorpickerwidget.cpp
     src/widgets/branchselectiondialog.cpp
+    src/widgets/openmediaconflictdialog.cpp
 )
 
 set(BentoPackWidgets_UI
@@ -161,6 +162,7 @@ set(BentoPackWidgets_INCLUDE
     include/widgets/filterdialogbase.h
     include/widgets/filtermenubuilder.h
     include/widgets/branchselectiondialog.h
+    include/widgets/openmediaconflictdialog.h
     include/widgets/polygonmeshdialog.h
     include/widgets/pixelcanvas.h
     include/widgets/pixeleditordialog.h
