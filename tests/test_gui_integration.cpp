@@ -415,10 +415,10 @@ void TestGuiIntegration::testDocumentLayerVisibilityRecompositionAndExportStats(
             comboFormat->setCurrentIndex(godotIdx);
         }
         exportDlg.show();
-        QTest::qWait(100);
         QLabel *lblFrames = exportDlg.findChild<QLabel*>("lblFrames");
         QVERIFY(lblFrames != nullptr);
-        QVERIFY(lblFrames->text().contains(QStringLiteral("Layers: 2/2 visible")));
+        QMetaObject::invokeMethod(&exportDlg, "updateStats");
+        QTRY_VERIFY_WITH_TIMEOUT(lblFrames->text().contains(QStringLiteral("Layers: 2/2 visible")), 2000);
     }
 
     // Now hide background layer
@@ -442,10 +442,10 @@ void TestGuiIntegration::testDocumentLayerVisibilityRecompositionAndExportStats(
             comboFormat->setCurrentIndex(godotIdx);
         }
         exportDlg.show();
-        QTest::qWait(100);
         QLabel *lblFrames = exportDlg.findChild<QLabel*>("lblFrames");
         QVERIFY(lblFrames != nullptr);
-        QVERIFY(lblFrames->text().contains(QStringLiteral("Layers: 1/2 visible")));
+        QMetaObject::invokeMethod(&exportDlg, "updateStats");
+        QTRY_VERIFY_WITH_TIMEOUT(lblFrames->text().contains(QStringLiteral("Layers: 1/2 visible")), 2000);
     }
 
     // Test lock, opacity, blendMode and moveLayer
