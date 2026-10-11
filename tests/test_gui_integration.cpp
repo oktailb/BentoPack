@@ -222,7 +222,8 @@ void TestGuiIntegration::testExportDialogOptionsAndDefaults()
     doc.addSlice(QRect(32, 0, 32, 32));
     doc.addAnimation(QStringLiteral("idle"), {0, 1}, 10);
 
-    ExportDialog dlg(&doc, QStringLiteral("/tmp/test_export.png"));
+    const QString tempExportPath = QDir::cleanPath(QDir::tempPath() + QStringLiteral("/test_export.png"));
+    ExportDialog dlg(&doc, tempExportPath);
 
     // Verify initial default options
     ExportOptions opts = dlg.exportOptions();
@@ -290,7 +291,8 @@ void TestGuiIntegration::testExportDialogOptionsAndDefaults()
     }
 
     // Test destination directory and project name updates
-    txtOutputDir->setText(QStringLiteral("C:/output_test"));
+    const QString customOutDir = QDir::cleanPath(QDir::tempPath() + QStringLiteral("/output_test"));
+    txtOutputDir->setText(QDir::toNativeSeparators(customOutDir));
     txtBaseName->setText(QStringLiteral("my_character"));
     QVERIFY(dlg.exportFilePath().contains(QStringLiteral("my_character")));
     QVERIFY(dlg.exportFilePath().contains(QStringLiteral("output_test")));
@@ -298,15 +300,17 @@ void TestGuiIntegration::testExportDialogOptionsAndDefaults()
     // Test default path and base name inferred from document's filePath
     {
         SpriteDocument fileDoc;
-        fileDoc.setFilePath(QStringLiteral("/home/sample_user/sprites/warrior.aseprite"));
+        const QString sampleFilePath = QDir::cleanPath(QDir::tempPath() + QStringLiteral("/sample_user/sprites/warrior.aseprite"));
+        QFileInfo sampleFi(sampleFilePath);
+        fileDoc.setFilePath(sampleFilePath);
         ExportDialog defaultDlg(&fileDoc);
         auto *outDir = defaultDlg.findChild<QLineEdit*>(QStringLiteral("txtOutputDir"));
         auto *baseName = defaultDlg.findChild<QLineEdit*>(QStringLiteral("txtBaseName"));
         QVERIFY(outDir != nullptr);
         QVERIFY(baseName != nullptr);
-        QCOMPARE(outDir->text(), QDir::toNativeSeparators(QStringLiteral("/home/sample_user/sprites")));
+        QCOMPARE(outDir->text(), QDir::toNativeSeparators(sampleFi.absolutePath()));
         QCOMPARE(baseName->text(), QStringLiteral("warrior"));
-        QVERIFY(defaultDlg.exportFilePath().startsWith(QDir::toNativeSeparators(QStringLiteral("/home/sample_user/sprites"))));
+        QVERIFY(defaultDlg.exportFilePath().startsWith(QDir::toNativeSeparators(sampleFi.absolutePath())));
         QVERIFY(defaultDlg.exportFilePath().contains(QStringLiteral("warrior")));
     }
 }
