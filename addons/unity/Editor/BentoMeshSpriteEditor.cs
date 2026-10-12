@@ -49,8 +49,7 @@ namespace BentoPack.Editor
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(bentoPath, EditorStyles.miniLabel);
-            if (!string.IsNullOrEmpty(bentoPath) && GUILayout.Button(BentoI18n.Tr("reimport"), GUILayout.Width(170), GUILayout.Height(22)))
+            if (!string.IsNullOrEmpty(bentoPath) && GUILayout.Button(BentoI18n.Tr("reimport"), GUILayout.Height(24)))
             {
                 if (!string.IsNullOrEmpty(player.ExternalSourcePath) && System.IO.File.Exists(player.ExternalSourcePath))
                 {
@@ -64,6 +63,13 @@ namespace BentoPack.Editor
                     SceneView.RepaintAll();
                     Debug.Log($"[BentoPack] {BentoI18n.Tr("sync_success")} ('{bentoFileName}')");
                 }
+            }
+            if (GUILayout.Button(BentoI18n.Tr("open_studio"), GUILayout.Height(24)))
+            {
+                string targetToOpen = !string.IsNullOrEmpty(player.ExternalSourcePath) && System.IO.File.Exists(player.ExternalSourcePath)
+                    ? player.ExternalSourcePath
+                    : (!string.IsNullOrEmpty(bentoPath) ? System.IO.Path.GetFullPath(bentoPath) : "");
+                BentoCliBridge.OpenInBentoPack(targetToOpen);
             }
             EditorGUILayout.EndHorizontal();
 

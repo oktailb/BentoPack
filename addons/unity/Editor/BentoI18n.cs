@@ -284,14 +284,14 @@ namespace BentoPack.Editor
             },
             ["open_studio"] = new Dictionary<string, string>
             {
-                ["fr"] = "🎨 Ouvrir dans BentoPack",
-                ["en"] = "🎨 Open in BentoPack",
-                ["ja"] = "🎨 BentoPack で開く",
-                ["zh"] = "🎨 在 BentoPack 中打开",
-                ["ko"] = "🎨 BentoPack에서 열기",
-                ["pt"] = "🎨 Abrir no BentoPack",
-                ["es"] = "🎨 Abrir en BentoPack",
-                ["de"] = "🎨 In BentoPack öffnen"
+                ["fr"] = "🎨 Ouvrir dans BentoPack Studio",
+                ["en"] = "🎨 Open in BentoPack Studio",
+                ["ja"] = "🎨 BentoPack Studio で開く",
+                ["zh"] = "🎨 在 BentoPack Studio 中打开",
+                ["ko"] = "🎨 BentoPack Studio에서 열기",
+                ["pt"] = "🎨 Abrir no BentoPack Studio",
+                ["es"] = "🎨 Abrir en BentoPack Studio",
+                ["de"] = "🎨 In BentoPack Studio öffnen"
             },
             ["animations_group"] = new Dictionary<string, string>
             {
