@@ -145,11 +145,13 @@ static func _build_resources(res: ParseResult, repack_for_animated_sprite: bool 
 		atlas_w = float(res.atlas_image.get_width())
 		atlas_h = float(res.atlas_image.get_height())
 
-	# Map box index -> box data dictionary
+	# Map box index -> box data dictionary (indexed by array position and explicit index)
 	var box_map := {}
-	for b in boxes:
+	for i in range(boxes.size()):
+		var b = boxes[i]
 		if b is Dictionary:
-			var idx: int = int(b.get("index", box_map.size()))
+			var idx: int = int(b.get("index", i))
+			box_map[i] = b
 			box_map[idx] = b
 
 	var sf := SpriteFrames.new()
@@ -163,10 +165,11 @@ static func _build_resources(res: ParseResult, repack_for_animated_sprite: bool 
 		sf.set_animation_speed("default", 10.0)
 		sf.set_animation_loop("default", true)
 
-		for idx in box_map.keys():
-			var b: Dictionary = box_map[idx]
-			var tex := _create_atlas_texture(res.atlas_texture, b)
-			sf.add_frame("default", tex)
+		for i in range(boxes.size()):
+			var b = boxes[i]
+			if b is Dictionary:
+				var tex := _create_atlas_texture(res.atlas_texture, b as Dictionary)
+				sf.add_frame("default", tex)
 	else:
 		for anim in animations:
 			if not (anim is Dictionary):
@@ -190,14 +193,12 @@ static func _build_resources(res: ParseResult, repack_for_animated_sprite: bool 
 
 	res.sprite_frames = sf
 
-	# Build M8 polygonal tight meshes and collision polygons if available
+	# Build 2D meshes (M8 tight polygonal meshes or fallback rectangular quads) and collision polygons
 	for idx in box_map.keys():
 		var b: Dictionary = box_map[idx]
-		var has_mesh: bool = b.get("hasPolygonMesh", false) or ((b.has("triangles") or b.has("indices")) and (b.has("vertices") or b.has("polygon")))
-		if has_mesh:
-			var mesh := _create_m8_array_mesh(b, atlas_w, atlas_h)
-			if mesh != null:
-				res.meshes[idx] = mesh
+		var mesh := _create_m8_array_mesh(b, atlas_w, atlas_h)
+		if mesh != null:
+			res.meshes[idx] = mesh
 
 		var col_poly := _create_collision_polygon(b)
 		if not col_poly.is_empty():
@@ -322,20 +323,24 @@ static func _create_atlas_texture(atlas_tex: Texture2D, box: Dictionary) -> Atla
 	return tex
 
 static func _create_m8_array_mesh(box: Dictionary, atlas_w: float, atlas_h: float) -> ArrayMesh:
-	var verts_raw: Array = box.get("vertices", box.get("polygon", []))
-	var indices_raw: Array = box.get("indices", box.get("triangles", []))
-	if verts_raw.is_empty() or indices_raw.is_empty():
-		return null
-
-	var vertices := PackedVector2Array()
-	var uvs := PackedVector2Array()
-	var indices := PackedInt32Array()
-
 	var r: Dictionary = box.get("rect", {})
 	var rx: float = float(r.get("x", 0))
 	var ry: float = float(r.get("y", 0))
 	var rw: float = float(r.get("w", 0))
 	var rh: float = float(r.get("h", 0))
+	if rw <= 0.0 or rh <= 0.0:
+		return null
+
+	var verts_raw: Array = box.get("vertices", box.get("polygon", []))
+	var indices_raw: Array = box.get("indices", box.get("triangles", []))
+	if verts_raw.is_empty() or indices_raw.is_empty():
+		# Fallback to standard 2D rectangular quad
+		verts_raw = [0.0, 0.0,  rw, 0.0,  rw, rh,  0.0, rh]
+		indices_raw = [0, 1, 2, 0, 2, 3]
+
+	var vertices := PackedVector2Array()
+	var uvs := PackedVector2Array()
+	var indices := PackedInt32Array()
 
 	# Pivot offset to center the mesh around anchor point
 	var p: Dictionary = box.get("pivot", {})

@@ -1,9 +1,33 @@
 @tool
+@icon("icon.png")
 class_name BentoMeshSprite
 extends MeshInstance2D
 
 ## 2D Polygonal Sprite Player for BentoPack M8 tight meshes.
 ## Plays frame-by-frame 2D polygonal animations with zero transparency overdraw on GPU.
+
+const BentoParser = preload("bento_parser.gd")
+
+## Path to .bento project file in project (e.g. res://character.bento)
+@export_file("*.bento") var bento_project: String = "":
+	set(val):
+		bento_project = val
+		if not val.is_empty():
+			load_from_bento(val)
+
+## Path to external .bento source file on disk. When modified, BentoPack hot-reloads this character.
+@export_global_file("*.bento") var external_source_path: String = "":
+	set(val):
+		external_source_path = val
+		if not val.is_empty():
+			load_from_bento(val)
+
+## Optional SpriteFrames or BentoPack imported resource. Dragging a .bento or companion .tres here unpacks it.
+@export var frames: Resource = null:
+	set(val):
+		frames = val
+		if val != null:
+			_on_frames_assigned(val)
 
 @export var atlas_texture: Texture2D:
 	set(val):
@@ -85,12 +109,151 @@ func _validate_property(property: Dictionary) -> void:
 		property.hint_string = "0,%d,1" % max_frame
 
 func _ready() -> void:
+	if animations.is_empty():
+		if not bento_project.is_empty():
+			load_from_bento(bento_project)
+		elif not external_source_path.is_empty():
+			load_from_bento(external_source_path)
+		elif frames != null:
+			_on_frames_assigned(frames)
+
 	if texture_atlas_valid():
 		texture = atlas_texture
 	if not autoplay.is_empty() and has_animation(autoplay):
 		play(autoplay)
 	else:
 		_update_mesh_for_current_frame()
+
+func _on_frames_assigned(res: Resource) -> void:
+	if res == null:
+		return
+	var rpath := res.resource_path
+	if rpath.ends_with(".bento"):
+		load_from_bento(rpath)
+		return
+	var base := rpath.get_basename()
+	var bento_cand := base + ".bento"
+	if FileAccess.file_exists(ProjectSettings.globalize_path(bento_cand)):
+		load_from_bento(bento_cand)
+		return
+	var dir := rpath.get_base_dir()
+	var bento_in_dir := dir.path_join(rpath.get_file().get_basename() + ".bento")
+	if FileAccess.file_exists(ProjectSettings.globalize_path(bento_in_dir)):
+		load_from_bento(bento_in_dir)
+		return
+
+## Load and unpack all animations, meshes, collision polygons, and textures from a .bento project file
+func load_from_bento(path: String) -> bool:
+	if path.is_empty():
+		return false
+	var global_path := ProjectSettings.globalize_path(path)
+	if not FileAccess.file_exists(global_path):
+		push_error("[BentoMeshSprite] Fichier introuvable : " + path)
+		return false
+
+	var parse_result: BentoParser.ParseResult = BentoParser.parse_bento_file(global_path)
+	if not parse_result.success:
+		push_error("[BentoMeshSprite] Échec de la lecture du bento : " + parse_result.error_message)
+		return false
+
+	# 1. Atlas Texture
+	var assigned_tex: Texture2D = null
+	if path.begins_with("res://"):
+		var base_path := path.get_basename()
+		var candidate_webp := base_path + "_atlas.webp"
+		var candidate_png := base_path + "_atlas.png"
+		if ResourceLoader.exists(candidate_webp):
+			assigned_tex = load(candidate_webp)
+		elif ResourceLoader.exists(candidate_png):
+			assigned_tex = load(candidate_png)
+
+	if assigned_tex == null:
+		assigned_tex = parse_result.atlas_texture
+
+	if assigned_tex != null:
+		atlas_texture = assigned_tex
+		texture = assigned_tex
+
+	# 2. Extract animations & meshes
+	var anim_map := {}
+	var col_map := {}
+	var fps_map := {}
+	var loop_map := {}
+
+	var anims_data: Array = parse_result.project_data.get("animations", [])
+	var boxes: Array = parse_result.project_data.get("boxes", [])
+
+	if anims_data.is_empty():
+		var default_frames: Array = []
+		var default_col_frames: Array = []
+		for i in range(boxes.size()):
+			if parse_result.meshes.has(i):
+				default_frames.append(parse_result.meshes[i])
+			if parse_result.collision_polygons.has(i):
+				default_col_frames.append(parse_result.collision_polygons[i])
+		anim_map["default"] = default_frames
+		col_map["default"] = default_col_frames
+		fps_map["default"] = 10.0
+		loop_map["default"] = true
+	else:
+		for a in anims_data:
+			if a is Dictionary:
+				var a_name: String = str(a.get("name", "anim"))
+				var a_frames: Array = []
+				var a_col_frames: Array = []
+				for f_idx in a.get("frames", []):
+					var b_idx: int = int(f_idx)
+					if parse_result.meshes.has(b_idx):
+						a_frames.append(parse_result.meshes[b_idx])
+					if parse_result.collision_polygons.has(b_idx):
+						a_col_frames.append(parse_result.collision_polygons[b_idx])
+				anim_map[a_name] = a_frames
+				col_map[a_name] = a_col_frames
+				fps_map[a_name] = float(a.get("fps", 10.0))
+				loop_map[a_name] = bool(a.get("loop", true))
+
+	animations = anim_map
+	collision_polygons = col_map
+	animation_fps = fps_map
+	animation_loops = loop_map
+
+	# 3. Set default active animation
+	if not anim_map.is_empty():
+		var target_anim: String = ""
+		if anim_map.has("default"):
+			target_anim = "default"
+		elif anim_map.has("idle"):
+			target_anim = "idle"
+		else:
+			target_anim = anim_map.keys()[0]
+		current_animation = target_anim
+		autoplay = target_anim
+		frame = 0
+		if (anim_map[target_anim] as Array).size() > 0:
+			mesh = anim_map[target_anim][0]
+
+	_update_mesh_for_current_frame()
+	notify_property_list_changed()
+
+	# Register external source if path is outside project and bento_project is inside
+	if not path.begins_with("res://"):
+		if not bento_project.is_empty():
+			_save_sync_config(bento_project, path)
+		else:
+			var local_cand := "res://" + path.get_file()
+			if FileAccess.file_exists(ProjectSettings.globalize_path(local_cand)):
+				_save_sync_config(local_cand, path)
+
+	print("[BentoMeshSprite] ✓ Animations BentoPack chargées avec succès depuis '%s' (%d animation(s), %d mesh(es))" % [path.get_file(), anim_map.size(), parse_result.meshes.size()])
+	return true
+
+func _save_sync_config(internal_res: String, ext_file: String) -> void:
+	if internal_res.is_empty() or ext_file.is_empty():
+		return
+	var cfg := ConfigFile.new()
+	cfg.load("user://bentopack_sync_sources.cfg")
+	cfg.set_value("external_sources", internal_res, ext_file)
+	cfg.save("user://bentopack_sync_sources.cfg")
 
 func texture_atlas_valid() -> bool:
 	return atlas_texture != null

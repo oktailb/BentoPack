@@ -52,6 +52,12 @@ func _parse_begin(object: Object) -> void:
 	btn_open.pressed.connect(_on_open_pressed.bind(object))
 	vbox.add_child(btn_open)
 
+	var target_asset := _resolve_asset_path(object)
+	if not target_asset.is_empty() and target_asset.ends_with(".bento"):
+		var sync_card := _build_sync_card(target_asset, object)
+		if sync_card != null:
+			vbox.add_child(sync_card)
+
 	panel.add_child(vbox)
 	container.add_child(panel)
 
@@ -99,6 +105,13 @@ func _build_mesh_sprite_controller(mesh_sprite: MeshInstance2D) -> Control:
 
 	vbox.add_child(header)
 	vbox.add_child(HSeparator.new())
+
+	var target_asset := _resolve_asset_path(mesh_sprite)
+	if not target_asset.is_empty() and target_asset.ends_with(".bento"):
+		var sync_card := _build_sync_card(target_asset, mesh_sprite)
+		if sync_card != null:
+			vbox.add_child(sync_card)
+			vbox.add_child(HSeparator.new())
 
 	# 2. Animation Selector Row
 	var anim_row := HBoxContainer.new()
@@ -329,6 +342,13 @@ func _resolve_asset_path(target_object: Object) -> String:
 	# 3. MeshInstance2D / BentoMeshSprite
 	elif target_object is MeshInstance2D:
 		var mi := target_object as MeshInstance2D
+		if "bento_project" in mi and not str(mi.get("bento_project")).is_empty():
+			candidate_paths.append(str(mi.get("bento_project")))
+		if "external_source_path" in mi and not str(mi.get("external_source_path")).is_empty():
+			candidate_paths.append(str(mi.get("external_source_path")))
+		var f_res = mi.get("frames")
+		if f_res is Resource and not (f_res as Resource).resource_path.is_empty():
+			candidate_paths.append((f_res as Resource).resource_path)
 		var atlas_tex = mi.get("atlas_texture")
 		if atlas_tex is Texture2D and not (atlas_tex as Texture2D).resource_path.is_empty():
 			candidate_paths.append((atlas_tex as Texture2D).resource_path)
@@ -422,11 +442,12 @@ func _find_best_file(candidate: String) -> String:
 			return candidate
 
 	# 6. Check companion atlas image alongside the descriptor
-	for img_ext in ["webp", "png", "jpg", "jpeg"]:
-		var atlas_img := base + "_atlas." + img_ext
+	var img_extensions: Array[String] = ["webp", "png", "jpg", "jpeg"]
+	for img_ext: String in img_extensions:
+		var atlas_img: String = base + "_atlas." + img_ext
 		if FileAccess.file_exists(ProjectSettings.globalize_path(atlas_img)):
 			return atlas_img
-		var direct_img := base + "." + img_ext
+		var direct_img: String = base + "." + img_ext
 		if FileAccess.file_exists(ProjectSettings.globalize_path(direct_img)):
 			return direct_img
 
@@ -458,3 +479,111 @@ func _find_best_file(candidate: String) -> String:
 				return candidate_bentos[0]
 
 	return ""
+
+## Builds the External Source Synchronization UI card for inspector panels.
+func _build_sync_card(bento_path: String, target_object: Object = null) -> Control:
+	if bento_path.is_empty():
+		return null
+
+	var card := PanelContainer.new()
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.14, 0.16, 0.22, 0.95)
+	style.border_color = Color(0.28, 0.42, 0.70, 1.0)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(4)
+	style.content_margin_left = 6
+	style.content_margin_right = 6
+	style.content_margin_top = 6
+	style.content_margin_bottom = 6
+	card.add_theme_stylebox_override("panel", style)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 4)
+	card.add_child(vbox)
+
+	# Header: Title & Sync Now Button
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 6)
+
+	var title := Label.new()
+	title.text = BentoI18n.t("sync_external_title")
+	title.add_theme_color_override("font_color", Color(0.4, 0.8, 1.0))
+	title.add_theme_font_size_override("font_size", 12)
+	header.add_child(title)
+
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(spacer)
+
+	var sync_btn := Button.new()
+	sync_btn.text = BentoI18n.t("sync_external_btn")
+	sync_btn.tooltip_text = BentoI18n.t("sync_tooltip")
+	header.add_child(sync_btn)
+	vbox.add_child(header)
+
+	# File path row: LineEdit + Browse button
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 4)
+
+	var path_edit := LineEdit.new()
+	path_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	path_edit.placeholder_text = BentoI18n.t("sync_tooltip")
+
+	# Current registered external path
+	var cur_ext := BentoPackPlugin.get_external_source(bento_path)
+	if cur_ext.is_empty() and target_object != null and "external_source_path" in target_object:
+		cur_ext = str(target_object.get("external_source_path"))
+	path_edit.text = cur_ext
+	row.add_child(path_edit)
+
+	var browse_btn := Button.new()
+	browse_btn.text = BentoI18n.t("sync_browse_btn")
+	row.add_child(browse_btn)
+	vbox.add_child(row)
+
+	# Connect actions
+	var on_path_changed := func(new_text: String):
+		var trimmed := new_text.strip_edges()
+		BentoPackPlugin.register_external_source(bento_path, trimmed)
+		if target_object != null and "external_source_path" in target_object:
+			target_object.set("external_source_path", trimmed)
+
+	path_edit.text_submitted.connect(on_path_changed)
+	path_edit.focus_exited.connect(func(): on_path_changed.call(path_edit.text))
+
+	sync_btn.pressed.connect(func():
+		var ext := path_edit.text.strip_edges()
+		if ext.is_empty():
+			ext = BentoPackPlugin.get_external_source(bento_path)
+		if not ext.is_empty():
+			BentoPackPlugin.register_external_source(bento_path, ext)
+			if target_object != null and "external_source_path" in target_object:
+				target_object.set("external_source_path", ext)
+			var ok := BentoPackPlugin.sync_from_external_source(bento_path, ext)
+			if ok:
+				print("[BentoPack] ✓ Synchronisation manuelle réussie depuis '%s'" % ext)
+			else:
+				OS.alert("Échec de la synchronisation depuis : " + ext, "BentoPack Sync")
+		else:
+			OS.alert("Veuillez sélectionner un fichier source .bento externe d'abord.", "BentoPack Sync")
+	)
+
+	browse_btn.pressed.connect(func():
+		var dialog := EditorFileDialog.new()
+		dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
+		dialog.access = EditorFileDialog.ACCESS_FILESYSTEM
+		dialog.filters = PackedStringArray(["*.bento ; BentoPack Project Archive"])
+		dialog.title = "Select External Source .bento File"
+		dialog.file_selected.connect(func(selected_path: String):
+			path_edit.text = selected_path
+			on_path_changed.call(selected_path)
+			BentoPackPlugin.sync_from_external_source(bento_path, selected_path)
+			dialog.queue_free()
+		)
+		dialog.canceled.connect(func(): dialog.queue_free())
+		EditorInterface.get_base_control().add_child(dialog)
+		dialog.popup_file_dialog()
+	)
+
+	return card
+

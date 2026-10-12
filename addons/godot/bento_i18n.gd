@@ -538,6 +538,46 @@ const TRANSLATIONS: Dictionary = {
 		"es": "Iniciar la aplicación BentoPack para editar este asset.",
 		"de": "BentoPack Desktop-Anwendung starten, um dieses Asset zu bearbeiten."
 	},
+	"sync_external_title": {
+		"en": "🔄 External Source Sync",
+		"fr": "🔄 Synchronisation Source Externe",
+		"ja": "🔄 外部ソース同期",
+		"zh": "🔄 外部源同步",
+		"ko": "🔄 외부 소스 동기화",
+		"pt": "🔄 Sincronização de Fonte Externa",
+		"es": "🔄 Sincronización de Fuente Externa",
+		"de": "🔄 Externe Quellensynchronisation"
+	},
+	"sync_external_btn": {
+		"en": "🔄 Sync Now",
+		"fr": "🔄 Synchroniser",
+		"ja": "🔄 今すぐ同期",
+		"zh": "🔄 立即同步",
+		"ko": "🔄 지금 동기화",
+		"pt": "🔄 Sincronizar Agora",
+		"es": "🔄 Sincronizar Ahora",
+		"de": "🔄 Jetzt synchronisieren"
+	},
+	"sync_browse_btn": {
+		"en": "Browse...",
+		"fr": "Parcourir...",
+		"ja": "参照...",
+		"zh": "浏览...",
+		"ko": "찾아보기...",
+		"pt": "Navegar...",
+		"es": "Examinar...",
+		"de": "Durchsuchen..."
+	},
+	"sync_tooltip": {
+		"en": "Path to original external .bento file on disk. When modified, BentoPack automatically copies and hot-reloads it.",
+		"fr": "Chemin du fichier .bento externe d'origine sur le disque. Si modifié, BentoPack le copie et le recharge automatiquement.",
+		"ja": "ディスク上の元の外部 .bento ファイルのパス。変更されると、BentoPack が自動的にコピーして再読み込みします。",
+		"zh": "磁盘上原始外部 .bento 文件的路径。修改后，BentoPack 会自动复制并热重载它。",
+		"ko": "디스크의 원본 외부 .bento 파일 경로입니다. 수정 시 BentoPack이 자동으로 복사하고 핫 리로드합니다.",
+		"pt": "Caminho para o arquivo .bento externo original no disco. Quando modificado, o BentoPack copia e recarrega automaticamente.",
+		"es": "Ruta al archivo .bento externo original en el disco. Cuando se modifica, BentoPack lo copia y recarga automáticamente.",
+		"de": "Pfad zur ursprünglichen externen .bento-Datei auf der Festplatte. Wenn sie geändert wird, kopiert und lädt BentoPack sie automatisch neu."
+	},
 	"menu_open_editor": {
 		"en": "BentoPack: Open Desktop Editor",
 		"fr": "BentoPack : Ouvrir l'éditeur Desktop",

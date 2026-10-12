@@ -32,8 +32,24 @@ func _get_preset_name(preset_index: int) -> String:
 func _get_import_options(path: String, preset_index: int) -> Array[Dictionary]:
 	return [
 		{
+			"name": "external_source_path",
+			"default_value": "",
+			"property_hint": PROPERTY_HINT_GLOBAL_FILE,
+			"hint_string": "*.bento;BentoPack Project",
+		},
+		{
+			"name": "generate_tres",
+			"default_value": true,
+			"property_hint": PROPERTY_HINT_NONE,
+		},
+		{
 			"name": "generate_scene",
 			"default_value": true,
+			"property_hint": PROPERTY_HINT_NONE,
+		},
+		{
+			"name": "overwrite_existing_scene",
+			"default_value": false,
 			"property_hint": PROPERTY_HINT_NONE,
 		},
 		{
@@ -85,6 +101,11 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 		atlas_ext = "webp"
 	var atlas_file_path := base_path + "_atlas." + atlas_ext
 
+	# Register external source path if specified in import options
+	var ext_source: String = str(options.get("external_source_path", "")).strip_edges()
+	if not ext_source.is_empty():
+		BentoPackPlugin.register_external_source(source_file, ext_source)
+
 	# 1. Save extracted atlas image alongside the project
 	if parse_result.atlas_image != null and not parse_result.raw_atlas_bytes.is_empty():
 		var fa := FileAccess.open(atlas_file_path, FileAccess.WRITE)
@@ -95,15 +116,31 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 
 	# 2. Update AtlasTexture references to point to the saved texture resource
 	var atlas_res: Texture2D = null
-	if ResourceLoader.exists(atlas_file_path):
-		atlas_res = load(atlas_file_path)
-	elif parse_result.atlas_texture != null:
-		atlas_res = parse_result.atlas_texture
+	if ResourceLoader.has_cached(atlas_file_path):
+		var cached_res = ResourceLoader.load(atlas_file_path, "", ResourceLoader.CACHE_MODE_REUSE)
+		if cached_res is ImageTexture and parse_result.atlas_image != null:
+			cached_res.set_image(parse_result.atlas_image)
+			cached_res.emit_changed()
+			atlas_res = cached_res
+		elif parse_result.atlas_texture != null:
+			# If cached_res is CompressedTexture2D, Godot's C++ core prohibits set_image().
+			# Displace the stale cache entry and take over the path with the fresh ImageTexture!
+			if cached_res != null:
+				cached_res.take_over_path("")
+			parse_result.atlas_texture.resource_path = atlas_file_path
+			parse_result.atlas_texture.take_over_path(atlas_file_path)
+			atlas_res = parse_result.atlas_texture
+
+	if atlas_res == null:
+		if parse_result.atlas_texture != null:
+			atlas_res = parse_result.atlas_texture
+		elif ResourceLoader.exists(atlas_file_path):
+			atlas_res = load(atlas_file_path)
 
 	if atlas_res != null:
-		if atlas_res.resource_path.is_empty():
-			atlas_res.resource_path = atlas_file_path
-			atlas_res.take_over_path(atlas_file_path)
+		atlas_res.resource_path = atlas_file_path
+		atlas_res.take_over_path(atlas_file_path)
+		atlas_res.emit_changed()
 
 		if parse_result.sprite_frames != null:
 			for anim_name in parse_result.sprite_frames.get_animation_names():
@@ -113,15 +150,53 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 					if frame_tex is AtlasTexture:
 						frame_tex.atlas = atlas_res
 
-	# 3. Save SpriteFrames resource
+	# Notify Godot's EditorFileSystem to asynchronously refresh the atlas texture .ctex on disk
+	if Engine.is_editor_hint():
+		var fs := EditorInterface.get_resource_filesystem()
+		if fs != null and fs.has_method("reimport_files"):
+			fs.call_deferred("reimport_files", PackedStringArray([atlas_file_path]))
+
+	# 3. Synchronize in-place with existing cached SpriteFrames instances in RAM (active scenes / editor)
+	var companion_tres_path := base_path + ".tres"
+	var target_resource_path := companion_tres_path if options.get("generate_tres", true) else source_file
+
+	# In-place sync for companion .tres if already active in memory
+	if ResourceLoader.has_cached(companion_tres_path):
+		var cached_tres = ResourceLoader.load(companion_tres_path, "", ResourceLoader.CACHE_MODE_REUSE)
+		if cached_tres is SpriteFrames and cached_tres != parse_result.sprite_frames:
+			_sync_sprite_frames(cached_tres, parse_result.sprite_frames)
+			parse_result.sprite_frames = cached_tres
+
+	# In-place sync for direct source_file (.bento) if already assigned to a node's sprite_frames
+	if ResourceLoader.has_cached(source_file):
+		var cached_src = ResourceLoader.load(source_file, "", ResourceLoader.CACHE_MODE_REUSE)
+		if cached_src is SpriteFrames and cached_src != parse_result.sprite_frames:
+			_sync_sprite_frames(cached_src, parse_result.sprite_frames)
+
+	if parse_result.sprite_frames != null:
+		parse_result.sprite_frames.resource_path = target_resource_path
+		parse_result.sprite_frames.take_over_path(target_resource_path)
+		parse_result.sprite_frames.emit_changed()
+
 	var out_tres_path := "%s.%s" % [save_path, _get_save_extension()]
 	var save_err := ResourceSaver.save(parse_result.sprite_frames, out_tres_path)
 	if save_err != OK:
 		push_error("BentoPack: Failed to save SpriteFrames to: " + out_tres_path)
 		return save_err
 
+	# 3b. Optional: Save companion .tres directly in project alongside .bento
+	if options.get("generate_tres", true):
+		var tres_err := ResourceSaver.save(parse_result.sprite_frames, companion_tres_path)
+		if tres_err == OK:
+			gen_files.append(companion_tres_path)
+
 	# 4. Optional: Generate instantiable companion PackedScene (.tscn)
-	if options.get("generate_scene", true):
+	var tscn_path := base_path + ".tscn"
+	var should_gen_scene: bool = bool(options.get("generate_scene", true))
+	var overwrite_scene: bool = bool(options.get("overwrite_existing_scene", false))
+	var tscn_exists := FileAccess.file_exists(ProjectSettings.globalize_path(tscn_path))
+
+	if should_gen_scene and (not tscn_exists or overwrite_scene):
 		var scene := PackedScene.new()
 		var root := Node2D.new()
 		root.name = parse_result.project_name.validate_node_name()
@@ -148,7 +223,10 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 		# If polygonal meshes exist, add a native BentoMeshSprite node and AnimationPlayer
 		if has_m8_meshes:
 			var mesh_sprite := MeshInstance2D.new()
-			mesh_sprite.set_script(preload("bento_mesh_sprite.gd"))
+			var bento_script = load("res://addons/bentopack/bento_mesh_sprite.gd")
+			if bento_script == null:
+				bento_script = preload("bento_mesh_sprite.gd")
+			mesh_sprite.set_script(bento_script)
 			mesh_sprite.name = "PolygonalMeshSprite"
 			mesh_sprite.set("atlas_texture", atlas_res)
 
@@ -273,8 +351,10 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 			anim_player.owner = root
 
 		scene.pack(root)
-		var tscn_path := base_path + ".tscn"
 		ResourceSaver.save(scene, tscn_path)
+		gen_files.append(tscn_path)
+		root.free()
+	elif tscn_exists:
 		gen_files.append(tscn_path)
 
 	# 5. Optional: Save standalone M8 ArrayMesh resources
@@ -286,3 +366,21 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 			gen_files.append(mesh_file)
 
 	return OK
+
+## Synchronizes an existing in-memory SpriteFrames instance in place so all active viewport nodes update immediately.
+static func _sync_sprite_frames(target: SpriteFrames, source: SpriteFrames) -> void:
+	if target == null or source == null or target == source:
+		return
+	for anim in target.get_animation_names():
+		target.remove_animation(anim)
+	for anim in source.get_animation_names():
+		target.add_animation(anim)
+		target.set_animation_speed(anim, source.get_animation_speed(anim))
+		target.set_animation_loop(anim, source.get_animation_loop(anim))
+		var count: int = source.get_frame_count(anim)
+		for i in range(count):
+			var tex: Texture2D = source.get_frame_texture(anim, i)
+			var dur: float = source.get_frame_duration(anim, i)
+			target.add_frame(anim, tex, dur)
+	target.emit_changed()
+

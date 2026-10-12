@@ -22,6 +22,7 @@ func _init() -> void:
 	test_bento_importer_metadata()
 	test_real_bento_zip_file_parsing()
 	test_webp_atlas_decompression()
+	test_bento_mesh_sprite_load_from_bento()
 
 	print("\n=== Test Results: %d Passed, %d Failed ===" % [_tests_passed, _tests_failed])
 
@@ -331,3 +332,43 @@ func test_webp_atlas_decompression() -> void:
 		assert_true(res.atlas_image.get_width() == 32, "Decompressed WebP width is 32")
 		assert_true(res.atlas_image.get_height() == 32, "Decompressed WebP height is 32")
 	assert_true(res.sprite_frames != null, "Generated SpriteFrames from WebP atlas")
+
+func test_bento_mesh_sprite_load_from_bento() -> void:
+	print("\n[Suite 9: BentoMeshSprite load_from_bento and Inspector ExternalSourcePath]")
+	var tmp_webp_bento := "/tmp/test_webp_archive.bento"
+	assert_true(FileAccess.file_exists(tmp_webp_bento), "Source bento archive exists at /tmp/test_webp_archive.bento")
+
+	var sprite := BentoMeshSprite.new()
+	assert_true(sprite.animations.is_empty(), "Fresh BentoMeshSprite starts with empty animations")
+	assert_true(sprite.mesh == null, "Fresh BentoMeshSprite starts with null mesh")
+
+	# 1. Test assigning external_source_path setter directly (reproducing user action)
+	sprite.external_source_path = tmp_webp_bento
+
+	assert_true(not sprite.animations.is_empty(), "Assigning external_source_path unpacked animations")
+	assert_true(sprite.has_animation("idle"), "Animations dictionary contains 'idle'")
+	assert_true(sprite.get_frame_count("idle") == 1, "'idle' animation contains 1 frame")
+	assert_true(sprite.atlas_texture != null, "atlas_texture was populated")
+	assert_true(sprite.texture != null, "MeshInstance2D.texture was synchronized")
+	assert_true(sprite.mesh != null, "MeshInstance2D.mesh was assigned for frame 0")
+	assert_true(sprite.mesh is ArrayMesh, "Mesh is an ArrayMesh ready for GPU rendering")
+	assert_true(sprite.current_animation == "idle", "current_animation was automatically set to 'idle'")
+
+	# 2. Test bento_project setter
+	var sprite2 := BentoMeshSprite.new()
+	sprite2.bento_project = tmp_webp_bento
+	assert_true(not sprite2.animations.is_empty(), "Assigning bento_project unpacked animations")
+	assert_true(sprite2.mesh != null, "bento_project assigned active frame mesh")
+
+	# 3. Test real hero_bento_godot.bento if present in workspace
+	var real_sample_bento := "/home/oktail/Documents/GitHub/BentoPack/sample/hero_bento_godot.bento"
+	if FileAccess.file_exists(real_sample_bento):
+		var real_sprite := BentoMeshSprite.new()
+		real_sprite.external_source_path = real_sample_bento
+		assert_true(not real_sprite.animations.is_empty(), "hero_bento_godot.bento unpacked animations dictionary")
+		assert_true(real_sprite.mesh != null, "hero_bento_godot.bento generated active mesh")
+		assert_true(real_sprite.animations.keys().size() > 0, "hero_bento_godot.bento animations count: %d" % real_sprite.animations.size())
+		real_sprite.free()
+
+	sprite.free()
+	sprite2.free()
