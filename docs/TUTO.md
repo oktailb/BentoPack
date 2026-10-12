@@ -158,48 +158,125 @@ public class OverdrawBenchmarkSpawner : MonoBehaviour
 
 ### Script GDScript de Stress-Test
 
-Attachez ce script au nœud racine `Node2D` :
+Attachez un nouveau script au nœud racine `Node2D` (sauvegardez-le en tant que fichier externe, par exemple `res://stress_test.gd`, et non en "Script intégré / Built-in" si vous utilisez `class_name`) :
 
 ```gdscript
 extends Node2D
 
-@export var sprite_texture: Texture2D
-@export var use_tight_mesh: bool = false
-@export var tight_mesh_resource: ArrayMesh
-@export var count: int = 300
+@export var count: int = 200
+
+var bento_path := "res://original/hero.bento"
+var frames_path := "res://original/hero.tres"
+
+var use_tight_mesh: bool = false
+var nodes: Array = []
+var label: Label
+
+# Données partagées en mémoire pour 0 coût CPU
+var sf_res: SpriteFrames
+var meshes: Array = []
+var texture_atlas: Texture2D
+
+var anim_timer: float = 0.0
+var cur_frame: int = 0
 
 func _ready():
-	var screen_size = get_viewport_rect().size
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	
+	# Charger les ressources en C++
+	sf_res = load(frames_path)
+	var bento_parser = load("res://addons/bentopack/bento_parser.gd")
+	var parse_result = bento_parser.parse_bento_file(bento_path)
+	texture_atlas = parse_result.atlas_texture
+	
+	# Récupérer les meshes de l'animation de course
+	var anims = parse_result.project_data.get("animations", [])
+	for a in anims:
+		if a.get("name") == "ushiro":
+			for f_idx in a.get("frames", []):
+				if parse_result.meshes.has(int(f_idx)):
+					meshes.append(parse_result.meshes[int(f_idx)])
+	
+	label = Label.new()
+	label.position = Vector2(25, 25)
+	label.add_theme_font_size_override("font_size", 22)
+	label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.2))
+	add_child(label)
+	
+	_spawn()
+
+func _input(event):
+	if event is InputEventKey and event.pressed and event.keycode == KEY_SPACE:
+		use_tight_mesh = not use_tight_mesh
+		_spawn()
+
+func _spawn():
+	for n in nodes:
+		n.queue_free()
+	nodes.clear()
+	
+	var screen = get_viewport_rect().size
+	var center = screen * 0.5
 	
 	for i in range(count):
-		var pos = Vector2(
-			randf_range(50, screen_size.x - 50),
-			randf_range(50, screen_size.y - 50)
-		)
+		var offset = Vector2(randf_range(-350, 350) + 330, randf_range(-220, 220))
+		var pos = center + offset
 		
-		if use_tight_mesh and tight_mesh_resource:
-			var mesh_node = MeshInstance2D.new()
-			mesh_node.mesh = tight_mesh_resource
-			mesh_node.texture = sprite_texture
-			mesh_node.position = pos
-			add_child(mesh_node)
+		if use_tight_mesh:
+			# Nœud C++ pur : MeshInstance2D
+			var m = MeshInstance2D.new()
+			m.mesh = meshes[0] if not meshes.is_empty() else null
+			m.texture = texture_atlas
+			m.scale = Vector2(1.8, 1.8)
+			m.position = pos
+			add_child(m)
+			nodes.append(m)
 		else:
-			var spr = Sprite2D.new()
-			spr.texture = sprite_texture
-			spr.position = pos
-			add_child(spr)
+			# Nœud C++ pur : Sprite2D
+			var s = Sprite2D.new()
+			s.texture = texture_atlas
+			s.region_enabled = true
+			s.region_rect = sf_res.get_frame_texture("ushiro", 0).region
+			s.scale = Vector2(1.8, 1.8)
+			s.position = pos
+			add_child(s)
+			nodes.append(s)
+
+func _process(delta):
+	# Une seule mise à jour centrale pour les 400 sprites (0 surcharge CPU par sprite)
+	anim_timer += delta
+	if anim_timer >= 0.08: # ~12 FPS
+		anim_timer = 0.0
+		var frame_count = meshes.size() if use_tight_mesh else sf_res.get_frame_count("run")
+		if frame_count > 0:
+			cur_frame = (cur_frame + 1) % frame_count
+			if use_tight_mesh:
+				var m = meshes[cur_frame]
+				for node in nodes:
+					(node as MeshInstance2D).mesh = m
+			else:
+				var reg = sf_res.get_frame_texture("ushiro", cur_frame).region
+				for node in nodes:
+					(node as Sprite2D).region_rect = reg
+
+	var mode = "★ BENTOPACK (MeshInstance2D C++)" if use_tight_mesh else "⚠ STANDARD (Sprite2D C++)"
+	label.text = "[ESPACE] pour basculer\nMode : %s\nObjets C++ : %d\nFPS : %d (%.2f ms)" % [
+		mode,
+		nodes.size(),
+		Engine.get_frames_per_second(),
+		Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
+	]
+
 ```
 
 ---
 
 ### Lecture des Résultats (Godot)
 
-#### 1. Le Verdict Visuel dans le Viewport Godot 4
-1. Dans la barre supérieure du Viewport 2D, repérez le menu de rendu (icône avec trois petits points ou menu de vue 2D).
-2. Allez dans **Debug Draw** -> cochez **Overdraw**.
-3. **Résultat visuel :**
-   * Quads classiques : Les rectangles transparents s'additionnent en halos blancs vifs.
-   * BentoPack ArrayMesh : Les bordures transparentes sont découpées géométriquement, l'arrière-plan reste noir pur.
+#### 1. Le Verdict Visuel dans Godot 4
+Dans Godot 4, le mode de rendu natif *Debug Draw > Overdraw* est situé dans le Viewport 3D (accessible via l'onglet 3D tout en haut). En 2D :
+1. Dans le Viewport 2D, déroulez le menu **Affichage** (dans la barre d'outils au-dessus de la scène) ou cochez **Débogage > Formes de collision visibles** dans la barre de menu principale.
+2. Observez la bordure verte : le sprite BentoPack est découpé au pixel près par son maillage polygonal M8, éliminant totalement les rectangles transparents géants des quads classiques.
 
 #### 2. Le Verdict Chiffré dans les Moniteurs
 1. Ouvrez le panneau inférieur **Debugger** et cliquez sur l'onglet **Monitors**.

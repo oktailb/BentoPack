@@ -149,14 +149,14 @@ From raw pixel art and multi-layer Aseprite files to production-ready game engin
 
 Capturez ces visuels en résolution **1920x1080** (ou 4K) en mode sombre pour une clarté maximale :
 
-* [ ] `app_screen_01_main_workspace_packing.png` : **(Hero #1)** Fenêtre principale avec un atlas dense de sprites pixel art, la liste des frames, et la timeline filmstrip en lecture active. Badge en surimpression : *"Zero-Waste MaxRects Packing"*.
-* [ ] `app_screen_02_cdt_smart_mesh_ridges.png` : **(Hero #2 — Nouveauté M19)** Panneau de Maillage Intelligent CDT affichant la silhouette triangulée et les arêtes internes de contraste chromatique (RGB) épousant les vêtements/yeux, avec l'outil couteau laser actif. Badge : *"-76% GPU Overdraw & Smart CDT Mesh"*.
-* [ ] `app_screen_03_aseprite_layers_skins.png` : **(Hero #3 — Nouveauté M17/M18)** Atelier Pixel Editor avec le dock `LayerStackWidget` ouvert, montrant les calques Aseprite (Corps, Armure, Épée, Effet Magique) et les profils de skins modulaires.
-* [ ] `app_screen_04_vram_ktx2_telemetry.png` : **(Hero #4)** Boîte de dialogue d'exportation avec compression KTX2 Basis Universal active et télémétrie GPU en direct (*"GPU Memory: 1.2 MB vs 8.0 MB RGBA (-85%)"*).
-* [ ] `app_screen_05_pixel_editor_filters_preview.png` : Zoom sur l'Éditeur de Pixels (zoom 600%) montrant la grille de pixels, la palette rétro, et le menu contextuel de filtres en live preview (Despill CIELAB & Outline).
-* [ ] `app_screen_06_step_export_dialog_engines.png` : Boîte de dialogue d'exportation en 3 étapes avec les sélecteurs de formats moteurs (Godot 4 `.tres`, Unity `.unity.json`, Unreal `.paper2d.json`, Spine `.atlas`).
-* [ ] `app_screen_07_git_version_control.png` : Dock latéral d'historique Git avec arbre visuel des commits, messages de versions et boutons de rollback.
-* [ ] `app_screen_08_cli_watch_daemon.png` : Terminal montrant `bentopack-cli --watch` qui recompile et met à jour le projet Godot 4 en 18 millisecondes dès que l'artiste fait `Ctrl+S` dans Aseprite.
+* [X] ![Screenshot a faire](screenshots/app_screen_01_main_workspace_packing.webp) : **(Hero #1)** Fenêtre principale avec un atlas dense de sprites pixel art, la liste des frames, et la timeline filmstrip en lecture active. Badge en surimpression : *"Zero-Waste MaxRects Packing"*.
+* [X] ![Screenshot a faire](screenshots/app_screen_02_cdt_smart_mesh_ridges.webp) : **(Hero #2 — Nouveauté M19)** Panneau de Maillage Intelligent CDT affichant la silhouette triangulée et les arêtes internes de contraste chromatique (RGB) épousant les vêtements/yeux, avec l'outil couteau laser actif. Badge : *"-76% GPU Overdraw & Smart CDT Mesh"*.
+* [X] ![Screenshot a faire](screenshots/app_screen_03_aseprite_layers_skins.webp) : **(Hero #3 — Nouveauté M17/M18)** Atelier Pixel Editor avec le dock `LayerStackWidget` ouvert, montrant les calques Aseprite (Corps, Armure, Épée, Effet Magique) et les profils de skins modulaires.
+* [X] ![Screenshot a faire](screenshots/app_screen_04_vram_ktx2_telemetry.webp) : **(Hero #4)** Boîte de dialogue d'exportation avec compression KTX2 Basis Universal active et télémétrie GPU en direct (*"GPU Memory: 1.2 MB vs 8.0 MB RGBA (-85%)"*).
+* [X] ![Screenshot a faire](screenshots/app_screen_05_pixel_editor_filters_preview.webp) : Zoom sur l'Éditeur de Pixels (zoom 600%) montrant la grille de pixels, la palette rétro, et le menu contextuel de filtres en live preview (Despill CIELAB & Outline).
+* [X] ![Screenshot a faire](screenshots/app_screen_06_step_export_dialog_engines.webp) : Boîte de dialogue d'exportation en 3 étapes avec les sélecteurs de formats moteurs (Godot 4 `.tres`, Unity `.unity.json`, Unreal `.paper2d.json`, Spine `.atlas`).
+* [X] ![Screenshot a faire](screenshots/app_screen_07_git_version_control.webp) : Dock latéral d'historique Git avec arbre visuel des commits, messages de versions et boutons de rollback.
+* [X] ![Screenshot a faire](screenshots/app_screen_08_cli_watch_daemon.webp) : Terminal montrant `bentopack-cli --watch` qui recompile et met à jour le projet Godot 4 en 10 millisecondes dès que l'artiste fait `Ctrl+S` dans Aseprite.
 
 ---
 
@@ -241,10 +241,10 @@ Standard Unity 2D sprites render transparent quads that force mobile and console
 
 ## 2.4 Checklist des Captures d'Écran Unity
 
-* [ ] `unity_screen_01_inspector_bento_import.png` : L'inspecteur Unity avec un asset `.bento`, montrant les options d'importation et le bouton *Open in BentoPack Studio*.
-* [ ] `unity_screen_02_overdraw_view_before_after.png` : **(Preuve d'Achat)** Capture côte-à-côte de la vue Scène en mode **Overdraw** : à gauche les quads Unity rouges/blancs vifs (surconsommation GPU), à droite le maillage BentoPack vert sombre/bleu froid.
-* [ ] `unity_screen_03_animation_clips_hierarchy.png` : Arborescence du panneau Projet montrant les `AnimationClip` générés et prêts pour l'Animator Controller.
-* [ ] `unity_screen_04_dashboard_autowatch.png` : Fenêtre Dashboard (`Window > BentoPack > Studio Dashboard`) avec l'indicateur *Live Watch: Active*.
+* [X] ![Screenshot a faire](screenshots/unity_screen_01_inspector_bento_import.webp) : L'inspecteur Unity avec un asset `.bento`, montrant les options d'importation et le bouton *Open in BentoPack Studio*.
+* [X] ![Screenshot a faire](screenshots/unity_screen_02_overdraw_view_before_after.webp) : **(Preuve d'Achat)** Capture côte-à-côte de la vue Scène en mode **Overdraw** : à gauche les quads Unity rouges/blancs vifs (surconsommation GPU), à droite le maillage BentoPack vert sombre/bleu froid.
+* [X] ![Screenshot a faire](screenshots/unity_screen_03_animation_clips_hierarchy.webp) : Arborescence du panneau Projet montrant les `AnimationClip` générés et prêts pour l'Animator Controller.
+* [X] ![Screenshot a faire](screenshots/unity_screen_04_dashboard_autowatch.webp) : Fenêtre Dashboard (`Window > BentoPack > Studio Dashboard`) avec l'indicateur *Live Watch: Active*.
 
 ---
 
@@ -298,10 +298,10 @@ This official editor plugin adds native integration for `.bento` container archi
 
 ## 3.3 Checklist des Captures d'Écran Godot
 
-* [ ] `godot_screen_01_filedialog_tres_import.png` : FileSystem montrant le `.bento` et la ressource `SpriteFrames` `.tres` générée.
-* [ ] `godot_screen_02_spriteframes_animatedsprite2d.png` : Nœud `AnimatedSprite2D` dans l'inspecteur avec le panneau inférieur `SpriteFrames` actif.
-* [ ] `godot_screen_03_debug_draw_overdraw_mode.png` : **(Preuve d'Achat)** Viewport 2D en mode *Debug Draw > Overdraw* prouvant l'absence totale de remplissage transparent autour des sprites.
-* [ ] `godot_screen_04_bottom_panel_preview.png` : Dock inférieur BentoPack avec prévisualisation temps réel et bouton *Open in BentoPack Studio*.
+* [X] ![Screenshot a faire](screenshots/godot_screen_01_filedialog_tres_import.webp) : FileSystem montrant le `.bento` et la ressource `SpriteFrames` `.tres` générée.
+* [X] ![Screenshot a faire](screenshots/godot_screen_02_spriteframes_animatedsprite2d.webp) : Nœud `AnimatedSprite2D` dans l'inspecteur avec le panneau inférieur `SpriteFrames` actif.
+* [X] ![Screenshot a faire](screenshots/godot_screen_03_debug_draw_overdraw_mode_sprite2D.webp) ![Screenshot a faire](screenshots/godot_screen_03_debug_draw_overdraw_mode_MeshInstance2D.webp) : **(Preuve d'Achat)** Viewport 2D en mode *Debug Draw > Overdraw* prouvant l'absence totale de remplissage transparent autour des sprites.
+* [X] ![Screenshot a faire](screenshots/godot_screen_04_bottom_panel_preview.webp) : Dock inférieur BentoPack avec prévisualisation temps réel et bouton *Open in BentoPack Studio*.
 
 ---
 
@@ -360,10 +360,10 @@ Unleash the full potential of 2D game development in Unreal Engine 5. The **Bent
 
 ## 4.3 Checklist des Captures d'Écran Unreal
 
-* [ ] `unreal_screen_01_content_browser_import.png` : Content Browser montrant le dossier importé avec textures, `UPaperSprite` et `UPaperFlipbook`.
-* [ ] `unreal_screen_02_quad_overdraw_viewmode.png` : **(Preuve d'Achat)** Viewport en mode *Optimization Viewmodes > Quad Overdraw* montrant le gain drastique de fillrate.
-* [ ] `unreal_screen_03_flipbook_animation_preview.png` : Éditeur PaperFlipbook en cours de lecture avec la timeline de frames extraite de BentoPack.
-* [ ] `unreal_screen_04_slate_dashboard_bridge.png` : Fenêtre Slate personnalisée BentoPack dockée dans l'éditeur.
+* [ ] [Screenshot a faire](docs/screenshots/unreal_screen_01_content_browser_import.webp) : Content Browser montrant le dossier importé avec textures, `UPaperSprite` et `UPaperFlipbook`.
+* [ ] [Screenshot a faire](docs/screenshots/unreal_screen_02_quad_overdraw_viewmode.webp) : **(Preuve d'Achat)** Viewport en mode *Optimization Viewmodes > Quad Overdraw* montrant le gain drastique de fillrate.
+* [ ] [Screenshot a faire](docs/screenshots/unreal_screen_03_flipbook_animation_preview.webp) : Éditeur PaperFlipbook en cours de lecture avec la timeline de frames extraite de BentoPack.
+* [ ] [Screenshot a faire](docs/screenshots/unreal_screen_04_slate_dashboard_bridge.webp) : Fenêtre Slate personnalisée BentoPack dockée dans l'éditeur.
 
 ---
 
@@ -435,11 +435,11 @@ Ces 5 visuels doivent impérativement composer les 5 premières images de la gal
 
 ## 5.2 Les 3 Boucles Vidéo / GIFs Animés Clés (Pour Réseaux & Stores)
 
-* **Boucle 1 : `demo_knife_cdt_cut.webp` (5s) :**
+* **Boucle 1 : `demo_knife_cdt_cut.webp) (5s) :**
   * Tracé d'un trait de coupe avec le couteau laser et re-triangulation instantanée de Delaunay sans saccade.
-* **Boucle 2 : `demo_zero_click_reload.webp` (4s) :**
+* **Boucle 2 : `demo_zero_click_reload.webp) (4s) :**
   * Split-screen Aseprite + Godot 4 : `Ctrl+S` -> Rafraîchissement direct de l'animation en jeu.
-* **Boucle 3 : `demo_timeline_onion_skin.webp` (4s) :**
+* **Boucle 3 : `demo_timeline_onion_skin.webp) (4s) :**
   * Lecture fluide de la timeline avec scrubber interactif et réticule de pivot anti-jittering.
 
 ---
