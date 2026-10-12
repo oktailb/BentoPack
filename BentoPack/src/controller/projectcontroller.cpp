@@ -1307,6 +1307,8 @@ bool ProjectController::exportData(const QString &filePath, const ExportOptions 
         extractor = ExtractorRegistry::instance().findExtractorById(QStringLiteral("unity"));
     } else if (options.format == FORMAT_GODOT) {
         extractor = ExtractorRegistry::instance().findExtractorById(QStringLiteral("godot"));
+    } else if (options.format == FORMAT_UNREAL) {
+        extractor = ExtractorRegistry::instance().findExtractorById(QStringLiteral("unreal"));
     }
     if (!extractor) {
         extractor = ExtractorRegistry::instance().findEncoder(filePath);

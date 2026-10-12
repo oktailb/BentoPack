@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -362,6 +362,8 @@ CliResult NativeCommands::executeBento(const QStringList &args)
             opts.format = FORMAT_GODOT;
         } else if (exportFormat == QStringLiteral("unity")) {
             opts.format = FORMAT_UNITY;
+        } else if (exportFormat == QStringLiteral("unreal") || exportFormat == QStringLiteral("paper2d")) {
+            opts.format = FORMAT_UNREAL;
         } else {
             opts.format = FORMAT_TEXTUREPACKER_JSON;
         }

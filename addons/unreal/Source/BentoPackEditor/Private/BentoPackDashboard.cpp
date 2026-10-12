@@ -106,7 +106,7 @@ void SBentoPackDashboard::Construct(const FArguments& InArgs)
 				.FillWidth(1.0f)
 				[
 					SNew(SEditableTextBox)
-					.Text(this, [this]() { return SourcePath; })
+					.Text_Lambda([this]() { return SourcePath; })
 					.OnTextCommitted_Lambda([this](const FText& NewText, ETextCommit::Type) { SourcePath = NewText; })
 				]
 				+ SHorizontalBox::Slot()
@@ -137,7 +137,7 @@ void SBentoPackDashboard::Construct(const FArguments& InArgs)
 				.FillWidth(1.0f)
 				[
 					SNew(SEditableTextBox)
-					.Text(this, [this]() { return TargetPath; })
+					.Text_Lambda([this]() { return TargetPath; })
 					.OnTextCommitted_Lambda([this](const FText& NewText, ETextCommit::Type) { TargetPath = NewText; })
 				]
 				+ SHorizontalBox::Slot()
@@ -156,7 +156,7 @@ void SBentoPackDashboard::Construct(const FArguments& InArgs)
 			.Padding(0, 4, 0, 12)
 			[
 				SNew(SCheckBox)
-				.IsChecked(this, [this]() { return bWatchMode ? ECheckBoxState::Checked : ECheckBoxState::Unchecked; })
+				.IsChecked_Lambda([this]() { return bWatchMode ? ECheckBoxState::Checked : ECheckBoxState::Unchecked; })
 				.OnCheckStateChanged_Lambda([this](ECheckBoxState NewState) { bWatchMode = (NewState == ECheckBoxState::Checked); })
 				[
 					SNew(STextBlock)
@@ -197,7 +197,7 @@ void SBentoPackDashboard::Construct(const FArguments& InArgs)
 			.Padding(0, 4, 0, 0)
 			[
 				SNew(STextBlock)
-				.Text(this, [this]() { return StatusMessage; })
+				.Text_Lambda([this]() { return StatusMessage; })
 			]
 		]
 	];

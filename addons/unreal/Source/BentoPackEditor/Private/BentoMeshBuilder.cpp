@@ -1,5 +1,18 @@
 #include "BentoMeshBuilder.h"
 
+class FPaperSpriteAccessor : public UPaperSprite
+{
+public:
+	static FSpriteGeometryCollection& GetRenderGeometry(UPaperSprite* Sprite)
+	{
+		return static_cast<FPaperSpriteAccessor*>(Sprite)->RenderGeometry;
+	}
+	static FSpriteGeometryCollection& GetCollisionGeometry(UPaperSprite* Sprite)
+	{
+		return static_cast<FPaperSpriteAccessor*>(Sprite)->CollisionGeometry;
+	}
+};
+
 bool FBentoMeshBuilder::ApplyTightMesh(UPaperSprite* Sprite, const FBentoSpriteDescriptor& SpriteData)
 {
 	if (!Sprite)
@@ -15,7 +28,7 @@ bool FBentoMeshBuilder::ApplyTightMesh(UPaperSprite* Sprite, const FBentoSpriteD
 	}
 
 	// 1. Setup RenderGeometry (Tight Polygonal Mesh)
-	FSpriteGeometryCollection& RenderGeometry = Sprite->RenderGeometry;
+	FSpriteGeometryCollection& RenderGeometry = FPaperSpriteAccessor::GetRenderGeometry(Sprite);
 	RenderGeometry.GeometryType = ESpritePolygonMode::FullyCustom;
 	RenderGeometry.Shapes.Empty();
 
@@ -32,7 +45,7 @@ bool FBentoMeshBuilder::ApplyTightMesh(UPaperSprite* Sprite, const FBentoSpriteD
 	// 2. Setup CollisionGeometry
 	if (SpriteData.CollisionPolygon.Num() >= 3)
 	{
-		FSpriteGeometryCollection& CollisionGeometry = Sprite->CollisionGeometry;
+		FSpriteGeometryCollection& CollisionGeometry = FPaperSpriteAccessor::GetCollisionGeometry(Sprite);
 		CollisionGeometry.GeometryType = ESpritePolygonMode::FullyCustom;
 		CollisionGeometry.Shapes.Empty();
 
@@ -57,7 +70,7 @@ void FBentoMeshBuilder::ApplyFallbackQuad(UPaperSprite* Sprite, const FVector2D&
 		return;
 	}
 
-	FSpriteGeometryCollection& RenderGeometry = Sprite->RenderGeometry;
+	FSpriteGeometryCollection& RenderGeometry = FPaperSpriteAccessor::GetRenderGeometry(Sprite);
 	RenderGeometry.GeometryType = ESpritePolygonMode::SourceBoundingBox;
 	RenderGeometry.Shapes.Empty();
 

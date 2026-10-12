@@ -32,7 +32,8 @@ public class BentoPackEditor : ModuleRules
                 "JsonUtilities",
                 "DesktopPlatform",
                 "ContentBrowser",
-                "WorkspaceMenuStructure"
+                "WorkspaceMenuStructure",
+                "ToolMenus"
             }
         );
     }
