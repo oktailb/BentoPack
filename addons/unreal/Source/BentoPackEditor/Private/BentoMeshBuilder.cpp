@@ -37,8 +37,8 @@ bool FBentoMeshBuilder::ApplyTightMesh(UPaperSprite* Sprite, const FBentoSpriteD
 
 	for (const FVector2D& V : MeshData.Vertices)
 	{
-		// Unreal Paper2D local space has (0,0) at top-left or centered around pivot
-		RenderShape.Vertices.Add(V);
+		// In Unreal Paper2D, vertices in FSpriteGeometryShape must be in texture coordinates (offset by SourceRect.Min)
+		RenderShape.Vertices.Add(FVector2D(SpriteData.SourceRect.Min.X + V.X, SpriteData.SourceRect.Min.Y + V.Y));
 	}
 	RenderGeometry.Shapes.Add(RenderShape);
 
@@ -53,7 +53,7 @@ bool FBentoMeshBuilder::ApplyTightMesh(UPaperSprite* Sprite, const FBentoSpriteD
 		ColShape.ShapeType = ESpriteShapeType::Polygon;
 		for (const FVector2D& CV : SpriteData.CollisionPolygon)
 		{
-			ColShape.Vertices.Add(CV);
+			ColShape.Vertices.Add(FVector2D(SpriteData.SourceRect.Min.X + CV.X, SpriteData.SourceRect.Min.Y + CV.Y));
 		}
 		CollisionGeometry.Shapes.Add(ColShape);
 	}
@@ -73,14 +73,6 @@ void FBentoMeshBuilder::ApplyFallbackQuad(UPaperSprite* Sprite, const FVector2D&
 	FSpriteGeometryCollection& RenderGeometry = FPaperSpriteAccessor::GetRenderGeometry(Sprite);
 	RenderGeometry.GeometryType = ESpritePolygonMode::SourceBoundingBox;
 	RenderGeometry.Shapes.Empty();
-
-	FSpriteGeometryShape QuadShape;
-	QuadShape.ShapeType = ESpriteShapeType::Polygon;
-	QuadShape.Vertices.Add(FVector2D(0.0f, 0.0f));
-	QuadShape.Vertices.Add(FVector2D(SourceDim.X, 0.0f));
-	QuadShape.Vertices.Add(FVector2D(SourceDim.X, SourceDim.Y));
-	QuadShape.Vertices.Add(FVector2D(0.0f, SourceDim.Y));
-	RenderGeometry.Shapes.Add(QuadShape);
 
 	Sprite->PostEditChange();
 }

@@ -27,5 +27,5 @@ public:
 	virtual UObject* FactoryCreateText(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, UObject* Context, const TCHAR* Type, const TCHAR*& Buffer, const TCHAR* BufferEnd, FFeedbackContext* Warn) override;
 
 private:
-	UObject* ImportFromJsonString(const FString& JsonContent, const FString& SourceFilePath, UObject* InParent, FName InName, EObjectFlags Flags, FFeedbackContext* Warn);
+	UObject* ImportFromJsonString(const FString& JsonContent, const FString& SourceFilePath, UObject* InParent, FName InName, EObjectFlags Flags, FFeedbackContext* Warn, const FString& OverrideTexturePath = TEXT(""));
 };

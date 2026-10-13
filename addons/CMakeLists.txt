@@ -78,6 +78,67 @@ add_custom_target(package_unreal_addon
     VERBATIM
 )
 
+# -------------------------------------------------------------------------
+# Unreal Engine 5 Plugin Build Target (RunUAT)
+# -------------------------------------------------------------------------
+if(WIN32)
+    set(RUN_UAT_NAME "RunUAT.bat")
+    set(DEFAULT_HOST_PLATFORM "Win64")
+elseif(APPLE)
+    set(RUN_UAT_NAME "RunUAT.sh")
+    set(DEFAULT_HOST_PLATFORM "Mac")
+else()
+    set(RUN_UAT_NAME "RunUAT.sh")
+    set(DEFAULT_HOST_PLATFORM "Linux")
+endif()
+
+find_program(UNREAL_RUN_UAT
+    NAMES ${RUN_UAT_NAME}
+    PATHS
+        "$ENV{UNREAL_ENGINE_PATH}/Engine/Build/BatchFiles"
+        "$ENV{UE_ENGINE_PATH}/Engine/Build/BatchFiles"
+        "/opt/unreal-engine/Engine/Build/BatchFiles"
+        "/opt/unreal-engine-5/Engine/Build/BatchFiles"
+        "$ENV{HOME}/UE5/Engine/Build/BatchFiles"
+    DOC "Path to Unreal Engine RunUAT tool"
+)
+
+set(UNREAL_BUILD_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/addons_build/unreal")
+
+if(UNREAL_RUN_UAT)
+    message(STATUS "Found Unreal Engine RunUAT: ${UNREAL_RUN_UAT}")
+
+    add_custom_target(build_unreal_addon
+        COMMAND ${CMAKE_COMMAND} -E echo "==> Compiling BentoPack Unreal Engine Plugin via RunUAT..."
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${UNREAL_BUILD_OUTPUT_DIR}"
+        COMMAND ${UNREAL_RUN_UAT} BuildPlugin
+            -Plugin=${UNREAL_ADDON_SRC_DIR}/BentoPack.uplugin
+            -Package=${UNREAL_BUILD_OUTPUT_DIR}
+            -TargetPlatforms=${DEFAULT_HOST_PLATFORM}
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+        COMMENT "Compiling BentoPack Unreal Engine 5 plugin binaries..."
+        VERBATIM
+    )
+
+    if(DEFINED UNREAL_PROJECT_DIR)
+        add_custom_command(TARGET build_unreal_addon POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo "Deploying plugin to Unreal project..."
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${UNREAL_BUILD_OUTPUT_DIR}"
+                "${UNREAL_PROJECT_DIR}/Plugins/BentoPack"
+            VERBATIM
+        )
+    endif()
+else()
+    add_custom_target(build_unreal_addon
+        COMMAND ${CMAKE_COMMAND} -E echo "Error: Unreal Engine RunUAT tool not found."
+        COMMAND ${CMAKE_COMMAND} -E echo "Please set UNREAL_ENGINE_PATH or UE_ENGINE_PATH to your Unreal Engine directory."
+        COMMAND ${CMAKE_COMMAND} -E false
+        COMMENT "Unreal Engine RunUAT not found - cannot compile plugin"
+        VERBATIM
+    )
+endif()
+
 install(DIRECTORY unreal/
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/bentopack/addons/unreal/BentoPack
     COMPONENT bentopack

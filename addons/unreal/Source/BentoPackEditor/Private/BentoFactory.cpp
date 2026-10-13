@@ -5,9 +5,12 @@
 #include "Engine/Texture2D.h"
 #include "Factories/TextureFactory.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "ContentBrowserModule.h"
+#include "IContentBrowserSingleton.h"
 #include "PackageTools.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
+#include "Misc/PackageName.h"
 #include "HAL/PlatformProcess.h"
 #include "HAL/FileManager.h"
 #include "Serialization/JsonSerializer.h"
@@ -68,19 +71,7 @@ UObject* UBentoFactory::FactoryCreateFile(
 	{
 		FString BaseName = FPaths::GetBaseFilename(Filename);
 
-		// 1. Instant fast path: check if companion .paper2d.json & texture already exist alongside .bento
-		FString Paper2DPath = FPaths::ChangeExtension(Filename, TEXT("paper2d.json"));
-		FString CompanionPng = FPaths::ChangeExtension(Filename, TEXT("png"));
-		if (FPaths::FileExists(Paper2DPath) && FPaths::FileExists(CompanionPng))
-		{
-			FString JsonContent;
-			if (FFileHelper::LoadFileToString(JsonContent, *Paper2DPath))
-			{
-				return ImportFromJsonString(JsonContent, Paper2DPath, InParent, InName, Flags, Warn);
-			}
-		}
-
-		// 2. Automated extraction of .bento archive
+		// Automated extraction of .bento archive
 		FString TempDir = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("BentoPackTemp"), BaseName);
 		IFileManager::Get().MakeDirectory(*TempDir, true);
 
@@ -92,15 +83,16 @@ UObject* UBentoFactory::FactoryCreateFile(
 			FPlatformProcess::WaitForProc(Proc);
 		}
 
-		// Decompress WebP atlas to PNG if needed
+		// Decompress WebP atlas to PNG from the extracted archive
 		FString WebpPath = FPaths::Combine(TempDir, TEXT("bento"), TEXT("assets"), TEXT("atlas.webp"));
 		if (!FPaths::FileExists(WebpPath))
 		{
 			WebpPath = FPaths::Combine(TempDir, TEXT("assets"), TEXT("atlas.webp"));
 		}
+
+		FString ExtractedPng = FPaths::Combine(TempDir, BaseName + TEXT("_Atlas.png"));
 		if (FPaths::FileExists(WebpPath))
 		{
-			FString ExtractedPng = FPaths::Combine(TempDir, BaseName + TEXT(".png"));
 			FString DwebpArgs = FString::Printf(TEXT("\"%s\" -o \"%s\""), *WebpPath, *ExtractedPng);
 			FProcHandle DwebpProc = FPlatformProcess::CreateProc(TEXT("dwebp"), *DwebpArgs, true, true, true, nullptr, 0, nullptr, nullptr);
 			if (DwebpProc.IsValid())
@@ -125,7 +117,7 @@ UObject* UBentoFactory::FactoryCreateFile(
 			FString JsonContent;
 			if (FFileHelper::LoadFileToString(JsonContent, *ExtractedJson))
 			{
-				return ImportFromJsonString(JsonContent, ExtractedJson, InParent, InName, Flags, Warn);
+				return ImportFromJsonString(JsonContent, ExtractedJson, InParent, InName, Flags, Warn, ExtractedPng);
 			}
 		}
 
@@ -181,7 +173,8 @@ UObject* UBentoFactory::ImportFromJsonString(
 	UObject* InParent,
 	FName InName,
 	EObjectFlags Flags,
-	FFeedbackContext* Warn)
+	FFeedbackContext* Warn,
+	const FString& OverrideTexturePath)
 {
 	TSharedPtr<FJsonObject> RootObject;
 	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonContent);
@@ -197,67 +190,70 @@ UObject* UBentoFactory::ImportFromJsonString(
 	{
 		BaseName.LeftChopInline(8);
 	}
-	FString PackagePath = InParent->GetPathName();
+
+	FString LongPackagePath = FPackageName::GetLongPackagePath(InParent->GetOutermost()->GetPathName());
+	if (LongPackagePath.IsEmpty())
+	{
+		LongPackagePath = TEXT("/Game");
+	}
+
+	FString SpritesFolderPath = LongPackagePath / (BaseName + TEXT("_Sprites"));
+	FString AnimsFolderPath = LongPackagePath / (BaseName + TEXT("_Animations"));
 
 	// 1. Locate and Import Texture Atlas
-	FString SourceTextureName;
-	if (RootObject->HasField(TEXT("sourceTexture")))
-	{
-		SourceTextureName = RootObject->GetStringField(TEXT("sourceTexture"));
-	}
-	else if (RootObject->HasTypedField<EJson::Object>(TEXT("atlas")))
-	{
-		SourceTextureName = RootObject->GetObjectField(TEXT("atlas"))->GetStringField(TEXT("file"));
-	}
-	else if (RootObject->HasTypedField<EJson::Object>(TEXT("meta")))
-	{
-		SourceTextureName = RootObject->GetObjectField(TEXT("meta"))->GetStringField(TEXT("image"));
-	}
-
 	FString FullTexturePath;
-	if (!SourceTextureName.IsEmpty())
+	if (!OverrideTexturePath.IsEmpty() && FPaths::FileExists(OverrideTexturePath))
 	{
-		FullTexturePath = FPaths::Combine(Directory, SourceTextureName);
-		if (!FPaths::FileExists(FullTexturePath))
-		{
-			// Check base filename in directory
-			FullTexturePath = FPaths::Combine(Directory, FPaths::GetCleanFilename(SourceTextureName));
-		}
+		FullTexturePath = OverrideTexturePath;
 	}
-	if (FullTexturePath.IsEmpty() || !FPaths::FileExists(FullTexturePath))
+	else
 	{
-		// Try companion PNGs
-		FString Candidate = FPaths::Combine(Directory, BaseName + TEXT(".png"));
-		if (FPaths::FileExists(Candidate))
+		FString SourceTextureName;
+		if (RootObject->HasField(TEXT("sourceTexture")))
 		{
-			FullTexturePath = Candidate;
-			SourceTextureName = BaseName + TEXT(".png");
+			SourceTextureName = RootObject->GetStringField(TEXT("sourceTexture"));
 		}
-		else
+		else if (RootObject->HasTypedField<EJson::Object>(TEXT("atlas")))
 		{
-			Candidate = FPaths::Combine(Directory, TEXT("hero.png"));
+			SourceTextureName = RootObject->GetObjectField(TEXT("atlas"))->GetStringField(TEXT("file"));
+		}
+		else if (RootObject->HasTypedField<EJson::Object>(TEXT("meta")))
+		{
+			SourceTextureName = RootObject->GetObjectField(TEXT("meta"))->GetStringField(TEXT("image"));
+		}
+
+		if (!SourceTextureName.IsEmpty())
+		{
+			FullTexturePath = FPaths::Combine(Directory, SourceTextureName);
+			if (!FPaths::FileExists(FullTexturePath))
+			{
+				FullTexturePath = FPaths::Combine(Directory, FPaths::GetCleanFilename(SourceTextureName));
+			}
+		}
+		if (FullTexturePath.IsEmpty() || !FPaths::FileExists(FullTexturePath))
+		{
+			FString Candidate = FPaths::Combine(Directory, BaseName + TEXT(".png"));
 			if (FPaths::FileExists(Candidate))
 			{
 				FullTexturePath = Candidate;
-				SourceTextureName = TEXT("hero.png");
 			}
 		}
 	}
 
 	UTexture2D* AtlasTexture = nullptr;
-	FString TextureAssetName = !SourceTextureName.IsEmpty() ? FPaths::GetBaseFilename(SourceTextureName) : (BaseName + TEXT("_atlas"));
-	FString TexturePackageName = FPaths::Combine(PackagePath, TextureAssetName);
-	AtlasTexture = FindObject<UTexture2D>(nullptr, *TexturePackageName);
+	FString TextureAssetName = BaseName + TEXT("_Atlas");
+	FString TexturePackagePath = LongPackagePath / TextureAssetName;
 
-	if (!AtlasTexture && FPaths::FileExists(FullTexturePath))
+	if (FPaths::FileExists(FullTexturePath))
 	{
+		UPackage* TexturePackage = CreatePackage(*TexturePackagePath);
 		UTextureFactory* TexFactory = NewObject<UTextureFactory>();
 		bool bCanceled = false;
 		AtlasTexture = Cast<UTexture2D>(TexFactory->FactoryCreateFile(
 			UTexture2D::StaticClass(),
-			InParent,
+			TexturePackage,
 			*TextureAssetName,
-			Flags,
+			Flags | RF_Public | RF_Standalone,
 			FullTexturePath,
 			nullptr,
 			Warn,
@@ -273,9 +269,47 @@ UObject* UBentoFactory::ImportFromJsonString(
 			FAssetRegistryModule::AssetCreated(AtlasTexture);
 		}
 	}
+	if (!AtlasTexture)
+	{
+		AtlasTexture = FindObject<UTexture2D>(nullptr, *TexturePackagePath);
+	}
 
 	TMap<FString, UPaperSprite*> SpriteMap;
 	UPaperSprite* FirstSprite = nullptr;
+
+	auto CreateSpriteAsset = [&](const FBentoSpriteDescriptor& SpriteDesc, int32 Index, int32 X, int32 Y, int32 W, int32 H) -> UPaperSprite*
+	{
+		FString SpriteCleanName = SpriteDesc.Name.Replace(TEXT(" "), TEXT("_"));
+		FString SpritePackagePath = SpritesFolderPath / SpriteCleanName;
+		UPackage* SpritePackage = CreatePackage(*SpritePackagePath);
+
+		UPaperSprite* NewSprite = NewObject<UPaperSprite>(SpritePackage, *SpriteCleanName, Flags | RF_Public | RF_Standalone);
+		if (NewSprite)
+		{
+			FSpriteAssetInitParameters SpriteInitParams;
+			SpriteInitParams.Texture = AtlasTexture;
+			SpriteInitParams.Offset = FIntPoint(X, Y);
+			SpriteInitParams.Dimension = FIntPoint(W, H);
+			SpriteInitParams.SetPixelsPerUnrealUnit(1.0f);
+			NewSprite->InitializeSprite(SpriteInitParams, false);
+
+			FVector2D CustomPivot(X + W * SpriteDesc.Pivot.X, Y + H * SpriteDesc.Pivot.Y);
+			NewSprite->SetPivotMode(ESpritePivotMode::Custom, CustomPivot, false);
+
+			FBentoMeshBuilder::ApplyTightMesh(NewSprite, SpriteDesc);
+			NewSprite->RebuildData();
+			NewSprite->PostEditChange();
+
+			FAssetRegistryModule::AssetCreated(NewSprite);
+			NewSprite->MarkPackageDirty();
+
+			SpriteMap.Add(SpriteDesc.Name, NewSprite);
+			SpriteMap.Add(SpriteCleanName, NewSprite);
+			SpriteMap.Add(FString::FromInt(Index), NewSprite);
+			if (!FirstSprite) FirstSprite = NewSprite;
+		}
+		return NewSprite;
+	};
 
 	// 2. Parse and Create Sprites
 	// Format A: Standard Paper2D "sprites" array
@@ -339,22 +373,7 @@ UObject* UBentoFactory::ImportFromJsonString(
 				}
 			}
 
-			FName SpriteFName(*SpriteDesc.Name);
-			UPaperSprite* NewSprite = NewObject<UPaperSprite>(InParent, SpriteFName, Flags | RF_Public);
-			if (NewSprite)
-			{
-#if WITH_EDITORONLY_DATA
-				FPaperSpriteInternalAccessor::SetSourceData(NewSprite, AtlasTexture, FVector2D(X, Y), FVector2D(W, H));
-#endif
-				NewSprite->SetPivotMode(ESpritePivotMode::Custom, SpriteDesc.Pivot);
-				FBentoMeshBuilder::ApplyTightMesh(NewSprite, SpriteDesc);
-
-				FAssetRegistryModule::AssetCreated(NewSprite);
-				NewSprite->MarkPackageDirty();
-
-				SpriteMap.Add(SpriteDesc.Name, NewSprite);
-				if (!FirstSprite) FirstSprite = NewSprite;
-			}
+			CreateSpriteAsset(SpriteDesc, Index, X, Y, W, H);
 		}
 	}
 	// Format B: Native BentoPack "boxes" array
@@ -414,29 +433,12 @@ UObject* UBentoFactory::ImportFromJsonString(
 				}
 			}
 
-			FName SpriteFName(*SpriteDesc.Name);
-			UPaperSprite* NewSprite = NewObject<UPaperSprite>(InParent, SpriteFName, Flags | RF_Public);
-			if (NewSprite)
-			{
-#if WITH_EDITORONLY_DATA
-				FPaperSpriteInternalAccessor::SetSourceData(NewSprite, AtlasTexture, FVector2D(X, Y), FVector2D(W, H));
-#endif
-				NewSprite->SetPivotMode(ESpritePivotMode::Custom, SpriteDesc.Pivot);
-				FBentoMeshBuilder::ApplyTightMesh(NewSprite, SpriteDesc);
-
-				FAssetRegistryModule::AssetCreated(NewSprite);
-				NewSprite->MarkPackageDirty();
-
-				SpriteMap.Add(SpriteDesc.Name, NewSprite);
-				// Also map by index for animation lookup
-				SpriteMap.Add(FString::FromInt(Index), NewSprite);
-				if (!FirstSprite) FirstSprite = NewSprite;
-			}
+			CreateSpriteAsset(SpriteDesc, Index, X, Y, W, H);
 		}
 	}
 
 	// 3. Parse and Create Flipbooks
-	UPaperFlipbook* PrimaryFlipbook = nullptr;
+	TMap<FString, UPaperFlipbook*> FlipbookMap;
 
 	// Format A: Standard Paper2D "flipbooks" array
 	const TArray<TSharedPtr<FJsonValue>>* FlipbooksJson = nullptr;
@@ -450,8 +452,11 @@ UObject* UBentoFactory::ImportFromJsonString(
 			FString AnimName = FbObj->GetStringField(TEXT("name"));
 			float FPS = FbObj->HasField(TEXT("framesPerSecond")) ? (float)FbObj->GetNumberField(TEXT("framesPerSecond")) : 12.0f;
 
-			FName FbFName(*AnimName);
-			UPaperFlipbook* NewFlipbook = NewObject<UPaperFlipbook>(InParent, FbFName, Flags | RF_Public);
+			FString CleanAnimName = AnimName.Replace(TEXT(" "), TEXT("_"));
+			FString AnimPackagePath = AnimsFolderPath / CleanAnimName;
+			UPackage* AnimPackage = CreatePackage(*AnimPackagePath);
+
+			UPaperFlipbook* NewFlipbook = NewObject<UPaperFlipbook>(AnimPackage, *CleanAnimName, Flags | RF_Public | RF_Standalone);
 			if (NewFlipbook)
 			{
 				FScopedFlipbookMutator Mutator(NewFlipbook);
@@ -463,10 +468,15 @@ UObject* UBentoFactory::ImportFromJsonString(
 					for (auto& KfVal : *KeyframesJson)
 					{
 						FString SpriteName = KfVal->AsString();
-						if (SpriteMap.Contains(SpriteName))
+						UPaperSprite* Sprite = SpriteMap.FindRef(SpriteName);
+						if (!Sprite)
+						{
+							Sprite = SpriteMap.FindRef(SpriteName.Replace(TEXT(" "), TEXT("_")));
+						}
+						if (Sprite)
 						{
 							FPaperFlipbookKeyFrame KeyFrame;
-							KeyFrame.Sprite = SpriteMap[SpriteName];
+							KeyFrame.Sprite = Sprite;
 							KeyFrame.FrameRun = 1;
 							Mutator.KeyFrames.Add(KeyFrame);
 						}
@@ -476,7 +486,8 @@ UObject* UBentoFactory::ImportFromJsonString(
 				FAssetRegistryModule::AssetCreated(NewFlipbook);
 				NewFlipbook->MarkPackageDirty();
 
-				if (!PrimaryFlipbook) PrimaryFlipbook = NewFlipbook;
+				FlipbookMap.Add(AnimName, NewFlipbook);
+				FlipbookMap.Add(CleanAnimName, NewFlipbook);
 			}
 		}
 	}
@@ -491,8 +502,11 @@ UObject* UBentoFactory::ImportFromJsonString(
 			FString AnimName = AnimObj->GetStringField(TEXT("name"));
 			float FPS = AnimObj->HasField(TEXT("fps")) ? (float)AnimObj->GetNumberField(TEXT("fps")) : 12.0f;
 
-			FName FbFName(*AnimName);
-			UPaperFlipbook* NewFlipbook = NewObject<UPaperFlipbook>(InParent, FbFName, Flags | RF_Public);
+			FString CleanAnimName = AnimName.Replace(TEXT(" "), TEXT("_"));
+			FString AnimPackagePath = AnimsFolderPath / CleanAnimName;
+			UPackage* AnimPackage = CreatePackage(*AnimPackagePath);
+
+			UPaperFlipbook* NewFlipbook = NewObject<UPaperFlipbook>(AnimPackage, *CleanAnimName, Flags | RF_Public | RF_Standalone);
 			if (NewFlipbook)
 			{
 				FScopedFlipbookMutator Mutator(NewFlipbook);
@@ -523,9 +537,65 @@ UObject* UBentoFactory::ImportFromJsonString(
 				FAssetRegistryModule::AssetCreated(NewFlipbook);
 				NewFlipbook->MarkPackageDirty();
 
-				if (!PrimaryFlipbook) PrimaryFlipbook = NewFlipbook;
+				FlipbookMap.Add(AnimName, NewFlipbook);
+				FlipbookMap.Add(CleanAnimName, NewFlipbook);
 			}
 		}
+	}
+
+	// 4. Create Primary Asset in InParent (the target package requested by Unreal)
+	UPaperFlipbook* PrimaryFlipbook = NewObject<UPaperFlipbook>(InParent, InName, Flags | RF_Public | RF_Standalone);
+	if (PrimaryFlipbook)
+	{
+		UPaperFlipbook* SourceFb = nullptr;
+		if (FlipbookMap.Contains(TEXT("stand"))) SourceFb = FlipbookMap[TEXT("stand")];
+		else if (FlipbookMap.Contains(TEXT("idle"))) SourceFb = FlipbookMap[TEXT("idle")];
+		else if (FlipbookMap.Num() > 0)
+		{
+			for (auto& Pair : FlipbookMap)
+			{
+				if (Pair.Value)
+				{
+					SourceFb = Pair.Value;
+					break;
+				}
+			}
+		}
+
+		if (SourceFb)
+		{
+			FScopedFlipbookMutator Mutator(PrimaryFlipbook);
+			Mutator.FramesPerSecond = SourceFb->GetFramesPerSecond();
+			for (int32 i = 0; i < SourceFb->GetNumKeyFrames(); ++i)
+			{
+				Mutator.KeyFrames.Add(SourceFb->GetKeyFrameChecked(i));
+			}
+		}
+
+		FAssetRegistryModule::AssetCreated(PrimaryFlipbook);
+		PrimaryFlipbook->MarkPackageDirty();
+	}
+
+	// 5. Sync Content Browser to newly created assets
+	TArray<UObject*> AssetsToSync;
+	if (PrimaryFlipbook) AssetsToSync.Add(PrimaryFlipbook);
+	if (AtlasTexture) AssetsToSync.Add(AtlasTexture);
+	for (auto& Pair : FlipbookMap)
+	{
+		if (Pair.Value && !AssetsToSync.Contains(Pair.Value))
+		{
+			AssetsToSync.Add(Pair.Value);
+		}
+	}
+	if (FirstSprite && !AssetsToSync.Contains(FirstSprite))
+	{
+		AssetsToSync.Add(FirstSprite);
+	}
+
+	if (AssetsToSync.Num() > 0)
+	{
+		FContentBrowserModule& ContentBrowserModule = FModuleManager::LoadModuleChecked<FContentBrowserModule>("ContentBrowser");
+		ContentBrowserModule.Get().SyncBrowserToAssets(AssetsToSync);
 	}
 
 	return PrimaryFlipbook ? (UObject*)PrimaryFlipbook : (UObject*)FirstSprite;
