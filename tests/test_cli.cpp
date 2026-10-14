@@ -42,6 +42,8 @@ private slots:
     void testNativeFilterCommand();
     void testPosixExitCodes();
     void testJsonOutputMode();
+    void testSchemaCommand();
+    void testMultiPagePacking();
     void testWatchLockAcquisitionAndConflict();
     void testWatchDebouncedRepack();
 
@@ -395,6 +397,63 @@ void TestCli::testJsonOutputMode()
     QVERIFY(res.json.contains(QStringLiteral("atlas")));
     QVERIFY(res.json.contains(QStringLiteral("width")));
     QVERIFY(res.json.contains(QStringLiteral("height")));
+}
+
+void TestCli::testSchemaCommand()
+{
+    CliParser parser;
+    CliResult res = parser.parseAndExecute({ QStringLiteral("bentopack-cli"), QStringLiteral("--schema") });
+    QCOMPARE(res.exitCode, ExitSuccess);
+    QVERIFY(!res.json.isEmpty());
+    QCOMPARE(res.json[QStringLiteral("cli")].toString(), QStringLiteral("bentopack-cli"));
+    QVERIFY(res.json.contains(QStringLiteral("commands")));
+    QVERIFY(res.json.contains(QStringLiteral("exit_codes")));
+    QVERIFY(res.json.contains(QStringLiteral("export_formats")));
+    QVERIFY(res.json.contains(QStringLiteral("algorithms")));
+}
+
+void TestCli::testMultiPagePacking()
+{
+    QString mpDir = m_tempDir.filePath(QStringLiteral("mp_input"));
+    QDir().mkpath(mpDir);
+    // Create 3 frames of 48x48
+    for (int i = 0; i < 3; ++i) {
+        QImage img(48, 48, QImage::Format_RGBA8888);
+        img.fill(qRgb(i * 50, 100, 200));
+        img.save(QDir(mpDir).filePath(QStringLiteral("f_%1.png").arg(i)));
+    }
+
+    QString outSheet = m_tempDir.filePath(QStringLiteral("mp_sheet.png"));
+    QString outData = m_tempDir.filePath(QStringLiteral("mp_data.json"));
+
+    // 1. Without --multipage, 3 frames of 48x48 cannot fit in 64x64 -> should fail with ExitConstraintFailed
+    CliParser parser1;
+    CliResult resFail = parser1.parseAndExecute({
+        QStringLiteral("bentopack-cli"),
+        QStringLiteral("pack"),
+        QStringLiteral("--sheet"), outSheet,
+        QStringLiteral("--data"), outData,
+        QStringLiteral("--max-size"), QStringLiteral("64"), QStringLiteral("64"),
+        mpDir
+    });
+    QCOMPARE(resFail.exitCode, ExitConstraintFailed);
+
+    // 2. With --multipage, it should succeed and create mp_sheet_0.png, mp_sheet_1.png...
+    CliParser parser2;
+    CliResult resSuccess = parser2.parseAndExecute({
+        QStringLiteral("bentopack-cli"),
+        QStringLiteral("pack"),
+        QStringLiteral("--sheet"), outSheet,
+        QStringLiteral("--data"), outData,
+        QStringLiteral("--max-size"), QStringLiteral("64"), QStringLiteral("64"),
+        QStringLiteral("--multipage"),
+        mpDir
+    });
+    QCOMPARE(resSuccess.exitCode, ExitSuccess);
+    QVERIFY(resSuccess.json[QStringLiteral("is_multipage")].toBool());
+    QVERIFY(resSuccess.json[QStringLiteral("pages_count")].toInt() >= 2);
+    QVERIFY(QFile::exists(m_tempDir.filePath(QStringLiteral("mp_sheet_0.png"))));
+    QVERIFY(QFile::exists(m_tempDir.filePath(QStringLiteral("mp_sheet_1.png"))));
 }
 
 void TestCli::testWatchLockAcquisitionAndConflict()

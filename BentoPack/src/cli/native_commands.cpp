@@ -22,6 +22,7 @@
 #include "filters/filterplugin.h"
 #include "filters/filterregistry.h"
 #include "extractor/extractorregistry.h"
+#include "generated/version.h"
 #include <QFileInfo>
 #include <QDir>
 #include <QColor>
@@ -403,6 +404,153 @@ CliResult NativeCommands::executeBento(const QStringList &args)
         .arg(fi.fileName()).arg(doc.frameCount()).arg(doc.animations().size());
 
     return CliResult::success(summary, json);
+}
+
+CliResult NativeCommands::executeSchema()
+{
+    QJsonObject schema;
+    schema[QStringLiteral("cli")] = QStringLiteral("bentopack-cli");
+    schema[QStringLiteral("version")] = QStringLiteral(PROJECT_VERSION);
+    schema[QStringLiteral("description")] = QStringLiteral("Headless 2D sprite atlas packer, slicer, filter and game engine asset compiler.");
+
+    // Exit codes
+    QJsonObject exitCodes;
+    exitCodes[QStringLiteral("0")] = QStringLiteral("ExitSuccess: Execution completed without errors.");
+    exitCodes[QStringLiteral("1")] = QStringLiteral("ExitSyntaxError: Invalid arguments, unknown options, or missing parameters.");
+    exitCodes[QStringLiteral("2")] = QStringLiteral("ExitFileNotFound: Input file, directory or asset does not exist.");
+    exitCodes[QStringLiteral("3")] = QStringLiteral("ExitConstraintFailed: Packing constraints unsatisfied (e.g. sprites exceed max-size).");
+    exitCodes[QStringLiteral("4")] = QStringLiteral("ExitIoError: Disk write error, permission failure, or corrupt output path.");
+    exitCodes[QStringLiteral("5")] = QStringLiteral("ExitLockConflict: Another watch daemon instance is already active for this directory.");
+    exitCodes[QStringLiteral("6")] = QStringLiteral("ExitPluginNotFound: Requested export plugin or format encoder not found.");
+    schema[QStringLiteral("exit_codes")] = exitCodes;
+
+    // Supported capabilities
+    QJsonArray algorithms;
+    algorithms.append(QStringLiteral("MaxRects"));
+    algorithms.append(QStringLiteral("Basic"));
+    algorithms.append(QStringLiteral("Grid"));
+    algorithms.append(QStringLiteral("TightPolygon"));
+    schema[QStringLiteral("algorithms")] = algorithms;
+
+    QJsonArray heuristics;
+    heuristics.append(QStringLiteral("BestShortSideFit"));
+    heuristics.append(QStringLiteral("BestLongSideFit"));
+    heuristics.append(QStringLiteral("BestAreaFit"));
+    heuristics.append(QStringLiteral("BottomLeft"));
+    heuristics.append(QStringLiteral("ContactPoint"));
+    schema[QStringLiteral("heuristics")] = heuristics;
+
+    QJsonArray formats;
+    formats.append(QStringLiteral("json-array"));
+    formats.append(QStringLiteral("json-hash"));
+    formats.append(QStringLiteral("godot4"));
+    formats.append(QStringLiteral("unity"));
+    formats.append(QStringLiteral("unreal"));
+    formats.append(QStringLiteral("libgdx"));
+    formats.append(QStringLiteral("spine"));
+    formats.append(QStringLiteral("bento"));
+    schema[QStringLiteral("export_formats")] = formats;
+
+    QJsonArray texFormats;
+    texFormats.append(QStringLiteral("png"));
+    texFormats.append(QStringLiteral("webp"));
+    texFormats.append(QStringLiteral("ktx2"));
+    texFormats.append(QStringLiteral("basis"));
+    schema[QStringLiteral("texture_formats")] = texFormats;
+
+    // Subcommands definition
+    QJsonObject cmds;
+
+    // pack
+    QJsonObject packCmd;
+    packCmd[QStringLiteral("description")] = QStringLiteral("Pack loose images, folders, or sprite files into an optimized atlas sheet and metadata.");
+    QJsonObject packOpts;
+    packOpts[QStringLiteral("--sheet")] = QStringLiteral("Target atlas image file (e.g. atlas.png, atlas.ktx2)");
+    packOpts[QStringLiteral("--data")] = QStringLiteral("Target descriptor metadata file (e.g. atlas.json, atlas.tres)");
+    packOpts[QStringLiteral("--format")] = QStringLiteral("Data export format (json-array, json-hash, godot4, unity, unreal, libgdx)");
+    packOpts[QStringLiteral("--algorithm")] = QStringLiteral("Packing algorithm: MaxRects (default), Basic, Grid, TightPolygon");
+    packOpts[QStringLiteral("--maxrects-heuristics")] = QStringLiteral("Heuristic: BestShortSideFit (default), BestLongSideFit, BestAreaFit, BottomLeft, ContactPoint");
+    packOpts[QStringLiteral("--size-constraints")] = QStringLiteral("Size constraint: AnySize (default) or POT (Power of Two)");
+    packOpts[QStringLiteral("--max-size")] = QStringLiteral("Max width and height: <w> <h> (e.g. 2048 2048)");
+    packOpts[QStringLiteral("--padding")] = QStringLiteral("Pixel spacing between sprite rects (default: 2)");
+    packOpts[QStringLiteral("--border-padding")] = QStringLiteral("Pixel margin around atlas borders (default: 0)");
+    packOpts[QStringLiteral("--extrude")] = QStringLiteral("Duplicate border pixels to prevent texture bleeding on scaling (default: 0)");
+    packOpts[QStringLiteral("--trim-mode")] = QStringLiteral("Trim transparent pixels: None (default), Trim, Crop");
+    packOpts[QStringLiteral("--trim-threshold")] = QStringLiteral("Alpha value below which pixels are considered transparent (0-255, default: 1)");
+    packOpts[QStringLiteral("--enable-auto-alias")] = QStringLiteral("Deduplicate identical sprite frames by pixel hashing");
+    packOpts[QStringLiteral("--pivot-point")] = QStringLiteral("Normalized pivot anchor: <x> <y> (e.g. 0.5 1.0 for feet)");
+    packOpts[QStringLiteral("--godot-uid")] = QStringLiteral("Explicit Godot 4 UID to embed or preserve in .tres");
+    packOpts[QStringLiteral("--godot-scene")] = QStringLiteral("Generate ready-to-instantiate Godot 4 AnimatedSprite2D scene (.tscn)");
+    packOpts[QStringLiteral("--texture-format")] = QStringLiteral("Output texture encoder: png, webp, ktx2, basis");
+    packOpts[QStringLiteral("--vram-format")] = QStringLiteral("VRAM compression codec: uastc (high-quality) or etc1s (compact)");
+    packOpts[QStringLiteral("--vram-quality")] = QStringLiteral("Quality level for VRAM encoder (0-255, default: 128)");
+    packOpts[QStringLiteral("--enable-zstd")] = QStringLiteral("Enable Zstandard supercompression on KTX2/Basis");
+    packOpts[QStringLiteral("--zstd-level")] = QStringLiteral("Zstandard compression level (1-22, default: 9)");
+    packOpts[QStringLiteral("--multipage")] = QStringLiteral("Enable multi-page atlas spanning for collections exceeding max dimensions (M16)");
+    packCmd[QStringLiteral("options")] = packOpts;
+    cmds[QStringLiteral("pack")] = packCmd;
+
+    // slice
+    QJsonObject sliceCmd;
+    sliceCmd[QStringLiteral("description")] = QStringLiteral("Extract individual sprites from a composite sheet using smart connected-component detection.");
+    QJsonObject sliceOpts;
+    sliceOpts[QStringLiteral("<input_image>")] = QStringLiteral("Path to source composite sprite sheet image");
+    sliceOpts[QStringLiteral("--output-dir")] = QStringLiteral("Directory where extracted PNG frames will be written");
+    sliceOpts[QStringLiteral("--output-project")] = QStringLiteral("Save directly as a native BentoPack project (.bento)");
+    sliceOpts[QStringLiteral("--remove-bg")] = QStringLiteral("Automatically detect and remove uniform background color");
+    sliceOpts[QStringLiteral("--tolerance")] = QStringLiteral("Color distance tolerance for background removal (0-100, default: 10)");
+    sliceOpts[QStringLiteral("--alpha-threshold")] = QStringLiteral("Alpha threshold for component detection (default: 1)");
+    sliceOpts[QStringLiteral("--smart-crop")] = QStringLiteral("Crop bounding boxes tightly around non-transparent pixels");
+    sliceOpts[QStringLiteral("--min-size")] = QStringLiteral("Minimum width and height to filter out noise pixels (default: 3)");
+    sliceCmd[QStringLiteral("options")] = sliceOpts;
+    cmds[QStringLiteral("slice")] = sliceCmd;
+
+    // filter
+    QJsonObject filterCmd;
+    filterCmd[QStringLiteral("description")] = QStringLiteral("Apply non-destructive image processing filters in headless batch mode.");
+    QJsonObject filterOpts;
+    filterOpts[QStringLiteral("<input_image>")] = QStringLiteral("Path to source sprite or texture image");
+    filterOpts[QStringLiteral("--output")] = QStringLiteral("Path for the processed output image");
+    filterOpts[QStringLiteral("--despill")] = QStringLiteral("Remove colored halo/bleed fringes [optional: <hex_color>]");
+    filterOpts[QStringLiteral("--despill-mode")] = QStringLiteral("Despill mode: clamp (default) or strict");
+    filterOpts[QStringLiteral("--outline")] = QStringLiteral("Generate outer contour stroke [optional: <thickness_px>]");
+    filterOpts[QStringLiteral("--outline-color")] = QStringLiteral("Color for outline stroke in CSS/Hex format (#RRGGBB)");
+    filterOpts[QStringLiteral("--silhouette")] = QStringLiteral("Fill sprite interior with solid outline color");
+    filterOpts[QStringLiteral("--color-swap")] = QStringLiteral("Replace source color with destination: <#src:#dst>");
+    filterOpts[QStringLiteral("--color-adjust")] = QStringLiteral("Adjust HSL color balance and contrast");
+    filterOpts[QStringLiteral("--hue")] = QStringLiteral("Hue rotation in degrees (-180 to +180)");
+    filterOpts[QStringLiteral("--saturation")] = QStringLiteral("Saturation multiplier percentage (e.g. 150 for +50%)");
+    filterOpts[QStringLiteral("--contrast")] = QStringLiteral("Contrast multiplier percentage (e.g. 120 for +20%)");
+    filterOpts[QStringLiteral("--pixel-rescale")] = QStringLiteral("Pixel-art upscale using Nearest-Neighbor: 2x, 3x, 4x");
+    filterCmd[QStringLiteral("options")] = filterOpts;
+    cmds[QStringLiteral("filter")] = filterCmd;
+
+    // bento
+    QJsonObject bentoCmd;
+    bentoCmd[QStringLiteral("description")] = QStringLiteral("Inspect, export, or manage native BentoPack project archives (.bento).");
+    QJsonObject bentoOpts;
+    bentoOpts[QStringLiteral("<project_file.bento>")] = QStringLiteral("Path to .bento project archive");
+    bentoOpts[QStringLiteral("--info")] = QStringLiteral("Dump frame count, dimensions, animations, and metadata");
+    bentoOpts[QStringLiteral("--export")] = QStringLiteral("Export project directly: godot4, unity, unreal, json");
+    bentoOpts[QStringLiteral("--output")] = QStringLiteral("Target destination path for exported data");
+    bentoOpts[QStringLiteral("--checkout-revision")] = QStringLiteral("Restore project state from embedded LibGit2 git commit SHA");
+    bentoCmd[QStringLiteral("options")] = bentoOpts;
+    cmds[QStringLiteral("bento")] = bentoCmd;
+
+    // watch
+    QJsonObject watchCmd;
+    watchCmd[QStringLiteral("description")] = QStringLiteral("Watch folder in background and automatically re-pack on file change.");
+    QJsonObject watchOpts;
+    watchOpts[QStringLiteral("--watch")] = QStringLiteral("Start filesystem watcher on target inputs");
+    watchOpts[QStringLiteral("--daemon")] = QStringLiteral("Run watcher as an isolated background daemon with .lock guarding");
+    watchOpts[QStringLiteral("--debounce")] = QStringLiteral("Debounce delay in milliseconds before re-packing (default: 300)");
+    watchOpts[QStringLiteral("--stop-watch")] = QStringLiteral("Gracefully terminate active watch daemon guarding target directory");
+    watchCmd[QStringLiteral("options")] = watchOpts;
+    cmds[QStringLiteral("watch")] = watchCmd;
+
+    schema[QStringLiteral("commands")] = cmds;
+
+    return CliResult::success(QStringLiteral("BentoPack CLI schema"), schema);
 }
 
 } // namespace BentoPackCli

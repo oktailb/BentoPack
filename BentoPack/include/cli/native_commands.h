@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,7 @@ public:
     static CliResult executeFilter(const QStringList &args);
     static CliResult executeBento(const QStringList &args);
     static CliResult executeSsp(const QStringList &args) { return executeBento(args); }
+    static CliResult executeSchema();
 };
 
 } // namespace BentoPackCli

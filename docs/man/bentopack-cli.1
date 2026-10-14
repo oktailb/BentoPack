@@ -1,12 +1,12 @@
-.TH BENTOPACK-CLI 1 "September 2026" "BentoPack 0.11.0" "User Commands"
+.TH BENTOPACK-CLI 1 "October 2026" "BentoPack 0.11.0" "User Commands"
 .SH NAME
-bentopack-cli \- headless 2D sprite atlas packer, slicer, filter and batch exporter
+bentopack-cli \- headless 2D sprite atlas packer, smart slicer, image filter, and game engine asset compiler
 .SH SYNOPSIS
 .B bentopack-cli
-[\fIFLAVOR_OPTIONS\fR] [\fIOPTIONS\fR] [\fIINPUT_FILES\fR...]
+[\fIGLOBAL_OPTIONS\fR] [\fISUBCOMMAND\fR] [\fIOPTIONS\fR] [\fIINPUT_FILES\fR...]
 .br
 .B bentopack-cli
-\fISUBCOMMAND\fR [\fISUBCOMMAND_OPTIONS\fR]
+\-\-sheet \fISHEET_FILE\fR \-\-data \fIDATA_FILE\fR [\fIPACK_OPTIONS\fR] [\fIINPUT_FILES\fR...]
 .br
 .B TexturePacker
 [\fITEXTUREPACKER_COMPATIBLE_OPTIONS\fR] [\fIINPUT_FILES\fR...]
@@ -15,47 +15,224 @@ bentopack-cli \- headless 2D sprite atlas packer, slicer, filter and batch expor
 \-b [\fIASEPRITE_COMPATIBLE_OPTIONS\fR]
 .SH DESCRIPTION
 .B bentopack-cli
-is the non-interactive, headless command-line counterpart of the BentoPack 2D sprite preparation suite.
+is the non-interactive, headless command-line tool of the BentoPack 2D sprite suite.
 It executes without any graphic display server or X11/Wayland dependencies (\fBQT_QPA_PLATFORM=offscreen\fR),
-making it suitable for studio continuous integration (CI/CD) pipelines, automated build scripts, and game engine asset compilation.
+making it ideal for CI/CD automation, game engine asset pipelines, and AI coding agents.
 .PP
-The tool features an automatic flavor dispatcher allowing it to function either with native subcommands
-or as a seamless 100% drop-in replacement for \fBTexturePacker\fR and \fBAseprite\fR batch invocations.
+The tool features an automatic flavor dispatcher allowing it to act either as a native CLI
+or as a seamless 100% drop-in replacement for \fBTexturePacker\fR and \fBAseprite\fR batch scripts.
 
-.SH FLAVORS AND MODES OF OPERATION
-The operating mode is automatically inferred from the binary invocation name (\fBargv[0]\fR) or explicitly selected via \fB\-\-flavor\fR:
+.SH GLOBAL OPTIONS
 .TP
-.B texturepacker
-Activated when invoked as \fBTexturePacker\fR or with \fB\-\-flavor=texturepacker\fR. Accepts all standard TexturePacker flags and generates matching JSON, Godot, or XML formats.
+.BR \-h ", " \-\-help
+Display syntax summary and command help.
 .TP
-.B aseprite
-Activated when invoked as \fBaseprite\fR with \fB\-b\fR (\-\-batch) or with \fB\-\-flavor=aseprite\fR. Accepts sheet compilation flags (\fB\-\-sheet\fR, \fB\-\-data\fR, \fB\-\-list\-tags\fR, \fB\-\-sheet\-type\fR).
+.BR \-v ", " \-\-version
+Display application version and engine information.
 .TP
-.B godot
-Natively generates Godot 4 \fBSpriteFrames\fR resources (\fB.tres\fR) with automatic sub-textures, animation sequences, unique stable UIDs, and exact pivot offset margins.
+.B \-\-json
+Emit structured JSON output to standard output (ideal for scripting and AI agents).
 .TP
-.B native
-Default mode when invoked as \fBbentopack-cli\fR, accepting both universal options and structured subcommands (\fBpack\fR, \fBslice\fR, \fBfilter\fR, \fBbento\fR, \fBssp\fR).
+.B \-\-schema
+Emit complete self-describing JSON Schema of all commands, options, and capabilities for AI agents.
+.TP
+.B \-\-quiet
+Suppress progress and status logs, emitting only critical errors or clean JSON.
+.TP
+.B \-\-verbose
+Display verbose debug information during execution.
+.TP
+.BI \-\-flavor " <tp|aseprite|godot|native>"
+Force command line syntax flavor regardless of binary name.
 
 .SH SUBCOMMANDS
 .TP
 .B pack
-Empack sprite frames into an optimized atlas.
+Pack loose sprites, directories, or project files into an optimized texture atlas.
 .TP
 .B slice
-Slice composite images into loose frames using connected-component detection.
+Extract individual sprite frames from raw composite sheets using smart connected-component detection.
 .TP
 .B filter
-Apply image processing filters (background removal, outlines, color adjustments) in headless batch mode.
+Apply non-destructive image filters (despill, outline, color-swap, color-adjust, pixel-rescale).
 .TP
 .B bento\fR, \fBssp
-Inspect, unpack, or export native BentoPack Project archives (\fB.bento\fR).
+Inspect, unpack, or export native BentoPack project archives (\fB.bento\fR).
+.TP
+.B schema
+Output the machine-readable capability manifest and JSON schema for AI agents.
 
-.SH SEE ALSO
-.BR bentopack (1)
+.SH PACKING OPTIONS
+.TP
+.BI \-\-sheet " <file>"
+Destination sprite sheet image (e.g. \fIatlas.png\fR, \fIatlas.ktx2\fR, \fIatlas.basis\fR).
+.TP
+.BI \-\-data " <file>"
+Destination descriptor metadata (e.g. \fIatlas.json\fR, \fIatlas.tres\fR, \fIatlas.unity.json\fR).
+.TP
+.BI \-\-format " <fmt>"
+Export metadata format: \fBjson-array\fR, \fBjson-hash\fR, \fBgodot4\fR, \fBunity\fR, \fBunreal\fR, \fBlibgdx\fR, \fBspine\fR, \fBbento\fR.
+.TP
+.BI \-\-algorithm " <algo>"
+Packing algorithm: \fBMaxRects\fR (default), \fBBasic\fR (RowPacker), \fBGrid\fR, \fBTightPolygon\fR.
+.TP
+.BI \-\-maxrects-heuristics " <h>"
+MaxRects heuristic: \fBBestShortSideFit\fR (default), \fBBestLongSideFit\fR, \fBBestAreaFit\fR, \fBBottomLeft\fR, \fBContactPoint\fR.
+.TP
+.BI \-\-size-constraints " <AnySize|POT>"
+Enforce Power-of-Two dimensions (\fBPOT\fR) or arbitrary tight rectangular bounds (\fBAnySize\fR, default).
+.TP
+.BI \-\-max-size " <width> <height>"
+Upper bounds for atlas dimensions (e.g. \fB2048 2048\fR).
+.TP
+.BI \-\-padding " <px>"
+Spacing between neighboring sprite rectangles (default: 2).
+.TP
+.BI \-\-border-padding " <px>"
+Padding between sheet outer perimeter and packed sprites (default: 0).
+.TP
+.BI \-\-extrude " <px>"
+Extrude outermost boundary pixels to eliminate texture filtering edge-bleeding (default: 0).
+.TP
+.BI \-\-trim-mode " <None|Trim|Crop>"
+Trimming mode for transparent borders: \fBNone\fR (default), \fBTrim\fR, or \fBCrop\fR.
+.TP
+.BI \-\-trim-threshold " <0-255>"
+Alpha threshold below which pixels are considered transparent (default: 1).
+.TP
+.B \-\-enable-auto-alias
+Enable visual deduplication of identical sprites via pixel hashing.
+.TP
+.BI \-\-pivot-point " <x> <y>"
+Normalized anchor point coordinates across sprites [0.0 to 1.0] (e.g. \fB0.5 1.0\fR for ground-feet pivot).
+.TP
+.BI \-\-godot-uid " <uid>"
+Explicit Godot 4 unique identifier string to inject or preserve in generated \fB.tres\fR.
+.TP
+.BI \-\-godot-scene " <file.tscn>"
+Generate an instantiable Godot 4 \fBAnimatedSprite2D\fR scene referencing the packed frames.
+.TP
+.B \-\-multipage
+Enable multi-page atlas spanning (M16) when sprite collections exceed maximum page dimensions.
+.TP
+.BI \-\-texture-format " <png|webp|ktx2|basis>"
+Output image encoder format.
+.TP
+.BI \-\-vram-format " <uastc|etc1s>"
+GPU texture compression codec: \fBuastc\fR (high-fidelity HDR/PBR) or \fBetc1s\fR (compact).
+.TP
+.BI \-\-enable-zstd ", " \-\-disable-zstd
+Toggle Zstandard supercompression for KTX2/Basis files (enabled by default).
+.TP
+.BI \-\-zstd-level " <1-22>"
+Zstandard compression level (default: 9).
+
+.SH SLICE OPTIONS (SMART DETECTION)
+.TP
+.BI \-\-output-dir " <dir>"
+Destination folder where segmented PNG frames will be written.
+.TP
+.BI \-\-output-project " <file.bento>"
+Save segmented frames directly as a native BentoPack project.
+.TP
+.B \-\-remove-bg
+Automatically detect and remove uniform background color before segmentation.
+.TP
+.BI \-\-tolerance " <0-100>"
+Color distance tolerance for background removal (default: 10).
+.TP
+.B \-\-smart-crop
+Crop detected bounding boxes tightly around non-transparent pixels.
+.TP
+.BI \-\-min-size " <px>"
+Minimum width and height threshold to discard isolated noise artifacts (default: 3).
+
+.SH FILTER OPTIONS (HEADLESS IMAGE PROCESSING)
+.TP
+.BI \-\-output " <file.png>"
+Destination output image path.
+.TP
+.BI \-\-despill " [hex_color]"
+Remove color bleeding or fringe halos from extracted sprites.
+.TP
+.BI \-\-outline " [thickness_px]"
+Add an outer contour stroke around sprite boundaries.
+.TP
+.BI \-\-outline-color " <hex_color>"
+Hexadecimal color for the outline stroke (e.g. \fI#000000\fR).
+.TP
+.B \-\-silhouette
+Fill sprite interior with solid outline color.
+.TP
+.BI \-\-color-swap " <#src:#dst>"
+Replace a specific source color with a target color while preserving shading.
+.TP
+.BI \-\-color-adjust
+Activate HSL adjustment: use with \fB\-\-hue\fR, \fB\-\-saturation\fR, \fB\-\-contrast\fR.
+.TP
+.BI \-\-pixel-rescale " <2x|3x|4x>"
+Nearest-neighbor pixel-art integer upscaling.
+
+.SH WATCH AND DAEMON OPTIONS
+.TP
+.B \-\-watch
+Monitor input files and directories and automatically re-pack whenever changes are detected.
+.TP
+.B \-\-daemon
+Run the watcher in background mode guarded by an atomic directory lockfile (\fI.lock\fR).
+.TP
+.BI \-\-debounce " <ms>"
+Debounce latency window in milliseconds before triggering re-packing (default: 300).
+.TP
+.BI \-\-stop-watch " <dir>"
+Gracefully terminate the active watch daemon guarding the specified directory.
+
+.SH EXIT STATUS
+.TP
+.B 0
+.B ExitSuccess\fR: Execution completed successfully.
+.TP
+.B 1
+.B ExitSyntaxError\fR: Invalid arguments, unknown options, or missing required parameters.
+.TP
+.B 2
+.B ExitFileNotFound\fR: Specified input file, directory, or asset does not exist.
+.TP
+.B 3
+.B ExitConstraintFailed\fR: Packing constraints unsatisfied (e.g. frames exceed max dimensions without \fB\-\-multipage\fR).
+.TP
+.B 4
+.B ExitIoError\fR: Disk write error, missing write permissions, or corrupted filesystem.
+.TP
+.B 5
+.B ExitLockConflict\fR: Another watch daemon is already active for this directory.
+.TP
+.B 6
+.B ExitPluginNotFound\fR: Requested format exporter or compressor plugin not available.
+
+.SH EXAMPLES
 .PP
-Project repository:
-.I https://github.com/oktailb/BentoPack
+.B Pack folder of loose sprites into Godot 4 .tres:
+.RS
+bentopack-cli --sheet assets/hero.png --data assets/hero.tres --format godot4 sprites/hero/
+.RE
+.PP
+.B Drop-in replacement for TexturePacker with KTX2 VRAM compression:
+.RS
+TexturePacker --sheet atlas.ktx2 --data atlas.json --format json-array --vram-format uastc input/
+.RE
+.PP
+.B Auto-slice raw sheet with background removal:
+.RS
+bentopack-cli slice raw_sheet.png --remove-bg --tolerance 12 --output-dir frames/
+.RE
+.PP
+.B Machine-readable schema introspection for AI agent:
+.RS
+bentopack-cli --schema
+.RE
 
 .SH AUTHORS
-Vincent Lecoq and BentoPack contributors.
+Vincent Lecoq and the BentoPack project contributors.
+.SH SEE ALSO
+.BR bentopack (1)

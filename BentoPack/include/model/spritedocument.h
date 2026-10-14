@@ -116,6 +116,7 @@ struct BENTOPACK_CORE_EXPORT SpriteBox {
     bool        selected = false;
     int         index = 0;
     int         groupId = 0;
+    int         page = 0;
     QList<int>  overlappingBoxes;
     QPoint      pivot = QPoint(0, 0); // Local position relative to the box's top-left corner
     bool        hasCustomPivot = false;
@@ -139,7 +140,7 @@ struct BENTOPACK_CORE_EXPORT SpriteBox {
     explicit SpriteBox(const QRect &r) : rect(r) {}
 
     bool operator==(const SpriteBox &other) const {
-        return rect == other.rect && index == other.index && selected == other.selected
+        return rect == other.rect && index == other.index && page == other.page && selected == other.selected
                && pivot == other.pivot && hasCustomPivot == other.hasCustomPivot
                && hasPolygonMesh == other.hasPolygonMesh && polygon == other.polygon
                && vertices == other.vertices && triangles == other.triangles;

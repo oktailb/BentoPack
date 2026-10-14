@@ -18,6 +18,7 @@
 #include "controller/projectcontroller.h"
 #include "extractor/extractorregistry.h"
 #include "packer/vramtexturecompressor.h"
+#include "packer/multipagepacker.h"
 #include "project/sessionmanager.h"
 #include <QDir>
 #include <QFileInfo>
@@ -158,6 +159,7 @@ CliResult CliPackPipeline::execute(const QStringList &args)
     int vramQuality = 128;
     bool zstd = true;
     int zstdLevel = 9;
+    bool allowMultiPage = false;
 
     QStringList inputPaths;
 
@@ -227,6 +229,8 @@ CliResult CliPackPipeline::execute(const QStringList &args)
             godotScene = args[++i];
         } else if (arg == QStringLiteral("--list-tags")) {
             listTags = true;
+        } else if (arg == QStringLiteral("--multipage") || arg == QStringLiteral("--allow-multipage")) {
+            allowMultiPage = true;
         } else if (arg == QStringLiteral("-b") || arg == QStringLiteral("--batch")) {
             // aseprite batch flag, consume
         } else if (!arg.startsWith(QStringLiteral("-"))) {
@@ -325,16 +329,38 @@ CliResult CliPackPipeline::execute(const QStringList &args)
     packOpts.maxHeight = maxHeight;
     packOpts.deduplicate = autoAlias;
 
+    bool isMultiPage = false;
+    MultiPagePackResult mpRes;
+    AtlasPackResult packRes;
+
     QElapsedTimer timer;
     timer.start();
-    AtlasPackResult packRes = AtlasPacker::pack(packFrames, packOpts);
-    qint64 elapsedMs = timer.elapsed();
 
-    if (!packRes.success) {
-        return CliResult::error(ExitConstraintFailed,
-                                QStringLiteral("Packing failed: frames exceed max-size constraints (%1x%2).")
-                                .arg(maxWidth).arg(maxHeight));
+    if (allowMultiPage) {
+        mpRes = MultiPagePacker::packFrames(packFrames, animations, packOpts);
+        if (!mpRes.success) {
+            return CliResult::error(ExitConstraintFailed,
+                                    QStringLiteral("Packing failed: individual sprite frame exceeds maximum allowed page dimensions (%1x%2).")
+                                    .arg(maxWidth).arg(maxHeight));
+        }
+        isMultiPage = mpRes.isMultiPage();
+        if (!isMultiPage && mpRes.totalPages() == 1) {
+            packRes.success = true;
+            packRes.atlas = mpRes.pages.first().atlas;
+            packRes.dimensions = mpRes.pages.first().dimensions;
+            packRes.frameRects = mpRes.frameRects;
+            packRes.uniqueFramesCount = mpRes.frameRects.size();
+            packRes.efficiency = mpRes.overallEfficiency;
+        }
+    } else {
+        packRes = AtlasPacker::pack(packFrames, packOpts);
+        if (!packRes.success) {
+            return CliResult::error(ExitConstraintFailed,
+                                    QStringLiteral("Packing failed: frames exceed max-size constraints (%1x%2). Tip: Use --multipage to span across multiple atlas pages.")
+                                    .arg(maxWidth).arg(maxHeight));
+        }
     }
+    qint64 elapsedMs = timer.elapsed();
 
     // 5. Setup VRAM options
     bool isVram = (textureFormat == QStringLiteral("ktx2") || textureFormat == QStringLiteral("basis") ||
@@ -358,33 +384,58 @@ CliResult CliPackPipeline::execute(const QStringList &args)
     vOpts.zstdLevel = zstdLevel;
     VramCompressionStats vStats;
 
-    // 6. Save sheet image
+    // 6. Save sheet image(s)
     QFileInfo sfi(sheetPath);
     QDir().mkpath(sfi.dir().absolutePath());
-    if (isVram) {
-        QString vErr;
-        if (!VramTextureCompressor::compressToFile(packRes.atlas, sheetPath, vOpts, &vStats, &vErr)) {
-            return CliResult::error(ExitIoError, QStringLiteral("Failed to compress VRAM atlas: ") + sheetPath + QStringLiteral(" (") + vErr + QStringLiteral(")"));
+    QStringList pageSheetPaths;
+
+    if (isMultiPage) {
+        QString base = sfi.completeBaseName();
+        QString ext = sfi.suffix().isEmpty() ? QStringLiteral("png") : sfi.suffix();
+        for (int p = 0; p < mpRes.totalPages(); ++p) {
+            QString pageSheet = sfi.dir().filePath(QStringLiteral("%1_%2.%3").arg(base).arg(p).arg(ext));
+            pageSheetPaths.append(pageSheet);
+            if (isVram) {
+                QString vErr;
+                VramCompressionStats pageVStats;
+                if (!VramTextureCompressor::compressToFile(mpRes.pages[p].atlas, pageSheet, vOpts, &pageVStats, &vErr)) {
+                    return CliResult::error(ExitIoError, QStringLiteral("Failed to compress VRAM atlas page: ") + pageSheet);
+                }
+            } else {
+                if (!mpRes.pages[p].atlas.save(pageSheet, "PNG")) {
+                    return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas sheet page: ") + pageSheet);
+                }
+            }
         }
     } else {
-        if (!packRes.atlas.save(sheetPath, "PNG")) {
-            return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas sheet image: ") + sheetPath);
+        pageSheetPaths.append(sheetPath);
+        if (isVram) {
+            QString vErr;
+            if (!VramTextureCompressor::compressToFile(packRes.atlas, sheetPath, vOpts, &vStats, &vErr)) {
+                return CliResult::error(ExitIoError, QStringLiteral("Failed to compress VRAM atlas: ") + sheetPath + QStringLiteral(" (") + vErr + QStringLiteral(")"));
+            }
+        } else {
+            if (!packRes.atlas.save(sheetPath, "PNG")) {
+                return CliResult::error(ExitIoError, QStringLiteral("Failed to write atlas sheet image: ") + sheetPath);
+            }
         }
     }
 
     // 7. Save metadata via ExtractorRegistry plugin lookup
     if (!dataPath.isEmpty()) {
         SpriteDocument doc;
-        doc.setAtlas(packRes.atlas);
+        doc.setAtlas(isMultiPage ? mpRes.pages.first().atlas : packRes.atlas);
         QList<SpriteBox> boxes;
         boxes.reserve(packFrames.size());
         for (int i = 0; i < packFrames.size(); ++i) {
             SpriteBox b;
             b.index = i;
-            if (i < packRes.frameRects.size()) {
-                b.rect = packRes.frameRects[i];
+            if (isMultiPage) {
+                b.rect = mpRes.rectForFrame(i);
+                b.page = mpRes.pageForFrame(i);
             } else {
-                b.rect = QRect(0, 0, packFrames[i].width(), packFrames[i].height());
+                b.rect = (i < packRes.frameRects.size()) ? packRes.frameRects[i] : QRect(0, 0, packFrames[i].width(), packFrames[i].height());
+                b.page = 0;
             }
             b.pivot = (i < pivots.size()) ? pivots[i] : QPoint(b.rect.width() / 2, b.rect.height() / 2);
             boxes.append(b);
@@ -396,6 +447,7 @@ CliResult CliPackPipeline::execute(const QStringList &args)
 
         ExportOptions expOpts;
         expOpts.packOptions = packOpts;
+        expOpts.packOptions.algorithm = AtlasPacker::KeepLayout;
         expOpts.vramOptions = vOpts;
         expOpts.trimSprites = doTrim;
         expOpts.extraParams[QStringLiteral("trim")] = doTrim;
@@ -458,13 +510,30 @@ CliResult CliPackPipeline::execute(const QStringList &args)
     }
 
     QJsonObject json;
-    json[QStringLiteral("atlas")] = sheetPath;
+    if (isMultiPage) {
+        json[QStringLiteral("is_multipage")] = true;
+        json[QStringLiteral("pages_count")] = mpRes.totalPages();
+        QJsonArray pagesArr;
+        for (int p = 0; p < mpRes.totalPages(); ++p) {
+            QJsonObject pObj;
+            pObj[QStringLiteral("index")] = p;
+            pObj[QStringLiteral("sheet")] = pageSheetPaths[p];
+            pObj[QStringLiteral("width")] = mpRes.pages[p].dimensions.width();
+            pObj[QStringLiteral("height")] = mpRes.pages[p].dimensions.height();
+            pObj[QStringLiteral("efficiency")] = static_cast<double>(mpRes.pages[p].efficiency);
+            pagesArr.append(pObj);
+        }
+        json[QStringLiteral("pages")] = pagesArr;
+        json[QStringLiteral("atlas")] = pageSheetPaths.first();
+    } else {
+        json[QStringLiteral("atlas")] = sheetPath;
+        json[QStringLiteral("width")] = packRes.dimensions.width();
+        json[QStringLiteral("height")] = packRes.dimensions.height();
+        json[QStringLiteral("efficiency")] = static_cast<double>(packRes.efficiency);
+    }
     if (!dataPath.isEmpty()) json[QStringLiteral("data")] = dataPath;
-    json[QStringLiteral("width")] = packRes.dimensions.width();
-    json[QStringLiteral("height")] = packRes.dimensions.height();
-    json[QStringLiteral("frames_count")] = packRes.frameRects.size();
-    json[QStringLiteral("unique_frames")] = packRes.uniqueFramesCount;
-    json[QStringLiteral("efficiency")] = static_cast<double>(packRes.efficiency);
+    json[QStringLiteral("frames_count")] = packFrames.size();
+    json[QStringLiteral("unique_frames")] = isMultiPage ? packFrames.size() : packRes.uniqueFramesCount;
     json[QStringLiteral("elapsed_ms")] = elapsedMs;
     if (isVram) {
         json[QStringLiteral("vram_format")] = VramTextureCompressor::formatName(vOpts.format);
@@ -472,12 +541,21 @@ CliResult CliPackPipeline::execute(const QStringList &args)
         json[QStringLiteral("vram_savings_percent")] = vStats.vramSavingsPercent;
     }
 
-    QString summary = QStringLiteral("Packed %1 frames into %2x%3 atlas (%4% efficiency) in %5 ms.")
-        .arg(packRes.frameRects.size())
-        .arg(packRes.dimensions.width())
-        .arg(packRes.dimensions.height())
-        .arg(QString::number(packRes.efficiency, 'f', 1))
-        .arg(elapsedMs);
+    QString summary;
+    if (isMultiPage) {
+        summary = QStringLiteral("Packed %1 frames across %2 atlas pages (%3% overall efficiency) in %4 ms.")
+            .arg(packFrames.size())
+            .arg(mpRes.totalPages())
+            .arg(QString::number(mpRes.overallEfficiency, 'f', 1))
+            .arg(elapsedMs);
+    } else {
+        summary = QStringLiteral("Packed %1 frames into %2x%3 atlas (%4% efficiency) in %5 ms.")
+            .arg(packRes.frameRects.size())
+            .arg(packRes.dimensions.width())
+            .arg(packRes.dimensions.height())
+            .arg(QString::number(packRes.efficiency, 'f', 1))
+            .arg(elapsedMs);
+    }
 
     if (isVram) {
         summary += QStringLiteral(" [VRAM: %1, -%2% savings]")

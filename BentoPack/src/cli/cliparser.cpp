@@ -57,6 +57,7 @@ QString CliParser::helpText()
         "  -h, --help                  Show this help message\n"
         "  -v, --version               Show application version\n"
         "  --json                      Emit structured JSON output to stdout\n"
+        "  --schema                    Output self-describing JSON Schema for AI agents and tooling\n"
         "  --quiet                     Suppress progress and status messages\n"
         "  --verbose                   Display verbose debug details\n"
         "  --flavor <tp|aseprite|godot|native>  Force CLI syntax flavor\n\n"
@@ -69,7 +70,8 @@ QString CliParser::helpText()
         "  pack                        Pack individual images, folders or projects into sprite sheet\n"
         "  slice                       Auto-slice raw sheet with connected components & background removal\n"
         "  filter                      Apply headless image filters (despill, outline, color-swap, etc.)\n"
-        "  bento                       Inspect or export native .bento projects (alias: ssp)\n\n"
+        "  bento                       Inspect or export native .bento projects (alias: ssp)\n"
+        "  schema                      Output JSON schema of all capabilities, options and commands\n\n"
         "TexturePacker Compatibility Options:\n"
         "  --sheet <file.png>          Target sprite sheet texture file\n"
         "  --data <file.json|tres>     Target metadata file (JSON or Godot 4 .tres)\n"
@@ -87,7 +89,8 @@ QString CliParser::helpText()
         "  --disable-auto-alias        Disable visual deduplication\n"
         "  --pivot-point <x> <y>       Normalized sprite anchor point [0.0 - 1.0]\n"
         "  --godot-uid <uid>           Explicit Godot 4 UID (or preserve existing in .tres)\n"
-        "  --godot-scene <file.tscn>   Generate instantiable Godot 4 AnimatedSprite2D scene\n\n"
+        "  --godot-scene <file.tscn>   Generate instantiable Godot 4 AnimatedSprite2D scene\n"
+        "  --multipage                 Allow multi-page atlas spanning for collections exceeding max dimensions (M16)\n\n"
         "Aseprite Batch Options:\n"
         "  -b, --batch                 Headless batch execution\n"
         "  --sheet-type <type>         Sheet arrangement (packed, horizontal, vertical, matrix)\n"
@@ -166,6 +169,10 @@ CliResult CliParser::dispatchCommand(const QStringList &cleanArgs)
         if (subCmd == QStringLiteral("bento") || subCmd == QStringLiteral("ssp")) {
             return NativeCommands::executeBento(cleanArgs.mid(1));
         }
+        if (subCmd == QStringLiteral("schema") || subCmd == QStringLiteral("--schema")) {
+            m_jsonOutput = true;
+            return NativeCommands::executeSchema();
+        }
 
         // If options contain --sheet or --data, fallback to generic pack pipeline
         if (cleanArgs.contains(QStringLiteral("--sheet")) || cleanArgs.contains(QStringLiteral("--data"))) {
@@ -201,6 +208,10 @@ CliResult CliParser::parseAndExecute(const QStringList &args)
         if (arg == QStringLiteral("--json")) {
             m_jsonOutput = true;
             continue;
+        }
+        if (arg == QStringLiteral("--schema")) {
+            m_jsonOutput = true;
+            return NativeCommands::executeSchema();
         }
         if (arg == QStringLiteral("--quiet")) {
             m_quiet = true;
