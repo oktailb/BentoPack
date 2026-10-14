@@ -341,13 +341,14 @@ AtlasPackResult AtlasPacker::packMaxRects(const QList<QImage> &uniqueFrames, con
     } else {
         // Free-size / compact packing
         int sideEstimate = static_cast<int>(std::sqrt(totalArea * 1.15)) + border * 2;
-        binW = std::max(sideEstimate, maxAllocW + border * 2);
-        binH = binW;
+        binW = std::clamp(std::max(sideEstimate, maxAllocW + border * 2), 1, options.maxWidth);
+        binH = std::clamp(std::max(sideEstimate, maxAllocH + border * 2), 1, options.maxHeight);
 
         bool fits = false;
         int attempts = 0;
-        while (!fits && attempts < 10 && binW <= options.maxWidth && binH <= options.maxHeight) {
-            ::MaxRectsPacker packer(binW - border * 2, binH - border * 2);
+        while (!fits && attempts < 20) {
+            ::MaxRectsPacker packer(std::min(binW, options.maxWidth) - border * 2,
+                                    std::min(binH, options.maxHeight) - border * 2);
             placedRects = packer.insert(allocSizes, options.heuristic);
 
             fits = true;
@@ -359,8 +360,16 @@ AtlasPackResult AtlasPacker::packMaxRects(const QList<QImage> &uniqueFrames, con
             }
 
             if (!fits) {
-                binW = static_cast<int>(binW * 1.25);
-                binH = static_cast<int>(binH * 1.25);
+                if (binW >= options.maxWidth && binH >= options.maxHeight) {
+                    break;
+                }
+                if (binW < options.maxWidth && (binH >= options.maxHeight || binW <= binH)) {
+                    binW = std::min(options.maxWidth, static_cast<int>(binW * 1.25) + 1);
+                } else if (binH < options.maxHeight) {
+                    binH = std::min(options.maxHeight, static_cast<int>(binH * 1.25) + 1);
+                } else {
+                    binW = std::min(options.maxWidth, static_cast<int>(binW * 1.25) + 1);
+                }
                 attempts++;
             }
         }

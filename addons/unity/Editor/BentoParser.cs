@@ -14,6 +14,7 @@ namespace BentoPack.Editor
         public Texture2D atlasTexture;
         public byte[] rawAtlasBytes;
         public string atlasFormat = "png";
+        public Dictionary<int, Texture2D> pageTextures = new Dictionary<int, Texture2D>();
     }
 
     /// <summary>
@@ -216,6 +217,27 @@ namespace BentoPack.Editor
                 {
                     if (ts.ContainsKey("w")) data.textureSize.w = Convert.ToInt32(ts["w"]);
                     if (ts.ContainsKey("h")) data.textureSize.h = Convert.ToInt32(ts["h"]);
+                }
+
+                if (dict.ContainsKey("isMultiPage")) data.isMultiPage = Convert.ToBoolean(dict["isMultiPage"]);
+                if (dict.ContainsKey("pagesCount")) data.pagesCount = Convert.ToInt32(dict["pagesCount"]);
+                if (dict.ContainsKey("pages") && dict["pages"] is List<object> pList)
+                {
+                    foreach (var pObj in pList)
+                    {
+                        if (pObj is Dictionary<string, object> pDict)
+                        {
+                            BentoPageData page = new BentoPageData();
+                            if (pDict.ContainsKey("index")) page.index = Convert.ToInt32(pDict["index"]);
+                            if (pDict.ContainsKey("texture")) page.texture = pDict["texture"]?.ToString();
+                            if (pDict.ContainsKey("w")) page.w = Convert.ToInt32(pDict["w"]);
+                            if (pDict.ContainsKey("h")) page.h = Convert.ToInt32(pDict["h"]);
+                            if (pDict.ContainsKey("normal")) page.normal = pDict["normal"]?.ToString();
+                            if (pDict.ContainsKey("specular")) page.specular = pDict["specular"]?.ToString();
+                            if (pDict.ContainsKey("emissive")) page.emissive = pDict["emissive"]?.ToString();
+                            data.pages.Add(page);
+                        }
+                    }
                 }
 
                 // 1. Format: Unity2D_SpriteMesh ("sprites" key)
@@ -430,6 +452,31 @@ namespace BentoPack.Editor
                     for (int pi = 0; pi + 1 < pList.Count; pi += 2)
                     {
                         s.polygon.Add(new float[] { Convert.ToSingle(pList[pi]), Convert.ToSingle(pList[pi + 1]) });
+                    }
+                }
+            }
+
+            if (sDict.ContainsKey("page")) s.page = Convert.ToInt32(sDict["page"]);
+            if (sDict.ContainsKey("texture")) s.texture = sDict["texture"]?.ToString();
+
+            var uvObj = sDict.ContainsKey("uvs") ? sDict["uvs"] : (sDict.ContainsKey("uv") ? sDict["uv"] : null);
+            if (uvObj is List<object> uvList && uvList.Count > 0)
+            {
+                if (uvList[0] is List<object>)
+                {
+                    foreach (var item in uvList)
+                    {
+                        if (item is List<object> xy && xy.Count >= 2)
+                        {
+                            s.uvs.Add(new float[] { Convert.ToSingle(xy[0]), Convert.ToSingle(xy[1]) });
+                        }
+                    }
+                }
+                else
+                {
+                    for (int uvi = 0; uvi + 1 < uvList.Count; uvi += 2)
+                    {
+                        s.uvs.Add(new float[] { Convert.ToSingle(uvList[uvi]), Convert.ToSingle(uvList[uvi + 1]) });
                     }
                 }
             }

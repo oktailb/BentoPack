@@ -205,6 +205,16 @@ if (MINGW)
 endif()
 add_test(NAME test_concurrency_and_security COMMAND test_concurrency_and_security)
 
+# 12. test_multipage_packer (M16)
+add_executable(test_multipage_packer test_multipage_packer.cpp)
+target_include_directories(test_multipage_packer PRIVATE ${PLUGIN_INCLUDES})
+target_link_libraries(test_multipage_packer PRIVATE BentoPackCore Qt6::Test)
+set_target_properties(test_multipage_packer PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_multipage_packer PRIVATE -mconsole)
+endif()
+add_test(NAME test_multipage_packer COMMAND test_multipage_packer)
+
 set(ALL_TEST_TARGETS
     test_extractors
     test_app_config
@@ -221,6 +231,7 @@ set(ALL_TEST_TARGETS
     test_robustness
     test_gui_integration
     test_concurrency_and_security
+    test_multipage_packer
 )
 
 set_tests_properties(${ALL_TEST_TARGETS}

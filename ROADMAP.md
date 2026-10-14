@@ -27,6 +27,8 @@
 | **M18** | **Édition de Pixels Multi-Calques** | Dock `LayerStackWidget` complet dans `PixelEditorDialog` (Z-order, opacité, modes de composition, merge, flatten), dessin multi-couches, onion skinning. |
 | **M19** | **Maillage Intelligent CDT & Relief** | Triangulation Delaunay avec contraintes (CDT Bowyer-Watson), détection de crêtes chromatiques internes (RGB / Sobel), outils interactifs de sommets & couteau laser, application à toutes les frames d'animation. |
 | **M20** | **Taxonomie Filtres & Pixel Editor** | Typage déclaratif `FilterModifierFlags` (`PixelModifier`, `GeometryModifier`, `AtlasModifier`), intégration directe des filtres dans le Pixel Editor avec live preview et Undo/Redo. |
+| **M21** | **Éclairage 2D & Multi-Atlas Synchronisé** | Architecture Maître-Esclave pour textures Albedo, Normal (`_n`), Emissive (`_e`) et Specular (`_s`), préservation stricte des UVs, ponts Godot CanvasTexture et Unity URP. |
+| **M16** | **Multi-Page Atlas & Spanning (VRAM)** | `MultiPagePacker` : partitionnement automatique multi-pages lors du débordement VRAM, heuristique de cohésion sémantique par animation (anti-texture-swapping), synchronisation multi-atlas par page. |
 | **M-CLI** | **CLI & Mode Watch Daemon** | `bentopack-cli` avec mode daemon de surveillance en arrière-plan (`--watch`, détection récursive, debouncing, isolation `.lock`), drop-in TexturePacker. |
 | **M-DEVOPS**| **CI/CD Multi-Plateforme** | Pipelines automatisés Windows (NSIS & ZIP), Linux (AppImage, DEB, RPM), macOS (ARM64/Intel DMG & .app), Haiku OS (`.hpkg`). |
 
@@ -136,7 +138,15 @@ La 2D contemporaine (Unity URP 2D, Godot 4 `CanvasTexture`, Unreal Paper2D) s'ap
 
 ---
 
-## 🗂️ Priorité 3 (P1) : M16 — Multi-Page Atlas & Spanning (Gestion du Débordement VRAM)
+## 🗂️ Priorité 3 (P1) : M16 — Multi-Page Atlas & Spanning (Gestion du Débordement VRAM) — [x] TERMINÉ / LIVRÉ
+
+> [!NOTE]
+> **Implémentation Livrée (100% CTest Passed) :**
+> - `MultiPagePacker` ([`multipagepacker.h`](file:///BentoPack/include/packer/multipagepacker.h), [`multipagepacker.cpp`](file:///BentoPack/src/packer/multipagepacker.cpp)) intégrant l'heuristique de cohésion sémantique par animation (anti-texture swapping).
+> - Découpage séquentiel ordonné pour les animations dépassant la capacité d'une page vierge.
+> - Intégration complète de la synchronisation Multi-Atlas M21 (Normal, Emissive, Specular) par page.
+> - Correction de l'expansion rectangulaire asymétrique dans `AtlasPacker::packMaxRects`.
+> - Validation par la suite automatisée `test_multipage_packer` (8/8 tests passés avec succès).
 
 ### 📌 Contexte & Problématique Métier
 En production réelle (RPG avec des centaines de monstres, personnages avec des dizaines d'animations), un projet dépasse rapidement les limites de taille d'une seule texture (ex. contrainte stricte de $2048 \times 2048$ sur mobile bas de gamme ou $4096 \times 4096$ sur Switch).

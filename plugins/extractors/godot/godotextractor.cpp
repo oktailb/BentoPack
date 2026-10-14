@@ -18,6 +18,7 @@
 #include "godot_pipeline.h"
 #include "packer/atlaspacker.h"
 #include "packer/multiatlaspacker.h"
+#include "packer/multipagepacker.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -435,12 +436,11 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     AtlasPackResult packResult;
     MultiAtlasPackResult multiResult;
+    MultiPagePackResult mpResult;
+    bool isMultiPage = false;
     bool hasAux = options.exportMaterialMaps && doc.hasAnyAuxiliaryMaps();
 
-    if (hasAux) {
-        multiResult = MultiAtlasPacker::pack(doc, packOpts, options.normalMapYFlip);
-        packResult = multiResult.master;
-    } else if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
+    if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
         packResult.atlas = doc.atlas();
         packResult.frameRects.reserve(doc.boxes().size());
         for (const SpriteBox &box : doc.boxes()) {
@@ -450,46 +450,120 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         packResult.uniqueFramesCount = doc.frameCount();
         packResult.success = true;
     } else {
-        packResult = AtlasPacker::pack(doc.polygonClippedFrames(), packOpts, docPolygons);
-    }
-    if (!packResult.success) {
-        if (error) {
-            error->code = ExtractorError::PackingFailed;
-            error->message = tr("Failed to pack atlas frames for Godot export.");
-            error->filePath = filePath;
+        mpResult = MultiPagePacker::pack(doc, packOpts, hasAux, options.normalMapYFlip);
+        if (!mpResult.success) {
+            if (error) {
+                error->code = ExtractorError::PackingFailed;
+                error->message = tr("Failed to pack atlas frames for Godot export.");
+                error->filePath = filePath;
+            }
+            return false;
         }
-        return false;
+
+        if (mpResult.isMultiPage()) {
+            isMultiPage = true;
+        } else {
+            packResult.atlas = mpResult.pages[0].atlas;
+            packResult.dimensions = mpResult.pages[0].dimensions;
+            packResult.frameRects = mpResult.frameRects;
+            packResult.efficiency = mpResult.pages[0].efficiency;
+            packResult.uniqueFramesCount = doc.frameCount();
+            packResult.success = true;
+            if (hasAux) {
+                multiResult.master = packResult;
+                multiResult.maps = mpResult.pages[0].auxiliaryAtlases;
+                multiResult.auxiliaryAtlases = mpResult.pages[0].auxiliaryAtlases;
+                multiResult.success = true;
+            }
+        }
     }
 
     setProgress(60);
 
-    bool saveOk = false;
-    if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
-        VramCompressionOptions vOpts = options.vramOptions;
-        if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
-        else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
-        else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
-        QString vErr;
-        saveOk = VramTextureCompressor::compressToFile(packResult.atlas, imagePath, vOpts, nullptr, &vErr);
-        if (!saveOk && error) {
-            error->code = ExtractorError::WriteFailed;
-            error->message = tr("Failed to write Godot VRAM atlas texture: %1 (%2)").arg(imagePath, vErr);
-            error->filePath = imagePath;
-            return false;
+    QList<QString> pageImageFilenames;
+    QList<QString> pageNormalFilenames;
+    QList<QString> pageSpecFilenames;
+    QList<QString> pageEmissiveFilenames;
+
+    if (isMultiPage) {
+        for (int p = 0; p < mpResult.totalPages(); ++p) {
+            const AtlasPage &page = mpResult.pages[p];
+            QString pageImgFilename = QStringLiteral("%1_%2%3").arg(baseName).arg(p).arg(imageExt);
+            QString pageImgPath = dir.filePath(pageImgFilename);
+            pageImageFilenames.append(pageImgFilename);
+
+            bool saveOk = false;
+            if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
+                VramCompressionOptions vOpts = options.vramOptions;
+                if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
+                else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
+                else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
+                QString vErr;
+                saveOk = VramTextureCompressor::compressToFile(page.atlas, pageImgPath, vOpts, nullptr, &vErr);
+            } else {
+                saveOk = page.atlas.save(pageImgPath, "PNG");
+            }
+            if (!saveOk && error) {
+                error->code = ExtractorError::WriteFailed;
+                error->message = tr("Failed to write Godot atlas page image: %1").arg(pageImgPath);
+                error->filePath = pageImgPath;
+                return false;
+            }
+
+            // Auxiliary maps for page p
+            if (hasAux) {
+                if (page.hasAuxiliaryMap(MaterialMapType::Normal)) {
+                    QString nfn = QStringLiteral("%1_%2_n%3").arg(baseName).arg(p).arg(imageExt);
+                    page.auxiliaryAtlases.value(MaterialMapType::Normal).save(dir.filePath(nfn), "PNG");
+                    pageNormalFilenames.append(nfn);
+                } else {
+                    pageNormalFilenames.append(QString());
+                }
+                if (page.hasAuxiliaryMap(MaterialMapType::Specular)) {
+                    QString sfn = QStringLiteral("%1_%2_s%3").arg(baseName).arg(p).arg(imageExt);
+                    page.auxiliaryAtlases.value(MaterialMapType::Specular).save(dir.filePath(sfn), "PNG");
+                    pageSpecFilenames.append(sfn);
+                } else {
+                    pageSpecFilenames.append(QString());
+                }
+                if (page.hasAuxiliaryMap(MaterialMapType::Emissive)) {
+                    QString efn = QStringLiteral("%1_%2_e%3").arg(baseName).arg(p).arg(imageExt);
+                    page.auxiliaryAtlases.value(MaterialMapType::Emissive).save(dir.filePath(efn), "PNG");
+                    pageEmissiveFilenames.append(efn);
+                } else {
+                    pageEmissiveFilenames.append(QString());
+                }
+            }
         }
     } else {
-        saveOk = packResult.atlas.save(imagePath, "PNG");
-        if (!saveOk && error) {
-            error->code = ExtractorError::WriteFailed;
-            error->message = tr("Failed to write Godot atlas image: %1").arg(imagePath);
-            error->filePath = imagePath;
-            return false;
+        bool saveOk = false;
+        if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
+            VramCompressionOptions vOpts = options.vramOptions;
+            if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
+            else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
+            else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
+            QString vErr;
+            saveOk = VramTextureCompressor::compressToFile(packResult.atlas, imagePath, vOpts, nullptr, &vErr);
+            if (!saveOk && error) {
+                error->code = ExtractorError::WriteFailed;
+                error->message = tr("Failed to write Godot VRAM atlas texture: %1 (%2)").arg(imagePath, vErr);
+                error->filePath = imagePath;
+                return false;
+            }
+        } else {
+            saveOk = packResult.atlas.save(imagePath, "PNG");
+            if (!saveOk && error) {
+                error->code = ExtractorError::WriteFailed;
+                error->message = tr("Failed to write Godot atlas image: %1").arg(imagePath);
+                error->filePath = imagePath;
+                return false;
+            }
         }
     }
 
-    // Save synchronized auxiliary material maps if present
+    // Save synchronized auxiliary material maps if present (single-page mode)
     QString normalFilename, specFilename, emissiveFilename;
-    if (hasAux) {
+    if (!isMultiPage && hasAux) {
         if (multiResult.hasMap(MaterialMapType::Normal)) {
             normalFilename = baseName + QStringLiteral("_n") + imageExt;
             multiResult.maps[MaterialMapType::Normal].save(dir.filePath(normalFilename), "PNG");
@@ -529,15 +603,22 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     }
 
     // Write Godot 4.x SpriteFrames header with optional CanvasTexture 2D Lighting
-    bool useCanvasTexture = hasAux && (!normalFilename.isEmpty() || !specFilename.isEmpty());
-    int extResourceCount = 1;
+    bool useCanvasTexture = hasAux && (!normalFilename.isEmpty() || !specFilename.isEmpty() || !pageNormalFilenames.isEmpty());
+    const int totalFramesToOutput = isMultiPage ? mpResult.frameRects.size() : packResult.frameRects.size();
+
+    int extResourceCount = isMultiPage ? pageImageFilenames.size() : 1;
     if (useCanvasTexture) {
-        if (!normalFilename.isEmpty()) extResourceCount++;
-        if (!specFilename.isEmpty()) extResourceCount++;
+        if (isMultiPage) {
+            for (const QString &n : pageNormalFilenames) if (!n.isEmpty()) extResourceCount++;
+            for (const QString &s : pageSpecFilenames) if (!s.isEmpty()) extResourceCount++;
+        } else {
+            if (!normalFilename.isEmpty()) extResourceCount++;
+            if (!specFilename.isEmpty()) extResourceCount++;
+        }
     }
 
-    int loadSteps = packResult.frameRects.size() + extResourceCount + 1;
-    if (useCanvasTexture) loadSteps += 1; // CanvasTexture sub_resource
+    int loadSteps = totalFramesToOutput + extResourceCount + 1;
+    if (useCanvasTexture) loadSteps += (isMultiPage ? mpResult.totalPages() : 1);
 
     out << "[gd_resource type=\"SpriteFrames\" load_steps=" << loadSteps << " format=3";
     if (!uid.isEmpty()) {
@@ -545,59 +626,117 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     }
     out << "]\n\n";
 
-    if (useCanvasTexture) {
-        out << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_diffuse\"]\n";
-        int nextId = 2;
-        QString normIdStr, specIdStr;
-        if (!normalFilename.isEmpty()) {
-            normIdStr = QStringLiteral("%1_normal").arg(nextId++);
-            out << "[ext_resource type=\"Texture2D\" path=\"res://" << normalFilename << "\" id=\"" << normIdStr << "\"]\n";
-        }
-        if (!specFilename.isEmpty()) {
-            specIdStr = QStringLiteral("%1_specular").arg(nextId++);
-            out << "[ext_resource type=\"Texture2D\" path=\"res://" << specFilename << "\" id=\"" << specIdStr << "\"]\n";
-        }
-        out << "\n";
-        out << "[sub_resource type=\"CanvasTexture\" id=\"CanvasTexture_main\"]\n";
-        out << "diffuse_texture = ExtResource(\"1_diffuse\")\n";
-        if (!normIdStr.isEmpty()) {
-            out << "normal_texture = ExtResource(\"" << normIdStr << "\")\n";
-        }
-        if (!specIdStr.isEmpty()) {
-            out << "specular_texture = ExtResource(\"" << specIdStr << "\")\n";
-        }
-        out << "\n";
-    } else {
-        out << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_atlas\"]\n\n";
-    }
-
-    for (int i = 0; i < packResult.frameRects.size(); ++i) {
-        const QRect &r = packResult.frameRects[i];
-        QString subResId = QString("AtlasTexture_%1").arg(i);
-        out << "[sub_resource type=\"AtlasTexture\" id=\"" << subResId << "\"]\n";
-        if (useCanvasTexture) {
-            out << "atlas = SubResource(\"CanvasTexture_main\")\n";
-        } else {
-            out << "atlas = ExtResource(\"1_atlas\")\n";
-        }
-        out << "region = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n";
-
-        // Find which animation contains frame i
-        QString animName;
-        for (auto it = doc.animations().begin(); it != doc.animations().end(); ++it) {
-            if (it.value().frameIndices.contains(i)) {
-                animName = it.key();
-                break;
+    if (isMultiPage) {
+        // Multi-page declarations
+        for (int p = 0; p < mpResult.totalPages(); ++p) {
+            out << "[ext_resource type=\"Texture2D\" path=\"res://" << pageImageFilenames[p] << "\" id=\"page_" << p << "_diffuse\"]\n";
+            if (useCanvasTexture && p < pageNormalFilenames.size() && !pageNormalFilenames[p].isEmpty()) {
+                out << "[ext_resource type=\"Texture2D\" path=\"res://" << pageNormalFilenames[p] << "\" id=\"page_" << p << "_normal\"]\n";
+            }
+            if (useCanvasTexture && p < pageSpecFilenames.size() && !pageSpecFilenames[p].isEmpty()) {
+                out << "[ext_resource type=\"Texture2D\" path=\"res://" << pageSpecFilenames[p] << "\" id=\"page_" << p << "_specular\"]\n";
             }
         }
-        QRect env = doc.computeAnimationEnvelope(animName);
-        QPoint piv = doc.boxPivot(i);
-        int ox = env.x() - piv.x();
-        int oy = env.y() - piv.y();
-        if (env.width() > r.width() || env.height() > r.height() || ox != 0 || oy != 0) {
-            out << "margin = Rect2(" << ox << ", " << oy << ", " << env.width() << ", " << env.height() << ")\n";
-        }
         out << "\n";
+
+        if (useCanvasTexture) {
+            for (int p = 0; p < mpResult.totalPages(); ++p) {
+                out << "[sub_resource type=\"CanvasTexture\" id=\"CanvasTexture_page_" << p << "\"]\n";
+                out << "diffuse_texture = ExtResource(\"page_" << p << "_diffuse\")\n";
+                if (p < pageNormalFilenames.size() && !pageNormalFilenames[p].isEmpty()) {
+                    out << "normal_texture = ExtResource(\"page_" << p << "_normal\")\n";
+                }
+                if (p < pageSpecFilenames.size() && !pageSpecFilenames[p].isEmpty()) {
+                    out << "specular_texture = ExtResource(\"page_" << p << "_specular\")\n";
+                }
+                out << "\n";
+            }
+        }
+
+        for (int i = 0; i < totalFramesToOutput; ++i) {
+            int p = mpResult.pageForFrame(i);
+            QRect r = mpResult.rectForFrame(i);
+            QString subResId = QString("AtlasTexture_%1").arg(i);
+            out << "[sub_resource type=\"AtlasTexture\" id=\"" << subResId << "\"]\n";
+            if (useCanvasTexture) {
+                out << "atlas = SubResource(\"CanvasTexture_page_" << p << "\")\n";
+            } else {
+                out << "atlas = ExtResource(\"page_" << p << "_diffuse\")\n";
+            }
+            out << "region = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n";
+
+            QString animName;
+            for (auto it = doc.animations().begin(); it != doc.animations().end(); ++it) {
+                if (it.value().frameIndices.contains(i)) {
+                    animName = it.key();
+                    break;
+                }
+            }
+            QRect env = doc.computeAnimationEnvelope(animName);
+            QPoint piv = doc.boxPivot(i);
+            int ox = env.x() - piv.x();
+            int oy = env.y() - piv.y();
+            if (env.width() > r.width() || env.height() > r.height() || ox != 0 || oy != 0) {
+                out << "margin = Rect2(" << ox << ", " << oy << ", " << env.width() << ", " << env.height() << ")\n";
+            }
+            out << "\n";
+        }
+    } else {
+        // Single-page declaration (backward-compatible)
+        if (useCanvasTexture) {
+            out << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_diffuse\"]\n";
+            int nextId = 2;
+            QString normIdStr, specIdStr;
+            if (!normalFilename.isEmpty()) {
+                normIdStr = QStringLiteral("%1_normal").arg(nextId++);
+                out << "[ext_resource type=\"Texture2D\" path=\"res://" << normalFilename << "\" id=\"" << normIdStr << "\"]\n";
+            }
+            if (!specFilename.isEmpty()) {
+                specIdStr = QStringLiteral("%1_specular").arg(nextId++);
+                out << "[ext_resource type=\"Texture2D\" path=\"res://" << specFilename << "\" id=\"" << specIdStr << "\"]\n";
+            }
+            out << "\n";
+            out << "[sub_resource type=\"CanvasTexture\" id=\"CanvasTexture_main\"]\n";
+            out << "diffuse_texture = ExtResource(\"1_diffuse\")\n";
+            if (!normIdStr.isEmpty()) {
+                out << "normal_texture = ExtResource(\"" << normIdStr << "\")\n";
+            }
+            if (!specIdStr.isEmpty()) {
+                out << "specular_texture = ExtResource(\"" << specIdStr << "\")\n";
+            }
+            out << "\n";
+        } else {
+            out << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_atlas\"]\n\n";
+        }
+
+        for (int i = 0; i < packResult.frameRects.size(); ++i) {
+            const QRect &r = packResult.frameRects[i];
+            QString subResId = QString("AtlasTexture_%1").arg(i);
+            out << "[sub_resource type=\"AtlasTexture\" id=\"" << subResId << "\"]\n";
+            if (useCanvasTexture) {
+                out << "atlas = SubResource(\"CanvasTexture_main\")\n";
+            } else {
+                out << "atlas = ExtResource(\"1_atlas\")\n";
+            }
+            out << "region = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n";
+
+            // Find which animation contains frame i
+            QString animName;
+            for (auto it = doc.animations().begin(); it != doc.animations().end(); ++it) {
+                if (it.value().frameIndices.contains(i)) {
+                    animName = it.key();
+                    break;
+                }
+            }
+            QRect env = doc.computeAnimationEnvelope(animName);
+            QPoint piv = doc.boxPivot(i);
+            int ox = env.x() - piv.x();
+            int oy = env.y() - piv.y();
+            if (env.width() > r.width() || env.height() > r.height() || ox != 0 || oy != 0) {
+                out << "margin = Rect2(" << ox << ", " << oy << ", " << env.width() << ", " << env.height() << ")\n";
+            }
+            out << "\n";
+        }
     }
 
     out << "[resource]\n";
@@ -652,21 +791,34 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         if (meshFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QTextStream mOut(&meshFile);
             mOut << "[gd_resource type=\"Resource\" format=3]\n\n";
-            mOut << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_atlas\"]\n\n";
-            mOut << "[resource]\n";
-            mOut << "metadata/texture = ExtResource(\"1_atlas\")\n";
-            mOut << "metadata/atlas_width = " << packResult.dimensions.width() << "\n";
-            mOut << "metadata/atlas_height = " << packResult.dimensions.height() << "\n";
+            if (isMultiPage) {
+                for (int p = 0; p < mpResult.totalPages(); ++p) {
+                    mOut << "[ext_resource type=\"Texture2D\" path=\"res://" << pageImageFilenames[p] << "\" id=\"page_" << p << "_atlas\"]\n";
+                }
+                mOut << "\n[resource]\n";
+                mOut << "metadata/pages_count = " << mpResult.totalPages() << "\n";
+            } else {
+                mOut << "[ext_resource type=\"Texture2D\" path=\"res://" << imageFilename << "\" id=\"1_atlas\"]\n\n";
+                mOut << "[resource]\n";
+                mOut << "metadata/texture = ExtResource(\"1_atlas\")\n";
+                mOut << "metadata/atlas_width = " << packResult.dimensions.width() << "\n";
+                mOut << "metadata/atlas_height = " << packResult.dimensions.height() << "\n";
+            }
 
-            const double aW = packResult.dimensions.width();
-            const double aH = packResult.dimensions.height();
+            for (int i = 0; i < totalFramesToOutput; ++i) {
+                QRect r = isMultiPage ? mpResult.rectForFrame(i) : packResult.frameRects[i];
+                int pageIdx = isMultiPage ? mpResult.pageForFrame(i) : 0;
+                double aW = isMultiPage ? mpResult.pages[pageIdx].dimensions.width() : packResult.dimensions.width();
+                double aH = isMultiPage ? mpResult.pages[pageIdx].dimensions.height() : packResult.dimensions.height();
 
-            for (int i = 0; i < packResult.frameRects.size(); ++i) {
-                const QRect &r = packResult.frameRects[i];
                 if (i < doc.frameCount()) {
                     const SpriteBox &b = doc.box(i);
                     if (b.hasPolygonMesh && !b.polygon.isEmpty() && !b.triangles.isEmpty()) {
                         mOut << "metadata/frame_" << i << "/rect = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n";
+                        if (isMultiPage) {
+                            mOut << "metadata/frame_" << i << "/page = " << pageIdx << "\n";
+                            mOut << "metadata/frame_" << i << "/texture = ExtResource(\"page_" << pageIdx << "_atlas\")\n";
+                        }
 
                         const QList<QPointF> meshVertices = !b.vertices.isEmpty() ? b.vertices :
                             (b.polygon.isClosed() && b.polygon.size() >= 4 ? b.polygon.mid(0, b.polygon.size() - 1).toList() : b.polygon.toList());

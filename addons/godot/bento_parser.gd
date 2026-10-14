@@ -17,6 +17,8 @@ class ParseResult:
 	var collision_polygons: Dictionary = {} # box_index -> PackedVector2Array
 	var project_data: Dictionary = {}
 	var raw_atlas_bytes: PackedByteArray
+	var page_textures: Dictionary = {} # page_index -> Texture2D
+	var page_images: Dictionary = {} # page_index -> Image
 
 ## Parses a .bento ZIP archive or project JSON and produces ready-to-use Godot 2D resources.
 static func parse_bento_file(file_path: String, repack_for_animated_sprite: bool = false) -> ParseResult:
@@ -108,6 +110,30 @@ static func parse_bento_file(file_path: String, repack_for_animated_sprite: bool
 		else:
 			push_warning("[BentoPack] Failed to decode atlas image (%s) from archive." % atlas_entry)
 
+	# 3b. Read multi-page atlas textures if present
+	var pages_arr: Array = res.project_data.get("pages", [])
+	for p in pages_arr:
+		if p is Dictionary:
+			var p_idx: int = int(p.get("index", res.page_textures.size()))
+			var p_tex_name: String = p.get("texture", "").to_lower()
+			if not p_tex_name.is_empty():
+				for f in files:
+					if f.to_lower().ends_with(p_tex_name):
+						var p_bytes: PackedByteArray = reader.read_file(f)
+						var p_img := Image.new()
+						var p_err := FAILED
+						var f_low := f.to_lower()
+						if f_low.ends_with(".webp"):
+							p_err = p_img.load_webp_from_buffer(p_bytes)
+						elif f_low.ends_with(".png"):
+							p_err = p_img.load_png_from_buffer(p_bytes)
+						elif f_low.ends_with(".jpg") or f_low.ends_with(".jpeg"):
+							p_err = p_img.load_jpg_from_buffer(p_bytes)
+						if p_err == OK:
+							res.page_images[p_idx] = p_img
+							res.page_textures[p_idx] = ImageTexture.create_from_image(p_img)
+						break
+
 	reader.close()
 
 	# 4. Build SpriteFrames and ArrayMeshes from parsed project metadata
@@ -168,7 +194,9 @@ static func _build_resources(res: ParseResult, repack_for_animated_sprite: bool 
 		for i in range(boxes.size()):
 			var b = boxes[i]
 			if b is Dictionary:
-				var tex := _create_atlas_texture(res.atlas_texture, b as Dictionary)
+				var p_idx: int = int(b.get("page", 0))
+				var box_tex: Texture2D = res.page_textures.get(p_idx, res.atlas_texture)
+				var tex := _create_atlas_texture(box_tex, b as Dictionary)
 				sf.add_frame("default", tex)
 	else:
 		for anim in animations:
@@ -188,7 +216,9 @@ static func _build_resources(res: ParseResult, repack_for_animated_sprite: bool 
 				var box_idx := int(f_idx)
 				if box_map.has(box_idx):
 					var b: Dictionary = box_map[box_idx]
-					var tex := _create_atlas_texture(res.atlas_texture, b)
+					var p_idx: int = int(b.get("page", 0))
+					var box_tex: Texture2D = res.page_textures.get(p_idx, res.atlas_texture)
+					var tex := _create_atlas_texture(box_tex, b)
 					sf.add_frame(a_name, tex)
 
 	res.sprite_frames = sf
@@ -196,7 +226,17 @@ static func _build_resources(res: ParseResult, repack_for_animated_sprite: bool 
 	# Build 2D meshes (M8 tight polygonal meshes or fallback rectangular quads) and collision polygons
 	for idx in box_map.keys():
 		var b: Dictionary = box_map[idx]
-		var mesh := _create_m8_array_mesh(b, atlas_w, atlas_h)
+		var p_idx: int = int(b.get("page", 0))
+		var cur_w := atlas_w
+		var cur_h := atlas_h
+		if res.page_images.has(p_idx):
+			cur_w = float(res.page_images[p_idx].get_width())
+			cur_h = float(res.page_images[p_idx].get_height())
+		elif res.page_textures.has(p_idx) and res.page_textures[p_idx] != null:
+			cur_w = float(res.page_textures[p_idx].get_width())
+			cur_h = float(res.page_textures[p_idx].get_height())
+
+		var mesh := _create_m8_array_mesh(b, cur_w, cur_h)
 		if mesh != null:
 			res.meshes[idx] = mesh
 

@@ -81,13 +81,33 @@ namespace BentoPack.Editor
 
                 if (rw <= 0 || rh <= 0) continue;
 
+                // Multi-page resolution: use page texture if available
+                Texture2D spriteTex = atlasTex;
+                if (parsed.pageTextures.ContainsKey(sData.page))
+                {
+                    spriteTex = parsed.pageTextures[sData.page];
+                }
+                else if (!string.IsNullOrEmpty(sData.texture))
+                {
+                    string dir = Path.GetDirectoryName(filePath);
+                    string targetPath = Path.Combine(dir, sData.texture).Replace("\\", "/");
+                    Texture2D loaded = AssetDatabase.LoadAssetAtPath<Texture2D>(targetPath);
+                    if (loaded != null)
+                    {
+                        spriteTex = loaded;
+                        parsed.pageTextures[sData.page] = loaded;
+                    }
+                }
+
+                int curH = spriteTex != null ? spriteTex.height : atlasH;
+
                 // Unity texture origin (0,0) is bottom-left, whereas BentoPack is top-left
-                float unityY = atlasH - ry - rh;
+                float unityY = curH - ry - rh;
                 Rect rect = new Rect(rx, unityY, rw, rh);
                 Vector2 pivot = new Vector2(sData.pivot.x, sData.pivot.y);
 
                 Sprite sprite = Sprite.Create(
-                    atlasTex,
+                    spriteTex,
                     rect,
                     pivot,
                     pixelsPerUnit,

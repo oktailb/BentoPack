@@ -17,6 +17,7 @@
 #include "unityextractor.h"
 #include "packer/atlaspacker.h"
 #include "packer/multiatlaspacker.h"
+#include "packer/multipagepacker.h"
 #include "geometry/triangulator.h"
 #include "generated/version.h"
 #include <QFileInfo>
@@ -259,12 +260,11 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     AtlasPackResult packResult;
     MultiAtlasPackResult multiResult;
+    MultiPagePackResult mpResult;
+    bool isMultiPage = false;
     bool hasAux = options.exportMaterialMaps && doc.hasAnyAuxiliaryMaps();
 
-    if (hasAux) {
-        multiResult = MultiAtlasPacker::pack(doc, packOpts, options.normalMapYFlip);
-        packResult = multiResult.master;
-    } else if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
+    if (packOpts.algorithm == AtlasPacker::KeepLayout && !doc.atlas().isNull()) {
         packResult.atlas = doc.atlas();
         packResult.frameRects.reserve(doc.boxes().size());
         for (const SpriteBox &box : doc.boxes()) {
@@ -274,47 +274,119 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
         packResult.uniqueFramesCount = doc.frameCount();
         packResult.success = true;
     } else {
-        packResult = AtlasPacker::pack(doc.polygonClippedFrames(), packOpts, docPolygons);
-    }
-
-    if (!packResult.success) {
-        if (error) {
-            error->code = ExtractorError::PackingFailed;
-            error->message = tr("Failed to pack frames for Unity export.");
-            error->filePath = filePath;
+        mpResult = MultiPagePacker::pack(doc, packOpts, hasAux, options.normalMapYFlip);
+        if (!mpResult.success) {
+            if (error) {
+                error->code = ExtractorError::PackingFailed;
+                error->message = tr("Failed to pack frames for Unity export.");
+                error->filePath = filePath;
+            }
+            return false;
         }
-        return false;
+
+        if (mpResult.isMultiPage()) {
+            isMultiPage = true;
+        } else {
+            packResult.atlas = mpResult.pages[0].atlas;
+            packResult.dimensions = mpResult.pages[0].dimensions;
+            packResult.frameRects = mpResult.frameRects;
+            packResult.efficiency = mpResult.pages[0].efficiency;
+            packResult.uniqueFramesCount = doc.frameCount();
+            packResult.success = true;
+            if (hasAux) {
+                multiResult.master = packResult;
+                multiResult.maps = mpResult.pages[0].auxiliaryAtlases;
+                multiResult.auxiliaryAtlases = mpResult.pages[0].auxiliaryAtlases;
+                multiResult.success = true;
+            }
+        }
     }
 
     setProgress(50);
 
-    bool saveOk = false;
-    if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
-        VramCompressionOptions vOpts = options.vramOptions;
-        if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
-        else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
-        else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
-        QString vErr;
-        saveOk = VramTextureCompressor::compressToFile(packResult.atlas, pngFilePath, vOpts, nullptr, &vErr);
-        if (!saveOk && error) {
-            error->code = ExtractorError::WriteFailed;
-            error->message = tr("Failed to save companion VRAM texture: %1 (%2)").arg(pngFilePath, vErr);
-            error->filePath = pngFilePath;
-            return false;
+    QList<QString> pageFilenames;
+    QList<QString> pageNormalFilenames;
+    QList<QString> pageSpecFilenames;
+    QList<QString> pageEmissiveFilenames;
+
+    if (isMultiPage) {
+        for (int p = 0; p < mpResult.totalPages(); ++p) {
+            const AtlasPage &page = mpResult.pages[p];
+            QString pageImgFilename = QStringLiteral("%1_%2%3").arg(baseName).arg(p).arg(imageExt);
+            QString pageImgPath = dir.filePath(pageImgFilename);
+            pageFilenames.append(pageImgFilename);
+
+            bool saveOk = false;
+            if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
+                VramCompressionOptions vOpts = options.vramOptions;
+                if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
+                else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
+                else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
+                QString vErr;
+                saveOk = VramTextureCompressor::compressToFile(page.atlas, pageImgPath, vOpts, nullptr, &vErr);
+            } else {
+                saveOk = page.atlas.save(pageImgPath, "PNG");
+            }
+            if (!saveOk && error) {
+                error->code = ExtractorError::WriteFailed;
+                error->message = tr("Failed to save companion image: %1").arg(pageImgPath);
+                error->filePath = pageImgPath;
+                return false;
+            }
+
+            if (hasAux) {
+                if (page.hasAuxiliaryMap(MaterialMapType::Normal)) {
+                    QString nfn = QStringLiteral("%1_%2_n%3").arg(baseName).arg(p).arg(imageExt);
+                    page.auxiliaryAtlases.value(MaterialMapType::Normal).save(dir.filePath(nfn), "PNG");
+                    pageNormalFilenames.append(nfn);
+                } else {
+                    pageNormalFilenames.append(QString());
+                }
+                if (page.hasAuxiliaryMap(MaterialMapType::Specular)) {
+                    QString sfn = QStringLiteral("%1_%2_s%3").arg(baseName).arg(p).arg(imageExt);
+                    page.auxiliaryAtlases.value(MaterialMapType::Specular).save(dir.filePath(sfn), "PNG");
+                    pageSpecFilenames.append(sfn);
+                } else {
+                    pageSpecFilenames.append(QString());
+                }
+                if (page.hasAuxiliaryMap(MaterialMapType::Emissive)) {
+                    QString efn = QStringLiteral("%1_%2_e%3").arg(baseName).arg(p).arg(imageExt);
+                    page.auxiliaryAtlases.value(MaterialMapType::Emissive).save(dir.filePath(efn), "PNG");
+                    pageEmissiveFilenames.append(efn);
+                } else {
+                    pageEmissiveFilenames.append(QString());
+                }
+            }
         }
     } else {
-        saveOk = packResult.atlas.save(pngFilePath, "PNG");
-        if (!saveOk && error) {
-            error->code = ExtractorError::WriteFailed;
-            error->message = tr("Failed to save companion image: %1").arg(pngFilePath);
-            error->filePath = pngFilePath;
-            return false;
+        bool saveOk = false;
+        if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC || options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S || options.textureFormat == TEXTURE_FORMAT_BASIS) {
+            VramCompressionOptions vOpts = options.vramOptions;
+            if (options.textureFormat == TEXTURE_FORMAT_KTX2_UASTC) vOpts.format = VramFormat::KTX2_UASTC;
+            else if (options.textureFormat == TEXTURE_FORMAT_KTX2_ETC1S) vOpts.format = VramFormat::KTX2_ETC1S;
+            else if (options.textureFormat == TEXTURE_FORMAT_BASIS) vOpts.format = VramFormat::Basis_UASTC;
+            QString vErr;
+            saveOk = VramTextureCompressor::compressToFile(packResult.atlas, pngFilePath, vOpts, nullptr, &vErr);
+            if (!saveOk && error) {
+                error->code = ExtractorError::WriteFailed;
+                error->message = tr("Failed to save companion VRAM texture: %1 (%2)").arg(pngFilePath, vErr);
+                error->filePath = pngFilePath;
+                return false;
+            }
+        } else {
+            saveOk = packResult.atlas.save(pngFilePath, "PNG");
+            if (!saveOk && error) {
+                error->code = ExtractorError::WriteFailed;
+                error->message = tr("Failed to save companion image: %1").arg(pngFilePath);
+                error->filePath = pngFilePath;
+                return false;
+            }
         }
     }
 
-    // Save synchronized auxiliary material maps if present
+    // Save synchronized auxiliary material maps if present (single-page mode)
     QString normalFileName, specFileName, emissiveFileName;
-    if (hasAux) {
+    if (!isMultiPage && hasAux) {
         if (multiResult.hasMap(MaterialMapType::Normal)) {
             normalFileName = baseName + QStringLiteral("_n") + imageExt;
             multiResult.maps[MaterialMapType::Normal].save(dir.filePath(normalFileName), "PNG");
@@ -336,31 +408,58 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
     rootObj["generator"] = QStringLiteral("BentoPack");
     rootObj["version"] = QString(PROJECT_VERSION);
     rootObj["format"] = QStringLiteral("Unity2D_SpriteMesh");
-    rootObj["texture"] = pngFileName;
 
-    if (hasAux) {
-        QJsonObject texturesObj;
-        texturesObj["diffuse"] = pngFileName;
-        if (!normalFileName.isEmpty()) texturesObj["normal"] = normalFileName;
-        if (!specFileName.isEmpty()) texturesObj["specular"] = specFileName;
-        if (!emissiveFileName.isEmpty()) texturesObj["emissive"] = emissiveFileName;
-        rootObj["textures"] = texturesObj;
+    if (isMultiPage) {
+        rootObj["isMultiPage"] = true;
+        rootObj["pagesCount"] = mpResult.totalPages();
+        rootObj["texture"] = pageFilenames.first(); // Primary / fallback texture
+        QJsonArray pagesArr;
+        for (int p = 0; p < mpResult.totalPages(); ++p) {
+            QJsonObject pObj;
+            pObj["index"] = p;
+            pObj["texture"] = pageFilenames[p];
+            pObj["w"] = mpResult.pages[p].dimensions.width();
+            pObj["h"] = mpResult.pages[p].dimensions.height();
+            if (hasAux) {
+                if (p < pageNormalFilenames.size() && !pageNormalFilenames[p].isEmpty()) pObj["normal"] = pageNormalFilenames[p];
+                if (p < pageSpecFilenames.size() && !pageSpecFilenames[p].isEmpty()) pObj["specular"] = pageSpecFilenames[p];
+                if (p < pageEmissiveFilenames.size() && !pageEmissiveFilenames[p].isEmpty()) pObj["emissive"] = pageEmissiveFilenames[p];
+            }
+            pagesArr.append(pObj);
+        }
+        rootObj["pages"] = pagesArr;
+    } else {
+        rootObj["texture"] = pngFileName;
+        if (hasAux) {
+            QJsonObject texturesObj;
+            texturesObj["diffuse"] = pngFileName;
+            if (!normalFileName.isEmpty()) texturesObj["normal"] = normalFileName;
+            if (!specFileName.isEmpty()) texturesObj["specular"] = specFileName;
+            if (!emissiveFileName.isEmpty()) texturesObj["emissive"] = emissiveFileName;
+            rootObj["textures"] = texturesObj;
+        }
+        QJsonObject texSize;
+        texSize["w"] = packResult.dimensions.width();
+        texSize["h"] = packResult.dimensions.height();
+        rootObj["textureSize"] = texSize;
     }
 
-    QJsonObject texSize;
-    texSize["w"] = packResult.dimensions.width();
-    texSize["h"] = packResult.dimensions.height();
-    rootObj["textureSize"] = texSize;
-
-    const double aW = packResult.dimensions.width();
-    const double aH = packResult.dimensions.height();
-
+    const int totalSprites = isMultiPage ? mpResult.frameRects.size() : packResult.frameRects.size();
     QJsonArray spritesArr;
-    for (int i = 0; i < packResult.frameRects.size(); ++i) {
-        const QRect &r = packResult.frameRects[i];
+
+    for (int i = 0; i < totalSprites; ++i) {
+        QRect r = isMultiPage ? mpResult.rectForFrame(i) : packResult.frameRects[i];
+        int pageIdx = isMultiPage ? mpResult.pageForFrame(i) : 0;
+        double aW = isMultiPage ? mpResult.pages[pageIdx].dimensions.width() : packResult.dimensions.width();
+        double aH = isMultiPage ? mpResult.pages[pageIdx].dimensions.height() : packResult.dimensions.height();
+
         QJsonObject sObj;
         QString sName = QStringLiteral("%1_%2").arg(baseName).arg(i, 4, 10, QLatin1Char('0'));
         sObj["name"] = sName;
+        if (isMultiPage) {
+            sObj["page"] = pageIdx;
+            sObj["texture"] = pageFilenames[pageIdx];
+        }
 
         QJsonObject rectObj;
         rectObj["x"] = r.x();
@@ -425,7 +524,9 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
                 tArr.append(0); tArr.append(1); tArr.append(2);
                 tArr.append(0); tArr.append(2); tArr.append(3);
             }
+
             sObj["vertices"] = vArr;
+            sObj["uv"] = uvArr;
             sObj["uvs"] = uvArr;
             sObj["triangles"] = tArr;
         }

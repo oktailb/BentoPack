@@ -11,10 +11,24 @@ namespace BentoPack.Editor
         public string version = "1.0.0";
         public string format = "Unity2D_SpriteMesh";
         public string texture = "";
-        public BentoSize textureSize = new BentoSize();
+        public bool isMultiPage = false;
+        public int pagesCount = 1;
+        public List<BentoPageData> pages = new List<BentoPageData>();
         public List<BentoSpriteData> sprites = new List<BentoSpriteData>();
         [NonSerialized]
         public Dictionary<string, BentoAnimationData> animations = new Dictionary<string, BentoAnimationData>();
+    }
+
+    [Serializable]
+    public class BentoPageData
+    {
+        public int index = 0;
+        public string texture = "";
+        public int w = 0;
+        public int h = 0;
+        public string normal = "";
+        public string specular = "";
+        public string emissive = "";
     }
 
     [Serializable]
@@ -44,6 +58,8 @@ namespace BentoPack.Editor
     public class BentoSpriteData
     {
         public string name = "";
+        public int page = 0;
+        public string texture = "";
         public BentoRect rect = new BentoRect();
         public BentoVector2 pivot = new BentoVector2 { x = 0.5f, y = 0.5f };
         public bool hasTightMesh = false;

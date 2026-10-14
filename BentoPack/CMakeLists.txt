@@ -45,6 +45,7 @@ set(BentoPackCore_SRC
     src/packer/tightpolygonpacker.cpp
     src/packer/vramtexturecompressor.cpp
     src/packer/multiatlaspacker.cpp
+    src/packer/multipagepacker.cpp
     src/animation/animationplayer.cpp
     src/commands/commands.cpp
     src/extractor.cpp
@@ -88,6 +89,7 @@ set(BentoPackCore_INCLUDE
     include/packer/tightpolygonpacker.h
     include/packer/vramtexturecompressor.h
     include/packer/multiatlaspacker.h
+    include/packer/multipagepacker.h
     include/animation/animationplayer.h
     include/commands/commands.h
     include/commands/filtercommands.h
