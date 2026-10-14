@@ -85,5 +85,5 @@ BentoPack/src/generated/license_config.h
 BUSINESS.md
 docs/BUSINESS*.md
 business/
-
-tests/
+
+/docs/site
