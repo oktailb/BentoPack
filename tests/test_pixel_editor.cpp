@@ -94,6 +94,7 @@ private slots:
     // 10. Intelligent Polygon Mesh Interactive Editing (M19)
     void testPixelEditorPolygonMeshInteractiveEditingAndUndo();
     void testSmartMeshGenerationApplyToAllAnimationFrames();
+    void testAsyncCdtMeshBatchProgressAndCancellation();
 
     // 11. Multi-Layer Aseprite File Loading & Cel Offset Handling
     void testMultiLayerAsepriteSampleLoadingAndPixelEditor();
@@ -2612,6 +2613,7 @@ void TestPixelEditor::testSmartMeshGenerationApplyToAllAnimationFrames()
 
     // Trigger CDT smart mesh generation on current frame (frame 0) with all frames enabled
     dlg.onGenerateSmartMeshRequested();
+    dlg.waitForCdtMeshFinished();
 
     // Verify current frame has CDT interior points
     QVERIFY(dlg.canvas()->meshVertices().size() > 4);
@@ -2633,6 +2635,113 @@ void TestPixelEditor::testSmartMeshGenerationApplyToAllAnimationFrames()
 
     // Apply changes to document
     QVERIFY(dlg.applyChanges());
+}
+
+void TestPixelEditor::testAsyncCdtMeshBatchProgressAndCancellation()
+{
+    // 3-frame document for asynchronous CDT mesh calculation testing
+    QImage frame0(32, 32, QImage::Format_ARGB32);
+    frame0.fill(Qt::transparent);
+    for (int y = 4; y < 28; ++y) {
+        for (int x = 4; x < 28; ++x) {
+            frame0.setPixelColor(x, y, (x < 16) ? QColor(255, 0, 0) : QColor(0, 255, 0));
+        }
+    }
+
+    QImage frame1(32, 32, QImage::Format_ARGB32);
+    frame1.fill(Qt::transparent);
+    for (int y = 6; y < 26; ++y) {
+        for (int x = 6; x < 26; ++x) {
+            frame1.setPixelColor(x, y, (y < 16) ? QColor(0, 0, 255) : QColor(255, 255, 0));
+        }
+    }
+
+    QImage frame2(32, 32, QImage::Format_ARGB32);
+    frame2.fill(Qt::transparent);
+    for (int y = 8; y < 24; ++y) {
+        for (int x = 8; x < 24; ++x) {
+            frame2.setPixelColor(x, y, (x < 16) ? QColor(255, 0, 255) : QColor(0, 255, 255));
+        }
+    }
+
+    QPolygonF poly0;
+    poly0 << QPointF(4, 4) << QPointF(28, 4) << QPointF(28, 28) << QPointF(4, 28);
+    QPolygonF poly1;
+    poly1 << QPointF(6, 6) << QPointF(26, 6) << QPointF(26, 26) << QPointF(6, 26);
+    QPolygonF poly2;
+    poly2 << QPointF(8, 8) << QPointF(24, 8) << QPointF(24, 24) << QPointF(8, 24);
+
+    SpriteBox box0, box1, box2;
+    box0.rect = QRect(0, 0, 32, 32);
+    box0.hasPolygonMesh = true;
+    box0.polygon = poly0;
+    box0.vertices = poly0.toList();
+    box0.triangles = BentoPackGeometry::Triangulator::triangulate(poly0);
+
+    box1.rect = QRect(32, 0, 32, 32);
+    box1.hasPolygonMesh = true;
+    box1.polygon = poly1;
+    box1.vertices = poly1.toList();
+    box1.triangles = BentoPackGeometry::Triangulator::triangulate(poly1);
+
+    box2.rect = QRect(64, 0, 32, 32);
+    box2.hasPolygonMesh = true;
+    box2.polygon = poly2;
+    box2.vertices = poly2.toList();
+    box2.triangles = BentoPackGeometry::Triangulator::triangulate(poly2);
+
+    QImage atlas(96, 32, QImage::Format_ARGB32);
+    atlas.fill(Qt::transparent);
+
+    SpriteDocument doc;
+    doc.setFrames({frame0, frame1, frame2}, {box0, box1, box2});
+    doc.setAtlas(atlas);
+
+    QUndoStack docStack;
+    PixelEditorDialog dlg(&doc, &docStack, 0);
+
+    // 1. Verify UI indicator controls exist and initial visibility states
+    QVERIFY(dlg.cdtProgressBar() != nullptr);
+    QVERIFY(dlg.cdtProgressBar()->isHidden());
+    QVERIFY(dlg.cdtFeedbackLabel() != nullptr);
+    QVERIFY(dlg.cdtFeedbackLabel()->isHidden());
+    QVERIFY(dlg.cancelCdtMeshButton() != nullptr);
+    QVERIFY(dlg.cancelCdtMeshButton()->isHidden());
+    QVERIFY(!dlg.isCdtProcessing());
+
+    // 2. Enable apply to all frames
+    dlg.meshApplyAllFramesCheckBox()->setChecked(true);
+    QVERIFY(dlg.isApplyToAllFramesEnabled());
+
+    // 3. Launch async CDT mesh batch generation
+    dlg.onGenerateSmartMeshRequested(true);
+
+    // 4. Wait for background task completion
+    dlg.waitForCdtMeshFinished();
+
+    // 5. Verify post-conditions: progress bar hidden, feedback shows success, all 3 frames modified
+    QVERIFY(!dlg.isCdtProcessing());
+    QVERIFY(dlg.cdtProgressBar()->isHidden());
+    QVERIFY(!dlg.cdtFeedbackLabel()->isHidden());
+    QVERIFY(dlg.cdtFeedbackLabel()->text().contains(QStringLiteral("✓")));
+    QVERIFY(dlg.cancelCdtMeshButton()->isHidden());
+
+    QVERIFY(dlg.sessionModifiedVertices().contains(0));
+    QVERIFY(dlg.sessionModifiedVertices().value(0).size() > 4);
+    QVERIFY(dlg.sessionModifiedVertices().contains(1));
+    QVERIFY(dlg.sessionModifiedVertices().value(1).size() > 4);
+    QVERIFY(dlg.sessionModifiedVertices().contains(2));
+    QVERIFY(dlg.sessionModifiedVertices().value(2).size() > 4);
+
+    // 6. Test cancellation behavior
+    dlg.onGenerateSmartMeshRequested(true);
+    dlg.cancelCdtMeshCalculation();
+    dlg.waitForCdtMeshFinished();
+    QVERIFY(!dlg.isCdtProcessing());
+    QVERIFY(dlg.cdtProgressBar()->isHidden());
+    QVERIFY(!dlg.cdtFeedbackLabel()->isHidden());
+    QVERIFY(dlg.cdtFeedbackLabel()->text().contains(QStringLiteral("cancel"), Qt::CaseInsensitive) ||
+            dlg.cdtFeedbackLabel()->text().contains(QStringLiteral("annul"), Qt::CaseInsensitive));
 }
 
 void TestPixelEditor::testMultiLayerAsepriteSampleLoadingAndPixelEditor()

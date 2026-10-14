@@ -38,10 +38,15 @@
 #include <QRadioButton>
 #include <QMainWindow>
 #include <QDockWidget>
+#include <QProgressBar>
+#include <QFutureWatcher>
+#include <QtConcurrent>
+#include <atomic>
 #include "image/colorpalettepresets.h"
 #include "widgets/colorpickerwidget.h"
 #include "widgets/layerstackwidget.h"
 #include "model/spritedocument.h"
+#include "geometry/triangulator.h"
 
 class PixelCanvas;
 class FilterPlugin;
@@ -101,8 +106,36 @@ public:
     QMap<int, QPolygonF> sessionModifiedPolygons() const { return m_sessionModifiedPolygons; }
     QMap<int, QList<QPointF>> sessionModifiedVertices() const { return m_sessionModifiedVertices; }
     QMap<int, QList<int>> sessionModifiedTriangles() const { return m_sessionModifiedTriangles; }
+    struct CdtBatchWorkItem {
+        int index = -1;
+        QImage image;
+        QPolygonF polygon;
+        BentoPackGeometry::SmartMeshParams params;
+    };
+
+    struct CdtFrameResult {
+        int index = -1;
+        QPolygonF outerPolygon;
+        QList<QPointF> vertices;
+        QList<int> triangles;
+        bool success = false;
+    };
+
+    struct CdtBatchJobResult {
+        QList<CdtFrameResult> results;
+        int totalFrames = 0;
+        bool cancelled = false;
+    };
+
     QPushButton* generateSmartMeshButton() const { return m_btnGenerateSmartMesh; }
     QPushButton* resetMeshToOutlineButton() const { return m_btnResetToOutline; }
+    QProgressBar* cdtProgressBar() const { return m_cdtProgressBar; }
+    QLabel* cdtFeedbackLabel() const { return m_lblCdtFeedback; }
+    QPushButton* cancelCdtMeshButton() const { return m_btnCancelCdtMesh; }
+    bool isCdtProcessing() const { return m_isCdtProcessing; }
+    void waitForCdtMeshFinished();
+    void cancelCdtMeshCalculation();
+
     bool applyChanges();
     bool openAtlasPackingDialog(bool nonInteractive = false);
     bool performAtlasRepack(const QMap<int, QImage> &modifiedFrames, const QMap<int, QPolygonF> &modifiedPolygons);
@@ -113,12 +146,13 @@ public:
     QToolButton* panelsButton() const { return m_btnPanels; }
     void resetDefaultLayout();
     void saveLayoutState();
+    void reject() override;
 
 public slots:
     void onPreviousFrame();
     void onNextFrame();
     void loadFrame(int index);
-    void onGenerateSmartMeshRequested();
+    void onGenerateSmartMeshRequested(bool async = true);
     void onResetMeshToOutlineRequested();
     void updateToolIcons();
 
@@ -170,6 +204,7 @@ private slots:
     void onCanvasMeshDataChanged(const QPolygonF &poly, const QList<QPointF> &verts, const QList<int> &tris);
     void onCanvasSelectedVertexChanged(int index, bool isInterior);
     void updateMeshStatsUI();
+    void onCdtBatchFinished();
 
 public:
     void restoreFrameBackup(int frameIndex, const QImage &img, const QPolygonF &poly,
@@ -198,6 +233,7 @@ private:
     void populateFiltersMenu(QMenu *menu);
     void computeAnimationEnvelope(QSize &outSize, QPoint &outPivot, QPoint &outFrameOffset) const;
     void syncSessionLayersFromCanvas();
+    void setCdtProcessingState(bool processing);
 
     QWidget* createToolBar();
     QWidget* createPalettePanel();
@@ -294,6 +330,12 @@ private:
     QPushButton*            m_btnGenerateSmartMesh = nullptr;
     QPushButton*            m_btnResetToOutline = nullptr;
     QCheckBox*              m_meshApplyAllFramesCheck = nullptr;
+    QProgressBar*           m_cdtProgressBar = nullptr;
+    QLabel*                 m_lblCdtFeedback = nullptr;
+    QPushButton*            m_btnCancelCdtMesh = nullptr;
+    QFutureWatcher<CdtBatchJobResult> m_cdtBatchWatcher;
+    std::atomic<bool>       m_cancelCdtMesh{false};
+    bool                    m_isCdtProcessing = false;
     QGroupBox*              m_meshStatsGroup = nullptr;
     QLabel*                 m_lblMeshBoundaryTitle = nullptr;
     QLabel*                 m_lblMeshBoundaryVerts = nullptr;

@@ -276,6 +276,9 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
 
     setupUi();
 
+    connect(&m_cdtBatchWatcher, &QFutureWatcher<CdtBatchJobResult>::finished,
+            this, &PixelEditorDialog::onCdtBatchFinished);
+
     QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
     QByteArray savedGeometry = settings.value(QStringLiteral("pixelEditor/geometry")).toByteArray();
     QByteArray savedDockState = settings.value(QStringLiteral("pixelEditor/dockState")).toByteArray();
@@ -306,10 +309,25 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
 
 PixelEditorDialog::~PixelEditorDialog()
 {
+    m_cancelCdtMesh.store(true);
+    if (m_cdtBatchWatcher.isRunning()) {
+        m_cdtBatchWatcher.waitForFinished();
+    }
     saveLayoutState();
     if (m_canvas && m_canvas->undoStack()) {
         m_canvas->undoStack()->disconnect(this);
     }
+}
+
+void PixelEditorDialog::reject()
+{
+    if (m_isCdtProcessing) {
+        cancelCdtMeshCalculation();
+        if (m_cdtBatchWatcher.isRunning()) {
+            m_cdtBatchWatcher.waitForFinished();
+        }
+    }
+    QDialog::reject();
 }
 
 void PixelEditorDialog::setupUi()
@@ -1328,12 +1346,42 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     m_btnGenerateSmartMesh = new QPushButton(tr("⚡ Generate CDT Mesh"), m_cdtGroup);
     m_btnGenerateSmartMesh->setStyleSheet(QStringLiteral("QPushButton { font-weight: bold; padding: 5px; }"));
-    connect(m_btnGenerateSmartMesh, &QPushButton::clicked, this, &PixelEditorDialog::onGenerateSmartMeshRequested);
+    connect(m_btnGenerateSmartMesh, &QPushButton::clicked, this, [this]() {
+        onGenerateSmartMeshRequested(true);
+    });
     cgLayout->addWidget(m_btnGenerateSmartMesh);
 
     m_btnResetToOutline = new QPushButton(tr("↺ Reset to Outline"), m_cdtGroup);
     connect(m_btnResetToOutline, &QPushButton::clicked, this, &PixelEditorDialog::onResetMeshToOutlineRequested);
     cgLayout->addWidget(m_btnResetToOutline);
+
+    // Activity progress bar matching AtlasPackingDialog / PolygonMeshDialog style
+    m_cdtProgressBar = new QProgressBar(m_cdtGroup);
+    m_cdtProgressBar->setFixedHeight(6);
+    m_cdtProgressBar->setTextVisible(false);
+    m_cdtProgressBar->setStyleSheet(QStringLiteral(
+        "QProgressBar { border: none; background: #2c3e50; border-radius: 2px; } "
+        "QProgressBar::chunk { background-color: #00bcd4; border-radius: 2px; }"
+    ));
+    m_cdtProgressBar->setVisible(false);
+    cgLayout->addWidget(m_cdtProgressBar);
+
+    m_lblCdtFeedback = new QLabel(m_cdtGroup);
+    m_lblCdtFeedback->setAlignment(Qt::AlignCenter);
+    m_lblCdtFeedback->setTextFormat(Qt::PlainText);
+    m_lblCdtFeedback->setWordWrap(true);
+    m_lblCdtFeedback->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: bold;"));
+    m_lblCdtFeedback->setVisible(false);
+    cgLayout->addWidget(m_lblCdtFeedback);
+
+    m_btnCancelCdtMesh = new QPushButton(tr("Cancel CDT Mesh"), m_cdtGroup);
+    m_btnCancelCdtMesh->setStyleSheet(QStringLiteral(
+        "QPushButton { color: #e74c3c; font-size: 11px; font-weight: bold; padding: 4px; border: 1px solid #e74c3c; border-radius: 4px; } "
+        "QPushButton:hover { background-color: rgba(231, 76, 60, 0.15); }"
+    ));
+    m_btnCancelCdtMesh->setVisible(false);
+    connect(m_btnCancelCdtMesh, &QPushButton::clicked, this, &PixelEditorDialog::cancelCdtMeshCalculation);
+    cgLayout->addWidget(m_btnCancelCdtMesh);
 
     mcLayout->addWidget(m_cdtGroup);
 
@@ -3285,6 +3333,9 @@ bool PixelEditorDialog::performAtlasRepack(const QMap<int, QImage> &modifiedFram
 
 bool PixelEditorDialog::applyChanges()
 {
+    if (m_isCdtProcessing && m_cdtBatchWatcher.isRunning()) {
+        waitForCdtMeshFinished();
+    }
     saveCurrentFrameToSession();
     if (m_canvas && m_canvas->layerCount() > 1 && m_sessionLayers.size() <= 1) {
         syncSessionLayersFromCanvas();
@@ -3719,8 +3770,11 @@ void PixelEditorDialog::retranslateUi()
     if (m_lblSteinerDensityTitle) m_lblSteinerDensityTitle->setText(tr("Steiner Density:"));
     if (m_lblMinAngleTitle) m_lblMinAngleTitle->setText(tr("Guaranteed Minimum Angle:"));
     if (m_lblContrastSensitivityTitle) m_lblContrastSensitivityTitle->setText(tr("Internal Contrast:"));
-    if (m_btnGenerateSmartMesh) m_btnGenerateSmartMesh->setText(tr("⚡ Generate CDT Mesh"));
+    if (m_btnGenerateSmartMesh) {
+        m_btnGenerateSmartMesh->setText(m_isCdtProcessing ? tr("⚡ Computing CDT...") : tr("⚡ Generate CDT Mesh"));
+    }
     if (m_btnResetToOutline) m_btnResetToOutline->setText(tr("↺ Reset to Outline"));
+    if (m_btnCancelCdtMesh) m_btnCancelCdtMesh->setText(tr("Cancel CDT Mesh"));
 
     if (m_meshStatsGroup) m_meshStatsGroup->setTitle(tr("Mesh Statistics"));
     if (m_lblMeshBoundaryTitle) m_lblMeshBoundaryTitle->setText(tr("Outline vertices:"));
@@ -4286,9 +4340,9 @@ void PixelEditorDialog::onMeshEditModeChanged(int id)
     }
 }
 
-void PixelEditorDialog::onGenerateSmartMeshRequested()
+void PixelEditorDialog::onGenerateSmartMeshRequested(bool async)
 {
-    if (!m_canvas || !m_canvas->hasPolygonMesh()) return;
+    if (!m_canvas || !m_canvas->hasPolygonMesh() || m_isCdtProcessing) return;
 
     QPolygonF poly = m_canvas->polygonMesh();
     if (poly.size() < 3) return;
@@ -4321,64 +4375,241 @@ void PixelEditorDialog::onGenerateSmartMeshRequested()
     m_sessionModifiedTriangles[m_currentFrameIndex] = result.triangles;
 
     // Apply to all frames of current animation (or all document frames) if checkbox is enabled
-    if (isApplyToAllFramesEnabled() && m_document && m_document->frameCount() > 1) {
-        QList<int> targetFrames;
-        if (!m_activeSequence.isEmpty()) {
-            for (int idx : m_activeSequence) {
-                if (idx >= 0 && idx < m_document->frameCount() && !targetFrames.contains(idx)) {
-                    targetFrames.append(idx);
-                }
-            }
-        } else {
-            for (int i = 0; i < m_document->frameCount(); ++i) {
-                targetFrames.append(i);
+    bool applyAll = isApplyToAllFramesEnabled() && m_document && m_document->frameCount() > 1;
+    if (!applyAll) {
+        if (m_lblCdtFeedback) {
+            m_lblCdtFeedback->setText(tr("✓ CDT mesh generated"));
+            m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #27ae60; font-size: 11px; font-weight: bold;"));
+            m_lblCdtFeedback->setVisible(true);
+        }
+        updateMeshStatsUI();
+        return;
+    }
+
+    QList<int> targetFrames;
+    if (!m_activeSequence.isEmpty()) {
+        for (int idx : m_activeSequence) {
+            if (idx >= 0 && idx < m_document->frameCount() && !targetFrames.contains(idx)) {
+                targetFrames.append(idx);
             }
         }
-
-        for (int targetIdx : targetFrames) {
-            if (targetIdx == m_currentFrameIndex) continue;
-
-            QImage targetImg;
-            if (m_sessionModifiedFrames.contains(targetIdx)) {
-                targetImg = m_sessionModifiedFrames[targetIdx];
-            } else {
-                targetImg = m_document->frame(targetIdx);
-            }
-            if (targetImg.isNull()) continue;
-
-            QPolygonF targetPoly;
-            if (m_sessionModifiedPolygons.contains(targetIdx)) {
-                targetPoly = m_sessionModifiedPolygons[targetIdx];
-            } else if (targetIdx >= 0 && targetIdx < m_document->boxes().size() &&
-                       m_document->box(targetIdx).polygon.size() >= 3) {
-                targetPoly = m_document->box(targetIdx).polygon;
-            }
-            if (targetPoly.size() < 3) continue;
-
-            BentoPackGeometry::SmartMeshParams targetParams = params;
-            targetParams.userInteriorPoints.clear();
-
-            // Preserve target frame's existing user interior points if any
-            QList<QPointF> targetVerts;
-            if (m_sessionModifiedVertices.contains(targetIdx)) {
-                targetVerts = m_sessionModifiedVertices[targetIdx];
-            } else if (targetIdx >= 0 && targetIdx < m_document->boxes().size()) {
-                targetVerts = m_document->box(targetIdx).vertices;
-            }
-            if (targetVerts.size() > targetPoly.size()) {
-                for (int vi = targetPoly.size(); vi < targetVerts.size(); ++vi) {
-                    targetParams.userInteriorPoints.append(targetVerts.at(vi));
-                }
-            }
-
-            auto targetResult = BentoPackGeometry::Triangulator::generateSmartMesh(targetPoly, targetImg, targetParams);
-            m_sessionModifiedPolygons[targetIdx] = targetResult.outerPolygon;
-            m_sessionModifiedVertices[targetIdx] = targetResult.vertices;
-            m_sessionModifiedTriangles[targetIdx] = targetResult.triangles;
+    } else {
+        for (int i = 0; i < m_document->frameCount(); ++i) {
+            targetFrames.append(i);
         }
     }
 
+    QList<CdtBatchWorkItem> workItems;
+    for (int targetIdx : targetFrames) {
+        if (targetIdx == m_currentFrameIndex) continue;
+
+        QImage targetImg;
+        if (m_sessionModifiedFrames.contains(targetIdx)) {
+            targetImg = m_sessionModifiedFrames[targetIdx];
+        } else {
+            targetImg = m_document->frame(targetIdx);
+        }
+        if (targetImg.isNull()) continue;
+
+        QPolygonF targetPoly;
+        if (m_sessionModifiedPolygons.contains(targetIdx)) {
+            targetPoly = m_sessionModifiedPolygons[targetIdx];
+        } else if (targetIdx >= 0 && targetIdx < m_document->boxes().size() &&
+                   m_document->box(targetIdx).polygon.size() >= 3) {
+            targetPoly = m_document->box(targetIdx).polygon;
+        }
+        if (targetPoly.size() < 3) continue;
+
+        BentoPackGeometry::SmartMeshParams targetParams = params;
+        targetParams.userInteriorPoints.clear();
+
+        // Preserve target frame's existing user interior points if any
+        QList<QPointF> targetVerts;
+        if (m_sessionModifiedVertices.contains(targetIdx)) {
+            targetVerts = m_sessionModifiedVertices[targetIdx];
+        } else if (targetIdx >= 0 && targetIdx < m_document->boxes().size()) {
+            targetVerts = m_document->box(targetIdx).vertices;
+        }
+        if (targetVerts.size() > targetPoly.size()) {
+            for (int vi = targetPoly.size(); vi < targetVerts.size(); ++vi) {
+                targetParams.userInteriorPoints.append(targetVerts.at(vi));
+            }
+        }
+
+        CdtBatchWorkItem item;
+        item.index = targetIdx;
+        item.image = targetImg;
+        item.polygon = targetPoly;
+        item.params = targetParams;
+        workItems.append(item);
+    }
+
+    if (workItems.isEmpty()) {
+        if (m_lblCdtFeedback) {
+            m_lblCdtFeedback->setText(tr("✓ CDT mesh generated"));
+            m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #27ae60; font-size: 11px; font-weight: bold;"));
+            m_lblCdtFeedback->setVisible(true);
+        }
+        updateMeshStatsUI();
+        return;
+    }
+
+    int totalCount = targetFrames.size();
+
+    if (!async) {
+        // Synchronous execution for test harness or explicit callers
+        for (const auto &item : workItems) {
+            auto targetResult = BentoPackGeometry::Triangulator::generateSmartMesh(item.polygon, item.image, item.params);
+            m_sessionModifiedPolygons[item.index] = targetResult.outerPolygon;
+            m_sessionModifiedVertices[item.index] = targetResult.vertices;
+            m_sessionModifiedTriangles[item.index] = targetResult.triangles;
+        }
+        if (m_lblCdtFeedback) {
+            m_lblCdtFeedback->setText(tr("✓ CDT mesh applied to all %1 frames").arg(totalCount));
+            m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #27ae60; font-size: 11px; font-weight: bold;"));
+            m_lblCdtFeedback->setVisible(true);
+        }
+        updateMeshStatsUI();
+        return;
+    }
+
+    // Asynchronous background execution with live progress bar and status feedback
+    setCdtProcessingState(true);
+    m_cdtProgressBar->setRange(0, totalCount);
+    m_cdtProgressBar->setValue(1); // Frame 1 (current frame) is already done
+    m_lblCdtFeedback->setText(tr("Computing CDT mesh: frame 1 / %1...").arg(totalCount));
+    m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #00bcd4; font-size: 11px; font-weight: bold;"));
+
+    m_cdtBatchWatcher.setFuture(QtConcurrent::run([this, workItems, totalCount]() {
+        CdtBatchJobResult batchResult;
+        batchResult.totalFrames = totalCount;
+        int completed = 1;
+
+        for (int i = 0; i < workItems.size(); ++i) {
+            if (m_cancelCdtMesh.load()) {
+                batchResult.cancelled = true;
+                break;
+            }
+
+            const auto &item = workItems[i];
+            auto targetResult = BentoPackGeometry::Triangulator::generateSmartMesh(item.polygon, item.image, item.params);
+
+            CdtFrameResult fr;
+            fr.index = item.index;
+            fr.outerPolygon = targetResult.outerPolygon;
+            fr.vertices = targetResult.vertices;
+            fr.triangles = targetResult.triangles;
+            fr.success = true;
+            batchResult.results.append(fr);
+
+            completed++;
+            int currentDone = completed;
+            QMetaObject::invokeMethod(this, [this, currentDone, totalCount]() {
+                if (m_isCdtProcessing) {
+                    if (m_cdtProgressBar) {
+                        m_cdtProgressBar->setValue(currentDone);
+                    }
+                    if (m_lblCdtFeedback) {
+                        m_lblCdtFeedback->setText(tr("Computing CDT mesh: frame %1 / %2...").arg(currentDone).arg(totalCount));
+                    }
+                }
+            }, Qt::QueuedConnection);
+        }
+        return batchResult;
+    }));
+}
+
+void PixelEditorDialog::onCdtBatchFinished()
+{
+    if (!m_cdtBatchWatcher.future().isFinished()) return;
+    CdtBatchJobResult batchResult = m_cdtBatchWatcher.result();
+
+    for (const auto &fr : batchResult.results) {
+        if (fr.success && fr.index >= 0) {
+            m_sessionModifiedPolygons[fr.index] = fr.outerPolygon;
+            m_sessionModifiedVertices[fr.index] = fr.vertices;
+            m_sessionModifiedTriangles[fr.index] = fr.triangles;
+
+            if (fr.index == m_currentFrameIndex && m_canvas) {
+                m_canvas->setPolygonMeshData(fr.outerPolygon, fr.vertices, fr.triangles);
+            }
+        }
+    }
+
+    if (batchResult.cancelled) {
+        if (m_lblCdtFeedback) {
+            m_lblCdtFeedback->setText(tr("CDT mesh generation cancelled"));
+            m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #e74c3c; font-size: 11px; font-weight: bold;"));
+            m_lblCdtFeedback->setVisible(true);
+        }
+    } else {
+        if (m_lblCdtFeedback) {
+            m_lblCdtFeedback->setText(tr("✓ CDT mesh applied to all %1 frames").arg(batchResult.totalFrames));
+            m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #27ae60; font-size: 11px; font-weight: bold;"));
+            m_lblCdtFeedback->setVisible(true);
+        }
+    }
+
+    setCdtProcessingState(false);
     updateMeshStatsUI();
+}
+
+void PixelEditorDialog::setCdtProcessingState(bool processing)
+{
+    m_isCdtProcessing = processing;
+    if (processing) {
+        m_cancelCdtMesh.store(false);
+        if (m_btnGenerateSmartMesh) {
+            m_btnGenerateSmartMesh->setEnabled(false);
+            m_btnGenerateSmartMesh->setText(tr("⚡ Computing CDT..."));
+        }
+        if (m_btnResetToOutline) m_btnResetToOutline->setEnabled(false);
+        if (m_meshApplyAllFramesCheck) m_meshApplyAllFramesCheck->setEnabled(false);
+        if (m_applyToAllFramesCheck) m_applyToAllFramesCheck->setEnabled(false);
+        if (m_prevFrameBtn) m_prevFrameBtn->setEnabled(false);
+        if (m_nextFrameBtn) m_nextFrameBtn->setEnabled(false);
+        if (m_btnCancelCdtMesh) {
+            m_btnCancelCdtMesh->setEnabled(true);
+            m_btnCancelCdtMesh->setText(tr("Cancel CDT Mesh"));
+            m_btnCancelCdtMesh->setVisible(true);
+        }
+        if (m_cdtProgressBar) m_cdtProgressBar->setVisible(true);
+        if (m_lblCdtFeedback) m_lblCdtFeedback->setVisible(true);
+    } else {
+        if (m_btnGenerateSmartMesh) {
+            m_btnGenerateSmartMesh->setEnabled(true);
+            m_btnGenerateSmartMesh->setText(tr("⚡ Generate CDT Mesh"));
+        }
+        if (m_btnResetToOutline) m_btnResetToOutline->setEnabled(true);
+        if (m_meshApplyAllFramesCheck) m_meshApplyAllFramesCheck->setEnabled(true);
+        if (m_applyToAllFramesCheck) m_applyToAllFramesCheck->setEnabled(true);
+        updateNavigationButtons();
+        if (m_btnCancelCdtMesh) m_btnCancelCdtMesh->setVisible(false);
+        if (m_cdtProgressBar) m_cdtProgressBar->setVisible(false);
+    }
+}
+
+void PixelEditorDialog::cancelCdtMeshCalculation()
+{
+    if (m_isCdtProcessing) {
+        m_cancelCdtMesh.store(true);
+        if (m_btnCancelCdtMesh) {
+            m_btnCancelCdtMesh->setText(tr("Cancelling..."));
+            m_btnCancelCdtMesh->setEnabled(false);
+        }
+        if (m_lblCdtFeedback) {
+            m_lblCdtFeedback->setText(tr("Cancelling CDT calculation..."));
+            m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #e67e22; font-size: 11px; font-weight: bold;"));
+        }
+    }
+}
+
+void PixelEditorDialog::waitForCdtMeshFinished()
+{
+    if (m_cdtBatchWatcher.isRunning()) {
+        m_cdtBatchWatcher.waitForFinished();
+        QCoreApplication::processEvents();
+    }
 }
 
 void PixelEditorDialog::onResetMeshToOutlineRequested()
