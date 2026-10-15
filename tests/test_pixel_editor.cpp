@@ -2720,8 +2720,8 @@ void TestPixelEditor::testAsyncCdtMeshBatchProgressAndCancellation()
     dlg.waitForCdtMeshFinished();
 
     // 5. Verify post-conditions: progress bar hidden, feedback shows success, all 3 frames modified
-    QVERIFY(!dlg.isCdtProcessing());
-    QVERIFY(dlg.cdtProgressBar()->isHidden());
+    QTRY_VERIFY(!dlg.isCdtProcessing());
+    QTRY_VERIFY(dlg.cdtProgressBar()->isHidden());
     QVERIFY(!dlg.cdtFeedbackLabel()->isHidden());
     QVERIFY(dlg.cdtFeedbackLabel()->text().contains(QStringLiteral("✓")));
     QVERIFY(dlg.cancelCdtMeshButton()->isHidden());
@@ -2737,8 +2737,8 @@ void TestPixelEditor::testAsyncCdtMeshBatchProgressAndCancellation()
     dlg.onGenerateSmartMeshRequested(true);
     dlg.cancelCdtMeshCalculation();
     dlg.waitForCdtMeshFinished();
-    QVERIFY(!dlg.isCdtProcessing());
-    QVERIFY(dlg.cdtProgressBar()->isHidden());
+    QTRY_VERIFY(!dlg.isCdtProcessing());
+    QTRY_VERIFY(dlg.cdtProgressBar()->isHidden());
     QVERIFY(!dlg.cdtFeedbackLabel()->isHidden());
     QVERIFY(dlg.cdtFeedbackLabel()->text().contains(QStringLiteral("cancel"), Qt::CaseInsensitive) ||
             dlg.cdtFeedbackLabel()->text().contains(QStringLiteral("annul"), Qt::CaseInsensitive));

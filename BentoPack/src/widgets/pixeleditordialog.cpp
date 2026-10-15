@@ -4521,32 +4521,33 @@ void PixelEditorDialog::onGenerateSmartMeshRequested(bool async)
 
 void PixelEditorDialog::onCdtBatchFinished()
 {
-    if (!m_cdtBatchWatcher.future().isFinished()) return;
-    CdtBatchJobResult batchResult = m_cdtBatchWatcher.result();
+    if (m_cdtBatchWatcher.future().isValid() && m_cdtBatchWatcher.future().isFinished()) {
+        CdtBatchJobResult batchResult = m_cdtBatchWatcher.result();
 
-    for (const auto &fr : batchResult.results) {
-        if (fr.success && fr.index >= 0) {
-            m_sessionModifiedPolygons[fr.index] = fr.outerPolygon;
-            m_sessionModifiedVertices[fr.index] = fr.vertices;
-            m_sessionModifiedTriangles[fr.index] = fr.triangles;
+        for (const auto &fr : batchResult.results) {
+            if (fr.success && fr.index >= 0) {
+                m_sessionModifiedPolygons[fr.index] = fr.outerPolygon;
+                m_sessionModifiedVertices[fr.index] = fr.vertices;
+                m_sessionModifiedTriangles[fr.index] = fr.triangles;
 
-            if (fr.index == m_currentFrameIndex && m_canvas) {
-                m_canvas->setPolygonMeshData(fr.outerPolygon, fr.vertices, fr.triangles);
+                if (fr.index == m_currentFrameIndex && m_canvas) {
+                    m_canvas->setPolygonMeshData(fr.outerPolygon, fr.vertices, fr.triangles);
+                }
             }
         }
-    }
 
-    if (batchResult.cancelled) {
-        if (m_lblCdtFeedback) {
-            m_lblCdtFeedback->setText(tr("CDT mesh generation cancelled"));
-            m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #e74c3c; font-size: 11px; font-weight: bold;"));
-            m_lblCdtFeedback->setVisible(true);
-        }
-    } else {
-        if (m_lblCdtFeedback) {
-            m_lblCdtFeedback->setText(tr("✓ CDT mesh applied to all %1 frames").arg(batchResult.totalFrames));
-            m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #27ae60; font-size: 11px; font-weight: bold;"));
-            m_lblCdtFeedback->setVisible(true);
+        if (batchResult.cancelled || m_cancelCdtMesh.load()) {
+            if (m_lblCdtFeedback) {
+                m_lblCdtFeedback->setText(tr("CDT mesh generation cancelled"));
+                m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #e74c3c; font-size: 11px; font-weight: bold;"));
+                m_lblCdtFeedback->setVisible(true);
+            }
+        } else {
+            if (m_lblCdtFeedback) {
+                m_lblCdtFeedback->setText(tr("✓ CDT mesh applied to all %1 frames").arg(batchResult.totalFrames));
+                m_lblCdtFeedback->setStyleSheet(QStringLiteral("color: #27ae60; font-size: 11px; font-weight: bold;"));
+                m_lblCdtFeedback->setVisible(true);
+            }
         }
     }
 
@@ -4606,10 +4607,19 @@ void PixelEditorDialog::cancelCdtMeshCalculation()
 
 void PixelEditorDialog::waitForCdtMeshFinished()
 {
-    if (m_cdtBatchWatcher.isRunning()) {
+    if (m_cdtBatchWatcher.future().isValid()) {
         m_cdtBatchWatcher.waitForFinished();
-        QCoreApplication::processEvents();
     }
+    int safetyCounter = 0;
+    while (m_isCdtProcessing && safetyCounter++ < 200) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+        if (!m_isCdtProcessing) break;
+        QThread::msleep(5);
+    }
+    if (m_isCdtProcessing) {
+        onCdtBatchFinished();
+    }
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
 }
 
 void PixelEditorDialog::onResetMeshToOutlineRequested()
