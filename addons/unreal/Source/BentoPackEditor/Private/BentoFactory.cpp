@@ -185,20 +185,38 @@ UObject* UBentoFactory::ImportFromJsonString(
 	}
 
 	FString Directory = FPaths::GetPath(SourceFilePath);
-	FString BaseName = FPaths::GetBaseFilename(SourceFilePath);
-	if (BaseName.EndsWith(TEXT(".paper2d"), ESearchCase::IgnoreCase))
+	FString BaseName = InName.IsNone() ? TEXT("") : InName.ToString();
+	if (BaseName.IsEmpty() || BaseName.Equals(TEXT("project"), ESearchCase::IgnoreCase))
 	{
-		BaseName.LeftChopInline(8);
+		BaseName = FPaths::GetBaseFilename(SourceFilePath);
+		if (BaseName.EndsWith(TEXT(".paper2d"), ESearchCase::IgnoreCase))
+		{
+			BaseName.LeftChopInline(8);
+		}
+	}
+	if (BaseName.IsEmpty() || BaseName.Equals(TEXT("project"), ESearchCase::IgnoreCase))
+	{
+		BaseName = TEXT("BentoAsset");
 	}
 
-	FString LongPackagePath = FPackageName::GetLongPackagePath(InParent->GetOutermost()->GetPathName());
-	if (LongPackagePath.IsEmpty())
+	FString DestinationFolder = FPackageName::GetLongPackagePath(InParent->GetOutermost()->GetPathName());
+	if (DestinationFolder.IsEmpty())
 	{
-		LongPackagePath = TEXT("/Game");
+		DestinationFolder = TEXT("/Game");
 	}
 
-	FString SpritesFolderPath = LongPackagePath / (BaseName + TEXT("_Sprites"));
-	FString AnimsFolderPath = LongPackagePath / (BaseName + TEXT("_Animations"));
+	// Organize import into a dedicated root folder per Bento archive:
+	// e.g. <DestinationFolder>/<BaseName>/
+	FString BentoRootFolder = DestinationFolder;
+	if (!FPaths::GetCleanFilename(DestinationFolder).Equals(BaseName, ESearchCase::IgnoreCase))
+	{
+		BentoRootFolder = DestinationFolder / BaseName;
+	}
+
+	// Subfolders for animations, individual sliced sprites, and texture atlas
+	FString SpritesFolderPath = BentoRootFolder / TEXT("Sprites");
+	FString AnimsFolderPath = BentoRootFolder / TEXT("Animations");
+	FString TexturesFolderPath = BentoRootFolder / TEXT("Textures");
 
 	// 1. Locate and Import Texture Atlas
 	FString FullTexturePath;
@@ -242,7 +260,7 @@ UObject* UBentoFactory::ImportFromJsonString(
 
 	UTexture2D* AtlasTexture = nullptr;
 	FString TextureAssetName = BaseName + TEXT("_Atlas");
-	FString TexturePackagePath = LongPackagePath / TextureAssetName;
+	FString TexturePackagePath = TexturesFolderPath / TextureAssetName;
 
 	if (FPaths::FileExists(FullTexturePath))
 	{
@@ -543,37 +561,20 @@ UObject* UBentoFactory::ImportFromJsonString(
 		}
 	}
 
-	// 4. Create Primary Asset in InParent (the target package requested by Unreal)
-	UPaperFlipbook* PrimaryFlipbook = NewObject<UPaperFlipbook>(InParent, InName, Flags | RF_Public | RF_Standalone);
-	if (PrimaryFlipbook)
+	// 4. Resolve Primary Asset (prefer stand/idle or the first available animation)
+	UPaperFlipbook* PrimaryFlipbook = nullptr;
+	if (FlipbookMap.Contains(TEXT("stand"))) PrimaryFlipbook = FlipbookMap[TEXT("stand")];
+	else if (FlipbookMap.Contains(TEXT("idle"))) PrimaryFlipbook = FlipbookMap[TEXT("idle")];
+	else if (FlipbookMap.Num() > 0)
 	{
-		UPaperFlipbook* SourceFb = nullptr;
-		if (FlipbookMap.Contains(TEXT("stand"))) SourceFb = FlipbookMap[TEXT("stand")];
-		else if (FlipbookMap.Contains(TEXT("idle"))) SourceFb = FlipbookMap[TEXT("idle")];
-		else if (FlipbookMap.Num() > 0)
+		for (auto& Pair : FlipbookMap)
 		{
-			for (auto& Pair : FlipbookMap)
+			if (Pair.Value)
 			{
-				if (Pair.Value)
-				{
-					SourceFb = Pair.Value;
-					break;
-				}
+				PrimaryFlipbook = Pair.Value;
+				break;
 			}
 		}
-
-		if (SourceFb)
-		{
-			FScopedFlipbookMutator Mutator(PrimaryFlipbook);
-			Mutator.FramesPerSecond = SourceFb->GetFramesPerSecond();
-			for (int32 i = 0; i < SourceFb->GetNumKeyFrames(); ++i)
-			{
-				Mutator.KeyFrames.Add(SourceFb->GetKeyFrameChecked(i));
-			}
-		}
-
-		FAssetRegistryModule::AssetCreated(PrimaryFlipbook);
-		PrimaryFlipbook->MarkPackageDirty();
 	}
 
 	// 5. Sync Content Browser to newly created assets

@@ -360,10 +360,10 @@ Unleash the full potential of 2D game development in Unreal Engine 5. The **Bent
 
 ## 4.3 Checklist des Captures d'Écran Unreal
 
-* [ ] [Screenshot a faire](docs/screenshots/unreal_screen_01_content_browser_import.webp) : Content Browser montrant le dossier importé avec textures, `UPaperSprite` et `UPaperFlipbook`.
-* [ ] [Screenshot a faire](docs/screenshots/unreal_screen_02_quad_overdraw_viewmode.webp) : **(Preuve d'Achat)** Viewport en mode *Optimization Viewmodes > Quad Overdraw* montrant le gain drastique de fillrate.
-* [ ] [Screenshot a faire](docs/screenshots/unreal_screen_03_flipbook_animation_preview.webp) : Éditeur PaperFlipbook en cours de lecture avec la timeline de frames extraite de BentoPack.
-* [ ] [Screenshot a faire](docs/screenshots/unreal_screen_04_slate_dashboard_bridge.webp) : Fenêtre Slate personnalisée BentoPack dockée dans l'éditeur.
+* [X] ![Screenshot a faire](screenshots/unreal_screen_01_content_browser_import.webp) : Content Browser montrant le dossier importé avec textures, `UPaperSprite` et `UPaperFlipbook`.
+* [X] ![Screenshot a faire](screenshots/unreal_screen_02_quad_overdraw_viewmode.webp) : **(Preuve d'Achat)** Viewport en mode *Optimization Viewmodes > Quad Overdraw* montrant le gain drastique de fillrate.
+* [X] ![Screenshot a faire](screenshots/unreal_screen_03_flipbook_animation_preview.webp) : Éditeur PaperFlipbook en cours de lecture avec la timeline de frames extraite de BentoPack.
+* [X] ![Screenshot a faire](screenshots/unreal_screen_04_slate_dashboard_bridge.webp) : Fenêtre Slate personnalisée BentoPack dockée dans l'éditeur.
 
 ---
 
