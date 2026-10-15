@@ -1211,7 +1211,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | 图层：%1/%2 可见</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1547,6 +1547,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>为 Godot 导出打包图集帧失败。</translation>
+    </message>
+    <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>写入 Godot 图集页面图像失败：%1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1970,11 +1974,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">图层</translation>
+        <translation>图层</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">图层 %1</translation>
+        <translation>图层 %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Strict removal clears the pixel.</source>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>打开媒体 — 项目已激活</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>当前已有项目打开</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>您希望如何处理传入的媒体 &lt;b&gt;%1&lt;/b&gt;？</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭现有项目并作为新项目打开</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭当前项目（如有修改则提示保存），并将此文件作为全新项目打开。</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>更新 / 替换现有图集</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>使用此媒体更新图集纹理。保留现有的精灵框、轴心和动画（从新图集中重新切片）。</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>作为新图集图层添加</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>将此媒体作为图集图层导入（例如法线贴图、光照、护甲）。为每个与现有图集框匹配的动画帧切片一个单元格。</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>作为通用背景 / 叠加层添加</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>将此媒体作为共享背景或叠加单元格放置，并在每个动画帧中完全相同地重复。</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -3094,6 +3098,34 @@ Strict removal clears the pixel.</source>
         <translation>生成 CDT 网格</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ CDT 网格已生成</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ CDT 网格已应用于所有 %1 帧</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>正在计算 CDT 网格：帧 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>正在计算 CDT 网格：帧 %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>已取消生成 CDT 网格</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>正在取消...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>正在取消 CDT 计算...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>重置网格为轮廓</translation>
     </message>
@@ -3250,6 +3282,10 @@ Strict removal clears the pixel.</source>
         <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 单击任意像素可设置前景色。在使用任何工具时按住 &lt;b&gt;Alt&lt;/b&gt; 可临时取样颜色。</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>取消 CDT 网格</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>工具选项</translation>
     </message>
@@ -3328,6 +3364,10 @@ Would you like to repack the atlas now?</source>
     <message>
         <source># Grid</source>
         <translation># 网格</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ 正在计算 CDT...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>解码的图集图像为空。</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>将图集替换为 %1</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>已成功将图集替换为 %1。</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>加载图像失败：%1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>基础</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>背景：%1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>从 %1 添加图层</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>已成功从 %1 添加通用背景。</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>已成功从 %1 添加图层。</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在将图集替换为 %1...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在从 %1 添加通用背景...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在从 %1 导入图层...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3801,15 +3841,15 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>替换图集媒体</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>添加媒体图层</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>从 %1 添加图层</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3825,15 +3865,15 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>加载图像失败：%1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>基础</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>背景：%1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>

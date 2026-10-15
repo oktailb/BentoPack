@@ -1211,7 +1211,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | レイヤー: %1/%2 表示中</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1549,6 +1549,10 @@ Strict removal clears the pixel.</source>
         <translation>Godotエクスポート用フレームパッキングに失敗しました。</translation>
     </message>
     <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>Godotアトラスページ画像の書き込みに失敗しました: %1</translation>
+    </message>
+    <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
         <translation>Godot VRAMアトラステクスチャの書き込みに失敗しました：%1 (%2)</translation>
     </message>
@@ -1854,11 +1858,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">レイヤー</translation>
+        <translation>レイヤー</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">レイヤー %1</translation>
+        <translation>レイヤー %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Strict removal clears the pixel.</source>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>メディアを開く — プロジェクトは既にアクティブです</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>プロジェクトが現在開かれています</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>読み込むメディア &lt;b&gt;%1&lt;/b&gt; をどのように処理しますか？</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>既存のものを閉じて新規として開く</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のプロジェクトを閉じ（変更がある場合は保存を確認）、このファイルを新しいプロジェクトとして開きます。</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>既存のアトラスを更新 / 置換</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>このメディアでアトラステクスチャを更新します。既存のスプライトボックス、ピボット、アニメーションを保持します（新しいアトラスから再スライス）。</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいアトラスレイヤーとして追加</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>このメディアをアトラスレイヤー（法線マップ、ライティング、防具など）としてインポートします。既存のアトラスボックスに一致するアニメーションフレームごとにセルをスライスします。</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>共通の背景 / オーバーレイとして追加</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>このメディアを共有の背景またはオーバーレイセルとして配置し、すべてのアニメーションフレームで同一に繰り返します。</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
 </context>
 <context>
@@ -3094,6 +3098,34 @@ Strict removal clears the pixel.</source>
         <translation>CDTメッシュを生成</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ CDTメッシュが生成されました</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ すべての %1 フレームにCDTメッシュを適用しました</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>CDTメッシュを計算中: フレーム 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>CDTメッシュを計算中: フレーム %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>CDTメッシュ生成がキャンセルされました</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>キャンセル中...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>CDT計算をキャンセル中...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>メッシュを輪郭にリセット</translation>
     </message>
@@ -3250,6 +3282,10 @@ Strict removal clears the pixel.</source>
         <translation>💡 &lt;b&gt;ヒント:&lt;/b&gt; 任意のピクセルをクリックしてプライマリカラーを設定します。任意のツールの使用中に&lt;b&gt;Alt&lt;/b&gt;を押すと一時的に色を採取できます。</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>CDTメッシュをキャンセル</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>ツールオプション</translation>
     </message>
@@ -3328,6 +3364,10 @@ Would you like to repack the atlas now?</source>
     <message>
         <source># Grid</source>
         <translation># グリッド</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ CDT計算中...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>デコードされたアトラス画像がnullです。</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>アトラスを %1 で置換</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>アトラスが %1 で正常に置換されました。</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>画像の読み込みに失敗しました: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>ベース</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>背景: %1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 からレイヤーを追加</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 から共通の背景が正常に追加されました。</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 からレイヤーが正常に追加されました。</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>アトラスを %1 で置換中...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 から共通の背景を追加中...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 からレイヤーをインポート中...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3801,15 +3841,15 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>アトラスメディアを置換</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>メディアレイヤーを追加</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 からレイヤーを追加</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3825,15 +3865,15 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>画像の読み込みに失敗しました: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>ベース</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>背景: %1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>

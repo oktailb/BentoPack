@@ -1211,7 +1211,7 @@ La rimozione rigida cancella il pixel.</translation>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | Livelli: %1/%2 visibili</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1547,6 +1547,10 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Impossibile impacchettare i fotogrammi atlas per l&apos;esportazione Godot.</translation>
+    </message>
+    <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>Impossibile scrivere l&apos;immagine della pagina dell&apos;atlante Godot: %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1970,11 +1974,11 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">Livelli</translation>
+        <translation>Livelli</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">Livello %1</translation>
+        <translation>Livello %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Vuoi salvarle prima di procedere?</translation>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri file multimediale — Progetto già attivo</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>Un progetto è attualmente aperto</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Come desideri gestire il file multimediale in entrata &lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiudi esistente e apri come nuovo</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiude il progetto corrente (chiede di salvare se modificato) e apre questo file come nuovo progetto.</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna / Sostituisci atlante esistente</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna la texture dell&apos;atlante con questo elemento. Mantiene i riquadri sprite, i perni e le animazioni esistenti (ritagliati dal nuovo atlante).</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi come nuovo livello atlante</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa questo elemento come livello atlante (es. mappa normale, illuminazione, armatura). Ritaglia una cella per ogni fotogramma di animazione corrispondente al riquadro atlante esistente.</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi come sfondo comune / sovrapposizione</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>Posiziona questo elemento come sfondo condiviso o cella di sovrapposizione ripetuta in modo identico su ogni fotogramma dell&apos;animazione.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
 </context>
 <context>
@@ -3094,6 +3098,34 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Genera mesh CDT</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ Mesh CDT generata</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ Mesh CDT applicata a tutti i %1 fotogrammi</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>Calcolo mesh CDT: fotogramma 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>Calcolo mesh CDT: fotogramma %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>Generazione mesh CDT annullata</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>Annullamento in corso...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>Annullamento del calcolo CDT...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>Ripristina mesh al contorno</translation>
     </message>
@@ -3250,6 +3282,10 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Clicca su qualsiasi pixel per impostare il colore primario. Tieni premuto &lt;b&gt;Alt&lt;/b&gt; per campionare temporaneamente.</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>Annulla mesh CDT</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Opzioni strumento</translation>
     </message>
@@ -3328,6 +3364,10 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     <message>
         <source># Grid</source>
         <translation># Griglia</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ Calcolo CDT in corso...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;immagine dell&apos;atlante decodificata è nulla.</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci atlante con %1</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Atlante sostituito con successo con %1.</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile caricare l&apos;immagine: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Base</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sfondo: %1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi livelli da %1</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sfondo comune aggiunto con successo da %1.</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Livelli aggiunti con successo da %1.</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituzione dell&apos;atlante con %1 in corso...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiunta sfondo comune da %1 in corso...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importazione livelli da %1 in corso...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3803,15 +3843,15 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci file multimediale dell&apos;atlante</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi livelli multimediali</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi livelli da %1</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3827,15 +3867,15 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile caricare l&apos;immagine: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Base</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sfondo: %1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>

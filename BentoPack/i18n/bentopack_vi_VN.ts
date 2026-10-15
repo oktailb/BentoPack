@@ -515,7 +515,7 @@ Choose which branch to restore:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>Hủy</translation>
     </message>
     <message>
         <source>Restore Branch</source>
@@ -1211,7 +1211,7 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | Lớp: %1/%2 hiển thị</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1337,7 +1337,7 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>Hủy</translation>
     </message>
 </context>
 <context>
@@ -1547,6 +1547,10 @@ Bấm vào một nút để xem chi tiết.</translation>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Thất bại khi thực hiện tác vụ.</translation>
+    </message>
+    <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>Không thể ghi hình ảnh trang atlas Godot: %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1970,11 +1974,11 @@ Bấm vào một nút để xem chi tiết.</translation>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">Các lớp</translation>
+        <translation>Lớp</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">Lớp %1</translation>
+        <translation>Lớp %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Mở phương tiện — Dự án đang hoạt động</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>Một dự án hiện đang mở</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Bạn muốn xử lý phương tiện sắp tới &lt;b&gt;%1&lt;/b&gt; như thế nào?</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>Đóng dự án hiện tại &amp; mở dưới dạng mới</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Đóng dự án hiện tại (nhắc lưu nếu có thay đổi) và mở tệp này dưới dạng dự án hoàn toàn mới.</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>Cập nhật / Thay thế atlas hiện có</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>Cập nhật kết cấu atlas bằng phương tiện này. Giữ nguyên các hộp sprite, điểm xoay và hoạt ảnh hiện có (được cắt lại từ atlas mới).</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm làm lớp atlas mới</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nhập phương tiện này làm lớp atlas (ví dụ: normal map, ánh sáng, áo giáp). Cắt một ô cho mỗi khung hình hoạt ảnh khớp với hộp atlas hiện có.</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm làm hình nền / lớp phủ chung</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>Đặt phương tiện này làm nền chung hoặc ô phủ lặp lại giống hệt nhau trên mỗi khung hình hoạt ảnh.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Hủy</translation>
     </message>
 </context>
 <context>
@@ -2835,7 +2839,7 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>Hủy</translation>
     </message>
     <message>
         <source>Animation:</source>
@@ -2887,7 +2891,7 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     </message>
     <message>
         <source>Layers</source>
-        <translation>Các lớp</translation>
+        <translation>Lớp</translation>
     </message>
     <message>
         <source>⚠ Active layer is locked! Unlock to paint.</source>
@@ -3094,6 +3098,34 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Tạo lưới CDT</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ Đã tạo lưới CDT</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ Đã áp dụng lưới CDT cho tất cả %1 khung hình</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>Đang tính toán lưới CDT: khung hình 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>Đang tính toán lưới CDT: khung hình %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>Đã hủy tạo lưới CDT</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>Đang hủy...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>Đang hủy tính toán CDT...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>Đặt lại lưới về đường viền ngoài</translation>
     </message>
@@ -3250,6 +3282,10 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Nhấp vào bất kỳ pixel nào để đặt màu chính. Giữ phím &lt;b&gt;Alt&lt;/b&gt; khi đang dùng công cụ bất kỳ để lấy mẫu màu tạm thời.</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>Hủy lưới CDT</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Tùy chọn công cụ</translation>
     </message>
@@ -3328,6 +3364,10 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source># Grid</source>
         <translation># Lưới</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ Đang tính toán CDT...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hình ảnh atlas đã giải mã là null.</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Thay thế atlas bằng %1</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Đã thay thế atlas bằng %1 thành công.</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Không thể tải hình ảnh: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Cơ sở</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nền: %1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm các lớp từ %1</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Đã thêm hình nền chung từ %1 thành công.</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Đã thêm các lớp từ %1 thành công.</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Đang thay thế atlas bằng %1...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Đang thêm hình nền chung từ %1...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Đang nhập các lớp từ %1...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3801,15 +3841,15 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>Thay thế phương tiện atlas</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm lớp phương tiện</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm các lớp từ %1</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3825,15 +3865,15 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Không thể tải hình ảnh: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Cơ sở</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nền: %1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>
@@ -4922,7 +4962,7 @@ Cài đặt gói:
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>Hủy</translation>
     </message>
 </context>
 <context>

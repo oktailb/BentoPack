@@ -1211,7 +1211,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | 레이어: %1/%2 표시됨</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1547,6 +1547,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Godot 내보내기용 아틀라스 프레임 패킹 실패.</translation>
+    </message>
+    <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>Godot 아틀라스 페이지 이미지를 쓰는 데 실패했습니다: %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1970,11 +1974,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">레이어</translation>
+        <translation>레이어</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">레이어 %1</translation>
+        <translation>레이어 %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Strict removal clears the pixel.</source>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>미디어 열기 — 프로젝트가 이미 열려 있음</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 프로젝트가 열려 있습니다</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>가져오는 미디어 &lt;b&gt;%1&lt;/b&gt;을(를) 어떻게 처리하시겠습니까?</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>기존 항목 닫고 새 프로젝트로 열기</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 프로젝트를 닫고(수정된 경우 저장 확인) 이 파일을 새 프로젝트로 엽니다.</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>기존 아틀라스 업데이트 / 교체</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>이 미디어로 아틀라스 텍스처를 업데이트합니다. 기존 스프라이트 상자, 피벗 및 애니메이션을 유지합니다(새 아틀라스에서 다시 슬라이스됨).</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>새 아틀라스 레이어로 추가</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 미디어를 아틀라스 레이어(예: 노멀 맵, 조명, 방어구)로 가져옵니다. 기존 아틀라스 상자와 일치하는 각 애니메이션 프레임에 대한 셀을 슬라이스합니다.</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>공통 배경 / 오버레이로 추가</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 미디어를 모든 애니메이션 프레임에서 동일하게 반복되는 공유 배경 또는 오버레이 셀로 배치합니다.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">취소</translation>
+        <translation>취소</translation>
     </message>
 </context>
 <context>
@@ -3094,6 +3098,34 @@ Strict removal clears the pixel.</source>
         <translation>CDT 메시 생성</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ CDT 메시 생성됨</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ 모든 %1 프레임에 CDT 메시 적용됨</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>CDT 메시 계산 중: 프레임 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>CDT 메시 계산 중: 프레임 %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>CDT 메시 생성이 취소되었습니다</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>취소 중...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>CDT 계산 취소 중...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>메시를 윤곽선으로 초기화</translation>
     </message>
@@ -3250,6 +3282,10 @@ Strict removal clears the pixel.</source>
         <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 픽셀을 클릭하여 기본 색상을 설정합니다. 도구를 사용하는 동안 &lt;b&gt;Alt&lt;/b&gt;를 누르고 있으면 임시로 색상을 추출할 수 있습니다.</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>CDT 메시 취소</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>도구 옵션</translation>
     </message>
@@ -3328,6 +3364,10 @@ Would you like to repack the atlas now?</source>
     <message>
         <source># Grid</source>
         <translation># 그리드</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ CDT 계산 중...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>디코딩된 아틀라스 이미지가 null입니다.</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>아틀라스를 %1(으)로 교체</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>아틀라스가 %1(으)로 성공적으로 교체되었습니다.</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지를 로드하지 못했습니다: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>기본</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>배경: %1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에서 레이어 추가</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에서 공통 배경이 성공적으로 추가되었습니다.</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에서 레이어가 성공적으로 추가되었습니다.</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>아틀라스를 %1(으)로 교체하는 중...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에서 공통 배경 추가 중...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에서 레이어 가져오는 중...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3801,15 +3841,15 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>아틀라스 미디어 교체</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>미디어 레이어 추가</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에서 레이어 추가</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3825,15 +3865,15 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지를 로드하지 못했습니다: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>기본</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>배경: %1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>

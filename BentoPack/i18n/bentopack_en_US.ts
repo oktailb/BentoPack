@@ -1211,7 +1211,7 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | Layers: %1/%2 visible</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1547,6 +1547,10 @@ Click a node to view its details.</translation>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Failed to pack atlas frames for Godot export.</translation>
+    </message>
+    <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>Failed to write Godot atlas page image: %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1970,11 +1974,11 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">Layers</translation>
+        <translation>Layers</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">Layer %1</translation>
+        <translation>Layer %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Do you want to save them before proceeding?</translation>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Media — Project Already Active</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>A project is currently open</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>Close Existing &amp; Open as New</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Closes current project (prompts to save if modified) and opens this file as a brand new project.</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>Update / Replace Existing Atlas</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Add as New Atlas Layer</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Add as Common Background / Overlay</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>Places this media as a shared background or overlay cel repeated identically across every animation frame.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel</translation>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>
@@ -3094,6 +3098,34 @@ Do you want to save them before proceeding?</translation>
         <translation>Generate CDT Mesh</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ CDT mesh generated</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ CDT mesh applied to all %1 frames</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>Computing CDT mesh: frame 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>Computing CDT mesh: frame %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>CDT mesh generation cancelled</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>Cancelling...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>Cancelling CDT calculation...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>Reset Mesh to Outline</translation>
     </message>
@@ -3250,6 +3282,10 @@ Do you want to save them before proceeding?</translation>
         <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>Cancel CDT Mesh</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Tool Options</translation>
     </message>
@@ -3328,6 +3364,10 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source># Grid</source>
         <translation># Grid</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ Computing CDT...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>Decoded atlas image is null.</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Replace atlas with %1</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Replaced atlas with %1 successfully.</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to load image: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Base</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Background: %1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Add layers from %1</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Added common background from %1 successfully.</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Added layers from %1 successfully.</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Replacing atlas with %1...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Adding common background from %1...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importing layers from %1...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3803,15 +3843,15 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>Replace Atlas Media</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Add Media Layers</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Add Layers from %1</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3827,15 +3867,15 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to load image: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Base</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Background: %1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>

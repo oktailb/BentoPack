@@ -1211,7 +1211,7 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | Слои: %1/%2 видимы</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1547,6 +1547,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Не удалось упаковать кадры атласа для экспорта в Godot.</translation>
+    </message>
+    <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>Не удалось записать изображение страницы атласа Godot: %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1970,11 +1974,11 @@ Strict removal clears the pixel.</source>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">Слои</translation>
+        <translation>Слои</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">Слой %1</translation>
+        <translation>Слой %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Strict removal clears the pixel.</source>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть медиафайл — Проект уже активен</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>В настоящее время открыт проект</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Как вы хотите обработать входящий медиафайл &lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть существующий и открыть как новый</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрывает текущий проект (предлагает сохранить изменения) и открывает этот файл как новый проект.</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновить / Заменить существующий атлас</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновляет текстуру атласа этим медиафайлом. Сохраняет существующие рамки спрайтов, точки привязки и анимации (повторно нарезаются из нового атласа).</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить как новый слой атласа</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>Импортирует этот медиафайл как слой атласа (например, карта нормалей, освещение, броня). Нарезает ячейку для каждого кадра анимации, соответствующего существующей рамке атласа.</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить как общий фон / наложение</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>Помещает этот медиафайл как общий фон или ячейку наложения, одинаково повторяемую в каждом кадре анимации.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
 </context>
 <context>
@@ -3094,6 +3098,34 @@ Strict removal clears the pixel.</source>
         <translation>Сгенерировать CDT-сетку</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ Сетка CDT создана</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ Сетка CDT применена ко всем %1 кадрам</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>Вычисление сетки CDT: кадр 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>Вычисление сетки CDT: кадр %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>Генерация сетки CDT отменена</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>Отмена...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>Отмена вычисления CDT...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>Сбросить сетку к контуру</translation>
     </message>
@@ -3250,6 +3282,10 @@ Strict removal clears the pixel.</source>
         <translation>💡 &lt;b&gt;Совет:&lt;/b&gt; Кликните по пикселю, чтобы выбрать основной цвет. Удерживайте &lt;b&gt;Alt&lt;/b&gt; с любым инструментом для быстрого сэмплирования.</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>Отменить сетку CDT</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Параметры инструмента</translation>
     </message>
@@ -3328,6 +3364,10 @@ Would you like to repack the atlas now?</source>
     <message>
         <source># Grid</source>
         <translation># Сетка</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ Вычисление CDT...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>Декодированное изображение атласа равно null.</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Заменить атлас на %1</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Атлас успешно заменен на %1.</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить изображение: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Базовый</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Фон: %1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить слои из %1</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Общий фон из %1 успешно добавлен.</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Слои из %1 успешно добавлены.</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Замена атласа на %1...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавление общего фона из %1...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт слоев из %1...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3805,15 +3845,15 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>Заменить медиафайл атласа</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить медиаслои</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить слои из %1</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3829,15 +3869,15 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить изображение: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Базовый</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Фон: %1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>

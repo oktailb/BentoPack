@@ -1211,7 +1211,7 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | เลเยอร์: %1/%2 มองเห็นได้</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1547,6 +1547,10 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>การดำเนินการล้มเหลว</translation>
+    </message>
+    <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>ไม่สามารถเขียนภาพหน้าแอตลาส Godot ได้: %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1970,11 +1974,11 @@ Strict removal clears the pixel.</translation>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">เลเยอร์</translation>
+        <translation>เลเยอร์</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">เลเยอร์ %1</translation>
+        <translation>เลเยอร์ %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Strict removal clears the pixel.</translation>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>เปิดสื่อ — โครงการเปิดอยู่แล้ว</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>ขณะนี้มีโครงการเปิดอยู่</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>คุณต้องการจัดการกับสื่อขาเข้า &lt;b&gt;%1&lt;/b&gt; อย่างไร?</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>ปิดโครงการเดิมและเปิดเป็นโครงการใหม่</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>ปิดโครงการปัจจุบัน (ถามเพื่อบันทึกหากมีการแก้ไข) และเปิดไฟล์นี้เป็นโครงการใหม่</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>อัปเดต / แทนที่แอตลาสเดิม</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>อัปเดตพื้นผิวแอตลาสด้วยสื่อนี้ รักษาขอบเขตสไปรต์ จุดหมุน และแอนิเมชันเดิมไว้ (ตัดซ้ำจากแอตลาสใหม่)</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>เพิ่มเป็นเลเยอร์แอตลาสใหม่</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>นำเข้าสื่อนี้เป็นเลเยอร์แอตลาส (เช่น normal map, แสงสว่าง, เกราะ) ตัดเซลสำหรับแต่ละเฟรมแอนิเมชันให้ตรงกับกล่องแอตลาสที่มีอยู่</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>เพิ่มเป็นพื้นหลังร่วม / โอเวอร์เลย์</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>วางสื่อนี้เป็นพื้นหลังร่วมหรือเซลโอเวอร์เลย์ที่ทำซ้ำเหมือนกันในทุกเฟรมแอนิเมชัน</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">ยกเลิก</translation>
+        <translation>ยกเลิก</translation>
     </message>
 </context>
 <context>
@@ -3094,6 +3098,34 @@ Strict removal clears the pixel.</translation>
         <translation>สร้างเมช CDT</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ สร้างเมช CDT แล้ว</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ นำเมช CDT ไปใช้กับทั้ง %1 เฟรมแล้ว</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>กำลังคำนวณเมช CDT: เฟรม 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>กำลังคำนวณเมช CDT: เฟรม %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>ยกเลิกการสร้างเมช CDT แล้ว</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>กำลังยกเลิก...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>กำลังยกเลิกการคำนวณ CDT...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>รีเซ็ตเมชกลับเป็นโครงร่าง</translation>
     </message>
@@ -3250,6 +3282,10 @@ Strict removal clears the pixel.</translation>
         <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; คลิกที่พิกเซลใดก็ได้เพื่อตั้งเป็นสีหลัก กด &lt;b&gt;Alt&lt;/b&gt; ค้างไว้ขณะใช้เครื่องมือใดๆ เพื่อดูดสีชั่วคราว</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>ยกเลิกเมช CDT</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>ตัวเลือกเครื่องมือ</translation>
     </message>
@@ -3328,6 +3364,10 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source># Grid</source>
         <translation># ตาราง</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ กำลังคำนวณ CDT...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>รูปภาพแอตลาสที่ถอดรหัสแล้วเป็น null</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>แทนที่แอตลาสด้วย %1</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>แทนที่แอตลาสด้วย %1 สำเร็จแล้ว</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ไม่สามารถโหลดภาพได้: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>พื้นฐาน</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>พื้นหลัง: %1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>เพิ่มเลเยอร์จาก %1</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>เพิ่มพื้นหลังร่วมจาก %1 สำเร็จแล้ว</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>เพิ่มเลเยอร์จาก %1 สำเร็จแล้ว</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>กำลังแทนที่แอตลาสด้วย %1...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>กำลังเพิ่มพื้นหลังร่วมจาก %1...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>กำลังนำเข้าเลเยอร์จาก %1...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3801,15 +3841,15 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>แทนที่สื่อแอตลาส</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>เพิ่มเลเยอร์สื่อ</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>เพิ่มเลเยอร์จาก %1</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3825,15 +3865,15 @@ Would you like to repack the atlas now?</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ไม่สามารถโหลดภาพได้: %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>พื้นฐาน</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>พื้นหลัง: %1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>

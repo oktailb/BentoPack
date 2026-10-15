@@ -1211,7 +1211,7 @@ La suppression stricte efface le pixel.</translation>
     </message>
     <message>
         <source> | Layers: %1/%2 visible</source>
-        <translation type="unfinished"></translation>
+        <translation> | Calques : %1/%2 visibles</translation>
     </message>
     <message>
         <source>Dimensions: %1 x %2 px (Current Atlas)</source>
@@ -1547,6 +1547,10 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
         <translation>Échec de l&apos;assemblage des frames d&apos;atlas pour l&apos;export Godot.</translation>
+    </message>
+    <message>
+        <source>Failed to write Godot atlas page image: %1</source>
+        <translation>Échec de l&apos;écriture de l&apos;image de page d&apos;atlas Godot : %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1970,11 +1974,11 @@ Cliquez sur un nœud pour afficher ses détails.</translation>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished">Calques</translation>
+        <translation>Calques</translation>
     </message>
     <message>
         <source>Layer %1</source>
-        <translation type="unfinished">Calque %1</translation>
+        <translation>Calque %1</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2499,51 +2503,51 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <name>OpenMediaConflictDialog</name>
     <message>
         <source>Open Media — Project Already Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir le média — Projet déjà actif</translation>
     </message>
     <message>
         <source>A project is currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>Un projet est actuellement ouvert</translation>
     </message>
     <message>
         <source>How would you like to handle the incoming media &lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Comment souhaitez-vous traiter le média entrant &lt;b&gt;%1&lt;/b&gt; ?</translation>
     </message>
     <message>
         <source>Close Existing &amp; Open as New</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer l&apos;actuel et ouvrir comme nouveau</translation>
     </message>
     <message>
         <source>Closes current project (prompts to save if modified) and opens this file as a brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferme le projet actuel (invite à enregistrer si modifié) et ouvre ce fichier comme un tout nouveau projet.</translation>
     </message>
     <message>
         <source>Update / Replace Existing Atlas</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre à jour / Remplacer l&apos;atlas existant</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation type="unfinished"></translation>
+        <translation>Met à jour la texture de l&apos;atlas avec ce média. Conserve vos boîtes de sprites, pivots et animations existants (redécoupés depuis le nouvel atlas).</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter comme nouveau calque d&apos;atlas</translation>
     </message>
     <message>
         <source>Imports this media as an atlas layer (e.g. normal map, lighting, armor). Slices a cel for each animation frame matching its existing atlas box.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importe ce média comme calque d&apos;atlas (ex. normal map, éclairage, armure). Découpe une cellule pour chaque frame d&apos;animation correspondant à sa boîte d&apos;atlas existante.</translation>
     </message>
     <message>
         <source>Add as Common Background / Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter comme arrière-plan commun / calque superposé</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>Place ce média comme arrière-plan partagé ou cellule superposée répétée à l&apos;identique sur chaque frame d&apos;animation.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -3094,6 +3098,34 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Générer Maillage CDT</translation>
     </message>
     <message>
+        <source>✓ CDT mesh generated</source>
+        <translation>✓ Maillage CDT généré</translation>
+    </message>
+    <message>
+        <source>✓ CDT mesh applied to all %1 frames</source>
+        <translation>✓ Maillage CDT appliqué à l&apos;ensemble des %1 frames</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame 1 / %1...</source>
+        <translation>Calcul du maillage CDT : frame 1 / %1...</translation>
+    </message>
+    <message>
+        <source>Computing CDT mesh: frame %1 / %2...</source>
+        <translation>Calcul du maillage CDT : frame %1 / %2...</translation>
+    </message>
+    <message>
+        <source>CDT mesh generation cancelled</source>
+        <translation>Génération du maillage CDT annulée</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>Annulation en cours...</translation>
+    </message>
+    <message>
+        <source>Cancelling CDT calculation...</source>
+        <translation>Annulation du calcul CDT...</translation>
+    </message>
+    <message>
         <source>Reset Mesh to Outline</source>
         <translation>Réinitialiser maillage au contour</translation>
     </message>
@@ -3250,6 +3282,10 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>💡 &lt;b&gt;Astuce :&lt;/b&gt; Cliquez sur un pixel pour définir la couleur principale. Maintenez &lt;b&gt;Alt&lt;/b&gt; avec n&apos;importe quel outil pour échantillonner.</translation>
     </message>
     <message>
+        <source>Cancel CDT Mesh</source>
+        <translation>Annuler le maillage CDT</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Options de l&apos;outil</translation>
     </message>
@@ -3328,6 +3364,10 @@ Souhaitez-vous recompacter l&apos;atlas maintenant ?</translation>
     <message>
         <source># Grid</source>
         <translation># Grille</translation>
+    </message>
+    <message>
+        <source>⚡ Computing CDT...</source>
+        <translation>⚡ Calcul CDT en cours...</translation>
     </message>
     <message>
         <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
@@ -3622,51 +3662,51 @@ Souhaitez-vous recompacter l&apos;atlas maintenant ?</translation>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;image de l&apos;atlas décodée est nulle.</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer l&apos;atlas par %1</translation>
     </message>
     <message>
         <source>Replaced atlas with %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Atlas remplacé avec succès par %1.</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de charger l&apos;image : %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Base</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrière-plan : %1</translation>
     </message>
     <message>
         <source>Add layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter des calques depuis %1</translation>
     </message>
     <message>
         <source>Added common background from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrière-plan commun ajouté avec succès depuis %1.</translation>
     </message>
     <message>
         <source>Added layers from %1 successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Calques ajoutés avec succès depuis %1.</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacement de l&apos;atlas par %1...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajout de l&apos;arrière-plan commun depuis %1...</translation>
     </message>
     <message>
         <source>Importing layers from %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importation des calques depuis %1...</translation>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
@@ -3803,15 +3843,15 @@ Souhaitez-vous recompacter l&apos;atlas maintenant ?</translation>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer le média de l&apos;atlas</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter des calques de média</translation>
     </message>
     <message>
         <source>Add Layers from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter des calques depuis %1</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
@@ -3827,15 +3867,15 @@ Souhaitez-vous recompacter l&apos;atlas maintenant ?</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de charger l&apos;image : %1</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation>Base</translation>
     </message>
     <message>
         <source>Background: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrière-plan : %1</translation>
     </message>
     <message>
         <source>Failed to segment frames after background removal.</source>
