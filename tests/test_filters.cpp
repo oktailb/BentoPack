@@ -567,8 +567,8 @@ void TestFilters::testAtlasPackingFilterInteractive()
 
     // Verification:
     // With deduplication, unique frames count is 3 (frame 2 merged into frame 0)
-    QCOMPARE(doc.frameCount(), 3);
-    QCOMPARE(doc.boxes().size(), 3);
+    QTRY_COMPARE(doc.frameCount(), 3);
+    QTRY_COMPARE(doc.boxes().size(), 3);
 
     // Animation frames must be remapped seamlessly:
     // Frame 0 -> 0

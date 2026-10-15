@@ -556,18 +556,29 @@ void AtlasPackingDialog::onPackingFinished()
 
 void AtlasPackingDialog::waitForPendingPreview()
 {
-    if (m_futureWatcher.isRunning()) {
+    if (m_futureWatcher.future().isValid()) {
         m_futureWatcher.waitForFinished();
-        QCoreApplication::processEvents();
     }
+    int safetyCounter = 0;
+    while (m_isProcessing && safetyCounter++ < 200) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+        if (!m_isProcessing) break;
+        QThread::msleep(5);
+    }
+    if (m_isProcessing) {
+        onPackingFinished();
+    }
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
 }
 
 void AtlasPackingDialog::accept()
 {
-    if (m_previewAtlas.isNull()) {
-        applyPreview();
+    if (m_previewAtlas.isNull() || m_isProcessing) {
+        if (m_previewAtlas.isNull() && !m_isProcessing) {
+            applyPreview();
+        }
+        waitForPendingPreview();
     }
-    waitForPendingPreview();
     FilterDialogBase::accept();
 }
 
