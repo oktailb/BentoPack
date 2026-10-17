@@ -2483,9 +2483,9 @@ void TestPixelEditor::testPixelEditorPolygonMeshInteractiveEditingAndUndo()
     QPoint widgetPos(static_cast<int>((16 + imgOffset.x()) * zoom),
                      static_cast<int>((16 + imgOffset.y()) * zoom));
 
-    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPointF(widgetPos), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPointF(widgetPos), QPointF(widgetPos), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(canvas, &pressEvent);
-    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPointF(widgetPos), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPointF(widgetPos), QPointF(widgetPos), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
     QApplication::sendEvent(canvas, &releaseEvent);
 
     // Now mesh should have 5 vertices (4 boundary + 1 interior)
@@ -2512,11 +2512,11 @@ void TestPixelEditor::testPixelEditorPolygonMeshInteractiveEditingAndUndo()
     QPoint cutEndWidget(static_cast<int>((26 + imgOffset.x()) * zoom),
                         static_cast<int>((16 + imgOffset.y()) * zoom));
 
-    QMouseEvent cutPress(QEvent::MouseButtonPress, QPointF(cutStartWidget), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent cutPress(QEvent::MouseButtonPress, QPointF(cutStartWidget), QPointF(cutStartWidget), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(canvas, &cutPress);
-    QMouseEvent cutMove(QEvent::MouseMove, QPointF(cutEndWidget), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent cutMove(QEvent::MouseMove, QPointF(cutEndWidget), QPointF(cutEndWidget), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(canvas, &cutMove);
-    QMouseEvent cutRelease(QEvent::MouseButtonRelease, QPointF(cutEndWidget), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QMouseEvent cutRelease(QEvent::MouseButtonRelease, QPointF(cutEndWidget), QPointF(cutEndWidget), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
     QApplication::sendEvent(canvas, &cutRelease);
 
     // Cut line should have added additional vertices along the cut

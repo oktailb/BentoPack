@@ -1137,6 +1137,20 @@ void MainWindow::retranslateUi()
         ui->mainToolBar->setWindowTitle(tr("KEY_TOOLBAR_MAIN"));
     }
 
+    // Playback controls with shortcuts
+    if (ui->Play) {
+        ui->Play->setToolTip(tr("KEY_TOOLTIP_PLAY_PAUSE") + QStringLiteral(" (Space)"));
+    }
+    if (ui->Pause) {
+        ui->Pause->setToolTip(tr("KEY_TOOLTIP_PAUSE") + QStringLiteral(" (Space)"));
+    }
+    if (ui->btnPrevFrame) {
+        ui->btnPrevFrame->setToolTip(tr("KEY_TOOLTIP_PREV_FRAME") + QStringLiteral(" (Left)"));
+    }
+    if (ui->btnNextFrame) {
+        ui->btnNextFrame->setToolTip(tr("KEY_TOOLTIP_NEXT_FRAME") + QStringLiteral(" (Right)"));
+    }
+
     if (m_layersDock) {
         m_layersDock->setWindowTitle(tr("Layers"));
     }

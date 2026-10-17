@@ -21,6 +21,8 @@
 #include "atlaspackingdialog.h"
 #include "geometry/polygonmerger.h"
 #include "commands/commands.h"
+#include "widgets/pixelcanvas.h"
+#include <QElapsedTimer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -87,6 +89,10 @@ private slots:
     // 10. Intelligent Mesh & CDT Tests (M19)
     void testCDTTriangulationWithInteriorVertices();
     void testSmartMeshGenerationSteinerAndContrast();
+    void testCdtEmptyAndSinglePixelSprite();
+    void testCdtConcaveWithInteriorTransparentIsland();
+    void testVertexDeletionGuardInviolable();
+    void testMemoryPressureLongAnimationBatchCdt();
 };
 
 void TestMesh::initTestCase()
@@ -1330,6 +1336,228 @@ void TestMesh::testSmartMeshGenerationSteinerAndContrast()
 
     SmartMeshResult chromaResult = Triangulator::generateSmartMesh(outer, chromaImg, chromaParams);
     QVERIFY(chromaResult.interiorVertexCount > 0);
+}
+
+void TestMesh::testCdtEmptyAndSinglePixelSprite()
+{
+    // A. 1x1 fully transparent empty image
+    QImage empty1x1(1, 1, QImage::Format_ARGB32);
+    empty1x1.fill(Qt::transparent);
+
+    QPolygonF rawEmpty = ContourTracer::traceContour(empty1x1, 128);
+    QVERIFY(rawEmpty.isEmpty());
+
+    QPolygonF simplifiedEmpty = PolygonSimplifier::simplify(rawEmpty, 1.0, 0.0, 16, empty1x1.size(), empty1x1, 128);
+    QVERIFY(simplifiedEmpty.isEmpty());
+
+    SmartMeshParams params;
+    SmartMeshResult resEmpty = Triangulator::generateSmartMesh(rawEmpty, empty1x1, params);
+    QVERIFY(resEmpty.vertices.isEmpty());
+    QVERIFY(resEmpty.triangles.isEmpty());
+
+    // Clean fallback minimal quad on 1x1 bounding box
+    QPolygonF fallbackQuad;
+    fallbackQuad << QPointF(0, 0) << QPointF(1, 0) << QPointF(1, 1) << QPointF(0, 1);
+    QList<int> quadTris = Triangulator::triangulateCDT(fallbackQuad, fallbackQuad.toList());
+    QCOMPARE(quadTris.size(), 6); // 2 triangles
+
+    // B. 1x1 solid monochrome pixel
+    QImage solid1x1(1, 1, QImage::Format_ARGB32);
+    solid1x1.setPixelColor(0, 0, QColor(255, 0, 0, 255));
+
+    QPolygonF raw1x1 = ContourTracer::traceContour(solid1x1, 128);
+    QVERIFY(raw1x1.size() >= 3);
+
+    QPolygonF simplified1x1 = PolygonSimplifier::simplify(raw1x1, 1.0, 0.0, 16, solid1x1.size(), solid1x1, 128);
+    QVERIFY(simplified1x1.size() >= 3);
+
+    QList<int> tris1x1 = Triangulator::triangulateCDT(simplified1x1, simplified1x1.toList());
+    QVERIFY(!tris1x1.isEmpty());
+    QCOMPARE(tris1x1.size() % 3, 0);
+
+    SmartMeshResult res1x1 = Triangulator::generateSmartMesh(simplified1x1, solid1x1, params);
+    QVERIFY(!res1x1.triangles.isEmpty());
+    QCOMPARE(res1x1.triangles.size() % 3, 0);
+}
+
+void TestMesh::testCdtConcaveWithInteriorTransparentIsland()
+{
+    // Create a 60x60 U-shaped concave polygon with a 30x40 transparent bay in the middle
+    // Perimeter: (0,0) -> (15,0) -> (15,40) -> (45,40) -> (45,0) -> (60,0) -> (60,60) -> (0,60)
+    QPolygonF uShape;
+    uShape << QPointF(0, 0)
+           << QPointF(15, 0)
+           << QPointF(15, 40)
+           << QPointF(45, 40)
+           << QPointF(45, 0)
+           << QPointF(60, 0)
+           << QPointF(60, 60)
+           << QPointF(0, 60);
+
+    QList<QPointF> allVerts = uShape.toList();
+    // Add internal Steiner points inside the left prong, right prong, and bottom bar
+    allVerts.append(QPointF(7, 20));   // Left prong interior
+    allVerts.append(QPointF(53, 20));  // Right prong interior
+    allVerts.append(QPointF(30, 50));  // Bottom bar interior
+
+    QList<int> tris = Triangulator::triangulateCDT(uShape, allVerts);
+    QVERIFY(!tris.isEmpty());
+    QCOMPARE(tris.size() % 3, 0);
+
+    // Verify Bowyer-Watson boundary pruning:
+    // 1. Every triangle's centroid must strictly lie inside the uShape polygon
+    // 2. No triangle can span across or inhabit the transparent concave gap [15..45] x [0..40]
+    for (int i = 0; i < tris.size(); i += 3) {
+        const QPointF &p0 = allVerts[tris[i]];
+        const QPointF &p1 = allVerts[tris[i + 1]];
+        const QPointF &p2 = allVerts[tris[i + 2]];
+
+        QPointF centroid((p0.x() + p1.x() + p2.x()) / 3.0,
+                         (p0.y() + p1.y() + p2.y()) / 3.0);
+
+        QVERIFY2(uShape.containsPoint(centroid, Qt::OddEvenFill),
+                 "Triangle centroid was generated outside the concave boundary!");
+
+        bool insideHollowGap = (centroid.x() > 15.01 && centroid.x() < 44.99 &&
+                                centroid.y() >= 0.0 && centroid.y() < 39.99);
+        QVERIFY2(!insideHollowGap, "Triangle was generated inside the transparent concave gap!");
+    }
+
+    // Outer boundary points must still be intact
+    for (const QPointF &bp : uShape) {
+        QVERIFY(allVerts.contains(bp));
+    }
+}
+
+void TestMesh::testVertexDeletionGuardInviolable()
+{
+    PixelCanvas canvas;
+    // Set a simple 4-vertex quad mesh
+    QPolygonF quad;
+    quad << QPointF(10, 10) << QPointF(50, 10) << QPointF(50, 50) << QPointF(10, 50);
+    QList<QPointF> verts = quad.toList();
+    QList<int> tris = Triangulator::triangulateCDT(quad, verts);
+    canvas.setPolygonMeshData(quad, verts, tris);
+
+    QCOMPARE(canvas.polygonMesh().size(), 4);
+    QCOMPARE(canvas.meshVertices().size(), 4);
+
+    // Delete vertex 0 -> decreases to 3 (triangle)
+    canvas.setSelectedVertexIndex(0);
+    canvas.deleteSelectedVertex();
+    QCOMPARE(canvas.polygonMesh().size(), 3);
+    QCOMPARE(canvas.meshVertices().size(), 3);
+
+    // Now try massive repeated deletion attempts (e.g. 50 times) on remaining vertices
+    for (int i = 0; i < 50; ++i) {
+        canvas.setSelectedVertexIndex(0);
+        canvas.deleteSelectedVertex();
+        canvas.setSelectedVertexIndex(1);
+        canvas.deleteSelectedVertex();
+        canvas.setSelectedVertexIndex(2);
+        canvas.deleteSelectedVertex();
+        // The guard MUST remain strictly inviolable: >= 3 vertices
+        QVERIFY2(canvas.polygonMesh().size() >= 3, "Guard violated: polygon mesh reduced below 3 vertices!");
+        QVERIFY2(canvas.meshVertices().size() >= 3, "Guard violated: mesh vertices reduced below 3 vertices!");
+    }
+
+    QCOMPARE(canvas.polygonMesh().size(), 3);
+}
+
+void TestMesh::testMemoryPressureLongAnimationBatchCdt()
+{
+    // Create a SpriteDocument with a 64-frame animation sequence (> 60 frames)
+    SpriteDocument doc;
+    const int frameCount = 64;
+    QList<int> frameIndices;
+    frameIndices.reserve(frameCount);
+
+    for (int i = 0; i < frameCount; ++i) {
+        QImage frame(64, 64, QImage::Format_ARGB32_Premultiplied);
+        frame.fill(Qt::transparent);
+        {
+            QPainter p(&frame);
+            int r = 16 + (i % 8);
+            p.setBrush(QColor(100 + i * 2, 80, 200));
+            p.drawEllipse(QPoint(32, 32), r, r);
+        }
+        SpriteBox box(QRect(32 - (16 + (i % 8)), 32 - (16 + (i % 8)), (16 + (i % 8)) * 2, (16 + (i % 8)) * 2));
+        box.hasPolygonMesh = true;
+        box.polygon << QPointF(0, 0) << QPointF(box.rect.width(), 0)
+                    << QPointF(box.rect.width(), box.rect.height()) << QPointF(0, box.rect.height());
+        box.vertices = box.polygon.toList();
+        box.triangles = Triangulator::triangulate(box.polygon);
+
+        doc.addFrame(frame, box);
+        frameIndices.append(i);
+    }
+
+    doc.addAnimation(QStringLiteral("run_cycle"), frameIndices, 24, SpriteAnimation::Loop);
+    QCOMPARE(doc.frameCount(), frameCount);
+    QCOMPARE(doc.boxes().size(), frameCount);
+
+    // Set up QUndoStack for batch mesh commands
+    QUndoStack undoStack;
+    QElapsedTimer timer;
+    timer.start();
+
+    SmartMeshParams params;
+    params.steinerDensity = 30;
+    params.contrastSensitivity = 40;
+
+    QList<MeshState> newStates;
+    newStates.reserve(frameCount);
+    for (int i = 0; i < frameCount; ++i) {
+        const QImage &img = doc.frame(i);
+        const SpriteBox &oldBox = doc.box(i);
+        SmartMeshResult smartRes = Triangulator::generateSmartMesh(oldBox.polygon, img, params);
+
+        MeshState st;
+        st.index = i;
+        st.hasPolygonMesh = true;
+        st.polygon = smartRes.outerPolygon;
+        st.vertices = smartRes.vertices;
+        st.triangles = smartRes.triangles;
+        newStates.append(st);
+    }
+
+    undoStack.push(new SetPolygonMeshCommand(&doc, newStates));
+
+    qint64 batchGenMs = timer.elapsed();
+    qDebug() << "Batch CDT on" << frameCount << "frames completed in:" << batchGenMs << "ms";
+
+    // Verify all 64 frames received their CDT triangles
+    for (int i = 0; i < frameCount; ++i) {
+        QVERIFY(!doc.box(i).triangles.isEmpty());
+        QVERIFY(doc.box(i).hasPolygonMesh);
+    }
+
+    // Benchmark Undo responsiveness
+    timer.restart();
+    QVERIFY(undoStack.canUndo());
+    undoStack.undo();
+    qint64 undoMs = timer.elapsed();
+    qDebug() << "Undo 64-frame batch CDT completed in:" << undoMs << "ms";
+    QVERIFY(undoMs < 500); // Sub-half-second responsiveness guaranteed
+
+    // Verify that undo reverted meshes to original quad size (4 vertices, 6 triangle indices)
+    for (int i = 0; i < frameCount; ++i) {
+        QCOMPARE(doc.box(i).vertices.size(), 4);
+        QCOMPARE(doc.box(i).triangles.size(), 6);
+    }
+
+    // Benchmark Redo responsiveness
+    timer.restart();
+    QVERIFY(undoStack.canRedo());
+    undoStack.redo();
+    qint64 redoMs = timer.elapsed();
+    qDebug() << "Redo 64-frame batch CDT completed in:" << redoMs << "ms";
+    QVERIFY(redoMs < 500);
+
+    for (int i = 0; i < frameCount; ++i) {
+        QVERIFY(doc.box(i).vertices.size() >= 4);
+        QVERIFY(!doc.box(i).triangles.isEmpty());
+    }
 }
 
 #include <QApplication>

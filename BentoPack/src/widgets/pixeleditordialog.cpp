@@ -749,6 +749,9 @@ QWidget* PixelEditorDialog::createToolBar()
         "  color: palette(highlighted-text);"
         "  border: 2px solid palette(highlight);"
         "}"
+        "QToolButton:checked:hover {"
+        "  border: 2px solid palette(highlighted-text);"
+        "}"
         "QToolButton:disabled {"
         "  color: palette(placeholder-text);"
         "}"
@@ -1136,32 +1139,38 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     m_btnSelectAll = new QPushButton(tr("⬚ Select All (Ctrl+A)"), m_selGroup);
     m_btnSelectAll->setStyleSheet(actionBtnStyle);
+    m_btnSelectAll->setToolTip(tr("Select all pixels on canvas (Ctrl+A)"));
     connect(m_btnSelectAll, &QPushButton::clicked, this, [this]() { m_canvas->selectAll(); });
     sgLayout->addWidget(m_btnSelectAll);
 
     m_btnDeselect = new QPushButton(tr("✕ Deselect (Esc)"), m_selGroup);
     m_btnDeselect->setStyleSheet(actionBtnStyle);
+    m_btnDeselect->setToolTip(tr("Deselect active selection (Esc)"));
     connect(m_btnDeselect, &QPushButton::clicked, this, [this]() { m_canvas->deselect(); });
     sgLayout->addWidget(m_btnDeselect);
 
     m_btnClearSelection = new QPushButton(tr("🗑 Delete Contents (Del)"), m_selGroup);
     m_btnClearSelection->setStyleSheet(actionBtnStyle);
+    m_btnClearSelection->setToolTip(tr("Clear pixels within selection (Del)"));
     connect(m_btnClearSelection, &QPushButton::clicked, this, [this]() { m_canvas->clearSelection(); });
     sgLayout->addWidget(m_btnClearSelection);
 
     QHBoxLayout *cbRow = new QHBoxLayout();
     m_btnCopySel = new QPushButton(tr("📋 Copy"), m_selGroup);
     m_btnCopySel->setStyleSheet(actionBtnStyle);
+    m_btnCopySel->setToolTip(tr("Copy active selection to clipboard (Ctrl+C)"));
     connect(m_btnCopySel, &QPushButton::clicked, this, [this]() { m_canvas->copySelection(); });
     cbRow->addWidget(m_btnCopySel);
 
     m_btnCutSel = new QPushButton(tr("✂ Cut"), m_selGroup);
     m_btnCutSel->setStyleSheet(actionBtnStyle);
+    m_btnCutSel->setToolTip(tr("Cut active selection to clipboard (Ctrl+X)"));
     connect(m_btnCutSel, &QPushButton::clicked, this, [this]() { m_canvas->cutSelection(); });
     cbRow->addWidget(m_btnCutSel);
 
     m_btnPasteSel = new QPushButton(tr("📥 Paste"), m_selGroup);
     m_btnPasteSel->setStyleSheet(actionBtnStyle);
+    m_btnPasteSel->setToolTip(tr("Paste selection from clipboard (Ctrl+V)"));
     connect(m_btnPasteSel, &QPushButton::clicked, this, [this]() { m_canvas->pasteClipboard(); });
     cbRow->addWidget(m_btnPasteSel);
     sgLayout->addLayout(cbRow);
@@ -1223,17 +1232,24 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     // Group 1: Vertex Editing Mode
     m_meshModeGroup_box = new QGroupBox(tr("Vertex Editing Mode"), m_meshControlsContainer);
-    m_meshModeGroup_box->setStyleSheet(groupBoxStyle);
+    m_meshModeGroup_box->setStyleSheet(groupBoxStyle + QStringLiteral(
+        "QRadioButton:checked { font-weight: bold; color: palette(highlight); }"
+    ));
     QVBoxLayout *mgLayout = new QVBoxLayout(m_meshModeGroup_box);
     mgLayout->setContentsMargins(8, 10, 8, 10);
     mgLayout->setSpacing(6);
 
     m_meshModeGroup = new QButtonGroup(this);
     m_radioMeshSelectMove = new QRadioButton(tr("✥ Move / Select"), m_meshModeGroup_box);
+    m_radioMeshSelectMove->setToolTip(tr("Select or move vertices (Click, Shift+Click, or drag vertices)"));
     m_radioMeshAddInterior = new QRadioButton(tr("➕ Add Interior Point"), m_meshModeGroup_box);
+    m_radioMeshAddInterior->setToolTip(tr("Click inside polygon to insert internal Steiner points"));
     m_radioMeshAddExterior = new QRadioButton(tr("🔲 Add Outline Point"), m_meshModeGroup_box);
+    m_radioMeshAddExterior->setToolTip(tr("Click along edges to insert contour boundary vertices"));
     m_radioMeshCutLine = new QRadioButton(tr("✂️ Cut Line (Knife)"), m_meshModeGroup_box);
+    m_radioMeshCutLine->setToolTip(tr("Laser knife tool: click and drag a line across the polygon to slice geometry"));
     m_radioMeshDelete = new QRadioButton(tr("✖ Delete Point"), m_meshModeGroup_box);
+    m_radioMeshDelete->setToolTip(tr("Click on a vertex to delete it"));
 
     m_radioMeshSelectMove->setChecked(true);
     m_meshModeGroup->addButton(m_radioMeshSelectMove, static_cast<int>(PolygonEditMode::SelectOrMove));
@@ -1251,6 +1267,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     connect(m_meshModeGroup, &QButtonGroup::idClicked, this, &PixelEditorDialog::onMeshEditModeChanged);
 
     m_btnDeleteSelectedVertex = new QPushButton(tr("🗑 Delete Vertex (Del)"), m_meshModeGroup_box);
+    m_btnDeleteSelectedVertex->setToolTip(tr("Delete selected mesh vertex or vertices (Del)"));
     m_btnDeleteSelectedVertex->setEnabled(false);
     connect(m_btnDeleteSelectedVertex, &QPushButton::clicked, this, &PixelEditorDialog::onDeleteSelectedVertexRequested);
     mgLayout->addWidget(m_btnDeleteSelectedVertex);
@@ -1345,6 +1362,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     cgLayout->addWidget(m_meshApplyAllFramesCheck);
 
     m_btnGenerateSmartMesh = new QPushButton(tr("⚡ Generate CDT Mesh"), m_cdtGroup);
+    m_btnGenerateSmartMesh->setToolTip(tr("Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection"));
     m_btnGenerateSmartMesh->setStyleSheet(QStringLiteral("QPushButton { font-weight: bold; padding: 5px; }"));
     connect(m_btnGenerateSmartMesh, &QPushButton::clicked, this, [this]() {
         onGenerateSmartMeshRequested(true);
@@ -1352,6 +1370,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     cgLayout->addWidget(m_btnGenerateSmartMesh);
 
     m_btnResetToOutline = new QPushButton(tr("↺ Reset to Outline"), m_cdtGroup);
+    m_btnResetToOutline->setToolTip(tr("Reset mesh to outer boundary contour"));
     connect(m_btnResetToOutline, &QPushButton::clicked, this, &PixelEditorDialog::onResetMeshToOutlineRequested);
     cgLayout->addWidget(m_btnResetToOutline);
 
@@ -1375,6 +1394,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     cgLayout->addWidget(m_lblCdtFeedback);
 
     m_btnCancelCdtMesh = new QPushButton(tr("Cancel CDT Mesh"), m_cdtGroup);
+    m_btnCancelCdtMesh->setToolTip(tr("Cancel in-progress CDT mesh calculation"));
     m_btnCancelCdtMesh->setStyleSheet(QStringLiteral(
         "QPushButton { color: #e74c3c; font-size: 11px; font-weight: bold; padding: 4px; border: 1px solid #e74c3c; border-radius: 4px; } "
         "QPushButton:hover { background-color: rgba(231, 76, 60, 0.15); }"
@@ -1589,16 +1609,19 @@ QWidget* PixelEditorDialog::createBottomBar()
 
     m_cancelBtn = new QPushButton(tr("Cancel"), bar);
     m_cancelBtn->setStyleSheet(btnSecondaryStyle);
+    m_cancelBtn->setToolTip(tr("Discard unsaved pixel modifications and close editor (Esc)"));
     connect(m_cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
     layout->addWidget(m_cancelBtn);
 
     m_applyBtn = new QPushButton(tr("Apply"), bar);
     m_applyBtn->setStyleSheet(btnSecondaryStyle);
+    m_applyBtn->setToolTip(tr("Apply changes to project and keep editor open (Ctrl+S)"));
     connect(m_applyBtn, &QPushButton::clicked, this, &PixelEditorDialog::onApplyClicked);
     layout->addWidget(m_applyBtn);
 
     m_okBtn = new QPushButton(tr("OK"), bar);
     m_okBtn->setDefault(true);
+    m_okBtn->setToolTip(tr("Save changes and close editor (Enter)"));
     m_okBtn->setStyleSheet(QStringLiteral(
         "QPushButton {"
         "  background-color: palette(highlight);"
@@ -3727,12 +3750,30 @@ void PixelEditorDialog::retranslateUi()
 
     // Tool Options - Selection Actions
     if (m_selGroup) m_selGroup->setTitle(tr("Selection Actions"));
-    if (m_btnSelectAll) m_btnSelectAll->setText(tr("⬚ Select All (Ctrl+A)"));
-    if (m_btnDeselect) m_btnDeselect->setText(tr("✕ Deselect (Esc)"));
-    if (m_btnClearSelection) m_btnClearSelection->setText(tr("🗑 Delete Contents (Del)"));
-    if (m_btnCopySel) m_btnCopySel->setText(tr("📋 Copy"));
-    if (m_btnCutSel) m_btnCutSel->setText(tr("✂ Cut"));
-    if (m_btnPasteSel) m_btnPasteSel->setText(tr("📥 Paste"));
+    if (m_btnSelectAll) {
+        m_btnSelectAll->setText(tr("⬚ Select All (Ctrl+A)"));
+        m_btnSelectAll->setToolTip(tr("Select all pixels on canvas (Ctrl+A)"));
+    }
+    if (m_btnDeselect) {
+        m_btnDeselect->setText(tr("✕ Deselect (Esc)"));
+        m_btnDeselect->setToolTip(tr("Deselect active selection (Esc)"));
+    }
+    if (m_btnClearSelection) {
+        m_btnClearSelection->setText(tr("🗑 Delete Contents (Del)"));
+        m_btnClearSelection->setToolTip(tr("Clear pixels within selection (Del)"));
+    }
+    if (m_btnCopySel) {
+        m_btnCopySel->setText(tr("📋 Copy"));
+        m_btnCopySel->setToolTip(tr("Copy active selection to clipboard (Ctrl+C)"));
+    }
+    if (m_btnCutSel) {
+        m_btnCutSel->setText(tr("✂ Cut"));
+        m_btnCutSel->setToolTip(tr("Cut active selection to clipboard (Ctrl+X)"));
+    }
+    if (m_btnPasteSel) {
+        m_btnPasteSel->setText(tr("📥 Paste"));
+        m_btnPasteSel->setToolTip(tr("Paste selection from clipboard (Ctrl+V)"));
+    }
     if (m_selTipLabel) {
         m_selTipLabel->setText(tr("💡 <b>Tip:</b> Drag selection to move floating pixels. Press <b>Enter</b> or click outside to commit."));
     }
@@ -3750,12 +3791,30 @@ void PixelEditorDialog::retranslateUi()
         m_meshNoticeLabel->setText(tr("⚠️ <b>No polygon mesh</b> for this sprite.<br>A polygon mesh must already exist (generate it from the main toolbox: Tools > Polygon Mesh)."));
     }
     if (m_meshModeGroup_box) m_meshModeGroup_box->setTitle(tr("Vertex Editing Mode"));
-    if (m_radioMeshSelectMove) m_radioMeshSelectMove->setText(tr("✥ Move / Select"));
-    if (m_radioMeshAddInterior) m_radioMeshAddInterior->setText(tr("➕ Add Interior Point"));
-    if (m_radioMeshAddExterior) m_radioMeshAddExterior->setText(tr("🔲 Add Outline Point"));
-    if (m_radioMeshCutLine) m_radioMeshCutLine->setText(tr("✂️ Cut Line (Knife)"));
-    if (m_radioMeshDelete) m_radioMeshDelete->setText(tr("✖ Delete Point"));
-    if (m_btnDeleteSelectedVertex) m_btnDeleteSelectedVertex->setText(tr("🗑 Delete Vertex (Del)"));
+    if (m_radioMeshSelectMove) {
+        m_radioMeshSelectMove->setText(tr("✥ Move / Select"));
+        m_radioMeshSelectMove->setToolTip(tr("Select or move vertices (Click, Shift+Click, or drag vertices)"));
+    }
+    if (m_radioMeshAddInterior) {
+        m_radioMeshAddInterior->setText(tr("➕ Add Interior Point"));
+        m_radioMeshAddInterior->setToolTip(tr("Click inside polygon to insert internal Steiner points"));
+    }
+    if (m_radioMeshAddExterior) {
+        m_radioMeshAddExterior->setText(tr("🔲 Add Outline Point"));
+        m_radioMeshAddExterior->setToolTip(tr("Click along edges to insert contour boundary vertices"));
+    }
+    if (m_radioMeshCutLine) {
+        m_radioMeshCutLine->setText(tr("✂️ Cut Line (Knife)"));
+        m_radioMeshCutLine->setToolTip(tr("Laser knife tool: click and drag a line across the polygon to slice geometry"));
+    }
+    if (m_radioMeshDelete) {
+        m_radioMeshDelete->setText(tr("✖ Delete Point"));
+        m_radioMeshDelete->setToolTip(tr("Click on a vertex to delete it"));
+    }
+    if (m_btnDeleteSelectedVertex) {
+        m_btnDeleteSelectedVertex->setText(tr("🗑 Delete Vertex (Del)"));
+        m_btnDeleteSelectedVertex->setToolTip(tr("Delete selected mesh vertex or vertices (Del)"));
+    }
 
     if (m_cdtGroup) m_cdtGroup->setTitle(tr("CDT Generation & Steiner Points"));
     if (m_lblContrastModeTitle) m_lblContrastModeTitle->setText(tr("Detection Mode:"));
@@ -3772,9 +3831,16 @@ void PixelEditorDialog::retranslateUi()
     if (m_lblContrastSensitivityTitle) m_lblContrastSensitivityTitle->setText(tr("Internal Contrast:"));
     if (m_btnGenerateSmartMesh) {
         m_btnGenerateSmartMesh->setText(m_isCdtProcessing ? tr("⚡ Computing CDT...") : tr("⚡ Generate CDT Mesh"));
+        m_btnGenerateSmartMesh->setToolTip(tr("Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection"));
     }
-    if (m_btnResetToOutline) m_btnResetToOutline->setText(tr("↺ Reset to Outline"));
-    if (m_btnCancelCdtMesh) m_btnCancelCdtMesh->setText(tr("Cancel CDT Mesh"));
+    if (m_btnResetToOutline) {
+        m_btnResetToOutline->setText(tr("↺ Reset to Outline"));
+        m_btnResetToOutline->setToolTip(tr("Reset mesh to outer boundary contour"));
+    }
+    if (m_btnCancelCdtMesh) {
+        m_btnCancelCdtMesh->setText(tr("Cancel CDT Mesh"));
+        m_btnCancelCdtMesh->setToolTip(tr("Cancel in-progress CDT mesh calculation"));
+    }
 
     if (m_meshStatsGroup) m_meshStatsGroup->setTitle(tr("Mesh Statistics"));
     if (m_lblMeshBoundaryTitle) m_lblMeshBoundaryTitle->setText(tr("Outline vertices:"));
@@ -3821,9 +3887,18 @@ void PixelEditorDialog::retranslateUi()
 
     // Bottom bar buttons
     if (m_btnRepackAtlas) m_btnRepackAtlas->setText(tr("Repack Atlas..."));
-    if (m_cancelBtn) m_cancelBtn->setText(tr("Cancel"));
-    if (m_applyBtn) m_applyBtn->setText(tr("Apply"));
-    if (m_okBtn) m_okBtn->setText(tr("OK"));
+    if (m_cancelBtn) {
+        m_cancelBtn->setText(tr("Cancel"));
+        m_cancelBtn->setToolTip(tr("Discard unsaved pixel modifications and close editor (Esc)"));
+    }
+    if (m_applyBtn) {
+        m_applyBtn->setText(tr("Apply"));
+        m_applyBtn->setToolTip(tr("Apply changes to project and keep editor open (Ctrl+S)"));
+    }
+    if (m_okBtn) {
+        m_okBtn->setText(tr("OK"));
+        m_okBtn->setToolTip(tr("Save changes and close editor (Enter)"));
+    }
 
     updateNavigationButtons();
 }

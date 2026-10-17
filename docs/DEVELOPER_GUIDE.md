@@ -26,6 +26,10 @@ Bienvenue dans le guide d'extension de **BentoPack**. Ce document s'adresse aux 
   - [4.2. Accès direct `scanLine()` vs `pixel()`](#42-accès-direct-scanline-vs-pixel)
   - [4.3. Déportation asynchrone non-bloquante (`QtConcurrent`)](#43-déportation-asynchrone-non-bloquante-qtconcurrent)
 - [5. Internationalisation (i18n) & Bonnes Pratiques](#5-internationalisation-i18n--bonnes-pratiques)
+- [6. Moteur Géométrique : Triangulation CDT & Maillages Anti-Overdraw](#6-moteur-géométrique--triangulation-cdt--maillages-anti-overdraw)
+  - [6.1. Signatures et Contrats d'Invariance (`Triangulator`)](#61-signatures-et-contrats-dinvariance-triangulator)
+  - [6.2. Format de Stockage dans `SpriteBox` & Métadonnées Projet](#62-format-de-stockage-dans-spritebox--métadonnées-projet)
+  - [6.3. Injection dans les Extracteurs Moteurs (Godot 4, Unity, Unreal Paper2D)](#63-injection-dans-les-extracteurs-moteurs-godot-4-unity-unreal-paper2d)
 
 ---
 
@@ -628,3 +632,132 @@ Après avoir ajouté de nouvelles chaînes `tr("Nouvelle Fonctionnalité")`, ex�
 python scripts/update_i18n.py
 ```
 Puis recompilez les catalogues avec `lrelease` ou via le build CMake (`cmake --build build`).
+
+---
+
+## 6. Moteur Géométrique : Triangulation CDT & Maillages Anti-Overdraw
+
+BentoPack intègre dans son namespace `BentoPackGeometry` une suite complète de triangulation 2D (Ear-Clipping et Constrained Delaunay Triangulation — CDT) conçue pour éradiquer l'overdraw GPU tout en fournissant des structures de maillage optimisées pour le rigging et l'animation squelettique 2D.
+
+### 6.1. Signatures et Contrats d'Invariance (`Triangulator`)
+
+Les méthodes clés sont exposées par la classe statique `Triangulator` (`BentoPack/include/geometry/triangulator.h`) :
+
+```cpp
+namespace BentoPackGeometry {
+
+class BENTOPACK_CORE_EXPORT Triangulator
+{
+public:
+    static QList<int> triangulate(const QPolygonF &polygon);
+
+    static QList<int> triangulateCDT(const QPolygonF &outerPolygon, 
+                                     const QList<QPointF> &allVertices);
+
+    static SmartMeshResult generateSmartMesh(const QPolygonF &outerPolygon,
+                                             const QImage &image,
+                                             const SmartMeshParams &params = SmartMeshParams());
+
+    static double calculateArea(const QPolygonF &polygon);
+    static double calculateOverdrawSavings(const QPolygonF &polygon, const QSize &boxSize);
+};
+
+} // namespace BentoPackGeometry
+```
+
+#### Contrats d'Invariance et Garanties Algorithmiques :
+1. **Préservation Stricte des Contraintes Frontières (*Boundary Constraint Preservation*) :**
+   - L'enveloppe rigide `outerPolygon` définit la frontière infranchissable du sprite.
+   - Lors de la triangulation CDT (`triangulateCDT`), les arêtes formant `outerPolygon` sont obligatoirement présentes comme segments dans le maillage triangulé final.
+2. **Élagage Hors-Frontière de Bowyer-Watson (*Boundary Clipping & Hollow Gap Pruning*) :**
+   - L'algorithme incrémental de Bowyer-Watson opère initialement sur un super-triangle englobant.
+   - Tous les triangles générés dont le centroïde se situe hors du polygone frontière (`poly.containsPoint(centroid, Qt::OddEvenFill) == false`) sont strictement éliminés.
+   - De même, pour les formes concaves (ex: formes en U, bras écartés) ou comportant des cavités transparentes, toute arête de triangle coupant le contour extérieur sans être une arête légitime est rejetée.
+3. **Enroulement Counter-Clockwise (CCW) Garanti :**
+   - Chaque triplet d'indices `[i0, i1, i2]` renvoyé dans `triangles` respecte un enroulement direct (anti-horaire) :
+     $$\det \begin{pmatrix} x_1 - x_0 & x_2 - x_0 \\ y_1 - y_0 & y_2 - y_0 \end{pmatrix} > 0$$
+   - Cela assure une compatibilité native et immédiate avec le backface-culling des moteurs graphiques modernes (OpenGL, Vulkan, Metal, Direct3D).
+4. **Résilience aux Cas Dégénérés (*Corner Cases*) :**
+   - *Sprite 1x1 ou monochrome vide :* Si le contour détecté a moins de 3 sommets ou une aire nulle, `generateSmartMesh` renvoie un quad minimal sans crash ni boucle infinie.
+   - *Garde-fou d'intégrité polygonale :* La suppression de sommets (au couteau ou via la touche Suppr) impose un seuil minimal absolu de $N \ge 3$ sommets.
+
+---
+
+### 6.2. Format de Stockage dans `SpriteBox` & Métadonnées Projet
+
+L'état géométrique de chaque frame est encapsulé dans `SpriteBox` (`BentoPack/include/model/spritedocument.h`) :
+
+```cpp
+struct SpriteBox {
+    QRect           rect;            // Rectangle englobant dans l'atlas (coordonnées globales atlas)
+    QPoint          pivot;           // Point d'ancrage relatif au coin supérieur gauche de rect
+    bool            hasCustomPivot;
+
+    // Données de maillage polygonal 2D
+    bool            hasPolygonMesh;  // True si un maillage polygonal est actif
+    QPolygonF       polygon;         // Enveloppe extérieure rigide (repère local [0, W] x [0, H])
+    QList<QPointF>  vertices;        // Ensemble des sommets (contour + points Steiner intérieurs)
+    QList<int>      triangles;       // Triplets d'indices [i0, i1, i2, ...] indexant vertices
+    
+    double polygonArea() const;
+    double overdrawSavings() const;
+};
+```
+
+#### Sérialisation dans le fichier `.bento` (`project.json`) :
+```json
+{
+  "rect": [128, 64, 48, 64],
+  "pivot": [24, 60],
+  "hasPolygonMesh": true,
+  "polygon": [0.0, 12.0, 14.0, 0.0, 48.0, 20.0, 36.0, 64.0, 8.0, 64.0],
+  "vertices": [0.0, 12.0, 14.0, 0.0, 48.0, 20.0, 36.0, 64.0, 8.0, 64.0, 24.0, 32.0],
+  "triangles": [0, 1, 5, 1, 2, 5, 2, 3, 5, 3, 4, 5, 4, 0, 5]
+}
+```
+
+---
+
+### 6.3. Injection dans les Extracteurs Moteurs (Godot 4, Unity, Unreal Paper2D)
+
+Lors de l'implémentation d'un nouvel `Extractor` ou de l'export vers les moteurs de jeu, voici la convention de conversion recommandée :
+
+#### 1. Godot 4 (`ArrayMesh` / `Polygon2D`) :
+```gdscript
+var arr_mesh = ArrayMesh.new()
+var arrays = []
+arrays.resize(Mesh.ARRAY_MAX)
+
+# Sommets 2D convertis en Vector2 ou Vector3
+var godot_vertices = PackedVector2Array()
+var godot_uvs = PackedVector2Array()
+for pt in box.vertices:
+    godot_vertices.append(Vector2(pt.x - box.pivot.x, pt.y - box.pivot.y))
+    godot_uvs.append(Vector2((box.rect.x + pt.x) / atlas_width, (box.rect.y + pt.y) / atlas_height))
+
+arrays[Mesh.ARRAY_VERTEX] = godot_vertices
+arrays[Mesh.ARRAY_TEX_UV] = godot_uvs
+arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(box.triangles)
+
+arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+```
+
+#### 2. Unity (`Sprite.OverrideGeometry`) :
+```csharp
+// Pour un Sprite Unity configuré en SpriteMeshType.Tight :
+Vector2[] unityVertices = new Vector2[box.vertices.Count];
+Vector2[] uvs = new Vector2[box.vertices.Count];
+
+for (int i = 0; i < box.vertices.Count; i++) {
+    var pt = box.vertices[i];
+    // Conversion repère Unity (Y inversé)
+    unityVertices[i] = new Vector2(pt.x - box.pivot.x, (box.rect.height - pt.y) - (box.rect.height - box.pivot.y)) / pixelsPerUnit;
+    uvs[i] = new Vector2((box.rect.x + pt.x) / atlasWidth, 1.0f - (box.rect.y + pt.y) / atlasHeight);
+}
+
+ushort[] unityTriangles = box.triangles.Select(idx => (ushort)idx).ToArray();
+sprite.OverrideGeometry(unityVertices, unityTriangles);
+```
+
+#### 3. Unreal Engine (`UPaperSprite` / Render Geometry) :
+Dans Unreal Paper2D, la géométrie de rendu personnalisée est définie via `FSpriteGeometryCollection`. Les triplets d'indices de `box.triangles` définissent les triangles des polygones de rendu de la structure `FPaperSpriteSocket` et du mesh tight render, réduisant drastiquement l'instruction count des pixel shaders 2D.

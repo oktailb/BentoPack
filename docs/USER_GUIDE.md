@@ -178,6 +178,38 @@ Sur smartphone, Nintendo Switch ou consoles portables, l'overdraw GPU (coût de 
   - Gain de compacité d'atlas de $+20\%$ à $+50\%$.
   - Sélection du nombre de threads de calcul ($1$ à $N$ cœurs logiques).
 
+### 7.2. Maillage Intelligent CDT & Anti-Overdraw
+
+En rendu 2D moderne, chaque quad rectangulaire traditionnel rasterise de nombreux pixels entièrement transparents (`alpha == 0`). Sur les écrans haute densité (Retina, 4K) ou les puces mobiles (Adreno, Mali, Apple Silicon), ce phénomène appelé **overdraw** sature la bande passante mémoire du GPU (*fillrate bound*). 
+
+Le système de **Maillage Intelligent CDT (Constrained Delaunay Triangulation)** de BentoPack génère automatiquement un maillage triangulé sur-mesure pour chaque sprite, réduisant l'overdraw de $60\%$ à $85\%$.
+
+#### 1. Détection de Crêtes Internes (RGB vs Sobel)
+Pour aller au-delà du simple contour extérieur et trianguler harmonieusement l'intérieur du sprite, BentoPack propose deux algorithmes d'analyse d'image :
+- **Mode Distance RGB (`RgbDistance`) :**
+  - *Idéal pour :* Pixel art, aplats nets, palettes rétro à nombre limité de couleurs.
+  - *Fonctionnement :* Mesure la distance colorimétrique euclidienne $\Delta C = \sqrt{\Delta R^2 + \Delta G^2 + \Delta B^2}$ entre pixels 4-voisins. Dès que le contraste dépasse le seuil configuré, une arête interne est créée. Cela permet de séparer proprement les zones d'armure, de peau ou d'armes sans dépendre de leur luminosité respective (deux teintes très différentes mais de même luminance seront parfaitement discriminées).
+- **Mode Gradient Sobel (`SobelLuminance`) :**
+  - *Idéal pour :* Sprites haute résolution peints à la main (hand-painted), dégradés lissés, rendus avec ombrages doux.
+  - *Fonctionnement :* Applique les noyaux de convolution horizontaux et verticaux de Sobel sur le canal de luminance ($Y = 0.299R + 0.587G + 0.114B$). La magnitude du gradient $|\nabla Y| = \sqrt{G_x^2 + G_y^2}$ capture les contours de formes et reliefs les plus prépondérants.
+- **Réglage du Seuil (*Contrast Threshold*) :**
+  - Un seuil bas ($10$–$25$) capture davantage de détails et injecte plus de sommets internes (*Steiner points*), idéal pour un maillage souple destiné au rigging 2D.
+  - Un seuil élevé ($60$–$120$) se concentre uniquement sur les transitions majeures, produisant un maillage minimaliste et ultra-léger pour le GPU.
+
+#### 2. L'Outil Couteau Laser (`mesh_knife`)
+Dans l'Atelier de Retouche Pixel (`Ctrl+E`), l'outil **Couteau Laser** permet une découpe chirurgicale et manuelle du maillage :
+- Activez le mode Couteau dans le panneau latéral droit (*Outils de Maillage*).
+- Tracez un trait de coupe à la souris à travers le sprite (ex: au niveau du coude, du genou ou de la taille du personnage).
+- BentoPack calcule instantanément les intersections avec les arêtes existantes, insère les nouveaux sommets contraints et réexécute une triangulation de Delaunay conforme.
+- *Cas d'usage :* Définir manuellement les lignes de pliure anatomiques avant d'exporter le maillage vers Godot (Bone2D) ou Unity (2D Animation / Sprite Skinning).
+
+#### 3. Application par Lot aux Animations (*« Appliquer à toutes les frames »*)
+- Lorsque vous travaillez sur une animation (ex: cycle de course de 64 frames), il serait fastidieux de reconfigurer ou retoucher chaque frame individuellement.
+- Cochez l'option **« Appliquer le maillage à toutes les frames de l'animation »** lors de la génération CDT.
+- BentoPack applique le traitement géométrique à l'ensemble de la séquence dans une commande unifiée `SetPolygonMeshCommand`.
+- **Zéro latence & Undo instantané :** L'opération est totalement réversible en un seul `Ctrl+Z` via la pile `QUndoStack` sans surconsommation mémoire.
+
+
 ---
 
 ## 8. Atelier d'Édition Pixel par Pixel Chirurgicale
