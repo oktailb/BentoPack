@@ -2954,6 +2954,146 @@ Do you want to save them before proceeding?</translation>
         <translation>Repack Atlas...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>Position: %1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>Size: %1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>Selected: %1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>Pencil Options</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>Size (px):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>Opacity (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>Brush Shape:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>Square (Pixel Art)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>Circle (Soft Round)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>Hard edge (Pixel art)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>Crisp non-antialiased pixel contours</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>Eraser Shape:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>Rectangle Select</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>Mode:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Replace selection</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>Add to current selection (Shift)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>Subtract from selection (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>Intersect with selection (Shift+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>Fixed 1:1 Aspect ratio (Square)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>Constrain selection rectangle to a 1:1 square</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>Position: 0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>Size: 0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>Selected: 0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>Actions:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ Invert Selection</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>Sample Source:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>Sample All Layers (Composite)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>Set Color Target:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>Primary Color (Left Click)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>Secondary Color (Right Click)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>Hovered Color Preview:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>Hover over canvas</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</translation>
     </message>
@@ -3050,6 +3190,102 @@ Do you want to save them before proceeding?</translation>
         <translation>Overdraw savings:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>Bucket Fill Options</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>Current Primary Color (Click to change)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>Pick Color...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>Affected Area:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>Fill Similar Colors (Contiguous)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>Fill Whole Selection</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>Replace Color Globally</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Threshold:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>Diagonal neighbors (8-connected)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>Allow flood fill to spread through diagonal pixel corners</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>Fill transparent areas</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>Allow bucket tool to flood fill empty/transparent areas</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>Sample merged (all layers)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>Check color boundaries across all visible layers combined</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>Fuzzy Select (Magic Wand)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>Contiguous (Flood fill)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>Allow magic wand selection to expand diagonally through pixel corners</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>Select transparent areas</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>Allow selecting transparent / empty pixel regions</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>Detect color boundaries across all visible layers combined</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>Selection Actions:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>Open interactive Atlas Packing dialog to resolve sprite collisions</translation>
     </message>
@@ -3068,6 +3304,10 @@ Do you want to save them before proceeding?</translation>
     <message>
         <source>Select Secondary Color</source>
         <translation>Select Secondary Color</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>Transparent [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Do you want to save them before proceeding?</translation>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>Apply to all &apos;%1&apos; frames</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>Invert current selection</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Do you want to save them before proceeding?</translation>
         <translation>When checked, clears pixels on all visible layers simultaneously instead of only active layer</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>Selection Actions</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ Select All (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>Select all pixels on canvas (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ Deselect (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>Deselect active selection (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 Delete Contents (Del)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>Clear pixels within selection (Del)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 Copy</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>Copy active selection to clipboard (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ Cut</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>Cut active selection to clipboard (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 Paste</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>Paste selection from clipboard (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Do you want to save them before proceeding?</translation>
         <translation>Eyedropper Sampling</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>Sample All Visible Layers (Composite)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>Sample Active Layer Only</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>Select or move vertices (Click, Shift+Click, or drag vertices)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>Click inside polygon to insert internal Steiner points</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>Click along edges to insert contour boundary vertices</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>Laser knife tool: click and drag a line across the polygon to slice geometry</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>Click on a vertex to delete it</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>Delete selected mesh vertex or vertices (Del)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>Reset mesh to outer boundary contour</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>Cancel CDT Mesh</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>Cancel in-progress CDT mesh calculation</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Tool Options</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>Discard unsaved pixel modifications and close editor (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>Apply changes to project and keep editor open (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>Save changes and close editor (Enter)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

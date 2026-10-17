@@ -2954,6 +2954,146 @@ Strict removal clears the pixel.</source>
         <translation>重新打包圖集...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>位置：%1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>大小：%1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>已選：%1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>鉛筆選項</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>大小 (px)：</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>不透明度 (%)：</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>筆刷形狀：</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>方形 (像素藝術)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>圓形 (柔和圓)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>硬邊緣 (像素藝術)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>清晰無消除鋸齒的像素輪廓</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 按住 &lt;b&gt;Shift&lt;/b&gt; 可繪製直線。按住 &lt;b&gt;Alt&lt;/b&gt; 可使用滴管吸取顏色。</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>橡皮擦形狀：</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 直接清除為 Alpha 0。按住 &lt;b&gt;Shift&lt;/b&gt; 可擦除直線。按右鍵使用次要顏色擦除。</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>矩形選取</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>模式：</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>取代選取區</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>新增至目前選取區 (Shift)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>從選取區減去 (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>與選取區相交 (Shift+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>固定 1:1 長寬比 (正方形)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>限制選取矩形為 1:1 正方形</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>位置：0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>大小：0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>已選：0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>操作：</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ 反轉選取區</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>取樣來源：</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>取樣所有圖層 (合併)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>設定顏色目標：</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>主要顏色 (左鍵點擊)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>次要顏色 (右鍵點擊)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>懸停顏色預覽：</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>懸停在畫布上</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 點擊任何像素進行取樣。按左鍵設定主要顏色，按右鍵設定次要顏色。使用任何工具時按住 &lt;b&gt;Alt&lt;/b&gt; 鍵可暫時吸取顏色。</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ 此精靈&lt;b&gt;沒有多邊形網格&lt;/b&gt;。&lt;br&gt;必須已存在多邊形網格（請從主工具箱生成：工具 &gt; 多邊形網格）。</translation>
     </message>
@@ -3050,6 +3190,102 @@ Strict removal clears the pixel.</source>
         <translation>過度繪製節省:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>油漆桶填滿選項</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>目前主顏色 (點擊變更)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>選取顏色...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>影響區域：</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>填滿相似顏色 (連續)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>填滿整個選取區</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>全域取代顏色</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>閾值：</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>對角相鄰 (8向連通)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>允許填滿沿對角線像素角擴散</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>填滿透明區域</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>允許油漆桶工具填滿空白/透明區域</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>合併取樣 (所有圖層)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>跨所有可見圖層綜合檢查顏色邊界</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 點擊顏色進行填滿。按左鍵填滿主要顏色，按右鍵填滿次要顏色。按住 &lt;b&gt;Shift&lt;/b&gt; 可填滿整個選取區。</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>魔棒選取 (模糊選取)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>連續 (填滿)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>選取相連的相符顏色像素 (取消勾選以在整張影像中選取所有相符像素)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>允許魔棒選取區沿對角線像素角擴展</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>選取透明區域</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>允許選取透明/空白像素區域</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>跨所有可見圖層綜合偵測顏色邊界</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>選取操作：</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 點擊顏色選取連續相符的像素。按住 &lt;b&gt;Shift&lt;/b&gt; 新增至選取區，按住 &lt;b&gt;Ctrl&lt;/b&gt; 減去。</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>打開交互式圖集打包對話框以解決精靈重疊衝突</translation>
     </message>
@@ -3068,6 +3304,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Select Secondary Color</source>
         <translation>選擇次色</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>透明 [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>套用到 &apos;%1&apos; 的所有影格</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>反轉目前選取區</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Strict removal clears the pixel.</source>
         <translation>選取時，將同時擦除所有可見圖層上的像素，而不僅是當前圖層</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 1像素連續布雷森漢姆橡皮擦，直接清除至透明(alpha 0)。按住 &lt;b&gt;Shift&lt;/b&gt; 可繪製直線。</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>選取區操作</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ 全選 (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>選取畫布上的所有像素 (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ 取消選取 (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>取消目前選取 (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 刪除內容 (Del)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>清除選取區內的像素 (Del)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 複製</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>複製目前選取區至剪貼簿 (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ 剪下</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>剪下目前選取區至剪貼簿 (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 貼上</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>從剪貼簿貼上選取區 (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Strict removal clears the pixel.</source>
         <translation>滴管取樣</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>所有可見圖層取樣 (複合)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>僅當前圖層取樣</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 點擊任意像素可設定前景色。在使用任何工具時按住 &lt;b&gt;Alt&lt;/b&gt; 可暫時取樣色彩。</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>選取或移動頂點 (點擊、Shift+點擊或拖曳頂點)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>在多邊形內部點擊以插入內部斯坦納點</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>沿邊緣點擊以插入輪廓邊界頂點</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>雷射刀工具：點擊並在多邊形上拖曳劃線以切割幾何圖形</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>點擊頂點以將其刪除</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>刪除選定的網格頂點 (Del)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>產生具邊緣偵測的約束德勞內三角剖分 (CDT) 網格</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>重設網格至外部邊界輪廓</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>取消 CDT 網格</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>取消正在進行的 CDT 網格計算</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>工具選項</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>放棄未儲存的變更並關閉編輯器 (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>套用變更至專案並保持編輯器開啟 (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>儲存變更並關閉編輯器 (Enter)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

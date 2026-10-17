@@ -392,6 +392,62 @@ void TestPixelEditor::testRectangularSelection()
 
     canvas.deselect();
     QVERIFY(!canvas.hasSelection());
+
+    // 1. Initial selection with SelectRect in Replace mode
+    canvas.setCurrentTool(PixelTool::SelectRect);
+    canvas.setSelectionMode(SelectionMode::Replace);
+
+    // Drag from (2, 2) to (5, 5)
+    sendMouseEvent(&canvas, QEvent::MouseButtonPress, QPointF(2 * canvas.zoom(), 2 * canvas.zoom()), Qt::LeftButton);
+    sendMouseEvent(&canvas, QEvent::MouseMove, QPointF(5 * canvas.zoom(), 5 * canvas.zoom()), Qt::LeftButton);
+    QVERIFY(canvas.hasSelection());
+    sendMouseEvent(&canvas, QEvent::MouseButtonRelease, QPointF(5 * canvas.zoom(), 5 * canvas.zoom()), Qt::LeftButton);
+
+    QVERIFY(canvas.hasSelection());
+    QCOMPARE(canvas.selectionRect(), QRect(2, 2, 4, 4));
+    QVERIFY(canvas.isPixelSelected(2, 2));
+    QVERIFY(canvas.isPixelSelected(5, 5));
+    QVERIFY(!canvas.isPixelSelected(1, 1));
+    QVERIFY(!canvas.isPixelSelected(8, 8));
+
+    // 2. Add mode: Drag another rectangle at (8, 8) to (10, 10)
+    canvas.setSelectionMode(SelectionMode::Add);
+    sendMouseEvent(&canvas, QEvent::MouseButtonPress, QPointF(8 * canvas.zoom(), 8 * canvas.zoom()), Qt::LeftButton);
+    // During drag: previous selection (2, 2) MUST STILL BE SELECTED!
+    QVERIFY(canvas.isPixelSelected(2, 2));
+    QVERIFY(canvas.isPixelSelected(5, 5));
+    sendMouseEvent(&canvas, QEvent::MouseMove, QPointF(10 * canvas.zoom(), 10 * canvas.zoom()), Qt::LeftButton);
+    // During drag: both regions must be in preview!
+    QVERIFY(canvas.isPixelSelected(2, 2));
+    QVERIFY(canvas.isPixelSelected(10, 10));
+    sendMouseEvent(&canvas, QEvent::MouseButtonRelease, QPointF(10 * canvas.zoom(), 10 * canvas.zoom()), Qt::LeftButton);
+
+    // Both rectangles must now be selected
+    QVERIFY(canvas.hasSelection());
+    QCOMPARE(canvas.selectionRect(), QRect(2, 2, 9, 9));
+    QVERIFY(canvas.isPixelSelected(2, 2));
+    QVERIFY(canvas.isPixelSelected(5, 5));
+    QVERIFY(canvas.isPixelSelected(8, 8));
+    QVERIFY(canvas.isPixelSelected(10, 10));
+    // Gap in-between should NOT be selected
+    QVERIFY(!canvas.isPixelSelected(6, 6));
+    QVERIFY(!canvas.isPixelSelected(7, 7));
+
+    // 3. Subtract mode: Drag rectangle from (4, 4) to (9, 9)
+    canvas.setSelectionMode(SelectionMode::Subtract);
+    sendMouseEvent(&canvas, QEvent::MouseButtonPress, QPointF(4 * canvas.zoom(), 4 * canvas.zoom()), Qt::LeftButton);
+    sendMouseEvent(&canvas, QEvent::MouseMove, QPointF(9 * canvas.zoom(), 9 * canvas.zoom()), Qt::LeftButton);
+    sendMouseEvent(&canvas, QEvent::MouseButtonRelease, QPointF(9 * canvas.zoom(), 9 * canvas.zoom()), Qt::LeftButton);
+
+    // Overlapping pixels (4, 4) to (5, 5) and (8, 8) to (9, 9) are now subtracted!
+    QVERIFY(!canvas.isPixelSelected(4, 4));
+    QVERIFY(!canvas.isPixelSelected(5, 5));
+    QVERIFY(!canvas.isPixelSelected(8, 8));
+    QVERIFY(!canvas.isPixelSelected(9, 9));
+    // Non-subtracted pixels must remain selected: (2, 2) to (3, 3) and (10, 10)
+    QVERIFY(canvas.isPixelSelected(2, 2));
+    QVERIFY(canvas.isPixelSelected(3, 3));
+    QVERIFY(canvas.isPixelSelected(10, 10));
 }
 
 void TestPixelEditor::testColorSelectionMagicWand()
@@ -407,19 +463,31 @@ void TestPixelEditor::testColorSelectionMagicWand()
 
     canvas.setCurrentTool(PixelTool::SelectColor);
 
-    // Click on pixel (2, 3) which is red
+    // 1. Contiguous selection mode (default): clicking (2, 3) selects only the connected component
+    QVERIFY(canvas.magicWandContiguous());
     sendMouseEvent(&canvas, QEvent::MouseButtonPress, QPointF(2 * canvas.zoom(), 3 * canvas.zoom()), Qt::LeftButton);
-
     QVERIFY(canvas.hasSelection());
 
-    // Clear selection should erase all 3 red pixels to transparent
+    // Clear selection should erase only the contiguous clicked red pixel
     canvas.clearSelection();
-    QImage res = canvas.image();
-    QCOMPARE(res.pixelColor(2, 3).alpha(), 0);
-    QCOMPARE(res.pixelColor(8, 8).alpha(), 0);
-    QCOMPARE(res.pixelColor(12, 14).alpha(), 0);
-    // Surrounding blue pixels must remain blue
-    QCOMPARE(res.pixelColor(0, 0), QColor(Qt::blue));
+    QImage resContiguous = canvas.image();
+    QCOMPARE(resContiguous.pixelColor(2, 3).alpha(), 0);
+    // Other isolated red pixels are not connected, so they remain intact
+    QCOMPARE(resContiguous.pixelColor(8, 8), QColor(Qt::red));
+    QCOMPARE(resContiguous.pixelColor(12, 14), QColor(Qt::red));
+    QCOMPARE(resContiguous.pixelColor(0, 0), QColor(Qt::blue));
+
+    // 2. Non-contiguous selection mode: selects all identical pixels across whole image
+    canvas.deselect();
+    canvas.setMagicWandContiguous(false);
+    sendMouseEvent(&canvas, QEvent::MouseButtonPress, QPointF(8 * canvas.zoom(), 8 * canvas.zoom()), Qt::LeftButton);
+    QVERIFY(canvas.hasSelection());
+
+    canvas.clearSelection();
+    QImage resGlobal = canvas.image();
+    QCOMPARE(resGlobal.pixelColor(8, 8).alpha(), 0);
+    QCOMPARE(resGlobal.pixelColor(12, 14).alpha(), 0);
+    QCOMPARE(resGlobal.pixelColor(0, 0), QColor(Qt::blue));
 }
 
 void TestPixelEditor::testClearSelection()
@@ -2234,15 +2302,15 @@ void TestPixelEditor::testErgonomicContextualPanels()
     QVERIFY(dlg.filtersButton() != nullptr);
     QCOMPARE(dlg.filtersButton()->objectName(), QStringLiteral("filtersButton"));
 
-    // Verify contextual stack exists (0: Colors, 1: Eraser, 2: Marquee, 3: Eyedropper, 4: PolygonMesh)
+    // Verify contextual stack exists (0: Pencil, 1: Eraser, 2: Marquee, 3: Eyedropper, 4: PolygonMesh, 5: Bucket, 6: Magic Wand)
     QStackedWidget *stack = dlg.contextualStack();
     if (!stack) {
         stack = dlg.findChild<QStackedWidget*>(QStringLiteral("contextualStack"));
     }
     QVERIFY(stack != nullptr);
-    QCOMPARE(stack->count(), 5);
+    QCOMPARE(stack->count(), 7);
 
-    // Initial tool is Pencil -> page 0 (Color studio)
+    // Initial tool is Pencil -> page 0 (Pencil options)
     QCOMPARE(stack->currentIndex(), 0);
 
     // Switch to Eraser -> page 1 (Eraser options)
@@ -2284,14 +2352,23 @@ void TestPixelEditor::testErgonomicContextualPanels()
     }
     QCOMPARE(stack->currentIndex(), 4);
 
-    // Switch to BucketFill -> page 0 (Color studio)
+    // Switch to BucketFill -> page 5 (Bucket fill options)
     for (QToolButton *btn : toolButtons) {
         if (btn->toolTip().contains(QLatin1String("Bucket"), Qt::CaseInsensitive)) {
             btn->click();
             break;
         }
     }
-    QCOMPARE(stack->currentIndex(), 0);
+    QCOMPARE(stack->currentIndex(), 5);
+
+    // Switch to SelectColor (Magic Wand) -> page 6 (Magic Wand options)
+    for (QToolButton *btn : toolButtons) {
+        if (btn->toolTip().contains(QLatin1String("Magic Wand"), Qt::CaseInsensitive) || btn->toolTip().contains(QLatin1String("Color Selection"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(stack->currentIndex(), 6);
 }
 
 void TestPixelEditor::testFilterAllFramesMultiLayerAndNavigation()

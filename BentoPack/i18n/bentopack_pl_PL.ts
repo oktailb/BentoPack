@@ -2954,6 +2954,146 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Przepakuj atlas...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>Pozycja: %1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>Rozmiar: %1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>Zaznaczono: %1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>Opcje ołówka</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>Rozmiar (px):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>Krycie (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>Kształt pędzla:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>Kwadrat (Pixel Art)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>Koło (Miękkie okrągłe)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>Ostra krawędź (Pixel art)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>Wyraźne kontury pikseli bez wygładzania</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Przytrzymaj &lt;b&gt;Shift&lt;/b&gt;, aby rysować proste linie. Przytrzymaj &lt;b&gt;Alt&lt;/b&gt;, aby pobierać kolory próbnikiem.</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>Kształt gumki:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Czyści bezpośrednio do alfa 0. Przytrzymaj &lt;b&gt;Shift&lt;/b&gt;, aby wymazywać w linii prostej. Prawy przycisk wymazuje kolorem pomocniczym.</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>Zaznaczenie prostokątne</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>Tryb:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Zastąp zaznaczenie</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>Dodaj do bieżącego zaznaczenia (Shift)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>Odejmij od zaznaczenia (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>Część wspólna z zaznaczeniem (Shift+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>Stałe proporcje 1:1 (Kwadrat)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>Ogranicz prostokąt zaznaczenia do kwadratu 1:1</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>Pozycja: 0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>Rozmiar: 0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>Zaznaczono: 0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>Akcje:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ Odwróć zaznaczenie</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>Źródło próbkowania:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>Próbkuj wszystkie warstwy (Kompozyt)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>Ustaw cel koloru:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>Kolor główny (Lewy przycisk myszy)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>Kolor pomocniczy (Prawy przycisk myszy)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>Podgląd wskazanego koloru:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>Najedź kursorem na płótno</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Kliknij dowolny piksel, aby pobrać próbkę. Lewy przycisk ustawia kolor główny, prawy pomocniczy. Przytrzymaj &lt;b&gt;Alt&lt;/b&gt;, aby próbkować kolory.</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ &lt;b&gt;Brak siatki wielokątnej&lt;/b&gt; dla tego sprite&apos;a.&lt;br&gt;Siatka wielokątna musi już istnieć (wygeneruj ją z głównego paska narzędzi: Narzędzia &gt; Siatka wielokątna).</translation>
     </message>
@@ -3050,6 +3190,102 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Oszczędność overdraw:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>Opcje wypełniania wiadrem</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>Bieżący kolor podstawowy (Kliknij, aby zmienić)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>Wybierz kolor...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>Obszar objęty:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>Wypełnij podobne kolory (Ciągły)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>Wypełnij całe zaznaczenie</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>Zastąp kolor globalnie</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Próg:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>Sąsiedzi po przekątnej (8-spójni)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>Zezwalaj na rozprzestrzenianie wypełnienia po przekątnych narożnikach pikseli</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>Wypełniaj przezroczyste obszary</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>Zezwalaj wiadru z farbą na wypełnianie pustych/przezroczystych obszarów</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>Próbkuj połączone (wszystkie warstwy)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>Sprawdzaj granice kolorów na wszystkich widocznych warstwach łącznie</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Kliknij kolor, aby wypełnić. Lewy przycisk wypełnia kolorem głównym, prawy pomocniczym. Przytrzymaj &lt;b&gt;Shift&lt;/b&gt;, aby wypełnić całe zaznaczenie.</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>Zaznaczenie rozmyte (Czarodziejska różdżka)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>Ciągły (Wypełnienie)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>Zaznaczaj połączone piksele o pasującym kolorze (Odznacz, aby zaznaczać w całym obrazie)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>Zezwalaj zaznaczeniu różdżki na rozszerzanie po przekątnych narożnikach</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>Zaznaczaj przezroczyste obszary</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>Zezwalaj na zaznaczanie przezroczystych / pustych obszarów</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>Wykrywaj granice kolorów na wszystkich widocznych warstwach łącznie</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>Działania na zaznaczeniu:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Kliknij kolor, aby zaznaczyć ciągłe pasujące piksele. Przytrzymaj &lt;b&gt;Shift&lt;/b&gt;, aby dodać, &lt;b&gt;Ctrl&lt;/b&gt;, aby odjąć.</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>Otwórz okno pakowania atlasu, aby rozwiązać kolizje sprite&apos;ów</translation>
     </message>
@@ -3068,6 +3304,10 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     <message>
         <source>Select Secondary Color</source>
         <translation>Wybierz kolor dodatkowy</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>Przezroczysty [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>Zastosuj do wszystkich klatek &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>Odwróć bieżące zaznaczenie</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Gdy zaznaczone, usuwa piksele na wszystkich widocznych warstwach jednocześnie zamiast tylko na aktywnej</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Ciągła gumka Bresenhama 1px. Czyści bezpośrednio do alfa 0. Przytrzymaj &lt;b&gt;Shift&lt;/b&gt;, aby rysować proste linie.</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>Działania selekcji</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ Zaznacz wszystko (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>Zaznacz wszystkie piksele na płótnie (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ Odznacz (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>Odznacz aktywne zaznaczenie (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 Usuń zawartość (Del)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>Wyczyść piksele w zaznaczeniu (Del)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 Kopiuj</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>Kopiuj aktywne zaznaczenie do schowka (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ Wytnij</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>Wytnij aktywne zaznaczenie do schowka (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 Wklej</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>Wklej zaznaczenie ze schowka (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Próbkowanie kroplomierza</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>Próbkuj ze wszystkich widocznych warstw (Kompozyt)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>Próbkuj tylko z aktywnej warstwy</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Kliknij dowolny piksel, aby ustawić kolor główny. Przytrzymaj &lt;b&gt;Alt&lt;/b&gt; z dowolnym narzędziem, aby tymczasowo pobrać kolor.</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>Zaznacz lub przesuń wierzchołki (Kliknięcie, Shift+Klik lub przeciąganie)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>Kliknij wewnątrz wielokąta, aby wstawić wewnętrzne punkty Steinera</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>Klikaj wzdłuż krawędzi, aby wstawiać wierzchołki konturu</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>Narzędzie nóż laserowy: kliknij i przeciągnij linię przez wielokąt, aby rozciąć geometrię</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>Kliknij wierzchołek, aby go usunąć</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>Usuń zaznaczony wierzchołek lub wierzchołki siatki (Del)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>Generuj siatkę CDT z wykrywaniem krawędzi</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>Zresetuj siatkę do zewnętrznego konturu</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>Anuluj siatkę CDT</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>Anuluj trwające obliczenia siatki CDT</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Opcje narzędzia</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>Odrzuć niezapisane zmiany i zamknij edytor (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>Zastosuj zmiany w projekcie i pozostaw edytor otwarty (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>Zapisz zmiany i zamknij edytor (Enter)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

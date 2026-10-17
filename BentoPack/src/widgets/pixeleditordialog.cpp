@@ -427,6 +427,17 @@ void PixelEditorDialog::setupUi()
     connect(m_canvas, &PixelCanvas::mousePixelMoved, this, &PixelEditorDialog::onCanvasPixelMoved);
     connect(m_canvas, &PixelCanvas::mousePixelLeft, this, &PixelEditorDialog::onCanvasPixelLeft);
     connect(m_canvas, &PixelCanvas::zoomChanged, this, &PixelEditorDialog::onCanvasZoomChanged);
+    connect(m_canvas, &PixelCanvas::selectionGeometryChanged, this, [this](const QRect &rect, int pixelCount) {
+        if (m_selPosLabel) {
+            m_selPosLabel->setText(tr("Position: %1, %2 px").arg(rect.isNull() ? 0 : rect.x()).arg(rect.isNull() ? 0 : rect.y()));
+        }
+        if (m_selSizeLabel) {
+            m_selSizeLabel->setText(tr("Size: %1 x %2 px").arg(rect.isNull() ? 0 : rect.width()).arg(rect.isNull() ? 0 : rect.height()));
+        }
+        if (m_selCountLabel) {
+            m_selCountLabel->setText(tr("Selected: %1 px").arg(pixelCount));
+        }
+    });
     connect(m_canvas, &PixelCanvas::panRequested, this, [this](int dx, int dy) {
         if (m_scrollArea) {
             m_scrollArea->horizontalScrollBar()->setValue(m_scrollArea->horizontalScrollBar()->value() - dx);
@@ -725,9 +736,16 @@ QWidget* PixelEditorDialog::createToolBar()
 {
     QWidget *panel = new QWidget(this);
     panel->setMinimumWidth(88);
-    QGridLayout *layout = new QGridLayout(panel);
+    QVBoxLayout *mainVBox = new QVBoxLayout(panel);
+    mainVBox->setContentsMargins(4, 4, 4, 4);
+    mainVBox->setSpacing(6);
+    mainVBox->setAlignment(Qt::AlignTop);
+
+    // 1. Tool grid container
+    QWidget *gridContainer = new QWidget(panel);
+    QGridLayout *layout = new QGridLayout(gridContainer);
     layout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    layout->setContentsMargins(2, 2, 2, 2);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(4);
 
     m_toolGroup = new QButtonGroup(this);
@@ -812,7 +830,7 @@ QWidget* PixelEditorDialog::createToolBar()
     line2->setFrameShape(QFrame::HLine);
     layout->addWidget(line2, 7, 0, 1, 2);
 
-    // Filters Button (Moved into Left ToolBar!)
+    // Filters Button
     m_btnFilters = new QToolButton(this);
     m_btnFilters->setObjectName(QStringLiteral("filtersButton"));
     m_btnFilters->setText(tr("✨ Filters ▾"));
@@ -837,98 +855,144 @@ QWidget* PixelEditorDialog::createToolBar()
     if (m_btnUndo) m_btnUndo->setEnabled(false);
     if (m_btnRedo) m_btnRedo->setEnabled(false);
 
-    // Spacer
-    layout->addItem(new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding), 11, 0, 1, 2);
+    mainVBox->addWidget(gridContainer);
+    mainVBox->addStretch(1);
 
     updateToolIcons();
 
     return panel;
 }
 
-QWidget* PixelEditorDialog::createPalettePanel()
-{
-    QScrollArea *scrollPanel = new QScrollArea(this);
-    scrollPanel->setMinimumWidth(260);
-    scrollPanel->setWidgetResizable(true);
-    scrollPanel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scrollPanel->setStyleSheet(QStringLiteral("QScrollArea { background-color: transparent; border: none; }"));
+static const QString kToolGroupBoxStyle = QStringLiteral(
+    "QGroupBox {"
+    "  border: 1px solid palette(mid);"
+    "  border-radius: 6px;"
+    "  margin-top: 8px;"
+    "  padding-top: 10px;"
+    "  font-weight: bold;"
+    "  font-size: 11px;"
+    "}"
+    "QGroupBox::title {"
+    "  subcontrol-origin: margin;"
+    "  subcontrol-position: top left;"
+    "  left: 8px;"
+    "  top: 0px;"
+    "  padding: 0 4px;"
+    "  font-weight: bold;"
+    "  font-size: 11px;"
+    "}"
+);
 
-    QWidget *panel = new QWidget(scrollPanel);
-    QVBoxLayout *layout = new QVBoxLayout(panel);
-    layout->setContentsMargins(4, 2, 4, 2);
+static const QString kToolActionBtnStyle = QStringLiteral(
+    "QPushButton {"
+    "  border: 1px solid palette(mid);"
+    "  border-radius: 4px;"
+    "  padding: 5px 8px;"
+    "  font-size: 11px;"
+    "  font-weight: 600;"
+    "  text-align: left;"
+    "}"
+    "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
+);
+
+static const QString kToolModeBtnStyle = QStringLiteral(
+    "QToolButton {"
+    "  border: 1px solid palette(mid);"
+    "  border-radius: 4px;"
+    "  font-size: 12px;"
+    "  font-weight: bold;"
+    "  padding: 4px 8px;"
+    "}"
+    "QToolButton:hover {"
+    "  background-color: palette(alternate-base);"
+    "  border-color: palette(highlight);"
+    "}"
+    "QToolButton:checked {"
+    "  background-color: palette(highlight);"
+    "  color: palette(highlighted-text);"
+    "}"
+);
+
+static QHBoxLayout* makeSliderSpinRow(QWidget *parent, int minVal, int maxVal, int defaultVal,
+                                      const QString &suffix, QSlider* &outSlider, QSpinBox* &outSpin)
+{
+    QHBoxLayout *row = new QHBoxLayout();
+    row->setContentsMargins(0, 0, 0, 0);
+    row->setSpacing(4);
+    outSlider = new QSlider(Qt::Horizontal, parent);
+    outSlider->setRange(minVal, maxVal);
+    outSlider->setValue(defaultVal);
+    outSpin = new QSpinBox(parent);
+    outSpin->setRange(minVal, maxVal);
+    outSpin->setValue(defaultVal);
+    if (!suffix.isEmpty()) outSpin->setSuffix(suffix);
+    outSpin->setFixedWidth(64);
+    QObject::connect(outSlider, &QSlider::valueChanged, outSpin, &QSpinBox::setValue);
+    QObject::connect(outSpin, QOverload<int>::of(&QSpinBox::valueChanged), outSlider, &QSlider::setValue);
+    row->addWidget(outSlider, 1);
+    row->addWidget(outSpin);
+    return row;
+}
+
+QWidget* PixelEditorDialog::createPencilOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(6);
 
-    const QString groupBoxStyle = QStringLiteral(
-        "QGroupBox {"
-        "  border: 1px solid palette(mid);"
-        "  border-radius: 6px;"
-        "  margin-top: 8px;"
-        "  padding-top: 10px;"
-        "  font-weight: bold;"
-        "  font-size: 11px;"
-        "}"
-        "QGroupBox::title {"
-        "  subcontrol-origin: margin;"
-        "  subcontrol-position: top left;"
-        "  left: 8px;"
-        "  top: 0px;"
-        "  padding: 0 4px;"
-        "  font-weight: bold;"
-        "  font-size: 11px;"
-        "}"
-    );
+    m_pencilGroup = new QGroupBox(tr("Pencil Options"), page);
+    m_pencilGroup->setStyleSheet(kToolGroupBoxStyle);
+    QVBoxLayout *pgLayout = new QVBoxLayout(m_pencilGroup);
+    pgLayout->setContentsMargins(8, 10, 8, 10);
+    pgLayout->setSpacing(6);
 
-    // 1. Right Column Tab Widget (Ergonomic separation: Tool Options vs Layers)
-    m_rightTabWidget = new QTabWidget(panel);
-    m_rightTabWidget->setObjectName(QStringLiteral("pixelEditorRightTabs"));
-    m_rightTabWidget->setStyleSheet(QStringLiteral(
-        "QTabWidget::pane {"
-        "  border: 1px solid palette(mid);"
-        "  background-color: transparent;"
-        "  border-radius: 6px;"
-        "}"
-        "QTabWidget::tab-bar {"
-        "  alignment: left;"
-        "}"
-        "QTabBar::tab {"
-        "  background-color: palette(button);"
-        "  color: palette(button-text);"
-        "  border: 1px solid palette(mid);"
-        "  padding: 6px 14px;"
-        "  margin-right: 4px;"
-        "  border-top-left-radius: 5px;"
-        "  border-top-right-radius: 5px;"
-        "  font-weight: 600;"
-        "  font-size: 11px;"
-        "}"
-        "QTabBar::tab:selected {"
-        "  background-color: palette(highlight);"
-        "  color: palette(highlighted-text);"
-        "  border-color: palette(highlight);"
-        "  font-weight: bold;"
-        "}"
-        "QTabBar::tab:hover:!selected {"
-        "  background-color: palette(alternate-base);"
-        "}"
-    ));
+    QLabel *sizeLbl = new QLabel(tr("Size (px):"), m_pencilGroup);
+    sizeLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px;"));
+    pgLayout->addWidget(sizeLbl);
+    pgLayout->addLayout(makeSliderSpinRow(m_pencilGroup, 1, 16, 1, QStringLiteral(" px"), m_pencilSizeSlider, m_pencilSizeSpin));
+    connect(m_pencilSizeSlider, &QSlider::valueChanged, this, [this](int val) {
+        if (m_canvas) m_canvas->setBrushSize(val);
+    });
 
-    // Tab 1: Tool Options
-    m_toolTab = new QWidget(m_rightTabWidget);
-    QVBoxLayout *toolTabLayout = new QVBoxLayout(m_toolTab);
-    toolTabLayout->setContentsMargins(4, 4, 4, 4);
-    toolTabLayout->setSpacing(4);
+    QLabel *opLbl = new QLabel(tr("Opacity (%):"), m_pencilGroup);
+    opLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px; margin-top: 4px;"));
+    pgLayout->addWidget(opLbl);
+    pgLayout->addLayout(makeSliderSpinRow(m_pencilGroup, 1, 100, 100, QStringLiteral(" %"), m_pencilOpacitySlider, m_pencilOpacitySpin));
+    connect(m_pencilOpacitySlider, &QSlider::valueChanged, this, [this](int val) {
+        if (m_canvas) m_canvas->setBrushOpacity(val);
+    });
 
-    m_contextualStack = new QStackedWidget(m_toolTab);
-    m_contextualStack->setObjectName(QStringLiteral("contextualStack"));
+    QLabel *shapeLbl = new QLabel(tr("Brush Shape:"), m_pencilGroup);
+    shapeLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px; margin-top: 4px;"));
+    pgLayout->addWidget(shapeLbl);
 
-    // --- PAGE 0: Color Studio & Presets (Pencil / Bucket) ---
-    m_colorOptionsPage = new QWidget(m_contextualStack);
-    QVBoxLayout *colorPageLayout = new QVBoxLayout(m_colorOptionsPage);
-    colorPageLayout->setContentsMargins(0, 0, 0, 0);
-    colorPageLayout->setSpacing(6);
+    m_pencilShapeCombo = new QComboBox(m_pencilGroup);
+    m_pencilShapeCombo->addItem(tr("Square (Pixel Art)"), static_cast<int>(BrushShape::Square));
+    m_pencilShapeCombo->addItem(tr("Circle (Soft Round)"), static_cast<int>(BrushShape::Circle));
+    connect(m_pencilShapeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int idx) {
+        if (m_canvas) m_canvas->setBrushShape(static_cast<BrushShape>(idx));
+    });
+    pgLayout->addWidget(m_pencilShapeCombo);
 
-    m_colorsGroup = new QGroupBox(tr("Color Studio && Harmonies"), m_colorOptionsPage);
-    m_colorsGroup->setStyleSheet(groupBoxStyle);
+    m_pencilHardEdgeCheck = new QCheckBox(tr("Hard edge (Pixel art)"), m_pencilGroup);
+    m_pencilHardEdgeCheck->setChecked(true);
+    m_pencilHardEdgeCheck->setToolTip(tr("Crisp non-antialiased pixel contours"));
+    connect(m_pencilHardEdgeCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setBrushHardEdge(checked);
+    });
+    pgLayout->addWidget(m_pencilHardEdgeCheck);
+
+    m_pencilTipLabel = new QLabel(tr("💡 <b>Tip:</b> Hold <b>Shift</b> to draw straight lines. Hold <b>Alt</b> to sample colors with Eyedropper."), m_pencilGroup);
+    m_pencilTipLabel->setWordWrap(true);
+    m_pencilTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    pgLayout->addWidget(m_pencilTipLabel);
+
+    layout->addWidget(m_pencilGroup);
+
+    // Color Studio & Harmonies
+    m_colorsGroup = new QGroupBox(tr("Color Studio && Harmonies"), page);
+    m_colorsGroup->setStyleSheet(kToolGroupBoxStyle);
     QVBoxLayout *colorsMainLayout = new QVBoxLayout(m_colorsGroup);
     colorsMainLayout->setContentsMargins(6, 8, 6, 8);
     colorsMainLayout->setSpacing(6);
@@ -1017,15 +1081,15 @@ QWidget* PixelEditorDialog::createPalettePanel()
     refreshRecentSwatches();
     colorsMainLayout->addWidget(m_recentContainer);
 
-    colorPageLayout->addWidget(m_colorsGroup);
+    layout->addWidget(m_colorsGroup);
 
     // Presets & Nuanciers
     QHBoxLayout *presetHeader = new QHBoxLayout();
-    m_palLabel = new QLabel(tr("Palette Preset:"), m_colorOptionsPage);
+    m_palLabel = new QLabel(tr("Palette Preset:"), page);
     m_palLabel->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
     presetHeader->addWidget(m_palLabel);
 
-    m_btnSampleFrame = new QPushButton(tr("Sample Frame"), m_colorOptionsPage);
+    m_btnSampleFrame = new QPushButton(tr("Sample Frame"), page);
     m_btnSampleFrame->setToolTip(tr("Extract all unique colors from current sprite frame"));
     m_btnSampleFrame->setStyleSheet(QStringLiteral(
         "QPushButton {"
@@ -1039,18 +1103,18 @@ QWidget* PixelEditorDialog::createPalettePanel()
     ));
     connect(m_btnSampleFrame, &QPushButton::clicked, this, &PixelEditorDialog::onSampleFrameColorsClicked);
     presetHeader->addWidget(m_btnSampleFrame);
-    colorPageLayout->addLayout(presetHeader);
+    layout->addLayout(presetHeader);
 
-    m_paletteCombo = new QComboBox(m_colorOptionsPage);
+    m_paletteCombo = new QComboBox(page);
     const auto initialPalettes = ColorPalettePresets::availablePalettes();
     for (int i = 0; i < initialPalettes.size(); ++i) {
         const auto &p = initialPalettes.at(i);
         m_paletteCombo->addItem(p.name, p.id);
     }
     connect(m_paletteCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PixelEditorDialog::onPalettePresetChanged);
-    colorPageLayout->addWidget(m_paletteCombo);
+    layout->addWidget(m_paletteCombo);
 
-    QScrollArea *swatchScroll = new QScrollArea(m_colorOptionsPage);
+    QScrollArea *swatchScroll = new QScrollArea(page);
     swatchScroll->setWidgetResizable(true);
     swatchScroll->setFixedHeight(92);
     swatchScroll->setStyleSheet(QStringLiteral("background-color: palette(base); border: 1px solid palette(mid); border-radius: 6px;"));
@@ -1060,28 +1124,65 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_swatchesLayout->setContentsMargins(4, 4, 4, 4);
     m_swatchesLayout->setSpacing(4);
     swatchScroll->setWidget(m_swatchesContainer);
-    colorPageLayout->addWidget(swatchScroll);
+    layout->addWidget(swatchScroll);
 
-
-
-    m_allowOutsidePolyCheck = new QCheckBox(tr("Edit outside polygon"), m_colorOptionsPage);
+    m_allowOutsidePolyCheck = new QCheckBox(tr("Edit outside polygon"), page);
     m_allowOutsidePolyCheck->setToolTip(tr("Allow editing pixels outside polygon boundaries"));
     connect(m_allowOutsidePolyCheck, &QCheckBox::toggled, this, &PixelEditorDialog::onAllowOutsidePolygonToggled);
-    colorPageLayout->addWidget(m_allowOutsidePolyCheck);
+    layout->addWidget(m_allowOutsidePolyCheck);
 
-    m_contextualStack->addWidget(m_colorOptionsPage);
+    layout->addStretch();
+    m_colorOptionsPage = page;
+    return page;
+}
 
-    // --- PAGE 1: Eraser Options (Eraser) ---
-    m_eraserOptionsPage = new QWidget(m_contextualStack);
-    QVBoxLayout *eraserLayout = new QVBoxLayout(m_eraserOptionsPage);
-    eraserLayout->setContentsMargins(0, 0, 0, 0);
-    eraserLayout->setSpacing(6);
+QWidget* PixelEditorDialog::createEraserOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
 
-    m_eraserGroup = new QGroupBox(tr("Eraser Options"), m_eraserOptionsPage);
-    m_eraserGroup->setStyleSheet(groupBoxStyle);
+    m_eraserGroup = new QGroupBox(tr("Eraser Options"), page);
+    m_eraserGroup->setStyleSheet(kToolGroupBoxStyle);
     QVBoxLayout *egLayout = new QVBoxLayout(m_eraserGroup);
     egLayout->setContentsMargins(8, 10, 8, 10);
-    egLayout->setSpacing(8);
+    egLayout->setSpacing(6);
+
+    QLabel *sizeLbl = new QLabel(tr("Size (px):"), m_eraserGroup);
+    sizeLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px;"));
+    egLayout->addWidget(sizeLbl);
+    egLayout->addLayout(makeSliderSpinRow(m_eraserGroup, 1, 16, 1, QStringLiteral(" px"), m_eraserSizeSlider, m_eraserSizeSpin));
+    connect(m_eraserSizeSlider, &QSlider::valueChanged, this, [this](int val) {
+        if (m_canvas) m_canvas->setEraserSize(val);
+    });
+
+    QLabel *opLbl = new QLabel(tr("Opacity (%):"), m_eraserGroup);
+    opLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px; margin-top: 4px;"));
+    egLayout->addWidget(opLbl);
+    egLayout->addLayout(makeSliderSpinRow(m_eraserGroup, 1, 100, 100, QStringLiteral(" %"), m_eraserOpacitySlider, m_eraserOpacitySpin));
+    connect(m_eraserOpacitySlider, &QSlider::valueChanged, this, [this](int val) {
+        if (m_canvas) m_canvas->setEraserOpacity(val);
+    });
+
+    QLabel *shapeLbl = new QLabel(tr("Eraser Shape:"), m_eraserGroup);
+    shapeLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px; margin-top: 4px;"));
+    egLayout->addWidget(shapeLbl);
+
+    m_eraserShapeCombo = new QComboBox(m_eraserGroup);
+    m_eraserShapeCombo->addItem(tr("Square (Pixel Art)"), static_cast<int>(BrushShape::Square));
+    m_eraserShapeCombo->addItem(tr("Circle (Soft Round)"), static_cast<int>(BrushShape::Circle));
+    connect(m_eraserShapeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int idx) {
+        if (m_canvas) m_canvas->setEraserShape(static_cast<BrushShape>(idx));
+    });
+    egLayout->addWidget(m_eraserShapeCombo);
+
+    m_eraserHardEdgeCheck = new QCheckBox(tr("Hard edge (Pixel art)"), m_eraserGroup);
+    m_eraserHardEdgeCheck->setChecked(true);
+    connect(m_eraserHardEdgeCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setEraserHardEdge(checked);
+    });
+    egLayout->addWidget(m_eraserHardEdgeCheck);
 
     m_eraserApplyAllFramesCheck = new QCheckBox(tr("Erase across all frames (Timeline)"), m_eraserGroup);
     m_eraserApplyAllFramesCheck->setToolTip(tr("Erase pixels across all frames of current animation aligned by pivot"));
@@ -1090,87 +1191,156 @@ QWidget* PixelEditorDialog::createPalettePanel()
             m_applyToAllFramesCheck->setChecked(checked);
         }
     });
-    connect(m_applyToAllFramesCheck, &QCheckBox::toggled, this, [this](bool checked) {
-        if (m_eraserApplyAllFramesCheck && m_eraserApplyAllFramesCheck->isChecked() != checked) {
-            m_eraserApplyAllFramesCheck->setChecked(checked);
-        }
-        if (m_meshApplyAllFramesCheck && m_meshApplyAllFramesCheck->isChecked() != checked) {
-            m_meshApplyAllFramesCheck->setChecked(checked);
-        }
-    });
     egLayout->addWidget(m_eraserApplyAllFramesCheck);
 
     m_eraserAllLayersCheck = new QCheckBox(tr("Erase across all visible layers"), m_eraserGroup);
     m_eraserAllLayersCheck->setToolTip(tr("When checked, clears pixels on all visible layers simultaneously instead of only active layer"));
+    connect(m_eraserAllLayersCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setEraseAllLayers(checked);
+    });
     egLayout->addWidget(m_eraserAllLayersCheck);
 
-    m_eraserTipLabel = new QLabel(tr("💡 <b>Tip:</b> 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold <b>Shift</b> to draw straight lines."), m_eraserGroup);
+    m_eraserTipLabel = new QLabel(tr("💡 <b>Tip:</b> Clears directly to alpha 0. Hold <b>Shift</b> to erase straight lines. Right-click erases with secondary color."), m_eraserGroup);
     m_eraserTipLabel->setWordWrap(true);
     m_eraserTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
     egLayout->addWidget(m_eraserTipLabel);
 
     egLayout->addStretch();
-    eraserLayout->addWidget(m_eraserGroup);
-    m_contextualStack->addWidget(m_eraserOptionsPage);
+    layout->addWidget(m_eraserGroup);
+    layout->addStretch();
+    return page;
+}
 
-    // --- PAGE 2: Selection Actions & Options (SelectRect / SelectColor) ---
-    m_selectionOptionsPage = new QWidget(m_contextualStack);
-    QVBoxLayout *selLayout = new QVBoxLayout(m_selectionOptionsPage);
-    selLayout->setContentsMargins(0, 0, 0, 0);
-    selLayout->setSpacing(6);
+QWidget* PixelEditorDialog::createSelectionOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
 
-    m_selGroup = new QGroupBox(tr("Selection Actions"), m_selectionOptionsPage);
-    m_selGroup->setStyleSheet(groupBoxStyle);
+    m_selGroup = new QGroupBox(tr("Rectangle Select"), page);
+    m_selGroup->setStyleSheet(kToolGroupBoxStyle);
     QVBoxLayout *sgLayout = new QVBoxLayout(m_selGroup);
     sgLayout->setContentsMargins(8, 10, 8, 10);
     sgLayout->setSpacing(6);
 
-    const QString actionBtnStyle = QStringLiteral(
-        "QPushButton {"
-        "  border: 1px solid palette(mid);"
-        "  border-radius: 4px;"
-        "  padding: 5px 8px;"
-        "  font-size: 11px;"
-        "  font-weight: 600;"
-        "  text-align: left;"
-        "}"
-        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
-    );
+    QLabel *modeLbl = new QLabel(tr("Mode:"), m_selGroup);
+    modeLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    sgLayout->addWidget(modeLbl);
+
+    QHBoxLayout *modeRow = new QHBoxLayout();
+    modeRow->setSpacing(4);
+    m_selModeGroup = new QButtonGroup(this);
+    m_selModeGroup->setExclusive(true);
+
+    m_btnSelModeReplace = new QToolButton(m_selGroup);
+    m_btnSelModeReplace->setText(QStringLiteral("■"));
+    m_btnSelModeReplace->setToolTip(tr("Replace selection"));
+    m_btnSelModeReplace->setCheckable(true);
+    m_btnSelModeReplace->setChecked(true);
+    m_btnSelModeReplace->setStyleSheet(kToolModeBtnStyle);
+    m_selModeGroup->addButton(m_btnSelModeReplace, static_cast<int>(SelectionMode::Replace));
+    modeRow->addWidget(m_btnSelModeReplace);
+
+    m_btnSelModeAdd = new QToolButton(m_selGroup);
+    m_btnSelModeAdd->setText(QStringLiteral("+"));
+    m_btnSelModeAdd->setToolTip(tr("Add to current selection (Shift)"));
+    m_btnSelModeAdd->setCheckable(true);
+    m_btnSelModeAdd->setStyleSheet(kToolModeBtnStyle);
+    m_selModeGroup->addButton(m_btnSelModeAdd, static_cast<int>(SelectionMode::Add));
+    modeRow->addWidget(m_btnSelModeAdd);
+
+    m_btnSelModeSubtract = new QToolButton(m_selGroup);
+    m_btnSelModeSubtract->setText(QStringLiteral("−"));
+    m_btnSelModeSubtract->setToolTip(tr("Subtract from selection (Ctrl)"));
+    m_btnSelModeSubtract->setCheckable(true);
+    m_btnSelModeSubtract->setStyleSheet(kToolModeBtnStyle);
+    m_selModeGroup->addButton(m_btnSelModeSubtract, static_cast<int>(SelectionMode::Subtract));
+    modeRow->addWidget(m_btnSelModeSubtract);
+
+    m_btnSelModeIntersect = new QToolButton(m_selGroup);
+    m_btnSelModeIntersect->setText(QStringLiteral("∩"));
+    m_btnSelModeIntersect->setToolTip(tr("Intersect with selection (Shift+Ctrl)"));
+    m_btnSelModeIntersect->setCheckable(true);
+    m_btnSelModeIntersect->setStyleSheet(kToolModeBtnStyle);
+    m_selModeGroup->addButton(m_btnSelModeIntersect, static_cast<int>(SelectionMode::Intersect));
+    modeRow->addWidget(m_btnSelModeIntersect);
+    modeRow->addStretch();
+    sgLayout->addLayout(modeRow);
+
+    connect(m_selModeGroup, &QButtonGroup::idClicked, this, [this](int id) {
+        if (m_canvas) m_canvas->setSelectionMode(static_cast<SelectionMode>(id));
+        if (m_wandModeGroup && m_wandModeGroup->button(id)) {
+            m_wandModeGroup->button(id)->setChecked(true);
+        }
+    });
+
+    m_selFixedSquareCheck = new QCheckBox(tr("Fixed 1:1 Aspect ratio (Square)"), m_selGroup);
+    m_selFixedSquareCheck->setToolTip(tr("Constrain selection rectangle to a 1:1 square"));
+    connect(m_selFixedSquareCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setSelectRectFixedSquare(checked);
+    });
+    sgLayout->addWidget(m_selFixedSquareCheck);
+
+    // Geometry Info
+    QFrame *geoFrame = new QFrame(m_selGroup);
+    geoFrame->setStyleSheet(QStringLiteral("background-color: palette(base); border: 1px solid palette(mid); border-radius: 4px; padding: 4px;"));
+    QVBoxLayout *geoLayout = new QVBoxLayout(geoFrame);
+    geoLayout->setContentsMargins(4, 4, 4, 4);
+    geoLayout->setSpacing(2);
+
+    m_selPosLabel = new QLabel(tr("Position: 0, 0 px"), geoFrame);
+    m_selPosLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 10px;"));
+    geoLayout->addWidget(m_selPosLabel);
+
+    m_selSizeLabel = new QLabel(tr("Size: 0 x 0 px"), geoFrame);
+    m_selSizeLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 10px;"));
+    geoLayout->addWidget(m_selSizeLabel);
+
+    m_selCountLabel = new QLabel(tr("Selected: 0 px"), geoFrame);
+    m_selCountLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 10px; font-weight: bold; color: palette(highlight);"));
+    geoLayout->addWidget(m_selCountLabel);
+
+    sgLayout->addWidget(geoFrame);
+
+    // Selection Actions
+    QLabel *actLbl = new QLabel(tr("Actions:"), m_selGroup);
+    actLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 4px;"));
+    sgLayout->addWidget(actLbl);
 
     m_btnSelectAll = new QPushButton(tr("⬚ Select All (Ctrl+A)"), m_selGroup);
-    m_btnSelectAll->setStyleSheet(actionBtnStyle);
-    m_btnSelectAll->setToolTip(tr("Select all pixels on canvas (Ctrl+A)"));
+    m_btnSelectAll->setStyleSheet(kToolActionBtnStyle);
     connect(m_btnSelectAll, &QPushButton::clicked, this, [this]() { m_canvas->selectAll(); });
     sgLayout->addWidget(m_btnSelectAll);
 
     m_btnDeselect = new QPushButton(tr("✕ Deselect (Esc)"), m_selGroup);
-    m_btnDeselect->setStyleSheet(actionBtnStyle);
-    m_btnDeselect->setToolTip(tr("Deselect active selection (Esc)"));
+    m_btnDeselect->setStyleSheet(kToolActionBtnStyle);
     connect(m_btnDeselect, &QPushButton::clicked, this, [this]() { m_canvas->deselect(); });
     sgLayout->addWidget(m_btnDeselect);
 
+    m_btnInvertSel = new QPushButton(tr("⇄ Invert Selection"), m_selGroup);
+    m_btnInvertSel->setStyleSheet(kToolActionBtnStyle);
+    connect(m_btnInvertSel, &QPushButton::clicked, this, [this]() { m_canvas->invertSelection(); });
+    sgLayout->addWidget(m_btnInvertSel);
+
     m_btnClearSelection = new QPushButton(tr("🗑 Delete Contents (Del)"), m_selGroup);
-    m_btnClearSelection->setStyleSheet(actionBtnStyle);
-    m_btnClearSelection->setToolTip(tr("Clear pixels within selection (Del)"));
+    m_btnClearSelection->setStyleSheet(kToolActionBtnStyle);
     connect(m_btnClearSelection, &QPushButton::clicked, this, [this]() { m_canvas->clearSelection(); });
     sgLayout->addWidget(m_btnClearSelection);
 
     QHBoxLayout *cbRow = new QHBoxLayout();
     m_btnCopySel = new QPushButton(tr("📋 Copy"), m_selGroup);
-    m_btnCopySel->setStyleSheet(actionBtnStyle);
-    m_btnCopySel->setToolTip(tr("Copy active selection to clipboard (Ctrl+C)"));
+    m_btnCopySel->setStyleSheet(kToolActionBtnStyle);
     connect(m_btnCopySel, &QPushButton::clicked, this, [this]() { m_canvas->copySelection(); });
     cbRow->addWidget(m_btnCopySel);
 
     m_btnCutSel = new QPushButton(tr("✂ Cut"), m_selGroup);
-    m_btnCutSel->setStyleSheet(actionBtnStyle);
-    m_btnCutSel->setToolTip(tr("Cut active selection to clipboard (Ctrl+X)"));
+    m_btnCutSel->setStyleSheet(kToolActionBtnStyle);
     connect(m_btnCutSel, &QPushButton::clicked, this, [this]() { m_canvas->cutSelection(); });
     cbRow->addWidget(m_btnCutSel);
 
     m_btnPasteSel = new QPushButton(tr("📥 Paste"), m_selGroup);
-    m_btnPasteSel->setStyleSheet(actionBtnStyle);
-    m_btnPasteSel->setToolTip(tr("Paste selection from clipboard (Ctrl+V)"));
+    m_btnPasteSel->setStyleSheet(kToolActionBtnStyle);
     connect(m_btnPasteSel, &QPushButton::clicked, this, [this]() { m_canvas->pasteClipboard(); });
     cbRow->addWidget(m_btnPasteSel);
     sgLayout->addLayout(cbRow);
@@ -1181,58 +1351,105 @@ QWidget* PixelEditorDialog::createPalettePanel()
     sgLayout->addWidget(m_selTipLabel);
 
     sgLayout->addStretch();
-    selLayout->addWidget(m_selGroup);
-    m_contextualStack->addWidget(m_selectionOptionsPage);
+    layout->addWidget(m_selGroup);
+    layout->addStretch();
+    return page;
+}
 
-    // --- PAGE 3: Eyedropper Options (Eyedropper) ---
-    m_eyedropperOptionsPage = new QWidget(m_contextualStack);
-    QVBoxLayout *eyeLayout = new QVBoxLayout(m_eyedropperOptionsPage);
-    eyeLayout->setContentsMargins(0, 0, 0, 0);
-    eyeLayout->setSpacing(6);
+QWidget* PixelEditorDialog::createEyedropperOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
 
-    m_eyeGroup = new QGroupBox(tr("Eyedropper Sampling"), m_eyedropperOptionsPage);
-    m_eyeGroup->setStyleSheet(groupBoxStyle);
-    QVBoxLayout *egEyeLayout = new QVBoxLayout(m_eyeGroup);
-    egEyeLayout->setContentsMargins(8, 10, 8, 10);
-    egEyeLayout->setSpacing(8);
+    m_eyeGroup = new QGroupBox(tr("Eyedropper Sampling"), page);
+    m_eyeGroup->setStyleSheet(kToolGroupBoxStyle);
+    QVBoxLayout *egLayout = new QVBoxLayout(m_eyeGroup);
+    egLayout->setContentsMargins(8, 10, 8, 10);
+    egLayout->setSpacing(6);
 
-    m_radioSampleAllLayers = new QRadioButton(tr("Sample All Visible Layers (Composite)"), m_eyeGroup);
+    QLabel *srcLbl = new QLabel(tr("Sample Source:"), m_eyeGroup);
+    srcLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    egLayout->addWidget(srcLbl);
+
+    m_radioSampleAllLayers = new QRadioButton(tr("Sample All Layers (Composite)"), m_eyeGroup);
     m_radioSampleAllLayers->setChecked(true);
-    egEyeLayout->addWidget(m_radioSampleAllLayers);
+    egLayout->addWidget(m_radioSampleAllLayers);
 
     m_radioSampleActiveLayer = new QRadioButton(tr("Sample Active Layer Only"), m_eyeGroup);
-    egEyeLayout->addWidget(m_radioSampleActiveLayer);
+    egLayout->addWidget(m_radioSampleActiveLayer);
 
-    m_eyeTipLabel = new QLabel(tr("💡 <b>Tip:</b> Click on any pixel to set primary color. Hold <b>Alt</b> while using any tool to temporarily sample color."), m_eyeGroup);
+    connect(m_radioSampleAllLayers, &QRadioButton::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setSampleAllLayers(checked);
+    });
+
+    QLabel *tgtLbl = new QLabel(tr("Set Color Target:"), m_eyeGroup);
+    tgtLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 6px;"));
+    egLayout->addWidget(tgtLbl);
+
+    m_eyeTargetGroup = new QButtonGroup(this);
+    m_radioEyeTargetPrimary = new QRadioButton(tr("Primary Color (Left Click)"), m_eyeGroup);
+    m_radioEyeTargetPrimary->setChecked(true);
+    m_radioEyeTargetSecondary = new QRadioButton(tr("Secondary Color (Right Click)"), m_eyeGroup);
+    m_eyeTargetGroup->addButton(m_radioEyeTargetPrimary, 0);
+    m_eyeTargetGroup->addButton(m_radioEyeTargetSecondary, 1);
+    egLayout->addWidget(m_radioEyeTargetPrimary);
+    egLayout->addWidget(m_radioEyeTargetSecondary);
+
+    connect(m_eyeTargetGroup, &QButtonGroup::idClicked, this, [this](int id) {
+        if (m_canvas) m_canvas->setEyedropperTargetSecondary(id == 1);
+    });
+
+    // Swatch preview box
+    QLabel *previewTitle = new QLabel(tr("Hovered Color Preview:"), m_eyeGroup);
+    previewTitle->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 6px;"));
+    egLayout->addWidget(previewTitle);
+
+    QHBoxLayout *swatchRow = new QHBoxLayout();
+    m_eyeColorPreviewSwatch = new QLabel(m_eyeGroup);
+    m_eyeColorPreviewSwatch->setFixedSize(32, 32);
+    m_eyeColorPreviewSwatch->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 4px; background-color: transparent;"));
+    swatchRow->addWidget(m_eyeColorPreviewSwatch);
+
+    m_eyeColorHexLabel = new QLabel(tr("Hover over canvas"), m_eyeGroup);
+    m_eyeColorHexLabel->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 10px; font-weight: bold;"));
+    swatchRow->addWidget(m_eyeColorHexLabel, 1);
+    egLayout->addLayout(swatchRow);
+
+    m_eyeTipLabel = new QLabel(tr("💡 <b>Tip:</b> Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold <b>Alt</b> while using any tool to temporarily sample colors."), m_eyeGroup);
     m_eyeTipLabel->setWordWrap(true);
     m_eyeTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
-    egEyeLayout->addWidget(m_eyeTipLabel);
+    egLayout->addWidget(m_eyeTipLabel);
 
-    egEyeLayout->addStretch();
-    eyeLayout->addWidget(m_eyeGroup);
-    m_contextualStack->addWidget(m_eyedropperOptionsPage);
+    egLayout->addStretch();
+    layout->addWidget(m_eyeGroup);
+    layout->addStretch();
+    return page;
+}
 
-    // --- PAGE 4: Polygon Mesh & Smart CDT Options (PolygonEdit) ---
-    m_meshOptionsPage = new QWidget(m_contextualStack);
-    QVBoxLayout *meshLayout = new QVBoxLayout(m_meshOptionsPage);
+QWidget* PixelEditorDialog::createMeshOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *meshLayout = new QVBoxLayout(page);
     meshLayout->setContentsMargins(0, 0, 0, 0);
     meshLayout->setSpacing(6);
 
     // Warning banner when frame has no polygonal mesh
-    m_meshNoticeLabel = new QLabel(tr("⚠️ <b>No polygon mesh</b> for this sprite.<br>A polygon mesh must already exist (generate it from the main toolbox: Tools > Polygon Mesh)."), m_meshOptionsPage);
+    m_meshNoticeLabel = new QLabel(tr("⚠️ <b>No polygon mesh</b> for this sprite.<br>A polygon mesh must already exist (generate it from the main toolbox: Tools > Polygon Mesh)."), page);
     m_meshNoticeLabel->setWordWrap(true);
     m_meshNoticeLabel->setStyleSheet(QStringLiteral("background-color: rgba(230, 150, 0, 0.15); border: 1px solid rgba(230, 150, 0, 0.5); border-radius: 6px; padding: 8px; font-size: 11px;"));
     m_meshNoticeLabel->setVisible(false);
     meshLayout->addWidget(m_meshNoticeLabel);
 
-    m_meshControlsContainer = new QWidget(m_meshOptionsPage);
+    m_meshControlsContainer = new QWidget(page);
     QVBoxLayout *mcLayout = new QVBoxLayout(m_meshControlsContainer);
     mcLayout->setContentsMargins(0, 0, 0, 0);
     mcLayout->setSpacing(6);
 
     // Group 1: Vertex Editing Mode
     m_meshModeGroup_box = new QGroupBox(tr("Vertex Editing Mode"), m_meshControlsContainer);
-    m_meshModeGroup_box->setStyleSheet(groupBoxStyle + QStringLiteral(
+    m_meshModeGroup_box->setStyleSheet(kToolGroupBoxStyle + QStringLiteral(
         "QRadioButton:checked { font-weight: bold; color: palette(highlight); }"
     ));
     QVBoxLayout *mgLayout = new QVBoxLayout(m_meshModeGroup_box);
@@ -1276,7 +1493,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     // Group 2: Smart Mesh CDT Generation
     m_cdtGroup = new QGroupBox(tr("CDT Generation & Steiner Points"), m_meshControlsContainer);
-    m_cdtGroup->setStyleSheet(groupBoxStyle);
+    m_cdtGroup->setStyleSheet(kToolGroupBoxStyle);
     QVBoxLayout *cgLayout = new QVBoxLayout(m_cdtGroup);
     cgLayout->setContentsMargins(8, 10, 8, 10);
     cgLayout->setSpacing(6);
@@ -1407,7 +1624,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     // Group 3: Mesh Statistics
     m_meshStatsGroup = new QGroupBox(tr("Mesh Statistics"), m_meshControlsContainer);
-    m_meshStatsGroup->setStyleSheet(groupBoxStyle);
+    m_meshStatsGroup->setStyleSheet(kToolGroupBoxStyle);
     QGridLayout *sgGrid = new QGridLayout(m_meshStatsGroup);
     sgGrid->setContentsMargins(8, 8, 8, 8);
     sgGrid->setSpacing(4);
@@ -1441,13 +1658,353 @@ QWidget* PixelEditorDialog::createPalettePanel()
 
     meshLayout->addWidget(m_meshControlsContainer);
     meshLayout->addStretch();
-    m_contextualStack->addWidget(m_meshOptionsPage);
+    return page;
+}
+
+QWidget* PixelEditorDialog::createBucketOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+
+    m_bucketGroup = new QGroupBox(tr("Bucket Fill Options"), page);
+    m_bucketGroup->setStyleSheet(kToolGroupBoxStyle);
+    QVBoxLayout *bgLayout = new QVBoxLayout(m_bucketGroup);
+    bgLayout->setContentsMargins(8, 10, 8, 10);
+    bgLayout->setSpacing(6);
+
+    QHBoxLayout *colorRow = new QHBoxLayout();
+    colorRow->setSpacing(6);
+
+    QPushButton *bucketPrimaryBtn = new QPushButton(m_bucketGroup);
+    bucketPrimaryBtn->setFixedSize(28, 28);
+    bucketPrimaryBtn->setToolTip(tr("Current Primary Color (Click to change)"));
+    QColor curCol = m_canvas ? m_canvas->primaryColor() : Qt::black;
+    bucketPrimaryBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid palette(window-text); border-radius: 4px;").arg(curCol.name()));
+    connect(bucketPrimaryBtn, &QPushButton::clicked, this, &PixelEditorDialog::onPrimarySwatchClicked);
+    colorRow->addWidget(bucketPrimaryBtn);
+
+    QPushButton *bucketSwapBtn = new QPushButton(QStringLiteral("⇄"), m_bucketGroup);
+    bucketSwapBtn->setFixedSize(24, 24);
+    bucketSwapBtn->setToolTip(tr("Swap Colors (X)"));
+    bucketSwapBtn->setStyleSheet(QStringLiteral("QPushButton { border: 1px solid palette(mid); border-radius: 12px; font-weight: bold; font-size: 11px; } QPushButton:hover { background-color: palette(alternate-base); }"));
+    connect(bucketSwapBtn, &QPushButton::clicked, this, [this]() { m_canvas->swapColors(); });
+    colorRow->addWidget(bucketSwapBtn);
+
+    QLabel *bucketHexLbl = new QLabel(curCol.name().toUpper(), m_bucketGroup);
+    bucketHexLbl->setStyleSheet(QStringLiteral("font-family: monospace; font-size: 11px; font-weight: bold;"));
+    colorRow->addWidget(bucketHexLbl);
+
+    colorRow->addStretch();
+
+    QPushButton *bucketPickBtn = new QPushButton(tr("Pick Color..."), m_bucketGroup);
+    bucketPickBtn->setStyleSheet(QStringLiteral("QPushButton { border: 1px solid palette(mid); border-radius: 4px; font-size: 10px; font-weight: 600; padding: 3px 6px; } QPushButton:hover { background-color: palette(alternate-base); }"));
+    connect(bucketPickBtn, &QPushButton::clicked, this, &PixelEditorDialog::onPrimarySwatchClicked);
+    colorRow->addWidget(bucketPickBtn);
+
+    bgLayout->addLayout(colorRow);
+
+    connect(m_canvas, &PixelCanvas::primaryColorChanged, this, [bucketPrimaryBtn, bucketHexLbl](const QColor &col) {
+        if (bucketPrimaryBtn) bucketPrimaryBtn->setStyleSheet(QStringLiteral("background-color: %1; border: 2px solid palette(window-text); border-radius: 4px;").arg(col.name()));
+        if (bucketHexLbl) bucketHexLbl->setText(col.name().toUpper());
+    });
+
+    QLabel *modeLbl = new QLabel(tr("Affected Area:"), m_bucketGroup);
+    modeLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    bgLayout->addWidget(modeLbl);
+
+    m_bucketModeGroup = new QButtonGroup(this);
+    m_radioBucketSimilar = new QRadioButton(tr("Fill Similar Colors (Contiguous)"), m_bucketGroup);
+    m_radioBucketSelection = new QRadioButton(tr("Fill Whole Selection"), m_bucketGroup);
+    m_radioBucketGlobal = new QRadioButton(tr("Replace Color Globally"), m_bucketGroup);
+
+    m_radioBucketSimilar->setChecked(true);
+    m_bucketModeGroup->addButton(m_radioBucketSimilar, static_cast<int>(BucketFillMode::SimilarColors));
+    m_bucketModeGroup->addButton(m_radioBucketSelection, static_cast<int>(BucketFillMode::WholeSelection));
+    m_bucketModeGroup->addButton(m_radioBucketGlobal, static_cast<int>(BucketFillMode::GlobalReplace));
+
+    bgLayout->addWidget(m_radioBucketSimilar);
+    bgLayout->addWidget(m_radioBucketSelection);
+    bgLayout->addWidget(m_radioBucketGlobal);
+
+    connect(m_bucketModeGroup, &QButtonGroup::idClicked, this, [this](int id) {
+        if (m_canvas) m_canvas->setBucketMode(static_cast<BucketFillMode>(id));
+    });
+
+    QLabel *threshLbl = new QLabel(tr("Threshold:"), m_bucketGroup);
+    threshLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px; margin-top: 4px;"));
+    bgLayout->addWidget(threshLbl);
+    bgLayout->addLayout(makeSliderSpinRow(m_bucketGroup, 0, 255, 0, QString(), m_bucketThresholdSlider, m_bucketThresholdSpin));
+    connect(m_bucketThresholdSlider, &QSlider::valueChanged, this, [this](int val) {
+        if (m_canvas) m_canvas->setBucketThreshold(val);
+    });
+
+    QLabel *opLbl = new QLabel(tr("Opacity (%):"), m_bucketGroup);
+    opLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px; margin-top: 4px;"));
+    bgLayout->addWidget(opLbl);
+    bgLayout->addLayout(makeSliderSpinRow(m_bucketGroup, 1, 100, 100, QStringLiteral(" %"), m_bucketOpacitySlider, m_bucketOpacitySpin));
+    connect(m_bucketOpacitySlider, &QSlider::valueChanged, this, [this](int val) {
+        if (m_canvas) m_canvas->setBucketOpacity(val);
+    });
+
+    m_bucketDiagonalCheck = new QCheckBox(tr("Diagonal neighbors (8-connected)"), m_bucketGroup);
+    m_bucketDiagonalCheck->setToolTip(tr("Allow flood fill to spread through diagonal pixel corners"));
+    connect(m_bucketDiagonalCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setBucketDiagonal(checked);
+    });
+    bgLayout->addWidget(m_bucketDiagonalCheck);
+
+    m_bucketTransparentCheck = new QCheckBox(tr("Fill transparent areas"), m_bucketGroup);
+    m_bucketTransparentCheck->setChecked(true);
+    m_bucketTransparentCheck->setToolTip(tr("Allow bucket tool to flood fill empty/transparent areas"));
+    connect(m_bucketTransparentCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setBucketFillTransparent(checked);
+    });
+    bgLayout->addWidget(m_bucketTransparentCheck);
+
+    m_bucketSampleMergedCheck = new QCheckBox(tr("Sample merged (all layers)"), m_bucketGroup);
+    m_bucketSampleMergedCheck->setToolTip(tr("Check color boundaries across all visible layers combined"));
+    connect(m_bucketSampleMergedCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setSampleAllLayers(checked);
+    });
+    bgLayout->addWidget(m_bucketSampleMergedCheck);
+
+    m_bucketTipLabel = new QLabel(tr("💡 <b>Tip:</b> Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold <b>Shift</b> to fill whole selection."), m_bucketGroup);
+    m_bucketTipLabel->setWordWrap(true);
+    m_bucketTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    bgLayout->addWidget(m_bucketTipLabel);
+
+    bgLayout->addStretch();
+    layout->addWidget(m_bucketGroup);
+    layout->addStretch();
+    return page;
+}
+
+QWidget* PixelEditorDialog::createMagicWandOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+
+    m_wandGroup = new QGroupBox(tr("Fuzzy Select (Magic Wand)"), page);
+    m_wandGroup->setStyleSheet(kToolGroupBoxStyle);
+    QVBoxLayout *wgLayout = new QVBoxLayout(m_wandGroup);
+    wgLayout->setContentsMargins(8, 10, 8, 10);
+    wgLayout->setSpacing(6);
+
+    QLabel *modeLbl = new QLabel(tr("Mode:"), m_wandGroup);
+    modeLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    wgLayout->addWidget(modeLbl);
+
+    QHBoxLayout *modeRow = new QHBoxLayout();
+    modeRow->setSpacing(4);
+    m_wandModeGroup = new QButtonGroup(this);
+    m_wandModeGroup->setExclusive(true);
+
+    m_btnWandModeReplace = new QToolButton(m_wandGroup);
+    m_btnWandModeReplace->setText(QStringLiteral("■"));
+    m_btnWandModeReplace->setToolTip(tr("Replace selection"));
+    m_btnWandModeReplace->setCheckable(true);
+    m_btnWandModeReplace->setChecked(true);
+    m_btnWandModeReplace->setStyleSheet(kToolModeBtnStyle);
+    m_wandModeGroup->addButton(m_btnWandModeReplace, static_cast<int>(SelectionMode::Replace));
+    modeRow->addWidget(m_btnWandModeReplace);
+
+    m_btnWandModeAdd = new QToolButton(m_wandGroup);
+    m_btnWandModeAdd->setText(QStringLiteral("+"));
+    m_btnWandModeAdd->setToolTip(tr("Add to current selection (Shift)"));
+    m_btnWandModeAdd->setCheckable(true);
+    m_btnWandModeAdd->setStyleSheet(kToolModeBtnStyle);
+    m_wandModeGroup->addButton(m_btnWandModeAdd, static_cast<int>(SelectionMode::Add));
+    modeRow->addWidget(m_btnWandModeAdd);
+
+    m_btnWandModeSubtract = new QToolButton(m_wandGroup);
+    m_btnWandModeSubtract->setText(QStringLiteral("−"));
+    m_btnWandModeSubtract->setToolTip(tr("Subtract from selection (Ctrl)"));
+    m_btnWandModeSubtract->setCheckable(true);
+    m_btnWandModeSubtract->setStyleSheet(kToolModeBtnStyle);
+    m_wandModeGroup->addButton(m_btnWandModeSubtract, static_cast<int>(SelectionMode::Subtract));
+    modeRow->addWidget(m_btnWandModeSubtract);
+
+    m_btnWandModeIntersect = new QToolButton(m_wandGroup);
+    m_btnWandModeIntersect->setText(QStringLiteral("∩"));
+    m_btnWandModeIntersect->setToolTip(tr("Intersect with selection (Shift+Ctrl)"));
+    m_btnWandModeIntersect->setCheckable(true);
+    m_btnWandModeIntersect->setStyleSheet(kToolModeBtnStyle);
+    m_wandModeGroup->addButton(m_btnWandModeIntersect, static_cast<int>(SelectionMode::Intersect));
+    modeRow->addWidget(m_btnWandModeIntersect);
+    modeRow->addStretch();
+    wgLayout->addLayout(modeRow);
+
+    connect(m_wandModeGroup, &QButtonGroup::idClicked, this, [this](int id) {
+        if (m_canvas) m_canvas->setSelectionMode(static_cast<SelectionMode>(id));
+        if (m_selModeGroup && m_selModeGroup->button(id)) {
+            m_selModeGroup->button(id)->setChecked(true);
+        }
+    });
+
+    m_wandContiguousCheck = new QCheckBox(tr("Contiguous (Flood fill)"), m_wandGroup);
+    m_wandContiguousCheck->setChecked(true);
+    m_wandContiguousCheck->setToolTip(tr("Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)"));
+    connect(m_wandContiguousCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setMagicWandContiguous(checked);
+    });
+    wgLayout->addWidget(m_wandContiguousCheck);
+
+    QLabel *threshLbl = new QLabel(tr("Threshold:"), m_wandGroup);
+    threshLbl->setStyleSheet(QStringLiteral("font-weight: 600; font-size: 10px; margin-top: 4px;"));
+    wgLayout->addWidget(threshLbl);
+    wgLayout->addLayout(makeSliderSpinRow(m_wandGroup, 0, 255, 0, QString(), m_wandThresholdSlider, m_wandThresholdSpin));
+    connect(m_wandThresholdSlider, &QSlider::valueChanged, this, [this](int val) {
+        if (m_canvas) m_canvas->setMagicWandThreshold(val);
+    });
+
+    m_wandDiagonalCheck = new QCheckBox(tr("Diagonal neighbors (8-connected)"), m_wandGroup);
+    m_wandDiagonalCheck->setToolTip(tr("Allow magic wand selection to expand diagonally through pixel corners"));
+    connect(m_wandDiagonalCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setMagicWandDiagonal(checked);
+    });
+    wgLayout->addWidget(m_wandDiagonalCheck);
+
+    m_wandTransparentCheck = new QCheckBox(tr("Select transparent areas"), m_wandGroup);
+    m_wandTransparentCheck->setChecked(true);
+    m_wandTransparentCheck->setToolTip(tr("Allow selecting transparent / empty pixel regions"));
+    connect(m_wandTransparentCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setMagicWandSelectTransparent(checked);
+    });
+    wgLayout->addWidget(m_wandTransparentCheck);
+
+    m_wandSampleMergedCheck = new QCheckBox(tr("Sample merged (all layers)"), m_wandGroup);
+    m_wandSampleMergedCheck->setToolTip(tr("Detect color boundaries across all visible layers combined"));
+    connect(m_wandSampleMergedCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setSampleAllLayers(checked);
+    });
+    wgLayout->addWidget(m_wandSampleMergedCheck);
+
+    // Quick Actions
+    QLabel *actLbl = new QLabel(tr("Selection Actions:"), m_wandGroup);
+    actLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 6px;"));
+    wgLayout->addWidget(actLbl);
+
+    m_btnWandDeselect = new QPushButton(tr("✕ Deselect (Esc)"), m_wandGroup);
+    m_btnWandDeselect->setStyleSheet(kToolActionBtnStyle);
+    connect(m_btnWandDeselect, &QPushButton::clicked, this, [this]() { m_canvas->deselect(); });
+    wgLayout->addWidget(m_btnWandDeselect);
+
+    m_btnWandInvert = new QPushButton(tr("⇄ Invert Selection"), m_wandGroup);
+    m_btnWandInvert->setStyleSheet(kToolActionBtnStyle);
+    connect(m_btnWandInvert, &QPushButton::clicked, this, [this]() { m_canvas->invertSelection(); });
+    wgLayout->addWidget(m_btnWandInvert);
+
+    m_btnWandClear = new QPushButton(tr("🗑 Delete Contents (Del)"), m_wandGroup);
+    m_btnWandClear->setStyleSheet(kToolActionBtnStyle);
+    connect(m_btnWandClear, &QPushButton::clicked, this, [this]() { m_canvas->clearSelection(); });
+    wgLayout->addWidget(m_btnWandClear);
+
+    QHBoxLayout *wandClipRow = new QHBoxLayout();
+    m_btnWandCopy = new QPushButton(tr("📋 Copy"), m_wandGroup);
+    m_btnWandCopy->setStyleSheet(kToolActionBtnStyle);
+    connect(m_btnWandCopy, &QPushButton::clicked, this, [this]() { m_canvas->copySelection(); });
+    wandClipRow->addWidget(m_btnWandCopy);
+
+    m_btnWandCut = new QPushButton(tr("✂ Cut"), m_wandGroup);
+    m_btnWandCut->setStyleSheet(kToolActionBtnStyle);
+    connect(m_btnWandCut, &QPushButton::clicked, this, [this]() { m_canvas->cutSelection(); });
+    wandClipRow->addWidget(m_btnWandCut);
+    wgLayout->addLayout(wandClipRow);
+
+    m_wandTipLabel = new QLabel(tr("💡 <b>Tip:</b> Click on a color to select contiguous matching pixels. Hold <b>Shift</b> to add to selection, <b>Ctrl</b> to subtract."), m_wandGroup);
+    m_wandTipLabel->setWordWrap(true);
+    m_wandTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    wgLayout->addWidget(m_wandTipLabel);
+
+    wgLayout->addStretch();
+    layout->addWidget(m_wandGroup);
+    layout->addStretch();
+    return page;
+}
+
+QWidget* PixelEditorDialog::createPalettePanel()
+{
+    QScrollArea *scrollPanel = new QScrollArea(this);
+    scrollPanel->setMinimumWidth(260);
+    scrollPanel->setWidgetResizable(true);
+    scrollPanel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollPanel->setStyleSheet(QStringLiteral("QScrollArea { background-color: transparent; border: none; }"));
+
+    QWidget *panel = new QWidget(scrollPanel);
+    QVBoxLayout *layout = new QVBoxLayout(panel);
+    layout->setContentsMargins(4, 2, 4, 2);
+    layout->setSpacing(6);
+
+    const QString groupBoxStyle = kToolGroupBoxStyle;
+
+    // 1. Right Column Tab Widget: Tab 0 = Palette & Colors, Tab 1 = Layers
+    m_rightTabWidget = new QTabWidget(panel);
+    m_rightTabWidget->setObjectName(QStringLiteral("pixelEditorRightTabs"));
+    m_rightTabWidget->setStyleSheet(QStringLiteral(
+        "QTabWidget::pane {"
+        "  border: 1px solid palette(mid);"
+        "  background-color: transparent;"
+        "  border-radius: 6px;"
+        "}"
+        "QTabWidget::tab-bar {"
+        "  alignment: left;"
+        "}"
+        "QTabBar::tab {"
+        "  background-color: palette(button);"
+        "  color: palette(button-text);"
+        "  border: 1px solid palette(mid);"
+        "  padding: 6px 14px;"
+        "  margin-right: 4px;"
+        "  border-top-left-radius: 5px;"
+        "  border-top-right-radius: 5px;"
+        "  font-weight: 600;"
+        "  font-size: 11px;"
+        "}"
+        "QTabBar::tab:selected {"
+        "  background-color: palette(highlight);"
+        "  color: palette(highlighted-text);"
+        "  border-color: palette(highlight);"
+        "  font-weight: bold;"
+        "}"
+        "QTabBar::tab:hover:!selected {"
+        "  background-color: palette(alternate-base);"
+        "}"
+    ));
+
+    // Tab 0: Tool Options (M18 / M19 / Contextual Tool Options)
+    m_toolTab = new QWidget(m_rightTabWidget);
+    QVBoxLayout *toolTabLayout = new QVBoxLayout(m_toolTab);
+    toolTabLayout->setContentsMargins(4, 4, 4, 4);
+    toolTabLayout->setSpacing(4);
+
+    m_contextualStack = new QStackedWidget(m_toolTab);
+    m_contextualStack->setObjectName(QStringLiteral("contextualStack"));
+
+    m_pencilOptionsPage = createPencilOptionsPage();
+    m_eraserOptionsPage = createEraserOptionsPage();
+    m_selectionOptionsPage = createSelectionOptionsPage();
+    m_eyedropperOptionsPage = createEyedropperOptionsPage();
+    m_meshOptionsPage = createMeshOptionsPage();
+    m_bucketOptionsPage = createBucketOptionsPage();
+    m_magicWandOptionsPage = createMagicWandOptionsPage();
+
+    m_contextualStack->addWidget(m_pencilOptionsPage);     // 0: Pencil
+    m_contextualStack->addWidget(m_eraserOptionsPage);     // 1: Eraser
+    m_contextualStack->addWidget(m_selectionOptionsPage);  // 2: Selection
+    m_contextualStack->addWidget(m_eyedropperOptionsPage); // 3: Eyedropper
+    m_contextualStack->addWidget(m_meshOptionsPage);       // 4: Polygon Mesh CDT
+    m_contextualStack->addWidget(m_bucketOptionsPage);     // 5: Bucket Fill
+    m_contextualStack->addWidget(m_magicWandOptionsPage);  // 6: Magic Wand
 
     toolTabLayout->addWidget(m_contextualStack);
-    toolTabLayout->addStretch();
+    toolTabLayout->addStretch(1);
     m_rightTabWidget->addTab(m_toolTab, tr("Tool Options"));
 
-    // 2. Layer Stack Tab (M18)
+    // Tab 1: Layers (M18)
     m_layersTab = new QWidget(m_rightTabWidget);
     QVBoxLayout *layersTabLayout = new QVBoxLayout(m_layersTab);
     layersTabLayout->setContentsMargins(4, 4, 4, 4);
@@ -1652,22 +2209,26 @@ void PixelEditorDialog::onToolButtonClicked(int id)
     if (m_contextualStack) {
         switch (tool) {
         case PixelTool::Pencil:
-        case PixelTool::BucketFill:
-            m_contextualStack->setCurrentIndex(0); // Color & Palette Studio
+            m_contextualStack->setCurrentIndex(0); // Pencil
             break;
         case PixelTool::Eraser:
-            m_contextualStack->setCurrentIndex(1); // Eraser Options
+            m_contextualStack->setCurrentIndex(1); // Eraser
             break;
         case PixelTool::SelectRect:
-        case PixelTool::SelectColor:
-            m_contextualStack->setCurrentIndex(2); // Selection Actions
+            m_contextualStack->setCurrentIndex(2); // Selection
             break;
         case PixelTool::Eyedropper:
-            m_contextualStack->setCurrentIndex(3); // Eyedropper Sampling
+            m_contextualStack->setCurrentIndex(3); // Eyedropper
             break;
         case PixelTool::PolygonEdit:
             m_contextualStack->setCurrentIndex(4); // Smart Mesh CDT & Polygon Editing (M19)
             updateMeshStatsUI();
+            break;
+        case PixelTool::BucketFill:
+            m_contextualStack->setCurrentIndex(5); // Bucket Fill
+            break;
+        case PixelTool::SelectColor:
+            m_contextualStack->setCurrentIndex(6); // Magic Wand
             break;
         }
     }
@@ -1720,6 +2281,12 @@ void PixelEditorDialog::onCanvasPixelMoved(int x, int y, const QColor &color)
             m_hoverColorSwatch->show();
         }
         m_colorInfoLabel->setText(tr("Transparent [alpha: 0]"));
+        if (m_eyeColorPreviewSwatch) {
+            m_eyeColorPreviewSwatch->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 4px; background-color: transparent;"));
+        }
+        if (m_eyeColorHexLabel) {
+            m_eyeColorHexLabel->setText(tr("Transparent [A: 0]"));
+        }
     } else {
         if (m_hoverColorSwatch) {
             m_hoverColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid palette(window-text); border-radius: 3px; background-color: %1;").arg(color.name()));
@@ -1731,6 +2298,16 @@ void PixelEditorDialog::onCanvasPixelMoved(int x, int y, const QColor &color)
                                   .arg(color.green())
                                   .arg(color.blue())
                                   .arg(color.alpha()));
+        if (m_eyeColorPreviewSwatch) {
+            m_eyeColorPreviewSwatch->setStyleSheet(QStringLiteral("border: 1px solid palette(window-text); border-radius: 4px; background-color: %1;").arg(color.name()));
+        }
+        if (m_eyeColorHexLabel) {
+            m_eyeColorHexLabel->setText(QStringLiteral("%1  RGB(%2,%3,%4)")
+                                        .arg(color.name().toUpper())
+                                        .arg(color.red())
+                                        .arg(color.green())
+                                        .arg(color.blue()));
+        }
     }
 }
 
@@ -1739,6 +2316,10 @@ void PixelEditorDialog::onCanvasPixelLeft()
     m_coordLabel->setText(tr("X: -- , Y: --"));
     if (m_hoverColorSwatch) m_hoverColorSwatch->hide();
     m_colorInfoLabel->clear();
+    if (m_eyeColorHexLabel) m_eyeColorHexLabel->setText(tr("Hover over canvas"));
+    if (m_eyeColorPreviewSwatch) {
+        m_eyeColorPreviewSwatch->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 4px; background-color: transparent;"));
+    }
 }
 
 void PixelEditorDialog::onCanvasZoomChanged(double zoom)
@@ -3734,8 +4315,30 @@ void PixelEditorDialog::retranslateUi()
         m_rightTabWidget->setTabText(1, tr("Layers"));
     }
 
+    // Tool Options - Pencil
+    if (m_pencilGroup) m_pencilGroup->setTitle(tr("Pencil Options"));
+    if (m_pencilHardEdgeCheck) m_pencilHardEdgeCheck->setText(tr("Hard edge (Pixel art)"));
+    if (m_pencilTipLabel) m_pencilTipLabel->setText(tr("💡 <b>Tip:</b> Hold <b>Shift</b> to draw straight lines. Hold <b>Alt</b> to sample colors with Eyedropper."));
+    if (m_pencilShapeCombo) {
+        int curIdx = m_pencilShapeCombo->currentIndex();
+        m_pencilShapeCombo->blockSignals(true);
+        m_pencilShapeCombo->setItemText(0, tr("Square (Pixel Art)"));
+        m_pencilShapeCombo->setItemText(1, tr("Circle (Soft Round)"));
+        m_pencilShapeCombo->setCurrentIndex(curIdx);
+        m_pencilShapeCombo->blockSignals(false);
+    }
+
     // Tool Options - Eraser
     if (m_eraserGroup) m_eraserGroup->setTitle(tr("Eraser Options"));
+    if (m_eraserHardEdgeCheck) m_eraserHardEdgeCheck->setText(tr("Hard edge (Pixel art)"));
+    if (m_eraserShapeCombo) {
+        int curIdx = m_eraserShapeCombo->currentIndex();
+        m_eraserShapeCombo->blockSignals(true);
+        m_eraserShapeCombo->setItemText(0, tr("Square (Pixel Art)"));
+        m_eraserShapeCombo->setItemText(1, tr("Circle (Soft Round)"));
+        m_eraserShapeCombo->setCurrentIndex(curIdx);
+        m_eraserShapeCombo->blockSignals(false);
+    }
     if (m_eraserApplyAllFramesCheck) {
         m_eraserApplyAllFramesCheck->setText(tr("Erase across all frames (Timeline)"));
         m_eraserApplyAllFramesCheck->setToolTip(tr("Erase pixels across all frames of current animation aligned by pivot"));
@@ -3745,11 +4348,16 @@ void PixelEditorDialog::retranslateUi()
         m_eraserAllLayersCheck->setToolTip(tr("When checked, clears pixels on all visible layers simultaneously instead of only active layer"));
     }
     if (m_eraserTipLabel) {
-        m_eraserTipLabel->setText(tr("💡 <b>Tip:</b> 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold <b>Shift</b> to draw straight lines."));
+        m_eraserTipLabel->setText(tr("💡 <b>Tip:</b> Clears directly to alpha 0. Hold <b>Shift</b> to erase straight lines. Right-click erases with secondary color."));
     }
 
     // Tool Options - Selection Actions
-    if (m_selGroup) m_selGroup->setTitle(tr("Selection Actions"));
+    if (m_selGroup) m_selGroup->setTitle(tr("Rectangle Select"));
+    if (m_btnSelModeReplace) m_btnSelModeReplace->setToolTip(tr("Replace selection"));
+    if (m_btnSelModeAdd) m_btnSelModeAdd->setToolTip(tr("Add to current selection (Shift)"));
+    if (m_btnSelModeSubtract) m_btnSelModeSubtract->setToolTip(tr("Subtract from selection (Ctrl)"));
+    if (m_btnSelModeIntersect) m_btnSelModeIntersect->setToolTip(tr("Intersect with selection (Shift+Ctrl)"));
+    if (m_selFixedSquareCheck) m_selFixedSquareCheck->setText(tr("Fixed 1:1 Aspect ratio (Square)"));
     if (m_btnSelectAll) {
         m_btnSelectAll->setText(tr("⬚ Select All (Ctrl+A)"));
         m_btnSelectAll->setToolTip(tr("Select all pixels on canvas (Ctrl+A)"));
@@ -3757,6 +4365,10 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnDeselect) {
         m_btnDeselect->setText(tr("✕ Deselect (Esc)"));
         m_btnDeselect->setToolTip(tr("Deselect active selection (Esc)"));
+    }
+    if (m_btnInvertSel) {
+        m_btnInvertSel->setText(tr("⇄ Invert Selection"));
+        m_btnInvertSel->setToolTip(tr("Invert current selection"));
     }
     if (m_btnClearSelection) {
         m_btnClearSelection->setText(tr("🗑 Delete Contents (Del)"));
@@ -3780,10 +4392,43 @@ void PixelEditorDialog::retranslateUi()
 
     // Tool Options - Eyedropper Sampling
     if (m_eyeGroup) m_eyeGroup->setTitle(tr("Eyedropper Sampling"));
-    if (m_radioSampleAllLayers) m_radioSampleAllLayers->setText(tr("Sample All Visible Layers (Composite)"));
+    if (m_radioSampleAllLayers) m_radioSampleAllLayers->setText(tr("Sample All Layers (Composite)"));
     if (m_radioSampleActiveLayer) m_radioSampleActiveLayer->setText(tr("Sample Active Layer Only"));
+    if (m_radioEyeTargetPrimary) m_radioEyeTargetPrimary->setText(tr("Primary Color (Left Click)"));
+    if (m_radioEyeTargetSecondary) m_radioEyeTargetSecondary->setText(tr("Secondary Color (Right Click)"));
     if (m_eyeTipLabel) {
-        m_eyeTipLabel->setText(tr("💡 <b>Tip:</b> Click on any pixel to set primary color. Hold <b>Alt</b> while using any tool to temporarily sample color."));
+        m_eyeTipLabel->setText(tr("💡 <b>Tip:</b> Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold <b>Alt</b> while using any tool to temporarily sample colors."));
+    }
+
+    // Tool Options - Bucket Fill
+    if (m_bucketGroup) m_bucketGroup->setTitle(tr("Bucket Fill Options"));
+    if (m_radioBucketSimilar) m_radioBucketSimilar->setText(tr("Fill Similar Colors (Contiguous)"));
+    if (m_radioBucketSelection) m_radioBucketSelection->setText(tr("Fill Whole Selection"));
+    if (m_radioBucketGlobal) m_radioBucketGlobal->setText(tr("Replace Color Globally"));
+    if (m_bucketDiagonalCheck) m_bucketDiagonalCheck->setText(tr("Diagonal neighbors (8-connected)"));
+    if (m_bucketTransparentCheck) m_bucketTransparentCheck->setText(tr("Fill transparent areas"));
+    if (m_bucketSampleMergedCheck) m_bucketSampleMergedCheck->setText(tr("Sample merged (all layers)"));
+    if (m_bucketTipLabel) {
+        m_bucketTipLabel->setText(tr("💡 <b>Tip:</b> Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold <b>Shift</b> to fill whole selection."));
+    }
+
+    // Tool Options - Magic Wand
+    if (m_wandGroup) m_wandGroup->setTitle(tr("Fuzzy Select (Magic Wand)"));
+    if (m_btnWandModeReplace) m_btnWandModeReplace->setToolTip(tr("Replace selection"));
+    if (m_btnWandModeAdd) m_btnWandModeAdd->setToolTip(tr("Add to current selection (Shift)"));
+    if (m_btnWandModeSubtract) m_btnWandModeSubtract->setToolTip(tr("Subtract from selection (Ctrl)"));
+    if (m_btnWandModeIntersect) m_btnWandModeIntersect->setToolTip(tr("Intersect with selection (Shift+Ctrl)"));
+    if (m_wandContiguousCheck) m_wandContiguousCheck->setText(tr("Contiguous (Flood fill)"));
+    if (m_wandDiagonalCheck) m_wandDiagonalCheck->setText(tr("Diagonal neighbors (8-connected)"));
+    if (m_wandTransparentCheck) m_wandTransparentCheck->setText(tr("Select transparent areas"));
+    if (m_wandSampleMergedCheck) m_wandSampleMergedCheck->setText(tr("Sample merged (all layers)"));
+    if (m_btnWandDeselect) m_btnWandDeselect->setText(tr("✕ Deselect (Esc)"));
+    if (m_btnWandInvert) m_btnWandInvert->setText(tr("⇄ Invert Selection"));
+    if (m_btnWandClear) m_btnWandClear->setText(tr("🗑 Delete Contents (Del)"));
+    if (m_btnWandCopy) m_btnWandCopy->setText(tr("📋 Copy"));
+    if (m_btnWandCut) m_btnWandCut->setText(tr("✂ Cut"));
+    if (m_wandTipLabel) {
+        m_wandTipLabel->setText(tr("💡 <b>Tip:</b> Click on a color to select contiguous matching pixels. Hold <b>Shift</b> to add to selection, <b>Ctrl</b> to subtract."));
     }
 
     // Tool Options - Polygon Mesh & Smart CDT Options

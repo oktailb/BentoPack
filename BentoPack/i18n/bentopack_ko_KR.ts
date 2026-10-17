@@ -2954,6 +2954,146 @@ Strict removal clears the pixel.</source>
         <translation>아틀라스 재패킹...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>위치: %1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>크기: %1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>선택됨: %1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>연필 옵션</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>크기 (px):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>불투명도 (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>브러시 모양:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>정사각형 (픽셀 아트)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>원형 (부드러운 원)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>하드 엣지 (픽셀 아트)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>앤티앨리어싱 없는 선명한 픽셀 윤곽</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;팁:&lt;/b&gt; &lt;b&gt;Shift&lt;/b&gt;를 누르면 직선을 그립니다. &lt;b&gt;Alt&lt;/b&gt;를 누르면 스포이트로 색상을 추출합니다.</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>지우개 모양:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 알파 0으로 직접 지웁니다. &lt;b&gt;Shift&lt;/b&gt;를 누른 채 직선으로 지울 수 있습니다. 우클릭 시 보조 색상으로 지웁니다.</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>사각형 선택</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>모드:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>선택 영역 대체</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>현재 선택 영역에 추가 (Shift)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>선택 영역에서 빼기 (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>선택 영역과 교차 (Shift+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>1:1 고정 종횡비 (정사각형)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>선택 사각형을 1:1 정사각형으로 제한</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>위치: 0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>크기: 0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>선택됨: 0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>동작:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ 선택 영역 반전</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>샘플 소스:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>모든 레이어에서 샘플링 (합성)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>색상 대상 설정:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>기본 색상 (좌클릭)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>보조 색상 (우클릭)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>가리킨 색상 미리보기:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>캔버스 위로 마우스 이동</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 픽셀을 클릭하여 색상을 추출합니다. 좌클릭은 기본 색상, 우클릭은 보조 색상으로 설정됩니다. &lt;b&gt;Alt&lt;/b&gt;를 누르면 일시적으로 스포이트가 활성화됩니다.</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ 이 스프라이트에는 &lt;b&gt;다각형 메시가 없습니다&lt;/b&gt;.&lt;br&gt;다각형 메시가 이미 존재해야 합니다(기본 도구 상자: 도구 &gt; 다각형 메시에서 생성).</translation>
     </message>
@@ -3050,6 +3190,102 @@ Strict removal clears the pixel.</source>
         <translation>오버드로 절감률:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>페인트통 채우기 옵션</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>현재 기본 색상 (클릭하여 변경)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>색상 선택...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>적용 영역:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>유사한 색상 채우기 (인접)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>전체 선택 영역 채우기</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>전체 색상 바꾸기</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>임계값:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>대각선 인접 (8방향 연결)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>채우기가 대각선 픽셀 모서리를 통해 퍼지도록 허용</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>투명 영역 채우기</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>페인트통 도구가 빈/투명 영역을 채우도록 허용</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>병합 샘플 (모든 레이어)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>모든 보이는 레이어를 결합하여 색상 경계 확인</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 색상을 클릭하여 채웁니다. 좌클릭은 기본 색상, 우클릭은 보조 색상으로 채웁니다. &lt;b&gt;Shift&lt;/b&gt;를 누르면 전체 선택 영역을 채웁니다.</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>마법봉 선택 (퍼지 선택)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>인접 영역 (연속 채우기)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>일치하는 색상의 연결된 픽셀 선택 (해제 시 전체 이미지에서 일치하는 모든 픽셀 선택)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>마법봉 선택이 대각선 모서리를 통해 확장되도록 허용</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>투명 영역 선택</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>투명/비어 있는 픽셀 영역 선택 허용</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>모든 보이는 레이어를 결합하여 색상 경계 감지</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>선택 작업:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 색상을 클릭하여 인접한 일치 픽셀을 선택합니다. &lt;b&gt;Shift&lt;/b&gt;를 누르면 추가, &lt;b&gt;Ctrl&lt;/b&gt;을 누르면 뺍니다.</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>대화형 아틀라스 패킹 창을 열어 스프라이트 충돌을 해결합니다</translation>
     </message>
@@ -3068,6 +3304,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Select Secondary Color</source>
         <translation>보조 색상 선택</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>투명 [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>&apos;%1&apos;의 모든 프레임에 적용</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>현재 선택 영역 반전</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Strict removal clears the pixel.</source>
         <translation>선택하면 활성 레이어뿐만 아니라 모든 보이는 레이어의 픽셀을 동시에 지웁니다</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 1px 연속 브레젠험 지우개. 알파 0으로 직접 지웁니다. &lt;b&gt;Shift&lt;/b&gt;를 누른 채로 직선을 그릴 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>선택 작업</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ 모두 선택 (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>캔버스의 모든 픽셀 선택 (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ 선택 해제 (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>선택 해제 (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 내용 삭제 (Del)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>선택 영역 내 픽셀 지우기 (Del)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 복사</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>선택 영역을 클립보드에 복사 (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ 잘라내기</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>선택 영역을 클립보드로 잘라내기 (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 붙여넣기</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>클립보드에서 선택 영역 붙여넣기 (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Strict removal clears the pixel.</source>
         <translation>스포이트 샘플링</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>모든 보이는 레이어 샘플링 (합성)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>활성 레이어만 샘플링</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 픽셀을 클릭하여 기본 색상을 설정합니다. 도구를 사용하는 동안 &lt;b&gt;Alt&lt;/b&gt;를 누르고 있으면 임시로 색상을 추출할 수 있습니다.</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>꼭짓점 선택 또는 이동 (클릭, Shift+클릭 또는 드래그)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>다각형 내부를 클릭하여 내부 슈타이너 점 삽입</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>가장자리를 클릭하여 윤곽 경계 꼭짓점 삽입</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>레이저 나이프: 다각형 위를 드래그하여 도형 자르기</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>꼭짓점을 클릭하여 삭제</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>선택한 메시 꼭짓점 삭제 (Del)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>가장자리 감지 기능이 있는 CDT(구속 델로네 삼각분할) 메시 생성</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>메시를 외부 경계 윤곽으로 초기화</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>CDT 메시 취소</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>진행 중인 CDT 메시 계산 취소</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>도구 옵션</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>저장되지 않은 변경사항을 취소하고 닫기 (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>프로젝트에 변경사항을 적용하고 편집기 열어두기 (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>변경사항을 저장하고 편집기 닫기 (Enter)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

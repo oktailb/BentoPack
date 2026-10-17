@@ -2954,6 +2954,146 @@ Strict removal clears the pixel.</source>
         <translation>Переупаковать атлас...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>Позиция: %1, %2 пкс</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>Размер: %1 x %2 пкс</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>Выделено: %1 пкс</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>Параметры карандаша</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>Размер (пкс):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>Непрозрачность (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>Форма кисти:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>Квадрат (Пиксель-арт)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>Круг (Мягкий круглый)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>Жесткие края (Пиксель-арт)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>Четкие пиксельные контуры без сглаживания</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;Совет:&lt;/b&gt; Удерживайте &lt;b&gt;Shift&lt;/b&gt; для рисования прямых линий. Удерживайте &lt;b&gt;Alt&lt;/b&gt; для выбора цвета пипеткой.</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>Форма ластика:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;Совет:&lt;/b&gt; Стирает напрямую в альфа 0. Удерживайте &lt;b&gt;Shift&lt;/b&gt; для стирания прямых линий. Правый клик стирает вторым цветом.</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>Прямоугольное выделение</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>Режим:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Заменить выделение</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>Добавить к текущему выделению (Shift)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>Вычесть из выделения (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>Пересечение с выделением (Shift+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>Фиксированные пропорции 1:1 (Квадрат)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>Ограничить прямоугольник выделения квадратом 1:1</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>Позиция: 0, 0 пкс</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>Размер: 0 x 0 пкс</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>Выделено: 0 пкс</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>Действия:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ Инвертировать выделение</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>Источник пробы:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>Брать пробу со всех слоев (Композит)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>Целевой цвет:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>Основной цвет (Левый клик)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>Второй цвет (Правый клик)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>Предпросмотр цвета под курсором:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>Наведите курсор на холст</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;Совет:&lt;/b&gt; Кликните по любому пикселю для взятия пробы. Левый клик задает основной цвет, правый — второй. Удерживайте &lt;b&gt;Alt&lt;/b&gt; для пипетки.</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ &lt;b&gt;Нет полигональной сетки&lt;/b&gt; для этого спрайта.&lt;br&gt;Полигональная сетка уже должна существовать (создайте ее на панели: Инструменты &gt; Полигональная сетка).</translation>
     </message>
@@ -3050,6 +3190,102 @@ Strict removal clears the pixel.</source>
         <translation>Экономия Overdraw:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>Параметры заливки</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>Текущий основной цвет (Нажмите для изменения)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>Выбрать цвет...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>Область действия:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>Заливка похожих цветов (Смежные)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>Залить все выделение</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>Заменить цвет глобально</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Порог:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>Диагональные соседи (8-связность)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>Разрешить заливке распространяться по диагональным углам пикселей</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>Заливать прозрачные области</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>Разрешить заливке заполнять пустые/прозрачные области</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>Объединенная проба (все слои)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>Проверять границы цветов по всем видимым слоям вместе</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;Совет:&lt;/b&gt; Кликните по цвету для заливки. Левый клик заливает основным цветом, правый — вторым. Удерживайте &lt;b&gt;Shift&lt;/b&gt; для заливки всего выделения.</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>Выделение смежных областей (Волшебная палочка)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>Смежные (Заливка)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>Выделять связанные пиксели одного цвета (Снимите флажок для выделения на всем изображении)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>Разрешить волшебной палочке расширяться по диагональным углам</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>Выделять прозрачные области</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>Разрешить выделение прозрачных / пустых пикселей</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>Определять границы цветов по всем видимым слоям вместе</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>Действия с выделением:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;Совет:&lt;/b&gt; Кликните по цвету для выделения смежных пикселей. Удерживайте &lt;b&gt;Shift&lt;/b&gt; для добавления, &lt;b&gt;Ctrl&lt;/b&gt; для вычитания.</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>Открыть диалог упаковки атласа для разрешения коллизий спрайтов</translation>
     </message>
@@ -3068,6 +3304,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Select Secondary Color</source>
         <translation>Выбрать дополнительный цвет</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>Прозрачный [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>Применить ко всем кадрам &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>Инвертировать текущее выделение</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Strict removal clears the pixel.</source>
         <translation>Если флажок установлен, стирает пиксели на всех видимых слоях одновременно, а не только на активном</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;Совет:&lt;/b&gt; Непрерывный ластик Брезенхэма в 1px. Стирает сразу в прозрачность (alpha 0). Удерживайте &lt;b&gt;Shift&lt;/b&gt; для прямых линий.</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>Действия с выделением</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ Выделить все (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>Выделить все пиксели на холсте (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ Снять выделение (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>Снять активное выделение (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 Удалить содержимое (Del)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>Очистить пиксели внутри выделения (Del)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 Копировать</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>Копировать активное выделение в буфер (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ Вырезать</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>Вырезать активное выделение в буфер (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 Вставить</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>Вставить выделение из буфера (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Strict removal clears the pixel.</source>
         <translation>Сэмплирование пипетки</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>Сэмплировать все видимые слои (Композит)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>Сэмплировать только активный слой</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;Совет:&lt;/b&gt; Кликните по пикселю, чтобы выбрать основной цвет. Удерживайте &lt;b&gt;Alt&lt;/b&gt; с любым инструментом для быстрого сэмплирования.</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>Выделение или перемещение вершин (Клик, Shift+клик или перетаскивание)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>Нажмите внутри полигона, чтобы добавить внутренние точки Штейнера</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>Нажимайте вдоль ребер, чтобы вставлять контурные вершины</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>Лазерный нож: проведите линию через полигон, чтобы разрезать геометрию</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>Нажмите на вершину, чтобы удалить ее</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>Удалить выбранную вершину/вершины сетки (Del)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>Создать сетку CDT (Триангуляция Делоне с ограничениями) с распознаванием ребер</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>Сбросить сетку к внешнему контуру</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>Отменить сетку CDT</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>Отменить текущий расчет сетки CDT</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Параметры инструмента</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>Отменить несохраненные изменения и закрыть редактор (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>Применить изменения к проекту и оставить редактор открытым (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>Сохранить изменения и закрыть редактор (Enter)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

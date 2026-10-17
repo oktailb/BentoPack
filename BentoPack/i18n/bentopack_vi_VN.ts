@@ -2954,6 +2954,146 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Đóng gói lại Atlas...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>Vị trí: %1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>Kích thước: %1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>Đã chọn: %1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>Tùy chọn bút chì</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>Kích thước (px):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>Độ mờ đục (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>Hình dạng nét cọ:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>Hình vuông (Pixel Art)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>Hình tròn (Tròn mềm)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>Cạnh sắc nét (Pixel art)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>Đường viền pixel sắc nét không khử răng cưa</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Giữ &lt;b&gt;Shift&lt;/b&gt; để vẽ đường thẳng. Giữ &lt;b&gt;Alt&lt;/b&gt; để lấy mẫu màu bằng ống hút màu.</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>Hình dạng tẩy:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Xóa trực tiếp về alpha 0. Giữ &lt;b&gt;Shift&lt;/b&gt; để xóa đường thẳng. Nhấp chuột phải xóa bằng màu phụ.</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>Chọn hình chữ nhật</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>Chế độ:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Thay thế vùng chọn</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>Thêm vào vùng chọn hiện tại (Shift)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>Trừ khỏi vùng chọn (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>Giao với vùng chọn (Shift+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>Tỷ lệ cố định 1:1 (Hình vuông)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>Ràng buộc hình chữ nhật chọn thành hình vuông 1:1</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>Vị trí: 0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>Kích thước: 0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>Đã chọn: 0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>Hành động:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ Đảo ngược vùng chọn</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>Nguồn lấy mẫu:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>Lấy mẫu tất cả các lớp (Tổng hợp)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>Đặt mục tiêu màu:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>Màu chính (Nhấp chuột trái)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>Màu phụ (Nhấp chuột phải)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>Xem trước màu dưới con trỏ:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>Di chuột qua khung vẽ</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Nhấp vào bất kỳ pixel nào để lấy mẫu. Chuột trái đặt màu chính, chuột phải đặt màu phụ. Giữ &lt;b&gt;Alt&lt;/b&gt; để lấy mẫu màu.</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ &lt;b&gt;Chưa có lưới đa giác&lt;/b&gt; cho sprite này.&lt;br&gt;Lưới đa giác phải tồn tại từ trước (tạo từ hộp công cụ chính: Công cụ &gt; Lưới đa giác).</translation>
     </message>
@@ -3050,6 +3190,102 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Tiết kiệm Overdraw:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>Tùy chọn xô màu</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>Màu chính hiện tại (Nhấp để thay đổi)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>Chọn màu...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>Vùng ảnh hưởng:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>Tô các màu tương tự (Liên tục)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>Tô toàn bộ vùng chọn</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>Thay thế màu trên toàn bộ</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Ngưỡng:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>Lân cận đường chéo (kết nối 8)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>Cho phép màu lan qua các góc pixel chéo</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>Tô vùng trong suốt</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>Cho phép công cụ xô màu tô vùng trống/trong suốt</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>Lấy mẫu kết hợp (tất cả các lớp)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>Kiểm tra ranh giới màu trên tất cả các lớp hiển thị kết hợp</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Nhấp vào màu để tô. Nhấp chuột trái tô màu chính, chuột phải tô màu phụ. Giữ &lt;b&gt;Shift&lt;/b&gt; để tô toàn bộ vùng chọn.</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>Chọn mờ (Đũa thần)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>Liên tục (Tô màu)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>Chọn các pixel liền kề có màu khớp (Bỏ chọn để chọn tất cả pixel khớp trên toàn ảnh)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>Cho phép đũa thần mở rộng chéo qua góc pixel</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>Chọn vùng trong suốt</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>Cho phép chọn các vùng pixel trong suốt / trống</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>Phát hiện ranh giới màu trên tất cả các lớp hiển thị kết hợp</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>Thao tác vùng chọn:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Nhấp vào màu để chọn pixel liền kề khớp. Giữ &lt;b&gt;Shift&lt;/b&gt; để thêm, &lt;b&gt;Ctrl&lt;/b&gt; để trừ khỏi vùng chọn.</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>Mở hộp thoại đóng gói Atlas tương tác để xử lý va chạm sprite</translation>
     </message>
@@ -3068,6 +3304,10 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>Select Secondary Color</source>
         <translation>Thao tác: Select Secondary Color</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>Trong suốt [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>Áp dụng cho tất cả khung hình &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>Đảo ngược vùng chọn</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Khi được chọn, xóa pixel trên tất cả các lớp hiển thị cùng một lúc thay vì chỉ lớp đang hoạt động</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Tẩy Bresenham liên tục 1px. Xóa trực tiếp về alpha 0. Giữ phím &lt;b&gt;Shift&lt;/b&gt; để vẽ đường thẳng.</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>Thao tác vùng chọn</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ Chọn tất cả (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>Chọn tất cả pixel trên khung vẽ (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ Bỏ chọn (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>Bỏ vùng chọn hiện tại (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 Xóa nội dung (Del)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>Xóa pixel trong vùng chọn (Del)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 Sao chép</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>Sao chép vùng chọn vào bộ nhớ tạm (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ Cắt</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>Cắt vùng chọn vào bộ nhớ tạm (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 Dán</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>Dán vùng chọn từ bộ nhớ tạm (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Lấy mẫu ống hút màu</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>Lấy mẫu tất cả các lớp hiển thị (Ảnh ghép)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>Chỉ lấy mẫu lớp đang hoạt động</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Nhấp vào bất kỳ pixel nào để đặt màu chính. Giữ phím &lt;b&gt;Alt&lt;/b&gt; khi đang dùng công cụ bất kỳ để lấy mẫu màu tạm thời.</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>Chọn hoặc di chuyển đỉnh (Nhấp, Shift+Nhấp hoặc kéo đỉnh)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>Nhấp bên trong đa giác để chèn các điểm Steiner nội bộ</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>Nhấp dọc theo các cạnh để chèn đỉnh đường viền</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>Công cụ dao laser: nhấp và kéo đường thẳng qua đa giác để cắt hình học</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>Nhấp vào một đỉnh để xóa</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>Xóa (các) đỉnh lưới đã chọn (Del)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>Tạo lưới tam giác Delaunay ràng buộc (CDT) với nhận diện cạnh</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>Đặt lại lưới về đường viền ngoài</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>Hủy lưới CDT</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>Hủy tính toán lưới CDT đang thực hiện</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Tùy chọn công cụ</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>Hủy thay đổi chưa lưu và đóng trình chỉnh sửa (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>Áp dụng thay đổi cho dự án và giữ mở trình chỉnh sửa (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>Lưu thay đổi và đóng trình chỉnh sửa (Enter)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

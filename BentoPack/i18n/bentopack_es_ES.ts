@@ -2954,6 +2954,146 @@ Fecha: %2
         <translation>Reempaquetar atlas...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>Posición: %1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>Tamaño: %1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>Seleccionado: %1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>Opciones de lápiz</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>Tamaño (px):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>Opacidad (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>Forma del pincel:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>Cuadrado (Pixel Art)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>Círculo (Redondo suave)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>Borde duro (Pixel art)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>Contornos de píxeles nítidos sin suavizado</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;Consejo:&lt;/b&gt; Mantén &lt;b&gt;Mayús&lt;/b&gt; para dibujar líneas rectas. Mantén &lt;b&gt;Alt&lt;/b&gt; para muestrear colores con el cuentagotas.</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>Forma del borrador:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;Consejo:&lt;/b&gt; Borra directamente a alfa 0. Mantén &lt;b&gt;Mayús&lt;/b&gt; para borrar en línea recta. Clic derecho borra con color secundario.</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>Selección rectangular</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>Modo:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Reemplazar selección</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>Añadir a la selección actual (Mayús)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>Restar de la selección (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>Intersecar con la selección (Mayús+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>Relación de aspecto fija 1:1 (Cuadrado)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>Restringir el rectángulo de selección a un cuadrado 1:1</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>Posición: 0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>Tamaño: 0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>Seleccionado: 0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>Acciones:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ Invertir selección</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>Origen de muestra:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>Muestrear todas las capas (Compuesto)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>Destino del color:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>Color principal (Clic izquierdo)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>Color secundario (Clic derecho)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>Vista previa del color apuntado:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>Pasar sobre el lienzo</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;Consejo:&lt;/b&gt; Clic en cualquier píxel para muestrear. Clic izquierdo establece el color principal, clic derecho el secundario. Mantén &lt;b&gt;Alt&lt;/b&gt; con cualquier herramienta para muestrear temporalmente.</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ &lt;b&gt;No hay malla poligonal&lt;/b&gt; para este sprite.&lt;br&gt;Debe existir una malla poligonal (genérela desde la caja de herramientas principal: Herramientas &gt; Malla poligonal).</translation>
     </message>
@@ -3050,6 +3190,102 @@ Fecha: %2
         <translation>Ahorro de sobregiro:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>Opciones de bote de pintura</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>Color principal actual (Clic para cambiar)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>Elegir color...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>Área afectada:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>Rellenar colores similares (Contiguo)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>Rellenar toda la selección</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>Reemplazar color globalmente</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Umbral:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>Vecinos diagonales (8 conectados)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>Permitir que el relleno se propague por las esquinas diagonales de los píxeles</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>Rellenar áreas transparentes</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>Permitir que el bote de pintura rellene áreas vacías/transparentes</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>Muestreo combinado (todas las capas)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>Comprobar límites de color en todas las capas visibles combinadas</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;Consejo:&lt;/b&gt; Clic en un color para rellenar. Clic izquierdo rellena con color principal, clic derecho con secundario. Mantén &lt;b&gt;Mayús&lt;/b&gt; para rellenar toda la selección.</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>Selección difusa (Varita mágica)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>Contiguo (Relleno)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>Seleccionar píxeles conectados de color coincidente (Desmarcar para seleccionar en toda la imagen)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>Permitir que la selección de varita mágica se expanda diagonalmente por las esquinas</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>Seleccionar áreas transparentes</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>Permitir seleccionar regiones de píxeles transparentes / vacías</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>Detectar límites de color en todas las capas visibles combinadas</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>Acciones de selección:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;Consejo:&lt;/b&gt; Clic en un color para seleccionar píxeles contiguos coincidentes. Mantén &lt;b&gt;Mayús&lt;/b&gt; para añadir a la selección, &lt;b&gt;Ctrl&lt;/b&gt; para restar.</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>Abrir cuadro de diálogo interactivo de empaquetado para resolver colisiones</translation>
     </message>
@@ -3068,6 +3304,10 @@ Fecha: %2
     <message>
         <source>Select Secondary Color</source>
         <translation>Seleccionar Color Secundario</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>Transparente [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Fecha: %2
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>Aplicar a todos los fotogramas de &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>Invertir selección actual</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Fecha: %2
         <translation>Si está marcado, borra píxeles en todas las capas visibles simultáneamente en lugar de solo la capa activa</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;Consejo:&lt;/b&gt; Borrador Bresenham continuo de 1px. Borra directamente a alfa 0. Mantén &lt;b&gt;Mayús&lt;/b&gt; para dibujar líneas rectas.</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>Acciones de selección</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ Seleccionar todo (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>Seleccionar todos los píxeles del lienzo (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ Deseleccionar (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>Deseleccionar la selección activa (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 Eliminar contenido (Supr)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>Borrar píxeles dentro de la selección (Supr)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 Copiar</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>Copiar selección activa al portapapeles (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ Cortar</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>Cortar selección activa al portapapeles (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 Pegar</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>Pegar selección desde el portapapeles (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Fecha: %2
         <translation>Muestreo del cuentagotas</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>Muestrear todas las capas visibles (Compuesto)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>Muestrear solo la capa activa</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;Consejo:&lt;/b&gt; Haz clic en cualquier píxel para definir el color principal. Mantén &lt;b&gt;Alt&lt;/b&gt; con cualquier herramienta para muestrear color.</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>Seleccionar o mover vértices (Clic, Mayús+Clic o arrastrar)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>Hacer clic dentro del polígono para insertar puntos Steiner internos</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>Hacer clic a lo largo de los bordes para insertar vértices de contorno</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>Herramienta cuchillo láser: haz clic y arrastra una línea por el polígono para cortar</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>Hacer clic en un vértice para eliminarlo</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>Eliminar vértice(s) de malla seleccionado(s) (Supr)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>Generar malla CDT con detección de bordes</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>Restablecer malla al contorno exterior</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>Cancelar malla CDT</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>Cancelar el cálculo de malla CDT en curso</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Opciones de herramienta</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>Descartar cambios no guardados y cerrar el editor (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>Aplicar cambios al proyecto y mantener el editor abierto (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>Guardar cambios y cerrar el editor (Intro)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

@@ -2954,6 +2954,146 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Atlas neu packen...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>Position: %1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>Größe: %1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>Ausgewählt: %1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>Stift-Optionen</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>Größe (px):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>Deckkraft (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>Pinselform:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>Quadrat (Pixel-Art)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>Kreis (Weich rund)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>Harte Kante (Pixel-Art)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>Scharfe, nicht geglättete Pixelkonturen</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;Tipp:&lt;/b&gt; &lt;b&gt;Umschalt&lt;/b&gt; halten, um gerade Linien zu zeichnen. &lt;b&gt;Alt&lt;/b&gt; halten, um Farben mit der Pipette aufzunehmen.</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>Radiergummi-Form:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;Tipp:&lt;/b&gt; Löscht direkt auf Alpha 0. &lt;b&gt;Umschalt&lt;/b&gt; halten, um gerade Linien zu radieren. Rechtsklick radiert mit Sekundärfarbe.</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>Rechteckauswahl</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>Modus:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Auswahl ersetzen</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>Zur aktuellen Auswahl hinzufügen (Umschalt)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>Von der Auswahl abziehen (Strg)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>Schnittmenge mit Auswahl bilden (Umschalt+Strg)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>Festes Seitenverhältnis 1:1 (Quadrat)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>Auswahlrechteck auf ein 1:1-Quadrat beschränken</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>Position: 0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>Größe: 0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>Ausgewählt: 0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>Aktionen:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ Auswahl umkehren</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>Abtastquelle:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>Alle Ebenen abtasten (Komposit)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>Farbe anwenden auf:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>Primärfarbe (Linksklick)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>Sekundärfarbe (Rechtsklick)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>Vorschau der anvisierten Farbe:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>Über die Leinwand bewegen</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;Tipp:&lt;/b&gt; Auf ein beliebiges Pixel klicken zum Abtasten. Linksklick setzt Primärfarbe, Rechtsklick Sekundärfarbe. &lt;b&gt;Alt&lt;/b&gt; bei jedem Werkzeug halten, um vorübergehend Farben aufzunehmen.</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ &lt;b&gt;Kein Polygonnetz&lt;/b&gt; für dieses Sprite.&lt;br&gt;Ein Polygonnetz muss bereits vorhanden sein (erzeugen Sie es über die Hauptwerkzeugleiste: Werkzeuge &gt; Polygonnetz).</translation>
     </message>
@@ -3050,6 +3190,102 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Overdraw-Ersparnis:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>Füllwerkzeug-Optionen</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>Aktuelle Primärfarbe (Klicken zum Ändern)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>Farbe wählen...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>Betroffener Bereich:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>Ähnliche Farben füllen (Zusammenhängend)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>Gesamte Auswahl füllen</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>Farbe global ersetzen</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Schwellenwert:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>Diagonale Nachbarn (8-fach verbunden)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>Ausbreitung der Füllung über diagonale Pixelecken erlauben</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>Transparente Bereiche füllen</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>Dem Füllwerkzeug erlauben, leere/transparente Bereiche zu füllen</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>Zusammengeführt abtasten (alle Ebenen)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>Farbgrenzen über alle sichtbaren Ebenen kombiniert prüfen</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;Tipp:&lt;/b&gt; Auf eine Farbe klicken, um zu füllen. Linksklick füllt mit Primärfarbe, Rechtsklick mit Sekundärfarbe. &lt;b&gt;Umschalt&lt;/b&gt; halten, um gesamte Auswahl zu füllen.</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>Zauberstab-Auswahl (Fuzzy Select)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>Zusammenhängend (Füllung)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>Verbundene Pixel passender Farbe auswählen (Deaktivieren für gesamtes Bild)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>Ausdehnung der Zauberstab-Auswahl diagonal über Pixelecken erlauben</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>Transparente Bereiche auswählen</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>Auswahl transparenter / leerer Pixelbereiche erlauben</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>Farbgrenzen über alle sichtbaren Ebenen kombiniert erkennen</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>Auswahl-Aktionen:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;Tipp:&lt;/b&gt; Auf eine Farbe klicken, um zusammenhängende passende Pixel auszuwählen. &lt;b&gt;Umschalt&lt;/b&gt; halten zum Hinzufügen, &lt;b&gt;Strg&lt;/b&gt; zum Abziehen.</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>Interaktiven Atlas-Pack-Dialog öffnen, um Überlappungen zu beheben</translation>
     </message>
@@ -3068,6 +3304,10 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
     <message>
         <source>Select Secondary Color</source>
         <translation>Sekundärfarbe auswählen</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>Transparent [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>Auf alle Frames von &apos;%1&apos; anwenden</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>Aktuelle Auswahl umkehren</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Wenn aktiviert, werden Pixel auf allen sichtbaren Ebenen gleichzeitig gelöscht statt nur auf der aktiven</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;Tipp:&lt;/b&gt; Kontinuierlicher 1px Bresenham-Radierer. Löscht direkt auf Alpha 0. Halten Sie &lt;b&gt;Umschalt&lt;/b&gt; gedrückt für gerade Linien.</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>Auswahlaktionen</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ Alles auswählen (Strg+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>Alle Pixel auf der Leinwand auswählen (Strg+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ Auswahl aufheben (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>Aktive Auswahl aufheben (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 Inhalt löschen (Entf)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>Pixel innerhalb der Auswahl löschen (Entf)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 Kopieren</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>Aktive Auswahl in die Zwischenablage kopieren (Strg+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ Ausschneiden</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>Aktive Auswahl in die Zwischenablage ausschneiden (Strg+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 Einfügen</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>Auswahl aus der Zwischenablage einfügen (Strg+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Pipetten-Abtastung</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>Alle sichtbaren Ebenen abtasten (Zusammengesetzt)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>Nur aktive Ebene abtasten</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;Tipp:&lt;/b&gt; Klicken Sie auf ein Pixel, um die Primärfarbe zu setzen. Halten Sie &lt;b&gt;Alt&lt;/b&gt; gedrückt, um temporär Farben abzutasten.</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>Scheitelpunkte auswählen oder verschieben (Klick, Umschalt+Klick oder Ziehen)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>In das Polygon klicken, um interne Steiner-Punkte einzufügen</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>Entlang von Kanten klicken, um Konturgrenzen-Scheitelpunkte einzufügen</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>Lasermesser: Linie über das Polygon ziehen, um Geometrie zu schneiden</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>Auf einen Scheitelpunkt klicken, um ihn zu löschen</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>Ausgewählte(n) Netz-Scheitelpunkt(e) löschen (Entf)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>CDT-Netz (Constrained Delaunay Triangulation) mit Kantenerkennung generieren</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>Netz auf äußere Begrenzungskontur zurücksetzen</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>CDT-Mesh abbrechen</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>Laufende CDT-Netzberechnung abbrechen</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
-        <translation>Werkzeugoptionen</translation>
+        <translation>Werkzeug-Optionen</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>Nicht gespeicherte Änderungen verwerfen und Editor schließen (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>Änderungen auf das Projekt anwenden und Editor geöffnet lassen (Strg+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>Änderungen speichern und Editor schließen (Eingabe)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

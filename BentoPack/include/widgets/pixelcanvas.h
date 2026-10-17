@@ -67,6 +67,24 @@ enum class CanvasAction {
     Rotate90CW
 };
 
+enum class SelectionMode {
+    Replace = 0,
+    Add = 1,
+    Subtract = 2,
+    Intersect = 3
+};
+
+enum class BucketFillMode {
+    SimilarColors = 0,
+    WholeSelection = 1,
+    GlobalReplace = 2
+};
+
+enum class BrushShape {
+    Square = 0,
+    Circle = 1
+};
+
 struct StrokeSegment {
     QPoint p1;
     QPoint p2;
@@ -142,6 +160,68 @@ public:
 
     void swapColors();
 
+    // Brush & Eraser Options
+    int brushSize() const { return m_brushSize; }
+    void setBrushSize(int size) { m_brushSize = std::clamp(size, 1, 32); }
+    int brushOpacity() const { return m_brushOpacity; }
+    void setBrushOpacity(int opacity) { m_brushOpacity = std::clamp(opacity, 1, 100); }
+    BrushShape brushShape() const { return m_brushShape; }
+    void setBrushShape(BrushShape shape) { m_brushShape = shape; }
+    bool brushHardEdge() const { return m_brushHardEdge; }
+    void setBrushHardEdge(bool hard) { m_brushHardEdge = hard; }
+
+    int eraserSize() const { return m_eraserSize; }
+    void setEraserSize(int size) { m_eraserSize = std::clamp(size, 1, 32); }
+    int eraserOpacity() const { return m_eraserOpacity; }
+    void setEraserOpacity(int opacity) { m_eraserOpacity = std::clamp(opacity, 1, 100); }
+    BrushShape eraserShape() const { return m_eraserShape; }
+    void setEraserShape(BrushShape shape) { m_eraserShape = shape; }
+    bool eraserHardEdge() const { return m_eraserHardEdge; }
+    void setEraserHardEdge(bool hard) { m_eraserHardEdge = hard; }
+    bool eraseAllLayers() const { return m_eraseAllLayers; }
+    void setEraseAllLayers(bool all) { m_eraseAllLayers = all; }
+
+    // Eyedropper Options
+    bool eyedropperTargetSecondary() const { return m_eyedropperTargetSecondary; }
+    void setEyedropperTargetSecondary(bool sec) { m_eyedropperTargetSecondary = sec; }
+
+    // Bucket Fill Options
+    BucketFillMode bucketMode() const { return m_bucketMode; }
+    void setBucketMode(BucketFillMode mode) { m_bucketMode = mode; }
+    int bucketThreshold() const { return m_bucketThreshold; }
+    void setBucketThreshold(int thresh) { m_bucketThreshold = std::clamp(thresh, 0, 255); }
+    bool bucketDiagonal() const { return m_bucketDiagonal; }
+    void setBucketDiagonal(bool diag) { m_bucketDiagonal = diag; }
+    bool bucketFillTransparent() const { return m_bucketFillTransparent; }
+    void setBucketFillTransparent(bool fill) { m_bucketFillTransparent = fill; }
+    int bucketOpacity() const { return m_bucketOpacity; }
+    void setBucketOpacity(int opacity) { m_bucketOpacity = std::clamp(opacity, 1, 100); }
+
+    // Selection & Transformations
+    bool hasSelection() const;
+    QRect selectionRect() const { return m_selectionRect; }
+    bool isPixelSelected(int x, int y) const;
+    void selectAll();
+    void deselect();
+    void clearSelection(); // Erases pixels in selection (Suppr)
+    void invertSelection();
+
+    SelectionMode selectionMode() const { return m_selectionMode; }
+    void setSelectionMode(SelectionMode mode) { m_selectionMode = mode; }
+
+    bool selectRectFixedSquare() const { return m_selectRectFixedSquare; }
+    void setSelectRectFixedSquare(bool fixed) { m_selectRectFixedSquare = fixed; }
+
+    // Magic Wand (Fuzzy Select) Options
+    bool magicWandContiguous() const { return m_magicWandContiguous; }
+    void setMagicWandContiguous(bool cont) { m_magicWandContiguous = cont; }
+    bool magicWandDiagonal() const { return m_magicWandDiagonal; }
+    void setMagicWandDiagonal(bool diag) { m_magicWandDiagonal = diag; }
+    int magicWandThreshold() const { return m_magicWandThreshold; }
+    void setMagicWandThreshold(int thresh) { m_magicWandThreshold = std::clamp(thresh, 0, 255); }
+    bool magicWandSelectTransparent() const { return m_magicWandSelectTransparent; }
+    void setMagicWandSelectTransparent(bool sel) { m_magicWandSelectTransparent = sel; }
+
     // Zoom & Grid
     double zoom() const { return m_zoom; }
     void setZoom(double zoom);
@@ -151,13 +231,6 @@ public:
 
     bool showGrid() const { return m_showGrid; }
     void setShowGrid(bool show);
-
-    // Selection & Transformations
-    bool hasSelection() const;
-    QRect selectionRect() const { return m_selectionRect; }
-    void selectAll();
-    void deselect();
-    void clearSelection(); // Erases pixels in selection (Suppr)
 
     void copySelection();
     void cutSelection();
@@ -285,6 +358,7 @@ signals:
     void mousePixelMoved(int x, int y, const QColor &color);
     void mousePixelLeft();
     void selectionStateChanged(bool hasSelection);
+    void selectionGeometryChanged(const QRect &rect, int pixelCount);
     void zoomChanged(double zoom);
     void panRequested(int dx, int dy);
     void layersChanged();
@@ -307,10 +381,13 @@ private:
     QPoint pixelToWidget(const QPoint &pixelPos) const;
     QRect pixelToWidget(const QRect &pixelRect) const;
     bool isPixelInside(int x, int y) const;
-    bool isPixelSelected(int x, int y) const;
 
+    void drawPixelBrush(int centerX, int centerY, const QColor &color, int brushSize, int opacity);
     void drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor &color);
     void applyColorSelection(int targetX, int targetY);
+    SelectionMode effectiveSelectionMode() const;
+    void ensureSelectionMaskValid();
+    void updateSelectionPreview();
 
     void drawCheckerboard(QPainter &painter, const QRect &rect);
     void drawPixelGrid(QPainter &painter, const QRect &rect);
@@ -334,6 +411,33 @@ private:
     PixelTool       m_tool = PixelTool::Pencil;
     QColor          m_primaryColor = Qt::black;
     QColor          m_secondaryColor = Qt::transparent;
+
+    // Brush & Eraser Settings
+    int             m_brushSize = 1;
+    int             m_brushOpacity = 100;
+    BrushShape      m_brushShape = BrushShape::Square;
+    bool            m_brushHardEdge = true;
+    int             m_eraserSize = 1;
+    int             m_eraserOpacity = 100;
+    BrushShape      m_eraserShape = BrushShape::Square;
+    bool            m_eraserHardEdge = true;
+    bool            m_eraseAllLayers = false;
+    bool            m_eyedropperTargetSecondary = false;
+
+    // Bucket Fill Settings
+    BucketFillMode  m_bucketMode = BucketFillMode::SimilarColors;
+    int             m_bucketThreshold = 0;
+    bool            m_bucketDiagonal = false;
+    bool            m_bucketFillTransparent = true;
+    int             m_bucketOpacity = 100;
+
+    // Selection & Magic Wand Settings
+    SelectionMode   m_selectionMode = SelectionMode::Replace;
+    bool            m_selectRectFixedSquare = false;
+    bool            m_magicWandContiguous = true;
+    bool            m_magicWandDiagonal = false;
+    int             m_magicWandThreshold = 0;
+    bool            m_magicWandSelectTransparent = true;
 
     // Onion Skinning
     bool                    m_onionSkinEnabled = true;
@@ -381,6 +485,9 @@ private:
     // Selection
     QRect           m_selectionRect;
     QVector<bool>   m_selectionMask; // size width * height
+    QRect           m_dragSelectionRect;
+    QVector<bool>   m_preDragSelectionMask;
+    QRect           m_preDragSelectionRect;
 
     // Clipboard & Floating Stamp
     static QImage   s_clipboardImage;

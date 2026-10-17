@@ -20,6 +20,8 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QKeyEvent>
+#include <QApplication>
+#include <QGuiApplication>
 #include <QQueue>
 #include <QTransform>
 #include <QDateTime>
@@ -971,6 +973,7 @@ void PixelCanvas::selectAll()
     m_selectionRect = m_image.rect();
     m_selectionMask.fill(true, m_image.width() * m_image.height());
     emit selectionStateChanged(true);
+    emit selectionGeometryChanged(m_selectionRect, m_image.width() * m_image.height());
     update();
 }
 
@@ -980,6 +983,55 @@ void PixelCanvas::deselect()
     m_selectionRect = QRect();
     m_selectionMask.clear();
     emit selectionStateChanged(false);
+    emit selectionGeometryChanged(QRect(), 0);
+    update();
+}
+
+void PixelCanvas::invertSelection()
+{
+    if (m_image.isNull()) return;
+    commitFloatingSelection();
+
+    int w = m_image.width();
+    int h = m_image.height();
+    if (m_selectionMask.size() != w * h) {
+        m_selectionMask.resize(w * h);
+        if (!hasSelection()) {
+            m_selectionMask.fill(false);
+        } else {
+            m_selectionMask.fill(false);
+            for (int y = m_selectionRect.top(); y <= m_selectionRect.bottom(); ++y) {
+                for (int x = m_selectionRect.left(); x <= m_selectionRect.right(); ++x) {
+                    if (isPixelInside(x, y)) {
+                        m_selectionMask[y * w + x] = true;
+                    }
+                }
+            }
+        }
+    }
+
+    int minX = w, maxX = -1, minY = h, maxY = -1;
+    int pixelCount = 0;
+    for (int i = 0; i < m_selectionMask.size(); ++i) {
+        m_selectionMask[i] = !m_selectionMask[i];
+        if (m_selectionMask[i]) {
+            pixelCount++;
+            int x = i % w;
+            int y = i / w;
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+        }
+    }
+
+    if (pixelCount > 0 && maxX >= minX && maxY >= minY) {
+        m_selectionRect = QRect(QPoint(minX, minY), QPoint(maxX, maxY));
+        emit selectionStateChanged(true);
+        emit selectionGeometryChanged(m_selectionRect, pixelCount);
+    } else {
+        deselect();
+    }
     update();
 }
 
@@ -1545,6 +1597,127 @@ bool PixelCanvas::isPixelEditable(int x, int y) const
     return true;
 }
 
+void PixelCanvas::drawPixelBrush(int centerX, int centerY, const QColor &color, int brushSize, int opacity)
+{
+    BrushShape activeShape = (color == Qt::transparent) ? m_eraserShape : m_brushShape;
+
+    if (brushSize <= 1) {
+        if (!isPixelEditable(centerX, centerY)) return;
+        QColor effectiveColor = color;
+        if (color == Qt::transparent) {
+            if (opacity >= 100) {
+                if (hasLayers()) {
+                    if (m_eraseAllLayers) {
+                        for (auto &l : m_layers) {
+                            if (l.visible && !l.locked) l.image.setPixelColor(centerX, centerY, Qt::transparent);
+                        }
+                    } else {
+                        m_layers[m_activeLayerIndex].image.setPixelColor(centerX, centerY, Qt::transparent);
+                    }
+                } else {
+                    m_image.setPixelColor(centerX, centerY, Qt::transparent);
+                }
+            } else {
+                if (hasLayers()) {
+                    if (m_eraseAllLayers) {
+                        for (auto &l : m_layers) {
+                            if (l.visible && !l.locked) {
+                                QColor cur = l.image.pixelColor(centerX, centerY);
+                                cur.setAlpha((cur.alpha() * (100 - opacity)) / 100);
+                                l.image.setPixelColor(centerX, centerY, cur);
+                            }
+                        }
+                    } else {
+                        QColor cur = m_layers[m_activeLayerIndex].image.pixelColor(centerX, centerY);
+                        cur.setAlpha((cur.alpha() * (100 - opacity)) / 100);
+                        m_layers[m_activeLayerIndex].image.setPixelColor(centerX, centerY, cur);
+                    }
+                } else {
+                    QColor cur = m_image.pixelColor(centerX, centerY);
+                    cur.setAlpha((cur.alpha() * (100 - opacity)) / 100);
+                    m_image.setPixelColor(centerX, centerY, cur);
+                }
+            }
+        } else {
+            if (opacity < 100) {
+                effectiveColor.setAlpha((color.alpha() * opacity) / 100);
+                QPainter p(hasLayers() ? &m_layers[m_activeLayerIndex].image : &m_image);
+                p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                p.fillRect(centerX, centerY, 1, 1, effectiveColor);
+            } else {
+                if (hasLayers()) m_layers[m_activeLayerIndex].image.setPixelColor(centerX, centerY, color);
+                else m_image.setPixelColor(centerX, centerY, color);
+            }
+        }
+        return;
+    }
+
+    int half = brushSize / 2;
+    int xStart = centerX - half;
+    int yStart = centerY - half;
+    int xEnd = xStart + brushSize;
+    int yEnd = yStart + brushSize;
+    double radiusSq = (brushSize / 2.0) * (brushSize / 2.0);
+
+    for (int py = yStart; py < yEnd; ++py) {
+        for (int px = xStart; px < xEnd; ++px) {
+            if (activeShape == BrushShape::Circle) {
+                double dx = (px - centerX);
+                double dy = (py - centerY);
+                if (dx * dx + dy * dy > radiusSq) continue;
+            }
+            if (!isPixelEditable(px, py)) continue;
+
+            if (color == Qt::transparent) {
+                if (opacity >= 100) {
+                    if (hasLayers()) {
+                        if (m_eraseAllLayers) {
+                            for (auto &l : m_layers) {
+                                if (l.visible && !l.locked) l.image.setPixelColor(px, py, Qt::transparent);
+                            }
+                        } else {
+                            m_layers[m_activeLayerIndex].image.setPixelColor(px, py, Qt::transparent);
+                        }
+                    } else {
+                        m_image.setPixelColor(px, py, Qt::transparent);
+                    }
+                } else {
+                    if (hasLayers()) {
+                        if (m_eraseAllLayers) {
+                            for (auto &l : m_layers) {
+                                if (l.visible && !l.locked) {
+                                    QColor cur = l.image.pixelColor(px, py);
+                                    cur.setAlpha((cur.alpha() * (100 - opacity)) / 100);
+                                    l.image.setPixelColor(px, py, cur);
+                                }
+                            }
+                        } else {
+                            QColor cur = m_layers[m_activeLayerIndex].image.pixelColor(px, py);
+                            cur.setAlpha((cur.alpha() * (100 - opacity)) / 100);
+                            m_layers[m_activeLayerIndex].image.setPixelColor(px, py, cur);
+                        }
+                    } else {
+                        QColor cur = m_image.pixelColor(px, py);
+                        cur.setAlpha((cur.alpha() * (100 - opacity)) / 100);
+                        m_image.setPixelColor(px, py, cur);
+                    }
+                }
+            } else {
+                if (opacity < 100) {
+                    QColor effectiveColor = color;
+                    effectiveColor.setAlpha((color.alpha() * opacity) / 100);
+                    QPainter p(hasLayers() ? &m_layers[m_activeLayerIndex].image : &m_image);
+                    p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                    p.fillRect(px, py, 1, 1, effectiveColor);
+                } else {
+                    if (hasLayers()) m_layers[m_activeLayerIndex].image.setPixelColor(px, py, color);
+                    else m_image.setPixelColor(px, py, color);
+                }
+            }
+        }
+    }
+}
+
 void PixelCanvas::drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor &color)
 {
     if (isLayerLocked()) {
@@ -1558,20 +1731,15 @@ void PixelCanvas::drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor
     int sy = (y0 < y1) ? 1 : -1;
     int err = dx - dy;
 
-    bool anyModified = false;
     if (hasLayers()) {
         ensureActiveCelAllocated();
     }
 
+    int bSize = (m_tool == PixelTool::Eraser) ? m_eraserSize : m_brushSize;
+    int bOp = (m_tool == PixelTool::Eraser) ? m_eraserOpacity : m_brushOpacity;
+
     while (true) {
-        if (isPixelEditable(x0, y0)) {
-            if (hasLayers()) {
-                m_layers[m_activeLayerIndex].image.setPixelColor(x0, y0, color);
-            } else {
-                m_image.setPixelColor(x0, y0, color);
-            }
-            anyModified = true;
-        }
+        drawPixelBrush(x0, y0, color, bSize, bOp);
         if (x0 == x1 && y0 == y1) break;
         int e2 = 2 * err;
         if (e2 > -dy) {
@@ -1584,7 +1752,7 @@ void PixelCanvas::drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor
         }
     }
 
-    if (anyModified && hasLayers()) {
+    if (hasLayers()) {
         recomposite();
     }
 }
@@ -1603,39 +1771,92 @@ void PixelCanvas::applyFloodFill(int startX, int startY, const QColor &replaceme
 
     QImage sourceImage = (hasLayers() && !m_sampleAllLayers) ? activeLayerImage() : m_image;
     QRgb targetRgb = sourceImage.pixel(startX, startY);
-    QRgb replaceRgb = replacementColor.rgba();
-    if (targetRgb == replaceRgb) return;
+    QColor effectiveColor = replacementColor;
+    if (m_bucketOpacity < 100) {
+        effectiveColor.setAlpha((replacementColor.alpha() * m_bucketOpacity) / 100);
+    }
+    QRgb replaceRgb = effectiveColor.rgba();
+    if (targetRgb == replaceRgb && m_bucketThreshold == 0) return;
 
     QImage oldImg = hasLayers() ? activeLayerImage() : m_image;
     int w = m_image.width();
     int h = m_image.height();
-    QVector<bool> visited(w * h, false);
-    QQueue<QPoint> queue;
 
-    queue.enqueue(QPoint(startX, startY));
-    visited[startY * w + startX] = true;
-
-    while (!queue.isEmpty()) {
-        QPoint pt = queue.dequeue();
-        int x = pt.x();
-        int y = pt.y();
-
-        if (hasLayers()) {
-            m_layers[m_activeLayerIndex].image.setPixelColor(x, y, replacementColor);
-        } else {
-            m_image.setPixelColor(x, y, replacementColor);
+    auto matchColor = [this, targetRgb](QRgb c) -> bool {
+        int a1 = qAlpha(targetRgb);
+        int a2 = qAlpha(c);
+        if (a1 == 0 && a2 == 0) return m_bucketFillTransparent;
+        if ((a1 == 0) != (a2 == 0)) {
+            if (!m_bucketFillTransparent) return false;
+            if (m_bucketThreshold == 0) return false;
         }
+        if (m_bucketThreshold == 0) return targetRgb == c;
+        int dr = qRed(targetRgb) - qRed(c);
+        int dg = qGreen(targetRgb) - qGreen(c);
+        int db = qBlue(targetRgb) - qBlue(c);
+        int da = a1 - a2;
+        return std::sqrt(dr * dr + dg * dg + db * db + da * da) <= (m_bucketThreshold * 2.0);
+    };
 
-        const int dx[] = {-1, 1, 0, 0};
-        const int dy[] = {0, 0, -1, 1};
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
-                int idx = ny * w + nx;
-                if (!visited[idx] && isPixelEditable(nx, ny) && sourceImage.pixel(nx, ny) == targetRgb) {
-                    visited[idx] = true;
-                    queue.enqueue(QPoint(nx, ny));
+    auto setPixel = [this, effectiveColor](int x, int y) {
+        if (m_bucketOpacity >= 100) {
+            if (hasLayers()) m_layers[m_activeLayerIndex].image.setPixelColor(x, y, effectiveColor);
+            else m_image.setPixelColor(x, y, effectiveColor);
+        } else {
+            QPainter p(hasLayers() ? &m_layers[m_activeLayerIndex].image : &m_image);
+            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            p.fillRect(x, y, 1, 1, effectiveColor);
+        }
+    };
+
+    if (m_bucketMode == BucketFillMode::WholeSelection && hasSelection()) {
+        for (int y = m_selectionRect.top(); y <= m_selectionRect.bottom(); ++y) {
+            for (int x = m_selectionRect.left(); x <= m_selectionRect.right(); ++x) {
+                if (isPixelEditable(x, y)) {
+                    setPixel(x, y);
+                }
+            }
+        }
+    } else if (m_bucketMode == BucketFillMode::GlobalReplace) {
+        for (int y = 0; y < h; ++y) {
+            for (int x = 0; x < w; ++x) {
+                if (isPixelEditable(x, y) && matchColor(sourceImage.pixel(x, y))) {
+                    setPixel(x, y);
+                }
+            }
+        }
+    } else {
+        // SimilarColors: Flood fill BFS
+        QVector<bool> visited(w * h, false);
+        QQueue<QPoint> queue;
+
+        queue.enqueue(QPoint(startX, startY));
+        visited[startY * w + startX] = true;
+
+        const int dx4[] = {-1, 1, 0, 0};
+        const int dy4[] = {0, 0, -1, 1};
+        const int dx8[] = {-1, 1, 0, 0, -1, 1, -1, 1};
+        const int dy8[] = {0, 0, -1, 1, -1, -1, 1, 1};
+        const int *dx = m_bucketDiagonal ? dx8 : dx4;
+        const int *dy = m_bucketDiagonal ? dy8 : dy4;
+        const int nDirs = m_bucketDiagonal ? 8 : 4;
+
+        while (!queue.isEmpty()) {
+            QPoint pt = queue.dequeue();
+            int x = pt.x();
+            int y = pt.y();
+
+            setPixel(x, y);
+
+            for (int i = 0; i < nDirs; ++i) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                    int idx = ny * w + nx;
+                    if (!visited[idx] && isPixelEditable(nx, ny) && matchColor(sourceImage.pixel(nx, ny))) {
+                        visited[idx] = true;
+                        queue.enqueue(QPoint(nx, ny));
+                    }
                 }
             }
         }
@@ -1665,15 +1886,89 @@ void PixelCanvas::applyColorSelection(int targetX, int targetY)
     QRgb targetRgb = source.pixel(targetX, targetY);
     int w = source.width();
     int h = source.height();
-    m_selectionMask.resize(w * h);
-    m_selectionMask.fill(false);
+
+    QVector<bool> newMask(w * h, false);
+
+    auto matches = [this, targetRgb](QRgb c) -> bool {
+        int a1 = qAlpha(targetRgb);
+        int a2 = qAlpha(c);
+        if (a1 == 0 && a2 == 0) return m_magicWandSelectTransparent;
+        if ((a1 == 0) != (a2 == 0)) {
+            if (!m_magicWandSelectTransparent) return false;
+            if (m_magicWandThreshold == 0) return false;
+        }
+        if (m_magicWandThreshold == 0) return targetRgb == c;
+        int dr = qRed(targetRgb) - qRed(c);
+        int dg = qGreen(targetRgb) - qGreen(c);
+        int db = qBlue(targetRgb) - qBlue(c);
+        int da = a1 - a2;
+        return std::sqrt(dr * dr + dg * dg + db * db + da * da) <= (m_magicWandThreshold * 2.0);
+    };
+
+    if (m_magicWandContiguous) {
+        if (matches(source.pixel(targetX, targetY))) {
+            QQueue<QPoint> queue;
+            queue.enqueue(QPoint(targetX, targetY));
+            newMask[targetY * w + targetX] = true;
+
+            const int dx4[] = {-1, 1, 0, 0};
+            const int dy4[] = {0, 0, -1, 1};
+            const int dx8[] = {-1, 1, 0, 0, -1, 1, -1, 1};
+            const int dy8[] = {0, 0, -1, 1, -1, -1, 1, 1};
+            const int *dx = m_magicWandDiagonal ? dx8 : dx4;
+            const int *dy = m_magicWandDiagonal ? dy8 : dy4;
+            const int nDirs = m_magicWandDiagonal ? 8 : 4;
+
+            while (!queue.isEmpty()) {
+                QPoint pt = queue.dequeue();
+                for (int i = 0; i < nDirs; ++i) {
+                    int nx = pt.x() + dx[i];
+                    int ny = pt.y() + dy[i];
+                    if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                        int idx = ny * w + nx;
+                        if (!newMask[idx] && matches(source.pixel(nx, ny))) {
+                            newMask[idx] = true;
+                            queue.enqueue(QPoint(nx, ny));
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        for (int y = 0; y < h; ++y) {
+            for (int x = 0; x < w; ++x) {
+                if (matches(source.pixel(x, y))) {
+                    newMask[y * w + x] = true;
+                }
+            }
+        }
+    }
+
+    SelectionMode mode = effectiveSelectionMode();
+    ensureSelectionMaskValid();
+
+    if (mode == SelectionMode::Replace || m_selectionMask.size() != w * h) {
+        m_selectionMask = newMask;
+    } else if (mode == SelectionMode::Add) {
+        for (int i = 0; i < w * h; ++i) {
+            m_selectionMask[i] = m_selectionMask[i] || newMask[i];
+        }
+    } else if (mode == SelectionMode::Subtract) {
+        for (int i = 0; i < w * h; ++i) {
+            m_selectionMask[i] = m_selectionMask[i] && !newMask[i];
+        }
+    } else if (mode == SelectionMode::Intersect) {
+        for (int i = 0; i < w * h; ++i) {
+            m_selectionMask[i] = m_selectionMask[i] && newMask[i];
+        }
+    }
 
     int minX = w, maxX = -1, minY = h, maxY = -1;
-
+    int pixelCount = 0;
     for (int y = 0; y < h; ++y) {
         for (int x = 0; x < w; ++x) {
-            if (source.pixel(x, y) == targetRgb) {
-                m_selectionMask[y * w + x] = true;
+            if (m_selectionMask[y * w + x]) {
+                pixelCount++;
                 if (x < minX) minX = x;
                 if (x > maxX) maxX = x;
                 if (y < minY) minY = y;
@@ -1682,14 +1977,144 @@ void PixelCanvas::applyColorSelection(int targetX, int targetY)
         }
     }
 
-    if (maxX >= minX && maxY >= minY) {
+    if (pixelCount > 0 && maxX >= minX && maxY >= minY) {
         m_selectionRect = QRect(QPoint(minX, minY), QPoint(maxX, maxY));
         emit selectionStateChanged(true);
+        emit selectionGeometryChanged(m_selectionRect, pixelCount);
     } else {
         deselect();
     }
     update();
 }
+
+SelectionMode PixelCanvas::effectiveSelectionMode() const
+{
+    SelectionMode mode = m_selectionMode;
+    Qt::KeyboardModifiers mods = QApplication::keyboardModifiers();
+    if (mods.testFlag(Qt::ControlModifier) && mods.testFlag(Qt::ShiftModifier)) {
+        mode = SelectionMode::Intersect;
+    } else if (mods.testFlag(Qt::ShiftModifier)) {
+        mode = SelectionMode::Add;
+    } else if (mods.testFlag(Qt::ControlModifier) || mods.testFlag(Qt::AltModifier)) {
+        mode = SelectionMode::Subtract;
+    }
+    return mode;
+}
+
+void PixelCanvas::ensureSelectionMaskValid()
+{
+    if (m_image.isNull()) return;
+    int w = m_image.width();
+    int h = m_image.height();
+    if (m_selectionMask.size() != w * h) {
+        m_selectionMask.resize(w * h);
+        if (hasSelection()) {
+            m_selectionMask.fill(false);
+            for (int y = m_selectionRect.top(); y <= m_selectionRect.bottom(); ++y) {
+                for (int x = m_selectionRect.left(); x <= m_selectionRect.right(); ++x) {
+                    if (isPixelInside(x, y)) {
+                        m_selectionMask[y * w + x] = true;
+                    }
+                }
+            }
+        } else {
+            m_selectionMask.fill(false);
+        }
+    }
+}
+
+void PixelCanvas::updateSelectionPreview()
+{
+    if (m_image.isNull()) return;
+    int w = m_image.width();
+    int h = m_image.height();
+    int totalPixels = w * h;
+
+    if (m_selectionMask.size() != totalPixels) {
+        m_selectionMask.resize(totalPixels);
+    }
+
+    SelectionMode mode = effectiveSelectionMode();
+
+    if (mode == SelectionMode::Replace) {
+        m_selectionMask.fill(false);
+        if (!m_dragSelectionRect.isNull() && m_dragSelectionRect.isValid()) {
+            int top = std::clamp(m_dragSelectionRect.top(), 0, h - 1);
+            int bottom = std::clamp(m_dragSelectionRect.bottom(), 0, h - 1);
+            int left = std::clamp(m_dragSelectionRect.left(), 0, w - 1);
+            int right = std::clamp(m_dragSelectionRect.right(), 0, w - 1);
+            for (int y = top; y <= bottom; ++y) {
+                for (int x = left; x <= right; ++x) {
+                    m_selectionMask[y * w + x] = true;
+                }
+            }
+        }
+    } else {
+        if (m_preDragSelectionMask.size() == totalPixels) {
+            m_selectionMask = m_preDragSelectionMask;
+        } else {
+            m_selectionMask.fill(false);
+        }
+
+        if (!m_dragSelectionRect.isNull() && m_dragSelectionRect.isValid()) {
+            int top = std::clamp(m_dragSelectionRect.top(), 0, h - 1);
+            int bottom = std::clamp(m_dragSelectionRect.bottom(), 0, h - 1);
+            int left = std::clamp(m_dragSelectionRect.left(), 0, w - 1);
+            int right = std::clamp(m_dragSelectionRect.right(), 0, w - 1);
+
+            if (mode == SelectionMode::Add) {
+                for (int y = top; y <= bottom; ++y) {
+                    for (int x = left; x <= right; ++x) {
+                        m_selectionMask[y * w + x] = true;
+                    }
+                }
+            } else if (mode == SelectionMode::Subtract) {
+                for (int y = top; y <= bottom; ++y) {
+                    for (int x = left; x <= right; ++x) {
+                        m_selectionMask[y * w + x] = false;
+                    }
+                }
+            } else if (mode == SelectionMode::Intersect) {
+                m_selectionMask.fill(false);
+                if (m_preDragSelectionMask.size() == totalPixels) {
+                    for (int y = top; y <= bottom; ++y) {
+                        for (int x = left; x <= right; ++x) {
+                            if (m_preDragSelectionMask[y * w + x]) {
+                                m_selectionMask[y * w + x] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Recompute bounding box & pixel count
+    int minX = w, maxX = -1, minY = h, maxY = -1;
+    int pixelCount = 0;
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            if (m_selectionMask[y * w + x]) {
+                pixelCount++;
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+            }
+        }
+    }
+
+    if (pixelCount > 0 && maxX >= minX && maxY >= minY) {
+        m_selectionRect = QRect(QPoint(minX, minY), QPoint(maxX, maxY));
+        emit selectionStateChanged(true);
+        emit selectionGeometryChanged(m_selectionRect, pixelCount);
+    } else {
+        m_selectionRect = QRect();
+        emit selectionStateChanged(false);
+        emit selectionGeometryChanged(QRect(), 0);
+    }
+}
+
 
 void PixelCanvas::drawCheckerboard(QPainter &painter, const QRect &rect)
 {
@@ -1736,16 +2161,72 @@ void PixelCanvas::drawSelectionBorder(QPainter &painter)
     if (!hasSelection() || m_image.isNull()) return;
 
     painter.save();
-    QRectF r(m_selectionRect.x() * m_zoom,
-             m_selectionRect.y() * m_zoom,
-             (m_selectionRect.width() + 1) * m_zoom,
-             (m_selectionRect.height() + 1) * m_zoom);
+    int w = m_image.width();
+    int h = m_image.height();
 
-    // Subtle outline with dashes
-    painter.setPen(QPen(QColor(0, 0, 0, 180), 1.0, Qt::SolidLine));
-    painter.drawRect(r);
-    painter.setPen(QPen(QColor(255, 255, 255, 220), 1.0, Qt::DashLine));
-    painter.drawRect(r);
+    // 1. If we have a selection mask, draw pixel highlight overlay
+    if (!m_selectionMask.isEmpty() && m_selectionMask.size() == w * h) {
+        QColor selTint(56, 189, 248, 45); // Soft translucent cyan highlight
+        for (int y = m_selectionRect.top(); y <= m_selectionRect.bottom(); ++y) {
+            for (int x = m_selectionRect.left(); x <= m_selectionRect.right(); ++x) {
+                if (m_selectionMask[y * w + x]) {
+                    painter.fillRect(QRectF(x * m_zoom, y * m_zoom, m_zoom, m_zoom), selTint);
+                }
+            }
+        }
+
+        // 2. Extract contour boundary edges where selected meets unselected
+        QVector<QLineF> contourEdges;
+        contourEdges.reserve(m_selectionRect.width() * m_selectionRect.height() * 2);
+
+        for (int y = m_selectionRect.top(); y <= m_selectionRect.bottom(); ++y) {
+            for (int x = m_selectionRect.left(); x <= m_selectionRect.right(); ++x) {
+                if (!m_selectionMask[y * w + x]) continue;
+
+                // Top edge
+                if (y == 0 || !m_selectionMask[(y - 1) * w + x]) {
+                    contourEdges.append(QLineF(x * m_zoom, y * m_zoom, (x + 1) * m_zoom, y * m_zoom));
+                }
+                // Bottom edge
+                if (y == h - 1 || !m_selectionMask[(y + 1) * w + x]) {
+                    contourEdges.append(QLineF(x * m_zoom, (y + 1) * m_zoom, (x + 1) * m_zoom, (y + 1) * m_zoom));
+                }
+                // Left edge
+                if (x == 0 || !m_selectionMask[y * w + (x - 1)]) {
+                    contourEdges.append(QLineF(x * m_zoom, y * m_zoom, x * m_zoom, (y + 1) * m_zoom));
+                }
+                // Right edge
+                if (x == w - 1 || !m_selectionMask[y * w + (x + 1)]) {
+                    contourEdges.append(QLineF((x + 1) * m_zoom, y * m_zoom, (x + 1) * m_zoom, (y + 1) * m_zoom));
+                }
+            }
+        }
+
+        // Solid dark background line
+        QPen darkPen(QColor(0, 0, 0, 220), 1.5, Qt::SolidLine, Qt::SquareCap);
+        painter.setPen(darkPen);
+        painter.drawLines(contourEdges);
+
+        // Dashed bright marching ants foreground
+        QPen dashPen(QColor(255, 255, 255, 240), 1.5, Qt::DashLine, Qt::SquareCap);
+        dashPen.setDashPattern({4, 4});
+        painter.setPen(dashPen);
+        painter.drawLines(contourEdges);
+    } else if (hasSelection()) {
+        // Fallback for simple bounding rectangle
+        QRectF r(m_selectionRect.x() * m_zoom,
+                 m_selectionRect.y() * m_zoom,
+                 (m_selectionRect.width() + 1) * m_zoom,
+                 (m_selectionRect.height() + 1) * m_zoom);
+
+        painter.setPen(QPen(QColor(0, 0, 0, 200), 1.5, Qt::SolidLine));
+        painter.drawRect(r);
+        QPen dashPen(QColor(255, 255, 255, 240), 1.5, Qt::DashLine);
+        dashPen.setDashPattern({4, 4});
+        painter.setPen(dashPen);
+        painter.drawRect(r);
+    }
+
     painter.restore();
 }
 
@@ -2332,7 +2813,8 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
             } else {
                 picked = m_image.pixelColor(pixelPos.x(), pixelPos.y());
             }
-            if (event->button() == Qt::RightButton) {
+            bool setSec = (event->button() == Qt::RightButton) || m_eyedropperTargetSecondary;
+            if (setSec) {
                 setSecondaryColor(picked);
             } else {
                 setPrimaryColor(picked);
@@ -2346,11 +2828,30 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
         QColor fillCol = (event->button() == Qt::RightButton) ? m_secondaryColor : m_primaryColor;
         applyFloodFill(pixelPos.x(), pixelPos.y(), fillCol);
     } else if (m_tool == PixelTool::SelectRect) {
+        if (event->button() != Qt::LeftButton) return;
+        if (m_image.isNull()) return;
+
+        commitFloatingSelection();
+        ensureSelectionMaskValid();
+
+        int clampedX = std::clamp(pixelPos.x(), 0, m_image.width() - 1);
+        int clampedY = std::clamp(pixelPos.y(), 0, m_image.height() - 1);
+        QPoint startPt(clampedX, clampedY);
+
         m_isSelecting = true;
-        m_dragStartPixel = pixelPos;
-        m_selectionRect = QRect(pixelPos, QSize(1, 1));
-        m_selectionMask.clear();
-        emit selectionStateChanged(true);
+        m_dragStartPixel = startPt;
+        m_dragSelectionRect = QRect(startPt, QSize(1, 1));
+
+        SelectionMode mode = effectiveSelectionMode();
+        if (mode == SelectionMode::Replace) {
+            m_preDragSelectionMask.fill(false, m_image.width() * m_image.height());
+            m_preDragSelectionRect = QRect();
+        } else {
+            m_preDragSelectionMask = m_selectionMask;
+            m_preDragSelectionRect = m_selectionRect;
+        }
+
+        updateSelectionPreview();
         update();
     } else if (m_tool == PixelTool::SelectColor) {
         applyColorSelection(pixelPos.x(), pixelPos.y());
@@ -2482,11 +2983,26 @@ void PixelCanvas::mouseMoveEvent(QMouseEvent *event)
             update();
         }
     } else if (m_isSelecting && m_tool == PixelTool::SelectRect) {
+        if (m_image.isNull()) return;
         int x1 = std::clamp(std::min(m_dragStartPixel.x(), pixelPos.x()), 0, m_image.width() - 1);
         int y1 = std::clamp(std::min(m_dragStartPixel.y(), pixelPos.y()), 0, m_image.height() - 1);
         int x2 = std::clamp(std::max(m_dragStartPixel.x(), pixelPos.x()), 0, m_image.width() - 1);
         int y2 = std::clamp(std::max(m_dragStartPixel.y(), pixelPos.y()), 0, m_image.height() - 1);
-        m_selectionRect = QRect(QPoint(x1, y1), QPoint(x2, y2));
+        if (m_selectRectFixedSquare) {
+            int dx = std::abs(pixelPos.x() - m_dragStartPixel.x());
+            int dy = std::abs(pixelPos.y() - m_dragStartPixel.y());
+            int side = std::max(dx, dy);
+            int sx = (pixelPos.x() >= m_dragStartPixel.x()) ? 1 : -1;
+            int sy = (pixelPos.y() >= m_dragStartPixel.y()) ? 1 : -1;
+            int targetX = std::clamp(m_dragStartPixel.x() + sx * side, 0, m_image.width() - 1);
+            int targetY = std::clamp(m_dragStartPixel.y() + sy * side, 0, m_image.height() - 1);
+            x1 = std::min(m_dragStartPixel.x(), targetX);
+            x2 = std::max(m_dragStartPixel.x(), targetX);
+            y1 = std::min(m_dragStartPixel.y(), targetY);
+            y2 = std::max(m_dragStartPixel.y(), targetY);
+        }
+        m_dragSelectionRect = QRect(QPoint(x1, y1), QPoint(x2, y2));
+        updateSelectionPreview();
         update();
     } else if (m_tool == PixelTool::PolygonEdit) {
         if (m_isCuttingLine) {
@@ -2554,21 +3070,19 @@ void PixelCanvas::mouseReleaseEvent(QMouseEvent *event)
                      QPolygonF(), (m_tool == PixelTool::Eraser) ? CanvasAction::Eraser : CanvasAction::Pencil);
         emit strokeFinished();
     } else if (m_isSelecting && m_tool == PixelTool::SelectRect) {
+        if (event->button() != Qt::LeftButton) return;
         m_isSelecting = false;
-        if (!m_selectionRect.isNull() && m_selectionRect.isValid()) {
-            int w = m_image.width();
-            int h = m_image.height();
-            m_selectionMask.resize(w * h);
-            m_selectionMask.fill(false);
-            for (int y = m_selectionRect.top(); y <= m_selectionRect.bottom(); ++y) {
-                for (int x = m_selectionRect.left(); x <= m_selectionRect.right(); ++x) {
-                    if (isPixelInside(x, y)) {
-                        m_selectionMask[y * w + x] = true;
-                    }
-                }
-            }
+        updateSelectionPreview();
+        m_dragSelectionRect = QRect();
+        m_preDragSelectionMask.clear();
+        m_preDragSelectionRect = QRect();
+
+        if (hasSelection()) {
+            emit selectionStateChanged(true);
+        } else {
+            deselect();
         }
-        emit selectionStateChanged(hasSelection());
+        update();
     } else if (m_tool == PixelTool::PolygonEdit) {
         if (m_isCuttingLine) {
             m_isCuttingLine = false;
@@ -2608,6 +3122,13 @@ void PixelCanvas::keyPressEvent(QKeyEvent *event)
         return;
     }
 
+    if (m_isSelecting && m_tool == PixelTool::SelectRect) {
+        if (event->key() == Qt::Key_Shift || event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt) {
+            updateSelectionPreview();
+            update();
+        }
+    }
+
     if (event->key() == Qt::Key_X) {
         swapColors();
         event->accept();
@@ -2622,6 +3143,25 @@ void PixelCanvas::keyPressEvent(QKeyEvent *event)
         event->accept();
         return;
     } else if (event->key() == Qt::Key_Escape) {
+        if (m_isSelecting && m_tool == PixelTool::SelectRect) {
+            m_isSelecting = false;
+            m_dragSelectionRect = QRect();
+            m_selectionMask = m_preDragSelectionMask;
+            m_selectionRect = m_preDragSelectionRect;
+            m_preDragSelectionMask.clear();
+            m_preDragSelectionRect = QRect();
+            if (hasSelection()) {
+                int count = 0;
+                for (bool b : m_selectionMask) if (b) count++;
+                emit selectionStateChanged(true);
+                emit selectionGeometryChanged(m_selectionRect, count);
+            } else {
+                deselect();
+            }
+            update();
+            event->accept();
+            return;
+        }
         if (m_hasFloating) {
             commitFloatingSelection();
         } else {
@@ -2675,6 +3215,12 @@ void PixelCanvas::keyPressEvent(QKeyEvent *event)
 
 void PixelCanvas::keyReleaseEvent(QKeyEvent *event)
 {
+    if (m_isSelecting && m_tool == PixelTool::SelectRect) {
+        if (event->key() == Qt::Key_Shift || event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt) {
+            updateSelectionPreview();
+            update();
+        }
+    }
     if (event->key() == Qt::Key_Space && !event->isAutoRepeat()) {
         m_isSpacePressed = false;
         if (!m_isPanning) {

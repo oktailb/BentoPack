@@ -2954,6 +2954,146 @@ Strict removal clears the pixel.</translation>
         <translation>แพ็กแอตลาสใหม่...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>ตำแหน่ง: %1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>ขนาด: %1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>เลือกแล้ว: %1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>ตัวเลือกดินสอ</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>ขนาด (px):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>ความทึบแสง (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>รูปทรงแปรง:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>สี่เหลี่ยมจัตุรัส (Pixel Art)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>วงกลม (ทรงกลมนุ่ม)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>ขอบแข็ง (Pixel art)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>ขอบพิกเซลคมชัดโดยไม่มีการลบรอยหยัก</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; กด &lt;b&gt;Shift&lt;/b&gt; ค้างไว้เพื่อวาดเส้นตรง กด &lt;b&gt;Alt&lt;/b&gt; ค้างไว้เพื่อดูดสีด้วยหลอดหยดสี</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>รูปทรงยางลบ:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; ลบพิกเซลเป็น alpha 0 โดยตรง กด &lt;b&gt;Shift&lt;/b&gt; ค้างไว้เพื่อลบเส้นตรง คลิกขวาจะลบด้วยสีรอง</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>เลือกสี่เหลี่ยมผืนผ้า</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>โหมด:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>แทนที่ส่วนที่เลือก</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>เพิ่มไปยังส่วนที่เลือกปัจจุบัน (Shift)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>ลบออกจากส่วนที่เลือก (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>ตัดกับส่วนที่เลือก (Shift+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>อัตราส่วนคงที่ 1:1 (สี่เหลี่ยมจัตุรัส)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>จำกัดสี่เหลี่ยมผืนผ้าการเลือกให้เป็นสี่เหลี่ยมจัตุรัส 1:1</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>ตำแหน่ง: 0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>ขนาด: 0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>เลือกแล้ว: 0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>การกระทำ:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ สลับส่วนที่เลือก</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>แหล่งสุ่มตัวอย่าง:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>สุ่มตัวอย่างจากทุกเลเยอร์ (รวมกัน)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>กำหนดเป้าหมายสี:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>สีหลัก (คลิกซ้าย)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>สีรอง (คลิกขวา)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>ตัวอย่างสีใต้เคอร์เซอร์:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>เลื่อนเคอร์เซอร์เหนือผืนผ้าใบ</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; คลิกที่พิกเซลเพื่อดูดสี คลิกซ้ายตั้งเป็นสีหลัก คลิกขวาตั้งเป็นสีรอง กด &lt;b&gt;Alt&lt;/b&gt; ค้างไว้เพื่อดูดสีชั่วคราว</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ &lt;b&gt;ไม่มีโพลีกอนเมช&lt;/b&gt; สำหรับสไปรต์นี้&lt;br&gt;ต้องมีโพลีกอนเมชอยู่แล้ว (สร้างจากกล่องเครื่องมือหลัก: เครื่องมือ &gt; โพลีกอนเมช)</translation>
     </message>
@@ -3050,6 +3190,102 @@ Strict removal clears the pixel.</translation>
         <translation>การประหยัด Overdraw:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>ตัวเลือกถังสี</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>สีหลักปัจจุบัน (คลิกเพื่อเปลี่ยน)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>เลือกสี...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>พื้นที่ที่ได้รับผลกระทบ:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>เทสีที่คล้ายกัน (ต่อเนื่อง)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>เทสีเต็มพื้นที่ที่เลือก</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>แทนที่สีทั่วทั้งภาพ</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>ค่าเกณฑ์:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>พิกเซลข้างเคียงแนวทแยง (8 ทิศทาง)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>อนุญาตให้สีเทกระจายผ่านมุมพิกเซลแนวทแยง</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>เทสีพื้นที่โปร่งใส</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>อนุญาตให้ถังสีเทพื้นที่ว่าง/โปร่งใส</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>สุ่มตัวอย่างแบบรวม (ทุกเลเยอร์)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>ตรวจสอบขอบเขตสีข้ามทุกเลเยอร์ที่มองเห็นรวมกัน</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; คลิกที่สีเพื่อเทสี คลิกซ้ายเทด้วยสีหลัก คลิกขวาเทด้วยสีรอง กด &lt;b&gt;Shift&lt;/b&gt; ค้างเพื่อเทสีเต็มพื้นที่ที่เลือก</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>เลือกแบบคลุมเครือ (ไม้กายสิทธิ์)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>ต่อเนื่อง (เทสี)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>เลือกพิกเซลที่เชื่อมต่อกันซึ่งมีสีตรงกัน (ยกเลิกการเลือกเพื่อเลือกทั่วทั้งภาพ)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>อนุญาตให้ไม้กายสิทธิ์เลือกขยายผ่านมุมพิกเซลแนวทแยง</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>เลือกพื้นที่โปร่งใส</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>อนุญาตให้เลือกพื้นที่พิกเซลโปร่งใส / ว่างเปล่า</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>ตรวจจับขอบเขตสีข้ามทุกเลเยอร์ที่มองเห็นรวมกัน</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>การจัดการส่วนที่เลือก:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; คลิกที่สีเพื่อเลือกพิกเซลที่ตรงกันต่อเนื่องกัน กด &lt;b&gt;Shift&lt;/b&gt; เพื่อเพิ่ม กด &lt;b&gt;Ctrl&lt;/b&gt; เพื่อลบออกจากส่วนที่เลือก</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>เปิดกล่องโต้ตอบการแพ็กแอตลาสเพื่อแก้ไขการชนกันของสไปรต์</translation>
     </message>
@@ -3068,6 +3304,10 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Select Secondary Color</source>
         <translation>ดำเนินการ: Select Secondary Color</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>โปร่งใส [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>ใช้กับทุกเฟรมของ &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>สลับส่วนที่เลือก</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Strict removal clears the pixel.</translation>
         <translation>เมื่อเลือก จะล้างพิกเซลในทุกเลเยอร์ที่มองเห็นพร้อมกันแทนที่จะเป็นเฉพาะเลเยอร์ที่ใช้งานอยู่</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; ยางลบ Bresenham ต่อเนื่องขนาด 1px ลบเป็นอัลฟา 0 โดยตรง กด &lt;b&gt;Shift&lt;/b&gt; ค้างไว้เพื่อวาดเส้นตรง</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>การกระทำของพื้นที่ที่เลือก</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ เลือกทั้งหมด (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>เลือกพิกเซลทั้งหมดบนผืนผ้าใบ (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ ยกเลิกการเลือก (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>ยกเลิกการเลือกส่วนที่ใช้งาน (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 ลบเนื้อหา (Del)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>ล้างพิกเซลในส่วนที่เลือก (Del)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 คัดลอก</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>คัดลอกส่วนที่เลือกไปยังคลิปบอร์ด (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ ตัด</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>ตัดส่วนที่เลือกไปยังคลิปบอร์ด (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 วาง</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>วางส่วนที่เลือกจากคลิปบอร์ด (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Strict removal clears the pixel.</translation>
         <translation>การสุ่มตัวอย่างหลอดดูดสี</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>สุ่มตัวอย่างทุกเลเยอร์ที่มองเห็น (ภาพรวม)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>สุ่มตัวอย่างเฉพาะเลเยอร์ที่ใช้งานอยู่</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; คลิกที่พิกเซลใดก็ได้เพื่อตั้งเป็นสีหลัก กด &lt;b&gt;Alt&lt;/b&gt; ค้างไว้ขณะใช้เครื่องมือใดๆ เพื่อดูดสีชั่วคราว</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>เลือกหรือย้ายจุดยอด (คลิก, Shift+คลิก หรือลากจุดยอด)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>คลิกภายในรูปหลายเหลี่ยมเพื่อแทรกจุด Steiner ภายใน</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>คลิกตามขอบเพื่อแทรกจุดยอดขอบเขตเค้าโครง</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>เครื่องมือมีดเลเซอร์: คลิกและลากเส้นผ่านรูปหลายเหลี่ยมเพื่อตัดรูปทรงเรขาคณิต</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>คลิกที่จุดยอดเพื่อลบ</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>ลบจุดยอดตาข่ายที่เลือก (Del)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>สร้างตาข่าย CDT พร้อมการตรวจจับขอบ</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>รีเซ็ตตาข่ายกลับไปเป็นขอบเขตภายนอก</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>ยกเลิกเมช CDT</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>ยกเลิกการคำนวณตาข่าย CDT ที่กำลังดำเนินการ</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>ตัวเลือกเครื่องมือ</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>ละทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกและปิดตัวแก้ไข (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>นำการเปลี่ยนแปลงไปใช้กับโปรเจกต์และเปิดตัวแก้ไขไว้ (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>บันทึกการเปลี่ยนแปลงและปิดตัวแก้ไข (Enter)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

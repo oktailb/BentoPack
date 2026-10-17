@@ -2954,6 +2954,146 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Kemas Ulang Atlas...</translation>
     </message>
     <message>
+        <source>Position: %1, %2 px</source>
+        <translation>Posisi: %1, %2 px</translation>
+    </message>
+    <message>
+        <source>Size: %1 x %2 px</source>
+        <translation>Ukuran: %1 x %2 px</translation>
+    </message>
+    <message>
+        <source>Selected: %1 px</source>
+        <translation>Dipilih: %1 px</translation>
+    </message>
+    <message>
+        <source>Pencil Options</source>
+        <translation>Opsi Pensil</translation>
+    </message>
+    <message>
+        <source>Size (px):</source>
+        <translation>Ukuran (px):</translation>
+    </message>
+    <message>
+        <source>Opacity (%):</source>
+        <translation>Opasitas (%):</translation>
+    </message>
+    <message>
+        <source>Brush Shape:</source>
+        <translation>Bentuk Kuas:</translation>
+    </message>
+    <message>
+        <source>Square (Pixel Art)</source>
+        <translation>Persegi (Pixel Art)</translation>
+    </message>
+    <message>
+        <source>Circle (Soft Round)</source>
+        <translation>Lingkaran (Bulat Lembut)</translation>
+    </message>
+    <message>
+        <source>Hard edge (Pixel art)</source>
+        <translation>Tepi tegas (Pixel art)</translation>
+    </message>
+    <message>
+        <source>Crisp non-antialiased pixel contours</source>
+        <translation>Kontur piksel tajam tanpa antialiasing</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines. Hold &lt;b&gt;Alt&lt;/b&gt; to sample colors with Eyedropper.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Tahan &lt;b&gt;Shift&lt;/b&gt; untuk menggambar garis lurus. Tahan &lt;b&gt;Alt&lt;/b&gt; untuk mengambil sampel warna dengan pipet.</translation>
+    </message>
+    <message>
+        <source>Eraser Shape:</source>
+        <translation>Bentuk Penghapus:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to erase straight lines. Right-click erases with secondary color.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Menghapus langsung ke alfa 0. Tahan &lt;b&gt;Shift&lt;/b&gt; untuk menghapus garis lurus. Klik kanan menghapus dengan warna sekunder.</translation>
+    </message>
+    <message>
+        <source>Rectangle Select</source>
+        <translation>Pilihan Persegi Panjang</translation>
+    </message>
+    <message>
+        <source>Mode:</source>
+        <translation>Mode:</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Ganti pilihan</translation>
+    </message>
+    <message>
+        <source>Add to current selection (Shift)</source>
+        <translation>Tambahkan ke pilihan saat ini (Shift)</translation>
+    </message>
+    <message>
+        <source>Subtract from selection (Ctrl)</source>
+        <translation>Kurangi dari pilihan (Ctrl)</translation>
+    </message>
+    <message>
+        <source>Intersect with selection (Shift+Ctrl)</source>
+        <translation>Irisan dengan pilihan (Shift+Ctrl)</translation>
+    </message>
+    <message>
+        <source>Fixed 1:1 Aspect ratio (Square)</source>
+        <translation>Rasio Aspek Tetap 1:1 (Persegi)</translation>
+    </message>
+    <message>
+        <source>Constrain selection rectangle to a 1:1 square</source>
+        <translation>Batasi persegi panjang pilihan menjadi persegi 1:1</translation>
+    </message>
+    <message>
+        <source>Position: 0, 0 px</source>
+        <translation>Posisi: 0, 0 px</translation>
+    </message>
+    <message>
+        <source>Size: 0 x 0 px</source>
+        <translation>Ukuran: 0 x 0 px</translation>
+    </message>
+    <message>
+        <source>Selected: 0 px</source>
+        <translation>Dipilih: 0 px</translation>
+    </message>
+    <message>
+        <source>Actions:</source>
+        <translation>Tindakan:</translation>
+    </message>
+    <message>
+        <source>⇄ Invert Selection</source>
+        <translation>⇄ Balikkan Pilihan</translation>
+    </message>
+    <message>
+        <source>Sample Source:</source>
+        <translation>Sumber Sampel:</translation>
+    </message>
+    <message>
+        <source>Sample All Layers (Composite)</source>
+        <translation>Sampel Semua Lapisan (Komposit)</translation>
+    </message>
+    <message>
+        <source>Set Color Target:</source>
+        <translation>Tetapkan Target Warna:</translation>
+    </message>
+    <message>
+        <source>Primary Color (Left Click)</source>
+        <translation>Warna Utama (Klik Kiri)</translation>
+    </message>
+    <message>
+        <source>Secondary Color (Right Click)</source>
+        <translation>Warna Sekunder (Klik Kanan)</translation>
+    </message>
+    <message>
+        <source>Hovered Color Preview:</source>
+        <translation>Pratinjau Warna di Bawah Kursor:</translation>
+    </message>
+    <message>
+        <source>Hover over canvas</source>
+        <translation>Arahkan kursor ke atas kanvas</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to sample. Left click sets primary color, Right click sets secondary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample colors.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Klik pada piksel mana saja untuk mengambil sampel warna. Klik kiri menetapkan warna utama, klik kanan warna sekunder. Tahan &lt;b&gt;Alt&lt;/b&gt; untuk mengambil sampel.</translation>
+    </message>
+    <message>
         <source>⚠️ &lt;b&gt;No polygon mesh&lt;/b&gt; for this sprite.&lt;br&gt;A polygon mesh must already exist (generate it from the main toolbox: Tools &gt; Polygon Mesh).</source>
         <translation>⚠️ &lt;b&gt;Tidak ada jaring poligon&lt;/b&gt; untuk sprite ini.&lt;br&gt;Jaring poligon harus sudah ada (buat dari kotak alat utama: Alat &gt; Jaring Poligon).</translation>
     </message>
@@ -3050,6 +3190,102 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Penghematan Overdraw:</translation>
     </message>
     <message>
+        <source>Bucket Fill Options</source>
+        <translation>Opsi Ember Cat</translation>
+    </message>
+    <message>
+        <source>Current Primary Color (Click to change)</source>
+        <translation>Warna Utama Saat Ini (Klik untuk mengubah)</translation>
+    </message>
+    <message>
+        <source>Pick Color...</source>
+        <translation>Pilih Warna...</translation>
+    </message>
+    <message>
+        <source>Affected Area:</source>
+        <translation>Area yang Terpengaruh:</translation>
+    </message>
+    <message>
+        <source>Fill Similar Colors (Contiguous)</source>
+        <translation>Isi Warna Serupa (Berdekatan)</translation>
+    </message>
+    <message>
+        <source>Fill Whole Selection</source>
+        <translation>Isi Seluruh Pilihan</translation>
+    </message>
+    <message>
+        <source>Replace Color Globally</source>
+        <translation>Ganti Warna Secara Global</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Ambang batas:</translation>
+    </message>
+    <message>
+        <source>Diagonal neighbors (8-connected)</source>
+        <translation>Tetangga diagonal (terhubung 8)</translation>
+    </message>
+    <message>
+        <source>Allow flood fill to spread through diagonal pixel corners</source>
+        <translation>Izinkan pengisian menyebar melalui sudut piksel diagonal</translation>
+    </message>
+    <message>
+        <source>Fill transparent areas</source>
+        <translation>Isi area transparan</translation>
+    </message>
+    <message>
+        <source>Allow bucket tool to flood fill empty/transparent areas</source>
+        <translation>Izinkan alat ember mengisi area kosong/transparan</translation>
+    </message>
+    <message>
+        <source>Sample merged (all layers)</source>
+        <translation>Sampel gabungan (semua lapisan)</translation>
+    </message>
+    <message>
+        <source>Check color boundaries across all visible layers combined</source>
+        <translation>Periksa batas warna di semua lapisan yang terlihat gabungan</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Klik pada warna untuk mengisi. Klik kiri mengisi dengan warna utama, klik kanan dengan sekunder. Tahan &lt;b&gt;Shift&lt;/b&gt; untuk mengisi seluruh pilihan.</translation>
+    </message>
+    <message>
+        <source>Fuzzy Select (Magic Wand)</source>
+        <translation>Seleksi Kabur (Tongkat Sihir)</translation>
+    </message>
+    <message>
+        <source>Contiguous (Flood fill)</source>
+        <translation>Berdekatan (Pengisian)</translation>
+    </message>
+    <message>
+        <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
+        <translation>Pilih piksel terhubung dengan warna cocok (Hapus centang untuk memilih seluruh gambar)</translation>
+    </message>
+    <message>
+        <source>Allow magic wand selection to expand diagonally through pixel corners</source>
+        <translation>Izinkan tongkat sihir memilih secara diagonal melalui sudut piksel</translation>
+    </message>
+    <message>
+        <source>Select transparent areas</source>
+        <translation>Pilih area transparan</translation>
+    </message>
+    <message>
+        <source>Allow selecting transparent / empty pixel regions</source>
+        <translation>Izinkan memilih area piksel transparan / kosong</translation>
+    </message>
+    <message>
+        <source>Detect color boundaries across all visible layers combined</source>
+        <translation>Deteksi batas warna di semua lapisan yang terlihat gabungan</translation>
+    </message>
+    <message>
+        <source>Selection Actions:</source>
+        <translation>Tindakan Pilihan:</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Klik pada warna untuk memilih piksel cocok yang berdekatan. Tahan &lt;b&gt;Shift&lt;/b&gt; untuk menambah, &lt;b&gt;Ctrl&lt;/b&gt; untuk mengurangi.</translation>
+    </message>
+    <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
         <translation>Buka dialog Pengemasan Atlas interaktif untuk mengatasi tabrakan sprite</translation>
     </message>
@@ -3068,6 +3304,10 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>Select Secondary Color</source>
         <translation>Pilih Warna Sekunder</translation>
+    </message>
+    <message>
+        <source>Transparent [A: 0]</source>
+        <translation>Transparan [A: 0]</translation>
     </message>
     <message>
         <source>Background</source>
@@ -3092,6 +3332,10 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>Apply to all &apos;%1&apos; frames</source>
         <translation>Terapkan ke semua bingkai &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Invert current selection</source>
+        <translation>Balikkan pilihan saat ini</translation>
     </message>
     <message>
         <source>Generate CDT Mesh</source>
@@ -3230,36 +3474,52 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Jika dicentang, menghapus piksel pada semua lapisan yang terlihat secara bersamaan daripada hanya lapisan aktif</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; 1px continuous Bresenham eraser. Clears directly to alpha 0. Hold &lt;b&gt;Shift&lt;/b&gt; to draw straight lines.</source>
-        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Penghapus Bresenham kontinu 1px. Menghapus langsung ke alfa 0. Tahan &lt;b&gt;Shift&lt;/b&gt; untuk menggambar garis lurus.</translation>
-    </message>
-    <message>
-        <source>Selection Actions</source>
-        <translation>Tindakan Pilihan</translation>
-    </message>
-    <message>
         <source>⬚ Select All (Ctrl+A)</source>
         <translation>⬚ Pilih Semua (Ctrl+A)</translation>
+    </message>
+    <message>
+        <source>Select all pixels on canvas (Ctrl+A)</source>
+        <translation>Pilih semua piksel di kanvas (Ctrl+A)</translation>
     </message>
     <message>
         <source>✕ Deselect (Esc)</source>
         <translation>✕ Batalkan Pilihan (Esc)</translation>
     </message>
     <message>
+        <source>Deselect active selection (Esc)</source>
+        <translation>Batalkan pilihan aktif (Esc)</translation>
+    </message>
+    <message>
         <source>🗑 Delete Contents (Del)</source>
         <translation>🗑 Hapus Isi (Del)</translation>
+    </message>
+    <message>
+        <source>Clear pixels within selection (Del)</source>
+        <translation>Hapus piksel di dalam pilihan (Del)</translation>
     </message>
     <message>
         <source>📋 Copy</source>
         <translation>📋 Salin</translation>
     </message>
     <message>
+        <source>Copy active selection to clipboard (Ctrl+C)</source>
+        <translation>Salin pilihan aktif ke papan klip (Ctrl+C)</translation>
+    </message>
+    <message>
         <source>✂ Cut</source>
         <translation>✂ Potong</translation>
     </message>
     <message>
+        <source>Cut active selection to clipboard (Ctrl+X)</source>
+        <translation>Potong pilihan aktif ke papan klip (Ctrl+X)</translation>
+    </message>
+    <message>
         <source>📥 Paste</source>
         <translation>📥 Tempel</translation>
+    </message>
+    <message>
+        <source>Paste selection from clipboard (Ctrl+V)</source>
+        <translation>Tempel pilihan dari papan klip (Ctrl+V)</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
@@ -3270,24 +3530,64 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Pengambilan Sampel Pipet</translation>
     </message>
     <message>
-        <source>Sample All Visible Layers (Composite)</source>
-        <translation>Sampel Semua Lapisan Terlihat (Komposit)</translation>
-    </message>
-    <message>
         <source>Sample Active Layer Only</source>
         <translation>Sampel Lapisan Aktif Saja</translation>
     </message>
     <message>
-        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on any pixel to set primary color. Hold &lt;b&gt;Alt&lt;/b&gt; while using any tool to temporarily sample color.</source>
-        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Klik pada piksel mana pun untuk menyetel warna primer. Tahan &lt;b&gt;Alt&lt;/b&gt; saat menggunakan alat apa pun untuk mengambil sampel warna.</translation>
+        <source>Select or move vertices (Click, Shift+Click, or drag vertices)</source>
+        <translation>Pilih atau pindahkan titik (Klik, Shift+Klik, atau seret titik)</translation>
+    </message>
+    <message>
+        <source>Click inside polygon to insert internal Steiner points</source>
+        <translation>Klik di dalam poligon untuk menyisipkan titik Steiner internal</translation>
+    </message>
+    <message>
+        <source>Click along edges to insert contour boundary vertices</source>
+        <translation>Klik di sepanjang tepi untuk menyisipkan titik batas kontur</translation>
+    </message>
+    <message>
+        <source>Laser knife tool: click and drag a line across the polygon to slice geometry</source>
+        <translation>Alat pisau laser: klik dan seret garis melintasi poligon untuk memotong geometri</translation>
+    </message>
+    <message>
+        <source>Click on a vertex to delete it</source>
+        <translation>Klik pada titik untuk menghapusnya</translation>
+    </message>
+    <message>
+        <source>Delete selected mesh vertex or vertices (Del)</source>
+        <translation>Hapus titik jaring yang dipilih (Del)</translation>
+    </message>
+    <message>
+        <source>Generate Constrained Delaunay Triangulation (CDT) mesh with edge detection</source>
+        <translation>Hasilkan jaring CDT dengan deteksi tepi</translation>
+    </message>
+    <message>
+        <source>Reset mesh to outer boundary contour</source>
+        <translation>Atur ulang jaring ke kontur batas luar</translation>
     </message>
     <message>
         <source>Cancel CDT Mesh</source>
         <translation>Batalkan Mesh CDT</translation>
     </message>
     <message>
+        <source>Cancel in-progress CDT mesh calculation</source>
+        <translation>Batalkan perhitungan jaring CDT yang sedang berlangsung</translation>
+    </message>
+    <message>
         <source>Tool Options</source>
         <translation>Opsi Alat</translation>
+    </message>
+    <message>
+        <source>Discard unsaved pixel modifications and close editor (Esc)</source>
+        <translation>Buang modifikasi yang belum disimpan dan tutup editor (Esc)</translation>
+    </message>
+    <message>
+        <source>Apply changes to project and keep editor open (Ctrl+S)</source>
+        <translation>Terapkan perubahan ke proyek dan biarkan editor terbuka (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Save changes and close editor (Enter)</source>
+        <translation>Simpan perubahan dan tutup editor (Enter)</translation>
     </message>
     <message>
         <source>CDT Polygon Mesh Editor (◆) [D]</source>

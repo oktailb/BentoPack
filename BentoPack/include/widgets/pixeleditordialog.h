@@ -32,6 +32,7 @@
 #include <QGroupBox>
 #include <QEvent>
 #include <QSlider>
+#include <QSpinBox>
 #include <QCheckBox>
 #include <QStackedWidget>
 #include <QTabWidget>
@@ -240,6 +241,14 @@ private:
     QWidget* createHeaderBar();
     QWidget* createBottomBar();
 
+    QWidget* createPencilOptionsPage();
+    QWidget* createEraserOptionsPage();
+    QWidget* createSelectionOptionsPage();
+    QWidget* createEyedropperOptionsPage();
+    QWidget* createMeshOptionsPage();
+    QWidget* createBucketOptionsPage();
+    QWidget* createMagicWandOptionsPage();
+
 private:
     SpriteDocument*         m_document = nullptr;
     QUndoStack*             m_docUndoStack = nullptr;
@@ -295,14 +304,69 @@ private:
     QToolButton*            m_btnRedo = nullptr;
     QToolButton*            m_btnClearSel = nullptr;
 
-
-    // Contextual Panel (Ergonomic Tool-Aware Suite)
+    // Contextual Panel (Ergonomic Tool-Aware Suite, Left Panel)
     QStackedWidget*         m_contextualStack = nullptr;
-    QWidget*                m_colorOptionsPage = nullptr;
+    QWidget*                m_pencilOptionsPage = nullptr;
     QWidget*                m_eraserOptionsPage = nullptr;
     QWidget*                m_selectionOptionsPage = nullptr;
     QWidget*                m_eyedropperOptionsPage = nullptr;
     QWidget*                m_meshOptionsPage = nullptr;
+    QWidget*                m_bucketOptionsPage = nullptr;
+    QWidget*                m_magicWandOptionsPage = nullptr;
+    QWidget*                m_colorOptionsPage = nullptr;
+
+    // Contextual: Pencil
+    QGroupBox*              m_pencilGroup = nullptr;
+    QSlider*                m_pencilSizeSlider = nullptr;
+    QSpinBox*               m_pencilSizeSpin = nullptr;
+    QSlider*                m_pencilOpacitySlider = nullptr;
+    QSpinBox*               m_pencilOpacitySpin = nullptr;
+    QComboBox*              m_pencilShapeCombo = nullptr;
+    QCheckBox*              m_pencilHardEdgeCheck = nullptr;
+    QLabel*                 m_pencilTipLabel = nullptr;
+
+    // Contextual: Eraser
+    QGroupBox*              m_eraserGroup = nullptr;
+    QSlider*                m_eraserSizeSlider = nullptr;
+    QSpinBox*               m_eraserSizeSpin = nullptr;
+    QSlider*                m_eraserOpacitySlider = nullptr;
+    QSpinBox*               m_eraserOpacitySpin = nullptr;
+    QComboBox*              m_eraserShapeCombo = nullptr;
+    QCheckBox*              m_eraserHardEdgeCheck = nullptr;
+    QCheckBox*              m_eraserApplyAllFramesCheck = nullptr;
+    QCheckBox*              m_eraserAllLayersCheck = nullptr;
+    QLabel*                 m_eraserTipLabel = nullptr;
+
+    // Contextual: Selection (Rect)
+    QGroupBox*              m_selGroup = nullptr;
+    QButtonGroup*           m_selModeGroup = nullptr;
+    QToolButton*            m_btnSelModeReplace = nullptr;
+    QToolButton*            m_btnSelModeAdd = nullptr;
+    QToolButton*            m_btnSelModeSubtract = nullptr;
+    QToolButton*            m_btnSelModeIntersect = nullptr;
+    QCheckBox*              m_selFixedSquareCheck = nullptr;
+    QLabel*                 m_selPosLabel = nullptr;
+    QLabel*                 m_selSizeLabel = nullptr;
+    QLabel*                 m_selCountLabel = nullptr;
+    QPushButton*            m_btnSelectAll = nullptr;
+    QPushButton*            m_btnDeselect = nullptr;
+    QPushButton*            m_btnInvertSel = nullptr;
+    QPushButton*            m_btnClearSelection = nullptr;
+    QPushButton*            m_btnCopySel = nullptr;
+    QPushButton*            m_btnCutSel = nullptr;
+    QPushButton*            m_btnPasteSel = nullptr;
+    QLabel*                 m_selTipLabel = nullptr;
+
+    // Contextual: Eyedropper
+    QGroupBox*              m_eyeGroup = nullptr;
+    QRadioButton*           m_radioSampleActiveLayer = nullptr;
+    QRadioButton*           m_radioSampleAllLayers = nullptr;
+    QButtonGroup*           m_eyeTargetGroup = nullptr;
+    QRadioButton*           m_radioEyeTargetPrimary = nullptr;
+    QRadioButton*           m_radioEyeTargetSecondary = nullptr;
+    QLabel*                 m_eyeColorPreviewSwatch = nullptr;
+    QLabel*                 m_eyeColorHexLabel = nullptr;
+    QLabel*                 m_eyeTipLabel = nullptr;
 
     // Contextual: Smart Mesh CDT (M19)
     QLabel*                 m_meshNoticeLabel = nullptr;
@@ -346,27 +410,40 @@ private:
     QLabel*                 m_lblMeshOverdrawTitle = nullptr;
     QLabel*                 m_lblMeshOverdrawSavings = nullptr;
 
-    // Contextual: Eraser
-    QGroupBox*              m_eraserGroup = nullptr;
-    QCheckBox*              m_eraserApplyAllFramesCheck = nullptr;
-    QCheckBox*              m_eraserAllLayersCheck = nullptr;
-    QLabel*                 m_eraserTipLabel = nullptr;
+    // Contextual: Bucket Fill
+    QGroupBox*              m_bucketGroup = nullptr;
+    QButtonGroup*           m_bucketModeGroup = nullptr;
+    QRadioButton*           m_radioBucketSimilar = nullptr;
+    QRadioButton*           m_radioBucketSelection = nullptr;
+    QRadioButton*           m_radioBucketGlobal = nullptr;
+    QSlider*                m_bucketThresholdSlider = nullptr;
+    QSpinBox*               m_bucketThresholdSpin = nullptr;
+    QSlider*                m_bucketOpacitySlider = nullptr;
+    QSpinBox*               m_bucketOpacitySpin = nullptr;
+    QCheckBox*              m_bucketDiagonalCheck = nullptr;
+    QCheckBox*              m_bucketTransparentCheck = nullptr;
+    QCheckBox*              m_bucketSampleMergedCheck = nullptr;
+    QLabel*                 m_bucketTipLabel = nullptr;
 
-    // Contextual: Selection
-    QGroupBox*              m_selGroup = nullptr;
-    QPushButton*            m_btnSelectAll = nullptr;
-    QPushButton*            m_btnDeselect = nullptr;
-    QPushButton*            m_btnClearSelection = nullptr;
-    QPushButton*            m_btnCopySel = nullptr;
-    QPushButton*            m_btnCutSel = nullptr;
-    QPushButton*            m_btnPasteSel = nullptr;
-    QLabel*                 m_selTipLabel = nullptr;
-
-    // Contextual: Eyedropper
-    QGroupBox*              m_eyeGroup = nullptr;
-    QRadioButton*           m_radioSampleActiveLayer = nullptr;
-    QRadioButton*           m_radioSampleAllLayers = nullptr;
-    QLabel*                 m_eyeTipLabel = nullptr;
+    // Contextual: Magic Wand (Fuzzy Select)
+    QGroupBox*              m_wandGroup = nullptr;
+    QButtonGroup*           m_wandModeGroup = nullptr;
+    QToolButton*            m_btnWandModeReplace = nullptr;
+    QToolButton*            m_btnWandModeAdd = nullptr;
+    QToolButton*            m_btnWandModeSubtract = nullptr;
+    QToolButton*            m_btnWandModeIntersect = nullptr;
+    QCheckBox*              m_wandContiguousCheck = nullptr;
+    QSlider*                m_wandThresholdSlider = nullptr;
+    QSpinBox*               m_wandThresholdSpin = nullptr;
+    QCheckBox*              m_wandDiagonalCheck = nullptr;
+    QCheckBox*              m_wandTransparentCheck = nullptr;
+    QCheckBox*              m_wandSampleMergedCheck = nullptr;
+    QPushButton*            m_btnWandDeselect = nullptr;
+    QPushButton*            m_btnWandInvert = nullptr;
+    QPushButton*            m_btnWandClear = nullptr;
+    QPushButton*            m_btnWandCopy = nullptr;
+    QPushButton*            m_btnWandCut = nullptr;
+    QLabel*                 m_wandTipLabel = nullptr;
 
     // Palette & Colors
     QGroupBox*              m_colorsGroup = nullptr;
