@@ -1871,6 +1871,49 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>Kein Quellpfad für den Überwachungsmodus angegeben.</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>Quelldatei oder Quellordner existiert nicht: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>Überwache %1</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>Inaktiv</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>Keine gültigen Sprite-Dateien im überwachten Ordner gefunden.</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>Im Hintergrund neu kompilieren...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Aktuell (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>Datei nicht gefunden oder durch eine andere Anwendung gesperrt: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>Fehler beim Dekodieren der Datei: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>Kein Exporter für Zielformat gefunden: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>BentoPack</source>
@@ -2013,6 +2056,14 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
         <translation>Ebene %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>Live-Watch-Modus</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>Live-Dateiüberwachung und automatischen Engine-Export umschalten (Strg+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Bearbeiten</translation>
     </message>
@@ -2027,6 +2078,10 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>Filte&amp;r</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>Live-Watch konfigurieren...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2055,6 +2110,42 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Zuletzt verwendete Projekte leeren</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>Live-Watch-Modus gestoppt.</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Live-Watch-Modus</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>Live-Watch-Modus aktiv für: %1</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>Live-Watch-Modus — Zum Konfigurieren klicken (Strg+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: Aus</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: Aktiv</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: Kompilieren...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: Bereit (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: Fehler</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -5323,6 +5414,245 @@ Per Drag &amp; Drop neu anordnen</translation>
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>Exportiert Unreal Engine Paper2D-Sprites mit enger RenderGeometry.</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Live-Watch-Modus</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;Live-Watch-Modus&lt;/b&gt; — Zero-Click Hot-Reload</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>Überwacht Quelldateien (Aseprite / PNG) und exportiert bei jedem Speichern automatisch in Ihre Spiel-Engine (Godot, Unity, Unreal).</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Inaktiv</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. Zu überwachende Quelle (Quelldatei oder Ordner)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>Einzeldatei (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>Gesamter Ordner (alle Sprites überwachen)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>Pfad zur zu überwachenden Datei oder zum Ordner...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>Datei...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>Ordner...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 Aktuelles Projekt</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>Automatisch mit der Quelldatei des geöffneten BentoPack-Projekts ausfüllen</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>Filter:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>Überwachte Erweiterungen, durch Semikolons getrennt</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>Entprellverzögerung:</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>Wartezeit nach Schreibzugriff, damit Aseprite das Speichern abschließen kann</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. Zielort für Export (Ziel und Engine-Deskriptor)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>Nach jeder erkannten Änderung automatisch in die Spiel-Engine exportieren</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>Zielordner:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>Asset-Zielverzeichnis...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>Durchsuchen...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>Basisname:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>Basisname der exportierten Datei (z. B. hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>Generierte Datei:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. Engine-Konfiguration &amp; Komprimierungs-Pipeline</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>Ziel-Engine:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>Textur / VRAM:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>Standard PNG (RGBA8888 unkomprimiert GPU)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - Hohe Qualität)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - Maximale Kompression)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>2D-Mesh:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>Klassische Bounding-Box (4-Punkte-Quad)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>Tight Polygon CDT Mesh (Delaunay Anti-Overdraw)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>Abstand (Padding):</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>Modulare Cel-Deduplizierung (M22 - XXH3 64-Bit)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>Dedupliziert identische Aseprite-Cels über mehrere Ebenen</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>Delta-Patch-Zuschnitt (M22 - VRAM-Einsparung)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>Extrahiert geänderte Delta-Patches zwischen aufeinanderfolgenden Frames</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>Identische Frames zusammenführen (Auto-Aliasing)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>Zweierpotenz-Dimensionen (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>Transparente Pixel zuschneiden (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>Bereit.</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ Überwachung starten</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ Jetzt exportieren</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>Löst den Export sofort aus, um Einstellungen zu überprüfen</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 Speichern</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Schließen</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>Zu überwachende Quelldatei auswählen</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>Sprites &amp; Animationen (*.ase *.aseprite *.png);;Alle Dateien (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>Zu überwachenden Quellordner auswählen</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>Zielordner auswählen</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>In BentoPack ist derzeit kein Projekt oder keine Quelldatei geöffnet.</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>Live-Watch-Fehler</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>Einstellungen als Standard gespeichert.</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 Überwacht</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ Überwachung stoppen</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ Kompilieren...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ Aktuell</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ Fehler</translation>
     </message>
 </context>
 <context>

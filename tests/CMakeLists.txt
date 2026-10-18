@@ -226,6 +226,17 @@ if (MINGW)
 endif()
 add_test(NAME test_vram_dedup COMMAND test_vram_dedup)
 
+# 14. test_live_watch (GUI-Watch)
+add_executable(test_live_watch test_live_watch.cpp)
+target_include_directories(test_live_watch PRIVATE ${PLUGIN_INCLUDES})
+target_compile_definitions(test_live_watch PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_live_watch PRIVATE BentoPackCore Qt6::Test)
+set_target_properties(test_live_watch PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_live_watch PRIVATE -mconsole)
+endif()
+add_test(NAME test_live_watch COMMAND test_live_watch)
+
 set(ALL_TEST_TARGETS
     test_extractors
     test_app_config
@@ -244,6 +255,7 @@ set(ALL_TEST_TARGETS
     test_concurrency_and_security
     test_multipage_packer
     test_vram_dedup
+    test_live_watch
 )
 
 set_tests_properties(${ALL_TEST_TARGETS}

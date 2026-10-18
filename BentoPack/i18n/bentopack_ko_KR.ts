@@ -1871,6 +1871,49 @@ Strict removal clears the pixel.</source>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>감시 모드의 소스 경로가 지정되지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>소스 파일 또는 디렉터리가 존재하지 않음: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>%1 감시 중</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>대기 중</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>감시 대상 디렉터리에 유효한 스프라이트 파일이 없습니다.</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>백그라운드에서 다시 컴파일 중...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>최신 상태 (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>파일을 찾을 수 없거나 다른 애플리케이션에서 잠김: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>파일 디코딩 실패: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>대상 형식에 대한 익스포터를 찾을 수 없음: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>BentoPack</source>
@@ -2013,6 +2056,14 @@ Strict removal clears the pixel.</source>
         <translation>레이어 %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>라이브 감시 모드 (Live Watch)</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>실시간 파일 감시 및 엔진 자동 내보내기 전환 (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>편집(&amp;E)</translation>
     </message>
@@ -2027,6 +2078,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>필터(&amp;F)</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>라이브 감시 설정...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2055,6 +2110,42 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>최근 프로젝트 지우기</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>라이브 감시 모드가 중지되었습니다.</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>라이브 감시 모드</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>%1에 대한 라이브 감시 모드 활성화됨</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>라이브 감시 모드 — 클릭하여 구성 (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: 꺼짐</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: 활성</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: 컴파일 중...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: 준비 완료 (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: 오류</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -5321,6 +5412,245 @@ Install package:
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>타이트한 렌더 지오메트리(RenderGeometry)를 포함하여 언리얼 엔진 Paper2D 스프라이트를 내보냅니다.</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>라이브 감시 모드</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;라이브 감시 모드 (Live Watch)&lt;/b&gt; — 제로 클릭 핫 리로드</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>소스 파일(Aseprite / PNG)을 감시하고 저장할 때마다 게임 엔진(Godot, Unity, Unreal)으로 자동 내보냅니다.</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>비활성</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. 감시 대상 (소스 파일 또는 디렉터리)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>단일 파일 (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>전체 디렉터리 (모든 스프라이트 감시)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>감시할 파일 또는 디렉터리 경로...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>파일...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>디렉터리...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 현재 프로젝트</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>현재 열려 있는 BentoPack 프로젝트 소스 파일로 자동 채우기</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>필터:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>감시할 확장자 (세미콜론으로 구분)</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>디바운스 지연:</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>Aseprite 저장이 완료되도록 쓰기 감지 후 대기 시간</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. 내보낼 위치 (대상 디렉터리 및 엔진 설명자)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>변경 사항 감지 시 게임 엔진으로 자동 내보내기</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>대상 디렉터리:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>에셋 대상 디렉터리...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>찾아보기...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>기본 이름:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>내보낼 파일의 기본 이름 (예: hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>생성된 파일:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. 엔진 설정 및 압축 파이프라인</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>대상 엔진:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>텍스처 / VRAM:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>표준 PNG (RGBA8888 비압축 GPU)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - 고품질)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - 최대 압축)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>2D 메시:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>클래식 바운딩 박스 (4정점 쿼드)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>타이트 폴리곤 CDT 메시 (Delaunay 오버드로 방지)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>패딩:</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>모듈형 셀 중복 제거 (M22 - XXH3 64비트)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>여러 레이어에서 동일한 Aseprite 셀 중복 제거</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>델타 패치 슬라이싱 (M22 - VRAM 절약)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>연속된 프레임 사이에서 수정된 델타 패치 추출</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>동일한 프레임 병합 (자동 앨리어싱)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>2의 거듭제곱 크기 (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>투명 픽셀 잘라내기 (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>준비 완료.</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ 감시 시작</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ 지금 내보내기</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>설정 유효성 검사를 위해 즉시 내보내기 실행</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 저장</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>닫기</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>감시할 소스 파일 선택</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>스프라이트 및 애니메이션 (*.ase *.aseprite *.png);;모든 파일 (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>감시할 소스 디렉터리 선택</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>대상 디렉터리 선택</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>현재 BentoPack에 열려 있는 프로젝트나 소스 파일이 없습니다.</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>라이브 감시 오류</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>설정이 기본값으로 저장되었습니다.</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 감시 중</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ 감시 중지</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ 컴파일 중...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ 최신 상태</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ 오류</translation>
     </message>
 </context>
 <context>

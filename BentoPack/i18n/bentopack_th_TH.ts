@@ -1871,6 +1871,49 @@ Strict removal clears the pixel.</translation>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>ไม่ได้ระบุเส้นทางต้นฉบับสำหรับโหมดเฝ้าติดตาม</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>ไฟล์หรือไดเรกทอรีต้นฉบับไม่มีอยู่: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>กำลังเฝ้าติดตาม %1</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>ไม่ได้ใช้งาน</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>ไม่พบไฟล์สไปรต์ที่ถูกต้องในไดเรกทอรีที่เฝ้าติดตาม</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>กำลังคอมไพล์ใหม่ในเบื้องหลัง...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>เป็นปัจจุบันแล้ว (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>ไม่พบไฟล์หรือไฟล์ถูกล็อคโดยแอปพลิเคชันอื่น: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>ถอดรหัสไฟล์ล้มเหลว: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>ไม่พบตัวส่งออกสำหรับรูปแบบเป้าหมาย: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>BentoPack</source>
@@ -2013,6 +2056,14 @@ Strict removal clears the pixel.</translation>
         <translation>เลเยอร์ %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>โหมดเฝ้าติดตามสด (Live Watch)</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>สลับการเฝ้าติดตามไฟล์สดและการส่งออกไปยังเอนจินอัตโนมัติ (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;แก้ไข</translation>
     </message>
@@ -2027,6 +2078,10 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;ฟิลเตอร์</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>กำหนดค่าการเฝ้าติดตามสด...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2055,6 +2110,42 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>ล้างประวัติโปรเจกต์ล่าสุด</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>หยุดโหมดเฝ้าติดตามสดแล้ว</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>โหมดเฝ้าติดตามสด</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>เปิดใช้งานโหมดเฝ้าติดตามสดสำหรับ: %1</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>โหมดเฝ้าติดตามสด — คลิกเพื่อกำหนดค่า (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: ปิด</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: กำลังทำงาน</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: กำลังคอมไพล์...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: พร้อม (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: ข้อผิดพลาด</translation>
     </message>
     <message>
         <source>KEY_CTX_CREATE_ANIM</source>
@@ -5320,6 +5411,245 @@ Install package:
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>ดำเนินการ: Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>โหมดเฝ้าติดตามสด</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;โหมดเฝ้าติดตามสด (Live Watch)&lt;/b&gt; — ฮอตรีโหลดแบบไร้คลิก</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>เฝ้าติดตามไฟล์ต้นฉบับ (Aseprite / PNG) และส่งออกไปยังเอนจินเกมของคุณ (Godot, Unity, Unreal) โดยอัตโนมัติทุกครั้งที่บันทึก</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>ไม่ทำงาน</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. สิ่งที่ต้องเฝ้าติดตาม (ไฟล์ต้นฉบับหรือไดเรกทอรี)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>ไฟล์เดี่ยว (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>ทั้งไดเรกทอรี (เฝ้าติดตามสไปรต์ทั้งหมด)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>เส้นทางไปยังไฟล์หรือไดเรกทอรีที่จะเฝ้าติดตาม...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>ไฟล์...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>ไดเรกทอรี...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 โปรเจกต์ปัจจุบัน</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>กรอกอัตโนมัติด้วยไฟล์ต้นฉบับของโปรเจกต์ BentoPack ที่เปิดอยู่</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>ตัวกรอง:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>นามสกุลไฟล์ที่เฝ้าติดตาม คั่นด้วยอัฒภาค</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>การหน่วงเวลาดีเด้ง (Debounce):</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>เวลารอหลังตรวจพบการเขียนเพื่อให้ Aseprite บันทึกเสร็จสมบูรณ์</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. ตำแหน่งส่งออก (ปลายทางและตัวอธิบายเอนจิน)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>ส่งออกไปยังเอนจินเกมโดยอัตโนมัติหลังตรวจพบการเปลี่ยนแปลง</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>ไดเรกทอรีเป้าหมาย:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>ไดเรกทอรีปลายทางของแอสเซท...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>เรียกดู...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>ชื่อพื้นฐาน:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>ชื่อพื้นฐานของไฟล์ที่ส่งออก (เช่น hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>ไฟล์ที่สร้างขึ้น:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. การกำหนดค่าเอนจินและไปป์ไลน์การบีบอัด</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>เอนจินเป้าหมาย:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>เทกซ์เจอร์ / VRAM:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>PNG มาตรฐาน (RGBA8888 ไม่บีบอัด GPU)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - คุณภาพสูง)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - การบีบอัดสูงสุด)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>ตาข่าย 2D:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>กล่องขอบเขตแบบคลาสสิก (Quad 4 จุด)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>ตาข่ายโพลีกอน CDT แนบสนิท (Delaunay ลด overdraw)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>ระยะห่าง (Padding):</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>การลดความซ้ำซ้อนของเซลแบบโมดูลาร์ (M22 - XXH3 64-bit)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>ขจัดความซ้ำซ้อนของเซล Aseprite ที่เหมือนกันในหลายเลเยอร์</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>การแบ่งส่วนแพตช์เดลต้า (M22 - ประหยัด VRAM)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>แยกแพตช์เดลต้าที่แก้ไขระหว่างเฟรมที่ต่อเนื่องกัน</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>รวมเฟรมที่เหมือนกัน (Auto-Aliasing)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>มิติยกกำลังสอง (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>ตัดพิกเซลโปร่งใสออก (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>พร้อม</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ เริ่มเฝ้าติดตาม</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ ส่งออกทันที</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>ทริกเกอร์การส่งออกทันทีเพื่อตรวจสอบการตั้งค่า</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 บันทึก</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>ปิด</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>เลือกไฟล์ต้นฉบับที่จะเฝ้าติดตาม</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>สไปรต์และแอนิเมชัน (*.ase *.aseprite *.png);;ไฟล์ทั้งหมด (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>เลือกไดเรกทอรีต้นฉบับที่จะเฝ้าติดตาม</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>เลือกไดเรกทอรีปลายทาง</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>ไม่มีโปรเจกต์หรือไฟล์ต้นฉบับเปิดอยู่ใน BentoPack</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>ข้อผิดพลาดการเฝ้าติดตามสด</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>บันทึกการตั้งค่าเป็นค่าเริ่มต้นแล้ว</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 กำลังเฝ้าติดตาม</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ หยุดเฝ้าติดตาม</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ กำลังคอมไพล์...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ เป็นปัจจุบัน</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ ข้อผิดพลาด</translation>
     </message>
 </context>
 <context>

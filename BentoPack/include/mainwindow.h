@@ -33,6 +33,7 @@
 #include "controller/projectcontroller.h"
 #include "controller/animationcontroller.h"
 #include "controller/atlasviewcontroller.h"
+#include "watcher/livewatchmanager.h"
 #include "widgets/timelinefilmstripwidget.h"
 #include "widgets/layerstackwidget.h"
 #include "bentopackwidgets_export.h"
@@ -210,6 +211,10 @@ private slots:
     void onRedoTriggered();
     void updateUndoRedoActions();
 
+    void onToggleLiveWatchTriggered();
+    void onConfigureLiveWatchTriggered();
+    void updateWatchStatusUI(WatchState state, const QString &message);
+
 private:
     void updatePivotUiFromSelection();
     void applyPivotPresetToSelection(PivotPreset preset);
@@ -243,6 +248,7 @@ private:
     std::unique_ptr<ProjectController> m_projectController;
     std::unique_ptr<AtlasViewController> m_atlasController;
     std::unique_ptr<AnimationController> m_animationController;
+    std::unique_ptr<class LiveWatchManager> m_liveWatchManager;
 
     QMenu *m_recentMenu = nullptr;
     QMenu *m_recentProjectsMenu = nullptr;
@@ -258,6 +264,9 @@ private:
     QAction *m_actionPolygonMeshDialog = nullptr;
     QAction *m_actionPixelEditorDialog = nullptr;
     QAction *m_actionMergeSlices = nullptr;
+    QAction *m_actionToggleLiveWatch = nullptr;
+    QAction *m_actionConfigureLiveWatch = nullptr;
+    QPushButton *m_watchStatusBtn = nullptr;
     QLabel *statusLabel = nullptr;
     QLabel *zoomLabel = nullptr;
     QSlider *zoomSlider = nullptr;

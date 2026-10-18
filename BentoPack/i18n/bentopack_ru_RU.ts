@@ -1871,6 +1871,49 @@ Strict removal clears the pixel.</source>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>Не указан исходный путь для режима слежения.</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>Исходный файл или каталог не существует: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>Отслеживание %1</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>Бездействие</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>В отслеживаемой папке не найдено корректных файлов спрайтов.</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>Фоновая компиляция...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Актуально (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>Файл не найден или занят другим приложением: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>Не удалось декодировать файл: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>Экспортер для целевого формата не найден: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>BentoPack</source>
@@ -2013,6 +2056,14 @@ Strict removal clears the pixel.</source>
         <translation>Слой %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>Режим динамического слежения (Live Watch)</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>Включить/выключить динамическое отслеживание файлов и автоэкспорт в движок (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Правка</translation>
     </message>
@@ -2027,6 +2078,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Фильтры</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>Настроить режим Live Watch...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2055,6 +2110,42 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Очистить недавние проекты</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>Режим Live Watch остановлен.</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Режим Live Watch</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>Режим Live Watch активен для: %1</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>Режим Live Watch — Нажмите для настройки (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: Выкл</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: Активен</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: Компиляция...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: Готово (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: Ошибка</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -5326,6 +5417,245 @@ Delete, чтобы удалить</translation>
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>Экспортирует спрайты Unreal Engine Paper2D с плотной RenderGeometry.</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Режим Live Watch</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;Режим Live Watch&lt;/b&gt; — Бескликовый Hot-Reload</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>Отслеживает исходные файлы (Aseprite / PNG) и автоматически реэкспортирует в игровой движок (Godot, Unity, Unreal) при каждом сохранении.</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Неактивно</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. Что отслеживать (Исходный файл или каталог)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>Один файл (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>Весь каталог (следить за всеми спрайтами)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>Путь к отслеживаемому файлу или каталогу...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>Файл...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>Каталог...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 Текущий проект</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>Заполнить исходным файлом открытого проекта BentoPack</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>Фильтры:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>Отслеживаемые расширения через точку с запятой</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>Задержка стабилизации (Debounce):</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>Время ожидания после записи, чтобы Aseprite успел завершить сохранение</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. Куда экспортировать (Целевая папка и дескриптор)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>Автоматически экспортировать в игровой движок при каждом сохранении</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>Целевой каталог:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>Папка назначения ресурсов...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>Обзор...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>Базовое имя:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>Базовое имя экспортируемого файла (напр., hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>Сгенерированный файл:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. Настройка движка и конвейер сжатия</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>Целевой движок:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>Текстура / VRAM:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>Стандартный PNG (RGBA8888 несжатый GPU)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - Высокое качество)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - Максимальное сжатие)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>2D-сетка:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>Классический габаритный прямоугольник (Quad 4 вершины)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>Плотная полигональная CDT-сетка (Delaunay anti-overdraw)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>Отступ (Padding):</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>Модульная дедупликация ячеек (M22 - XXH3 64-бит)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>Дедуплицирует одинаковые ячейки Aseprite на нескольких слоях</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>Нарезка дельта-патчами (M22 - Экономия VRAM)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>Извлекает измененные дельта-патчи между соседними кадрами</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>Объединять одинаковые кадры (Auto-Aliasing)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>Размеры степени двойки (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>Обрезать прозрачность (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>Готово.</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ Запустить слежение</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ Экспортировать сейчас</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>Немедленно запустить экспорт для проверки настроек</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 Сохранить</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>Выберите отслеживаемый исходный файл</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>Спрайты и анимации (*.ase *.aseprite *.png);;Все файлы (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>Выберите отслеживаемый исходный каталог</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>Выберите целевой каталог</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>В BentoPack нет открытого проекта или исходного файла.</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>Ошибка Live Watch</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>Настройки сохранены по умолчанию.</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 Отслеживание</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ Остановить слежение</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ Компиляция...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ Актуально</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ Ошибка</translation>
     </message>
 </context>
 <context>

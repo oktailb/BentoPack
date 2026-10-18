@@ -1871,6 +1871,49 @@ Bấm vào một nút để xem chi tiết.</translation>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>Chưa chỉ định đường dẫn nguồn cho chế độ theo dõi.</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>Tệp hoặc thư mục nguồn không tồn tại: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>Đang theo dõi %1</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>Nhàn rỗi</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>Không tìm thấy tệp sprite hợp lệ trong thư mục được theo dõi.</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>Đang biên dịch lại trong nền...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Đã cập nhật (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>Không tìm thấy tệp hoặc tệp bị khóa bởi ứng dụng khác: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>Không thể giải mã tệp: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>Không tìm thấy bộ xuất cho định dạng đích: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>BentoPack</source>
@@ -2013,6 +2056,14 @@ Bấm vào một nút để xem chi tiết.</translation>
         <translation>Lớp %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>Chế độ theo dõi trực tiếp (Live Watch)</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>Bật/tắt theo dõi tệp trực tiếp và tự động xuất sang engine (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Chỉnh sửa</translation>
     </message>
@@ -2027,6 +2078,10 @@ Bấm vào một nút để xem chi tiết.</translation>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Bộ lọc</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>Cấu hình theo dõi trực tiếp...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2055,6 +2110,42 @@ Bấm vào một nút để xem chi tiết.</translation>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Xóa danh sách dự án gần đây</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>Đã dừng chế độ theo dõi trực tiếp.</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Chế độ theo dõi trực tiếp</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>Chế độ theo dõi trực tiếp đang hoạt động cho: %1</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>Chế độ theo dõi trực tiếp — Nhấp để định cấu hình (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: Tắt</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: Hoạt động</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: Đang biên dịch...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: Sẵn sàng (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: Lỗi</translation>
     </message>
     <message>
         <source>KEY_CTX_CREATE_ANIM</source>
@@ -5320,6 +5411,245 @@ Cài đặt gói:
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>Thao tác: Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Chế độ theo dõi trực tiếp</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;Chế độ theo dõi trực tiếp&lt;/b&gt; — Tải lại nóng không cần nhấp chuột</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>Theo dõi các tệp nguồn (Aseprite / PNG) và tự động xuất lại sang engine trò chơi của bạn (Godot, Unity, Unreal) sau mỗi lần lưu.</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Không hoạt động</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. Đối tượng theo dõi (Tệp hoặc thư mục nguồn)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>Tệp đơn (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>Toàn bộ thư mục (theo dõi tất cả sprite)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>Đường dẫn đến tệp hoặc thư mục cần theo dõi...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>Tệp...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>Thư mục...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 Dự án hiện tại</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>Tự động điền bằng tệp nguồn của dự án BentoPack đang mở</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>Bộ lọc:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>Các phần mở rộng được theo dõi phân tách bằng dấu chấm phẩy</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>Độ trễ chống rung (Debounce):</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>Thời gian chờ sau khi phát hiện ghi để Aseprite lưu xong</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. Nơi xuất (Thư mục đích và bộ mô tả engine)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>Tự động xuất sang engine trò chơi sau mỗi thay đổi được phát hiện</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>Thư mục đích:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>Thư mục đích của tài nguyên...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>Duyệt...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>Tên cơ sở:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>Tên cơ sở của tệp được xuất (ví dụ: hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>Tệp được tạo:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. Cấu hình Engine &amp; Quy trình nén</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>Engine đích:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>Kết cấu / VRAM:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>PNG tiêu chuẩn (RGBA8888 không nén GPU)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - Chất lượng cao)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - Nén tối đa)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>Lưới 2D:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>Hộp giới hạn cổ điển (Hình tứ giác 4 đỉnh)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>Lưới đa giác CDT khít (Delaunay chống vẽ đè)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>Phần đệm (Padding):</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>Khử trùng lặp cel dạng mô-đun (M22 - XXH3 64-bit)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>Khử trùng lặp các cel Aseprite giống hệt nhau trên nhiều lớp</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>Cắt bản vá delta (M22 - Tiết kiệm VRAM)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>Trích xuất các bản vá delta đã sửa đổi giữa các khung hình liên tiếp</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>Hợp nhất các khung hình giống nhau (Tự động đặt bí danh)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>Kích thước lũy thừa của 2 (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>Cắt bớt pixel trong suốt (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>Sẵn sàng.</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ Bắt đầu theo dõi</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ Xuất ngay</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>Kích hoạt xuất ngay lập tức để xác thực cài đặt</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 Lưu</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Đóng</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>Chọn tệp nguồn cần theo dõi</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>Sprite &amp; Hoạt ảnh (*.ase *.aseprite *.png);;Tất cả tệp (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>Chọn thư mục nguồn cần theo dõi</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>Chọn thư mục đích</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>Hiện không có dự án hoặc tệp nguồn nào được mở trong BentoPack.</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>Lỗi theo dõi trực tiếp</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>Cài đặt đã được lưu làm mặc định.</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 Đang theo dõi</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ Dừng theo dõi</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ Đang biên dịch...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ Đã cập nhật</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ Lỗi</translation>
     </message>
 </context>
 <context>

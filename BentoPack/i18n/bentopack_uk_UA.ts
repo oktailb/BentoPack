@@ -1871,6 +1871,49 @@ Strict removal clears the pixel.</source>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>Не вказано вихідний шлях для режиму стеження.</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>Вихідний файл або каталог не існує: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>Стеження за %1</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>Неактивно</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>У каталозі стеження не знайдено дійсних файлів спрайтів.</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>Фонова компіляція...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Актуально (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>Файл не знайдено або він зайнятий іншою програмою: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>Не вдалося декодувати файл: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>Не знайдено експортер для цільового формату: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>BentoPack</source>
@@ -2013,6 +2056,14 @@ Strict removal clears the pixel.</source>
         <translation>Шар %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>Режим динамічного стеження (Live Watch)</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>Увімкнути/вимкнути динамічне стеження за файлами та автоекспорт у рушій (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Редагувати</translation>
     </message>
@@ -2027,6 +2078,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Фільтри</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>Налаштувати режим Live Watch...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2055,6 +2110,42 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Очистити нещодавні проекти</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>Режим Live Watch зупинено.</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Режим Live Watch</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>Режим Live Watch активний для: %1</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>Режим Live Watch — Натисніть для налаштування (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: Вимк</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: Активний</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: Компіляція...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: Готово (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: Помилка</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -5326,6 +5417,245 @@ Del для видалення</translation>
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>Експортує спрайти Unreal Engine Paper2D з компактною RenderGeometry.</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Режим Live Watch</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;Режим Live Watch&lt;/b&gt; — Безкліковий Hot-Reload</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>Стежить за вихідними файлами (Aseprite / PNG) та автоматично експортує у рушій (Godot, Unity, Unreal) під час кожного збереження.</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Неактивно</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. Що стежити (Вихідний файл або каталог)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>Один файл (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>Весь каталог (стежити за всіма спрайтами)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>Шлях до файлу або каталогу для стеження...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>Файл...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>Каталог...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 Поточний проект</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>Заповнити вихідним файлом відкритого проекту BentoPack</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>Фільтри:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>Відстежувані розширення через крапку з комою</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>Затримка стабілізації (Debounce):</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>Час очікування після запису, щоб Aseprite встиг завершити збереження</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. Куди експортувати (Цільова папка та дескриптор)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>Автоматично експортувати у гральний рушій після кожної зміни</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>Цільовий каталог:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>Папка призначення ресурсів...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>Огляд...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>Базове ім&apos;я:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>Базове ім&apos;я експортованого файлу (напр., hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>Згенерований файл:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. Конфігурація рушія та конвеєр стиснення</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>Цільовий рушій:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>Текстура / VRAM:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>Стандартний PNG (RGBA8888 нестиснений GPU)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - Висока якість)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - Максимальне стиснення)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>2D-сітка:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>Класичний обмежувальний прямокутник (Quad 4 вершини)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>Щільна полігональна CDT-сітка (Delaunay anti-overdraw)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>Відступ (Padding):</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>Модульна дедуплікація комірок (M22 - XXH3 64-біт)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>Дедуплікує однакові комірки Aseprite на кількох шарах</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>Нарізка дельта-патчами (M22 - Економія VRAM)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>Витягує змінені дельта-патчі між послідовними кадрами</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>Об&apos;єднувати однакові кадри (Auto-Aliasing)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>Розміри степеня двійки (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>Обрізати прозорість (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>Готово.</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ Почати стеження</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ Експортувати зараз</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>Негайно запустити експорт для перевірки налаштувань</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 Зберегти</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Закрити</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>Виберіть файл для стеження</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>Спрайти й анімації (*.ase *.aseprite *.png);;Усі файли (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>Виберіть каталог для стеження</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>Виберіть цільовий каталог</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>У BentoPack немає відкритого проекту або вихідного файлу.</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>Помилка Live Watch</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>Налаштування збережено за замовчуванням.</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 Стеження</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ Зупинити стеження</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ Компіляція...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ Актуально</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ Помилка</translation>
     </message>
 </context>
 <context>

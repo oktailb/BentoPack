@@ -1871,6 +1871,49 @@ Strict removal clears the pixel.</source>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>監視モードのソースパスが指定されていません。</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>ソースファイルまたはディレクトリが存在しません: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>%1 を監視中</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>アイドル</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>監視対象ディレクトリ内に有効なスプライトファイルが見つかりません。</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>バックグラウンドで再コンパイル中...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>最新 (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>ファイルが見つからないか、別のアプリによってロックされています: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>ファイルのデコードに失敗しました: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>ターゲット形式のエクスポーターが見つかりません: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>KEY_MSG_LOAD_ERROR</source>
@@ -1897,6 +1940,14 @@ Strict removal clears the pixel.</source>
         <translation>レイヤー %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>ライブ監視モード (Live Watch)</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>ライブファイル監視と自動エンジンエクスポートを切り替え (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>編集(&amp;E)</translation>
     </message>
@@ -1911,6 +1962,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>フィルター(&amp;F)</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>ライブ監視を設定...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -1939,6 +1994,42 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>最近開いたプロジェクト履歴をクリア</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>ライブ監視モードを停止しました。</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>ライブ監視モード</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>%1 のライブ監視モードが有効です</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>ライブ監視モード — クリックして設定 (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: オフ</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: アクティブ</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: コンパイル中...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: 完了 (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: エラー</translation>
     </message>
     <message>
         <source>BentoPack</source>
@@ -5321,6 +5412,245 @@ Install package:
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>タイトなRenderGeometryを含むUnreal Engine Paper2Dスプライトをエクスポートします。</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>ライブ監視モード</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;ライブ監視モード (Live Watch)&lt;/b&gt; — ゼロクリック・ホットリロード</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>ソースファイル (Aseprite / PNG) を監視し、保存のたびにゲームエンジン (Godot, Unity, Unreal) へ自動再エクスポートします。</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>非アクティブ</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. 監視対象 (ソースファイルまたはディレクトリ)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>単一ファイル (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>ディレクトリ全体 (全スプライトを監視)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>監視するファイルまたはディレクトリのパス...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>ファイル...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>ディレクトリ...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 現在のプロジェクト</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>現在開いているBentoPackプロジェクトのソースファイルで自動入力</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>フィルター:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>監視対象拡張子 (セミコロン区切り)</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>デバウンス遅延:</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>Asepriteの保存完了を待機するための検出後待機時間</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. エクスポート先 (出力先とエンジン記述子)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>変更検出後にゲームエンジンへ自動再エクスポート</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>出力先ディレクトリ:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>アセット出力先ディレクトリ...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>参照...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>ベース名:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>エクスポートファイルのベース名 (例: hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>生成ファイル:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. エンジン設定と圧縮パイプライン</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>ターゲットエンジン:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>テクスチャ / VRAM:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>標準PNG (RGBA8888 非圧縮GPU)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - 高品質)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - 最大圧縮)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>2Dメッシュ:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>クラシック境界ボックス (4頂点クアッド)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>タイトポリゴンCDTメッシュ (ドロネー過剰描画低減)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>パディング:</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>モジュラーセル重複排除 (M22 - XXH3 64ビット)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>複数レイヤー間で同一のAsepriteセルを重複排除</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>デルタパッチスライス (M22 - VRAM節約)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>連続フレーム間の変更されたデルタパッチを抽出</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>同一フレームの統合 (オートエイリアス)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>2の累乗サイズ (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>透明ピクセルのトリミング (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>準備完了。</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ 監視開始</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ 今すぐエクスポート</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>設定検証のため直ちにエクスポートを実行</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 保存</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>閉じる</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>監視するソースファイルを選択</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>スプライト &amp; アニメーション (*.ase *.aseprite *.png);;すべてのファイル (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>監視するソースディレクトリを選択</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>出力先ディレクトリを選択</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>現在BentoPackでプロジェクトまたはソースファイルが開かれていません。</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>ライブ監視エラー</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>設定をデフォルトとして保存しました。</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 監視中</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ 監視停止</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ コンパイル中...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ 最新</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ エラー</translation>
     </message>
 </context>
 <context>

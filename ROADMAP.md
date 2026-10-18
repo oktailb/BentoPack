@@ -45,8 +45,8 @@
 │ 1   │ STORES            │ Publication & Distribution Stores │ P0 - Imm.│
 │ 2   │ M21 (LIGHTING)    │ Multi-Atlas Normal/Emissive Maps  │ P1 - Trés│
 │ 3   │ M16 (MULTI-PAGE)  │ Multi-Page Atlas (Spanning VRAM)  │ P1 - Fort│
-│ 4   │ M22 (VRAM-DEDUP)  │ Déduplication Cels & Delta-Patches│ P2 - Moy.│
-│ 5   │ GUI-WATCH         │ Mode Hot-Reload Zéro-Clic (GUI)   │ P2 - Moy.│
+│ 4   │ M22 (VRAM-DEDUP)  │ Déduplication Cels & Delta-Patches│ [x] LIVRÉ │
+│ 5   │ GUI-WATCH         │ Mode Hot-Reload Zéro-Clic (GUI)   │ [x] LIVRÉ │
 │ 6   │ FILTERS-POLISH    │ Fignolage Extrusions & Filtres    │ P2 - Moy.│
 │ 7   │ M12 (SUR-ANIM)    │ Sur-Animation (Weights & Sockets) │ P3 - Moy.│
 │ 8   │ M14 (SIMD)        │ Vectorisation AVX2/NEON & Undo RAM│ P3 - Tech│
@@ -209,25 +209,21 @@ Dans les animations de personnages (idle, respiration, clignement des yeux) ou d
 
 ---
 
-## ⏱️ Priorité 5 (P2) : GUI-WATCH — Mode Hot-Reload Zéro-Clic Intégré dans l'Interface
+## ⏱️ Priorité 5 (P2) : GUI-WATCH — Mode Hot-Reload Zéro-Clic Intégré dans l'Interface — [x] TERMINÉ / LIVRÉ
 
-### 📌 Contexte & Spécifications
-Le mode daemon CLI (`bentopack-cli --watch`) est déjà opérationnel. Pour les artistes qui n'utilisent pas le terminal de commande, intégrer ce mécanisme directement dans l'interface de bureau transforme radicalement l'expérience utilisateur.
-
-### 💰 Valeur Ajoutée Produit
-* Ergonomie « zéro clic » : l'artiste fait `Ctrl+S` dans Aseprite, et voit son animation se rafraîchir en quelques millisecondes directement dans la fenêtre de test de son jeu sous Godot ou Unity.
-
-### 🛠️ Spécifications Techniques
-1. Action à bascule dans la barre d'outils et le menu principal : *« Mode Surveillance / Live Watch (Ctrl+Alt+W) »*.
-2. Exploitation de `QFileSystemWatcher` avec filtre sur les extensions surveillées (`.ase`, `.aseprite`, `.png`).
-3. Délai anti-rebond (*debouncing*) de 250 ms pour laisser Aseprite terminer d'écrire son binaire sur disque.
-4. Rechargement transparent, re-packing, recalcul du maillage et écriture des descripteurs moteurs en tâche de fond.
-5. Icône d'état discrète dans la barre d'état (En écoute / Recompilation / Prêt).
-
-### 🧭 Conseil Senior : Must-Haves vs Barrières à Ne Pas Franchir
-> [!TIP]
-> **Must-Have :** Vérifier l'existence d'un verrou ou d'une absence d'erreur d'ouverture de fichier avant de lire pour éviter de lire un binaire à moitié écrit par l'OS.  
-> 🚫 **Barrière à ne pas franchir :** Ne pas bloquer le thread principal de rendu Qt pendant la recompilation. Tout recalcul doit s'exécuter dans un worker thread sans figer l'interface.
+> [!NOTE]
+> **Implémentation Livrée (100% CTest Passed) :**
+> - **Gestionnaire central `LiveWatchManager`** : surveillance fine via `QFileSystemWatcher`, temporisation anti-rebond (*debouncing* 250 ms par défaut), vérification de stabilité de fichier binaire (taille non nulle, descripteur en lecture seule débloqué, vérification d'en-tête binaire Aseprite `0xA5E0` ou PNG).
+> - **Recompilation & Ré-export non bloquant** : traitement asynchrone hors thread principal via `QtConcurrent::run()`, évitant tout gel de l'interface graphique utilisateur.
+> - **Boîte de configuration ergonomique `WatchConfigDialog`** :
+>   - **Quoi surveiller** : Fichier unique ou dossier complet, filtres d'extensions (`*.ase;*.aseprite;*.png`), détection automatique via bouton « 📌 Projet actuel ».
+>   - **Où exporter** : Répertoire de destination, nom de base, prévisualisation interactive en direct du chemin généré (`hero.tres`, `hero.prefab`, etc.).
+>   - **Options Moteur complètes** : Choix du format moteur (Godot 4, Unity, Unreal Paper2D, TexturePacker JSON), compression VRAM KTX2 / Basis Universal (UASTC / ETC1S), découpage maillage Tight Polygon CDT Delaunay, déduplication modulaire des cels (M22 XXH3 64-bit), patchs delta d'animation, Power of Two et rognage.
+> - **Intégration transparente `MainWindow`** :
+>   - Action à bascule dans la barre d'outils et menu Fichier avec raccourci dédié `Ctrl+Alt+W`.
+>   - Widget bouton interactif dans la barre d'état avec badges dynamiques (Inactif, En écoute, Recompilation, À jour avec horodatage, Erreur) et ouverture directe de la boîte de configuration au clic.
+>   - Internationalisation i18n complète à 100% sur les 16 langues supportées sans chaîne inachevée.
+>   - Suite de tests unitaires dédiée `test_live_watch` validée avec succès.
 
 ---
 

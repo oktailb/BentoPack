@@ -70,6 +70,7 @@ set(BentoPackCore_SRC
     src/cli/clipackpipeline.cpp
     src/cli/native_commands.cpp
     src/cli/watch_daemon.cpp
+    src/watcher/livewatchmanager.cpp
     src/geometry/contourtracer.cpp
     src/geometry/polygonsimplifier.cpp
     src/geometry/triangulator.cpp
@@ -114,6 +115,7 @@ set(BentoPackCore_INCLUDE
     include/cli/clipackpipeline.h
     include/cli/native_commands.h
     include/cli/watch_daemon.h
+    include/watcher/livewatchmanager.h
     include/geometry/contourtracer.h
     include/geometry/polygonsimplifier.h
     include/geometry/triangulator.h
@@ -147,6 +149,7 @@ set(BentoPackWidgets_SRC
     src/widgets/colorpickerwidget.cpp
     src/widgets/branchselectiondialog.cpp
     src/widgets/openmediaconflictdialog.cpp
+    src/widgets/watchconfigdialog.cpp
 )
 
 set(BentoPackWidgets_UI
@@ -176,6 +179,7 @@ set(BentoPackWidgets_INCLUDE
     include/widgets/pixeleditordialog.h
     include/widgets/layerstackwidget.h
     include/widgets/colorpickerwidget.h
+    include/widgets/watchconfigdialog.h
 )
 
 # 1. BentoPackCore: Pure headless library (Qt6::Core, Qt6::Gui, Qt6::Concurrent, Qt6::Network - ZERO Qt6::Widgets)

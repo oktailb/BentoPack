@@ -26,7 +26,9 @@
 #include "include/widgets/pixeleditordialog.h"
 #include "include/widgets/branchselectiondialog.h"
 #include "include/widgets/openmediaconflictdialog.h"
+#include "include/widgets/watchconfigdialog.h"
 #include "include/widgets/filtermenubuilder.h"
+#include "include/watcher/livewatchmanager.h"
 #include "include/filters/filterregistry.h"
 #include <QShortcut>
 #include <QSettings>
@@ -66,6 +68,20 @@ MainWindow::MainWindow(QWidget *parent)
     setupControllers();
     setupGitHistoryDock();
     setupErgonomicLayout();
+
+    m_liveWatchManager = std::make_unique<LiveWatchManager>(this);
+    connect(m_liveWatchManager.get(), &LiveWatchManager::stateChanged, this, &MainWindow::updateWatchStatusUI);
+    connect(m_liveWatchManager.get(), &LiveWatchManager::fileReloaded, this, [this](const QString &filePath) {
+        if (m_projectController) {
+            m_projectController->openFile(filePath);
+        }
+    });
+    connect(m_liveWatchManager.get(), &LiveWatchManager::exportCompleted, this, [this](bool /*success*/, const QString &/*outputPath*/, const QString &message) {
+        if (statusLabel) {
+            statusLabel->setText(message);
+        }
+    });
+
     setupUIConnections();
     setupShortcuts();
 
@@ -563,6 +579,14 @@ void MainWindow::setupErgonomicLayout()
     connect(ui->actionDetectSprites, &QAction::triggered, this, &MainWindow::detectSpritesAndRefresh);
     connect(ui->actionRemoveBg, &QAction::triggered, this, &MainWindow::removeAtlasBackgroundAndRefresh);
 
+    // Live Watch toolbar toggle
+    ui->mainToolBar->addSeparator();
+    m_actionToggleLiveWatch = ui->mainToolBar->addAction(QIcon::fromTheme(QStringLiteral("view-refresh"), QIcon(":/drawer/icons/bentopack.png")), tr("KEY_ACTION_TOGGLE_LIVE_WATCH"));
+    m_actionToggleLiveWatch->setCheckable(true);
+    m_actionToggleLiveWatch->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_W));
+    m_actionToggleLiveWatch->setToolTip(tr("KEY_TOOLTIP_LIVE_WATCH"));
+    connect(m_actionToggleLiveWatch, &QAction::triggered, this, &MainWindow::onToggleLiveWatchTriggered);
+
     // Setup Affichage (View) Menu with toggle actions for all docks
     setupViewMenuActions();
     connect(ui->actionResetLayout, &QAction::triggered, this, &MainWindow::resetDefaultLayout);
@@ -601,6 +625,13 @@ void MainWindow::setupUIConnections()
     progressBar->setFormat(tr("KEY_STATUS_PROGRESS") + " %p%");
     progressBar->setMinimumWidth(300);
     ui->statusBar->addPermanentWidget(progressBar);
+
+    m_watchStatusBtn = new QPushButton(this);
+    m_watchStatusBtn->setFlat(true);
+    m_watchStatusBtn->setCursor(Qt::PointingHandCursor);
+    ui->statusBar->addPermanentWidget(m_watchStatusBtn);
+    connect(m_watchStatusBtn, &QPushButton::clicked, this, &MainWindow::onConfigureLiveWatchTriggered);
+    updateWatchStatusUI(WatchState::Idle, QString());
 
     connect(zoomSlider, &QSlider::valueChanged, this, &MainWindow::zoomSliderChanged);
 
@@ -730,6 +761,13 @@ void MainWindow::setupShortcuts()
     ui->actionExport->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_E));
     ui->actionExportAs->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_E));
     ui->actionExit->setShortcut(QKeySequence::Quit);
+
+    ui->menuFile->addSeparator();
+    if (m_actionToggleLiveWatch) {
+        ui->menuFile->addAction(m_actionToggleLiveWatch);
+    }
+    m_actionConfigureLiveWatch = ui->menuFile->addAction(tr("KEY_ACTION_CONFIGURE_LIVE_WATCH"));
+    connect(m_actionConfigureLiveWatch, &QAction::triggered, this, &MainWindow::onConfigureLiveWatchTriggered);
 
     // Recent Projects Submenu
     m_recentProjectsMenu = new QMenu(tr("KEY_MENU_RECENT_PROJECTS"), this);
@@ -1206,6 +1244,16 @@ void MainWindow::retranslateUi()
     if (m_actionMergeSlices) {
         m_actionMergeSlices->setText(tr("KEY_CTX_MERGE_SLICES"));
     }
+    if (m_actionToggleLiveWatch) {
+        m_actionToggleLiveWatch->setText(tr("KEY_ACTION_TOGGLE_LIVE_WATCH"));
+        m_actionToggleLiveWatch->setToolTip(tr("KEY_TOOLTIP_LIVE_WATCH"));
+    }
+    if (m_actionConfigureLiveWatch) {
+        m_actionConfigureLiveWatch->setText(tr("KEY_ACTION_CONFIGURE_LIVE_WATCH"));
+    }
+    if (m_liveWatchManager) {
+        updateWatchStatusUI(m_liveWatchManager->state(), m_liveWatchManager->lastStatusMessage());
+    }
 
     // Refresh view menu dock titles
     setupViewMenuActions();
@@ -1481,6 +1529,100 @@ void MainWindow::updateUndoRedoActions()
         m_redoAction->setEnabled(canRedo);
     }
 }
+
+void MainWindow::onToggleLiveWatchTriggered()
+{
+    if (!m_liveWatchManager) return;
+
+    if (m_liveWatchManager->isWatching()) {
+        m_liveWatchManager->stopWatching();
+        if (statusLabel) statusLabel->setText(tr("Live Watch Mode stopped."));
+    } else {
+        LiveWatchConfig cfg = m_liveWatchManager->config();
+        if (cfg.sourcePath.trimmed().isEmpty() || !QFile::exists(cfg.sourcePath)) {
+            QString curPath;
+            if (m_document && !m_document->filePath().isEmpty()) {
+                curPath = m_document->filePath();
+            } else if (m_projectController && !m_projectController->currentFilePath().isEmpty()) {
+                curPath = m_projectController->currentFilePath();
+            } else if (m_projectController && !m_projectController->currentProjectPath().isEmpty()) {
+                curPath = m_projectController->currentProjectPath();
+            }
+            if (!curPath.isEmpty()) {
+                cfg = LiveWatchConfig::createDefault(curPath);
+            } else {
+                onConfigureLiveWatchTriggered();
+                return;
+            }
+        }
+        QString err;
+        if (!m_liveWatchManager->startWatching(cfg, &err)) {
+            QMessageBox::warning(this, tr("Live Watch Mode"), err);
+            onConfigureLiveWatchTriggered();
+        } else {
+            if (statusLabel) statusLabel->setText(tr("Live Watch Mode active for: %1").arg(QFileInfo(cfg.sourcePath).fileName()));
+        }
+    }
+}
+
+void MainWindow::onConfigureLiveWatchTriggered()
+{
+    if (!m_liveWatchManager) return;
+    WatchConfigDialog dlg(m_liveWatchManager.get(), m_document, m_projectController.get(), this);
+    dlg.exec();
+}
+
+void MainWindow::updateWatchStatusUI(WatchState state, const QString &message)
+{
+    if (!m_watchStatusBtn) return;
+
+    QString tooltip = tr("Live Watch Mode — Click to configure (Ctrl+Alt+W)");
+    if (!message.isEmpty()) {
+        tooltip += QStringLiteral("\n") + message;
+    }
+    m_watchStatusBtn->setToolTip(tooltip);
+
+    switch (state) {
+    case WatchState::Idle:
+        m_watchStatusBtn->setText(tr("👁 Watch: Off"));
+        m_watchStatusBtn->setStyleSheet(QStringLiteral("QPushButton { color: #888888; border: none; padding: 2px 8px; border-radius: 3px; } QPushButton:hover { background: rgba(255,255,255,0.1); }"));
+        if (m_actionToggleLiveWatch) {
+            m_actionToggleLiveWatch->blockSignals(true);
+            m_actionToggleLiveWatch->setChecked(false);
+            m_actionToggleLiveWatch->blockSignals(false);
+        }
+        break;
+    case WatchState::Watching:
+        m_watchStatusBtn->setText(tr("🟢 Watch: Active"));
+        m_watchStatusBtn->setStyleSheet(QStringLiteral("QPushButton { color: #4caf50; font-weight: bold; border: none; padding: 2px 8px; border-radius: 3px; } QPushButton:hover { background: rgba(76,175,80,0.2); }"));
+        if (m_actionToggleLiveWatch) {
+            m_actionToggleLiveWatch->blockSignals(true);
+            m_actionToggleLiveWatch->setChecked(true);
+            m_actionToggleLiveWatch->blockSignals(false);
+        }
+        break;
+    case WatchState::Compiling:
+        m_watchStatusBtn->setText(tr("⚙ Watch: Compiling..."));
+        m_watchStatusBtn->setStyleSheet(QStringLiteral("QPushButton { color: #ff9800; font-weight: bold; border: none; padding: 2px 8px; border-radius: 3px; } QPushButton:hover { background: rgba(255,152,0,0.2); }"));
+        break;
+    case WatchState::Success: {
+        QString timeStr = QTime::currentTime().toString(QStringLiteral("HH:mm:ss"));
+        m_watchStatusBtn->setText(tr("✅ Watch: Ready (%1)").arg(timeStr));
+        m_watchStatusBtn->setStyleSheet(QStringLiteral("QPushButton { color: #4caf50; border: none; padding: 2px 8px; border-radius: 3px; } QPushButton:hover { background: rgba(76,175,80,0.2); }"));
+        if (m_actionToggleLiveWatch) {
+            m_actionToggleLiveWatch->blockSignals(true);
+            m_actionToggleLiveWatch->setChecked(true);
+            m_actionToggleLiveWatch->blockSignals(false);
+        }
+        break;
+    }
+    case WatchState::Error:
+        m_watchStatusBtn->setText(tr("⚠️ Watch: Error"));
+        m_watchStatusBtn->setStyleSheet(QStringLiteral("QPushButton { color: #f44336; font-weight: bold; border: none; padding: 2px 8px; border-radius: 3px; } QPushButton:hover { background: rgba(244,67,54,0.2); }"));
+        break;
+    }
+}
+
 
 
 

@@ -1871,6 +1871,49 @@ Strict removal clears the pixel.</source>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>未指定監控模式的來源路徑。</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>來源檔案或目錄不存在: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>正在監控 %1</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>閒置</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>在被監控目錄中未找到有效的精靈檔案。</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>正在背景重新編譯...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>最新 (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>找不到檔案或被其他應用程式鎖定: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>解碼檔案失敗: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>未找到目標格式的匯出器: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>BentoPack</source>
@@ -2013,6 +2056,14 @@ Strict removal clears the pixel.</source>
         <translation>圖層 %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>即時監控模式 (Live Watch)</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>切換即時檔案監控與自動引擎匯出 (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>編輯 (&amp;E)</translation>
     </message>
@@ -2027,6 +2078,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>濾鏡 (&amp;F)</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>設定即時監控...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2055,6 +2110,42 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>清除最近的專案</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>即時監控模式已停止。</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>即時監控模式</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>已為 %1 啟用即時監控模式</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>即時監控模式 — 點擊進行設定 (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: 關閉</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: 運作中</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: 正在編譯...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: 就緒 (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: 錯誤</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -5321,6 +5412,245 @@ Install package:
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>匯出帶有緊湊渲染幾何體 (RenderGeometry) 的虛幻引擎 Paper2D 精靈。</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>即時監控模式</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;即時監控模式 (Live Watch)&lt;/b&gt; — 零點擊熱重載</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>監控來源檔案 (Aseprite / PNG)，並在每次儲存時自動重新匯出至您的遊戲引擎 (Godot, Unity, Unreal)。</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>未啟用</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. 監控對象 (來源檔案或目錄)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>單一檔案 (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>整個目錄 (監控所有精靈)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>要監控的檔案或目錄路徑...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>檔案...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>目錄...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 目前專案</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>使用目前開啟的 BentoPack 專案來源檔案自動填入</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>篩選器:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>被監控的副檔名 (分號分隔)</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>防抖延遲:</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>偵測到寫入後的等待時間，以讓 Aseprite 完成儲存</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. 匯出位置 (目標目錄及引擎描述符)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>每次偵測到變更後自動匯出至遊戲引擎</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>目標目錄:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>資源目標輸出目錄...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>瀏覽...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>基本名稱:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>匯出檔案的基本名稱 (例如: hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>產生的檔案:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. 引擎設定與壓縮管線</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>目標引擎:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>紋理 / 顯示記憶體:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>標準 PNG (RGBA8888 未壓縮 GPU)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - 高保真)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - 最大壓縮)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>2D 網格:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>傳統邊界框 (4 頂點四邊形)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>緊密多邊形 CDT 網格 (Delaunay 抗過度繪製)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>間距 (Padding):</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>模組化 Cel 去重 (M22 - XXH3 64 位元)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>跨多個圖層對相同的 Aseprite 單元格去重</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>增量修補片切片 (M22 - 節省顯示記憶體)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>擷取連續幀之間修改後的增量修補片</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>合併相同幀 (自動別名)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>2 的冪次方尺寸 (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>裁切透明像素 (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>就緒。</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ 開始監控</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ 立即匯出</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>立即觸發匯出以驗證設定</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 儲存</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>關閉</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>選取要監控的來源檔案</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>精靈與動畫 (*.ase *.aseprite *.png);;所有檔案 (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>選取要監控的來源目錄</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>選取匯出目標目錄</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>目前未在 BentoPack 中開啟任何專案或來源檔案。</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>即時監控錯誤</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>設定已儲存為預設值。</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 監控中</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ 停止監控</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ 正在編譯...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ 已是最新</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ 錯誤</translation>
     </message>
 </context>
 <context>

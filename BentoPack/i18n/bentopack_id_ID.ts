@@ -1871,6 +1871,49 @@ Klik simpul untuk melihat detailnya.</translation>
     </message>
 </context>
 <context>
+    <name>LiveWatchManager</name>
+    <message>
+        <source>No source path specified for watch mode.</source>
+        <translation>Tidak ada jalur sumber yang ditentukan untuk mode pemantauan.</translation>
+    </message>
+    <message>
+        <source>Source file or directory does not exist: %1</source>
+        <translation>Berkas atau direktori sumber tidak ada: %1</translation>
+    </message>
+    <message>
+        <source>Watching %1</source>
+        <translation>Memantau %1</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation>Diam</translation>
+    </message>
+    <message>
+        <source>No valid sprite files found in watched directory.</source>
+        <translation>Tidak ditemukan berkas sprite yang valid di direktori yang dipantau.</translation>
+    </message>
+    <message>
+        <source>Recompiling in background...</source>
+        <translation>Mengompilasi ulang di latar belakang...</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Terbaru (%1)</translation>
+    </message>
+    <message>
+        <source>File not found or locked by another application: %1</source>
+        <translation>Berkas tidak ditemukan atau dikunci oleh aplikasi lain: %1</translation>
+    </message>
+    <message>
+        <source>Failed to decode file: %1</source>
+        <translation>Gagal mendekode berkas: %1</translation>
+    </message>
+    <message>
+        <source>No exporter found for target format: %1</source>
+        <translation>Eksportir tidak ditemukan untuk format target: %1</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>BentoPack</source>
@@ -2013,6 +2056,14 @@ Klik simpul untuk melihat detailnya.</translation>
         <translation>Lapisan %1</translation>
     </message>
     <message>
+        <source>KEY_ACTION_TOGGLE_LIVE_WATCH</source>
+        <translation>Mode Pemantauan Langsung (Live Watch)</translation>
+    </message>
+    <message>
+        <source>KEY_TOOLTIP_LIVE_WATCH</source>
+        <translation>Alihkan pemantauan berkas langsung dan ekspor mesin otomatis (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
         <source>KEY_MENU_EDIT</source>
         <translation>&amp;Edit</translation>
     </message>
@@ -2027,6 +2078,10 @@ Klik simpul untuk melihat detailnya.</translation>
     <message>
         <source>KEY_MENU_FILTERS</source>
         <translation>&amp;Filter</translation>
+    </message>
+    <message>
+        <source>KEY_ACTION_CONFIGURE_LIVE_WATCH</source>
+        <translation>Konfigurasi Pemantauan Langsung...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2055,6 +2110,42 @@ Klik simpul untuk melihat detailnya.</translation>
     <message>
         <source>KEY_ACTION_CLEAR_RECENT_PROJECTS</source>
         <translation>Bersihkan Proyek Terkini</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode stopped.</source>
+        <translation>Mode Pemantauan Langsung dihentikan.</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Mode Pemantauan Langsung</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode active for: %1</source>
+        <translation>Mode Pemantauan Langsung aktif untuk: %1</translation>
+    </message>
+    <message>
+        <source>Live Watch Mode — Click to configure (Ctrl+Alt+W)</source>
+        <translation>Mode Pemantauan Langsung — Klik untuk mengonfigurasi (Ctrl+Alt+W)</translation>
+    </message>
+    <message>
+        <source>👁 Watch: Off</source>
+        <translation>👁 Watch: Mati</translation>
+    </message>
+    <message>
+        <source>🟢 Watch: Active</source>
+        <translation>🟢 Watch: Aktif</translation>
+    </message>
+    <message>
+        <source>⚙ Watch: Compiling...</source>
+        <translation>⚙ Watch: Mengompilasi...</translation>
+    </message>
+    <message>
+        <source>✅ Watch: Ready (%1)</source>
+        <translation>✅ Watch: Siap (%1)</translation>
+    </message>
+    <message>
+        <source>⚠️ Watch: Error</source>
+        <translation>⚠️ Watch: Kesalahan</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -5322,6 +5413,245 @@ Delete untuk menghapus</translation>
     <message>
         <source>Exports Unreal Engine Paper2D sprites with tight RenderGeometry.</source>
         <translation>Mengekspor sprite Unreal Engine Paper2D dengan RenderGeometry rapat.</translation>
+    </message>
+</context>
+<context>
+    <name>WatchConfigDialog</name>
+    <message>
+        <source>Live Watch Mode</source>
+        <translation>Mode Pemantauan Langsung</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Live Watch Mode&lt;/b&gt; — Zero-Click Hot-Reload</source>
+        <translation>&lt;b&gt;Mode Pemantauan Langsung&lt;/b&gt; — Hot-Reload Tanpa Klik</translation>
+    </message>
+    <message>
+        <source>Monitors source files (Aseprite / PNG) and automatically re-exports to your game engine (Godot, Unity, Unreal) upon every save.</source>
+        <translation>Memantau berkas sumber (Aseprite / PNG) dan mengekspor ulang secara otomatis ke mesin game Anda (Godot, Unity, Unreal) setiap kali disimpan.</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Tidak aktif</translation>
+    </message>
+    <message>
+        <source>1. What to watch (Source file or directory)</source>
+        <translation>1. Apa yang dipantau (Berkas atau direktori sumber)</translation>
+    </message>
+    <message>
+        <source>Single file (.ase, .aseprite, .png)</source>
+        <translation>Berkas tunggal (.ase, .aseprite, .png)</translation>
+    </message>
+    <message>
+        <source>Entire directory (watch all sprites)</source>
+        <translation>Seluruh direktori (pantau semua sprite)</translation>
+    </message>
+    <message>
+        <source>Path to file or directory to watch...</source>
+        <translation>Jalur ke berkas atau direktori yang akan dipantau...</translation>
+    </message>
+    <message>
+        <source>File...</source>
+        <translation>Berkas...</translation>
+    </message>
+    <message>
+        <source>Directory...</source>
+        <translation>Direktori...</translation>
+    </message>
+    <message>
+        <source>📌 Current Project</source>
+        <translation>📌 Proyek Saat Ini</translation>
+    </message>
+    <message>
+        <source>Auto-fill using the currently opened project source file</source>
+        <translation>Isi otomatis menggunakan berkas sumber proyek BentoPack yang sedang dibuka</translation>
+    </message>
+    <message>
+        <source>Filters:</source>
+        <translation>Filter:</translation>
+    </message>
+    <message>
+        <source>Watched extensions separated by semicolons</source>
+        <translation>Ekstensi yang dipantau dipisahkan dengan titik koma</translation>
+    </message>
+    <message>
+        <source>Debounce delay:</source>
+        <translation>Jeda debounce:</translation>
+    </message>
+    <message>
+        <source>Wait time after file write detection to let Aseprite finish saving</source>
+        <translation>Waktu tunggu setelah deteksi penulisan agar Aseprite selesai menyimpan</translation>
+    </message>
+    <message>
+        <source>2. Where to export (Target and engine descriptor)</source>
+        <translation>2. Ke mana diekspor (Target dan deskriptor mesin)</translation>
+    </message>
+    <message>
+        <source>Auto-export to game engine after each detected change</source>
+        <translation>Ekspor otomatis ke mesin game setelah setiap perubahan terdeteksi</translation>
+    </message>
+    <message>
+        <source>Target directory:</source>
+        <translation>Direktori target:</translation>
+    </message>
+    <message>
+        <source>Asset destination directory...</source>
+        <translation>Direktori tujuan aset...</translation>
+    </message>
+    <message>
+        <source>Browse...</source>
+        <translation>Telusuri...</translation>
+    </message>
+    <message>
+        <source>Base name:</source>
+        <translation>Nama dasar:</translation>
+    </message>
+    <message>
+        <source>Exported file base name (e.g., hero)</source>
+        <translation>Nama dasar berkas yang diekspor (mis. hero)</translation>
+    </message>
+    <message>
+        <source>Generated file:</source>
+        <translation>Berkas yang dihasilkan:</translation>
+    </message>
+    <message>
+        <source>3. Engine Configuration &amp; Compression Pipeline</source>
+        <translation>3. Konfigurasi Mesin &amp; Pipeline Kompresi</translation>
+    </message>
+    <message>
+        <source>Target engine:</source>
+        <translation>Mesin target:</translation>
+    </message>
+    <message>
+        <source>Texture / VRAM:</source>
+        <translation>Tekstur / VRAM:</translation>
+    </message>
+    <message>
+        <source>Standard PNG (RGBA8888 uncompressed GPU)</source>
+        <translation>PNG Standar (RGBA8888 GPU tidak terkompresi)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU UASTC - High quality)</source>
+        <translation>KTX2 / Basis Universal (GPU UASTC - Kualitas tinggi)</translation>
+    </message>
+    <message>
+        <source>KTX2 / Basis Universal (GPU ETC1S - Maximum compression)</source>
+        <translation>KTX2 / Basis Universal (GPU ETC1S - Kompresi maksimum)</translation>
+    </message>
+    <message>
+        <source>2D Mesh:</source>
+        <translation>Mesh 2D:</translation>
+    </message>
+    <message>
+        <source>Classic Bounding Box (4-vertex Quad)</source>
+        <translation>Bounding Box Klasik (Quad 4 verteks)</translation>
+    </message>
+    <message>
+        <source>Tight Polygon CDT Mesh (Delaunay anti-overdraw)</source>
+        <translation>Mesh Poligon CDT Ketat (Delaunay anti-overdraw)</translation>
+    </message>
+    <message>
+        <source>Padding:</source>
+        <translation>Bantalan (Padding):</translation>
+    </message>
+    <message>
+        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
+        <translation>Deduplikasi sel modular (M22 - XXH3 64-bit)</translation>
+    </message>
+    <message>
+        <source>Deduplicates identical Aseprite cels across multiple layers</source>
+        <translation>Hapus duplikasi sel Aseprite identik di beberapa layer</translation>
+    </message>
+    <message>
+        <source>Delta patch slicing (M22 - VRAM savings)</source>
+        <translation>Pemotongan patch delta (M22 - Penghematan VRAM)</translation>
+    </message>
+    <message>
+        <source>Extracts modified delta patches between consecutive frames</source>
+        <translation>Ekstrak patch delta yang dimodifikasi antara frame berurutan</translation>
+    </message>
+    <message>
+        <source>Merge identical frames (Auto-Aliasing)</source>
+        <translation>Gabungkan frame identik (Auto-Aliasing)</translation>
+    </message>
+    <message>
+        <source>Power of Two dimensions (POT)</source>
+        <translation>Dimensi Kuadrat Dua (POT)</translation>
+    </message>
+    <message>
+        <source>Trim transparent pixels</source>
+        <translation>Pangkas piksel transparan (Trim)</translation>
+    </message>
+    <message>
+        <source>Ready.</source>
+        <translation>Siap.</translation>
+    </message>
+    <message>
+        <source>▶ Start Watching</source>
+        <translation>▶ Mulai Memantau</translation>
+    </message>
+    <message>
+        <source>⚡ Export Now</source>
+        <translation>⚡ Ekspor Sekarang</translation>
+    </message>
+    <message>
+        <source>Immediately triggers export to validate settings</source>
+        <translation>Segera picu ekspor untuk memvalidasi pengaturan</translation>
+    </message>
+    <message>
+        <source>💾 Save</source>
+        <translation>💾 Simpan</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Tutup</translation>
+    </message>
+    <message>
+        <source>Select source file to watch</source>
+        <translation>Pilih berkas sumber untuk dipantau</translation>
+    </message>
+    <message>
+        <source>Sprites &amp; Animations (*.ase *.aseprite *.png);;All Files (*.*)</source>
+        <translation>Sprite &amp; Animasi (*.ase *.aseprite *.png);;Semua Berkas (*.*)</translation>
+    </message>
+    <message>
+        <source>Select source directory to watch</source>
+        <translation>Pilih direktori sumber untuk dipantau</translation>
+    </message>
+    <message>
+        <source>Select destination directory</source>
+        <translation>Pilih direktori tujuan</translation>
+    </message>
+    <message>
+        <source>No project or source file is currently open in BentoPack.</source>
+        <translation>Tidak ada proyek atau berkas sumber yang sedang dibuka di BentoPack.</translation>
+    </message>
+    <message>
+        <source>Live Watch Error</source>
+        <translation>Kesalahan Pemantauan Langsung</translation>
+    </message>
+    <message>
+        <source>Settings saved as default.</source>
+        <translation>Pengaturan disimpan sebagai default.</translation>
+    </message>
+    <message>
+        <source>🟢 Watching</source>
+        <translation>🟢 Memantau</translation>
+    </message>
+    <message>
+        <source>⏹ Stop Watching</source>
+        <translation>⏹ Berhenti Memantau</translation>
+    </message>
+    <message>
+        <source>⚙ Compiling...</source>
+        <translation>⚙ Mengompilasi...</translation>
+    </message>
+    <message>
+        <source>✅ Up to date</source>
+        <translation>✅ Terbaru</translation>
+    </message>
+    <message>
+        <source>⚠️ Error</source>
+        <translation>⚠️ Kesalahan</translation>
     </message>
 </context>
 <context>
