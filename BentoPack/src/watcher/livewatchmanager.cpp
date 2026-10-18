@@ -140,7 +140,10 @@ LiveWatchConfig LiveWatchConfig::createDefault(const QString &sourceFilePath)
 
     if (!sourceFilePath.isEmpty()) {
         QFileInfo fi(sourceFilePath);
-        cfg.outputDirectory = fi.absolutePath();
+        cfg.outputDirectory = fi.path();
+        if (cfg.outputDirectory.isEmpty() || cfg.outputDirectory == QStringLiteral(".")) {
+            cfg.outputDirectory = fi.absolutePath();
+        }
         cfg.outputBaseName = fi.completeBaseName();
     }
 
@@ -417,10 +420,15 @@ bool LiveWatchManager::isIgnoredFile(const QString &path) const
     // Prevent recursive loop with output target
     if (!m_targetExportCanonical.isEmpty()) {
         if (cleanPath == m_targetExportCanonical) return true;
-        // Companion textures (.png, .ktx2)
-        QFileInfo expFi(m_targetExportCanonical);
-        QString expBase = expFi.absolutePath() + '/' + expFi.completeBaseName();
-        if (cleanPath.startsWith(expBase)) return true;
+        // Companion textures (.png, .ktx2) - but never ignore the source file being watched!
+        QFileInfo srcFi(m_config.sourcePath);
+        QString srcClean = srcFi.canonicalFilePath();
+        if (srcClean.isEmpty()) srcClean = srcFi.absoluteFilePath();
+        if (!srcClean.isEmpty() && cleanPath != srcClean) {
+            QFileInfo expFi(m_targetExportCanonical);
+            QString expBase = expFi.absolutePath() + '/' + expFi.completeBaseName();
+            if (cleanPath.startsWith(expBase)) return true;
+        }
     }
 
     // Ignore temporary, hidden, swap and lock files
