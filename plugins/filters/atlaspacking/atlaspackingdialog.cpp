@@ -80,7 +80,7 @@ AtlasPackingDialog::AtlasPackingDialog(SpriteDocument *doc, QUndoStack *undoStac
     m_comboAlgorithm->setCurrentIndex(qBound(0, algo, m_comboAlgorithm->count() - 1));
     m_spinPadding->setValue(qBound(0, pad, 64));
     m_spinBorderPadding->setValue(qBound(0, border, 64));
-    m_spinExtrude->setValue(qBound(0, extrude, 2));
+    m_spinExtrude->setValue(qBound(0, extrude, 4));
     m_checkPowerOfTwo->setChecked(pot);
     m_checkForceSquare->setChecked(square);
     m_checkDeduplicate->setChecked(dedup);
@@ -162,10 +162,10 @@ void AtlasPackingDialog::setupUI()
     formSpacing->addRow(tr("Border Padding:"), m_spinBorderPadding);
 
     m_spinExtrude = new QSpinBox(grpSpacing);
-    m_spinExtrude->setRange(0, 2);
+    m_spinExtrude->setRange(0, 4);
     m_spinExtrude->setValue(0);
     m_spinExtrude->setSuffix(QStringLiteral(" px"));
-    m_spinExtrude->setToolTip(tr("Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines"));
+    m_spinExtrude->setToolTip(tr("Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines"));
     formSpacing->addRow(tr("Extrude (Anti-Bleeding):"), m_spinExtrude);
 
     layout->addWidget(grpSpacing);
@@ -177,8 +177,8 @@ void AtlasPackingDialog::setupUI()
     m_checkPowerOfTwo = new QCheckBox(tr("Force Power of Two Dimensions (2^n: 512, 1024, 2048...)"), grpConstraints);
     m_checkForceSquare = new QCheckBox(tr("Force Square Atlas (Width == Height)"), grpConstraints);
     m_checkDeduplicate = new QCheckBox(tr("Auto-Aliasing (Merge identical frames without breaking animations)"), grpConstraints);
-    m_checkDeduplicateCels = new QCheckBox(tr("Modular Cel Deduplication (M22 - Link shared cels across layers)"), grpConstraints);
-    m_checkDeltaPatching = new QCheckBox(tr("Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)"), grpConstraints);
+    m_checkDeduplicateCels = new QCheckBox(tr("Modular Cel Deduplication (Link shared cels across layers)"), grpConstraints);
+    m_checkDeltaPatching = new QCheckBox(tr("Delta-Patch Slicing (Crop sub-rect deltas between animation frames)"), grpConstraints);
     m_checkTrim = new QCheckBox(tr("Trim Transparent Borders before packing"), grpConstraints);
     m_checkTrim->setToolTip(tr("Crops transparent margins around frames while preserving animation pivots. Highly recommended for animation spritesheets to eliminate empty spaces and maximize packing density."));
 

@@ -110,6 +110,10 @@ struct FrameBackup {
     QImage newImage;
     QPolygonF oldPoly;
     QPolygonF newPoly;
+    QList<QPointF> oldVerts;
+    QList<QPointF> newVerts;
+    QList<int> oldTris;
+    QList<int> newTris;
 };
 
 static QImage compositeCelsForFrame(const QList<SpriteLayer> &layers, const QList<SpriteCel> &cels)
@@ -3195,9 +3199,11 @@ void PixelEditorDialog::restoreFrameBackup(int frameIndex, const QImage &img, co
         if (!verts.isEmpty()) {
             m_sessionModifiedVertices[frameIndex] = verts;
             m_sessionModifiedTriangles[frameIndex] = tris;
-        } else {
-            m_sessionModifiedVertices.remove(frameIndex);
-            m_sessionModifiedTriangles.remove(frameIndex);
+        } else if (!m_sessionModifiedVertices.contains(frameIndex)) {
+            if (m_document && frameIndex >= 0 && frameIndex < m_document->boxes().size() && m_document->box(frameIndex).hasPolygonMesh) {
+                m_sessionModifiedVertices[frameIndex] = m_document->box(frameIndex).vertices;
+                m_sessionModifiedTriangles[frameIndex] = m_document->box(frameIndex).triangles;
+            }
         }
     } else {
         m_sessionModifiedPolygons.remove(frameIndex);
@@ -3332,8 +3338,11 @@ void PixelEditorDialog::onCanvasModificationPushed(const QImage &oldImage, const
         m_sessionModifiedPolygons.remove(m_currentFrameIndex);
     }
 
+    QList<QPointF> curVerts = sessionModifiedVertices(m_currentFrameIndex);
+    QList<int> curTris = sessionModifiedTriangles(m_currentFrameIndex);
     QVector<FrameBackup> backups;
-    backups.append({m_currentFrameIndex, oldImage, newImage, oldPolygon, newPolygon});
+    backups.append({m_currentFrameIndex, oldImage, newImage, oldPolygon, newPolygon,
+                    curVerts, curVerts, curTris, curTris});
 
     if (m_applyToAllFramesCheck && m_applyToAllFramesCheck->isChecked() &&
         m_document && m_document->frameCount() > 1)
@@ -3388,6 +3397,10 @@ void PixelEditorDialog::onCanvasModificationPushed(const QImage &oldImage, const
 
             const QImage oldTargetImg = targetImg;
             const QPolygonF oldTargetPoly = targetPoly;
+            const QList<QPointF> oldTargetVerts = sessionModifiedVertices(targetIdx);
+            const QList<int> oldTargetTris = sessionModifiedTriangles(targetIdx);
+            QList<QPointF> targetVerts = oldTargetVerts;
+            QList<int> targetTris = oldTargetTris;
 
             QPoint targetPivot(0, 0);
             if (targetIdx >= 0 && targetIdx < m_document->boxes().size()) {
@@ -3443,6 +3456,9 @@ void PixelEditorDialog::onCanvasModificationPushed(const QImage &oldImage, const
                             flipped.append(QPointF(w - pt.x(), pt.y()));
                         }
                         targetPoly = flipped;
+                        for (auto &v : targetVerts) {
+                            v.setX(w - v.x());
+                        }
                     }
                 }
             } else if (action == CanvasAction::FlipVertical) {
@@ -3481,6 +3497,9 @@ void PixelEditorDialog::onCanvasModificationPushed(const QImage &oldImage, const
                             flipped.append(QPointF(pt.x(), h - pt.y()));
                         }
                         targetPoly = flipped;
+                        for (auto &v : targetVerts) {
+                            v.setY(h - v.y());
+                        }
                     }
                 }
             } else if (action == CanvasAction::Rotate90CW) {
@@ -3495,6 +3514,9 @@ void PixelEditorDialog::onCanvasModificationPushed(const QImage &oldImage, const
                         rotPoly.append(QPointF(static_cast<double>(oldH) - pt.y(), pt.x()));
                     }
                     targetPoly = rotPoly;
+                    for (auto &v : targetVerts) {
+                        v = QPointF(static_cast<double>(oldH) - v.y(), v.x());
+                    }
                 }
             } else if (action == CanvasAction::FloodFill) {
                 // Command-level flood fill: run flood fill algorithm directly on targetImg
@@ -3629,11 +3651,18 @@ void PixelEditorDialog::onCanvasModificationPushed(const QImage &oldImage, const
             m_sessionModifiedFrames[targetIdx] = targetImg;
             if (targetPoly.size() >= 3) {
                 m_sessionModifiedPolygons[targetIdx] = targetPoly;
+                if (!targetVerts.isEmpty()) {
+                    m_sessionModifiedVertices[targetIdx] = targetVerts;
+                    m_sessionModifiedTriangles[targetIdx] = targetTris;
+                }
             } else {
                 m_sessionModifiedPolygons.remove(targetIdx);
+                m_sessionModifiedVertices.remove(targetIdx);
+                m_sessionModifiedTriangles.remove(targetIdx);
             }
 
-            backups.append({targetIdx, oldTargetImg, targetImg, oldTargetPoly, targetPoly});
+            backups.append({targetIdx, oldTargetImg, targetImg, oldTargetPoly, targetPoly,
+                            oldTargetVerts, targetVerts, oldTargetTris, targetTris});
         }
     }
 
@@ -3641,7 +3670,7 @@ void PixelEditorDialog::onCanvasModificationPushed(const QImage &oldImage, const
         auto undoFunc = [this, backups]() {
             bool currentFrameAffected = false;
             for (const auto &b : backups) {
-                restoreFrameBackup(b.frameIndex, b.oldImage, b.oldPoly);
+                restoreFrameBackup(b.frameIndex, b.oldImage, b.oldPoly, b.oldVerts, b.oldTris);
                 if (b.frameIndex == m_currentFrameIndex) {
                     currentFrameAffected = true;
                 }
@@ -3655,7 +3684,7 @@ void PixelEditorDialog::onCanvasModificationPushed(const QImage &oldImage, const
         auto redoFunc = [this, backups]() {
             bool currentFrameAffected = false;
             for (const auto &b : backups) {
-                restoreFrameBackup(b.frameIndex, b.newImage, b.newPoly);
+                restoreFrameBackup(b.frameIndex, b.newImage, b.newPoly, b.newVerts, b.newTris);
                 if (b.frameIndex == m_currentFrameIndex) {
                     currentFrameAffected = true;
                 }
@@ -3780,7 +3809,9 @@ void PixelEditorDialog::updateOnionSkinLayers()
 
     // Calculate current frame's effective pivot
     QPoint curPivot(0, 0);
-    if (m_currentFrameIndex >= 0 && m_currentFrameIndex < m_document->boxes().size()) {
+    if (m_sessionModifiedPivots.contains(m_currentFrameIndex)) {
+        curPivot = m_sessionModifiedPivots[m_currentFrameIndex];
+    } else if (m_currentFrameIndex >= 0 && m_currentFrameIndex < m_document->boxes().size()) {
         curPivot = m_document->box(m_currentFrameIndex).effectivePivot();
     } else if (m_currentFrameIndex >= 0 && m_currentFrameIndex < totalFrames) {
         QImage curImg = m_canvas->image();
@@ -3809,7 +3840,9 @@ void PixelEditorDialog::updateOnionSkinLayers()
         if (frameIdx >= 0 && frameIdx < totalFrames) {
             QImage img = getClippedFrameImage(frameIdx);
             QPoint layerPivot(img.width() / 2, img.height() / 2);
-            if (frameIdx < m_document->boxes().size()) {
+            if (m_sessionModifiedPivots.contains(frameIdx)) {
+                layerPivot = m_sessionModifiedPivots[frameIdx];
+            } else if (frameIdx < m_document->boxes().size()) {
                 layerPivot = m_document->box(frameIdx).effectivePivot();
             }
             QPoint alignOffset = anchorPivot - layerPivot;
@@ -3836,7 +3869,9 @@ void PixelEditorDialog::updateOnionSkinLayers()
         if (frameIdx >= 0 && frameIdx < totalFrames) {
             QImage img = getClippedFrameImage(frameIdx);
             QPoint layerPivot(img.width() / 2, img.height() / 2);
-            if (frameIdx < m_document->boxes().size()) {
+            if (m_sessionModifiedPivots.contains(frameIdx)) {
+                layerPivot = m_sessionModifiedPivots[frameIdx];
+            } else if (frameIdx < m_document->boxes().size()) {
                 layerPivot = m_document->box(frameIdx).effectivePivot();
             }
             QPoint alignOffset = anchorPivot - layerPivot;
@@ -4042,6 +4077,34 @@ QPolygonF PixelEditorDialog::sessionModifiedPolygon(int frameIndex) const
         return m_document->box(frameIndex).polygon;
     }
     return QPolygonF();
+}
+
+QList<QPointF> PixelEditorDialog::sessionModifiedVertices(int frameIndex) const
+{
+    if (m_sessionModifiedVertices.contains(frameIndex)) {
+        return m_sessionModifiedVertices.value(frameIndex);
+    }
+    if (frameIndex == m_currentFrameIndex && m_canvas && m_canvas->hasPolygonMesh()) {
+        return m_canvas->meshVertices();
+    }
+    if (m_document && frameIndex >= 0 && frameIndex < m_document->boxes().size() && m_document->box(frameIndex).hasPolygonMesh) {
+        return m_document->box(frameIndex).vertices;
+    }
+    return QList<QPointF>();
+}
+
+QList<int> PixelEditorDialog::sessionModifiedTriangles(int frameIndex) const
+{
+    if (m_sessionModifiedTriangles.contains(frameIndex)) {
+        return m_sessionModifiedTriangles.value(frameIndex);
+    }
+    if (frameIndex == m_currentFrameIndex && m_canvas && m_canvas->hasPolygonMesh()) {
+        return m_canvas->meshTriangles();
+    }
+    if (m_document && frameIndex >= 0 && frameIndex < m_document->boxes().size() && m_document->box(frameIndex).hasPolygonMesh) {
+        return m_document->box(frameIndex).triangles;
+    }
+    return QList<int>();
 }
 
 bool PixelEditorDialog::checkAtlasPolygonCollision(QString *outDetails, QList<int> *outCollidingIndices) const
@@ -5056,6 +5119,24 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         QRect r(curX, margin, img.width(), img.height());
         SpriteBox b(r);
         b.index = i;
+        int origIdx = targetFrames[i];
+        QPolygonF poly = sessionModifiedPolygon(origIdx);
+        QList<QPointF> verts = sessionModifiedVertices(origIdx);
+        QList<int> tris = sessionModifiedTriangles(origIdx);
+        QPoint piv(img.width() / 2, img.height() / 2);
+        if (m_sessionModifiedPivots.contains(origIdx)) {
+            piv = m_sessionModifiedPivots[origIdx];
+        } else if (origIdx >= 0 && origIdx < m_document->boxes().size()) {
+            piv = m_document->box(origIdx).effectivePivot();
+        }
+        b.pivot = piv;
+        b.hasCustomPivot = true;
+        if (poly.size() >= 3) {
+            b.hasPolygonMesh = true;
+            b.polygon = poly;
+            b.vertices = verts.isEmpty() ? poly.toList() : verts;
+            b.triangles = tris;
+        }
         tempBoxes.append(b);
         tempFrames.append(img);
         curX += img.width() + margin;
@@ -5069,6 +5150,9 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
     // 3. Connect live preview so adjustments in filter dialog are immediately visible on canvas
     const QImage initialCanvasImage = (hasLayers && m_canvas) ? m_canvas->activeLayerImage() : (m_canvas ? m_canvas->image() : QImage());
     const QPolygonF initialPolygonMesh = m_canvas ? m_canvas->polygonMesh() : QPolygonF();
+    const QList<QPointF> initialMeshVertices = m_canvas ? m_canvas->meshVertices() : QList<QPointF>();
+    const QList<int> initialMeshTriangles = m_canvas ? m_canvas->meshTriangles() : QList<int>();
+    const int initialActiveLayer = m_canvas ? m_canvas->activeLayerIndex() : 0;
     QSize initialEnvSize;
     QPoint initialEnvPivot;
     QPoint initialFrameOffset;
@@ -5088,6 +5172,9 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         if (previewImg.isNull()) return;
 
         QPolygonF previewPoly = initialPolygonMesh;
+        QList<QPointF> previewVerts = initialMeshVertices;
+        QList<int> previewTris = initialMeshTriangles;
+
         if (previewImg.size() != initialCanvasImage.size() && initialPolygonMesh.size() >= 3) {
             double sx = static_cast<double>(previewImg.width()) / std::max(1, initialCanvasImage.width());
             double sy = static_cast<double>(previewImg.height()) / std::max(1, initialCanvasImage.height());
@@ -5096,6 +5183,12 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
                 scaledPoly.append(QPointF(pt.x() * sx, pt.y() * sy));
             }
             previewPoly = scaledPoly;
+
+            QList<QPointF> scaledVerts;
+            for (const QPointF &pt : initialMeshVertices) {
+                scaledVerts.append(QPointF(pt.x() * sx, pt.y() * sy));
+            }
+            previewVerts = scaledVerts;
         }
 
         if (hasLayers) {
@@ -5103,7 +5196,7 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         } else {
             m_canvas->setImage(previewImg);
         }
-        m_canvas->setPolygonMesh(previewPoly);
+        m_canvas->setPolygonMeshData(previewPoly, previewVerts, previewTris);
 
         if (previewImg.size() != initialCanvasImage.size()) {
             double sx = static_cast<double>(previewImg.width()) / std::max(1, initialCanvasImage.width());
@@ -5118,6 +5211,7 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         } else {
             m_canvas->setCanvasEnvelope(initialEnvSize, initialFrameOffset, initialEnvPivot);
         }
+        updateOnionSkinLayers();
     };
 
     // Connect tempDoc changes so live preview updates canvas in real-time
@@ -5144,6 +5238,13 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
     updatePreviewOnCanvas();
 
     int res = dlg->exec();
+
+    const bool isNewMaterialLayer = dlg->createsNewMaterialLayer();
+    const bool isAuxMap = dlg->createsAuxiliaryMap();
+    MaterialMapType mapType = dlg->materialMapType();
+    QString layerName = dlg->materialLayerName();
+    QList<QImage> auxFrames = dlg->generatedAuxiliaryFrames();
+
     delete dlg;
     disconnect(&tempDoc, nullptr, this, nullptr);
 
@@ -5151,14 +5252,166 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         // Guarantee non-destructive rollback on Cancel/Escape
         if (m_canvas) {
             if (hasLayers) {
-                m_canvas->setLayerCelImage(m_canvas->activeLayerIndex(), initialCanvasImage);
+                m_canvas->setLayerCelImage(initialActiveLayer, initialCanvasImage);
+                m_canvas->setActiveLayerIndex(initialActiveLayer);
             } else {
                 m_canvas->setImage(initialCanvasImage);
             }
-            m_canvas->setPolygonMesh(initialPolygonMesh);
+            m_canvas->setPolygonMeshData(initialPolygonMesh, initialMeshVertices, initialMeshTriangles);
             m_canvas->setCanvasEnvelope(initialEnvSize, initialFrameOffset, initialEnvPivot);
+            updateOnionSkinLayers();
         }
         return; // User canceled
+    }
+
+    if (isNewMaterialLayer) {
+        // 1. Capture old state for undo
+        QList<SpriteLayer> oldLayers = m_sessionLayers;
+        QMap<int, QList<SpriteCel>> oldCels = m_sessionModifiedCels;
+        bool oldLayersModified = m_sessionLayersModified;
+        QList<QImage> oldAux = m_document ? m_document->auxiliaryFrames(mapType) : QList<QImage>();
+
+        // 2. Prepare new layers
+        QList<SpriteLayer> newLayers = oldLayers;
+        if (newLayers.isEmpty()) {
+            if (m_document && m_document->hasLayers()) {
+                newLayers = m_document->layers();
+            } else {
+                SpriteLayer baseLayer;
+                baseLayer.id = QStringLiteral("layer_albedo");
+                baseLayer.name = QStringLiteral("Albedo");
+                baseLayer.visible = true;
+                baseLayer.locked = false;
+                baseLayer.opacity = 255;
+                baseLayer.zOrder = 0;
+                baseLayer.blendMode = QPainter::CompositionMode_SourceOver;
+                newLayers.append(baseLayer);
+            }
+        }
+
+        int targetLayerIdx = -1;
+        for (int l = 0; l < newLayers.size(); ++l) {
+            if (newLayers[l].name == layerName) {
+                targetLayerIdx = l;
+                break;
+            }
+        }
+
+        if (targetLayerIdx < 0) {
+            SpriteLayer matLayer;
+            matLayer.id = QStringLiteral("mat_%1_%2").arg(static_cast<int>(mapType)).arg(QDateTime::currentMSecsSinceEpoch());
+            matLayer.name = layerName;
+            matLayer.visible = true;
+            matLayer.locked = false;
+            matLayer.opacity = 255;
+            matLayer.zOrder = newLayers.isEmpty() ? 10 : (newLayers.last().zOrder + 10);
+            matLayer.blendMode = (mapType == MaterialMapType::Emissive)
+                ? QPainter::CompositionMode_Plus
+                : QPainter::CompositionMode_SourceOver;
+            newLayers.append(matLayer);
+            targetLayerIdx = newLayers.size() - 1;
+        }
+
+        QString targetLayerId = newLayers[targetLayerIdx].id;
+        QMap<int, QList<SpriteCel>> newCels = oldCels;
+
+        // Ensure base layer has cels populated if transitioning from flat
+        const int totalFrames = m_document ? m_document->frameCount() : targetFrames.size();
+        for (int i = 0; i < totalFrames; ++i) {
+            if (!newCels.contains(i)) {
+                if (m_document && m_document->hasFrameCels(i)) {
+                    newCels[i] = m_document->frameCels(i);
+                } else {
+                    SpriteCel baseCel;
+                    baseCel.layerIndex = 0;
+                    baseCel.layerId = newLayers.first().id;
+                    baseCel.opacity = 255;
+                    if (m_sessionModifiedFrames.contains(i)) {
+                        baseCel.image = m_sessionModifiedFrames[i];
+                    } else if (m_document) {
+                        baseCel.image = m_document->frame(i);
+                    }
+                    newCels[i] = { baseCel };
+                }
+            }
+        }
+
+        // Set material cel for each target frame
+        for (int i = 0; i < targetFrames.size(); ++i) {
+            int frameIdx = targetFrames[i];
+            QImage celImg = (i < auxFrames.size()) ? auxFrames[i] : QImage();
+            if (celImg.isNull()) {
+                celImg = targetImages[i];
+            }
+
+            QList<SpriteCel> &cels = newCels[frameIdx];
+            bool found = false;
+            for (auto &c : cels) {
+                if (c.layerIndex == targetLayerIdx || (!targetLayerId.isEmpty() && c.layerId == targetLayerId)) {
+                    c.image = celImg;
+                    c.opacity = 255;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                SpriteCel c;
+                c.layerIndex = targetLayerIdx;
+                c.layerId = targetLayerId;
+                c.opacity = 255;
+                c.image = celImg;
+                cels.append(c);
+            }
+        }
+
+        QList<QImage> newAux = auxFrames;
+
+        auto applyMaterialState = [this, targetLayerIdx, initialActiveLayer, mapType,
+                                   oldLayers, newLayers, oldCels, newCels,
+                                   oldLayersModified, oldAux, newAux](bool isRedo) {
+            m_sessionLayers = isRedo ? newLayers : oldLayers;
+            m_sessionModifiedCels = isRedo ? newCels : oldCels;
+            m_sessionLayersModified = isRedo ? true : oldLayersModified;
+            if (m_document) {
+                m_document->setAuxiliaryFrames(mapType, isRedo ? newAux : oldAux);
+            }
+            loadFrame(m_currentFrameIndex);
+            if (m_canvas) {
+                int targetActive = isRedo ? targetLayerIdx : initialActiveLayer;
+                if (targetActive >= 0 && targetActive < m_canvas->layerCount()) {
+                    m_canvas->setActiveLayerIndex(targetActive);
+                }
+            }
+        };
+
+        applyMaterialState(true);
+
+        if (m_canvas && m_canvas->undoStack()) {
+            class MaterialLayerUndoCmd : public QUndoCommand {
+            public:
+                MaterialLayerUndoCmd(const std::function<void(bool)> &func, const QString &name)
+                    : QUndoCommand(name), m_func(func) {}
+                void undo() override { m_func(false); }
+                void redo() override {
+                    if (m_first) { m_first = false; return; }
+                    m_func(true);
+                }
+            private:
+                std::function<void(bool)> m_func;
+                bool m_first = true;
+            };
+
+            QString cmdText = tr("Create %1 Layer ").arg(layerName);
+            m_canvas->undoStack()->push(new MaterialLayerUndoCmd(applyMaterialState, cmdText));
+        }
+
+        return;
+    }
+
+    if (isAuxMap) {
+        if (m_document) {
+            m_document->setAuxiliaryFrames(mapType, auxFrames);
+        }
     }
 
     // 4. Extract filtered results
@@ -5169,6 +5422,8 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         int frameIdx = targetFrames[i];
         QImage oldImg = targetImages[i];
         QPolygonF oldPoly = sessionModifiedPolygon(frameIdx);
+        QList<QPointF> oldVerts = sessionModifiedVertices(frameIdx);
+        QList<int> oldTris = sessionModifiedTriangles(frameIdx);
 
         // Get new image from tempDoc
         QImage newImg;
@@ -5182,6 +5437,8 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         }
 
         QPolygonF newPoly = oldPoly;
+        QList<QPointF> newVerts = oldVerts;
+        QList<int> newTris = oldTris;
         if (newImg.size() != oldImg.size() && oldPoly.size() >= 3) {
             double sx = static_cast<double>(newImg.width()) / std::max(1, oldImg.width());
             double sy = static_cast<double>(newImg.height()) / std::max(1, oldImg.height());
@@ -5190,9 +5447,16 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
                 scaledPoly.append(QPointF(pt.x() * sx, pt.y() * sy));
             }
             newPoly = scaledPoly;
+
+            QList<QPointF> scaledVerts;
+            for (const QPointF &pt : oldVerts) {
+                scaledVerts.append(QPointF(pt.x() * sx, pt.y() * sy));
+            }
+            newVerts = scaledVerts;
         }
 
-        backups.append({frameIdx, oldImg, newImg, oldPoly, newPoly});
+        backups.append({frameIdx, oldImg, newImg, oldPoly, newPoly,
+                        oldVerts, newVerts, oldTris, newTris});
     }
 
     // 5. Apply changes and create undo command on canvas undo stack
@@ -5200,7 +5464,9 @@ void PixelEditorDialog::applyFilterToSession(FilterPlugin *filter)
         for (const auto &b : backups) {
             const QImage &img = isRedo ? b.newImage : b.oldImage;
             const QPolygonF &poly = isRedo ? b.newPoly : b.oldPoly;
-            restoreFrameBackup(b.frameIndex, img, poly);
+            const QList<QPointF> &verts = isRedo ? b.newVerts : b.oldVerts;
+            const QList<int> &tris = isRedo ? b.newTris : b.oldTris;
+            restoreFrameBackup(b.frameIndex, img, poly, verts, tris);
         }
         onMultiFrameUndoRedoDone();
     };

@@ -35,8 +35,9 @@ class DespillFilterDialog : public FilterDialogBase
 
 public:
     enum DespillMode {
-        ColorClamping = 0, // Gentle despill: replaces fringe color with interior neighbor RGB
-        StrictAlpha   = 1  // Erases fringe pixels (sets alpha to 0)
+        ColorClamping = 0, // CIELAB Soft Clamping: replaces fringe color with interior neighbor RGB
+        ChromaSpill   = 1, // Chroma Spill Suppression: neutralizes green/blue bounce reflection on edges
+        StrictAlpha   = 2  // Strict removal: erases fringe pixels (sets alpha to 0)
     };
 
     explicit DespillFilterDialog(SpriteDocument *doc,

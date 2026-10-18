@@ -74,14 +74,17 @@ void DespillFilterDialog::setupFilterUI()
     modeRow->addWidget(modeLabel);
 
     m_modeCombo = new QComboBox(this);
-    m_modeCombo->addItem(tr("Soft Color Clamping (Recommended - Preserves fine edges)"), ColorClamping);
-    m_modeCombo->addItem(tr("Strict removal (Alpha = 0)"), StrictAlpha);
-    m_modeCombo->setToolTip(tr("Soft clamping replaces fringe hue with interior neighbor color.\nStrict removal clears the pixel."));
+    m_modeCombo->addItem(tr("Soft Color Clamping (CIELAB Perceptual)"), ColorClamping);
+    m_modeCombo->addItem(tr("Chroma Spill Suppression (Matte Despill)"), ChromaSpill);
+    m_modeCombo->addItem(tr("Strict Removal (Alpha = 0)"), StrictAlpha);
+    m_modeCombo->setToolTip(tr("Soft clamping: replaces fringe with interior color using CIELAB ΔE.\n"
+                               "Chroma spill: neutralizes green/blue bounce reflection without removing alpha.\n"
+                               "Strict removal: clears the fringe pixel."));
     modeRow->addWidget(m_modeCombo, 1);
     contentLayout()->addLayout(modeRow);
 
     // Tolerance row
-    QLabel *tolLabel = new QLabel(tr("Detection tolerance (0 - 100):"), this);
+    QLabel *tolLabel = new QLabel(tr("Detection tolerance (CIELAB ΔE 1 - 100):"), this);
     contentLayout()->addWidget(tolLabel);
 
     QHBoxLayout *tolRow = new QHBoxLayout();
@@ -165,6 +168,65 @@ void DespillFilterDialog::saveSettings()
     // Settings can be extended in AppConfig if needed
 }
 
+// ----------------------------------------------------------------------------
+// CIELAB Color Space Conversion and Delta E calculation
+// ----------------------------------------------------------------------------
+namespace {
+    struct LabColor {
+        double L;
+        double a;
+        double b;
+    };
+
+    static inline LabColor rgbToLab(int r, int g, int b) {
+        // sRGB to linear RGB [0, 1]
+        auto toLinear = [](double c) -> double {
+            return (c <= 0.04045) ? (c / 12.92) : std::pow((c + 0.055) / 1.055, 2.4);
+        };
+        double lr = toLinear(r / 255.0);
+        double lg = toLinear(g / 255.0);
+        double lb = toLinear(b / 255.0);
+
+        // Linear RGB to CIE XYZ (D65)
+        double x = lr * 0.4124564 + lg * 0.3575761 + lb * 0.1804375;
+        double y = lr * 0.2126729 + lg * 0.7151522 + lb * 0.0721750;
+        double z = lr * 0.0193339 + lg * 0.1191920 + lb * 0.9503041;
+
+        // D65 reference white points
+        const double xn = 0.95047;
+        const double yn = 1.00000;
+        const double zn = 1.08883;
+
+        double xr = x / xn;
+        double yr = y / yn;
+        double zr = z / zn;
+
+        const double delta = 6.0 / 29.0;
+        const double delta3 = delta * delta * delta;
+
+        auto f = [delta, delta3](double t) -> double {
+            return (t > delta3) ? std::cbrt(t) : (t / (3.0 * delta * delta) + 4.0 / 29.0);
+        };
+
+        double fx = f(xr);
+        double fy = f(yr);
+        double fz = f(zr);
+
+        double L = 116.0 * fy - 16.0;
+        double a = 500.0 * (fx - fy);
+        double labB = 200.0 * (fy - fz);
+
+        return {L, a, labB};
+    }
+
+    static inline double deltaE(const LabColor &c1, const LabColor &c2) {
+        double dL = c1.L - c2.L;
+        double da = c1.a - c2.a;
+        double db = c1.b - c2.b;
+        return std::sqrt(dL * dL + da * da + db * db);
+    }
+}
+
 QImage DespillFilterDialog::applyDespill(const QImage &source,
                                         QRgb fringeColor,
                                         int tolerance,
@@ -182,9 +244,8 @@ QImage DespillFilterDialog::applyDespill(const QImage &source,
     int fG = qGreen(fringeColor);
     int fB = qBlue(fringeColor);
 
-    // Normalize tolerance to max Euclidean distance (0 to ~441.67)
-    double maxDist = tolerance * 4.4167;
-    double maxDistSq = maxDist * maxDist;
+    LabColor fringeLab = rgbToLab(fR, fG, fB);
+    double maxDeltaE = static_cast<double>(tolerance);
 
     int modifiedCount = 0;
 
@@ -203,19 +264,70 @@ QImage DespillFilterDialog::applyDespill(const QImage &source,
 
         if (!isBorder) return;
 
-        int dR = qRed(p) - fR;
-        int dG = qGreen(p) - fG;
-        int dB = qBlue(p) - fB;
-        double distSq = dR * dR + dG * dG + dB * dB;
+        int pR = qRed(p);
+        int pG = qGreen(p);
+        int pB = qBlue(p);
 
-        if (distSq <= maxDistSq) {
+        LabColor pLab = rgbToLab(pR, pG, pB);
+        double dE = deltaE(pLab, fringeLab);
+
+        if (mode == ChromaSpill) {
+            bool isSpill = false;
+            double spillFactor = 1.0;
+
+            if (fG > fR && fG > fB && pG > std::max(pR, pB)) {
+                isSpill = true;
+                spillFactor = std::min(1.0, maxDeltaE / 35.0);
+            } else if (fB > fR && fB > fG && pB > std::max(pR, pG)) {
+                isSpill = true;
+                spillFactor = std::min(1.0, maxDeltaE / 35.0);
+            } else if (fR > fG && fB > fG && (pR > pG || pB > pG)) {
+                isSpill = true;
+                spillFactor = std::min(1.0, maxDeltaE / 35.0);
+            } else if (dE <= maxDeltaE) {
+                isSpill = true;
+                spillFactor = 1.0 - (dE / std::max(1.0, maxDeltaE));
+            }
+
+            if (isSpill) {
+                int newR = pR;
+                int newG = pG;
+                int newB = pB;
+
+                if (fG > fR && fG > fB) {
+                    int maxOther = std::max(pR, pB);
+                    if (pG > maxOther) {
+                        newG = static_cast<int>(std::round(pG * (1.0 - spillFactor) + maxOther * spillFactor));
+                    }
+                } else if (fB > fR && fB > fG) {
+                    int maxOther = std::max(pR, pG);
+                    if (pB > maxOther) {
+                        newB = static_cast<int>(std::round(pB * (1.0 - spillFactor) + maxOther * spillFactor));
+                    }
+                } else if (fR > fG && fB > fG) {
+                    int maxOther = pG;
+                    if (pR > maxOther || pB > maxOther) {
+                        newR = static_cast<int>(std::round(pR * (1.0 - spillFactor) + maxOther * spillFactor));
+                        newB = static_cast<int>(std::round(pB * (1.0 - spillFactor) + maxOther * spillFactor));
+                    }
+                } else {
+                    int lum = static_cast<int>(std::round(0.299 * pR + 0.587 * pG + 0.114 * pB));
+                    newR = static_cast<int>(std::round(pR * (1.0 - spillFactor) + lum * spillFactor));
+                    newG = static_cast<int>(std::round(pG * (1.0 - spillFactor) + lum * spillFactor));
+                    newB = static_cast<int>(std::round(pB * (1.0 - spillFactor) + lum * spillFactor));
+                }
+
+                dest.setPixel(x, y, qRgba(qBound(0, newR, 255), qBound(0, newG, 255), qBound(0, newB, 255), a));
+                modifiedCount++;
+            }
+        } else if (dE <= maxDeltaE) {
             if (mode == StrictAlpha) {
                 dest.setPixel(x, y, qRgba(0, 0, 0, 0));
                 modifiedCount++;
-            } else {
-                // Color clamping: find nearest non-fringe opaque neighbor within radius 2
+            } else { // ColorClamping
+                // Color Clamping: find nearest non-fringe opaque neighbor within radius 2 using CIELAB ΔE
                 QRgb bestNeighbor = p;
-                double bestNeighborDistSq = -1.0;
+                double bestNeighborDeltaE = -1.0;
 
                 for (int dy = -2; dy <= 2; ++dy) {
                     for (int dx = -2; dx <= 2; ++dx) {
@@ -226,19 +338,17 @@ QImage DespillFilterDialog::applyDespill(const QImage &source,
 
                         QRgb np = source.pixel(nx, ny);
                         if (qAlpha(np) > 128) {
-                            int ndR = qRed(np) - fR;
-                            int ndG = qGreen(np) - fG;
-                            int ndB = qBlue(np) - fB;
-                            double nDistSq = ndR * ndR + ndG * ndG + ndB * ndB;
-                            if (nDistSq > bestNeighborDistSq) {
-                                bestNeighborDistSq = nDistSq;
+                            LabColor npLab = rgbToLab(qRed(np), qGreen(np), qBlue(np));
+                            double nDE = deltaE(npLab, fringeLab);
+                            if (nDE > bestNeighborDeltaE) {
+                                bestNeighborDeltaE = nDE;
                                 bestNeighbor = np;
                             }
                         }
                     }
                 }
 
-                if (bestNeighborDistSq > maxDistSq) {
+                if (bestNeighborDeltaE > maxDeltaE) {
                     dest.setPixel(x, y, qRgba(qRed(bestNeighbor), qGreen(bestNeighbor), qBlue(bestNeighbor), a));
                     modifiedCount++;
                 } else {

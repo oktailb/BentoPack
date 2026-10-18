@@ -656,9 +656,10 @@ void TestControllerAtlas::testI18nKeyTranslations()
 
     // 3. Test Japanese translation
     QTranslator jaTranslator;
-    bool jaLoaded = loadCatalog(jaTranslator, QStringLiteral("bentopack_ja_JA.qm"));
+    bool jaLoaded = loadCatalog(jaTranslator, QStringLiteral("bentopack_ja_JP.qm")) ||
+                    loadCatalog(jaTranslator, QStringLiteral("bentopack_ja_JA.qm"));
     if (!jaLoaded) {
-        QSKIP("Translation catalog bentopack_ja_JA.qm not found in build tree or resources on this platform.");
+        QSKIP("Translation catalog bentopack_ja_JP.qm not found in build tree or resources on this platform.");
     }
 
     {

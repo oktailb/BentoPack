@@ -305,10 +305,6 @@
         <translation>Отступ границы:</translation>
     </message>
     <message>
-        <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
-        <translation>Повторяет граничные пиксели наружу (1-2 пикс.) для предотвращения артефактов билинейной фильтрации в движках</translation>
-    </message>
-    <message>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>Экструзия (Anti-Bleeding):</translation>
     </message>
@@ -329,12 +325,12 @@
         <translation>Авто-алиасинг (слияние дубликатов кадров без нарушения анимаций)</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
-        <translation>Модульная дедупликация cels (M22 — связывание общих cels между слоями)</translation>
+        <source>Modular Cel Deduplication (Link shared cels across layers)</source>
+        <translation>Модульная дедупликация cels (связывание общих cels между слоями)</translation>
     </message>
     <message>
-        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
-        <translation>Нарезка дельта-патчей (M22 — обрезка подпрямоугольных дельт между кадрами)</translation>
+        <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
+        <translation>Нарезка дельта-патчей (обрезка подпрямоугольных дельт между кадрами)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -383,6 +379,10 @@
     <message>
         <source>Live Packing Metrics</source>
         <translation>Метрики упаковки в реальном времени</translation>
+    </message>
+    <message>
+        <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
+        <translation>Повторяет граничные пиксели наружу (1-4 пкс) с 8-связным угловым зажимом для предотвращения артефактов билинейной фильтрации в игровых движках</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -789,22 +789,28 @@ Choose which branch to restore:</source>
         <translation>Режим действия:</translation>
     </message>
     <message>
-        <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>Мягкое ограничение цвета (рекомендуется - сохраняет тонкие края)</translation>
+        <source>Soft Color Clamping (CIELAB Perceptual)</source>
+        <translation>Мягкое цветовое ограничение (CIELAB)</translation>
     </message>
     <message>
-        <source>Strict removal (Alpha = 0)</source>
-        <translation>Строгое удаление (Alpha = 0)</translation>
+        <source>Chroma Spill Suppression (Matte Despill)</source>
+        <translation>Подавление цветового перелива (Matte Despill)</translation>
     </message>
     <message>
-        <source>Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</source>
-        <translation>Мягкое ограничение заменяет оттенок каймы цветом соседних пикселей.
-Строгое удаление очищает пиксель.</translation>
+        <source>Strict Removal (Alpha = 0)</source>
+        <translation>Строгое удаление (Альфа = 0)</translation>
     </message>
     <message>
-        <source>Detection tolerance (0 - 100):</source>
-        <translation>Допуск обнаружения (0 - 100):</translation>
+        <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
+Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
+Strict removal: clears the fringe pixel.</source>
+        <translation>Мягкое ограничение: заменяет кайму внутренним цветом по CIELAB ΔE.
+Подавление перелива: нейтрализует зеленые/синие отблески без удаления альфы.
+Строгое удаление: очищает пиксель каймы.</translation>
+    </message>
+    <message>
+        <source>Detection tolerance (CIELAB ΔE 1 - 100):</source>
+        <translation>Допуск обнаружения (CIELAB ΔE 1 - 100):</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -829,6 +835,136 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>Фильтр: Деспилл и очистка краёв</translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorDialog</name>
+    <message>
+        <source>Emissive Map Generator </source>
+        <translation>Генератор карты свечения </translation>
+    </message>
+    <message>
+        <source>Extraction Method:</source>
+        <translation>Метод извлечения:</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold (Highlights &amp; Hotspots)</source>
+        <translation>Порог яркости (Блики и горячие точки)</translation>
+    </message>
+    <message>
+        <source>Color Key / Hue Isolation (Magic &amp; Neon)</source>
+        <translation>Цветовой ключ / Выделение оттенка (Магия и неон)</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold Parameters</source>
+        <translation>Параметры порога яркости</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Порог:</translation>
+    </message>
+    <message>
+        <source>Soft Knee Falloff:</source>
+        <translation>Мягкий спад (Soft Knee):</translation>
+    </message>
+    <message>
+        <source>Selective Color Key Parameters</source>
+        <translation>Параметры выборочного цветового ключа</translation>
+    </message>
+    <message>
+        <source>Target Glow Color:</source>
+        <translation>Целевой цвет свечения:</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>Выбрать...</translation>
+    </message>
+    <message>
+        <source>Hue Tolerance:</source>
+        <translation>Допуск оттенка:</translation>
+    </message>
+    <message>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <source>Intensity &amp; Output Format</source>
+        <translation>Интенсивность и формат вывода</translation>
+    </message>
+    <message>
+        <source>Emission Boost Multiplier:</source>
+        <translation>Множитель усиления свечения:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <source>Opaque black background (unlit = RGB 0,0,0)</source>
+        <translation>Непрозрачный чёрный фон (без свечения = RGB 0,0,0)</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Target</source>
+        <translation>Назначение и цель</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>Назначение вывода:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Emissive Map _e slave atlas)</source>
+        <translation>Вспомогательная карта свечения (Атлас _e)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>Активный лист (Заменить альбедо)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>Обрабатывать только выбранные кадры</translation>
+    </message>
+    <message>
+        <source>Select Target Glow Color</source>
+        <translation>Выбрать целевой цвет свечения</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Emissive Map (_e)</source>
+        <translation>Сгенерировано кадров в карту свечения (_e): %1</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Emissive Map</source>
+        <translation>Активный лист спрайтов заменён картой свечения</translation>
+    </message>
+    <message>
+        <source>Generate Emissive Map </source>
+        <translation>Сгенерировать карту свечения </translation>
+    </message>
+    <message>
+        <source>Filter: Emissive Map Generator</source>
+        <translation>Фильтр: Генератор карты свечения</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Emissive (_e))</source>
+        <translation>Новый слой (напр. Emissive (_e))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 кадр(ов) подготовлено для нового слоя &apos;Emissive (_e)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>Создать слой Emissive </translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorFilter</name>
+    <message>
+        <source>Emissive Map Generator ...</source>
+        <translation>Генератор карты свечения ...</translation>
+    </message>
+    <message>
+        <source>Extracts emissive maps (_e) for neon, magic runes, fire, and glows using luminance thresholding or selective color key isolation.</source>
+        <translation>Извлекает карты свечения (_e) для неона, магических рун, огня и сияния с помощью порога яркости или цветовой изоляции.</translation>
     </message>
 </context>
 <context>
@@ -986,24 +1122,24 @@ Strict removal clears the pixel.</source>
         <translation>Обрезать прозрачные границы</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22)</source>
-        <translation>Модульная дедупликация cels (M22)</translation>
+        <source>Modular Cel Deduplication </source>
+        <translation>Модульная дедупликация cels </translation>
     </message>
     <message>
         <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
         <translation>Дедуплицирует общие cels между слоями анимации и кадрами с помощью 64-битного хэширования XXH3</translation>
     </message>
     <message>
-        <source>Enable Delta-Patch Slicing (M22)</source>
-        <translation>Включить нарезку дельта-патчей (M22)</translation>
+        <source>Enable Delta-Patch Slicing </source>
+        <translation>Включить нарезку дельта-патчей </translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
         <translation>Извлекает измененные ограничивающие патчи между последовательными кадрами анимации при малой площади дельты, снижая расход VRAM</translation>
     </message>
     <message>
-        <source>VRAM Texture &amp; GPU Compression (M9)</source>
-        <translation>Текстуры VRAM и сжатие GPU (M9)</translation>
+        <source>VRAM Texture &amp; GPU Compression </source>
+        <translation>Текстуры VRAM и сжатие GPU </translation>
     </message>
     <message>
         <source>Texture Format:</source>
@@ -1050,8 +1186,8 @@ Strict removal clears the pixel.</source>
         <translation>Уровень Zstd (1-22):</translation>
     </message>
     <message>
-        <source>2D Lighting &amp; Multi-Atlas Maps (M21)</source>
-        <translation>2D-освещение и карты мульти-атласа (M21)</translation>
+        <source>2D Lighting &amp; Multi-Atlas Maps </source>
+        <translation>2D-освещение и карты мульти-атласа </translation>
     </message>
     <message>
         <source>Export Synchronized Material Atlases (Normal, Emissive, Specular)</source>
@@ -1389,6 +1525,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Geometry &amp; Transform</source>
         <translation>Геометрия и трансформация</translation>
+    </message>
+    <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>2D-освещение и материалы </translation>
     </message>
 </context>
 <context>
@@ -2620,6 +2760,108 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>Редактировать пиксели...</translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorDialog</name>
+    <message>
+        <source>Normal Map Generator </source>
+        <translation>Генератор карты нормалей </translation>
+    </message>
+    <message>
+        <source>Surface Height &amp; Bump</source>
+        <translation>Высота поверхности и рельеф</translation>
+    </message>
+    <message>
+        <source>Bump Intensity:</source>
+        <translation>Интенсивность рельефа:</translation>
+    </message>
+    <message>
+        <source>Alpha Bevel Depth:</source>
+        <translation>Глубина альфа-фаски:</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> пкс</translation>
+    </message>
+    <message>
+        <source>Invert Y (DirectX / Unreal convention)</source>
+        <translation>Инвертировать Y (Стандарт DirectX / Unreal)</translation>
+    </message>
+    <message>
+        <source>Invert X</source>
+        <translation>Инвертировать X</translation>
+    </message>
+    <message>
+        <source>Target &amp; Destination</source>
+        <translation>Цель и назначение</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>Назначение вывода:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Normal Map _n slave atlas)</source>
+        <translation>Вспомогательная карта нормалей (Атлас _n)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>Активный лист (Заменить альбедо)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>Обрабатывать только выбранные кадры</translation>
+    </message>
+    <message>
+        <source>Interactive 2D Lighting Preview</source>
+        <translation>Интерактивный предпросмотр 2D-освещения</translation>
+    </message>
+    <message>
+        <source>Light Angle:</source>
+        <translation>Угол света:</translation>
+    </message>
+    <message>
+        <source>Light Height:</source>
+        <translation>Высота источника света:</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Normal Map (_n)</source>
+        <translation>Сгенерировано кадров в карту нормалей (_n): %1</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Normal Map</source>
+        <translation>Активный лист спрайтов заменён картой нормалей</translation>
+    </message>
+    <message>
+        <source>Generate Normal Map </source>
+        <translation>Сгенерировать карту нормалей </translation>
+    </message>
+    <message>
+        <source>Filter: Normal Map Generator</source>
+        <translation>Фильтр: Генератор карты нормалей</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Normal (_n))</source>
+        <translation>Новый слой (напр. Normal (_n))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 кадр(ов) подготовлено для нового слоя &apos;Normal (_n)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>Создать слой Normal </translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorFilter</name>
+    <message>
+        <source>Normal Map Generator ...</source>
+        <translation>Генератор карты нормалей ...</translation>
+    </message>
+    <message>
+        <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
+        <translation>Создаёт карты нормалей в касательном пространстве (_n) с градиентом Собеля, объемным скосом альфа-силуэта и интерактивным предпросмотром 2D-света.</translation>
     </message>
 </context>
 <context>
@@ -3920,6 +4162,10 @@ Would you like to repack the atlas now?</source>
         <source>⊡ Fit</source>
         <translation>⊡ Вписать</translation>
     </message>
+    <message>
+        <source>Create %1 Layer </source>
+        <translation>Создать слой %1 </translation>
+    </message>
 </context>
 <context>
     <name>PixelRescaleFilter</name>
@@ -4423,6 +4669,10 @@ Would you like to repack the atlas now?</source>
         <translation>Геометрия и трансформация</translation>
     </message>
     <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>2D-освещение и материалы </translation>
+    </message>
+    <message>
         <source>No Atlas Loaded</source>
         <translation>Атлас не загружен</translation>
     </message>
@@ -4531,6 +4781,18 @@ Install package:
     <message>
         <source>Project atlas image file not found in session: %1</source>
         <translation>Файл изображения атласа проекта не найден в сессии: %1</translation>
+    </message>
+    <message>
+        <source>Set Auxiliary Map</source>
+        <translation>Установить вспомогательную карту</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>Создать слой Normal </translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>Создать слой Emissive </translation>
     </message>
 </context>
 <context>
@@ -5558,16 +5820,16 @@ Delete, чтобы удалить</translation>
         <translation>Отступ (Padding):</translation>
     </message>
     <message>
-        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
-        <translation>Модульная дедупликация ячеек (M22 - XXH3 64-бит)</translation>
+        <source>Modular cel deduplication (XXH3 64-bit)</source>
+        <translation>Модульная дедупликация ячеек (XXH3 64-бит)</translation>
     </message>
     <message>
         <source>Deduplicates identical Aseprite cels across multiple layers</source>
         <translation>Дедуплицирует одинаковые ячейки Aseprite на нескольких слоях</translation>
     </message>
     <message>
-        <source>Delta patch slicing (M22 - VRAM savings)</source>
-        <translation>Нарезка дельта-патчами (M22 - Экономия VRAM)</translation>
+        <source>Delta patch slicing (VRAM savings)</source>
+        <translation>Нарезка дельта-патчами (Экономия VRAM)</translation>
     </message>
     <message>
         <source>Extracts modified delta patches between consecutive frames</source>

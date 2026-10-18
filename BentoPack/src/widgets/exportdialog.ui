@@ -356,7 +356,7 @@
       <item row="5" column="0" colspan="2">
        <widget class="QCheckBox" name="chkDeduplicateCels">
         <property name="text">
-         <string>Modular Cel Deduplication (M22)</string>
+         <string>Modular Cel Deduplication </string>
         </property>
         <property name="toolTip">
          <string>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</string>
@@ -366,7 +366,7 @@
       <item row="5" column="2" colspan="2">
        <widget class="QCheckBox" name="chkDeltaPatching">
         <property name="text">
-         <string>Enable Delta-Patch Slicing (M22)</string>
+         <string>Enable Delta-Patch Slicing </string>
         </property>
         <property name="toolTip">
          <string>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</string>
@@ -379,7 +379,7 @@
    <item>
     <widget class="QGroupBox" name="grpVram">
      <property name="title">
-      <string>VRAM Texture &amp; GPU Compression (M9)</string>
+      <string>VRAM Texture &amp; GPU Compression </string>
      </property>
      <layout class="QFormLayout" name="formLayoutVram">
       <property name="fieldGrowthPolicy">
@@ -480,7 +480,7 @@
    <item>
     <widget class="QGroupBox" name="grpLighting">
      <property name="title">
-      <string>2D Lighting &amp; Multi-Atlas Maps (M21)</string>
+      <string>2D Lighting &amp; Multi-Atlas Maps </string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayoutLighting">
       <property name="spacing">

@@ -108,6 +108,9 @@ private slots:
 
     // 14. Aseprite Background Removal, Sprite Detection and Pixel Editor Synchronization
     void testAsepriteBackgroundRemovalSpriteDetectionAndPixelEditor();
+
+    // 15. Filter CDT Mesh Preservation & Layer Generation
+    void testFilterPreservesCdtMeshAndCreatesM21Layer();
 };
 
 void TestPixelEditor::initTestCase()
@@ -3230,6 +3233,105 @@ void TestPixelEditor::testAsepriteBackgroundRemovalSpriteDetectionAndPixelEditor
         QCOMPARE(restoredDlg.canvas()->canvasSize(), QSize(128, 128));
         QCOMPARE(restoredDlg.canvas()->layerCount(), 5);
     }
+}
+
+void TestPixelEditor::testFilterPreservesCdtMeshAndCreatesM21Layer()
+{
+    // 1. Prepare document with 2 frames
+    QImage f0(16, 16, QImage::Format_ARGB32);
+    f0.fill(qRgb(255, 0, 0));
+    QImage f1(16, 16, QImage::Format_ARGB32);
+    f1.fill(qRgb(0, 255, 0));
+
+    QPolygonF poly = { QPointF(0, 0), QPointF(16, 0), QPointF(16, 16), QPointF(0, 16) };
+    QList<QPointF> verts = { QPointF(0, 0), QPointF(16, 0), QPointF(16, 16), QPointF(0, 16),
+                             QPointF(8, 8), QPointF(4, 4) }; // 2 Steiner points
+    QList<int> tris = BentoPackGeometry::Triangulator::triangulateCDT(poly, verts);
+
+    SpriteBox b0(QRect(0, 0, 16, 16));
+    b0.index = 0;
+    b0.hasPolygonMesh = true;
+    b0.polygon = poly;
+    b0.vertices = verts;
+    b0.triangles = tris;
+
+    SpriteBox b1(QRect(16, 0, 16, 16));
+    b1.index = 1;
+
+    SpriteDocument doc;
+    doc.setFrames({f0, f1}, {b0, b1});
+    QUndoStack undoStack;
+
+    // 2. Open in PixelEditorDialog
+    PixelEditorDialog dlg(&doc, &undoStack, 0);
+    QVERIFY(dlg.canvas() != nullptr);
+    QCOMPARE(dlg.canvas()->meshVertices().size(), 6);
+    QCOMPARE(dlg.sessionModifiedVertices(0).size(), 6);
+
+    // 3. Define a mock Material Generator Filter plugin
+    class MockMaterialFilter : public FilterPlugin {
+    public:
+        QString id() const override { return QStringLiteral("mock_material"); }
+        QString name() const override { return QStringLiteral("Mock Material"); }
+        QString description() const override { return QStringLiteral("Mock Material"); }
+        QString category() const override { return QStringLiteral("Generators"); }
+        FilterModifierFlags modifierFlags() const override { return PixelModifier; }
+
+        FilterDialogBase* createDialog(SpriteDocument *d, QUndoStack*, QWidget *parent) override {
+            class MatDlg : public FilterDialogBase {
+            public:
+                MatDlg(SpriteDocument *doc, QWidget *p)
+                    : FilterDialogBase(doc, nullptr, p)
+                {
+                    QTimer::singleShot(10, this, [this]() {
+                        accept();
+                    });
+                }
+                void applyPreview() override {}
+                QUndoCommand* createUndoCommand() override { return nullptr; }
+                void resetDefaults() override {}
+
+                bool isMaterialLayerGenerator() const override { return true; }
+                MaterialMapType materialMapType() const override { return MaterialMapType::Normal; }
+                QString materialLayerName() const override { return QStringLiteral("Normal (_n)"); }
+                bool createsNewMaterialLayer() const override { return true; }
+                QList<QImage> generatedAuxiliaryFrames() const override {
+                    QImage n(16, 16, QImage::Format_ARGB32);
+                    n.fill(qRgb(128, 128, 255));
+                    return { n, n };
+                }
+            };
+            return new MatDlg(d, parent);
+        }
+    };
+
+    MockMaterialFilter filter;
+    dlg.applyFilterToSession(&filter);
+
+    // 4. Verify CDT mesh was NOT destroyed
+    QCOMPARE(dlg.canvas()->meshVertices().size(), 6);
+    QCOMPARE(dlg.sessionModifiedVertices(0).size(), 6);
+    QCOMPARE(dlg.canvas()->meshTriangles().size(), tris.size());
+
+    // 5. Verify Material Layer was created
+    QCOMPARE(dlg.canvas()->layerCount(), 2);
+    QCOMPARE(dlg.canvas()->activeLayerIndex(), 1);
+    QCOMPARE(dlg.canvas()->layers().size(), 2);
+    QCOMPARE(dlg.canvas()->layers().at(1).name, QStringLiteral("Normal (_n)"));
+
+    // 6. Test undo on canvas
+    QVERIFY(dlg.canvas()->undoStack() != nullptr);
+    dlg.canvas()->undoStack()->undo();
+
+    // After undo, layer count should revert back to 1, and CDT mesh must STILL be preserved!
+    QCOMPARE(dlg.canvas()->layerCount(), 1);
+    QCOMPARE(dlg.canvas()->meshVertices().size(), 6);
+    QCOMPARE(dlg.sessionModifiedVertices(0).size(), 6);
+
+    // Redo again
+    dlg.canvas()->undoStack()->redo();
+    QCOMPARE(dlg.canvas()->layerCount(), 2);
+    QCOMPARE(dlg.canvas()->meshVertices().size(), 6);
 }
 
 int main(int argc, char *argv[])

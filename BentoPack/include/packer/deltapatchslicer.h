@@ -53,7 +53,7 @@ struct BENTOPACK_CORE_EXPORT DeltaSlicingResult {
 };
 
 /**
- * @brief High-performance differential frame patch extractor (M22).
+ * @brief High-performance differential frame patch extractor .
  *
  * Compares animated frames against keyframes or preceding frames, detects the dirty bounding
  * box of modified pixels, and if the changed area is <= threshold (default 25%), isolates the

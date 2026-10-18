@@ -319,7 +319,7 @@ public:
     bool hasSkinProfile(const QString &profileId) const { return m_skinProfiles.contains(profileId); }
     void bakeAnimationVariants(const QStringList &profileIds = QStringList());
 
-    // Material Maps / 2D Lighting (M21)
+    // Material Maps / 2D Lighting 
     bool hasAuxiliaryMap(MaterialMapType type) const;
     bool hasAnyAuxiliaryMaps() const;
     QList<QImage> auxiliaryFrames(MaterialMapType type) const;

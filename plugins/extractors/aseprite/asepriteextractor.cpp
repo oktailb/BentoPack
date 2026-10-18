@@ -556,7 +556,7 @@ bool AsepriteExtractor::read(const QString &filePath, SpriteDocument &outDoc, Ex
         setProgress(50 + (f * 30 / qMax(1, totalCompositeFrames)));
     }
 
-    // 3a. Populate auxiliary material map frames if auxiliary layers were detected (M21)
+    // 3a. Populate auxiliary material map frames if auxiliary layers were detected 
     for (MaterialMapType mt : {MaterialMapType::Normal, MaterialMapType::Emissive, MaterialMapType::Specular}) {
         if (outDoc.hasAuxiliaryMap(mt)) {
             QList<QImage> auxList;

@@ -294,7 +294,7 @@ MultiPagePackResult MultiPagePacker::pack(const SpriteDocument &doc,
         return result;
     }
 
-    // 4. M21 Multi-Atlas Secondary Maps Synchronization per Page
+    // 4. Multi-Atlas Secondary Maps Synchronization per Page
     if (exportMaterialMaps && doc.hasAnyAuxiliaryMaps()) {
         for (int pIdx = 0; pIdx < result.pages.size(); ++pIdx) {
             AtlasPage &page = result.pages[pIdx];

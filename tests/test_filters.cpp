@@ -24,6 +24,11 @@
 #include "atlaspackingfilter.h"
 #include "spritedetectiondialog.h"
 #include "spritedetectionfilter.h"
+#include "normalgeneratordialog.h"
+#include "normalgeneratorfilter.h"
+#include "emissivegeneratordialog.h"
+#include "emissivegeneratorfilter.h"
+#include "packer/atlaspacker.h"
 #include "commands/filtercommands.h"
 #include "widgets/filtermenubuilder.h"
 #include "aboutdialog.h"
@@ -40,6 +45,12 @@ private slots:
 
     void testFilterRegistry();
     void testDespillFilterAlgorithm();
+    void testDespillFilterChromaSpill();
+    void testNormalGeneratorAlgorithm();
+    void testEmissiveGeneratorAlgorithm();
+    void testM21AuxiliaryMapUndoRedo();
+    void testAddMaterialLayerCommandUndoRedo();
+    void testAtlasPackerCornersClampingAndExtrusion();
     void testOutlineFilterAlgorithm();
     void testColorSwapFilterAlgorithm();
     void testColorAdjustFilterAlgorithm();
@@ -74,7 +85,7 @@ void TestFilters::testFilterRegistry()
 
     // Multiple calls to init/load should never create duplicates
     reg.initDefaultFilters();
-    QCOMPARE(reg.filters().size(), 10);
+    QCOMPARE(reg.filters().size(), 12);
     QVERIFY(reg.findFilter(QStringLiteral("background_removal")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("despill")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("outline")) != nullptr);
@@ -85,6 +96,8 @@ void TestFilters::testFilterRegistry()
     QVERIFY(reg.findFilter(QStringLiteral("atlas_packing")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("tight_polygon_packing")) != nullptr);
     QVERIFY(reg.findFilter(QStringLiteral("sprite_detection")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("normalgenerator")) != nullptr);
+    QVERIFY(reg.findFilter(QStringLiteral("emissivegenerator")) != nullptr);
 
     QStringList cats = reg.categories();
     QVERIFY(!cats.isEmpty());
@@ -101,8 +114,8 @@ void TestFilters::testFilterRegistry()
             filterActionCount++;
         }
     }
-    // Exactly 10 filter actions without any duplicates
-    QCOMPARE(filterActionCount, 10);
+    // Exactly 12 filter actions without any duplicates
+    QCOMPARE(filterActionCount, 12);
 
     // Test taxonomy and modifier flags
     FilterPlugin *bgRem = reg.findFilter(QStringLiteral("background_removal"));
@@ -182,6 +195,231 @@ void TestFilters::testDespillFilterAlgorithm()
     QCOMPARE(qAlpha(resClamp.pixel(5, 6)), 255);
     QCOMPARE(qRed(resClamp.pixel(5, 6)), 255);
     QCOMPARE(qGreen(resClamp.pixel(5, 6)), 0);
+}
+
+void TestFilters::testDespillFilterChromaSpill()
+{
+    QImage src(10, 10, QImage::Format_ARGB32);
+    src.fill(qRgba(0, 0, 0, 0));
+
+    // Warm flesh / red cloak pixel with green bounce spill from green screen
+    QRgb greenBouncePixel = qRgb(170, 210, 80); // Green is artificially high due to spill
+    src.setPixel(5, 5, greenBouncePixel);
+
+    int modifiedSpill = 0;
+    QImage res = DespillFilterDialog::applyDespill(
+        src, qRgb(0, 255, 0), 40, DespillFilterDialog::ChromaSpill, {}, &modifiedSpill);
+
+    QVERIFY(modifiedSpill > 0);
+    QRgb outPx = res.pixel(5, 5);
+    QCOMPARE(qAlpha(outPx), 255); // Alpha is strictly preserved in ChromaSpill
+    // Chroma spill formula: G' = min(G, max(R, B)) = min(210, 170) = 170
+    QCOMPARE(qRed(outPx), 170);
+    QCOMPARE(qGreen(outPx), 170);
+    QCOMPARE(qBlue(outPx), 80);
+}
+
+void TestFilters::testNormalGeneratorAlgorithm()
+{
+    QImage src(16, 16, QImage::Format_ARGB32);
+    src.fill(qRgba(0, 0, 0, 0));
+
+    for (int y = 4; y <= 11; ++y) {
+        for (int x = 4; x <= 11; ++x) {
+            src.setPixel(x, y, qRgb(255, 255, 255));
+        }
+    }
+
+    QImage norm = NormalGeneratorDialog::generateNormalMap(src, 2.0, 2, false, false);
+    QCOMPARE(norm.size(), src.size());
+
+    // Transparent pixels have neutral tangent-space normal (128, 128, 255) with alpha 0
+    QRgb transPx = norm.pixel(0, 0);
+    QCOMPARE(qAlpha(transPx), 0);
+    QCOMPARE(qRed(transPx), 128);
+    QCOMPARE(qGreen(transPx), 128);
+    QCOMPARE(qBlue(transPx), 255);
+
+    // Center flat pixel: near pure Z-up
+    QRgb centerPx = norm.pixel(8, 8);
+    QCOMPARE(qAlpha(centerPx), 255);
+    QVERIFY(qBlue(centerPx) >= 240);
+    QVERIFY(std::abs(qRed(centerPx) - 128) <= 5);
+    QVERIFY(std::abs(qGreen(centerPx) - 128) <= 5);
+
+    // Silhouette bevel edge has non-neutral normal
+    QRgb edgePx = norm.pixel(4, 8);
+    QCOMPARE(qAlpha(edgePx), 255);
+    QVERIFY(qRed(edgePx) != 128);
+
+    // Shaded preview rendering
+    QImage shaded = NormalGeneratorDialog::renderShadedPreview(src, norm, 45.0, 55.0);
+    QCOMPARE(shaded.size(), src.size());
+    QCOMPARE(qAlpha(shaded.pixel(0, 0)), 0);
+    QCOMPARE(qAlpha(shaded.pixel(8, 8)), 255);
+}
+
+void TestFilters::testEmissiveGeneratorAlgorithm()
+{
+    QImage src(16, 16, QImage::Format_ARGB32);
+    src.fill(qRgba(0, 0, 0, 0));
+
+    QRgb darkBg = qRgb(30, 30, 30);
+    QRgb brightNeon = qRgb(250, 250, 250);
+    QRgb cyanMagic = qRgb(0, 240, 255);
+    QRgb redBody = qRgb(200, 20, 20);
+
+    src.setPixel(2, 2, darkBg);
+    src.setPixel(5, 5, brightNeon);
+    src.setPixel(8, 8, cyanMagic);
+    src.setPixel(11, 11, redBody);
+
+    // Mode 1: Luminance threshold (highlights)
+    QImage emissiveLum = EmissiveGeneratorDialog::generateEmissiveMap(
+        src, EmissiveGeneratorDialog::LuminanceThreshold, 180, 20, qRgb(0, 255, 255), 30, 1.5, false);
+
+    // Dark pixel (lum ~30) is zeroed out
+    QCOMPARE(qAlpha(emissiveLum.pixel(2, 2)), 0);
+    // Bright neon (lum 250) is retained and boosted
+    QCOMPARE(qAlpha(emissiveLum.pixel(5, 5)), 255);
+    QVERIFY(qRed(emissiveLum.pixel(5, 5)) >= 250);
+
+    // Mode 2: Color Key isolation (cyan magic)
+    QImage emissiveColor = EmissiveGeneratorDialog::generateEmissiveMap(
+        src, EmissiveGeneratorDialog::ColorKeyIsolation, 180, 20, qRgb(0, 255, 255), 30, 1.0, false);
+
+    // Red body (hue 0 vs target cyan 180) is zeroed out
+    QCOMPARE(qAlpha(emissiveColor.pixel(11, 11)), 0);
+    // Cyan magic is retained
+    QVERIFY(qAlpha(emissiveColor.pixel(8, 8)) > 150);
+    QVERIFY(qBlue(emissiveColor.pixel(8, 8)) >= 200);
+}
+
+void TestFilters::testM21AuxiliaryMapUndoRedo()
+{
+    SpriteDocument doc;
+    QImage frame1(16, 16, QImage::Format_ARGB32);
+    frame1.fill(qRgb(255, 0, 0));
+    QImage frame2(16, 16, QImage::Format_ARGB32);
+    frame2.fill(qRgb(0, 255, 0));
+
+    SpriteBox box1; box1.rect = QRect(0, 0, 16, 16);
+    SpriteBox box2; box2.rect = QRect(16, 0, 16, 16);
+
+    doc.setFrames({frame1, frame2}, {box1, box2});
+    QCOMPARE(doc.frameCount(), 2);
+    QVERIFY(!doc.hasAuxiliaryMap(MaterialMapType::Normal));
+
+    QUndoStack undoStack;
+
+    QList<QImage> normFrames = {
+        NormalGeneratorDialog::generateNormalMap(frame1),
+        NormalGeneratorDialog::generateNormalMap(frame2)
+    };
+
+    auto *cmd = new SetAuxiliaryMapCommand(&doc, MaterialMapType::Normal, normFrames);
+    undoStack.push(cmd);
+
+    QVERIFY(doc.hasAuxiliaryMap(MaterialMapType::Normal));
+    QCOMPARE(doc.auxiliaryFrames(MaterialMapType::Normal).size(), 2);
+
+    undoStack.undo();
+    QVERIFY(!doc.hasAuxiliaryMap(MaterialMapType::Normal) || doc.auxiliaryFrames(MaterialMapType::Normal).isEmpty());
+
+    undoStack.redo();
+    QVERIFY(doc.hasAuxiliaryMap(MaterialMapType::Normal));
+    QCOMPARE(doc.auxiliaryFrames(MaterialMapType::Normal).size(), 2);
+}
+
+void TestFilters::testAddMaterialLayerCommandUndoRedo()
+{
+    SpriteDocument doc;
+    QImage frame1(16, 16, QImage::Format_ARGB32);
+    frame1.fill(qRgb(255, 0, 0));
+    QImage frame2(16, 16, QImage::Format_ARGB32);
+    frame2.fill(qRgb(0, 255, 0));
+
+    SpriteBox box1; box1.rect = QRect(0, 0, 16, 16);
+    SpriteBox box2; box2.rect = QRect(16, 0, 16, 16);
+
+    doc.setFrames({frame1, frame2}, {box1, box2});
+    QCOMPARE(doc.frameCount(), 2);
+    QVERIFY(!doc.hasLayers());
+    QVERIFY(!doc.hasAuxiliaryMap(MaterialMapType::Normal));
+
+    QUndoStack undoStack;
+
+    QList<QImage> normFrames = {
+        NormalGeneratorDialog::generateNormalMap(frame1),
+        NormalGeneratorDialog::generateNormalMap(frame2)
+    };
+
+    auto *cmd = new AddMaterialLayerCommand(&doc, MaterialMapType::Normal, normFrames, QStringLiteral("Create Normal Layer"));
+    undoStack.push(cmd);
+
+    // After redo, document should have 2 layers: Albedo + Normal (_n)
+    QVERIFY(doc.hasLayers());
+    QCOMPARE(doc.layerCount(), 2);
+    QCOMPARE(doc.layer(0).name, QStringLiteral("Albedo"));
+    QCOMPARE(doc.layer(1).name, QStringLiteral("Normal (_n)"));
+    QVERIFY(doc.hasFrameCels(0));
+    QVERIFY(doc.hasFrameCels(1));
+    QCOMPARE(doc.frameCels(0).size(), 2);
+    QCOMPARE(doc.frameCels(1).size(), 2);
+    QVERIFY(doc.hasAuxiliaryMap(MaterialMapType::Normal));
+    QCOMPARE(doc.auxiliaryFrames(MaterialMapType::Normal).size(), 2);
+
+    // Undo should restore document without layers
+    undoStack.undo();
+    QVERIFY(!doc.hasLayers());
+    QVERIFY(!doc.hasAuxiliaryMap(MaterialMapType::Normal) || doc.auxiliaryFrames(MaterialMapType::Normal).isEmpty());
+
+    // Redo should restore layers and cels
+    undoStack.redo();
+    QVERIFY(doc.hasLayers());
+    QCOMPARE(doc.layerCount(), 2);
+    QVERIFY(doc.hasAuxiliaryMap(MaterialMapType::Normal));
+}
+
+void TestFilters::testAtlasPackerCornersClampingAndExtrusion()
+{
+    QImage spr(10, 10, QImage::Format_ARGB32);
+    spr.fill(qRgba(0, 0, 0, 0));
+
+    QRgb body = qRgb(200, 100, 50);
+    for (int y = 2; y <= 7; ++y) {
+        for (int x = 2; x <= 7; ++x) {
+            spr.setPixel(x, y, body);
+        }
+    }
+
+    AtlasPacker::PackOptions opts;
+    opts.extrude = 2;
+    opts.padding = 6;
+    opts.borderPadding = 4;
+
+    AtlasPackResult res = AtlasPacker::pack({spr}, opts);
+    QVERIFY(!res.atlas.isNull());
+    QCOMPARE(res.frameRects.size(), 1);
+
+    QRect placed = res.frameRects.first();
+    QCOMPARE(res.atlas.pixel(placed.left() + 4, placed.top() + 4), body);
+
+    // Direct applyExtrusion test to verify 8-connected diagonal corner clamping
+    QImage canvas(24, 24, QImage::Format_ARGB32);
+    canvas.fill(qRgba(0, 0, 0, 0));
+    QRect target(6, 6, 10, 10);
+    for (int y = 0; y < 10; ++y) {
+        for (int x = 0; x < 10; ++x) {
+            canvas.setPixel(target.x() + x, target.y() + y, spr.pixel(x, y));
+        }
+    }
+    AtlasPacker::applyExtrusion(canvas, target, spr, 2);
+
+    // Check pixel at top-left diagonal corner extrusion
+    QRgb diagExtruded = canvas.pixel(target.x() - 1, target.y() - 1);
+    QCOMPARE(qAlpha(diagExtruded), 255);
+    QCOMPARE(diagExtruded, body);
 }
 
 void TestFilters::testOutlineFilterAlgorithm()

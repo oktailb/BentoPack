@@ -227,13 +227,34 @@ Dans les animations de personnages (idle, respiration, clignement des yeux) ou d
 
 ---
 
-## 🎨 Priorité 6 (P2) : FILTERS-POLISH — Fignolage des Extrusions & Filtres
+## 🎨 Priorité 6 (P2) : FILTERS-POLISH — Fignolage des Extrusions & Filtres (Intégration M21 Éclairage 2D) — [x] TERMINÉ / LIVRÉ
 
-### 📌 Contexte & Spécifications
-L'extrusion de bordure (padding) évite le *bleeding* (bavure de pixels voisins sous filtrage bilinéaire ou mipmapping).
-1. **Angles 8-connectés (Corners Clamping) :** Dupliquer les pixels sur les diagonales extérieures des coins pour éviter les pixels noirs ou transparents lors d'un échantillonnage oblique.
-2. **Épaisseur paramétrable :** 1 à 4 pixels selon le niveau de mipmapping ciblé.
-3. **Filtre Despill CIELAB :** Calcul de distance colorimétrique dans l'espace perceptuel CIELAB pour éliminer les halos de fond vert/bleu sans décolorer les teintes voisines.
+> [!NOTE]
+> **Implémentation Livrée (100% CTest & Tests Unitaires Validés) :**
+> - **Extrusion Paramétrique & Serrage d'Angles 8-connectés (*8-Connected Corners Clamping*) :**
+>   - Support d'une profondeur d'extrusion de 1 à 4 px dans `AtlasPacker` et `AtlasPackingDialog`.
+>   - Répétition intelligente des pixels de bordure et des diagonales extérieures (`findNearestOpaque()`) pour éliminer tout pixel noir ou transparent lors de l'échantillonnage bilinéaire ou de mipmapping oblique dans les moteurs de jeux.
+> - **Filtre Despill Perceptuel CIELAB & Suppression de Chroma Spill :**
+>   - Conversion colorimétrique sRGB $\to$ Linear $\to$ CIE XYZ (illuminant D65) $\to$ CIE $L^*a^*b^*$ avec calcul de distance euclidienne $\Delta E_{ab}$.
+>   - Mode **Chroma Spill Suppression** (formule VFX matte despill) : neutralise la réflexion verdâtre/bleutée du fond vert/bleu sans décolorer les teintes du personnage et en préservant strictement le canal alpha.
+> - **Générateur de Normal Maps Tangentes M21 (`NormalGeneratorFilter`) :**
+>   - Dérivation de carte de hauteur et convolution par gradients de Sobel/Scharr 3x3 avec force de relief réglable.
+>   - **Biseautage volumétrique de silhouette alpha (*Pillow 3D Contour*)** : calcule la courbure 3D sur les bords extérieurs du sprite pour conférer du volume aux sprites 2D plats.
+>   - Prévisualisation interactive 2D avec source de lumière ponctuelle orientable (angle et élévation).
+>   - Inversion configurable de l'axe Y (standard OpenGL / Godot vs DirectX / Unreal).
+>   - Destination au choix : carte auxiliaire M21 (`_n`) synchronisée avec l'atlas maître ou remplacement de la planche active.
+> - **Générateur de Cartes d'Émission M21 (`EmissiveGeneratorFilter`) :**
+>   - Deux modes de détection : **Seuil de Luminance** avec atténuation progressive (*Soft Knee*) et **Isolation Chromatique / Clé de Couleur** (pour isoler spécifiquement néons, runes magiques, yeux ou flammes).
+>   - Multiplicateur de boost d'intensité (0.5x à 5.0x) pour shaders bloom URP / Godot WorldEnvironment.
+>   - Fond noir opaque ou transparent selon les besoins de blending du moteur de jeu.
+>   - Destination au choix : carte auxiliaire M21 (`_e`) ou planche active.
+> - **Architecture Undo/Redo & Rollback Non-Destructif :**
+>   - Commande réversible dédiée `SetAuxiliaryMapCommand` garantissant l'annulation/rétablissement instantané des cartes de matériaux M21.
+>   - Sauvegarde et restauration automatique des états auxiliaires dans `FilterDialogBase` en cas d'annulation (*Cancel / Escape*).
+>   - Nouvelle catégorie de menu `2D Lighting & Materials (M21)` dans `FilterMenuBuilder`.
+> - **Qualité & Internationalisation :**
+>   - Suite de tests unitaires `test_filters` enrichie et validée (19/19 tests passés avec succès).
+>   - 100% des chaînes traduites et compilées (`.qm`) sur les 16 langues supportées sans la moindre chaîne inachevée.
 
 ---
 

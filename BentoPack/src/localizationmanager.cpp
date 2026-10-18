@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,18 @@
 #include <QDir>
 #include <QDebug>
 #include "generated/i18n.h"
+
+// Ensure Qt lupdate captures standard QPlatformTheme dialog strings in all translations
+namespace {
+    [[maybe_unused]] const char* dummyQPlatformThemeStrings[] = {
+        QT_TRANSLATE_NOOP("QPlatformTheme", "OK"),
+        QT_TRANSLATE_NOOP("QPlatformTheme", "Cancel"),
+        QT_TRANSLATE_NOOP("QPlatformTheme", "Discard"),
+        QT_TRANSLATE_NOOP("QPlatformTheme", "Save"),
+        QT_TRANSLATE_NOOP("QPlatformTheme", "Apply"),
+    };
+}
+
 
 LocalizationManager& LocalizationManager::instance()
 {

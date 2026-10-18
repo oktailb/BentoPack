@@ -40,7 +40,7 @@ struct BENTOPACK_CORE_EXPORT AtlasPage {
     QSize                           dimensions;
     QList<int>                      frameIndices;       ///< Global frame indices assigned to this page
     QList<QRect>                    frameRects;         ///< 1:1 local rects corresponding to frameIndices
-    QMap<MaterialMapType, QImage>   auxiliaryAtlases;   ///< M21 synchronized normal, emissive, specular textures
+    QMap<MaterialMapType, QImage>   auxiliaryAtlases;   ///< synchronized normal, emissive, specular textures
     float                           efficiency = 0.0f;  ///< Occupancy percentage (0.0% to 100.0%)
 
     bool hasAuxiliaryMap(MaterialMapType type) const {
@@ -91,7 +91,7 @@ public:
      *
      * @param doc The source SpriteDocument containing frames, animations, and optional auxiliary maps.
      * @param options Packing configuration (maxWidth, maxHeight, padding, heuristic, etc.).
-     * @param exportMaterialMaps If true and document has auxiliary maps, generates synchronized M21 maps per page.
+     * @param exportMaterialMaps If true and document has auxiliary maps, generates synchronized maps per page.
      * @param normalMapYFlip Invert green channel for DirectX/Unity/Unreal normal maps.
      * @return MultiPagePackResult with allocated pages and frame mappings.
      */

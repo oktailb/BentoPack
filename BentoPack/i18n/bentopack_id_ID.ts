@@ -305,10 +305,6 @@
         <translation>Bantalan Batas:</translation>
     </message>
     <message>
-        <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
-        <translation>Mengulang piksel batas ke luar (1-2px) untuk mencegah artefak interpolasi bilinear di mesin game</translation>
-    </message>
-    <message>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>Ekstrusi (Anti-Bleeding):</translation>
     </message>
@@ -329,12 +325,12 @@
         <translation>Auto-Aliasing (Gabungkan bingkai identik tanpa merusak animasi)</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
-        <translation>Deduplikasi Cel Modular (M22 - Tautkan cel bersama di seluruh lapisan)</translation>
+        <source>Modular Cel Deduplication (Link shared cels across layers)</source>
+        <translation>Deduplikasi Cel Modular (Tautkan cel bersama di seluruh lapisan)</translation>
     </message>
     <message>
-        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
-        <translation>Pemotongan Patch Delta (M22 - Pangkas delta sub-persegi panjang antar bingkai)</translation>
+        <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
+        <translation>Pemotongan Patch Delta (Pangkas delta sub-persegi panjang antar bingkai)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -383,6 +379,10 @@
     <message>
         <source>Live Packing Metrics</source>
         <translation>Metrik Pengemasan Langsung</translation>
+    </message>
+    <message>
+        <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
+        <translation>Mengulang piksel batas ke luar (1-4px) dengan penjepitan sudut 8 arah untuk mencegah artefak interpolasi bilinear di mesin game</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -789,22 +789,28 @@ Pilih cabang yang ingin dipulihkan:</translation>
         <translation>Mode tindakan:</translation>
     </message>
     <message>
-        <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>Penjepitan Warna Lembut (Disarankan - Mempertahankan tepi halus)</translation>
+        <source>Soft Color Clamping (CIELAB Perceptual)</source>
+        <translation>Penjepitan Warna Lembut (Perseptual CIELAB)</translation>
     </message>
     <message>
-        <source>Strict removal (Alpha = 0)</source>
-        <translation>Penghapusan ketat (Alfa = 0)</translation>
+        <source>Chroma Spill Suppression (Matte Despill)</source>
+        <translation>Peredam Bocoran Kroma (Matte Despill)</translation>
     </message>
     <message>
-        <source>Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</source>
-        <translation>Penjepitan lembut mengganti rona pinggiran dengan warna tetangga bagian dalam.
-Penghapusan ketat menghapus piksel.</translation>
+        <source>Strict Removal (Alpha = 0)</source>
+        <translation>Penghapusan Ketat (Alfa = 0)</translation>
     </message>
     <message>
-        <source>Detection tolerance (0 - 100):</source>
-        <translation>Toleransi deteksi (0 - 100):</translation>
+        <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
+Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
+Strict removal: clears the fringe pixel.</source>
+        <translation>Penjepitan lembut: mengganti batas dengan warna dalam menggunakan CIELAB ΔE.
+Peredam kroma: menetralkan pantulan hijau/biru tanpa menghapus alfa.
+Penghapusan ketat: membersihkan piksel batas.</translation>
+    </message>
+    <message>
+        <source>Detection tolerance (CIELAB ΔE 1 - 100):</source>
+        <translation>Toleransi deteksi (CIELAB ΔE 1 - 100):</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -829,6 +835,136 @@ Penghapusan ketat menghapus piksel.</translation>
     <message>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>Filter: Despill &amp; Pembersihan Tepi</translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorDialog</name>
+    <message>
+        <source>Emissive Map Generator </source>
+        <translation>Pembuat Peta Emisif </translation>
+    </message>
+    <message>
+        <source>Extraction Method:</source>
+        <translation>Metode Ekstraksi:</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold (Highlights &amp; Hotspots)</source>
+        <translation>Ambang Luminansi (Sorotan &amp; Titik Panas)</translation>
+    </message>
+    <message>
+        <source>Color Key / Hue Isolation (Magic &amp; Neon)</source>
+        <translation>Kunci Warna / Isolasi Corak (Sihir &amp; Neon)</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold Parameters</source>
+        <translation>Parameter Ambang Luminansi</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Ambang batas:</translation>
+    </message>
+    <message>
+        <source>Soft Knee Falloff:</source>
+        <translation>Pelemahan Lutut Lembut (Soft Knee):</translation>
+    </message>
+    <message>
+        <source>Selective Color Key Parameters</source>
+        <translation>Parameter Kunci Warna Selektif</translation>
+    </message>
+    <message>
+        <source>Target Glow Color:</source>
+        <translation>Warna Cahaya Target:</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>Pilih...</translation>
+    </message>
+    <message>
+        <source>Hue Tolerance:</source>
+        <translation>Toleransi Corak:</translation>
+    </message>
+    <message>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <source>Intensity &amp; Output Format</source>
+        <translation>Intensitas &amp; Format Output</translation>
+    </message>
+    <message>
+        <source>Emission Boost Multiplier:</source>
+        <translation>Pengganda Peningkatan Emisi:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <source>Opaque black background (unlit = RGB 0,0,0)</source>
+        <translation>Latar belakang hitam pekat (tanpa cahaya = RGB 0,0,0)</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Target</source>
+        <translation>Tujuan &amp; Target</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>Tujuan Output:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Emissive Map _e slave atlas)</source>
+        <translation>Peta Emisif Tambahan (Atlas Slave _e)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>Lembar sprite aktif (Ganti albedo)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>Hanya proses bingkai yang dipilih</translation>
+    </message>
+    <message>
+        <source>Select Target Glow Color</source>
+        <translation>Pilih Warna Cahaya Target</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Emissive Map (_e)</source>
+        <translation>%1 bingkai dibuat ke Peta Emisif (_e)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Emissive Map</source>
+        <translation>Lembar sprite aktif diganti dengan Peta Emisif</translation>
+    </message>
+    <message>
+        <source>Generate Emissive Map </source>
+        <translation>Hasilkan Peta Emisif </translation>
+    </message>
+    <message>
+        <source>Filter: Emissive Map Generator</source>
+        <translation>Filter: Pembuat Peta Emisif</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Emissive (_e))</source>
+        <translation>Lapisan Baru (mis. Emissive (_e))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 bingkai disiapkan untuk Lapisan Baru &apos;Emissive (_e)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>Buat Lapisan Emissive </translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorFilter</name>
+    <message>
+        <source>Emissive Map Generator ...</source>
+        <translation>Pembuat Peta Emisif ...</translation>
+    </message>
+    <message>
+        <source>Extracts emissive maps (_e) for neon, magic runes, fire, and glows using luminance thresholding or selective color key isolation.</source>
+        <translation>Mengekstrak peta emisif (_e) untuk neon, rune sihir, api, dan cahaya menggunakan ambang batas luminansi atau isolasi warna.</translation>
     </message>
 </context>
 <context>
@@ -986,24 +1122,24 @@ Penghapusan ketat menghapus piksel.</translation>
         <translation>Pangkas Batas Transparan</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22)</source>
-        <translation>Deduplikasi Cel Modular (M22)</translation>
+        <source>Modular Cel Deduplication </source>
+        <translation>Deduplikasi Cel Modular </translation>
     </message>
     <message>
         <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
         <translation>Mendeduplikasi cel bersama di seluruh lapisan dan bingkai animasi melalui hashing XXH3 64-bit</translation>
     </message>
     <message>
-        <source>Enable Delta-Patch Slicing (M22)</source>
-        <translation>Aktifkan Pemotongan Patch Delta (M22)</translation>
+        <source>Enable Delta-Patch Slicing </source>
+        <translation>Aktifkan Pemotongan Patch Delta </translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
         <translation>Mengekstrak patch kotak pembatas yang berubah di antara bingkai berurutan saat area delta kecil, mengurangi konsumsi VRAM</translation>
     </message>
     <message>
-        <source>VRAM Texture &amp; GPU Compression (M9)</source>
-        <translation>Tekstur VRAM &amp; Kompresi GPU (M9)</translation>
+        <source>VRAM Texture &amp; GPU Compression </source>
+        <translation>Tekstur VRAM &amp; Kompresi GPU </translation>
     </message>
     <message>
         <source>Texture Format:</source>
@@ -1050,8 +1186,8 @@ Penghapusan ketat menghapus piksel.</translation>
         <translation>Tingkat Zstd (1-22):</translation>
     </message>
     <message>
-        <source>2D Lighting &amp; Multi-Atlas Maps (M21)</source>
-        <translation>Pencahayaan 2D &amp; Peta Multi-Atlas (M21)</translation>
+        <source>2D Lighting &amp; Multi-Atlas Maps </source>
+        <translation>Pencahayaan 2D &amp; Peta Multi-Atlas </translation>
     </message>
     <message>
         <source>Export Synchronized Material Atlases (Normal, Emissive, Specular)</source>
@@ -1389,6 +1525,10 @@ Penghapusan ketat menghapus piksel.</translation>
     <message>
         <source>Geometry &amp; Transform</source>
         <translation>Geometri &amp; Transformasi</translation>
+    </message>
+    <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>Pencahayaan 2D &amp; Material </translation>
     </message>
 </context>
 <context>
@@ -2620,6 +2760,108 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>Edit Piksel...</translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorDialog</name>
+    <message>
+        <source>Normal Map Generator </source>
+        <translation>Pembuat Peta Normal </translation>
+    </message>
+    <message>
+        <source>Surface Height &amp; Bump</source>
+        <translation>Ketinggian Permukaan &amp; Tonjolan</translation>
+    </message>
+    <message>
+        <source>Bump Intensity:</source>
+        <translation>Intensitas Tonjolan:</translation>
+    </message>
+    <message>
+        <source>Alpha Bevel Depth:</source>
+        <translation>Kedalaman Bevel Alfa:</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Invert Y (DirectX / Unreal convention)</source>
+        <translation>Balik Y (Konvensi DirectX / Unreal)</translation>
+    </message>
+    <message>
+        <source>Invert X</source>
+        <translation>Balik X</translation>
+    </message>
+    <message>
+        <source>Target &amp; Destination</source>
+        <translation>Target &amp; Tujuan</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>Tujuan Output:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Normal Map _n slave atlas)</source>
+        <translation>Peta Normal Tambahan (Atlas Slave _n)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>Lembar sprite aktif (Ganti albedo)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>Hanya proses bingkai yang dipilih</translation>
+    </message>
+    <message>
+        <source>Interactive 2D Lighting Preview</source>
+        <translation>Pratinjau Pencahayaan 2D Interaktif</translation>
+    </message>
+    <message>
+        <source>Light Angle:</source>
+        <translation>Sudut Cahaya:</translation>
+    </message>
+    <message>
+        <source>Light Height:</source>
+        <translation>Ketinggian Cahaya:</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Normal Map (_n)</source>
+        <translation>%1 bingkai dibuat ke Peta Normal (_n)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Normal Map</source>
+        <translation>Lembar sprite aktif diganti dengan Peta Normal</translation>
+    </message>
+    <message>
+        <source>Generate Normal Map </source>
+        <translation>Hasilkan Peta Normal </translation>
+    </message>
+    <message>
+        <source>Filter: Normal Map Generator</source>
+        <translation>Filter: Pembuat Peta Normal</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Normal (_n))</source>
+        <translation>Lapisan Baru (mis. Normal (_n))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 bingkai disiapkan untuk Lapisan Baru &apos;Normal (_n)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>Buat Lapisan Normal </translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorFilter</name>
+    <message>
+        <source>Normal Map Generator ...</source>
+        <translation>Pembuat Peta Normal ...</translation>
+    </message>
+    <message>
+        <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
+        <translation>Menghasilkan peta normal ruang tangen (_n) dengan konvolusi ketinggian Sobel, bevel siluet alfa volumetrik, dan pratinjau cahaya 2D interaktif.</translation>
     </message>
 </context>
 <context>
@@ -3920,6 +4162,10 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
         <source>⊡ Fit</source>
         <translation>⊡ Paskan</translation>
     </message>
+    <message>
+        <source>Create %1 Layer </source>
+        <translation>Buat Lapisan %1 </translation>
+    </message>
 </context>
 <context>
     <name>PixelRescaleFilter</name>
@@ -4419,6 +4665,10 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
         <translation>Geometri &amp; Transformasi</translation>
     </message>
     <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>Pencahayaan 2D &amp; Material </translation>
+    </message>
+    <message>
         <source>No Atlas Loaded</source>
         <translation>Tidak Ada Atlas yang Dimuat</translation>
     </message>
@@ -4527,6 +4777,18 @@ Pasang paket:
     <message>
         <source>Project atlas image file not found in session: %1</source>
         <translation>Berkas gambar atlas proyek tidak ditemukan dalam sesi: %1</translation>
+    </message>
+    <message>
+        <source>Set Auxiliary Map</source>
+        <translation>Atur Peta Tambahan</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>Buat Lapisan Normal </translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>Buat Lapisan Emissive </translation>
     </message>
 </context>
 <context>
@@ -5554,16 +5816,16 @@ Delete untuk menghapus</translation>
         <translation>Bantalan (Padding):</translation>
     </message>
     <message>
-        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
-        <translation>Deduplikasi sel modular (M22 - XXH3 64-bit)</translation>
+        <source>Modular cel deduplication (XXH3 64-bit)</source>
+        <translation>Deduplikasi sel modular (XXH3 64-bit)</translation>
     </message>
     <message>
         <source>Deduplicates identical Aseprite cels across multiple layers</source>
         <translation>Hapus duplikasi sel Aseprite identik di beberapa layer</translation>
     </message>
     <message>
-        <source>Delta patch slicing (M22 - VRAM savings)</source>
-        <translation>Pemotongan patch delta (M22 - Penghematan VRAM)</translation>
+        <source>Delta patch slicing (VRAM savings)</source>
+        <translation>Pemotongan patch delta (Penghematan VRAM)</translation>
     </message>
     <message>
         <source>Extracts modified delta patches between consecutive frames</source>

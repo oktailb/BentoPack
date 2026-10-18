@@ -50,7 +50,7 @@ struct BENTOPACK_CORE_EXPORT CelDeduplicationResult {
 };
 
 /**
- * @brief High-performance cel deduplication engine for modular sprite architectures (M22).
+ * @brief High-performance cel deduplication engine for modular sprite architectures .
  *
  * Scans multi-layer frames (Aseprite or project cels), hashes them using XXH3-64,
  * and ensures that repeated or linked cels across animation frames are placed strictly

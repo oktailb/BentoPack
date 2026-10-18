@@ -57,31 +57,92 @@ void AtlasPacker::applyExtrusion(QImage &atlas, const QRect &targetRect, const Q
         atlas.setPixel(ax, ay, px);
     };
 
-    // Top and Bottom rows
+    // Helper to find the nearest non-transparent pixel in sprite from (sx, sy) within 8-connected radius
+    auto findNearestOpaque = [&](int sx, int sy) -> QRgb {
+        if (sx >= 0 && sx < w && sy >= 0 && sy < h) {
+            QRgb p = sprite.pixel(sx, sy);
+            if (qAlpha(p) > 0) return p;
+        }
+        int maxR = std::max(w, h);
+        for (int r = 1; r < maxR; ++r) {
+            for (int dy = -r; dy <= r; ++dy) {
+                for (int dx = -r; dx <= r; ++dx) {
+                    if (std::abs(dx) != r && std::abs(dy) != r) continue;
+                    int nx = sx + dx;
+                    int ny = sy + dy;
+                    if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                        QRgb np = sprite.pixel(nx, ny);
+                        if (qAlpha(np) > 0) {
+                            return np;
+                        }
+                    }
+                }
+            }
+        }
+        return qRgba(0, 0, 0, 0);
+    };
+
+    // Top and Bottom rows with opaque boundary clamping
     for (int x = 0; x < w; ++x) {
         QRgb topPixel = sprite.pixel(x, 0);
+        if (qAlpha(topPixel) == 0) {
+            // Find nearest opaque pixel in this column downward
+            for (int y = 1; y < h; ++y) {
+                if (qAlpha(sprite.pixel(x, y)) > 0) {
+                    topPixel = sprite.pixel(x, y);
+                    break;
+                }
+            }
+        }
         QRgb bottomPixel = sprite.pixel(x, h - 1);
+        if (qAlpha(bottomPixel) == 0) {
+            // Find nearest opaque pixel in this column upward
+            for (int y = h - 2; y >= 0; --y) {
+                if (qAlpha(sprite.pixel(x, y)) > 0) {
+                    bottomPixel = sprite.pixel(x, y);
+                    break;
+                }
+            }
+        }
+
         for (int dy = 1; dy <= extrudeAmount; ++dy) {
             setExtrudePixel(tx + x, ty - dy, topPixel);
             setExtrudePixel(tx + x, ty + h - 1 + dy, bottomPixel);
         }
     }
 
-    // Left and Right columns
+    // Left and Right columns with opaque boundary clamping
     for (int y = 0; y < h; ++y) {
         QRgb leftPixel = sprite.pixel(0, y);
+        if (qAlpha(leftPixel) == 0) {
+            for (int x = 1; x < w; ++x) {
+                if (qAlpha(sprite.pixel(x, y)) > 0) {
+                    leftPixel = sprite.pixel(x, y);
+                    break;
+                }
+            }
+        }
         QRgb rightPixel = sprite.pixel(w - 1, y);
+        if (qAlpha(rightPixel) == 0) {
+            for (int x = w - 2; x >= 0; --x) {
+                if (qAlpha(sprite.pixel(x, y)) > 0) {
+                    rightPixel = sprite.pixel(x, y);
+                    break;
+                }
+            }
+        }
+
         for (int dx = 1; dx <= extrudeAmount; ++dx) {
             setExtrudePixel(tx - dx, ty + y, leftPixel);
             setExtrudePixel(tx + w - 1 + dx, ty + y, rightPixel);
         }
     }
 
-    // 4 Corners
-    QRgb topLeft = sprite.pixel(0, 0);
-    QRgb topRight = sprite.pixel(w - 1, 0);
-    QRgb bottomLeft = sprite.pixel(0, h - 1);
-    QRgb bottomRight = sprite.pixel(w - 1, h - 1);
+    // 4 Corners with 8-connected clamping (Corners Clamping)
+    QRgb topLeft = findNearestOpaque(0, 0);
+    QRgb topRight = findNearestOpaque(w - 1, 0);
+    QRgb bottomLeft = findNearestOpaque(0, h - 1);
+    QRgb bottomRight = findNearestOpaque(w - 1, h - 1);
 
     for (int dx = 1; dx <= extrudeAmount; ++dx) {
         for (int dy = 1; dy <= extrudeAmount; ++dy) {

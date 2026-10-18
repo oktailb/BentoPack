@@ -305,10 +305,6 @@
         <translation>Đệm viền ngoài:</translation>
     </message>
     <message>
-        <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
-        <translation>Lặp lại pixel viền ra ngoài (1-2px) để ngăn ngừa lỗi nứt viền nội suy trong engine</translation>
-    </message>
-    <message>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>Kéo dài viền (Chống loang màu):</translation>
     </message>
@@ -329,12 +325,12 @@
         <translation>Tự động gộp các khung hình giống nhau (không làm hỏng hoạt ảnh)</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
-        <translation>Khử trùng lặp Cel mô-đun (M22 - Liên kết các cel dùng chung giữa các lớp)</translation>
+        <source>Modular Cel Deduplication (Link shared cels across layers)</source>
+        <translation>Khử trùng lặp Cel mô-đun (Liên kết các cel dùng chung giữa các lớp)</translation>
     </message>
     <message>
-        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
-        <translation>Cắt mảnh vá Delta (M22 - Cắt hình chữ nhật con delta giữa các khung hình)</translation>
+        <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
+        <translation>Cắt mảnh vá Delta (Cắt hình chữ nhật con delta giữa các khung hình)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -383,6 +379,10 @@
     <message>
         <source>Live Packing Metrics</source>
         <translation>Số liệu đóng gói trực tiếp</translation>
+    </message>
+    <message>
+        <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
+        <translation>Mở rộng pixel viền ra ngoài (1-4px) với kẹp góc 8 hướng để tránh hiện tượng lem màu nội suy trong engine game</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -789,22 +789,28 @@ Choose which branch to restore:</translation>
         <translation>Thao tác: Action mode:</translation>
     </message>
     <message>
-        <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>Thao tác: Soft Color Clamping (Recommended - Preserves fine edges)</translation>
+        <source>Soft Color Clamping (CIELAB Perceptual)</source>
+        <translation>Kẹp màu mềm (Không gian cảm nhận CIELAB)</translation>
     </message>
     <message>
-        <source>Strict removal (Alpha = 0)</source>
-        <translation>Thao tác: Strict removal (Alpha = 0)</translation>
+        <source>Chroma Spill Suppression (Matte Despill)</source>
+        <translation>Triệt tiêu lem màu (Matte Despill)</translation>
     </message>
     <message>
-        <source>Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</source>
-        <translation>Thao tác: Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</translation>
+        <source>Strict Removal (Alpha = 0)</source>
+        <translation>Xóa triệt để (Alpha = 0)</translation>
     </message>
     <message>
-        <source>Detection tolerance (0 - 100):</source>
-        <translation>Thao tác: Detection tolerance (0 - 100):</translation>
+        <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
+Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
+Strict removal: clears the fringe pixel.</source>
+        <translation>Kẹp mềm: thay thế viền bằng màu bên trong dùng CIELAB ΔE.
+Triệt tiêu lem màu: khử phản xạ xanh lá/dương mà không xóa alpha.
+Xóa triệt để: xóa pixel viền.</translation>
+    </message>
+    <message>
+        <source>Detection tolerance (CIELAB ΔE 1 - 100):</source>
+        <translation>Dung sai phát hiện (CIELAB ΔE 1 - 100):</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -829,6 +835,136 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>Thao tác: Filter: Despill &amp; Edge Cleanup</translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorDialog</name>
+    <message>
+        <source>Emissive Map Generator </source>
+        <translation>Trình tạo bản đồ phát sáng </translation>
+    </message>
+    <message>
+        <source>Extraction Method:</source>
+        <translation>Phương thức trích xuất:</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold (Highlights &amp; Hotspots)</source>
+        <translation>Ngưỡng độ sáng (Vùng sáng &amp; Điểm nóng)</translation>
+    </message>
+    <message>
+        <source>Color Key / Hue Isolation (Magic &amp; Neon)</source>
+        <translation>Khóa màu / Cô lập sắc độ (Phép thuật &amp; Neon)</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold Parameters</source>
+        <translation>Thông số ngưỡng độ sáng</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Ngưỡng:</translation>
+    </message>
+    <message>
+        <source>Soft Knee Falloff:</source>
+        <translation>Chuyển tiếp mềm (Soft Knee):</translation>
+    </message>
+    <message>
+        <source>Selective Color Key Parameters</source>
+        <translation>Thông số khóa màu chọn lọc</translation>
+    </message>
+    <message>
+        <source>Target Glow Color:</source>
+        <translation>Màu phát sáng mục tiêu:</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>Chọn...</translation>
+    </message>
+    <message>
+        <source>Hue Tolerance:</source>
+        <translation>Dung sai sắc độ:</translation>
+    </message>
+    <message>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <source>Intensity &amp; Output Format</source>
+        <translation>Cường độ &amp; Định dạng đầu ra</translation>
+    </message>
+    <message>
+        <source>Emission Boost Multiplier:</source>
+        <translation>Hệ số tăng cường phát sáng:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <source>Opaque black background (unlit = RGB 0,0,0)</source>
+        <translation>Nền đen đục (không phát sáng = RGB 0,0,0)</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Target</source>
+        <translation>Đích đến &amp; Mục tiêu</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>Đích xuất:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Emissive Map _e slave atlas)</source>
+        <translation>Bản đồ phát sáng phụ (Atlas phụ _e)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>Bảng sprite hiện tại (Thay thế albedo)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>Chỉ xử lý các khung hình đã chọn</translation>
+    </message>
+    <message>
+        <source>Select Target Glow Color</source>
+        <translation>Chọn màu phát sáng mục tiêu</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Emissive Map (_e)</source>
+        <translation>Đã tạo %1 khung hình vào Bản đồ phát sáng (_e)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Emissive Map</source>
+        <translation>Bảng sprite hiện tại đã được thay thế bằng Bản đồ phát sáng</translation>
+    </message>
+    <message>
+        <source>Generate Emissive Map </source>
+        <translation>Tạo bản đồ phát sáng </translation>
+    </message>
+    <message>
+        <source>Filter: Emissive Map Generator</source>
+        <translation>Bộ lọc: Trình tạo bản đồ phát sáng</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Emissive (_e))</source>
+        <translation>Lớp mới (ví dụ Emissive (_e))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 khung hình được chuẩn bị cho lớp mới &apos;Emissive (_e)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>Tạo lớp Emissive </translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorFilter</name>
+    <message>
+        <source>Emissive Map Generator ...</source>
+        <translation>Trình tạo bản đồ phát sáng ...</translation>
+    </message>
+    <message>
+        <source>Extracts emissive maps (_e) for neon, magic runes, fire, and glows using luminance thresholding or selective color key isolation.</source>
+        <translation>Trích xuất bản đồ phát sáng (_e) cho neon, cổ ngữ ma thuật, lửa và ánh sáng bằng ngưỡng độ sáng hoặc cô lập màu.</translation>
     </message>
 </context>
 <context>
@@ -986,24 +1122,24 @@ Strict removal clears the pixel.</translation>
         <translation>Thao tác: Trim Transparent Borders</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22)</source>
-        <translation>Khử trùng lặp Cel mô-đun (M22)</translation>
+        <source>Modular Cel Deduplication </source>
+        <translation>Khử trùng lặp Cel mô-đun </translation>
     </message>
     <message>
         <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
         <translation>Khử trùng lặp các cel dùng chung qua các lớp và khung hình hoạt ảnh bằng hàm băm XXH3 64-bit</translation>
     </message>
     <message>
-        <source>Enable Delta-Patch Slicing (M22)</source>
-        <translation>Bật cắt mảnh vá Delta (M22)</translation>
+        <source>Enable Delta-Patch Slicing </source>
+        <translation>Bật cắt mảnh vá Delta </translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
         <translation>Trích xuất các mảnh vá hộp bao thay đổi giữa các khung hình liên tiếp khi diện tích delta nhỏ, giảm tiêu thụ VRAM</translation>
     </message>
     <message>
-        <source>VRAM Texture &amp; GPU Compression (M9)</source>
-        <translation>Thao tác: VRAM Texture &amp; GPU Compression (M9)</translation>
+        <source>VRAM Texture &amp; GPU Compression </source>
+        <translation>Thao tác: VRAM Texture &amp; GPU Compression </translation>
     </message>
     <message>
         <source>Texture Format:</source>
@@ -1050,8 +1186,8 @@ Strict removal clears the pixel.</translation>
         <translation>Thao tác: Zstd Level (1-22):</translation>
     </message>
     <message>
-        <source>2D Lighting &amp; Multi-Atlas Maps (M21)</source>
-        <translation>Chiếu sáng 2D &amp; Bản đồ Multi-Atlas (M21)</translation>
+        <source>2D Lighting &amp; Multi-Atlas Maps </source>
+        <translation>Chiếu sáng 2D &amp; Bản đồ Multi-Atlas </translation>
     </message>
     <message>
         <source>Export Synchronized Material Atlases (Normal, Emissive, Specular)</source>
@@ -1389,6 +1525,10 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Geometry &amp; Transform</source>
         <translation>Hình học &amp; Biến đổi</translation>
+    </message>
+    <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>Ánh sáng 2D &amp; Vật liệu </translation>
     </message>
 </context>
 <context>
@@ -2620,6 +2760,108 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>Chỉnh sửa pixel...</translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorDialog</name>
+    <message>
+        <source>Normal Map Generator </source>
+        <translation>Trình tạo bản đồ pháp tuyến </translation>
+    </message>
+    <message>
+        <source>Surface Height &amp; Bump</source>
+        <translation>Độ cao bề mặt &amp; Độ nổi</translation>
+    </message>
+    <message>
+        <source>Bump Intensity:</source>
+        <translation>Độ nổi khối:</translation>
+    </message>
+    <message>
+        <source>Alpha Bevel Depth:</source>
+        <translation>Độ sâu vát Alpha:</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Invert Y (DirectX / Unreal convention)</source>
+        <translation>Đảo ngược Y (Quy ước DirectX / Unreal)</translation>
+    </message>
+    <message>
+        <source>Invert X</source>
+        <translation>Đảo ngược X</translation>
+    </message>
+    <message>
+        <source>Target &amp; Destination</source>
+        <translation>Mục tiêu &amp; Đích đến</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>Đích xuất:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Normal Map _n slave atlas)</source>
+        <translation>Bản đồ pháp tuyến phụ (Atlas phụ _n)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>Bảng sprite hiện tại (Thay thế albedo)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>Chỉ xử lý các khung hình đã chọn</translation>
+    </message>
+    <message>
+        <source>Interactive 2D Lighting Preview</source>
+        <translation>Xem trước ánh sáng 2D tương tác</translation>
+    </message>
+    <message>
+        <source>Light Angle:</source>
+        <translation>Góc chiếu sáng:</translation>
+    </message>
+    <message>
+        <source>Light Height:</source>
+        <translation>Độ cao nguồn sáng:</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Normal Map (_n)</source>
+        <translation>Đã tạo %1 khung hình vào Bản đồ pháp tuyến (_n)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Normal Map</source>
+        <translation>Bảng sprite hiện tại đã được thay thế bằng Bản đồ pháp tuyến</translation>
+    </message>
+    <message>
+        <source>Generate Normal Map </source>
+        <translation>Tạo bản đồ pháp tuyến </translation>
+    </message>
+    <message>
+        <source>Filter: Normal Map Generator</source>
+        <translation>Bộ lọc: Trình tạo bản đồ pháp tuyến</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Normal (_n))</source>
+        <translation>Lớp mới (ví dụ Normal (_n))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 khung hình được chuẩn bị cho lớp mới &apos;Normal (_n)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>Tạo lớp Normal </translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorFilter</name>
+    <message>
+        <source>Normal Map Generator ...</source>
+        <translation>Trình tạo bản đồ pháp tuyến ...</translation>
+    </message>
+    <message>
+        <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
+        <translation>Tạo bản đồ pháp tuyến không gian tiếp tuyến (_n) với tích chập độ cao Sobel, vát hình khối alpha và xem trước ánh sáng 2D tương tác.</translation>
     </message>
 </context>
 <context>
@@ -3920,6 +4162,10 @@ Would you like to repack the atlas now?</translation>
         <source>⊡ Fit</source>
         <translation>⊡ Vừa khung</translation>
     </message>
+    <message>
+        <source>Create %1 Layer </source>
+        <translation>Tạo lớp %1 </translation>
+    </message>
 </context>
 <context>
     <name>PixelRescaleFilter</name>
@@ -4419,6 +4665,10 @@ Would you like to repack the atlas now?</translation>
         <translation>Hình học &amp; Biến đổi</translation>
     </message>
     <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>Ánh sáng 2D &amp; Vật liệu </translation>
+    </message>
+    <message>
         <source>No Atlas Loaded</source>
         <translation>Thao tác: No Atlas Loaded</translation>
     </message>
@@ -4527,6 +4777,18 @@ Cài đặt gói:
     <message>
         <source>Project atlas image file not found in session: %1</source>
         <translation>Không tìm thấy tệp ảnh atlas trong phiên làm việc: %1</translation>
+    </message>
+    <message>
+        <source>Set Auxiliary Map</source>
+        <translation>Đặt bản đồ phụ</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>Tạo lớp Normal </translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>Tạo lớp Emissive </translation>
     </message>
 </context>
 <context>
@@ -5552,16 +5814,16 @@ Cài đặt gói:
         <translation>Phần đệm (Padding):</translation>
     </message>
     <message>
-        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
-        <translation>Khử trùng lặp cel dạng mô-đun (M22 - XXH3 64-bit)</translation>
+        <source>Modular cel deduplication (XXH3 64-bit)</source>
+        <translation>Khử trùng lặp cel dạng mô-đun (XXH3 64-bit)</translation>
     </message>
     <message>
         <source>Deduplicates identical Aseprite cels across multiple layers</source>
         <translation>Khử trùng lặp các cel Aseprite giống hệt nhau trên nhiều lớp</translation>
     </message>
     <message>
-        <source>Delta patch slicing (M22 - VRAM savings)</source>
-        <translation>Cắt bản vá delta (M22 - Tiết kiệm VRAM)</translation>
+        <source>Delta patch slicing (VRAM savings)</source>
+        <translation>Cắt bản vá delta (Tiết kiệm VRAM)</translation>
     </message>
     <message>
         <source>Extracts modified delta patches between consecutive frames</source>

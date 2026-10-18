@@ -305,10 +305,6 @@
         <translation>테두리 패딩:</translation>
     </message>
     <message>
-        <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
-        <translation>게임 엔진에서 이중선형 보간 아티팩트를 방지하기 위해 테두리 픽셀을 바깥쪽으로(1~2px) 반복합니다</translation>
-    </message>
-    <message>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>돌출 (번짐 방지):</translation>
     </message>
@@ -329,12 +325,12 @@
         <translation>자동 앨리어싱 (애니메이션을 깨지 않고 동일한 프레임 병합)</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
-        <translation>모듈식 셀(Cel) 중복 제거 (M22 - 레이어 간 공유 셀 연결)</translation>
+        <source>Modular Cel Deduplication (Link shared cels across layers)</source>
+        <translation>모듈식 셀(Cel) 중복 제거 (레이어 간 공유 셀 연결)</translation>
     </message>
     <message>
-        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
-        <translation>델타 패치 슬라이싱 (M22 - 애니메이션 프레임 간 서브 사각형 델타 자르기)</translation>
+        <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
+        <translation>델타 패치 슬라이싱 (애니메이션 프레임 간 서브 사각형 델타 자르기)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -383,6 +379,10 @@
     <message>
         <source>Live Packing Metrics</source>
         <translation>실시간 패킹 지표</translation>
+    </message>
+    <message>
+        <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
+        <translation>8연결 코너 클램핑으로 테두리 픽셀을 바깥쪽으로 확장(1-4px)하여 게임 엔진의 바이리니어 블리딩 아티팩트를 방지합니다</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -789,22 +789,28 @@ Choose which branch to restore:</source>
         <translation>작업 모드:</translation>
     </message>
     <message>
-        <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>소프트 컬러 클램핑 (권장 - 미세한 에지 보존)</translation>
+        <source>Soft Color Clamping (CIELAB Perceptual)</source>
+        <translation>부드러운 색상 클램핑 (CIELAB 지각 색상 공간)</translation>
     </message>
     <message>
-        <source>Strict removal (Alpha = 0)</source>
-        <translation>엄격한 제거 (알파 = 0)</translation>
+        <source>Chroma Spill Suppression (Matte Despill)</source>
+        <translation>크로마 스필 억제 (매트 디스필)</translation>
     </message>
     <message>
-        <source>Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</source>
-        <translation>소프트 클램핑은 프린지 색조를 인접한 내부 색상으로 바꿉니다.
-엄격한 제거는 픽셀을 완전히 지웁니다.</translation>
+        <source>Strict Removal (Alpha = 0)</source>
+        <translation>완전 제거 (알파 = 0)</translation>
     </message>
     <message>
-        <source>Detection tolerance (0 - 100):</source>
-        <translation>감지 허용 오차 (0 - 100):</translation>
+        <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
+Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
+Strict removal: clears the fringe pixel.</source>
+        <translation>소프트 클램핑: CIELAB ΔE를 사용하여 경계 색상을 내부 색상으로 교체합니다.
+크로마 스필: 알파를 유지하면서 녹색/청색 반사광을 중화합니다.
+엄격한 제거: 경계 픽셀을 완전히 삭제합니다.</translation>
+    </message>
+    <message>
+        <source>Detection tolerance (CIELAB ΔE 1 - 100):</source>
+        <translation>감지 허용오차 (CIELAB ΔE 1 - 100):</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -829,6 +835,136 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>필터: 디스필 및 에지 정리</translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorDialog</name>
+    <message>
+        <source>Emissive Map Generator </source>
+        <translation>발광 맵 생성기 </translation>
+    </message>
+    <message>
+        <source>Extraction Method:</source>
+        <translation>추출 방식:</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold (Highlights &amp; Hotspots)</source>
+        <translation>휘도 임계값 (하이라이트 및 핫스팟)</translation>
+    </message>
+    <message>
+        <source>Color Key / Hue Isolation (Magic &amp; Neon)</source>
+        <translation>컬러 키 / 색조 분리 (매직 및 네온)</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold Parameters</source>
+        <translation>휘도 임계값 파라미터</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>임계값:</translation>
+    </message>
+    <message>
+        <source>Soft Knee Falloff:</source>
+        <translation>소프트 니 감쇠:</translation>
+    </message>
+    <message>
+        <source>Selective Color Key Parameters</source>
+        <translation>선택적 컬러 키 파라미터</translation>
+    </message>
+    <message>
+        <source>Target Glow Color:</source>
+        <translation>대상 발광 색상:</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>선택...</translation>
+    </message>
+    <message>
+        <source>Hue Tolerance:</source>
+        <translation>색조 허용오차:</translation>
+    </message>
+    <message>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <source>Intensity &amp; Output Format</source>
+        <translation>강도 및 출력 형식</translation>
+    </message>
+    <message>
+        <source>Emission Boost Multiplier:</source>
+        <translation>발광 부스트 배율:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <source>Opaque black background (unlit = RGB 0,0,0)</source>
+        <translation>불투명 검은색 배경 (비발광 = RGB 0,0,0)</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Target</source>
+        <translation>대상 및 대상</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>출력 대상:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Emissive Map _e slave atlas)</source>
+        <translation>보조 발광 맵 _e 슬레이브 아틀라스)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>활성 시트 (알베도 교체)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>선택한 프레임만 처리</translation>
+    </message>
+    <message>
+        <source>Select Target Glow Color</source>
+        <translation>대상 발광 색상 선택</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Emissive Map (_e)</source>
+        <translation>발광 맵(_e)에 %1개 프레임 생성됨</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Emissive Map</source>
+        <translation>활성 스프라이트 시트가 발광 맵으로 교체되었습니다</translation>
+    </message>
+    <message>
+        <source>Generate Emissive Map </source>
+        <translation>발광 맵 생성 </translation>
+    </message>
+    <message>
+        <source>Filter: Emissive Map Generator</source>
+        <translation>필터: 발광 맵 생성기</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Emissive (_e))</source>
+        <translation>새 레이어 (예: Emissive (_e))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>새 레이어 &apos;Emissive (_e)&apos;을(를) 위해 %1개 프레임 준비됨</translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>발광 레이어 생성 </translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorFilter</name>
+    <message>
+        <source>Emissive Map Generator ...</source>
+        <translation>발광 맵 생성기 ...</translation>
+    </message>
+    <message>
+        <source>Extracts emissive maps (_e) for neon, magic runes, fire, and glows using luminance thresholding or selective color key isolation.</source>
+        <translation>휘도 임계값 또는 선택적 컬러 키 분리를 사용하여 네온, 마법 룬, 화염 및 광택용 발광 맵(_e)을 추출합니다.</translation>
     </message>
 </context>
 <context>
@@ -986,24 +1122,24 @@ Strict removal clears the pixel.</source>
         <translation>투명 테두리 자르기</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22)</source>
-        <translation>모듈식 셀(Cel) 중복 제거 (M22)</translation>
+        <source>Modular Cel Deduplication </source>
+        <translation>모듈식 셀(Cel) 중복 제거 </translation>
     </message>
     <message>
         <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
         <translation>64비트 XXH3 해싱을 통해 애니메이션 레이어와 프레임 전반에서 공유 셀 중복 제거</translation>
     </message>
     <message>
-        <source>Enable Delta-Patch Slicing (M22)</source>
-        <translation>델타 패치 슬라이싱 활성화 (M22)</translation>
+        <source>Enable Delta-Patch Slicing </source>
+        <translation>델타 패치 슬라이싱 활성화 </translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
         <translation>델타 영역이 작을 때 연속 애니메이션 프레임 간의 더티 바운딩 박스 패치를 추출하여 VRAM 텍스처 소비 절감</translation>
     </message>
     <message>
-        <source>VRAM Texture &amp; GPU Compression (M9)</source>
-        <translation>VRAM 텍스처 및 GPU 압축 (M9)</translation>
+        <source>VRAM Texture &amp; GPU Compression </source>
+        <translation>VRAM 텍스처 및 GPU 압축 </translation>
     </message>
     <message>
         <source>Texture Format:</source>
@@ -1050,8 +1186,8 @@ Strict removal clears the pixel.</source>
         <translation>Zstd 레벨 (1-22):</translation>
     </message>
     <message>
-        <source>2D Lighting &amp; Multi-Atlas Maps (M21)</source>
-        <translation>2D 조명 및 멀티 아틀라스 맵 (M21)</translation>
+        <source>2D Lighting &amp; Multi-Atlas Maps </source>
+        <translation>2D 조명 및 멀티 아틀라스 맵 </translation>
     </message>
     <message>
         <source>Export Synchronized Material Atlases (Normal, Emissive, Specular)</source>
@@ -1389,6 +1525,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Geometry &amp; Transform</source>
         <translation>기하학 및 변형</translation>
+    </message>
+    <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>2D 라이팅 및 머티리얼 </translation>
     </message>
 </context>
 <context>
@@ -2620,6 +2760,108 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>픽셀 편집...</translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorDialog</name>
+    <message>
+        <source>Normal Map Generator </source>
+        <translation>노멀 맵 생성기 </translation>
+    </message>
+    <message>
+        <source>Surface Height &amp; Bump</source>
+        <translation>표면 높이 및 범프</translation>
+    </message>
+    <message>
+        <source>Bump Intensity:</source>
+        <translation>범프 강도:</translation>
+    </message>
+    <message>
+        <source>Alpha Bevel Depth:</source>
+        <translation>알파 베벨 깊이:</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Invert Y (DirectX / Unreal convention)</source>
+        <translation>Y 반전 (DirectX / Unreal 규약)</translation>
+    </message>
+    <message>
+        <source>Invert X</source>
+        <translation>X 반전</translation>
+    </message>
+    <message>
+        <source>Target &amp; Destination</source>
+        <translation>대상 및 출력</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>출력 대상:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Normal Map _n slave atlas)</source>
+        <translation>보조 노멀 맵 _n 슬레이브 아틀라스)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>활성 시트 (알베도 교체)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>선택한 프레임만 처리</translation>
+    </message>
+    <message>
+        <source>Interactive 2D Lighting Preview</source>
+        <translation>대화형 2D 조명 미리보기</translation>
+    </message>
+    <message>
+        <source>Light Angle:</source>
+        <translation>조명 각도:</translation>
+    </message>
+    <message>
+        <source>Light Height:</source>
+        <translation>조명 높이:</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Normal Map (_n)</source>
+        <translation>노멀 맵(_n)에 %1개 프레임 생성됨</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Normal Map</source>
+        <translation>활성 스프라이트 시트가 노멀 맵으로 교체되었습니다</translation>
+    </message>
+    <message>
+        <source>Generate Normal Map </source>
+        <translation>노멀 맵 생성 </translation>
+    </message>
+    <message>
+        <source>Filter: Normal Map Generator</source>
+        <translation>필터: 노멀 맵 생성기</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Normal (_n))</source>
+        <translation>새 레이어 (예: Normal (_n))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>새 레이어 &apos;Normal (_n)&apos;을(를) 위해 %1개 프레임 준비됨</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>노멀 레이어 생성 </translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorFilter</name>
+    <message>
+        <source>Normal Map Generator ...</source>
+        <translation>노멀 맵 생성기 ...</translation>
+    </message>
+    <message>
+        <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
+        <translation>Sobel 높이 컨볼루션, 입체적 알파 실루엣 베벨 및 대화형 2D 조명 미리보기를 지원하는 탄젠트 공간 노멀 맵(_n)을 생성합니다.</translation>
     </message>
 </context>
 <context>
@@ -3920,6 +4162,10 @@ Would you like to repack the atlas now?</source>
         <source>⊡ Fit</source>
         <translation>⊡ 맞춤</translation>
     </message>
+    <message>
+        <source>Create %1 Layer </source>
+        <translation>%1 레이어 생성 </translation>
+    </message>
 </context>
 <context>
     <name>PixelRescaleFilter</name>
@@ -4419,6 +4665,10 @@ Would you like to repack the atlas now?</source>
         <translation>기하학 및 변형</translation>
     </message>
     <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>2D 라이팅 및 머티리얼 </translation>
+    </message>
+    <message>
         <source>No Atlas Loaded</source>
         <translation>로드된 아틀라스 없음</translation>
     </message>
@@ -4527,6 +4777,18 @@ Install package:
     <message>
         <source>Project atlas image file not found in session: %1</source>
         <translation>세션에서 프로젝트 아틀라스 이미지 파일을 찾을 수 없습니다: %1</translation>
+    </message>
+    <message>
+        <source>Set Auxiliary Map</source>
+        <translation>보조 맵 설정</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>노멀 레이어 생성 </translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>발광 레이어 생성 </translation>
     </message>
 </context>
 <context>
@@ -5553,16 +5815,16 @@ Install package:
         <translation>패딩:</translation>
     </message>
     <message>
-        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
-        <translation>모듈형 셀 중복 제거 (M22 - XXH3 64비트)</translation>
+        <source>Modular cel deduplication (XXH3 64-bit)</source>
+        <translation>모듈형 셀 중복 제거 (XXH3 64비트)</translation>
     </message>
     <message>
         <source>Deduplicates identical Aseprite cels across multiple layers</source>
         <translation>여러 레이어에서 동일한 Aseprite 셀 중복 제거</translation>
     </message>
     <message>
-        <source>Delta patch slicing (M22 - VRAM savings)</source>
-        <translation>델타 패치 슬라이싱 (M22 - VRAM 절약)</translation>
+        <source>Delta patch slicing (VRAM savings)</source>
+        <translation>델타 패치 슬라이싱 (VRAM 절약)</translation>
     </message>
     <message>
         <source>Extracts modified delta patches between consecutive frames</source>

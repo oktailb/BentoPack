@@ -50,6 +50,11 @@ FilterDialogBase::FilterDialogBase(SpriteDocument *doc, QUndoStack *undoStack, Q
             }
         }
         m_initialSkinProfiles = m_document->skinProfiles();
+        for (auto type : { MaterialMapType::Normal, MaterialMapType::Emissive, MaterialMapType::Specular }) {
+            if (m_document->hasAuxiliaryMap(type)) {
+                m_initialAuxiliaryFrames[type] = m_document->auxiliaryFrames(type);
+            }
+        }
     }
 
     setupBaseUI();
@@ -226,6 +231,13 @@ void FilterDialogBase::restoreInitialState()
         m_document->setSkinProfiles(m_initialSkinProfiles);
     }
     m_document->setAnimations(m_initialAnimations);
+    for (auto type : { MaterialMapType::Normal, MaterialMapType::Emissive, MaterialMapType::Specular }) {
+        if (m_initialAuxiliaryFrames.contains(type)) {
+            m_document->setAuxiliaryFrames(type, m_initialAuxiliaryFrames.value(type));
+        } else if (m_document->hasAuxiliaryMap(type)) {
+            m_document->setAuxiliaryFrames(type, {});
+        }
+    }
     m_previewApplied = false;
 
     if (m_statusBadge) {
@@ -251,12 +263,10 @@ void FilterDialogBase::accept()
     }
 
     if (m_document) {
-        QUndoCommand *cmd = createUndoCommand();
-        if (cmd) {
-            if (m_undoStack) {
+        if (m_undoStack) {
+            QUndoCommand *cmd = createUndoCommand();
+            if (cmd) {
                 m_undoStack->push(cmd);
-            } else {
-                delete cmd;
             }
         }
 

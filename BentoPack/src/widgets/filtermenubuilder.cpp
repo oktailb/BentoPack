@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +50,8 @@ void FilterMenuBuilder::populateMenu(QMenu *menu,
             catDisplay = QObject::tr("Effects & Outlines");
         else if (cat == QLatin1String("Geometry") || cat == QLatin1String("Geometry & Transform"))
             catDisplay = QObject::tr("Geometry & Transform");
+        else if (cat == QLatin1String("2D Lighting & Materials ") || cat == QLatin1String("Lighting & Materials"))
+            catDisplay = QObject::tr("2D Lighting & Materials ");
 
         menu->addSection(catDisplay);
 

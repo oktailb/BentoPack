@@ -305,10 +305,6 @@
         <translation>外枠パディング：</translation>
     </message>
     <message>
-        <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
-        <translation>ゲームエンジンでのバイリニア補間アーティファクトを防ぐため、境界ピクセルを外側に複製 (1-2px) します</translation>
-    </message>
-    <message>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>押し出し (ブリード防止)：</translation>
     </message>
@@ -329,12 +325,12 @@
         <translation>オートエイリアシング (アニメーションを壊さずに同一フレームを統合)</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
-        <translation>モジュラーセル重複排除 (M22 - レイヤー間で共有セルをリンク)</translation>
+        <source>Modular Cel Deduplication (Link shared cels across layers)</source>
+        <translation>モジュラーセル重複排除 (レイヤー間で共有セルをリンク)</translation>
     </message>
     <message>
-        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
-        <translation>デルタパッチスライス (M22 - アニメーションフレーム間の差分矩形をトリミング)</translation>
+        <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
+        <translation>デルタパッチスライス (アニメーションフレーム間の差分矩形をトリミング)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -383,6 +379,10 @@
     <message>
         <source>Live Packing Metrics</source>
         <translation>リアルタイムパッキング指標</translation>
+    </message>
+    <message>
+        <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
+        <translation>8近傍コーナー補正で境界ピクセルを外側に拡張 (1〜4px) し、ゲームエンジンでのバイリニア滲みアーティファクトを防止します</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -789,22 +789,28 @@ Choose which branch to restore:</source>
         <translation>処理モード：</translation>
     </message>
     <message>
-        <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>ソフトカラークランプ（推奨 - 輪郭を保持）</translation>
+        <source>Soft Color Clamping (CIELAB Perceptual)</source>
+        <translation>ソフトカラークランプ (CIELAB 知覚色空間)</translation>
     </message>
     <message>
-        <source>Strict removal (Alpha = 0)</source>
-        <translation>厳密な削除（アルファ = 0）</translation>
+        <source>Chroma Spill Suppression (Matte Despill)</source>
+        <translation>クロマスピル抑制 (マットデスピル)</translation>
     </message>
     <message>
-        <source>Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</source>
-        <translation>ソフトクランプはフリンジ色を隣接する内部色で置換します。
-厳密な削除はピクセルを透明化します。</translation>
+        <source>Strict Removal (Alpha = 0)</source>
+        <translation>完全除去 (アルファ = 0)</translation>
     </message>
     <message>
-        <source>Detection tolerance (0 - 100):</source>
-        <translation>検出許容値 (0 - 100)：</translation>
+        <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
+Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
+Strict removal: clears the fringe pixel.</source>
+        <translation>ソフトクランプ: CIELAB ΔE を用いてフリンジを内側の色に置換。
+クロマスピル: アルファを維持しながら緑/青の環境反射光を中和。
+完全除去: フリンジピクセルのアルファを0にして消去。</translation>
+    </message>
+    <message>
+        <source>Detection tolerance (CIELAB ΔE 1 - 100):</source>
+        <translation>検出許容値 (CIELAB ΔE 1 - 100):</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -829,6 +835,136 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>フィルター：エッジクリーンアップ・アンチハロー</translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorDialog</name>
+    <message>
+        <source>Emissive Map Generator </source>
+        <translation>発光マップジェネレーター </translation>
+    </message>
+    <message>
+        <source>Extraction Method:</source>
+        <translation>抽出方式:</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold (Highlights &amp; Hotspots)</source>
+        <translation>輝度しきい値 (ハイライト &amp; ホットスポット)</translation>
+    </message>
+    <message>
+        <source>Color Key / Hue Isolation (Magic &amp; Neon)</source>
+        <translation>カラーキー / 色相分離 (魔法 &amp; ネオン)</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold Parameters</source>
+        <translation>輝度しきい値パラメータ</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>しきい値:</translation>
+    </message>
+    <message>
+        <source>Soft Knee Falloff:</source>
+        <translation>ソフトニー減衰 (Soft Knee):</translation>
+    </message>
+    <message>
+        <source>Selective Color Key Parameters</source>
+        <translation>選択的カラーキーパラメータ</translation>
+    </message>
+    <message>
+        <source>Target Glow Color:</source>
+        <translation>対象の発光色:</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>選択...</translation>
+    </message>
+    <message>
+        <source>Hue Tolerance:</source>
+        <translation>色相許容値:</translation>
+    </message>
+    <message>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <source>Intensity &amp; Output Format</source>
+        <translation>強度 &amp; 出力形式</translation>
+    </message>
+    <message>
+        <source>Emission Boost Multiplier:</source>
+        <translation>発光ブースト倍率:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <source>Opaque black background (unlit = RGB 0,0,0)</source>
+        <translation>不透明ブラック背景 (非発光 = RGB 0,0,0)</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Target</source>
+        <translation>出力先 &amp; 対象</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>出力先:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Emissive Map _e slave atlas)</source>
+        <translation>補助発光マップ _e スレーブアトラス)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>アクティブシート (アルベド置換)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>選択したフレームのみ処理</translation>
+    </message>
+    <message>
+        <source>Select Target Glow Color</source>
+        <translation>対象の発光カラーを選択</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Emissive Map (_e)</source>
+        <translation>%1 フレームを 発光マップ (_e) に生成しました</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Emissive Map</source>
+        <translation>アクティブなスプライトシートを発光マップに置換しました</translation>
+    </message>
+    <message>
+        <source>Generate Emissive Map </source>
+        <translation>発光マップの生成 </translation>
+    </message>
+    <message>
+        <source>Filter: Emissive Map Generator</source>
+        <translation>フィルター: 発光マップジェネレーター</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Emissive (_e))</source>
+        <translation>新規 レイヤー (例: Emissive (_e))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>新規 レイヤー &apos;Emissive (_e)&apos; 用に %1 フレームを準備しました</translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>放射レイヤーを作成 </translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorFilter</name>
+    <message>
+        <source>Emissive Map Generator ...</source>
+        <translation>発光マップジェネレーター ...</translation>
+    </message>
+    <message>
+        <source>Extracts emissive maps (_e) for neon, magic runes, fire, and glows using luminance thresholding or selective color key isolation.</source>
+        <translation>輝度しきい値処理または選択的カラーキー分離を用いて、ネオン、魔法ルーン、炎、グロー用の発光マップ (_e) を抽出します。</translation>
     </message>
 </context>
 <context>
@@ -986,24 +1122,24 @@ Strict removal clears the pixel.</source>
         <translation>透明な境界線をトリミング</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22)</source>
-        <translation>モジュラーセル重複排除 (M22)</translation>
+        <source>Modular Cel Deduplication </source>
+        <translation>モジュラーセル重複排除 </translation>
     </message>
     <message>
         <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
         <translation>64ビットXXH3ハッシュによりアニメーションレイヤーとフレーム間で共有セルを重複排除</translation>
     </message>
     <message>
-        <source>Enable Delta-Patch Slicing (M22)</source>
-        <translation>デルタパッチスライスを有効化 (M22)</translation>
+        <source>Enable Delta-Patch Slicing </source>
+        <translation>デルタパッチスライスを有効化 </translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
         <translation>差分領域が小さい場合に連続するアニメーションフレーム間のダーティ境界パッチを抽出し、VRAM消費を削減</translation>
     </message>
     <message>
-        <source>VRAM Texture &amp; GPU Compression (M9)</source>
-        <translation>VRAM テクスチャと GPU 圧縮 (M9)</translation>
+        <source>VRAM Texture &amp; GPU Compression </source>
+        <translation>VRAM テクスチャと GPU 圧縮 </translation>
     </message>
     <message>
         <source>Texture Format:</source>
@@ -1050,8 +1186,8 @@ Strict removal clears the pixel.</source>
         <translation>Zstd レベル (1-22):</translation>
     </message>
     <message>
-        <source>2D Lighting &amp; Multi-Atlas Maps (M21)</source>
-        <translation>2Dライティング＆マルチアトラスマップ (M21)</translation>
+        <source>2D Lighting &amp; Multi-Atlas Maps </source>
+        <translation>2Dライティング＆マルチアトラスマップ </translation>
     </message>
     <message>
         <source>Export Synchronized Material Atlases (Normal, Emissive, Specular)</source>
@@ -1389,6 +1525,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Geometry &amp; Transform</source>
         <translation>ジオメトリと変形</translation>
+    </message>
+    <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>2D ライティング &amp; マテリアル </translation>
     </message>
 </context>
 <context>
@@ -2620,6 +2760,108 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>ピクセルを編集...</translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorDialog</name>
+    <message>
+        <source>Normal Map Generator </source>
+        <translation>法線マップジェネレーター </translation>
+    </message>
+    <message>
+        <source>Surface Height &amp; Bump</source>
+        <translation>表面の高さ &amp; バンプ</translation>
+    </message>
+    <message>
+        <source>Bump Intensity:</source>
+        <translation>バンプ強度:</translation>
+    </message>
+    <message>
+        <source>Alpha Bevel Depth:</source>
+        <translation>アルファベベル深度:</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Invert Y (DirectX / Unreal convention)</source>
+        <translation>Y 反転 (DirectX / Unreal 規則)</translation>
+    </message>
+    <message>
+        <source>Invert X</source>
+        <translation>X 反転</translation>
+    </message>
+    <message>
+        <source>Target &amp; Destination</source>
+        <translation>対象 &amp; 出力先</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>出力先:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Normal Map _n slave atlas)</source>
+        <translation>補助法線マップ _n スレーブアトラス)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>アクティブシート (アルベド置換)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>選択したフレームのみ処理</translation>
+    </message>
+    <message>
+        <source>Interactive 2D Lighting Preview</source>
+        <translation>対話型 2D ライティングプレビュー</translation>
+    </message>
+    <message>
+        <source>Light Angle:</source>
+        <translation>ライト角度:</translation>
+    </message>
+    <message>
+        <source>Light Height:</source>
+        <translation>ライト仰角:</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Normal Map (_n)</source>
+        <translation>%1 フレームを 法線マップ (_n) に生成しました</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Normal Map</source>
+        <translation>アクティブなスプライトシートを法線マップに置換しました</translation>
+    </message>
+    <message>
+        <source>Generate Normal Map </source>
+        <translation>法線マップの生成 </translation>
+    </message>
+    <message>
+        <source>Filter: Normal Map Generator</source>
+        <translation>フィルター: 法線マップジェネレーター</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Normal (_n))</source>
+        <translation>新規 レイヤー (例: Normal (_n))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>新規 レイヤー &apos;Normal (_n)&apos; 用に %1 フレームを準備しました</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>法線レイヤーを作成 </translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorFilter</name>
+    <message>
+        <source>Normal Map Generator ...</source>
+        <translation>法線マップジェネレーター ...</translation>
+    </message>
+    <message>
+        <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
+        <translation>Sobel 高さ畳み込み、立体アルファシルエットベベル、対話型 2D ライトプレビューを備えた接線空間法線マップ (_n) を生成します。</translation>
     </message>
 </context>
 <context>
@@ -3920,6 +4162,10 @@ Would you like to repack the atlas now?</source>
         <source>⊡ Fit</source>
         <translation>⊡ 全体表示</translation>
     </message>
+    <message>
+        <source>Create %1 Layer </source>
+        <translation>%1 レイヤーを作成 </translation>
+    </message>
 </context>
 <context>
     <name>PixelRescaleFilter</name>
@@ -4419,6 +4665,10 @@ Would you like to repack the atlas now?</source>
         <translation>ジオメトリと変形</translation>
     </message>
     <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>2D ライティング &amp; マテリアル </translation>
+    </message>
+    <message>
         <source>No Atlas Loaded</source>
         <translation>アトラスが読み込まれていません</translation>
     </message>
@@ -4527,6 +4777,18 @@ Install package:
     <message>
         <source>Project atlas image file not found in session: %1</source>
         <translation>セッション内にプロジェクトアトラス画像ファイルが見つかりません: %1</translation>
+    </message>
+    <message>
+        <source>Set Auxiliary Map</source>
+        <translation>補助マップを設定</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>法線レイヤーを作成 </translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>放射レイヤーを作成 </translation>
     </message>
 </context>
 <context>
@@ -5553,16 +5815,16 @@ Install package:
         <translation>パディング:</translation>
     </message>
     <message>
-        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
-        <translation>モジュラーセル重複排除 (M22 - XXH3 64ビット)</translation>
+        <source>Modular cel deduplication (XXH3 64-bit)</source>
+        <translation>モジュラーセル重複排除 (XXH3 64ビット)</translation>
     </message>
     <message>
         <source>Deduplicates identical Aseprite cels across multiple layers</source>
         <translation>複数レイヤー間で同一のAsepriteセルを重複排除</translation>
     </message>
     <message>
-        <source>Delta patch slicing (M22 - VRAM savings)</source>
-        <translation>デルタパッチスライス (M22 - VRAM節約)</translation>
+        <source>Delta patch slicing (VRAM savings)</source>
+        <translation>デルタパッチスライス (VRAM節約)</translation>
     </message>
     <message>
         <source>Extracts modified delta patches between consecutive frames</source>

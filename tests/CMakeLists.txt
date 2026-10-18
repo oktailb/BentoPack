@@ -22,6 +22,8 @@ set(ALL_FILTER_PLUGINS
     filter_atlaspacking
     filter_tightpolygonpacking
     filter_spritedetection
+    filter_normalgenerator
+    filter_emissivegenerator
 )
 
 set(PLUGIN_INCLUDES
@@ -43,6 +45,8 @@ set(PLUGIN_INCLUDES
     ${CMAKE_SOURCE_DIR}/plugins/filters/atlaspacking
     ${CMAKE_SOURCE_DIR}/plugins/filters/tightpolygonpacking
     ${CMAKE_SOURCE_DIR}/plugins/filters/spritedetection
+    ${CMAKE_SOURCE_DIR}/plugins/filters/normalgenerator
+    ${CMAKE_SOURCE_DIR}/plugins/filters/emissivegenerator
 )
 
 # 1. test_extractors
@@ -162,7 +166,7 @@ if (MINGW)
 endif()
 add_test(NAME test_pixel_editor COMMAND test_pixel_editor)
 
-# 8. test_vram_compression (M9)
+# 8. test_vram_compression 
 add_executable(test_vram_compression test_vram_compression.cpp)
 target_include_directories(test_vram_compression PRIVATE ${PLUGIN_INCLUDES})
 target_compile_definitions(test_vram_compression PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
@@ -215,7 +219,7 @@ if (MINGW)
 endif()
 add_test(NAME test_multipage_packer COMMAND test_multipage_packer)
 
-# 13. test_vram_dedup (M22)
+# 13. test_vram_dedup 
 add_executable(test_vram_dedup test_vram_dedup.cpp)
 target_include_directories(test_vram_dedup PRIVATE ${PLUGIN_INCLUDES})
 target_compile_definitions(test_vram_dedup PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")

@@ -299,7 +299,7 @@ ExportOptions ExportDialog::exportOptions() const
     opts.vramOptions.zstdSupercompression = ui->chkZstd->isChecked();
     opts.vramOptions.zstdLevel = ui->spinZstdLevel->value();
 
-    // 2D Lighting / Material maps (M21)
+    // 2D Lighting / Material maps 
     opts.exportMaterialMaps = ui->chkExportMaterialMaps->isChecked();
     opts.normalMapYFlip = ui->chkNormalMapYFlip->isChecked();
 

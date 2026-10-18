@@ -103,6 +103,8 @@ public:
     QPushButton* repackButton() const { return m_btnRepackAtlas; }
     QPushButton* applyButton() const { return m_applyBtn; }
     QPolygonF sessionModifiedPolygon(int frameIndex) const;
+    QList<QPointF> sessionModifiedVertices(int frameIndex) const;
+    QList<int> sessionModifiedTriangles(int frameIndex) const;
     QMap<int, QImage> sessionModifiedFrames() const { return m_sessionModifiedFrames; }
     QMap<int, QPolygonF> sessionModifiedPolygons() const { return m_sessionModifiedPolygons; }
     QMap<int, QList<QPointF>> sessionModifiedVertices() const { return m_sessionModifiedVertices; }

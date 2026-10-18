@@ -66,4 +66,52 @@ private:
     QMap<QString, SkinProfile>      m_skinProfilesBackup;
 };
 
+/**
+ * @brief Reversible command to set or replace an auxiliary material map (Normal, Emissive, Specular).
+ */
+class BENTOPACK_CORE_EXPORT SetAuxiliaryMapCommand : public QUndoCommand
+{
+public:
+    SetAuxiliaryMapCommand(SpriteDocument *doc,
+                           MaterialMapType mapType,
+                           const QList<QImage> &newFrames,
+                           const QString &commandName = QString(),
+                           QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument*             m_doc;
+    MaterialMapType             m_mapType;
+    QList<QImage>               m_oldFrames;
+    QList<QImage>               m_newFrames;
+    bool                        m_hadOldFrames = false;
+};
+
+/**
+ * @brief Reversible command to add or update a dedicated material map layer (Normal, Emissive) with full cel and auxiliary frame synchronization.
+ */
+class BENTOPACK_CORE_EXPORT AddMaterialLayerCommand : public QUndoCommand
+{
+public:
+    AddMaterialLayerCommand(SpriteDocument *doc,
+                            MaterialMapType mapType,
+                            const QList<QImage> &materialFrames,
+                            const QString &commandName = QString(),
+                            QUndoCommand *parent = nullptr);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    SpriteDocument*                 m_doc;
+    MaterialMapType                 m_mapType;
+    QList<QImage>                   m_materialFrames;
+    QList<SpriteLayer>              m_oldLayers;
+    QMap<int, QList<SpriteCel>>     m_oldCels;
+    QList<QImage>                   m_oldAuxFrames;
+    bool                            m_hadOldAux = false;
+};
+
 #endif // FILTERCOMMANDS_H

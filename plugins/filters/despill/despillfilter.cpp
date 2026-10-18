@@ -45,7 +45,12 @@ QImage DespillFilter::applyImage(const QImage &image, const QVariantMap &params)
 {
     QRgb fringeColor = params.value(QStringLiteral("fringeColor"), 0).toUInt();
     int tolerance = params.value(QStringLiteral("tolerance"), 20).toInt();
-    QString modeStr = params.value(QStringLiteral("mode"), QStringLiteral("clamp")).toString();
-    DespillFilterDialog::DespillMode mode = (modeStr == QStringLiteral("strict")) ? DespillFilterDialog::StrictAlpha : DespillFilterDialog::ColorClamping;
+    QString modeStr = params.value(QStringLiteral("mode"), QStringLiteral("clamp")).toString().toLower();
+    DespillFilterDialog::DespillMode mode = DespillFilterDialog::ColorClamping;
+    if (modeStr == QStringLiteral("strict")) {
+        mode = DespillFilterDialog::StrictAlpha;
+    } else if (modeStr == QStringLiteral("chromaspill") || modeStr == QStringLiteral("spill")) {
+        mode = DespillFilterDialog::ChromaSpill;
+    }
     return DespillFilterDialog::applyDespill(image, fringeColor, tolerance, mode);
 }

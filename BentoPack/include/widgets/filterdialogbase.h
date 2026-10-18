@@ -65,6 +65,14 @@ public:
     void setAutoDetectBoxesEnabled(bool enabled);
     void setStatusText(const QString &text);
 
+    // Material Map & Layer Generation Extensions
+    virtual bool isMaterialLayerGenerator() const { return false; }
+    virtual MaterialMapType materialMapType() const { return MaterialMapType::Normal; }
+    virtual QString materialLayerName() const { return QString(); }
+    virtual bool createsNewMaterialLayer() const { return false; }
+    virtual bool createsAuxiliaryMap() const { return false; }
+    virtual QList<QImage> generatedAuxiliaryFrames() const { return {}; }
+
 public slots:
     void schedulePreview();
     void resetToDefaults();
@@ -108,10 +116,12 @@ protected:
     QList<SpriteLayer>              m_initialLayers;
     QMap<int, QList<SpriteCel>>     m_initialFrameCels;
     QMap<QString, SkinProfile>      m_initialSkinProfiles;
+    QMap<MaterialMapType, QList<QImage>> m_initialAuxiliaryFrames;
 
     const QList<SpriteLayer>& initialLayers() const { return m_initialLayers; }
     const QMap<int, QList<SpriteCel>>& initialFrameCels() const { return m_initialFrameCels; }
     const QMap<QString, SkinProfile>& initialSkinProfiles() const { return m_initialSkinProfiles; }
+    const QMap<MaterialMapType, QList<QImage>>& initialAuxiliaryFrames() const { return m_initialAuxiliaryFrames; }
 
     // Preview state flag
     bool                            m_previewApplied = false;

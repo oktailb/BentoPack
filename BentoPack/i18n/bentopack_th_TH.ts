@@ -305,10 +305,6 @@
         <translation>ระยะขอบภายนอก:</translation>
     </message>
     <message>
-        <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
-        <translation>ทำซ้ำพิกเซลขอบออกไปด้านนอก (1-2px) เพื่อป้องกันรอยต่อผิดเพี้ยนจากการประมวลผล Bilinear ในเอนจิน</translation>
-    </message>
-    <message>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>การขยายพิกเซลขอบ (กันสีตก):</translation>
     </message>
@@ -329,12 +325,12 @@
         <translation>รวมเฟรมที่เหมือนกันอัตโนมัติ (ไม่กระทบแอนิเมชัน)</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
-        <translation>การขจัดความซ้ำซ้อนของ Cel แบบโมดูลาร์ (M22 - เชื่อมโยง cel ที่แชร์ข้ามเลเยอร์)</translation>
+        <source>Modular Cel Deduplication (Link shared cels across layers)</source>
+        <translation>การขจัดความซ้ำซ้อนของ Cel แบบโมดูลาร์ (เชื่อมโยง cel ที่แชร์ข้ามเลเยอร์)</translation>
     </message>
     <message>
-        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
-        <translation>การแบ่งส่วนแพตช์เดลต้า (M22 - ครอปส่วนย่อยเดลต้าระหว่างเฟรมแอนิเมชัน)</translation>
+        <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
+        <translation>การแบ่งส่วนแพตช์เดลต้า (ครอปส่วนย่อยเดลต้าระหว่างเฟรมแอนิเมชัน)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -383,6 +379,10 @@
     <message>
         <source>Live Packing Metrics</source>
         <translation>เมตริกการแพ็กแบบสด</translation>
+    </message>
+    <message>
+        <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
+        <translation>ขยายพิกเซลขอบออกไปด้านนอก (1-4px) พร้อมการปรับมุม 8 ทิศทางเพื่อป้องกันการรั่วไหลของสีในเกมเอนจิน</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -789,22 +789,28 @@ Choose which branch to restore:</translation>
         <translation>ดำเนินการ: Action mode:</translation>
     </message>
     <message>
-        <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>ดำเนินการ: Soft Color Clamping (Recommended - Preserves fine edges)</translation>
+        <source>Soft Color Clamping (CIELAB Perceptual)</source>
+        <translation>การตัดขอบสีแบบนุ่มนวล (CIELAB)</translation>
     </message>
     <message>
-        <source>Strict removal (Alpha = 0)</source>
-        <translation>ดำเนินการ: Strict removal (Alpha = 0)</translation>
+        <source>Chroma Spill Suppression (Matte Despill)</source>
+        <translation>การลดสีสะท้อนขอบ (Matte Despill)</translation>
     </message>
     <message>
-        <source>Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</source>
-        <translation>ดำเนินการ: Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</translation>
+        <source>Strict Removal (Alpha = 0)</source>
+        <translation>การลบแบบเคร่งครัด (Alpha = 0)</translation>
     </message>
     <message>
-        <source>Detection tolerance (0 - 100):</source>
-        <translation>ดำเนินการ: Detection tolerance (0 - 100):</translation>
+        <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
+Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
+Strict removal: clears the fringe pixel.</source>
+        <translation>การตัดขอบสีแบบนุ่มนวล: แทนที่ขอบด้วยสีด้านในโดยใช้ CIELAB ΔE
+การลดสีสะท้อนขอบ: ปรับสีสะท้อนเขียว/น้ำเงินให้เป็นกลางโดยไม่ลบอัลฟา
+การลบแบบเคร่งครัด: ลบพิกเซลขอบออก</translation>
+    </message>
+    <message>
+        <source>Detection tolerance (CIELAB ΔE 1 - 100):</source>
+        <translation>ความทนทานในการตรวจจับ (CIELAB ΔE 1 - 100):</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -829,6 +835,136 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>ดำเนินการ: Filter: Despill &amp; Edge Cleanup</translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorDialog</name>
+    <message>
+        <source>Emissive Map Generator </source>
+        <translation>เครื่องมือสร้างแผนที่การเปล่งแสง </translation>
+    </message>
+    <message>
+        <source>Extraction Method:</source>
+        <translation>วิธีการแยกข้อมูล:</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold (Highlights &amp; Hotspots)</source>
+        <translation>เกณฑ์ความสว่าง (ไฮไลต์ &amp; จุดสว่าง)</translation>
+    </message>
+    <message>
+        <source>Color Key / Hue Isolation (Magic &amp; Neon)</source>
+        <translation>คีย์สี / การแยกโทนสี (เวทมนตร์ &amp; นีออน)</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold Parameters</source>
+        <translation>พารามิเตอร์เกณฑ์ความสว่าง</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>เกณฑ์:</translation>
+    </message>
+    <message>
+        <source>Soft Knee Falloff:</source>
+        <translation>การลดทอนแบบโค้งนุ่มนวล (Soft Knee):</translation>
+    </message>
+    <message>
+        <source>Selective Color Key Parameters</source>
+        <translation>พารามิเตอร์คีย์สีที่เลือก</translation>
+    </message>
+    <message>
+        <source>Target Glow Color:</source>
+        <translation>สีเรืองแสงเป้าหมาย:</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>เลือก...</translation>
+    </message>
+    <message>
+        <source>Hue Tolerance:</source>
+        <translation>ความคลาดเคลื่อนของโทนสี:</translation>
+    </message>
+    <message>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <source>Intensity &amp; Output Format</source>
+        <translation>ความเข้มข้นและรูปแบบเอาต์พุต</translation>
+    </message>
+    <message>
+        <source>Emission Boost Multiplier:</source>
+        <translation>ตัวคูณเพิ่มการเปล่งแสง:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <source>Opaque black background (unlit = RGB 0,0,0)</source>
+        <translation>พื้นหลังสีดำทึบแสง (ไม่มีแสง = RGB 0,0,0)</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Target</source>
+        <translation>ปลายทางและเป้าหมาย</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>ปลายทางเอาต์พุต:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Emissive Map _e slave atlas)</source>
+        <translation>แผนที่การเปล่งแสงเสริม _e Slave Atlas)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>สไปรต์ชีตปัจจุบัน (แทนที่อัลบีโด)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>ประมวลผลเฉพาะเฟรมที่เลือก</translation>
+    </message>
+    <message>
+        <source>Select Target Glow Color</source>
+        <translation>เลือกสีเรืองแสงเป้าหมาย</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Emissive Map (_e)</source>
+        <translation>สร้าง %1 เฟรมลงในแผนที่การเปล่งแสง (_e)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Emissive Map</source>
+        <translation>แทนที่สไปรต์ชีตปัจจุบันด้วยแผนที่การเปล่งแสงแล้ว</translation>
+    </message>
+    <message>
+        <source>Generate Emissive Map </source>
+        <translation>สร้างแผนที่การเปล่งแสง </translation>
+    </message>
+    <message>
+        <source>Filter: Emissive Map Generator</source>
+        <translation>ฟิลเตอร์: เครื่องมือสร้างแผนที่การเปล่งแสง</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Emissive (_e))</source>
+        <translation>เลเยอร์ ใหม่ (เช่น Emissive (_e))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>เตรียม %1 เฟรมสำหรับเลเยอร์ ใหม่ &apos;Emissive (_e)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>สร้างเลเยอร์ Emissive </translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorFilter</name>
+    <message>
+        <source>Emissive Map Generator ...</source>
+        <translation>เครื่องมือสร้างแผนที่การเปล่งแสง ...</translation>
+    </message>
+    <message>
+        <source>Extracts emissive maps (_e) for neon, magic runes, fire, and glows using luminance thresholding or selective color key isolation.</source>
+        <translation>แยกแผนที่การเปล่งแสง (_e) สำหรับนีออน รูนเวทมนตร์ ไฟ และแสงเรืองแสงโดยใช้เกณฑ์ความสว่างหรือการแยกสี</translation>
     </message>
 </context>
 <context>
@@ -986,24 +1122,24 @@ Strict removal clears the pixel.</translation>
         <translation>ดำเนินการ: Trim Transparent Borders</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22)</source>
-        <translation>การขจัดความซ้ำซ้อนของ Cel แบบโมดูลาร์ (M22)</translation>
+        <source>Modular Cel Deduplication </source>
+        <translation>การขจัดความซ้ำซ้อนของ Cel แบบโมดูลาร์ </translation>
     </message>
     <message>
         <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
         <translation>ขจัดความซ้ำซ้อนของ cel ที่แชร์ระหว่างเลเยอร์และเฟรมแอนิเมชันผ่านการแฮช XXH3 64 บิต</translation>
     </message>
     <message>
-        <source>Enable Delta-Patch Slicing (M22)</source>
-        <translation>เปิดใช้งานการแบ่งส่วนแพตช์เดลต้า (M22)</translation>
+        <source>Enable Delta-Patch Slicing </source>
+        <translation>เปิดใช้งานการแบ่งส่วนแพตช์เดลต้า </translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
         <translation>แยกแพตช์ bounding box ที่เปลี่ยนแปลงระหว่างเฟรมต่อเนื่องเมื่อพื้นที่เดลต้ามีขนาดเล็ก เพื่อลดการใช้ VRAM</translation>
     </message>
     <message>
-        <source>VRAM Texture &amp; GPU Compression (M9)</source>
-        <translation>ดำเนินการ: VRAM Texture &amp; GPU Compression (M9)</translation>
+        <source>VRAM Texture &amp; GPU Compression </source>
+        <translation>ดำเนินการ: VRAM Texture &amp; GPU Compression </translation>
     </message>
     <message>
         <source>Texture Format:</source>
@@ -1050,8 +1186,8 @@ Strict removal clears the pixel.</translation>
         <translation>ดำเนินการ: Zstd Level (1-22):</translation>
     </message>
     <message>
-        <source>2D Lighting &amp; Multi-Atlas Maps (M21)</source>
-        <translation>ระบบแสง 2D และแผนที่มัลติแอตลาส (M21)</translation>
+        <source>2D Lighting &amp; Multi-Atlas Maps </source>
+        <translation>ระบบแสง 2D และแผนที่มัลติแอตลาส </translation>
     </message>
     <message>
         <source>Export Synchronized Material Atlases (Normal, Emissive, Specular)</source>
@@ -1389,6 +1525,10 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>Geometry &amp; Transform</source>
         <translation>เรขาคณิตและการแปลง</translation>
+    </message>
+    <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>แสง 2D &amp; วัสดุ </translation>
     </message>
 </context>
 <context>
@@ -2620,6 +2760,108 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>แก้ไขพิกเซล...</translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorDialog</name>
+    <message>
+        <source>Normal Map Generator </source>
+        <translation>เครื่องมือสร้างแผนที่นอร์มอล </translation>
+    </message>
+    <message>
+        <source>Surface Height &amp; Bump</source>
+        <translation>ความสูงของพื้นผิว &amp; บั๊มพ์</translation>
+    </message>
+    <message>
+        <source>Bump Intensity:</source>
+        <translation>ความเข้มของบั๊มพ์:</translation>
+    </message>
+    <message>
+        <source>Alpha Bevel Depth:</source>
+        <translation>ความลึกของการลบเหลี่ยมอัลฟา:</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Invert Y (DirectX / Unreal convention)</source>
+        <translation>กลับค่า Y (ตามมาตรฐาน DirectX / Unreal)</translation>
+    </message>
+    <message>
+        <source>Invert X</source>
+        <translation>กลับค่า X</translation>
+    </message>
+    <message>
+        <source>Target &amp; Destination</source>
+        <translation>เป้าหมายและปลายทาง</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>ปลายทางเอาต์พุต:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Normal Map _n slave atlas)</source>
+        <translation>แผนที่นอร์มอลเสริม _n Slave Atlas)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>สไปรต์ชีตปัจจุบัน (แทนที่อัลบีโด)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>ประมวลผลเฉพาะเฟรมที่เลือก</translation>
+    </message>
+    <message>
+        <source>Interactive 2D Lighting Preview</source>
+        <translation>พรีวิวแสง 2D แบบโต้ตอบ</translation>
+    </message>
+    <message>
+        <source>Light Angle:</source>
+        <translation>มุมของแสง:</translation>
+    </message>
+    <message>
+        <source>Light Height:</source>
+        <translation>ความสูงของแสง:</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Normal Map (_n)</source>
+        <translation>สร้าง %1 เฟรมลงในแผนที่นอร์มอล (_n)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Normal Map</source>
+        <translation>แทนที่สไปรต์ชีตปัจจุบันด้วยแผนที่นอร์มอลแล้ว</translation>
+    </message>
+    <message>
+        <source>Generate Normal Map </source>
+        <translation>สร้างแผนที่นอร์มอล </translation>
+    </message>
+    <message>
+        <source>Filter: Normal Map Generator</source>
+        <translation>ฟิลเตอร์: เครื่องมือสร้างแผนที่นอร์มอล</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Normal (_n))</source>
+        <translation>เลเยอร์ ใหม่ (เช่น Normal (_n))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>เตรียม %1 เฟรมสำหรับเลเยอร์ ใหม่ &apos;Normal (_n)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>สร้างเลเยอร์ Normal </translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorFilter</name>
+    <message>
+        <source>Normal Map Generator ...</source>
+        <translation>เครื่องมือสร้างแผนที่นอร์มอล ...</translation>
+    </message>
+    <message>
+        <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
+        <translation>สร้างแผนที่นอร์มอล Tangent-space (_n) ด้วยคอนโวลูชันความสูง Sobel การลบเหลี่ยมเงาอัลฟาแบบปริมาตร และการแสดงตัวอย่างแสง 2D</translation>
     </message>
 </context>
 <context>
@@ -3920,6 +4162,10 @@ Would you like to repack the atlas now?</translation>
         <source>⊡ Fit</source>
         <translation>⊡ พอดี</translation>
     </message>
+    <message>
+        <source>Create %1 Layer </source>
+        <translation>สร้างเลเยอร์ %1 </translation>
+    </message>
 </context>
 <context>
     <name>PixelRescaleFilter</name>
@@ -4419,6 +4665,10 @@ Would you like to repack the atlas now?</translation>
         <translation>เรขาคณิตและการแปลง</translation>
     </message>
     <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>แสง 2D &amp; วัสดุ </translation>
+    </message>
+    <message>
         <source>No Atlas Loaded</source>
         <translation>ดำเนินการ: No Atlas Loaded</translation>
     </message>
@@ -4527,6 +4777,18 @@ Install package:
     <message>
         <source>Project atlas image file not found in session: %1</source>
         <translation>ไม่พบไฟล์ภาพแอตลาสของโปรเจกต์ในเซสชัน: %1</translation>
+    </message>
+    <message>
+        <source>Set Auxiliary Map</source>
+        <translation>กำหนดแผนที่เสริม</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>สร้างเลเยอร์ Normal </translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>สร้างเลเยอร์ Emissive </translation>
     </message>
 </context>
 <context>
@@ -5552,16 +5814,16 @@ Install package:
         <translation>ระยะห่าง (Padding):</translation>
     </message>
     <message>
-        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
-        <translation>การลดความซ้ำซ้อนของเซลแบบโมดูลาร์ (M22 - XXH3 64-bit)</translation>
+        <source>Modular cel deduplication (XXH3 64-bit)</source>
+        <translation>การลดความซ้ำซ้อนของเซลแบบโมดูลาร์ (XXH3 64-bit)</translation>
     </message>
     <message>
         <source>Deduplicates identical Aseprite cels across multiple layers</source>
         <translation>ขจัดความซ้ำซ้อนของเซล Aseprite ที่เหมือนกันในหลายเลเยอร์</translation>
     </message>
     <message>
-        <source>Delta patch slicing (M22 - VRAM savings)</source>
-        <translation>การแบ่งส่วนแพตช์เดลต้า (M22 - ประหยัด VRAM)</translation>
+        <source>Delta patch slicing (VRAM savings)</source>
+        <translation>การแบ่งส่วนแพตช์เดลต้า (ประหยัด VRAM)</translation>
     </message>
     <message>
         <source>Extracts modified delta patches between consecutive frames</source>

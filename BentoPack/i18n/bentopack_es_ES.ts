@@ -305,10 +305,6 @@
         <translation>Espaciado de Borde:</translation>
     </message>
     <message>
-        <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
-        <translation>Repite los píxeles de los bordes hacia afuera (1-2px) para evitar artefactos de interpolación bilineal en los motores de juegos</translation>
-    </message>
-    <message>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>Extrusión (Anti-Sangrado):</translation>
     </message>
@@ -329,12 +325,12 @@
         <translation>Auto-Aliasing (Combinar fotogramas idénticos sin romper animaciones)</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
-        <translation>Deduplicación modular de cels (M22 - Vincular cels compartidos entre capas)</translation>
+        <source>Modular Cel Deduplication (Link shared cels across layers)</source>
+        <translation>Deduplicación modular de cels (Vincular cels compartidos entre capas)</translation>
     </message>
     <message>
-        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
-        <translation>Recorte por parches delta (M22 - Recortar subrectángulos delta entre fotogramas)</translation>
+        <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
+        <translation>Recorte por parches delta (Recortar subrectángulos delta entre fotogramas)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -383,6 +379,10 @@
     <message>
         <source>Live Packing Metrics</source>
         <translation>Métricas de Empaquetado en Vivo</translation>
+    </message>
+    <message>
+        <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
+        <translation>Repite los píxeles del borde hacia afuera (1-4 px) con fijación diagonal de 8 vecinos para evitar artefactos bilineales en motores de juegos</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -789,22 +789,28 @@ Elija qué rama restaurar:</translation>
         <translation>Modo de acción:</translation>
     </message>
     <message>
-        <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>Restricción de Color Suave (Recomendado - Preserva bordes finos)</translation>
+        <source>Soft Color Clamping (CIELAB Perceptual)</source>
+        <translation>Ajuste suave de color (Perceptual CIELAB)</translation>
     </message>
     <message>
-        <source>Strict removal (Alpha = 0)</source>
+        <source>Chroma Spill Suppression (Matte Despill)</source>
+        <translation>Supresión de desbordamiento de color (Despill Matte)</translation>
+    </message>
+    <message>
+        <source>Strict Removal (Alpha = 0)</source>
         <translation>Eliminación estricta (Alfa = 0)</translation>
     </message>
     <message>
-        <source>Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</source>
-        <translation>La restricción suave reemplaza el matiz del borde con el color vecino interior.
-La eliminación estricta borra el píxel.</translation>
+        <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
+Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
+Strict removal: clears the fringe pixel.</source>
+        <translation>Ajuste suave: reemplaza el borde con el color interior usando CIELAB ΔE.
+Desbordamiento de croma: neutraliza reflejos verdes/azules sin eliminar alfa.
+Eliminación estricta: borra el píxel del borde.</translation>
     </message>
     <message>
-        <source>Detection tolerance (0 - 100):</source>
-        <translation>Tolerancia de detección (0 - 100):</translation>
+        <source>Detection tolerance (CIELAB ΔE 1 - 100):</source>
+        <translation>Tolerancia de detección (CIELAB ΔE 1 - 100):</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -829,6 +835,136 @@ La eliminación estricta borra el píxel.</translation>
     <message>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>Filtro: Eliminación de Sangrado y Limpieza de Bordes</translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorDialog</name>
+    <message>
+        <source>Emissive Map Generator </source>
+        <translation>Generador de Mapa Emisivo </translation>
+    </message>
+    <message>
+        <source>Extraction Method:</source>
+        <translation>Método de extracción:</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold (Highlights &amp; Hotspots)</source>
+        <translation>Umbral de luminancia (Brillos y Puntos calientes)</translation>
+    </message>
+    <message>
+        <source>Color Key / Hue Isolation (Magic &amp; Neon)</source>
+        <translation>Clave de color / Aislamiento de tono (Magia y Neón)</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold Parameters</source>
+        <translation>Parámetros de umbral de luminancia</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>Umbral:</translation>
+    </message>
+    <message>
+        <source>Soft Knee Falloff:</source>
+        <translation>Atenuación suave (Soft Knee):</translation>
+    </message>
+    <message>
+        <source>Selective Color Key Parameters</source>
+        <translation>Parámetros de clave de color selectiva</translation>
+    </message>
+    <message>
+        <source>Target Glow Color:</source>
+        <translation>Color de resplandor objetivo:</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>Elegir...</translation>
+    </message>
+    <message>
+        <source>Hue Tolerance:</source>
+        <translation>Tolerancia de tono:</translation>
+    </message>
+    <message>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <source>Intensity &amp; Output Format</source>
+        <translation>Intensidad y Formato de Salida</translation>
+    </message>
+    <message>
+        <source>Emission Boost Multiplier:</source>
+        <translation>Multiplicador de emisión:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <source>Opaque black background (unlit = RGB 0,0,0)</source>
+        <translation>Fondo negro opaco (sin iluminar = RGB 0,0,0)</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Target</source>
+        <translation>Destino y Objetivo</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>Destino de salida:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Emissive Map _e slave atlas)</source>
+        <translation>Mapa emisivo auxiliar (Atlas esclavo _e)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>Hoja activa (Reemplazar albedo)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>Procesar solo fotogramas seleccionados</translation>
+    </message>
+    <message>
+        <source>Select Target Glow Color</source>
+        <translation>Seleccionar color de brillo objetivo</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Emissive Map (_e)</source>
+        <translation>%1 fotograma(s) generado(s) en el mapa emisivo (_e)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Emissive Map</source>
+        <translation>Hoja de sprites activa reemplazada por el mapa emisivo</translation>
+    </message>
+    <message>
+        <source>Generate Emissive Map </source>
+        <translation>Generar mapa emisivo </translation>
+    </message>
+    <message>
+        <source>Filter: Emissive Map Generator</source>
+        <translation>Filtro: Generador de Mapa Emisivo</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Emissive (_e))</source>
+        <translation>Nueva capa (ej. Emissive (_e))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 fotograma(s) preparado(s) para nueva capa &apos;Emissive (_e)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>Crear capa Emisiva </translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorFilter</name>
+    <message>
+        <source>Emissive Map Generator ...</source>
+        <translation>Generador de Mapa Emisivo ...</translation>
+    </message>
+    <message>
+        <source>Extracts emissive maps (_e) for neon, magic runes, fire, and glows using luminance thresholding or selective color key isolation.</source>
+        <translation>Extrae mapas emisivos (_e) para neones, runas mágicas, fuego y resplandores mediante umbral de luminancia o aislamiento de color.</translation>
     </message>
 </context>
 <context>
@@ -986,24 +1122,24 @@ La eliminación estricta borra el píxel.</translation>
         <translation>Recortar Bordes Transparentes</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22)</source>
-        <translation>Deduplicación modular de cels (M22)</translation>
+        <source>Modular Cel Deduplication </source>
+        <translation>Deduplicación modular de cels </translation>
     </message>
     <message>
         <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
         <translation>Deduplica cels compartidos entre capas y fotogramas de animación mediante hash XXH3 de 64 bits</translation>
     </message>
     <message>
-        <source>Enable Delta-Patch Slicing (M22)</source>
-        <translation>Activar recorte por parches delta (M22)</translation>
+        <source>Enable Delta-Patch Slicing </source>
+        <translation>Activar recorte por parches delta </translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
         <translation>Extrae parches delimitadores modificados entre fotogramas consecutivos cuando el área delta es pequeña, reduciendo el consumo de VRAM</translation>
     </message>
     <message>
-        <source>VRAM Texture &amp; GPU Compression (M9)</source>
-        <translation>Textura VRAM y Compresión de GPU (M9)</translation>
+        <source>VRAM Texture &amp; GPU Compression </source>
+        <translation>Textura VRAM y Compresión de GPU </translation>
     </message>
     <message>
         <source>Texture Format:</source>
@@ -1050,8 +1186,8 @@ La eliminación estricta borra el píxel.</translation>
         <translation>Nivel Zstd (1-22):</translation>
     </message>
     <message>
-        <source>2D Lighting &amp; Multi-Atlas Maps (M21)</source>
-        <translation>Iluminación 2D y mapas multi-atlas (M21)</translation>
+        <source>2D Lighting &amp; Multi-Atlas Maps </source>
+        <translation>Iluminación 2D y mapas multi-atlas </translation>
     </message>
     <message>
         <source>Export Synchronized Material Atlases (Normal, Emissive, Specular)</source>
@@ -1389,6 +1525,10 @@ La eliminación estricta borra el píxel.</translation>
     <message>
         <source>Geometry &amp; Transform</source>
         <translation>Geometría y Transformación</translation>
+    </message>
+    <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>Iluminación 2D y Materiales </translation>
     </message>
 </context>
 <context>
@@ -2620,6 +2760,108 @@ Fecha: %2
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>Editar Píxeles...</translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorDialog</name>
+    <message>
+        <source>Normal Map Generator </source>
+        <translation>Generador de Mapa de Normales </translation>
+    </message>
+    <message>
+        <source>Surface Height &amp; Bump</source>
+        <translation>Altura de Superficie y Relieve</translation>
+    </message>
+    <message>
+        <source>Bump Intensity:</source>
+        <translation>Intensidad de relieve:</translation>
+    </message>
+    <message>
+        <source>Alpha Bevel Depth:</source>
+        <translation>Profundidad de bisel alfa:</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Invert Y (DirectX / Unreal convention)</source>
+        <translation>Invertir Y (Convención DirectX / Unreal)</translation>
+    </message>
+    <message>
+        <source>Invert X</source>
+        <translation>Invertir X</translation>
+    </message>
+    <message>
+        <source>Target &amp; Destination</source>
+        <translation>Objetivo y Destino</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>Destino de salida:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Normal Map _n slave atlas)</source>
+        <translation>Mapa de normales auxiliar (Atlas esclavo _n)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>Hoja activa (Reemplazar albedo)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>Procesar solo fotogramas seleccionados</translation>
+    </message>
+    <message>
+        <source>Interactive 2D Lighting Preview</source>
+        <translation>Vista previa interactiva de iluminación 2D</translation>
+    </message>
+    <message>
+        <source>Light Angle:</source>
+        <translation>Ángulo de luz:</translation>
+    </message>
+    <message>
+        <source>Light Height:</source>
+        <translation>Altura de luz:</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Normal Map (_n)</source>
+        <translation>%1 fotograma(s) generado(s) en el mapa de normales (_n)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Normal Map</source>
+        <translation>Hoja de sprites activa reemplazada por el mapa de normales</translation>
+    </message>
+    <message>
+        <source>Generate Normal Map </source>
+        <translation>Generar mapa de normales </translation>
+    </message>
+    <message>
+        <source>Filter: Normal Map Generator</source>
+        <translation>Filtro: Generador de Mapa de Normales</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Normal (_n))</source>
+        <translation>Nueva capa (ej. Normal (_n))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 fotograma(s) preparado(s) para nueva capa &apos;Normal (_n)&apos;</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>Crear capa Normal </translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorFilter</name>
+    <message>
+        <source>Normal Map Generator ...</source>
+        <translation>Generador de Mapa de Normales ...</translation>
+    </message>
+    <message>
+        <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
+        <translation>Genera mapas de normales en espacio tangente (_n) con convolución Sobel, biselado volumétrico de silueta alfa y vista previa interactiva de luz 2D.</translation>
     </message>
 </context>
 <context>
@@ -3920,6 +4162,10 @@ Debe realizarse un reempaquetado del atlas para resolver fotogramas superpuestos
         <source>⊡ Fit</source>
         <translation>⊡ Ajustar</translation>
     </message>
+    <message>
+        <source>Create %1 Layer </source>
+        <translation>Crear capa %1 </translation>
+    </message>
 </context>
 <context>
     <name>PixelRescaleFilter</name>
@@ -4421,6 +4667,10 @@ Debe realizarse un reempaquetado del atlas para resolver fotogramas superpuestos
         <translation>Geometría y Transformación</translation>
     </message>
     <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>Iluminación 2D y Materiales </translation>
+    </message>
+    <message>
         <source>No Atlas Loaded</source>
         <translation>No hay Atlas Cargado</translation>
     </message>
@@ -4529,6 +4779,18 @@ Instale el paquete:
     <message>
         <source>Project atlas image file not found in session: %1</source>
         <translation>Archivo de imagen de atlas del proyecto no encontrado en la sesión: %1</translation>
+    </message>
+    <message>
+        <source>Set Auxiliary Map</source>
+        <translation>Establecer mapa auxiliar</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>Crear capa Normal </translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>Crear capa Emisiva </translation>
     </message>
 </context>
 <context>
@@ -5555,16 +5817,16 @@ Arrastre y suelte para reordenar</translation>
         <translation>Espaciado (Padding):</translation>
     </message>
     <message>
-        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
-        <translation>Deduplicación modular de cels (M22 - XXH3 64 bits)</translation>
+        <source>Modular cel deduplication (XXH3 64-bit)</source>
+        <translation>Deduplicación modular de cels (XXH3 64 bits)</translation>
     </message>
     <message>
         <source>Deduplicates identical Aseprite cels across multiple layers</source>
         <translation>Deduplica cels idénticos de Aseprite en múltiples capas</translation>
     </message>
     <message>
-        <source>Delta patch slicing (M22 - VRAM savings)</source>
-        <translation>Recorte por parches delta (M22 - Ahorro VRAM)</translation>
+        <source>Delta patch slicing (VRAM savings)</source>
+        <translation>Recorte por parches delta (Ahorro VRAM)</translation>
     </message>
     <message>
         <source>Extracts modified delta patches between consecutive frames</source>

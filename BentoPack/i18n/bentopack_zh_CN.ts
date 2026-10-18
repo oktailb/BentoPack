@@ -305,10 +305,6 @@
         <translation>边缘间距：</translation>
     </message>
     <message>
-        <source>Repeats border pixels outward (1-2px) to prevent bilinear interpolation artifacts in game engines</source>
-        <translation>向外重复边缘像素（1-2 像素）以防止游戏引擎中的双线性插值伪影</translation>
-    </message>
-    <message>
         <source>Extrude (Anti-Bleeding):</source>
         <translation>边缘挤出 (防出血)：</translation>
     </message>
@@ -329,12 +325,12 @@
         <translation>自动消除别名 (合并相同帧而不破坏动画)</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
-        <translation>模块化 Cel 去重 (M22 - 跨图层链接共享单元格)</translation>
+        <source>Modular Cel Deduplication (Link shared cels across layers)</source>
+        <translation>模块化 Cel 去重 (跨图层链接共享单元格)</translation>
     </message>
     <message>
-        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
-        <translation>增量补丁切片 (M22 - 裁剪动画帧之间的子矩形增量)</translation>
+        <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
+        <translation>增量补丁切片 (裁剪动画帧之间的子矩形增量)</translation>
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
@@ -383,6 +379,10 @@
     <message>
         <source>Live Packing Metrics</source>
         <translation>实时打包指标</translation>
+    </message>
+    <message>
+        <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
+        <translation>向外重复边界像素 (1-4px) 并进行 8 连通对角截断，以防止游戏引擎中的双线性插值渗透伪影</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -789,22 +789,28 @@ Choose which branch to restore:</source>
         <translation>操作模式：</translation>
     </message>
     <message>
-        <source>Soft Color Clamping (Recommended - Preserves fine edges)</source>
-        <translation>柔和颜色夹取 (推荐 - 保留细微边缘)</translation>
+        <source>Soft Color Clamping (CIELAB Perceptual)</source>
+        <translation>平滑颜色截断 (CIELAB 感知空间)</translation>
     </message>
     <message>
-        <source>Strict removal (Alpha = 0)</source>
-        <translation>严格移除 (Alpha = 0)</translation>
+        <source>Chroma Spill Suppression (Matte Despill)</source>
+        <translation>溢色抑制 (Matte Despill)</translation>
     </message>
     <message>
-        <source>Soft clamping replaces fringe hue with interior neighbor color.
-Strict removal clears the pixel.</source>
-        <translation>柔和夹取会将边缘色相替换为相邻的内部颜色。
-严格移除会直接清除该像素。</translation>
+        <source>Strict Removal (Alpha = 0)</source>
+        <translation>严格消除 (Alpha = 0)</translation>
     </message>
     <message>
-        <source>Detection tolerance (0 - 100):</source>
-        <translation>检测容差 (0 - 100)：</translation>
+        <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
+Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
+Strict removal: clears the fringe pixel.</source>
+        <translation>平滑截断: 使用 CIELAB ΔE 将边缘替换为内部颜色。
+溢色抑制: 在保留 Alpha 的同时消除绿/蓝反光。
+严格消除: 清除边缘像素。</translation>
+    </message>
+    <message>
+        <source>Detection tolerance (CIELAB ΔE 1 - 100):</source>
+        <translation>检测容差 (CIELAB ΔE 1 - 100):</translation>
     </message>
     <message>
         <source>Apply to selected frames only</source>
@@ -829,6 +835,136 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Filter: Despill &amp; Edge Cleanup</source>
         <translation>滤镜：去边与边缘清理</translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorDialog</name>
+    <message>
+        <source>Emissive Map Generator </source>
+        <translation>自发光贴图生成器 </translation>
+    </message>
+    <message>
+        <source>Extraction Method:</source>
+        <translation>提取方法:</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold (Highlights &amp; Hotspots)</source>
+        <translation>亮度阈值 (高光与亮点)</translation>
+    </message>
+    <message>
+        <source>Color Key / Hue Isolation (Magic &amp; Neon)</source>
+        <translation>颜色键 / 色相隔离 (魔法与霓虹)</translation>
+    </message>
+    <message>
+        <source>Luminance Threshold Parameters</source>
+        <translation>亮度阈值参数</translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation>阈值:</translation>
+    </message>
+    <message>
+        <source>Soft Knee Falloff:</source>
+        <translation>软拐点平滑衰减:</translation>
+    </message>
+    <message>
+        <source>Selective Color Key Parameters</source>
+        <translation>选择性颜色键参数</translation>
+    </message>
+    <message>
+        <source>Target Glow Color:</source>
+        <translation>目标发光颜色:</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>选择...</translation>
+    </message>
+    <message>
+        <source>Hue Tolerance:</source>
+        <translation>色相容差:</translation>
+    </message>
+    <message>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <source>Intensity &amp; Output Format</source>
+        <translation>强度与输出格式</translation>
+    </message>
+    <message>
+        <source>Emission Boost Multiplier:</source>
+        <translation>发光增强倍率:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <source>Opaque black background (unlit = RGB 0,0,0)</source>
+        <translation>不透明黑色背景 (未发光 = RGB 0,0,0)</translation>
+    </message>
+    <message>
+        <source>Destination &amp; Target</source>
+        <translation>目标与输出位置</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>输出目标:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Emissive Map _e slave atlas)</source>
+        <translation>辅助自发光贴图 _e 从属图集)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>当前精灵图集 (替换反照率)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>仅处理选定帧</translation>
+    </message>
+    <message>
+        <source>Select Target Glow Color</source>
+        <translation>选择目标发光颜色</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Emissive Map (_e)</source>
+        <translation>已将 %1 帧生成到 自发光贴图 (_e)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Emissive Map</source>
+        <translation>当前精灵图集已替换为自发光贴图</translation>
+    </message>
+    <message>
+        <source>Generate Emissive Map </source>
+        <translation>生成自发光贴图 </translation>
+    </message>
+    <message>
+        <source>Filter: Emissive Map Generator</source>
+        <translation>滤镜: 自发光贴图生成器</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Emissive (_e))</source>
+        <translation>新建 图层 (如 Emissive (_e))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>已为新建 图层 &apos;Emissive (_e)&apos; 准备 %1 帧</translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>创建发光图层 </translation>
+    </message>
+</context>
+<context>
+    <name>EmissiveGeneratorFilter</name>
+    <message>
+        <source>Emissive Map Generator ...</source>
+        <translation>自发光贴图生成器 ...</translation>
+    </message>
+    <message>
+        <source>Extracts emissive maps (_e) for neon, magic runes, fire, and glows using luminance thresholding or selective color key isolation.</source>
+        <translation>使用亮度阈值或选择性颜色键隔离提取霓虹、魔法符文、火焰和光晕的发光贴图 (_e)。</translation>
     </message>
 </context>
 <context>
@@ -986,24 +1122,24 @@ Strict removal clears the pixel.</source>
         <translation>修剪透明边缘</translation>
     </message>
     <message>
-        <source>Modular Cel Deduplication (M22)</source>
-        <translation>模块化 Cel 去重 (M22)</translation>
+        <source>Modular Cel Deduplication </source>
+        <translation>模块化 Cel 去重 </translation>
     </message>
     <message>
         <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
         <translation>通过 64 位 XXH3 哈希在动画图层与帧之间对共享 Cel 进行去重</translation>
     </message>
     <message>
-        <source>Enable Delta-Patch Slicing (M22)</source>
-        <translation>启用增量补丁切片 (M22)</translation>
+        <source>Enable Delta-Patch Slicing </source>
+        <translation>启用增量补丁切片 </translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
         <translation>在增量区域较小时提取连续动画帧之间的脏边界框补丁，降低 VRAM 显存占用</translation>
     </message>
     <message>
-        <source>VRAM Texture &amp; GPU Compression (M9)</source>
-        <translation>VRAM 纹理与 GPU 压缩 (M9)</translation>
+        <source>VRAM Texture &amp; GPU Compression </source>
+        <translation>VRAM 纹理与 GPU 压缩 </translation>
     </message>
     <message>
         <source>Texture Format:</source>
@@ -1050,8 +1186,8 @@ Strict removal clears the pixel.</source>
         <translation>Zstd 级别 (1-22)：</translation>
     </message>
     <message>
-        <source>2D Lighting &amp; Multi-Atlas Maps (M21)</source>
-        <translation>2D 光照与多图集贴图 (M21)</translation>
+        <source>2D Lighting &amp; Multi-Atlas Maps </source>
+        <translation>2D 光照与多图集贴图 </translation>
     </message>
     <message>
         <source>Export Synchronized Material Atlases (Normal, Emissive, Specular)</source>
@@ -1389,6 +1525,10 @@ Strict removal clears the pixel.</source>
     <message>
         <source>Geometry &amp; Transform</source>
         <translation>几何与变换</translation>
+    </message>
+    <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>2D 光照与材质 </translation>
     </message>
 </context>
 <context>
@@ -2620,6 +2760,108 @@ Strict removal clears the pixel.</source>
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>编辑像素...</translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorDialog</name>
+    <message>
+        <source>Normal Map Generator </source>
+        <translation>法线贴图生成器 </translation>
+    </message>
+    <message>
+        <source>Surface Height &amp; Bump</source>
+        <translation>表面高度与凹凸</translation>
+    </message>
+    <message>
+        <source>Bump Intensity:</source>
+        <translation>凹凸强度:</translation>
+    </message>
+    <message>
+        <source>Alpha Bevel Depth:</source>
+        <translation>Alpha 倒角深度:</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> 像素</translation>
+    </message>
+    <message>
+        <source>Invert Y (DirectX / Unreal convention)</source>
+        <translation>反转 Y (DirectX / Unreal 规范)</translation>
+    </message>
+    <message>
+        <source>Invert X</source>
+        <translation>反转 X</translation>
+    </message>
+    <message>
+        <source>Target &amp; Destination</source>
+        <translation>目标与输出</translation>
+    </message>
+    <message>
+        <source>Output Destination:</source>
+        <translation>输出目标:</translation>
+    </message>
+    <message>
+        <source>Auxiliary Normal Map _n slave atlas)</source>
+        <translation>辅助法线贴图 _n 从属图集)</translation>
+    </message>
+    <message>
+        <source>Active Sprite Sheet (Replace albedo)</source>
+        <translation>当前精灵图集 (替换反照率)</translation>
+    </message>
+    <message>
+        <source>Process selected frames only</source>
+        <translation>仅处理选定帧</translation>
+    </message>
+    <message>
+        <source>Interactive 2D Lighting Preview</source>
+        <translation>交互式 2D 光照预览</translation>
+    </message>
+    <message>
+        <source>Light Angle:</source>
+        <translation>光源角度:</translation>
+    </message>
+    <message>
+        <source>Light Height:</source>
+        <translation>光源高度:</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) generated into Normal Map (_n)</source>
+        <translation>已将 %1 帧生成到 法线贴图 (_n)</translation>
+    </message>
+    <message>
+        <source>Active sprite sheet replaced with Normal Map</source>
+        <translation>当前精灵图集已替换为法线贴图</translation>
+    </message>
+    <message>
+        <source>Generate Normal Map </source>
+        <translation>生成法线贴图 </translation>
+    </message>
+    <message>
+        <source>Filter: Normal Map Generator</source>
+        <translation>滤镜: 法线贴图生成器</translation>
+    </message>
+    <message>
+        <source>New Layer (e.g. Normal (_n))</source>
+        <translation>新建 图层 (如 Normal (_n))</translation>
+    </message>
+    <message>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>已为新建 图层 &apos;Normal (_n)&apos; 准备 %1 帧</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>创建法线图层 </translation>
+    </message>
+</context>
+<context>
+    <name>NormalGeneratorFilter</name>
+    <message>
+        <source>Normal Map Generator ...</source>
+        <translation>法线贴图生成器 ...</translation>
+    </message>
+    <message>
+        <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
+        <translation>生成切线空间法线贴图 (_n)，具有 Sobel 高度卷积、体积 Alpha 轮廓倒角和交互式 2D 光照预览。</translation>
     </message>
 </context>
 <context>
@@ -3920,6 +4162,10 @@ Would you like to repack the atlas now?</source>
         <source>⊡ Fit</source>
         <translation>⊡ 适应画布</translation>
     </message>
+    <message>
+        <source>Create %1 Layer </source>
+        <translation>创建 %1 图层 </translation>
+    </message>
 </context>
 <context>
     <name>PixelRescaleFilter</name>
@@ -4419,6 +4665,10 @@ Would you like to repack the atlas now?</source>
         <translation>几何与变换</translation>
     </message>
     <message>
+        <source>2D Lighting &amp; Materials </source>
+        <translation>2D 光照与材质 </translation>
+    </message>
+    <message>
         <source>No Atlas Loaded</source>
         <translation>未加载图集</translation>
     </message>
@@ -4527,6 +4777,18 @@ Install package:
     <message>
         <source>Project atlas image file not found in session: %1</source>
         <translation>在会话中未找到项目图集图像文件：%1</translation>
+    </message>
+    <message>
+        <source>Set Auxiliary Map</source>
+        <translation>设置辅助贴图</translation>
+    </message>
+    <message>
+        <source>Create Normal Layer </source>
+        <translation>创建法线图层 </translation>
+    </message>
+    <message>
+        <source>Create Emissive Layer </source>
+        <translation>创建发光图层 </translation>
     </message>
 </context>
 <context>
@@ -5553,16 +5815,16 @@ Install package:
         <translation>间距 (Padding):</translation>
     </message>
     <message>
-        <source>Modular cel deduplication (M22 - XXH3 64-bit)</source>
-        <translation>模块化 Cel 去重 (M22 - XXH3 64位)</translation>
+        <source>Modular cel deduplication (XXH3 64-bit)</source>
+        <translation>模块化 Cel 去重 (XXH3 64位)</translation>
     </message>
     <message>
         <source>Deduplicates identical Aseprite cels across multiple layers</source>
         <translation>跨多个图层对相同的 Aseprite 单元格去重</translation>
     </message>
     <message>
-        <source>Delta patch slicing (M22 - VRAM savings)</source>
-        <translation>增量补丁切片 (M22 - 节省显存)</translation>
+        <source>Delta patch slicing (VRAM savings)</source>
+        <translation>增量补丁切片 (节省显存)</translation>
     </message>
     <message>
         <source>Extracts modified delta patches between consecutive frames</source>

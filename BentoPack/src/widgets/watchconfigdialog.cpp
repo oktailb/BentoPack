@@ -267,12 +267,12 @@ void WatchConfigDialog::setupUI()
     engineLayout->addWidget(m_spinPadding, 1, 3);
 
     // Checkboxes (M22, POT, Trim)
-    m_chkModularCelDedup = new QCheckBox(tr("Modular cel deduplication (M22 - XXH3 64-bit)"), grpEngine);
+    m_chkModularCelDedup = new QCheckBox(tr("Modular cel deduplication (XXH3 64-bit)"), grpEngine);
     m_chkModularCelDedup->setChecked(true);
     m_chkModularCelDedup->setToolTip(tr("Deduplicates identical Aseprite cels across multiple layers"));
     engineLayout->addWidget(m_chkModularCelDedup, 2, 0, 1, 2);
 
-    m_chkDeltaPatch = new QCheckBox(tr("Delta patch slicing (M22 - VRAM savings)"), grpEngine);
+    m_chkDeltaPatch = new QCheckBox(tr("Delta patch slicing (VRAM savings)"), grpEngine);
     m_chkDeltaPatch->setChecked(false);
     m_chkDeltaPatch->setToolTip(tr("Extracts modified delta patches between consecutive frames"));
     engineLayout->addWidget(m_chkDeltaPatch, 2, 2, 1, 2);
