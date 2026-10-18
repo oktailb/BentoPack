@@ -85,6 +85,10 @@ void TestGuiIntegration::testMainWindowTitleAndDirtyFlag()
     QVERIFY(!mw.isWindowModified());
 }
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 void TestGuiIntegration::testMainWindowDragAndDropMimeTypes()
 {
     MainWindow mw;
@@ -96,7 +100,7 @@ void TestGuiIntegration::testMainWindowDragAndDropMimeTypes()
         urls.append(QUrl::fromLocalFile(QStringLiteral("/path/to/game.bento")));
         mime.setUrls(urls);
 
-        QDragEnterEvent event(QPointF(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QDragEnterEvent event(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(&mw, &event);
         QVERIFY(event.isAccepted());
     }
@@ -108,21 +112,21 @@ void TestGuiIntegration::testMainWindowDragAndDropMimeTypes()
         urls.append(QUrl::fromLocalFile(QStringLiteral("/path/to/spritesheet.png")));
         mime.setUrls(urls);
 
-        QDragEnterEvent event(QPointF(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QDragEnterEvent event(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(&mw, &event);
         QVERIFY(event.isAccepted());
 
-        QDragMoveEvent moveEvent(QPointF(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QDragMoveEvent moveEvent(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(&mw, &moveEvent);
         QVERIFY(moveEvent.isAccepted());
 
         // Also test directly on centralWidget to ensure event filter intercepts for child widgets
         if (mw.centralWidget()) {
-            QDragEnterEvent childEnter(QPointF(10, 10), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+            QDragEnterEvent childEnter(QPoint(10, 10), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
             QApplication::sendEvent(mw.centralWidget(), &childEnter);
             QVERIFY(childEnter.isAccepted());
 
-            QDragMoveEvent childMove(QPointF(10, 10), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+            QDragMoveEvent childMove(QPoint(10, 10), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
             QApplication::sendEvent(mw.centralWidget(), &childMove);
             QVERIFY(childMove.isAccepted());
         }
@@ -133,11 +137,11 @@ void TestGuiIntegration::testMainWindowDragAndDropMimeTypes()
         QMimeData mime;
         mime.setData(QStringLiteral("text/uri-list"), "file:///path/to/hero.png\r\n");
 
-        QDragEnterEvent event(QPointF(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QDragEnterEvent event(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(&mw, &event);
         QVERIFY(event.isAccepted());
 
-        QDragMoveEvent moveEvent(QPointF(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QDragMoveEvent moveEvent(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(&mw, &moveEvent);
         QVERIFY(moveEvent.isAccepted());
     }
@@ -147,11 +151,14 @@ void TestGuiIntegration::testMainWindowDragAndDropMimeTypes()
         QMimeData mime;
         mime.setText(QStringLiteral("Some plain text without urls"));
 
-        QDragEnterEvent event(QPointF(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
+        QDragEnterEvent event(QPoint(100, 100), Qt::CopyAction, &mime, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(&mw, &event);
         QVERIFY(!event.isAccepted());
     }
 }
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 void TestGuiIntegration::testMainWindowPlaybackTriggers()
 {
