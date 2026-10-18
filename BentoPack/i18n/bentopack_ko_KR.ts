@@ -329,6 +329,14 @@
         <translation>자동 앨리어싱 (애니메이션을 깨지 않고 동일한 프레임 병합)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>모듈식 셀(Cel) 중복 제거 (M22 - 레이어 간 공유 셀 연결)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>델타 패치 슬라이싱 (M22 - 애니메이션 프레임 간 서브 사각형 델타 자르기)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>패킹 전 투명 테두리 자르기</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>패킹 계산 중...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 델타 패치</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 고유 / 총 %2 (%3 프레임 절약됨)%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 프레임%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>실시간 패킹 지표</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 고유 / %2 전체 (%3 프레임 절약됨)</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>%1 프레임</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ Strict removal clears the pixel.</source>
         <translation>투명 테두리 자르기</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>모듈식 셀(Cel) 중복 제거 (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>64비트 XXH3 해싱을 통해 애니메이션 레이어와 프레임 전반에서 공유 셀 중복 제거</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>델타 패치 슬라이싱 활성화 (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>델타 영역이 작을 때 연속 애니메이션 프레임 간의 더티 바운딩 박스 패치를 추출하여 VRAM 텍스처 소비 절감</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>VRAM 텍스처 및 GPU 압축 (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ Strict removal clears the pixel.</source>
         <translation>패킹 효율성: %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>프레임: 총 %1 (%2 고유, 중복 %3 절약됨)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 델타 패치</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>프레임: 총 %1 (모두 고유함)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>프레임: 총 %1 (%2 고유, %3 중복 절약됨)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>프레임: 총 %1 (모두 고유)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

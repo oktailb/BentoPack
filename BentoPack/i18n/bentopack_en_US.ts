@@ -329,6 +329,14 @@
         <translation>Auto-Aliasing (Merge identical frames without breaking animations)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>Modular Cel Deduplication (M22 - Link shared cels across layers)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>Trim Transparent Borders before packing</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>Computing packing...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 delta patches</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 unique / %2 total (%3 frame(s) saved)%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 frame(s)%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>Live Packing Metrics</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 unique / %2 total (%3 frame(s) saved)</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>%1 frame(s)</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ Strict removal clears the pixel.</translation>
         <translation>Trim Transparent Borders</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>Modular Cel Deduplication (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>Enable Delta-Patch Slicing (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>VRAM Texture &amp; GPU Compression (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ Strict removal clears the pixel.</translation>
         <translation>Packing Efficiency: %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>Frames: %1 total (%2 unique, %3 duplicates saved)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 delta patches</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>Frames: %1 total (all unique)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>Frames: %1 total (%2 unique, %3 duplicates saved)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>Frames: %1 total (all unique)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

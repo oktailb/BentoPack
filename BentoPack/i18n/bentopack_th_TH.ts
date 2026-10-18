@@ -329,6 +329,14 @@
         <translation>รวมเฟรมที่เหมือนกันอัตโนมัติ (ไม่กระทบแอนิเมชัน)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>การขจัดความซ้ำซ้อนของ Cel แบบโมดูลาร์ (M22 - เชื่อมโยง cel ที่แชร์ข้ามเลเยอร์)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>การแบ่งส่วนแพตช์เดลต้า (M22 - ครอปส่วนย่อยเดลต้าระหว่างเฟรมแอนิเมชัน)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>ตัดขอบโปร่งใสก่อนทำการแพ็ก</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>กำลังคำนวณการแพ็ก...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 แพตช์เดลต้า</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 ไม่ซ้ำ / ทั้งหมด %2 (ประหยัดได้ %3 เฟรม)%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 เฟรม%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>เมตริกการแพ็กแบบสด</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>ดำเนินการ: %1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>ดำเนินการ: %1 unique / %2 total (%3 frame(s) saved)</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>ดำเนินการ: %1 frame(s)</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ Strict removal clears the pixel.</translation>
         <translation>ดำเนินการ: Trim Transparent Borders</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>การขจัดความซ้ำซ้อนของ Cel แบบโมดูลาร์ (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>ขจัดความซ้ำซ้อนของ cel ที่แชร์ระหว่างเลเยอร์และเฟรมแอนิเมชันผ่านการแฮช XXH3 64 บิต</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>เปิดใช้งานการแบ่งส่วนแพตช์เดลต้า (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>แยกแพตช์ bounding box ที่เปลี่ยนแปลงระหว่างเฟรมต่อเนื่องเมื่อพื้นที่เดลต้ามีขนาดเล็ก เพื่อลดการใช้ VRAM</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>ดำเนินการ: VRAM Texture &amp; GPU Compression (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ Strict removal clears the pixel.</translation>
         <translation>ประสิทธิภาพการแพ็ก: %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>เฟรมทั้งหมด: %1 (ไม่ซ้ำ %2, ประหยัดซ้ำ %3)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 แพตช์เดลต้า</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>เฟรมทั้งหมด: %1 (ไม่ซ้ำกันทั้งหมด)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>เฟรม: ทั้งหมด %1 (ไม่ซ้ำ %2, ประหยัดความซ้ำซ้อน %3)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>เฟรม: ทั้งหมด %1 (ไม่ซ้ำทั้งหมด)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

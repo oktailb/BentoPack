@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,9 +71,10 @@ public:
     void setAtlasBounds(const QRect &bounds) { m_atlasBounds = bounds; }
 
     // M8: 2D Polygon Mesh & Wireframe display
-    void setPolygonMesh(const QPolygonF &poly, const QList<int> &triangles, bool hasMesh);
+    void setPolygonMesh(const QPolygonF &poly, const QList<int> &triangles, bool hasMesh, const QList<QPointF> &vertices = {});
     bool hasPolygonMesh() const { return m_hasPolygonMesh; }
     QPolygonF polygon() const { return m_polygon; }
+    QList<QPointF> meshVertices() const { return m_vertices.isEmpty() ? m_polygon.toList() : m_vertices; }
     QList<int> triangles() const { return m_triangles; }
 
     void setShowPolygonMesh(bool show);
@@ -136,9 +137,10 @@ private:
     bool     m_hasMoved = false;
 
     // Polygon mesh data and vertex interaction
-    QPolygonF  m_polygon;
-    QList<int> m_triangles;
-    bool       m_hasPolygonMesh = false;
+    QPolygonF       m_polygon;
+    QList<QPointF>  m_vertices;
+    QList<int>      m_triangles;
+    bool            m_hasPolygonMesh = false;
     bool       m_showPolygonMesh = true;
 
     int        m_activeVertexIndex = -1;

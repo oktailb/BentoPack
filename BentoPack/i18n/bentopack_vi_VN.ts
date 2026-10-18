@@ -329,6 +329,14 @@
         <translation>Tự động gộp các khung hình giống nhau (không làm hỏng hoạt ảnh)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>Khử trùng lặp Cel mô-đun (M22 - Liên kết các cel dùng chung giữa các lớp)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>Cắt mảnh vá Delta (M22 - Cắt hình chữ nhật con delta giữa các khung hình)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>Cắt bỏ viền trong suốt trước khi đóng gói</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>Đang tính toán đóng gói...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 mảnh vá delta</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 duy nhất / %2 tổng cộng (tiết kiệm %3 khung hình)%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 khung hình%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>Số liệu đóng gói trực tiếp</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>Thao tác: %1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>Thao tác: %1 unique / %2 total (%3 frame(s) saved)</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>Thao tác: %1 frame(s)</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ Strict removal clears the pixel.</translation>
         <translation>Thao tác: Trim Transparent Borders</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>Khử trùng lặp Cel mô-đun (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>Khử trùng lặp các cel dùng chung qua các lớp và khung hình hoạt ảnh bằng hàm băm XXH3 64-bit</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>Bật cắt mảnh vá Delta (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>Trích xuất các mảnh vá hộp bao thay đổi giữa các khung hình liên tiếp khi diện tích delta nhỏ, giảm tiêu thụ VRAM</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>Thao tác: VRAM Texture &amp; GPU Compression (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ Strict removal clears the pixel.</translation>
         <translation>Hiệu quả đóng gói: %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>Tổng số khung hình: %1 (%2 duy nhất, tiết kiệm %3 trùng lặp)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 mảnh vá delta</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>Tổng số khung hình: %1 (tất cả đều duy nhất)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>Khung hình: %1 tổng cộng (%2 duy nhất, tiết kiệm %3 trùng lặp)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>Khung hình: %1 tổng cộng (tất cả đều duy nhất)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

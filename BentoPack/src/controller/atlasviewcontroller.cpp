@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,7 +68,7 @@ AtlasViewController::AtlasViewController(QGraphicsView *view,
                 const SpriteBox &box = m_document->box(index);
                 m_boxItems[index]->setBoxRect(box.rect);
                 m_boxItems[index]->setBoxPivot(box.effectivePivot(), box.hasCustomPivot);
-                m_boxItems[index]->setPolygonMesh(box.polygon, box.triangles, box.hasPolygonMesh);
+                m_boxItems[index]->setPolygonMesh(box.polygon, box.triangles, box.hasPolygonMesh, box.vertices);
             }
         });
         connect(m_document, &SpriteDocument::boxPivotChanged, this, [this](int index, const QPoint &pivot) {
@@ -228,7 +228,7 @@ void AtlasViewController::syncAtlasBoxes()
         const SpriteBox &sb = m_document->box(i);
         AtlasBoxItem *boxItem = new AtlasBoxItem(i, sb.rect, atlasBounds);
         boxItem->setBoxPivot(sb.effectivePivot(), sb.hasCustomPivot);
-        boxItem->setPolygonMesh(sb.polygon, sb.triangles, sb.hasPolygonMesh);
+        boxItem->setPolygonMesh(sb.polygon, sb.triangles, sb.hasPolygonMesh, sb.vertices);
         boxItem->setShowPolygonMesh(m_showPolygonMeshes);
         m_scene->addItem(boxItem);
         m_boxItems.append(boxItem);

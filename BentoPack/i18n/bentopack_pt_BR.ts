@@ -329,6 +329,14 @@
         <translation>Auto-Aliasing (Mesclar quadros idênticos sem quebrar animações)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>Deduplicação modular de cels (M22 - Vincular cels compartilhados entre camadas)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>Recorte de patches delta (M22 - Recortar sub-retângulos delta entre quadros)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>Aparar Bordas Transparentes antes de empacotar</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>Calculando empacotamento...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 patches delta</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 exclusivos / %2 total (%3 quadro(s) economizado(s))%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 quadro(s)%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>Métricas de Empacotamento ao Vivo</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 único(s) / %2 total (%3 quadro(s) economizado(s))</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>%1 quadro(s)</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ A remoção estrita limpa o pixel.</translation>
         <translation>Aparar Bordas Transparentes</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>Deduplicação modular de cels (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>Deduplica cels compartilhados entre camadas e quadros de animação via hashing XXH3 de 64 bits</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>Ativar recorte de patches delta (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>Extrai patches de caixas delimitadoras alteradas entre quadros consecutivos quando a área delta é pequena, reduzindo o consumo de VRAM</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>Textura VRAM e Compressão de GPU (M9)</translation>
     </message>
@@ -1242,12 +1270,16 @@ A remoção estrita limpa o pixel.</translation>
         <translation>Eficiência de empacotamento: %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>Frames: %1 no total (%2 únicos, %3 duplicados economizados)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 patches delta</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>Frames: %1 no total (todos únicos)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>Quadros: %1 total (%2 exclusivos, %3 duplicatas economizadas)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>Quadros: %1 total (todos exclusivos)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

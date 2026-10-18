@@ -163,14 +163,12 @@ bool UnityExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extra
         QJsonArray tArr = sObj.value(QStringLiteral("triangles")).toArray();
 
         if (hasTightMesh && !vArr.isEmpty()) {
-            QPolygonF poly;
             QList<QPointF> verts;
             for (const QJsonValue &vVal : vArr) {
                 if (vVal.isArray()) {
                     QJsonArray xy = vVal.toArray();
                     if (xy.size() >= 2) {
                         QPointF pt(xy[0].toDouble(), xy[1].toDouble());
-                        poly.append(pt);
                         verts.append(pt);
                     }
                 }
@@ -179,7 +177,24 @@ bool UnityExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extra
             for (const QJsonValue &tVal : tArr) {
                 tris.append(tVal.toInt());
             }
-            if (!poly.isEmpty()) {
+
+            QPolygonF poly;
+            if (sObj.contains(QStringLiteral("polygon"))) {
+                QJsonArray pArr = sObj.value(QStringLiteral("polygon")).toArray();
+                for (const QJsonValue &pVal : pArr) {
+                    if (pVal.isArray()) {
+                        QJsonArray xy = pVal.toArray();
+                        if (xy.size() >= 2) {
+                            poly.append(QPointF(xy[0].toDouble(), xy[1].toDouble()));
+                        }
+                    }
+                }
+            }
+            if (poly.isEmpty() && !verts.isEmpty()) {
+                poly = BentoPackGeometry::Triangulator::extractBoundaryContour(verts, tris);
+            }
+
+            if (!verts.isEmpty()) {
                 box.hasPolygonMesh = true;
                 box.polygon = poly;
                 box.vertices = verts;
@@ -502,6 +517,19 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
                     uv.append(v);
                     uvArr.append(uv);
                 }
+                QPolygonF boundaryPoly = box.polygon;
+                if (boundaryPoly.isClosed() && boundaryPoly.size() >= 4) {
+                    boundaryPoly.removeLast();
+                }
+                QJsonArray polyArr;
+                for (const QPointF &pt : boundaryPoly) {
+                    QJsonArray xy;
+                    xy.append(pt.x());
+                    xy.append(pt.y());
+                    polyArr.append(xy);
+                }
+                sObj["polygon"] = polyArr;
+
                 for (int tIdx : box.triangles) {
                     tArr.append(tIdx);
                 }

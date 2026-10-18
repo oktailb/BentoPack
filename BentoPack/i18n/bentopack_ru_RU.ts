@@ -329,6 +329,14 @@
         <translation>Авто-алиасинг (слияние дубликатов кадров без нарушения анимаций)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>Модульная дедупликация cels (M22 — связывание общих cels между слоями)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>Нарезка дельта-патчей (M22 — обрезка подпрямоугольных дельт между кадрами)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>Обрезать прозрачные границы перед упаковкой</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>Вычисление упаковки...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 дельта-патчей</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 уникальных / %2 всего (сэкономлено %3 кадр(ов))%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 кадр(ов)%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>Метрики упаковки в реальном времени</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 пикс.</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 уникальных / %2 всего (сэкономлено кадров: %3)</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>Кадров: %1</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ Strict removal clears the pixel.</source>
         <translation>Обрезать прозрачные границы</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>Модульная дедупликация cels (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>Дедуплицирует общие cels между слоями анимации и кадрами с помощью 64-битного хэширования XXH3</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>Включить нарезку дельта-патчей (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>Извлекает измененные ограничивающие патчи между последовательными кадрами анимации при малой площади дельты, снижая расход VRAM</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>Текстуры VRAM и сжатие GPU (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ Strict removal clears the pixel.</source>
         <translation>Эффективность упаковки: %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>Кадров: всего %1 (%2 уникальных, сэкономлено дубликатов: %3)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 дельта-патчей</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>Кадров: %1 всего (все уникальные)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>Кадры: всего %1 (%2 уникальных, сэкономлено %3 дубликатов)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>Кадры: всего %1 (все уникальные)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

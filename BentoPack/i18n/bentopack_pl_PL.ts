@@ -329,6 +329,14 @@
         <translation>Automatyczna deduplikacja (Scalaj identyczne klatki bez naruszania animacji)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>Modularna deduplikacja celi (M22 - Łączenie współdzielonych celi między warstwami)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>Wycinek łatek delta (M22 - Przycinanie podprostokątów delta między klatkami)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>Przytnij przezroczyste krawędzie przed pakowaniem</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>Obliczanie upakowania...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 łatek delta</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 unikalnych / %2 łącznie (zaoszczędzono %3 klatek)%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 klatka/klatek%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>Bieżące metryki pakowania</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 unikalnych / %2 łącznie (zaoszczędzono %3 klatek)</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>%1 klatek</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ Strict removal clears the pixel.</source>
         <translation>Przytnij przezroczyste krawędzie</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>Modularna deduplikacja celi (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>Deduplikuje współdzielone cele między warstwami i klatkami animacji za pomocą 64-bitowego haszowania XXH3</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>Włącz wycinek łatek delta (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>Wyodrębnia zmienione fragmenty ramek ograniczających między kolejnymi klatkami animacji przy małym obszarze delta, zmniejszając zużycie VRAM</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>Tekstura VRAM i kompresja GPU (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ Strict removal clears the pixel.</source>
         <translation>Wydajność pakowania: %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>Klatki: %1 łącznie (%2 unikalnych, zaoszczędzono %3 duplikatów)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 łatek delta</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>Klatki: %1 łącznie (wszystkie unikalne)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>Klatki: %1 łącznie (%2 unikalnych, zaoszczędzono %3 duplikatów)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>Klatki: %1 łącznie (wszystkie unikalne)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

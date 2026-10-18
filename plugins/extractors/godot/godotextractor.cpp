@@ -16,6 +16,7 @@
 
 #include "godotextractor.h"
 #include "godot_pipeline.h"
+#include "geometry/triangulator.h"
 #include "packer/atlaspacker.h"
 #include "packer/multiatlaspacker.h"
 #include "packer/multipagepacker.h"
@@ -322,7 +323,19 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
             meshFile.close();
 
             QRegularExpression polyRegex(QStringLiteral(R"re(metadata/frame_(\d+)/polygon\s*=\s*PackedVector2Array\(([^)]*)\))re"));
+            QRegularExpression vertRegex(QStringLiteral(R"re(metadata/frame_(\d+)/vertices\s*=\s*PackedVector2Array\(([^)]*)\))re"));
+            QRegularExpression intRegex(QStringLiteral(R"re(metadata/frame_(\d+)/internal_vertex_count\s*=\s*(\d+))re"));
             QRegularExpression triRegex(QStringLiteral(R"re(metadata/frame_(\d+)/triangles\s*=\s*PackedInt32Array\(([^)]*)\))re"));
+
+            struct FrameMeshEntry {
+                QPolygonF poly;
+                QList<QPointF> verts;
+                QList<int> tris;
+                int internalVertexCount = -1;
+                bool hasPoly = false;
+                bool hasVerts = false;
+            };
+            QMap<int, FrameMeshEntry> frameMeshes;
 
             QRegularExpressionMatchIterator pIter = polyRegex.globalMatch(meshContent);
             while (pIter.hasNext()) {
@@ -332,18 +345,44 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
                 if (idx >= 0 && idx < boxes.size() && !coordsStr.isEmpty()) {
                     QStringList parts = coordsStr.split(QLatin1Char(','), Qt::SkipEmptyParts);
                     QPolygonF poly;
-                    QList<QPointF> verts;
                     for (int p = 0; p + 1 < parts.size(); p += 2) {
                         double x = parts[p].trimmed().toDouble();
                         double y = parts[p + 1].trimmed().toDouble();
                         poly.append(QPointF(x, y));
-                        verts.append(QPointF(x, y));
                     }
                     if (!poly.isEmpty()) {
-                        boxes[idx].hasPolygonMesh = true;
-                        boxes[idx].polygon = poly;
-                        boxes[idx].vertices = verts;
+                        frameMeshes[idx].poly = poly;
+                        frameMeshes[idx].hasPoly = true;
                     }
+                }
+            }
+
+            QRegularExpressionMatchIterator vIter = vertRegex.globalMatch(meshContent);
+            while (vIter.hasNext()) {
+                QRegularExpressionMatch match = vIter.next();
+                int idx = match.captured(1).toInt();
+                QString coordsStr = match.captured(2).trimmed();
+                if (idx >= 0 && idx < boxes.size() && !coordsStr.isEmpty()) {
+                    QStringList parts = coordsStr.split(QLatin1Char(','), Qt::SkipEmptyParts);
+                    QList<QPointF> verts;
+                    for (int p = 0; p + 1 < parts.size(); p += 2) {
+                        double x = parts[p].trimmed().toDouble();
+                        double y = parts[p + 1].trimmed().toDouble();
+                        verts.append(QPointF(x, y));
+                    }
+                    if (!verts.isEmpty()) {
+                        frameMeshes[idx].verts = verts;
+                        frameMeshes[idx].hasVerts = true;
+                    }
+                }
+            }
+
+            QRegularExpressionMatchIterator intIter = intRegex.globalMatch(meshContent);
+            while (intIter.hasNext()) {
+                QRegularExpressionMatch match = intIter.next();
+                int idx = match.captured(1).toInt();
+                if (idx >= 0 && idx < boxes.size()) {
+                    frameMeshes[idx].internalVertexCount = match.captured(2).toInt();
                 }
             }
 
@@ -359,7 +398,32 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
                     for (const QString &s : parts) {
                         tris.append(s.trimmed().toInt());
                     }
-                    boxes[idx].triangles = tris;
+                    frameMeshes[idx].tris = tris;
+                }
+            }
+
+            for (auto it = frameMeshes.constBegin(); it != frameMeshes.constEnd(); ++it) {
+                int idx = it.key();
+                const FrameMeshEntry &fme = it.value();
+                if (fme.hasVerts && fme.hasPoly) {
+                    boxes[idx].hasPolygonMesh = true;
+                    boxes[idx].polygon = fme.poly;
+                    boxes[idx].vertices = fme.verts;
+                    boxes[idx].triangles = fme.tris;
+                } else if (fme.hasPoly) {
+                    boxes[idx].hasPolygonMesh = true;
+                    QList<QPointF> allVerts = fme.poly.toList();
+                    boxes[idx].vertices = allVerts;
+                    boxes[idx].triangles = fme.tris;
+
+                    if (fme.internalVertexCount > 0 && fme.internalVertexCount < fme.poly.size()) {
+                        boxes[idx].polygon = fme.poly.mid(0, fme.poly.size() - fme.internalVertexCount);
+                    } else if (!fme.tris.isEmpty()) {
+                        // Recover perimeter boundary contour from legacy mesh where internal points were merged into polygon
+                        boxes[idx].polygon = BentoPackGeometry::Triangulator::extractBoundaryContour(allVerts, fme.tris);
+                    } else {
+                        boxes[idx].polygon = fme.poly;
+                    }
                 }
             }
         }
@@ -820,18 +884,36 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
                             mOut << "metadata/frame_" << i << "/texture = ExtResource(\"page_" << pageIdx << "_atlas\")\n";
                         }
 
-                        const QList<QPointF> meshVertices = !b.vertices.isEmpty() ? b.vertices :
-                            (b.polygon.isClosed() && b.polygon.size() >= 4 ? b.polygon.mid(0, b.polygon.size() - 1).toList() : b.polygon.toList());
+                        // 1. Clean boundary perimeter contour
+                        QPolygonF boundaryPoly = b.polygon;
+                        if (boundaryPoly.isClosed() && boundaryPoly.size() >= 4) {
+                            boundaryPoly.removeLast();
+                        }
 
-                        // Polygon coordinates
+                        // 2. Full mesh vertices (boundary first, followed by interior Steiner/contrast points)
+                        const QList<QPointF> meshVertices = !b.vertices.isEmpty() ? b.vertices : boundaryPoly.toList();
+                        const int internalVertexCount = std::max(0, static_cast<int>(meshVertices.size()) - static_cast<int>(boundaryPoly.size()));
+
+                        // Boundary polygon coordinates
                         mOut << "metadata/frame_" << i << "/polygon = PackedVector2Array(";
-                        for (int p = 0; p < meshVertices.size(); ++p) {
+                        for (int p = 0; p < boundaryPoly.size(); ++p) {
                             if (p > 0) mOut << ", ";
-                            mOut << meshVertices[p].x() << ", " << meshVertices[p].y();
+                            mOut << boundaryPoly[p].x() << ", " << boundaryPoly[p].y();
                         }
                         mOut << ")\n";
 
-                        // UV coordinates
+                        // Full mesh vertices (when mesh contains interior vertices or differs from boundary)
+                        if (internalVertexCount > 0 || meshVertices.size() != boundaryPoly.size()) {
+                            mOut << "metadata/frame_" << i << "/vertices = PackedVector2Array(";
+                            for (int p = 0; p < meshVertices.size(); ++p) {
+                                if (p > 0) mOut << ", ";
+                                mOut << meshVertices[p].x() << ", " << meshVertices[p].y();
+                            }
+                            mOut << ")\n";
+                            mOut << "metadata/frame_" << i << "/internal_vertex_count = " << internalVertexCount << "\n";
+                        }
+
+                        // UV coordinates (mapped to meshVertices)
                         mOut << "metadata/frame_" << i << "/uv = PackedVector2Array(";
                         for (int p = 0; p < meshVertices.size(); ++p) {
                             if (p > 0) mOut << ", ";
@@ -841,7 +923,7 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
                         }
                         mOut << ")\n";
 
-                        // Triangles
+                        // Triangles (indices into meshVertices)
                         mOut << "metadata/frame_" << i << "/triangles = PackedInt32Array(";
                         for (int t = 0; t < b.triangles.size(); ++t) {
                             if (t > 0) mOut << ", ";

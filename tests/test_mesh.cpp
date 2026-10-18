@@ -74,6 +74,7 @@ private slots:
     void testUnityExtractorExport();
     void testUnrealExtractorExport();
     void testGodotExtractorCompanionTres();
+    void testGodotExtractorCdtMeshRoundtrip();
     void testAtlasPackingDialogPreservesPolygons();
     void testPolygonClippedFrame();
     void testPolygonalRepackEliminatesNeighborArtifacts();
@@ -784,6 +785,69 @@ void TestMesh::testGodotExtractorCompanionTres()
     QVERIFY(meshContent.contains("metadata/frame_0/polygon"));
     QVERIFY(meshContent.contains("metadata/frame_0/uv"));
     QVERIFY(meshContent.contains("metadata/frame_0/triangles"));
+}
+
+void TestMesh::testGodotExtractorCdtMeshRoundtrip()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    QString godotPath = tempDir.filePath("hero.tres");
+
+    SpriteDocument doc;
+    QImage img(64, 64, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    for (int y = 0; y < 64; ++y) {
+        for (int x = 0; x < 64; ++x) {
+            if (std::abs(x - 32) + std::abs(y - 32) <= 24) {
+                img.setPixelColor(x, y, QColor(255, 0, 0, 255));
+            }
+        }
+    }
+
+    SpriteBox box(QRect(0, 0, 64, 64));
+    box.hasPolygonMesh = true;
+    box.polygon = QPolygonF({ QPointF(32, 8), QPointF(56, 32), QPointF(32, 56), QPointF(8, 32) });
+    box.vertices = { QPointF(32, 8), QPointF(56, 32), QPointF(32, 56), QPointF(8, 32), QPointF(32, 32) };
+    box.triangles = { 0, 1, 4, 1, 2, 4, 2, 3, 4, 3, 0, 4 };
+    doc.addFrame(img, box);
+
+    GodotExtractor godotExt;
+    ExportOptions opts;
+    opts.format = FORMAT_GODOT;
+    opts.packOptions.algorithm = AtlasPacker::MaxRects;
+
+    ExtractorError err;
+    bool writeOk = godotExt.write(godotPath, doc, opts, &err);
+    QVERIFY2(writeOk, qPrintable(err.message));
+    QVERIFY(QFile::exists(godotPath));
+
+    QString meshPath = tempDir.filePath("hero_mesh.tres");
+    QVERIFY(QFile::exists(meshPath));
+
+    QFile mf(meshPath);
+    QVERIFY(mf.open(QIODevice::ReadOnly | QIODevice::Text));
+    QString meshContent = QString::fromUtf8(mf.readAll());
+    mf.close();
+
+    QVERIFY(meshContent.contains("metadata/frame_0/polygon"));
+    QVERIFY(meshContent.contains("metadata/frame_0/vertices"));
+    QVERIFY(meshContent.contains("metadata/frame_0/internal_vertex_count = 1"));
+    QVERIFY(meshContent.contains("metadata/frame_0/triangles"));
+
+    SpriteDocument readDoc;
+    bool readOk = godotExt.read(godotPath, readDoc, &err);
+    QVERIFY2(readOk, qPrintable(err.toString()));
+    QCOMPARE(readDoc.frameCount(), 1);
+
+    const SpriteBox &readBox = readDoc.box(0);
+    QVERIFY(readBox.hasPolygonMesh);
+    QCOMPARE(readBox.polygon.size(), 4);
+    QCOMPARE(readBox.vertices.size(), 5);
+    QCOMPARE(readBox.triangles.size(), 12);
+
+    QImage clipped = readDoc.polygonClippedFrame(0);
+    QVERIFY(!clipped.isNull());
+    QCOMPARE(clipped.pixelColor(32, 32), QColor(255, 0, 0, 255));
 }
 
 void TestMesh::testAtlasPackingDialogPreservesPolygons()

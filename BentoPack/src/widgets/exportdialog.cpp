@@ -157,6 +157,8 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
     connect(ui->chkPowerOfTwo, &QCheckBox::toggled, [this]() { m_debounceTimer->start(); });
     connect(ui->chkForceSquare, &QCheckBox::toggled, [this]() { m_debounceTimer->start(); });
     connect(ui->chkDeduplicate, &QCheckBox::toggled, [this]() { m_debounceTimer->start(); });
+    connect(ui->chkDeduplicateCels, &QCheckBox::toggled, [this]() { m_debounceTimer->start(); });
+    connect(ui->chkDeltaPatching, &QCheckBox::toggled, [this]() { m_debounceTimer->start(); });
     connect(ui->chkTrim, &QCheckBox::toggled, [this]() { m_debounceTimer->start(); });
 
     // VRAM compression signals
@@ -274,6 +276,8 @@ ExportOptions ExportDialog::exportOptions() const
     pOpts.powerOfTwo = ui->chkPowerOfTwo->isChecked();
     pOpts.forceSquare = ui->chkForceSquare->isChecked();
     pOpts.deduplicate = ui->chkDeduplicate->isChecked();
+    pOpts.enableCelDeduplication = ui->chkDeduplicateCels->isChecked();
+    pOpts.enableDeltaPatching = ui->chkDeltaPatching->isChecked();
 
     opts.padding = pOpts.padding;
     opts.trimSprites = ui->chkTrim->isChecked();
@@ -553,14 +557,25 @@ void ExportDialog::updateStats()
             .arg(QString::number(res.efficiency, 'f', 1)));
 
         int duplicates = m_document->frameCount() - res.uniqueFramesCount;
+        int deltaPatches = 0;
+        for (int refIdx : res.deltaReferenceIndices) {
+            if (refIdx != -1) deltaPatches++;
+        }
+        QString deltaInfo;
+        if (deltaPatches > 0) {
+            deltaInfo = tr(" | %1 delta patches").arg(deltaPatches);
+        }
+
         if (duplicates > 0) {
-            ui->lblFrames->setText(tr("Frames: %1 total (%2 unique, %3 duplicates saved)")
+            ui->lblFrames->setText(tr("Frames: %1 total (%2 unique, %3 duplicates saved)%4")
                 .arg(m_document->frameCount())
                 .arg(res.uniqueFramesCount)
-                .arg(duplicates) + layerInfo);
+                .arg(duplicates)
+                .arg(deltaInfo) + layerInfo);
         } else {
-            ui->lblFrames->setText(tr("Frames: %1 total (all unique)")
-                .arg(m_document->frameCount()) + layerInfo);
+            ui->lblFrames->setText(tr("Frames: %1 total (all unique)%2")
+                .arg(m_document->frameCount())
+                .arg(deltaInfo) + layerInfo);
         }
         updateVramLabel(w, h);
     } else {

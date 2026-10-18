@@ -16,7 +16,10 @@
 
 #include "packer/atlaspacker.h"
 #include "packer/tightpolygonpacker.h"
+#include "image/pixelhash.h"
+#include "packer/deltapatchslicer.h"
 #include <QPainter>
+#include <QHash>
 #include <cmath>
 #include <cstring>
 #include <algorithm>
@@ -35,27 +38,7 @@ int AtlasPacker::nextPowerOfTwo(int n)
 
 bool AtlasPacker::areImagesIdentical(const QImage &a, const QImage &b)
 {
-    if (a.size() != b.size()) {
-        return false;
-    }
-    if (a.isNull() && b.isNull()) {
-        return true;
-    }
-    if (a.isNull() || b.isNull()) {
-        return false;
-    }
-
-    QImage imgA = (a.format() == QImage::Format_ARGB32) ? a : a.convertToFormat(QImage::Format_ARGB32);
-    QImage imgB = (b.format() == QImage::Format_ARGB32) ? b : b.convertToFormat(QImage::Format_ARGB32);
-
-    int bytesPerLine = imgA.width() * 4;
-    for (int y = 0; y < imgA.height(); ++y) {
-        if (std::memcmp(imgA.constScanLine(y), imgB.constScanLine(y), bytesPerLine) != 0) {
-            return false;
-        }
-    }
-
-    return true;
+    return PixelHash::areImagesIdentical(a, b);
 }
 
 void AtlasPacker::applyExtrusion(QImage &atlas, const QRect &targetRect, const QImage &sprite, int extrudeAmount)
@@ -147,29 +130,63 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
         }
     }
 
-    // Deduplication step (Auto-Aliasing)
+    // M22: Delta-Patch Slicing (Differential Sub-Rectangles)
+    bool hasDeltaPatches = false;
+    QList<QPoint> deltaOffsets;
+    QList<QRect> deltaDirtyRects;
+    QList<int> deltaReferenceIndices;
+    deltaOffsets.resize(cleanFrames.size());
+    deltaDirtyRects.resize(cleanFrames.size());
+    deltaReferenceIndices.resize(cleanFrames.size());
+    deltaOffsets.fill(QPoint(0, 0));
+    deltaReferenceIndices.fill(-1);
+
+    QList<QImage> framesToPack = cleanFrames;
+    if (options.enableDeltaPatching && cleanFrames.size() > 1) {
+        DeltaSlicingResult deltaRes = DeltaPatchSlicer::sliceAnimation(cleanFrames, options.deltaPatchThreshold);
+        if (deltaRes.deltaFramesCount > 0 || deltaRes.duplicateFramesCount > 0) {
+            hasDeltaPatches = true;
+            for (int i = 0; i < deltaRes.patches.size(); ++i) {
+                const DeltaPatch &dp = deltaRes.patches.at(i);
+                deltaOffsets[i] = dp.deltaOffset;
+                deltaDirtyRects[i] = dp.dirtyRect;
+                deltaReferenceIndices[i] = dp.referenceFrameIndex;
+                if (dp.isDelta) {
+                    framesToPack[i] = dp.patchImage;
+                }
+            }
+        }
+    }
+
+    // Deduplication step (Auto-Aliasing accelerated by 64-bit PixelHash XXH3)
     QList<QImage> uniqueFrames;
     QList<QPolygonF> uniquePolygons;
     QList<int> mapping;
-    mapping.reserve(cleanFrames.size());
+    mapping.reserve(framesToPack.size());
 
     if (options.deduplicate) {
-        for (int i = 0; i < cleanFrames.size(); ++i) {
-            const QImage &img = cleanFrames.at(i);
+        QHash<quint64, QList<int>> hashToUniqueIndex;
+        for (int i = 0; i < framesToPack.size(); ++i) {
+            const QImage &img = framesToPack.at(i);
             int matchedIndex = -1;
+            quint64 h = PixelHash::hashImage(img);
 
-            for (int u = 0; u < uniqueFrames.size(); ++u) {
-                if (areImagesIdentical(img, uniqueFrames.at(u))) {
-                    matchedIndex = u;
-                    break;
+            if (hashToUniqueIndex.contains(h)) {
+                for (int u : hashToUniqueIndex.value(h)) {
+                    if (PixelHash::areImagesIdentical(img, uniqueFrames.at(u))) {
+                        matchedIndex = u;
+                        break;
+                    }
                 }
             }
 
             if (matchedIndex >= 0) {
                 mapping.append(matchedIndex);
             } else {
-                mapping.append(uniqueFrames.size());
+                int newU = uniqueFrames.size();
+                mapping.append(newU);
                 uniqueFrames.append(img);
+                hashToUniqueIndex[h].append(newU);
                 if (i < polygons.size()) {
                     uniquePolygons.append(polygons.at(i));
                 } else {
@@ -178,9 +195,9 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
             }
         }
     } else {
-        uniqueFrames = cleanFrames;
+        uniqueFrames = framesToPack;
         uniquePolygons = polygons;
-        for (int i = 0; i < cleanFrames.size(); ++i) {
+        for (int i = 0; i < framesToPack.size(); ++i) {
             mapping.append(i);
         }
     }
@@ -210,6 +227,11 @@ AtlasPackResult AtlasPacker::pack(const QList<QImage> &frames, const PackOptions
         res = packMaxRects(uniqueFrames, mapping, options);
         break;
     }
+
+    res.hasDeltaPatches = hasDeltaPatches;
+    res.deltaOffsets = deltaOffsets;
+    res.deltaDirtyRects = deltaDirtyRects;
+    res.deltaReferenceIndices = deltaReferenceIndices;
 
     return res;
 }

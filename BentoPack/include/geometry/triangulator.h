@@ -102,6 +102,16 @@ public:
      * @return Value between 0.0% and 100.0%.
      */
     static double calculateOverdrawSavings(const QPolygonF &polygon, const QSize &boundingBox);
+
+    /**
+     * @brief Extracts the outer boundary polygon contour from a 2D triangle mesh.
+     *        Identifies boundary edges (edges belonging to exactly 1 triangle) and walks
+     *        the boundary cycle starting from vertex 0 (or minimum boundary index).
+     * @param allVertices List of all mesh vertices.
+     * @param triangles Triangle index triplets into allVertices.
+     * @return Ordered boundary polygon contour. If no valid boundary cycle is found, returns QPolygonF(allVertices).
+     */
+    static QPolygonF extractBoundaryContour(const QList<QPointF> &allVertices, const QList<int> &triangles);
 };
 
 } // namespace BentoPackGeometry

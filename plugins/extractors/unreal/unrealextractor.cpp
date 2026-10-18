@@ -184,7 +184,22 @@ bool UnrealExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extr
                     }
                 }
 
-                if (!poly.isEmpty()) {
+                if (sObj.contains(QStringLiteral("collisionGeometry"))) {
+                    QJsonObject colGeom = sObj.value(QStringLiteral("collisionGeometry")).toObject();
+                    QJsonArray colArr = colGeom.value(QStringLiteral("polygon")).toArray();
+                    if (!colArr.isEmpty()) {
+                        poly.clear();
+                        for (const QJsonValue &cVal : colArr) {
+                            QJsonObject cObj = cVal.toObject();
+                            poly.append(QPointF(cObj.value(QStringLiteral("x")).toDouble(), cObj.value(QStringLiteral("y")).toDouble()));
+                        }
+                    }
+                }
+                if (poly.isEmpty() && !verts.isEmpty()) {
+                    poly = BentoPackGeometry::Triangulator::extractBoundaryContour(verts, tris);
+                }
+
+                if (!verts.isEmpty()) {
                     box.hasPolygonMesh = true;
                     box.polygon = poly;
                     box.vertices = verts;
@@ -427,11 +442,15 @@ bool UnrealExtractor::write(const QString &filePath, const SpriteDocument &doc, 
             renderGeom["triangles"] = tArr;
             sObj["renderGeometry"] = renderGeom;
 
-            // Collision geometry
+            // Collision geometry (rigid boundary contour)
             QJsonObject collisionGeom;
             QJsonArray colPoly;
             if (useMesh) {
-                for (const QPointF &pt : meshVertices) {
+                QPolygonF boundaryPoly = box.polygon;
+                if (boundaryPoly.isClosed() && boundaryPoly.size() >= 4) {
+                    boundaryPoly.removeLast();
+                }
+                for (const QPointF &pt : boundaryPoly) {
                     QJsonObject v;
                     v["x"] = pt.x();
                     v["y"] = pt.y();

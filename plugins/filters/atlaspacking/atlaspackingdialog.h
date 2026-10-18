@@ -84,6 +84,8 @@ private:
     QCheckBox       *m_checkPowerOfTwo = nullptr;
     QCheckBox       *m_checkForceSquare = nullptr;
     QCheckBox       *m_checkDeduplicate = nullptr;
+    QCheckBox       *m_checkDeduplicateCels = nullptr;
+    QCheckBox       *m_checkDeltaPatching = nullptr;
     QCheckBox       *m_checkTrim = nullptr;
     QSpinBox        *m_spinThreads = nullptr;
     QPushButton     *m_btnPackNow = nullptr;

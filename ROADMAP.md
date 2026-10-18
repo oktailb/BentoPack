@@ -176,7 +176,7 @@ En production réelle (RPG avec des centaines de monstres, personnages avec des 
 
 ---
 
-## ✂️ Priorité 4 (P2) : M22 — Déduplication Modulaire par Cels & Deltas (Trim & Link VRAM)
+## ✂️ Priorité 4 (P2) : [x] TERMINÉ / LIVRÉ — M22 : Déduplication Modulaire par Cels & Deltas (Trim & Link VRAM)
 
 ### 📌 Contexte & Problématique Métier
 Dans les animations de personnages (idle, respiration, clignement des yeux) ou d'objets (torche allumée), plus de 80% des pixels de l'image restent immobiles entre les frames. Les stocker intégralement à chaque frame dévore de la surface d'atlas et de la mémoire GPU inutilement.

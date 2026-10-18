@@ -215,6 +215,17 @@ if (MINGW)
 endif()
 add_test(NAME test_multipage_packer COMMAND test_multipage_packer)
 
+# 13. test_vram_dedup (M22)
+add_executable(test_vram_dedup test_vram_dedup.cpp)
+target_include_directories(test_vram_dedup PRIVATE ${PLUGIN_INCLUDES})
+target_compile_definitions(test_vram_dedup PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_vram_dedup PRIVATE BentoPackCore Qt6::Test)
+set_target_properties(test_vram_dedup PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_vram_dedup PRIVATE -mconsole)
+endif()
+add_test(NAME test_vram_dedup COMMAND test_vram_dedup)
+
 set(ALL_TEST_TARGETS
     test_extractors
     test_app_config
@@ -232,6 +243,7 @@ set(ALL_TEST_TARGETS
     test_gui_integration
     test_concurrency_and_security
     test_multipage_packer
+    test_vram_dedup
 )
 
 set_tests_properties(${ALL_TEST_TARGETS}

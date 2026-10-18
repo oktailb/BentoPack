@@ -329,6 +329,14 @@
         <translation>Auto-Aliasing (Combinar fotogramas idénticos sin romper animaciones)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>Deduplicación modular de cels (M22 - Vincular cels compartidos entre capas)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>Recorte por parches delta (M22 - Recortar subrectángulos delta entre fotogramas)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>Recortar Bordes Transparentes antes de empaquetar</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>Calculando empaquetado...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 parches delta</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 únicos / %2 total (%3 fotograma(s) ahorrado(s))%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 fotograma(s)%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>Métricas de Empaquetado en Vivo</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 único(s) / %2 en total (%3 fotograma(s) ahorrado(s))</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>%1 fotograma(s)</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ La eliminación estricta borra el píxel.</translation>
         <translation>Recortar Bordes Transparentes</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>Deduplicación modular de cels (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>Deduplica cels compartidos entre capas y fotogramas de animación mediante hash XXH3 de 64 bits</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>Activar recorte por parches delta (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>Extrae parches delimitadores modificados entre fotogramas consecutivos cuando el área delta es pequeña, reduciendo el consumo de VRAM</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>Textura VRAM y Compresión de GPU (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ La eliminación estricta borra el píxel.</translation>
         <translation>Eficiencia de Empaquetado: %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>Fotogramas: %1 en total (%2 únicos, %3 duplicados ahorrados)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 parches delta</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>Fotogramas: %1 en total (todos únicos)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>Fotogramas: %1 total (%2 únicos, %3 duplicados ahorrados)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>Fotogramas: %1 total (todos únicos)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

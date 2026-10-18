@@ -329,6 +329,14 @@
         <translation>Auto-Aliasing (Fusionner les frames identiques sans casser les animations)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>Déduplication modulaire des cels (M22 - Lier les cels partagés entre calques)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>Découpage par patchs delta (M22 - Rogner les sous-rectangles delta entre frames)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>Rogner les bordures transparentes avant empaquetage</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>Calcul du packing en cours...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 patchs delta</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 uniques / %2 au total (%3 frame(s) économisée(s))%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 frame(s)%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>Métriques d&apos;Empaquetage en Direct</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 uniques / %2 au total (%3 frame(s) économisée(s))</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>%1 frame(s)</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ La suppression stricte efface le pixel.</translation>
         <translation>Rogner les bordures transparentes (Trim)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>Déduplication modulaire des cels (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>Déduplique les cels partagés entre calques et frames d&apos;animation via hachage XXH3 64 bits</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>Activer le découpage par patchs delta (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>Extrait les patchs modifiés entre frames consécutives lorsque la surface delta est réduite, diminuant l&apos;empreinte VRAM</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>Compression de Textures VRAM &amp; GPU (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ La suppression stricte efface le pixel.</translation>
         <translation>Efficacité d&apos;empaquetage : %1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>Frames : %1 au total (%2 uniques, %3 doublons économisés)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 patchs delta</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>Frames : %1 au total (toutes uniques)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>Frames : %1 au total (%2 uniques, %3 doublons économisés)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>Frames : %1 au total (toutes uniques)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>
@@ -2475,10 +2507,6 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
         <translation>Échelle réelle 100%</translation>
     </message>
     <message>
-        <source>KEY_UNKNOWN_FEATURE</source>
-        <translation>Fonctionnalité inconnue</translation>
-    </message>
-    <message>
         <source>KEY_ACTION_POLYGON_MESH</source>
         <translation>Maillage polygonal 2D (Tight Mesh)...</translation>
     </message>
@@ -2497,6 +2525,10 @@ Voulez-vous les enregistrer avant de continuer ?</translation>
     <message>
         <source>KEY_CTX_EDIT_PIXELS</source>
         <translation>Éditer les pixels...</translation>
+    </message>
+    <message>
+        <source>KEY_UNKNOWN_FEATURE</source>
+        <translation>Fonctionnalité inconnue</translation>
     </message>
 </context>
 <context>

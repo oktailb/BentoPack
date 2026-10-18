@@ -71,6 +71,8 @@ AtlasPackingDialog::AtlasPackingDialog(SpriteDocument *doc, QUndoStack *undoStac
     bool pot = settings.value(QStringLiteral("atlasPacking/powerOfTwo"), false).toBool();
     bool square = settings.value(QStringLiteral("atlasPacking/forceSquare"), false).toBool();
     bool dedup = settings.value(QStringLiteral("atlasPacking/deduplicate"), false).toBool();
+    bool dedupCels = settings.value(QStringLiteral("atlasPacking/deduplicateCels"), false).toBool();
+    bool deltaPatch = settings.value(QStringLiteral("atlasPacking/deltaPatching"), false).toBool();
     bool trim = settings.value(QStringLiteral("atlasPacking/trim"), false).toBool();
     const int maxCores = std::max(1, QThread::idealThreadCount());
     int threads = settings.value(QStringLiteral("atlasPacking/threads"), maxCores).toInt();
@@ -82,6 +84,8 @@ AtlasPackingDialog::AtlasPackingDialog(SpriteDocument *doc, QUndoStack *undoStac
     m_checkPowerOfTwo->setChecked(pot);
     m_checkForceSquare->setChecked(square);
     m_checkDeduplicate->setChecked(dedup);
+    if (m_checkDeduplicateCels) m_checkDeduplicateCels->setChecked(dedupCels);
+    if (m_checkDeltaPatching) m_checkDeltaPatching->setChecked(deltaPatch);
     m_checkTrim->setChecked(trim);
     if (m_spinThreads) {
         m_spinThreads->setValue(qBound(1, threads, maxCores));
@@ -95,6 +99,8 @@ AtlasPackingDialog::AtlasPackingDialog(SpriteDocument *doc, QUndoStack *undoStac
     connect(m_checkPowerOfTwo, &QCheckBox::toggled, this, &AtlasPackingDialog::onParametersChanged);
     connect(m_checkForceSquare, &QCheckBox::toggled, this, &AtlasPackingDialog::onParametersChanged);
     connect(m_checkDeduplicate, &QCheckBox::toggled, this, &AtlasPackingDialog::onParametersChanged);
+    if (m_checkDeduplicateCels) connect(m_checkDeduplicateCels, &QCheckBox::toggled, this, &AtlasPackingDialog::onParametersChanged);
+    if (m_checkDeltaPatching) connect(m_checkDeltaPatching, &QCheckBox::toggled, this, &AtlasPackingDialog::onParametersChanged);
     connect(m_checkTrim, &QCheckBox::toggled, this, &AtlasPackingDialog::onParametersChanged);
     if (m_spinThreads) {
         connect(m_spinThreads, QOverload<int>::of(&QSpinBox::valueChanged), this, &AtlasPackingDialog::onParametersChanged);
@@ -171,12 +177,16 @@ void AtlasPackingDialog::setupUI()
     m_checkPowerOfTwo = new QCheckBox(tr("Force Power of Two Dimensions (2^n: 512, 1024, 2048...)"), grpConstraints);
     m_checkForceSquare = new QCheckBox(tr("Force Square Atlas (Width == Height)"), grpConstraints);
     m_checkDeduplicate = new QCheckBox(tr("Auto-Aliasing (Merge identical frames without breaking animations)"), grpConstraints);
+    m_checkDeduplicateCels = new QCheckBox(tr("Modular Cel Deduplication (M22 - Link shared cels across layers)"), grpConstraints);
+    m_checkDeltaPatching = new QCheckBox(tr("Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)"), grpConstraints);
     m_checkTrim = new QCheckBox(tr("Trim Transparent Borders before packing"), grpConstraints);
     m_checkTrim->setToolTip(tr("Crops transparent margins around frames while preserving animation pivots. Highly recommended for animation spritesheets to eliminate empty spaces and maximize packing density."));
 
     constLayout->addWidget(m_checkPowerOfTwo);
     constLayout->addWidget(m_checkForceSquare);
     constLayout->addWidget(m_checkDeduplicate);
+    constLayout->addWidget(m_checkDeduplicateCels);
+    constLayout->addWidget(m_checkDeltaPatching);
     constLayout->addWidget(m_checkTrim);
     layout->addWidget(grpConstraints);
 
@@ -317,6 +327,8 @@ AtlasPacker::PackOptions AtlasPackingDialog::packOptions() const
     opts.powerOfTwo = m_checkPowerOfTwo->isChecked();
     opts.forceSquare = m_checkForceSquare->isChecked();
     opts.deduplicate = m_checkDeduplicate->isChecked();
+    opts.enableCelDeduplication = m_checkDeduplicateCels && m_checkDeduplicateCels->isChecked();
+    opts.enableDeltaPatching = m_checkDeltaPatching && m_checkDeltaPatching->isChecked();
     if (m_spinThreads) {
         opts.threadCount = m_spinThreads->value();
     }
@@ -365,10 +377,19 @@ void AtlasPackingDialog::updateStatsUI(const AtlasPackResult &res)
     int unique = res.uniqueFramesCount;
     int saved = total - unique;
 
+    int deltaPatches = 0;
+    for (int refIdx : res.deltaReferenceIndices) {
+        if (refIdx != -1) deltaPatches++;
+    }
+    QString deltaSuffix;
+    if (deltaPatches > 0) {
+        deltaSuffix = tr(" | %1 delta patches").arg(deltaPatches);
+    }
+
     if (m_checkDeduplicate->isChecked() && saved > 0) {
-        m_lblSavedFrames->setText(tr("%1 unique / %2 total (%3 frame(s) saved)").arg(unique).arg(total).arg(saved));
+        m_lblSavedFrames->setText(tr("%1 unique / %2 total (%3 frame(s) saved)%4").arg(unique).arg(total).arg(saved).arg(deltaSuffix));
     } else {
-        m_lblSavedFrames->setText(tr("%1 frame(s)").arg(total));
+        m_lblSavedFrames->setText(tr("%1 frame(s)%2").arg(total).arg(deltaSuffix));
     }
 
     setStatusText(tr("Packed in %1x%2 (%3%)").arg(res.dimensions.width()).arg(res.dimensions.height()).arg(QString::number(res.efficiency, 'f', 1)));
@@ -621,6 +642,8 @@ void AtlasPackingDialog::resetDefaults()
     m_checkPowerOfTwo->setChecked(false);
     m_checkForceSquare->setChecked(false);
     m_checkDeduplicate->setChecked(false);
+    if (m_checkDeduplicateCels) m_checkDeduplicateCels->setChecked(false);
+    if (m_checkDeltaPatching) m_checkDeltaPatching->setChecked(false);
     m_checkTrim->setChecked(false);
     if (m_spinThreads) {
         m_spinThreads->setValue(std::max(1, QThread::idealThreadCount()));
@@ -637,6 +660,8 @@ void AtlasPackingDialog::saveSettings()
     settings.setValue(QStringLiteral("atlasPacking/powerOfTwo"), m_checkPowerOfTwo->isChecked());
     settings.setValue(QStringLiteral("atlasPacking/forceSquare"), m_checkForceSquare->isChecked());
     settings.setValue(QStringLiteral("atlasPacking/deduplicate"), m_checkDeduplicate->isChecked());
+    if (m_checkDeduplicateCels) settings.setValue(QStringLiteral("atlasPacking/deduplicateCels"), m_checkDeduplicateCels->isChecked());
+    if (m_checkDeltaPatching) settings.setValue(QStringLiteral("atlasPacking/deltaPatching"), m_checkDeltaPatching->isChecked());
     settings.setValue(QStringLiteral("atlasPacking/trim"), m_checkTrim->isChecked());
     if (m_spinThreads) {
         settings.setValue(QStringLiteral("atlasPacking/threads"), m_spinThreads->value());

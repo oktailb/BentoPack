@@ -16,6 +16,9 @@
 
 #include "geometry/triangulator.h"
 #include <QVector>
+#include <QHash>
+#include <QSet>
+#include <limits>
 #include <cmath>
 #include <algorithm>
 
@@ -652,6 +655,109 @@ SmartMeshResult Triangulator::generateSmartMesh(const QPolygonF &outerPolygon,
     result.triangles = triangulateCDT(poly, allVertices);
 
     return result;
+}
+
+QPolygonF Triangulator::extractBoundaryContour(const QList<QPointF> &allVertices, const QList<int> &triangles)
+{
+    if (allVertices.size() < 3) {
+        return QPolygonF(allVertices);
+    }
+    if (triangles.size() < 3 || triangles.size() % 3 != 0) {
+        return QPolygonF(allVertices);
+    }
+
+    // 1. Count occurrences of undirected edges
+    QHash<quint64, int> edgeCounts;
+    edgeCounts.reserve(triangles.size());
+    const int triCount = triangles.size() / 3;
+    for (int t = 0; t < triCount; ++t) {
+        int i0 = triangles[t * 3];
+        int i1 = triangles[t * 3 + 1];
+        int i2 = triangles[t * 3 + 2];
+        if (i0 < 0 || i0 >= allVertices.size() ||
+            i1 < 0 || i1 >= allVertices.size() ||
+            i2 < 0 || i2 >= allVertices.size()) {
+            continue;
+        }
+
+        auto addEdge = [&](int u, int v) {
+            if (u > v) std::swap(u, v);
+            quint64 key = (static_cast<quint64>(static_cast<quint32>(u)) << 32) | static_cast<quint32>(v);
+            edgeCounts[key]++;
+        };
+        addEdge(i0, i1);
+        addEdge(i1, i2);
+        addEdge(i2, i0);
+    }
+
+    // 2. Build adjacency for boundary edges (edges used in exactly 1 triangle)
+    QHash<int, QList<int>> adj;
+    for (auto it = edgeCounts.constBegin(); it != edgeCounts.constEnd(); ++it) {
+        if (it.value() == 1) {
+            int u = static_cast<int>(it.key() >> 32);
+            int v = static_cast<int>(it.key() & 0xFFFFFFFF);
+            adj[u].append(v);
+            adj[v].append(u);
+        }
+    }
+
+    if (adj.isEmpty()) {
+        return QPolygonF(allVertices);
+    }
+
+    // 3. Start boundary cycle at vertex 0 (or minimum boundary index)
+    int start = 0;
+    if (!adj.contains(start)) {
+        int minIdx = std::numeric_limits<int>::max();
+        for (auto it = adj.constBegin(); it != adj.constEnd(); ++it) {
+            if (it.key() < minIdx) {
+                minIdx = it.key();
+            }
+        }
+        start = minIdx;
+    }
+    if (start == std::numeric_limits<int>::max() || !adj.contains(start)) {
+        return QPolygonF(allVertices);
+    }
+
+    // 4. Walk the perimeter boundary loop
+    int curr = start;
+    int prev = -1;
+    QPolygonF contour;
+    contour.append(allVertices[start]);
+    QSet<int> visited;
+    visited.insert(start);
+
+    while (contour.size() <= allVertices.size()) {
+        const QList<int> &neighbors = adj.value(curr);
+        int nextNode = -1;
+        for (int n : neighbors) {
+            if (n != prev) {
+                if (n == start && contour.size() >= 3) {
+                    nextNode = start;
+                    break;
+                }
+                if (!visited.contains(n)) {
+                    nextNode = n;
+                    break;
+                }
+            }
+        }
+
+        if (nextNode < 0 || nextNode == start) {
+            break;
+        }
+
+        contour.append(allVertices[nextNode]);
+        visited.insert(nextNode);
+        prev = curr;
+        curr = nextNode;
+    }
+
+    if (contour.size() >= 3) {
+        return contour;
+    }
+    return QPolygonF(allVertices);
 }
 
 } // namespace BentoPackGeometry

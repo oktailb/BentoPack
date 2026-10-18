@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -154,9 +154,10 @@ bool AtlasBoxItem::nudgeSelectedVertices(int dx, int dy)
     return true;
 }
 
-void AtlasBoxItem::setPolygonMesh(const QPolygonF &poly, const QList<int> &triangles, bool hasMesh)
+void AtlasBoxItem::setPolygonMesh(const QPolygonF &poly, const QList<int> &triangles, bool hasMesh, const QList<QPointF> &vertices)
 {
     m_polygon = poly;
+    m_vertices = vertices.isEmpty() ? poly.toList() : vertices;
     m_triangles = triangles;
     m_hasPolygonMesh = hasMesh;
     update();
@@ -825,6 +826,8 @@ void AtlasBoxItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         painter->translate(m_rect.topLeft());
         painter->setRenderHint(QPainter::Antialiasing, true);
 
+        const QList<QPointF> &meshVerts = !m_vertices.isEmpty() ? m_vertices : m_polygon.toList();
+
         // Triangles wireframe
         if (!m_triangles.isEmpty() && m_triangles.size() % 3 == 0) {
             QPen triPen(QColor(0, 220, 255, 120), 1.0, Qt::DashLine);
@@ -837,10 +840,12 @@ void AtlasBoxItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
                 int i0 = m_triangles[t * 3];
                 int i1 = m_triangles[t * 3 + 1];
                 int i2 = m_triangles[t * 3 + 2];
-                if (i0 < m_polygon.size() && i1 < m_polygon.size() && i2 < m_polygon.size()) {
-                    const QPointF &p0 = m_polygon[i0];
-                    const QPointF &p1 = m_polygon[i1];
-                    const QPointF &p2 = m_polygon[i2];
+                if (i0 >= 0 && i0 < meshVerts.size() &&
+                    i1 >= 0 && i1 < meshVerts.size() &&
+                    i2 >= 0 && i2 < meshVerts.size()) {
+                    const QPointF &p0 = meshVerts[i0];
+                    const QPointF &p1 = meshVerts[i1];
+                    const QPointF &p2 = meshVerts[i2];
                     painter->drawLine(p0, p1);
                     painter->drawLine(p1, p2);
                     painter->drawLine(p2, p0);
@@ -848,7 +853,7 @@ void AtlasBoxItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
             }
         }
 
-        // Outer polygon boundary
+        // Outer polygon boundary (clean perimeter contour)
         QPen contourPen(QColor(0, 255, 128), 1.5, Qt::SolidLine);
         contourPen.setCosmetic(true);
         painter->setPen(contourPen);
@@ -856,6 +861,18 @@ void AtlasBoxItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
         // Vertices control points when selected
         if (m_selected) {
+            // Draw interior Steiner points if any as subtle dots
+            if (meshVerts.size() > m_polygon.size()) {
+                QPen interiorPen(QColor(0, 210, 255, 160), 1.0);
+                interiorPen.setCosmetic(true);
+                QBrush interiorBrush(QColor(0, 210, 255, 180));
+                painter->setPen(interiorPen);
+                painter->setBrush(interiorBrush);
+                for (int i = m_polygon.size(); i < meshVerts.size(); ++i) {
+                    painter->drawEllipse(meshVerts[i], 2.0, 2.0);
+                }
+            }
+
             QPen defaultPen(Qt::black, 1.0);
             defaultPen.setCosmetic(true);
             QBrush defaultBrush(QColor(255, 230, 40)); // Yellow

@@ -404,8 +404,39 @@ void TestVramCompression::testReadUserSampleTres()
     QVERIFY(doc.atlas().width() > 0);
     QVERIFY(doc.atlas().height() > 0);
     QVERIFY2(doc.box(0).hasPolygonMesh, "Frame 0 must have restored polygon mesh from _mesh.tres");
-    QVERIFY(!doc.box(0).polygon.isEmpty());
+    QCOMPARE(doc.box(0).polygon.size(), 66);
+    QCOMPARE(doc.box(0).vertices.size(), 167);
     QVERIFY(!doc.box(0).triangles.isEmpty());
+    QImage clipped = doc.polygonClippedFrame(0);
+    QVERIFY(!clipped.isNull());
+
+    // Test re-exporting and re-importing
+    QTemporaryDir tempOut;
+    QVERIFY(tempOut.isValid());
+    QString outTres = tempOut.filePath("hero_reexport.tres");
+    ExportOptions exportOpts;
+    exportOpts.format = FORMAT_GODOT;
+    exportOpts.packOptions.algorithm = AtlasPacker::MaxRects;
+    bool writeOk = godot.write(outTres, doc, exportOpts, &err);
+    QVERIFY2(writeOk, qPrintable(err.message));
+
+    QString outMesh = tempOut.filePath("hero_reexport_mesh.tres");
+    QVERIFY(QFile::exists(outMesh));
+    QFile fMesh(outMesh);
+    QVERIFY(fMesh.open(QIODevice::ReadOnly | QIODevice::Text));
+    QString meshContent = QString::fromUtf8(fMesh.readAll());
+    fMesh.close();
+
+    QVERIFY(meshContent.contains("metadata/frame_0/polygon = PackedVector2Array("));
+    QVERIFY(meshContent.contains("metadata/frame_0/vertices = PackedVector2Array("));
+    QVERIFY(meshContent.contains("metadata/frame_0/internal_vertex_count = 101"));
+
+    SpriteDocument reDoc;
+    bool reReadOk = godot.read(outTres, reDoc, &err);
+    QVERIFY2(reReadOk, qPrintable(err.toString()));
+    QCOMPARE(reDoc.frameCount(), doc.frameCount());
+    QCOMPARE(reDoc.box(0).polygon.size(), 66);
+    QCOMPARE(reDoc.box(0).vertices.size(), 167);
 }
 
 void TestVramCompression::testUnityExtractorReadRoundtrip()

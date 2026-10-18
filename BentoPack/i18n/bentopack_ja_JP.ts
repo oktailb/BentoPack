@@ -329,6 +329,14 @@
         <translation>オートエイリアシング (アニメーションを壊さずに同一フレームを統合)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>モジュラーセル重複排除 (M22 - レイヤー間で共有セルをリンク)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>デルタパッチスライス (M22 - アニメーションフレーム間の差分矩形をトリミング)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>パッキング前に透明な境界線をトリミング</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>パッキング計算中...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 デルタパッチ</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 固有 / %2 合計 (%3 フレーム節約)%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 フレーム%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>リアルタイムパッキング指標</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 px</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 固有 / 合計 %2 (%3 フレーム節約)</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>%1 フレーム</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ Strict removal clears the pixel.</source>
         <translation>透明な境界線をトリミング</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>モジュラーセル重複排除 (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>64ビットXXH3ハッシュによりアニメーションレイヤーとフレーム間で共有セルを重複排除</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>デルタパッチスライスを有効化 (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>差分領域が小さい場合に連続するアニメーションフレーム間のダーティ境界パッチを抽出し、VRAM消費を削減</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>VRAM テクスチャと GPU 圧縮 (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ Strict removal clears the pixel.</source>
         <translation>充填効率：%1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>フレーム：合計 %1 (固有 %2、節約重複 %3)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 デルタパッチ</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>フレーム：合計 %1 (すべて固有)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>フレーム: 合計 %1 (%2 固有、%3 重複節約)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>フレーム: 合計 %1 (すべて固有)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

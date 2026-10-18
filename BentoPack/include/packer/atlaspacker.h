@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,13 +38,20 @@ struct BENTOPACK_CORE_EXPORT AtlasPackResult {
     float           efficiency = 0.0f;  ///< Occupancy / compaction percentage (0.0% to 100.0%)
     int             uniqueFramesCount = 0;
     bool            success = false;
+
+    // M22: Delta-Patching and Modular Cel Deduplication metadata
+    bool            hasDeltaPatches = false;
+    QList<QPoint>   deltaOffsets;           ///< (dx, dy) offset for each frame (QPoint(0,0) if not a delta)
+    QList<QRect>    deltaDirtyRects;        ///< Bounding box of modified region for each frame
+    QList<int>      deltaReferenceIndices;  ///< Reference frame index for delta (-1 if full keyframe)
 };
 
 /**
  * @brief The AtlasPacker class provides advanced 2D atlas packing algorithms.
  *
  * Supports MaxRects (BSSF, BAF, BLSF, BottomLeft, ContactPoint), uniform grids,
- * row/shelf packing, power-of-two constraints, border extrusion, and visual deduplication.
+ * row/shelf packing, power-of-two constraints, border extrusion, visual deduplication,
+ * and M22 modular cel deduplication & delta-patch slicing.
  */
 class BENTOPACK_CORE_EXPORT AtlasPacker
 {
@@ -70,6 +77,9 @@ public:
         bool                powerOfTwo = false;     ///< Force dimensions to powers of two (2^n)
         bool                forceSquare = false;    ///< Force square dimensions (width == height)
         bool                deduplicate = false;    ///< Detect and share identical frames
+        bool                enableCelDeduplication = false; ///< M22: Deduplicate cels across layers and frames
+        bool                enableDeltaPatching = false;     ///< M22: Extract differential dirty patches (<= threshold)
+        float               deltaPatchThreshold = 0.25f;    ///< Maximum area ratio for delta-patching (default 25%)
         int                 maxWidth = 4096;
         int                 maxHeight = 4096;
         int                 threadCount = 0;        ///< Worker threads (0 = auto / ideal thread count)

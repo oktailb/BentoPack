@@ -353,6 +353,26 @@
         </property>
        </widget>
       </item>
+      <item row="5" column="0" colspan="2">
+       <widget class="QCheckBox" name="chkDeduplicateCels">
+        <property name="text">
+         <string>Modular Cel Deduplication (M22)</string>
+        </property>
+        <property name="toolTip">
+         <string>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2" colspan="2">
+       <widget class="QCheckBox" name="chkDeltaPatching">
+        <property name="text">
+         <string>Enable Delta-Patch Slicing (M22)</string>
+        </property>
+        <property name="toolTip">
+         <string>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

@@ -329,6 +329,14 @@
         <translation>自动消除别名 (合并相同帧而不破坏动画)</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22 - Link shared cels across layers)</source>
+        <translation>模块化 Cel 去重 (M22 - 跨图层链接共享单元格)</translation>
+    </message>
+    <message>
+        <source>Delta-Patch Slicing (M22 - Crop sub-rect deltas between animation frames)</source>
+        <translation>增量补丁切片 (M22 - 裁剪动画帧之间的子矩形增量)</translation>
+    </message>
+    <message>
         <source>Trim Transparent Borders before packing</source>
         <translation>打包前修剪透明边缘</translation>
     </message>
@@ -361,6 +369,18 @@
         <translation>正在计算打包...</translation>
     </message>
     <message>
+        <source> | %1 delta patches</source>
+        <translation> | %1 增量补丁</translation>
+    </message>
+    <message>
+        <source>%1 unique / %2 total (%3 frame(s) saved)%4</source>
+        <translation>%1 独立 / 共 %2 (%3 帧已节省)%4</translation>
+    </message>
+    <message>
+        <source>%1 frame(s)%2</source>
+        <translation>%1 帧%2</translation>
+    </message>
+    <message>
         <source>Live Packing Metrics</source>
         <translation>实时打包指标</translation>
     </message>
@@ -387,14 +407,6 @@
     <message>
         <source>%1 x %2 px</source>
         <translation>%1 x %2 像素</translation>
-    </message>
-    <message>
-        <source>%1 unique / %2 total (%3 frame(s) saved)</source>
-        <translation>%1 独立 / 共 %2 (节省了 %3 帧)</translation>
-    </message>
-    <message>
-        <source>%1 frame(s)</source>
-        <translation>%1 帧</translation>
     </message>
     <message>
         <source>Packed in %1x%2 (%3%)</source>
@@ -974,6 +986,22 @@ Strict removal clears the pixel.</source>
         <translation>修剪透明边缘</translation>
     </message>
     <message>
+        <source>Modular Cel Deduplication (M22)</source>
+        <translation>模块化 Cel 去重 (M22)</translation>
+    </message>
+    <message>
+        <source>Deduplicates shared cels across animation layers and frames via 64-bit XXH3 hashing</source>
+        <translation>通过 64 位 XXH3 哈希在动画图层与帧之间对共享 Cel 进行去重</translation>
+    </message>
+    <message>
+        <source>Enable Delta-Patch Slicing (M22)</source>
+        <translation>启用增量补丁切片 (M22)</translation>
+    </message>
+    <message>
+        <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
+        <translation>在增量区域较小时提取连续动画帧之间的脏边界框补丁，降低 VRAM 显存占用</translation>
+    </message>
+    <message>
         <source>VRAM Texture &amp; GPU Compression (M9)</source>
         <translation>VRAM 纹理与 GPU 压缩 (M9)</translation>
     </message>
@@ -1238,12 +1266,16 @@ Strict removal clears the pixel.</source>
         <translation>打包效率：%1%</translation>
     </message>
     <message>
-        <source>Frames: %1 total (%2 unique, %3 duplicates saved)</source>
-        <translation>帧数：共 %1 帧 (%2 独立，节省了 %3 个重复项)</translation>
+        <source> | %1 delta patches</source>
+        <translation> | %1 增量补丁</translation>
     </message>
     <message>
-        <source>Frames: %1 total (all unique)</source>
-        <translation>帧数：共 %1 帧 (全部独立)</translation>
+        <source>Frames: %1 total (%2 unique, %3 duplicates saved)%4</source>
+        <translation>帧：共 %1 (%2 独立，已节省 %3 重复项)%4</translation>
+    </message>
+    <message>
+        <source>Frames: %1 total (all unique)%2</source>
+        <translation>帧：共 %1 (全部独立)%2</translation>
     </message>
     <message>
         <source>Dimensions: Does not fit in maximum bounds!</source>

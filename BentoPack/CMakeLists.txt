@@ -53,6 +53,9 @@ set(BentoPackCore_SRC
     src/config/appconfig.cpp
     src/image/spritedetector.cpp
     src/image/colorpalettepresets.cpp
+    src/image/pixelhash.cpp
+    src/packer/celdeduplicator.cpp
+    src/packer/deltapatchslicer.cpp
     src/project/sessionmanager.cpp
     src/project/projectmanager.cpp
     src/filters/filterregistry.cpp
@@ -90,11 +93,14 @@ set(BentoPackCore_INCLUDE
     include/packer/vramtexturecompressor.h
     include/packer/multiatlaspacker.h
     include/packer/multipagepacker.h
+    include/packer/celdeduplicator.h
+    include/packer/deltapatchslicer.h
     include/animation/animationplayer.h
     include/commands/commands.h
     include/commands/filtercommands.h
     include/image/spritedetector.h
     include/image/colorpalettepresets.h
+    include/image/pixelhash.h
     include/project/sessionmanager.h
     include/project/projectmanager.h
     include/filters/filterplugin.h
