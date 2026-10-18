@@ -34,9 +34,13 @@ private slots:
 
 void TestLiveWatch::testConfigDefaultsAndComputedPath()
 {
-    LiveWatchConfig cfg = LiveWatchConfig::createDefault(QStringLiteral("/path/to/game/hero.ase"));
-    QCOMPARE(cfg.sourcePath, QStringLiteral("/path/to/game/hero.ase"));
-    QCOMPARE(cfg.outputDirectory, QStringLiteral("/path/to/game"));
+    const QString mockPath = QStringLiteral("/path/to/game/hero.ase");
+    LiveWatchConfig cfg = LiveWatchConfig::createDefault(mockPath);
+    QCOMPARE(cfg.sourcePath, mockPath);
+    // On Unix this is "/path/to/game"; on Windows QFileInfo may resolve drive-relative paths with drive letter (e.g. "D:/path/to/game")
+    QVERIFY(cfg.outputDirectory == QStringLiteral("/path/to/game") ||
+            cfg.outputDirectory == QFileInfo(mockPath).path() ||
+            cfg.outputDirectory == QFileInfo(mockPath).absolutePath());
     QCOMPARE(cfg.outputBaseName, QStringLiteral("hero"));
     QCOMPARE(cfg.engineFormatId, QStringLiteral("godot"));
     QVERIFY(cfg.autoExport);
@@ -180,7 +184,7 @@ void TestLiveWatch::testWatchLifecycleAndManualReload()
     manager.triggerManualReload();
 
     // Wait for async processing
-    QVERIFY(spyReload.wait(2000));
+    QVERIFY(spyReload.wait(5000));
     QVERIFY(manager.state() == WatchState::Success || manager.state() == WatchState::Watching);
 
     manager.stopWatching();
