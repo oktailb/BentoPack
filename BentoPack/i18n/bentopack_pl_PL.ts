@@ -2966,6 +2966,10 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Zaznaczono: %1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>Edytor punktu obrotu (pivot) i celownika animacji [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Opcje ołówka</translation>
     </message>
@@ -3284,6 +3288,90 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Kliknij kolor, aby zaznaczyć ciągłe pasujące piksele. Przytrzymaj &lt;b&gt;Shift&lt;/b&gt;, aby dodać, &lt;b&gt;Ctrl&lt;/b&gt;, aby odjąć.</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>Punkt obrotu i celownik animacji</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>Szybkie wyrównanie:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ Ziemia (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>Wyrównaj punkt obrotu do dołu na środku (pozycja ziemi)</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 Środek</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>Wyrównaj punkt obrotu dokładnie do środka</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (Góra-Lewo)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>Wyrównaj punkt obrotu do lewego górnego rogu (początek UI / obrazu)</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>Pozycje predefiniowane (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>Współrzędne (względem klatki):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>Pozioma współrzędna punktu obrotu względem lewego górnego rogu klatki</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>Pionowa współrzędna punktu obrotu względem lewego górnego rogu klatki</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>Pokaż linie pomocnicze ziemi i osi</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>Wyświetl przerywane linie poziomu gruntu (czerwona) i pionowej osi środkowej (niebieska)</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>Automatycznie stosuj zmiany do klatek animacji</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>Po zaznaczeniu przeciąganie lub edycja punktu obrotu dotyczy wszystkich klatek bieżącej animacji</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>Zastosuj do anim.</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>Zastosuj punkt obrotu bieżącej klatki do wszystkich klatek bieżącej animacji</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>Zastosuj do wszystkich</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>Zastosuj punkt obrotu bieżącej klatki do wszystkich klatek w całym projekcie</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;Wskazówka:&lt;/b&gt; Kliknij i przeciągnij celownik bezpośrednio na płótnie, aby ustawić punkt obrotu animacji. Przerywane linie oznaczają poziom gruntu i oś pionową do synchronizacji.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

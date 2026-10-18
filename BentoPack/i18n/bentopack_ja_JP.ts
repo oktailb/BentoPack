@@ -2966,6 +2966,10 @@ Strict removal clears the pixel.</source>
         <translation>選択中: %1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>アニメーションピボット＆レティクルエディター [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>鉛筆オプション</translation>
     </message>
@@ -3284,6 +3288,90 @@ Strict removal clears the pixel.</source>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;ヒント:&lt;/b&gt; 色をクリックして隣接する一致ピクセルを選択します。&lt;b&gt;Shift&lt;/b&gt;を押しながらで追加、&lt;b&gt;Ctrl&lt;/b&gt;で除外します。</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>アニメーションピボット＆レティクル</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>クイック配置:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ 地面 (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>ピボットを中央下（地面の位置）に配置</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 中央</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>ピボットを正確な中央に配置</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (左上)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>ピボットを左上（標準UI・画像原点）に配置</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>プリセット位置 (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>座標 (フレーム基準):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>フレーム左上を基準としたピボットの水平座標</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>フレーム左上を基準としたピボットの垂直座標</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>地面と軸のガイドラインを表示</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>地面レベル（赤色破線）と中央垂直軸（青色破線）を表示</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>アニメーションフレームに変更を自動適用</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>チェック時、ピボットのドラッグまたは編集が現在の全アニメーションフレームに適用されます</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>アニメに適用</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>現在のフレームのピボット位置を現在のアニメーションの全フレームに適用</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>すべてに適用</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>現在のフレームのピボット位置をプロジェクト全体の全フレームに適用</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;ヒント:&lt;/b&gt; キャンバス上でレティクルを直接クリック＆ドラッグしてアニメーションピボットを配置できます。破線は同期のための地面レベルと垂直軸を示します。</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

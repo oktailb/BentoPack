@@ -2966,6 +2966,10 @@ Deseja salvá-las antes de prosseguir?</translation>
         <translation>Selecionado: %1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>Editor de pivô e retículo de animação [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Opções do lápis</translation>
     </message>
@@ -3284,6 +3288,90 @@ Deseja salvá-las antes de prosseguir?</translation>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;Dica:&lt;/b&gt; Clique em uma cor para selecionar pixels contíguos correspondentes. Segure &lt;b&gt;Shift&lt;/b&gt; para adicionar, &lt;b&gt;Ctrl&lt;/b&gt; para subtrair.</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>Pivô e retículo de animação</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>Alinhamento rápido:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ Chão (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>Alinhar pivô ao centro inferior (posição do chão)</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 Centro</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>Alinhar pivô ao centro exato</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (Superior-Esquerdo)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>Alinhar pivô ao canto superior esquerdo (origem padrão da UI / imagem)</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>Posições predefinidas (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>Coordenadas (relativas ao quadro):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>Coordenada horizontal do pivô relativa ao canto superior esquerdo do quadro</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>Coordenada vertical do pivô relativa ao canto superior esquerdo do quadro</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>Mostrar guias de chão e eixo</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>Exibir linhas tracejadas do nível do chão (vermelho) e do eixo vertical central (azul)</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>Aplicar alterações automaticamente aos quadros da animação</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>Quando marcado, arrastar ou editar o pivô se aplica a todos os quadros da animação atual</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>Aplicar à Anim</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>Aplicar o ponto de pivô do quadro atual a todos os quadros da animação atual</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>Aplicar a Todos</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>Aplicar o ponto de pivô do quadro atual a todos os quadros de todo o projeto</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;Dica:&lt;/b&gt; Clique e arraste o retículo diretamente na tela para posicionar o pivô de animação. As linhas tracejadas indicam o nível do chão e o eixo vertical para sincronização.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

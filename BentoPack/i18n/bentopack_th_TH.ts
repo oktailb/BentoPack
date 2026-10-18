@@ -2966,6 +2966,10 @@ Strict removal clears the pixel.</translation>
         <translation>เลือกแล้ว: %1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>เครื่องมือแก้ไขจุดยึดและเป้าเล็งแอนิเมชัน [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>ตัวเลือกดินสอ</translation>
     </message>
@@ -3284,6 +3288,90 @@ Strict removal clears the pixel.</translation>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; คลิกที่สีเพื่อเลือกพิกเซลที่ตรงกันต่อเนื่องกัน กด &lt;b&gt;Shift&lt;/b&gt; เพื่อเพิ่ม กด &lt;b&gt;Ctrl&lt;/b&gt; เพื่อลบออกจากส่วนที่เลือก</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>จุดยึดและเป้าเล็งแอนิเมชัน</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>จัดตำแหน่งด่วน:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ พื้น (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>จัดจุดยึดไปที่กึ่งกลางด้านล่าง (ตำแหน่งพื้นดิน)</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 กึ่งกลาง</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>จัดจุดยึดไปที่กึ่งกลางพอดี</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (บน-ซ้าย)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>จัดจุดยึดไปที่บนซ้าย (จุดเริ่มต้นมาตรฐาน UI / รูปภาพ)</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>ตำแหน่งพรีเซ็ต (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>พิกัด (เทียบกับเฟรม):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>พิกัดแนวนอนของจุดยึดเทียบกับมุมบนซ้ายของเฟรม</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>พิกัดแนวตั้งของจุดยึดเทียบกับมุมบนซ้ายของเฟรม</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>แสดงเส้นบอกแนวพื้นและแกน</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>แสดงเส้นประระดับพื้นดิน (สีแดง) และแกนแนวตั้งตรงกลาง (สีน้ำเงิน)</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>นำการเปลี่ยนแปลงไปใช้กับเฟรมแอนิเมชันโดยอัตโนมัติ</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>เมื่อเลือก การลากหรือแก้ไขจุดยึดจะนำไปใช้กับทุกเฟรมในแอนิเมชันปัจจุบัน</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>นำไปใช้กับแอนิเมชัน</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>นำจุดยึดของเฟรมปัจจุบันไปใช้กับทุกเฟรมในแอนิเมชันปัจจุบัน</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>นำไปใช้กับทั้งหมด</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>นำจุดยึดของเฟรมปัจจุบันไปใช้กับทุกเฟรมในทั้งโปรเจกต์</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;คำแนะนำ:&lt;/b&gt; คลิกและลากเป้าเล็งบนผืนผ้าใบโดยตรงเพื่อวางจุดยึดแอนิเมชัน เส้นประจะระบุระดับพื้นดินและแกนแนวตั้งเพื่อการซิงโครไนซ์</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

@@ -294,6 +294,7 @@ qt6_add_resources(BentoPackWidgets "images"
     icons/delete_selection.png
     icons/undo.png
     icons/redo.png
+    icons/target.png
 )
 
 target_include_directories(BentoPackWidgets PUBLIC

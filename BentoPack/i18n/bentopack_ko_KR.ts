@@ -2966,6 +2966,10 @@ Strict removal clears the pixel.</source>
         <translation>선택됨: %1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>애니메이션 피벗 및 레티클 에디터 [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>연필 옵션</translation>
     </message>
@@ -3284,6 +3288,90 @@ Strict removal clears the pixel.</source>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 색상을 클릭하여 인접한 일치 픽셀을 선택합니다. &lt;b&gt;Shift&lt;/b&gt;를 누르면 추가, &lt;b&gt;Ctrl&lt;/b&gt;을 누르면 뺍니다.</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>애니메이션 피벗 및 레티클</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>빠른 정렬:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ 바닥 (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>피벗을 하단 중앙(바닥 위치)으로 정렬</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 중앙</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>피벗을 정확한 중앙으로 정렬</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (좌측 상단)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>피벗을 좌측 상단(표준 UI / 이미지 원점)으로 정렬</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>프리셋 위치 (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>좌표 (프레임 기준):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>프레임 좌측 상단 기준 피벗 가로 좌표</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>프레임 좌측 상단 기준 피벗 세로 좌표</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>바닥 및 중심축 가이드라인 표시</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>점선 바닥선(빨강) 및 중앙 수직축(파랑) 라인 표시</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>애니메이션 프레임에 변경 사항 자동 적용</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>선택 시 피벗을 드래그하거나 편집하면 현재 애니메이션의 모든 프레임에 적용됩니다</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>애니메이션에 적용</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>현재 프레임의 피벗 위치를 현재 애니메이션의 모든 프레임에 적용</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>모두 적용</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>현재 프레임의 피벗 위치를 전체 프로젝트의 모든 프레임에 적용</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;팁:&lt;/b&gt; 캔버스에서 레티클을 직접 클릭하고 드래그하여 애니메이션 피벗을 배치하세요. 점선은 동기화를 위한 바닥선과 수직축을 나타냅니다.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

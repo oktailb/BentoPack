@@ -2966,6 +2966,10 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Dipilih: %1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>Editor Poros &amp; Retikel Animasi [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Opsi Pensil</translation>
     </message>
@@ -3284,6 +3288,90 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Klik pada warna untuk memilih piksel cocok yang berdekatan. Tahan &lt;b&gt;Shift&lt;/b&gt; untuk menambah, &lt;b&gt;Ctrl&lt;/b&gt; untuk mengurangi.</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>Poros &amp; Retikel Animasi</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>Ratakan Cepat:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ Tanah (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>Ratakan poros ke tengah bawah (posisi tanah)</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 Tengah</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>Ratakan poros tepat di tengah</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (Kiri-Atas)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>Ratakan poros ke kiri atas (titik asal UI / gambar standar)</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>Posisi Preset (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>Koordinat (relatif terhadap frame):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>Koordinat horizontal poros relatif terhadap kiri atas frame</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>Koordinat vertikal poros relatif terhadap kiri atas frame</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>Tampilkan panduan tanah &amp; sumbu</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>Tampilkan garis putus-putus permukaan tanah (merah) dan sumbu vertikal tengah (biru)</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>Terapkan perubahan otomatis ke frame animasi</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>Jika dicentang, menyeret atau mengedit poros berlaku untuk semua frame di animasi saat ini</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>Terapkan ke Anim.</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>Terapkan titik poros frame saat ini ke semua frame di animasi saat ini</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>Terapkan ke Semua</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>Terapkan titik poros frame saat ini ke semua frame di seluruh proyek</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;Tip:&lt;/b&gt; Klik dan seret retikel langsung di kanvas untuk menempatkan poros animasi. Garis putus-putus menunjukkan permukaan tanah dan sumbu vertikal untuk sinkronisasi.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

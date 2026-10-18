@@ -895,6 +895,8 @@ void PixelCanvas::setCurrentTool(PixelTool tool)
             m_meshVertices = m_polygonMesh.toList();
             m_meshTriangles = BentoPackGeometry::Triangulator::triangulate(m_polygonMesh);
         }
+    } else if (m_tool == PixelTool::PivotEdit) {
+        m_showPivot = true;
     }
     update();
 }
@@ -1516,10 +1518,29 @@ void PixelCanvas::setCanvasEnvelope(const QSize &canvasSize, const QPoint &image
     update();
 }
 
+QPoint PixelCanvas::framePivot() const
+{
+    return m_pivotPos - m_imageOffset;
+}
+
+void PixelCanvas::setFramePivot(const QPoint &pivot)
+{
+    m_pivotPos = pivot + m_imageOffset;
+    update();
+}
+
 void PixelCanvas::setShowPivot(bool show)
 {
     if (m_showPivot != show) {
         m_showPivot = show;
+        update();
+    }
+}
+
+void PixelCanvas::setShowPivotGuidelines(bool show)
+{
+    if (m_showPivotGuidelines != show) {
+        m_showPivotGuidelines = show;
         update();
     }
 }
@@ -2724,28 +2745,50 @@ void PixelCanvas::drawPivotMarker(QPainter &painter)
     double cx = m_pivotPos.x() * m_zoom;
     double cy = m_pivotPos.y() * m_zoom;
 
-    const double radius = 5.0;
-    const double arm = 9.0;
+    // 1. Guidelines (ground horizontal line & vertical axis)
+    if (m_showPivotGuidelines || m_tool == PixelTool::PivotEdit) {
+        // Horizontal ground dashed line
+        QPen groundPen(QColor(255, 60, 60, 190), 1.0, Qt::DashLine);
+        groundPen.setCosmetic(true);
+        painter.setPen(groundPen);
+        painter.drawLine(QPointF(0, cy), QPointF(width(), cy));
 
-    // Outer dark halo for contrast
-    QPen darkPen(QColor(15, 23, 42, 210), 2.6, Qt::SolidLine, Qt::RoundCap);
+        // Vertical axis dashed line
+        QPen vertPen(QColor(60, 160, 255, 180), 1.0, Qt::DashLine);
+        vertPen.setCosmetic(true);
+        painter.setPen(vertPen);
+        painter.drawLine(QPointF(cx, 0), QPointF(cx, height()));
+    }
+
+    const double radius = 6.0;
+    const double arm = 11.0;
+
+    // 2. High contrast dark shadow / halo
+    QPen darkPen(QColor(15, 23, 42, 210), 3.0, Qt::SolidLine, Qt::RoundCap);
+    darkPen.setCosmetic(true);
     painter.setPen(darkPen);
     painter.setBrush(Qt::NoBrush);
     painter.drawEllipse(QPointF(cx, cy), radius, radius);
-    painter.drawLine(QPointF(cx - arm, cy), QPointF(cx + arm, cy));
-    painter.drawLine(QPointF(cx, cy - arm), QPointF(cx, cy + arm));
+    painter.drawLine(QPointF(cx - arm, cy), QPointF(cx - 3.0, cy));
+    painter.drawLine(QPointF(cx + 3.0, cy), QPointF(cx + arm, cy));
+    painter.drawLine(QPointF(cx, cy - arm), QPointF(cx, cy - 3.0));
+    painter.drawLine(QPointF(cx, cy + 3.0), QPointF(cx, cy + arm));
 
-    // Vibrant sky blue core (#38bdf8)
-    QPen corePen(QColor(56, 189, 248, 255), 1.2, Qt::SolidLine, Qt::RoundCap);
+    // 3. Neon core (golden yellow if active/dragging, cyan otherwise)
+    QColor reticleColor = m_isDraggingPivot ? QColor(255, 220, 40) : (m_tool == PixelTool::PivotEdit ? QColor(0, 230, 255) : QColor(56, 189, 248));
+    QPen corePen(reticleColor, 1.5, Qt::SolidLine, Qt::RoundCap);
+    corePen.setCosmetic(true);
     painter.setPen(corePen);
     painter.drawEllipse(QPointF(cx, cy), radius, radius);
-    painter.drawLine(QPointF(cx - arm, cy), QPointF(cx + arm, cy));
-    painter.drawLine(QPointF(cx, cy - arm), QPointF(cx, cy + arm));
+    painter.drawLine(QPointF(cx - (arm - 1.0), cy), QPointF(cx - 3.0, cy));
+    painter.drawLine(QPointF(cx + 3.0, cy), QPointF(cx + (arm - 1.0), cy));
+    painter.drawLine(QPointF(cx, cy - (arm - 1.0)), QPointF(cx, cy - 3.0));
+    painter.drawLine(QPointF(cx, cy + 3.0), QPointF(cx, cy + (arm - 1.0)));
 
-    // Crisp white center dot
+    // 4. Center dot
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(255, 255, 255, 255));
-    painter.drawEllipse(QPointF(cx, cy), 1.5, 1.5);
+    painter.setBrush(reticleColor);
+    painter.drawEllipse(QPointF(cx, cy), 2.0, 2.0);
 
     painter.restore();
 }
@@ -2939,6 +2982,16 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
             }
         }
         return;
+    } else if (m_tool == PixelTool::PivotEdit) {
+        if (event->button() == Qt::LeftButton) {
+            m_isDraggingPivot = true;
+            QPoint frameP = widgetToPixel(event->pos());
+            setFramePivot(frameP);
+            emit pivotChanged(frameP);
+            update();
+            event->accept();
+            return;
+        }
     }
 }
 
@@ -3038,6 +3091,23 @@ void PixelCanvas::mouseMoveEvent(QMouseEvent *event)
                 update();
             }
         }
+    } else if (m_tool == PixelTool::PivotEdit) {
+        if (m_isDraggingPivot) {
+            QPoint frameP = widgetToPixel(event->pos());
+            setFramePivot(frameP);
+            emit pivotChanged(frameP);
+            update();
+            event->accept();
+            return;
+        } else {
+            QPoint widgetPivotPos = pixelToWidget(framePivot());
+            double dist = QLineF(event->pos(), widgetPivotPos).length();
+            if (dist <= 12.0) {
+                setCursor(Qt::SizeAllCursor);
+            } else {
+                setCursor(Qt::CrossCursor);
+            }
+        }
     }
 }
 
@@ -3096,6 +3166,15 @@ void PixelCanvas::mouseReleaseEvent(QMouseEvent *event)
             if (m_dragPreVertices != m_meshVertices) {
                 pushMeshSnapshot(tr("Move Mesh Vertex"), m_dragPrePolygon, m_dragPreVertices, m_dragPreTriangles);
             }
+        }
+    } else if (m_tool == PixelTool::PivotEdit) {
+        if (m_isDraggingPivot && event->button() == Qt::LeftButton) {
+            m_isDraggingPivot = false;
+            emit pivotCommitRequested(framePivot());
+            update();
+            event->accept();
+            m_activeButton = Qt::NoButton;
+            return;
         }
     }
     m_activeButton = Qt::NoButton;

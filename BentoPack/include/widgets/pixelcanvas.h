@@ -34,7 +34,8 @@ enum class PixelTool {
     BucketFill,
     SelectRect,
     SelectColor,
-    PolygonEdit
+    PolygonEdit,
+    PivotEdit
 };
 
 enum class PolygonEditMode {
@@ -272,8 +273,18 @@ public:
     QSize canvasSize() const;
     QPoint imageOffset() const { return m_imageOffset; }
     QPoint pivotPos() const { return m_pivotPos; }
+    QPoint framePivot() const;
+    void setFramePivot(const QPoint &pivot);
     bool showPivot() const { return m_showPivot; }
     void setShowPivot(bool show);
+    bool showPivotGuidelines() const { return m_showPivotGuidelines; }
+    void setShowPivotGuidelines(bool show);
+
+    // Coordinate Mapping
+    QPoint widgetToPixel(const QPoint &widgetPos) const;
+    QPoint pixelToWidget(const QPoint &pixelPos) const;
+    QRect pixelToWidget(const QRect &pixelRect) const;
+    bool isPixelInside(int x, int y) const;
 
     // Onion Skinning
     bool isOnionSkinEnabled() const { return m_onionSkinEnabled; }
@@ -364,6 +375,8 @@ signals:
     void layersChanged();
     void activeLayerChanged(int index);
     void layerLockedAttempted();
+    void pivotChanged(const QPoint &framePivot);
+    void pivotCommitRequested(const QPoint &framePivot);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -376,12 +389,6 @@ protected:
     void leaveEvent(QEvent *event) override;
 
 private:
-    // Helpers
-    QPoint widgetToPixel(const QPoint &widgetPos) const;
-    QPoint pixelToWidget(const QPoint &pixelPos) const;
-    QRect pixelToWidget(const QRect &pixelRect) const;
-    bool isPixelInside(int x, int y) const;
-
     void drawPixelBrush(int centerX, int centerY, const QColor &color, int brushSize, int opacity);
     void drawBresenhamLine(int x0, int y0, int x1, int y1, const QColor &color);
     void applyColorSelection(int targetX, int targetY);
@@ -406,6 +413,8 @@ private:
     QPoint          m_imageOffset = QPoint(0, 0);
     QPoint          m_pivotPos = QPoint(0, 0);
     bool            m_showPivot = true;
+    bool            m_showPivotGuidelines = true;
+    bool            m_isDraggingPivot = false;
     double          m_zoom = 16.0;
     bool            m_showGrid = true;
     PixelTool       m_tool = PixelTool::Pencil;

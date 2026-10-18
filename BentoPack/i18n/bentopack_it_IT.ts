@@ -2966,6 +2966,10 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Selezionato: %1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>Editor pivot e mirino d&apos;animazione [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Opzioni matita</translation>
     </message>
@@ -3284,6 +3288,90 @@ Vuoi salvarle prima di procedere?</translation>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic su un colore per selezionare pixel contigui corrispondenti. Tieni premuto &lt;b&gt;Maiusc&lt;/b&gt; per aggiungere, &lt;b&gt;Ctrl&lt;/b&gt; per sottrarre.</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>Pivot e mirino d&apos;animazione</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>Allineamento rapido:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ Terra (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>Allinea il pivot in basso al centro (posizione a terra)</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 Centro</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>Allinea il pivot al centro esatto</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (In alto a sinistra)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>Allinea il pivot in alto a sinistra (origine standard UI / immagine)</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>Posizioni predefinite (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>Coordinate (relative al fotogramma):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>Coordinata orizzontale del pivot relativa all&apos;angolo in alto a sinistra del fotogramma</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>Coordinata verticale del pivot relativa all&apos;angolo in alto a sinistra del fotogramma</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>Mostra linee guida di terra e asse</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>Mostra le linee tratteggiate del livello del suolo (rosso) e dell&apos;asse verticale centrale (blu)</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>Applica automaticamente le modifiche ai fotogrammi dell&apos;animazione</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>Se selezionato, trascinare o modificare il pivot si applica a tutti i fotogrammi dell&apos;animazione corrente</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>Applica all&apos;anim.</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell&apos;animazione corrente</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>Applica a tutti</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell&apos;intero progetto</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic e trascina il mirino direttamente sul canvas per posizionare il pivot dell&apos;animazione. Le linee tratteggiate indicano il livello del suolo e l&apos;asse verticale per la sincronizzazione.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

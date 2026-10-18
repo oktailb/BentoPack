@@ -2966,6 +2966,10 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Đã chọn: %1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>Trình chỉnh sửa điểm neo &amp; tâm ngắm hoạt ảnh [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Tùy chọn bút chì</translation>
     </message>
@@ -3284,6 +3288,90 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Nhấp vào màu để chọn pixel liền kề khớp. Giữ &lt;b&gt;Shift&lt;/b&gt; để thêm, &lt;b&gt;Ctrl&lt;/b&gt; để trừ khỏi vùng chọn.</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>Điểm neo &amp; tâm ngắm hoạt ảnh</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>Căn chỉnh nhanh:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ Mặt đất (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>Căn chỉnh điểm neo vào giữa đáy (vị trí mặt đất)</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 Chính giữa</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>Căn chỉnh điểm neo vào chính giữa chính xác</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (Trên-Trái)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>Căn chỉnh điểm neo vào trên cùng bên trái (gốc UI / hình ảnh chuẩn)</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>Vị trí đặt trước (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>Tọa độ (tương đối với khung hình):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>Tọa độ ngang của điểm neo tương đối với góc trên bên trái khung hình</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>Tọa độ dọc của điểm neo tương đối với góc trên bên trái khung hình</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>Hiện đường gióng mặt đất &amp; trục</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>Hiển thị đường nét đứt mức mặt đất (đỏ) và trục dọc trung tâm (xanh dương)</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>Tự động áp dụng thay đổi cho các khung hình hoạt ảnh</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>Khi được chọn, kéo hoặc chỉnh sửa điểm neo sẽ áp dụng cho tất cả khung hình trong hoạt ảnh hiện tại</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>Áp dụng cho hoạt ảnh</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>Áp dụng điểm neo của khung hình hiện tại cho tất cả khung hình trong hoạt ảnh hiện tại</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>Áp dụng cho tất cả</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>Áp dụng điểm neo của khung hình hiện tại cho tất cả khung hình trong toàn bộ dự án</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;Mẹo:&lt;/b&gt; Nhấp và kéo tâm ngắm trực tiếp trên khung vẽ để đặt điểm neo hoạt ảnh. Đường nét đứt biểu thị mức mặt đất và trục thẳng đứng để đồng bộ hóa.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

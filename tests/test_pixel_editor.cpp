@@ -89,6 +89,7 @@ private slots:
     void testMultiLayerOnionSkinRestricted();
     void testMultiLayerSessionSaveAndDocumentSync();
     void testErgonomicContextualPanels();
+    void testPivotToolAndInteractivity();
     void testFilterAllFramesMultiLayerAndNavigation();
 
     // 10. Intelligent Polygon Mesh Interactive Editing (M19)
@@ -2308,7 +2309,7 @@ void TestPixelEditor::testErgonomicContextualPanels()
         stack = dlg.findChild<QStackedWidget*>(QStringLiteral("contextualStack"));
     }
     QVERIFY(stack != nullptr);
-    QCOMPARE(stack->count(), 7);
+    QCOMPARE(stack->count(), 8);
 
     // Initial tool is Pencil -> page 0 (Pencil options)
     QCOMPARE(stack->currentIndex(), 0);
@@ -2369,6 +2370,81 @@ void TestPixelEditor::testErgonomicContextualPanels()
         }
     }
     QCOMPARE(stack->currentIndex(), 6);
+
+    // Switch to PivotEdit -> page 7 (Pivot & Reticle options)
+    QVERIFY(dlg.pivotToolButton() != nullptr);
+    dlg.pivotToolButton()->click();
+    QCOMPARE(stack->currentIndex(), 7);
+}
+
+void TestPixelEditor::testPivotToolAndInteractivity()
+{
+    SpriteDocument doc;
+    QImage img(32, 32, QImage::Format_ARGB32);
+    img.fill(Qt::transparent);
+    doc.setFrames({img}, {SpriteBox(QRect(0, 0, 32, 32))});
+    doc.setBoxPivot(0, QPoint(16, 32)); // Default BottomCenter
+
+    PixelEditorDialog dlg(&doc, 0);
+    QVERIFY(dlg.pivotToolButton() != nullptr);
+
+    // 1. Select Pivot tool via button click
+    dlg.pivotToolButton()->click();
+    QCOMPARE(dlg.canvas()->currentTool(), PixelTool::PivotEdit);
+    QVERIFY(dlg.canvas()->showPivot());
+
+    // Contextual stack switches to index 7
+    QStackedWidget *stack = dlg.contextualStack();
+    if (!stack) stack = dlg.findChild<QStackedWidget*>(QStringLiteral("contextualStack"));
+    QVERIFY(stack != nullptr);
+    QCOMPARE(stack->currentIndex(), 7);
+
+    // Verify initial pivot in canvas matches document
+    QCOMPARE(dlg.canvas()->framePivot(), QPoint(16, 32));
+    QCOMPARE(dlg.sessionPivot(0), QPoint(16, 32));
+
+    // 2. Interactive Pivot Dragging on Canvas
+    // Click on canvas at pixel (10, 20)
+    QPoint targetPixel(10, 20);
+    QPoint widgetPt = dlg.canvas()->pixelToWidget(targetPixel);
+    QMouseEvent pressEv(QEvent::MouseButtonPress, QPointF(widgetPt), QPointF(widgetPt),
+                        Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(dlg.canvas(), &pressEv);
+
+    QCOMPARE(dlg.canvas()->framePivot(), targetPixel);
+    QCOMPARE(dlg.sessionPivot(0), targetPixel);
+
+    // Drag to (12, 25)
+    QPoint targetPixel2(12, 25);
+    QPoint widgetPt2 = dlg.canvas()->pixelToWidget(targetPixel2);
+    QMouseEvent moveEv(QEvent::MouseMove, QPointF(widgetPt2), QPointF(widgetPt2),
+                       Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(dlg.canvas(), &moveEv);
+
+    QCOMPARE(dlg.canvas()->framePivot(), targetPixel2);
+    QCOMPARE(dlg.sessionPivot(0), targetPixel2);
+
+    // Release
+    QMouseEvent releaseEv(QEvent::MouseButtonRelease, QPointF(widgetPt2), QPointF(widgetPt2),
+                          Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(dlg.canvas(), &releaseEv);
+
+    QCOMPARE(dlg.sessionPivot(0), targetPixel2);
+
+    // 3. Quick preset buttons (e.g. Centre: (16, 16))
+    QList<QPushButton*> pushButtons = dlg.findChildren<QPushButton*>();
+    for (QPushButton *btn : pushButtons) {
+        if (btn->text().contains(QStringLiteral("Centre"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(dlg.canvas()->framePivot(), QPoint(16, 16));
+    QCOMPARE(dlg.sessionPivot(0), QPoint(16, 16));
+
+    // 4. Apply changes and verify commit to SpriteDocument
+    QVERIFY(dlg.applyChanges());
+    QCOMPARE(doc.boxPivot(0), QPoint(16, 16));
 }
 
 void TestPixelEditor::testFilterAllFramesMultiLayerAndNavigation()

@@ -291,6 +291,10 @@ PixelEditorDialog::PixelEditorDialog(SpriteDocument *document,
     }
     if (!stateRestored) {
         resetDefaultLayout();
+    } else if (m_dockTools && m_dockMainWindow) {
+        if (m_dockTools->width() < 196) {
+            m_dockMainWindow->resizeDocks({m_dockTools}, {210}, Qt::Horizontal);
+        }
     }
 
     populateAnimationCombo();
@@ -327,6 +331,7 @@ void PixelEditorDialog::reject()
             m_cdtBatchWatcher.waitForFinished();
         }
     }
+    m_sessionModifiedPivots.clear();
     QDialog::reject();
 }
 
@@ -447,6 +452,28 @@ void PixelEditorDialog::setupUi()
 
     connect(m_canvas, &PixelCanvas::modificationPushed, this, &PixelEditorDialog::onCanvasModificationPushed);
 
+    connect(m_canvas, &PixelCanvas::pivotChanged, this, [this](const QPoint &pivot) {
+        m_sessionModifiedPivots[m_currentFrameIndex] = pivot;
+        m_isSyncingPivotUi = true;
+        if (m_pivotXSpin) m_pivotXSpin->setValue(pivot.x());
+        if (m_pivotYSpin) m_pivotYSpin->setValue(pivot.y());
+        m_isSyncingPivotUi = false;
+    });
+    connect(m_canvas, &PixelCanvas::pivotCommitRequested, this, [this](const QPoint &pivot) {
+        m_sessionModifiedPivots[m_currentFrameIndex] = pivot;
+        if (m_pivotApplyAllFramesCheck && m_pivotApplyAllFramesCheck->isChecked()) {
+            for (int idx : m_activeSequence) {
+                m_sessionModifiedPivots[idx] = pivot;
+            }
+        }
+        QSize envSize;
+        QPoint envPivot, curFrameOffset;
+        computeAnimationEnvelope(envSize, envPivot, curFrameOffset);
+        m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
+        updatePivotUI();
+        updateLivePreview();
+    });
+
     if (m_canvas->undoStack()) {
         QPointer<QToolButton> btnUndo = m_btnUndo;
         QPointer<QToolButton> btnRedo = m_btnRedo;
@@ -494,6 +521,8 @@ void PixelEditorDialog::setupUi()
     addShortcut(QKeySequence(Qt::Key_G), [this]() { m_btnBucket->click(); });
     addShortcut(QKeySequence(Qt::Key_M), [this]() { m_btnSelectRect->click(); });
     addShortcut(QKeySequence(Qt::Key_W), [this]() { m_btnSelectColor->click(); });
+    addShortcut(QKeySequence(Qt::Key_D), [this]() { if (m_btnToolPolygon) m_btnToolPolygon->click(); });
+    addShortcut(QKeySequence(Qt::Key_O), [this]() { if (m_btnToolPivot) m_btnToolPivot->click(); });
 
     // Transforms & Actions
     addShortcut(QKeySequence(Qt::Key_X), [this]() { m_canvas->swapColors(); });
@@ -732,16 +761,36 @@ QWidget* PixelEditorDialog::createHeaderBar()
     return bar;
 }
 
+static const QString kToolGroupBoxStyle = QStringLiteral(
+    "QGroupBox {"
+    "  border: 1px solid palette(mid);"
+    "  border-radius: 6px;"
+    "  margin-top: 8px;"
+    "  padding-top: 10px;"
+    "  font-weight: bold;"
+    "  font-size: 11px;"
+    "}"
+    "QGroupBox::title {"
+    "  subcontrol-origin: margin;"
+    "  subcontrol-position: top left;"
+    "  left: 8px;"
+    "  top: 0px;"
+    "  padding: 0 4px;"
+    "  font-weight: bold;"
+    "  font-size: 11px;"
+    "}"
+);
+
 QWidget* PixelEditorDialog::createToolBar()
 {
     QWidget *panel = new QWidget(this);
-    panel->setMinimumWidth(88);
+    panel->setMinimumWidth(196);
     QVBoxLayout *mainVBox = new QVBoxLayout(panel);
     mainVBox->setContentsMargins(4, 4, 4, 4);
     mainVBox->setSpacing(6);
     mainVBox->setAlignment(Qt::AlignTop);
 
-    // 1. Tool grid container
+    // 1. Tool grid container (4 columns)
     QWidget *gridContainer = new QWidget(panel);
     QGridLayout *layout = new QGridLayout(gridContainer);
     layout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
@@ -788,20 +837,24 @@ QWidget* PixelEditorDialog::createToolBar()
         return btn;
     };
 
+    // Row 0: Drawing & sampling tools (4 columns)
     m_btnPencil = addToolBtn(QStringLiteral("✏"), tr("Pencil (1px continuous Bresenham) [P]"), PixelTool::Pencil, static_cast<int>(PixelTool::Pencil), 0, 0, true);
     m_btnEraser = addToolBtn(QStringLiteral("🧹"), tr("Eraser (1px clear to alpha 0) [E]"), PixelTool::Eraser, static_cast<int>(PixelTool::Eraser), 0, 1);
-    m_btnBucket = addToolBtn(QStringLiteral("🪣"), tr("Bucket Fill (Flood Fill 4-way) [G]"), PixelTool::BucketFill, static_cast<int>(PixelTool::BucketFill), 1, 0);
-    m_btnEyedropper = addToolBtn(QStringLiteral("💧"), tr("Eyedropper / Pipette (Alt+Click or [I])"), PixelTool::Eyedropper, static_cast<int>(PixelTool::Eyedropper), 1, 1);
-    m_btnSelectRect = addToolBtn(QStringLiteral("⬚"), tr("Rectangular Marquee Selection [M]"), PixelTool::SelectRect, static_cast<int>(PixelTool::SelectRect), 2, 0);
-    m_btnSelectColor = addToolBtn(QStringLiteral("🪄"), tr("Magic Wand (Color Selection) [W]"), PixelTool::SelectColor, static_cast<int>(PixelTool::SelectColor), 2, 1);
-    m_btnToolPolygon = addToolBtn(QStringLiteral("◆"), tr("Polygon & Smart CDT Mesh Editor [D]"), PixelTool::PolygonEdit, static_cast<int>(PixelTool::PolygonEdit), 3, 0);
+    m_btnBucket = addToolBtn(QStringLiteral("🪣"), tr("Bucket Fill (Flood Fill 4-way) [G]"), PixelTool::BucketFill, static_cast<int>(PixelTool::BucketFill), 0, 2);
+    m_btnEyedropper = addToolBtn(QStringLiteral("💧"), tr("Eyedropper / Pipette (Alt+Click or [I])"), PixelTool::Eyedropper, static_cast<int>(PixelTool::Eyedropper), 0, 3);
+
+    // Row 1: Selection & mesh & pivot tools
+    m_btnSelectRect = addToolBtn(QStringLiteral("⬚"), tr("Rectangular Marquee Selection [M]"), PixelTool::SelectRect, static_cast<int>(PixelTool::SelectRect), 1, 0);
+    m_btnSelectColor = addToolBtn(QStringLiteral("🪄"), tr("Magic Wand (Color Selection) [W]"), PixelTool::SelectColor, static_cast<int>(PixelTool::SelectColor), 1, 1);
+    m_btnToolPolygon = addToolBtn(QStringLiteral("◆"), tr("Polygon & Smart CDT Mesh Editor [D]"), PixelTool::PolygonEdit, static_cast<int>(PixelTool::PolygonEdit), 1, 2);
+    m_btnToolPivot = addToolBtn(QStringLiteral("🎯"), tr("Animation Pivot & Reticle Editor [O]"), PixelTool::PivotEdit, static_cast<int>(PixelTool::PivotEdit), 1, 3);
 
     connect(m_toolGroup, &QButtonGroup::idClicked, this, &PixelEditorDialog::onToolButtonClicked);
 
-    // Separator 1
+    // Separator 1 (spans 4 columns)
     QFrame *line1 = new QFrame(this);
     line1->setFrameShape(QFrame::HLine);
-    layout->addWidget(line1, 4, 0, 1, 2);
+    layout->addWidget(line1, 2, 0, 1, 4);
 
     auto addActionBtn = [this, layout, &toolBtnStyle](const QString &text, const QString &tooltip, int row, int col, const auto &slot) -> QToolButton* {
         QToolButton *btn = new QToolButton(this);
@@ -814,10 +867,11 @@ QWidget* PixelEditorDialog::createToolBar()
         return btn;
     };
 
-    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal (H)"), 5, 0, [this]() { m_canvas->flipHorizontal(); });
-    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical (V)"), 5, 1, [this]() { m_canvas->flipVertical(); });
-    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise (R)"), 6, 0, [this]() { m_canvas->rotate90CW(); });
-    m_btnClearSel = addActionBtn(QStringLiteral("✕"), tr("Clear Selection / Deselect (Del)"), 6, 1, [this]() {
+    // Row 3: Image / selection transformations (4 columns)
+    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal (H)"), 3, 0, [this]() { m_canvas->flipHorizontal(); });
+    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical (V)"), 3, 1, [this]() { m_canvas->flipVertical(); });
+    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise (R)"), 3, 2, [this]() { m_canvas->rotate90CW(); });
+    m_btnClearSel = addActionBtn(QStringLiteral("✕"), tr("Clear Selection / Deselect (Del)"), 3, 3, [this]() {
         if (m_canvas->hasSelection()) {
             m_canvas->clearSelection();
         } else {
@@ -825,63 +879,54 @@ QWidget* PixelEditorDialog::createToolBar()
         }
     });
 
-    // Separator 2
+    // Separator 2 (spans 4 columns)
     QFrame *line2 = new QFrame(this);
     line2->setFrameShape(QFrame::HLine);
-    layout->addWidget(line2, 7, 0, 1, 2);
+    layout->addWidget(line2, 4, 0, 1, 4);
 
-    // Filters Button
+    // Row 5: Undo, Redo, and Filters
+    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 5, 0, [this]() { m_canvas->undo(); });
+    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 5, 1, [this]() { m_canvas->redo(); });
+    if (m_btnUndo) m_btnUndo->setEnabled(false);
+    if (m_btnRedo) m_btnRedo->setEnabled(false);
+
+    // Filters Button (spans columns 2 and 3)
     m_btnFilters = new QToolButton(this);
     m_btnFilters->setObjectName(QStringLiteral("filtersButton"));
     m_btnFilters->setText(tr("✨ Filters ▾"));
     m_btnFilters->setToolTip(tr("Apply image and color filters (Despill, Outline, Rescale, Palette...)"));
     m_btnFilters->setPopupMode(QToolButton::InstantPopup);
-    m_btnFilters->setFixedSize(90, 32);
+    m_btnFilters->setFixedHeight(34);
+    m_btnFilters->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_btnFilters->setStyleSheet(toolBtnStyle + QStringLiteral("QToolButton { font-size: 11px; }"));
 
     QMenu *filtersMenu = new QMenu(m_btnFilters);
     populateFiltersMenu(filtersMenu);
     m_btnFilters->setMenu(filtersMenu);
-    layout->addWidget(m_btnFilters, 8, 0, 1, 2);
-
-    // Separator 3
-    QFrame *line3 = new QFrame(this);
-    line3->setFrameShape(QFrame::HLine);
-    layout->addWidget(line3, 9, 0, 1, 2);
-
-    // Undo / Redo
-    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 10, 0, [this]() { m_canvas->undo(); });
-    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 10, 1, [this]() { m_canvas->redo(); });
-    if (m_btnUndo) m_btnUndo->setEnabled(false);
-    if (m_btnRedo) m_btnRedo->setEnabled(false);
+    layout->addWidget(m_btnFilters, 5, 2, 1, 2);
 
     mainVBox->addWidget(gridContainer);
+
+    // 2. Live Preview (1:1 scale) moved to left panel
+    m_prevGroup = new QGroupBox(tr("1:1 Scale Preview"), panel);
+    m_prevGroup->setStyleSheet(kToolGroupBoxStyle);
+    QVBoxLayout *prevLayout = new QVBoxLayout(m_prevGroup);
+    prevLayout->setContentsMargins(4, 6, 4, 6);
+    prevLayout->setSpacing(4);
+
+    m_previewLabel = new QLabel(m_prevGroup);
+    m_previewLabel->setAlignment(Qt::AlignCenter);
+    m_previewLabel->setMinimumHeight(64);
+    m_previewLabel->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 4px;"));
+    prevLayout->addWidget(m_previewLabel);
+    mainVBox->addWidget(m_prevGroup);
+
     mainVBox->addStretch(1);
 
     updateToolIcons();
 
     return panel;
 }
-
-static const QString kToolGroupBoxStyle = QStringLiteral(
-    "QGroupBox {"
-    "  border: 1px solid palette(mid);"
-    "  border-radius: 6px;"
-    "  margin-top: 8px;"
-    "  padding-top: 10px;"
-    "  font-weight: bold;"
-    "  font-size: 11px;"
-    "}"
-    "QGroupBox::title {"
-    "  subcontrol-origin: margin;"
-    "  subcontrol-position: top left;"
-    "  left: 8px;"
-    "  top: 0px;"
-    "  padding: 0 4px;"
-    "  font-weight: bold;"
-    "  font-size: 11px;"
-    "}"
-);
 
 static const QString kToolActionBtnStyle = QStringLiteral(
     "QPushButton {"
@@ -1926,6 +1971,269 @@ QWidget* PixelEditorDialog::createMagicWandOptionsPage()
     return page;
 }
 
+QWidget* PixelEditorDialog::createPivotOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+
+    const QString groupBoxStyle = kToolGroupBoxStyle;
+    const QString btnStyle = QStringLiteral(
+        "QPushButton {"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 4px;"
+        "  font-size: 11px;"
+        "  font-weight: 500;"
+        "  padding: 3px 6px;"
+        "}"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
+    );
+
+    m_pivotGroup = new QGroupBox(tr("Animation Pivot & Reticle"), page);
+    m_pivotGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *pgLayout = new QVBoxLayout(m_pivotGroup);
+    pgLayout->setContentsMargins(6, 10, 6, 6);
+    pgLayout->setSpacing(6);
+
+    // 1. Quick Presets Row
+    QLabel *quickLbl = new QLabel(tr("Quick Align:"), m_pivotGroup);
+    quickLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    pgLayout->addWidget(quickLbl);
+
+    QHBoxLayout *quickRow = new QHBoxLayout();
+    quickRow->setSpacing(4);
+
+    auto applyPreset = [this](PivotPreset preset) {
+        if (!m_canvas) return;
+        QSize sz = m_canvas->image().size();
+        if (sz.isEmpty()) sz = QSize(32, 32);
+        QPoint newP = SpriteBox::calculatePresetPivot(preset, sz);
+
+        m_sessionModifiedPivots[m_currentFrameIndex] = newP;
+        if (m_pivotApplyAllFramesCheck && m_pivotApplyAllFramesCheck->isChecked()) {
+            for (int idx : m_activeSequence) {
+                QSize fsz = m_sessionModifiedFrames.contains(idx) ? m_sessionModifiedFrames[idx].size()
+                            : (m_document ? m_document->frame(idx).size() : QSize(32, 32));
+                if (fsz.isEmpty()) fsz = QSize(32, 32);
+                m_sessionModifiedPivots[idx] = SpriteBox::calculatePresetPivot(preset, fsz);
+            }
+        }
+        m_canvas->setFramePivot(newP);
+        QSize envSize;
+        QPoint envPivot, curFrameOffset;
+        computeAnimationEnvelope(envSize, envPivot, curFrameOffset);
+        m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
+        updatePivotUI();
+        updateLivePreview();
+    };
+
+    m_btnPivotGround = new QPushButton(tr("⬇ Sol (Ground)"), m_pivotGroup);
+    m_btnPivotGround->setToolTip(tr("Align pivot to bottom center (ground position)"));
+    m_btnPivotGround->setStyleSheet(btnStyle);
+    connect(m_btnPivotGround, &QPushButton::clicked, this, [applyPreset]() {
+        applyPreset(PivotPreset::BottomCenter);
+    });
+    quickRow->addWidget(m_btnPivotGround);
+
+    m_btnPivotCenter = new QPushButton(tr("🎯 Centre"), m_pivotGroup);
+    m_btnPivotCenter->setToolTip(tr("Align pivot to exact center"));
+    m_btnPivotCenter->setStyleSheet(btnStyle);
+    connect(m_btnPivotCenter, &QPushButton::clicked, this, [applyPreset]() {
+        applyPreset(PivotPreset::Center);
+    });
+    quickRow->addWidget(m_btnPivotCenter);
+
+    m_btnPivotTopLeft = new QPushButton(tr("↖ UI (Top-Left)"), m_pivotGroup);
+    m_btnPivotTopLeft->setToolTip(tr("Align pivot to top-left (standard UI / image origin)"));
+    m_btnPivotTopLeft->setStyleSheet(btnStyle);
+    connect(m_btnPivotTopLeft, &QPushButton::clicked, this, [applyPreset]() {
+        applyPreset(PivotPreset::TopLeft);
+    });
+    quickRow->addWidget(m_btnPivotTopLeft);
+
+    pgLayout->addLayout(quickRow);
+
+    // 2. 3x3 Preset Alignment Matrix
+    QLabel *matrixLbl = new QLabel(tr("Preset Positions (3x3):"), m_pivotGroup);
+    matrixLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 4px;"));
+    pgLayout->addWidget(matrixLbl);
+
+    QGridLayout *matrixGrid = new QGridLayout();
+    matrixGrid->setSpacing(3);
+    const struct {
+        const char *iconText;
+        const char *tip;
+        PivotPreset preset;
+        int row;
+        int col;
+    } presetBtns[] = {
+        {"↖", "Top-Left", PivotPreset::TopLeft, 0, 0},
+        {"⬆", "Top-Center", PivotPreset::TopCenter, 0, 1},
+        {"↗", "Top-Right", PivotPreset::TopRight, 0, 2},
+        {"⬅", "Center-Left", PivotPreset::CenterLeft, 1, 0},
+        {"⏺", "Center", PivotPreset::Center, 1, 1},
+        {"➡", "Center-Right", PivotPreset::CenterRight, 1, 2},
+        {"↙", "Bottom-Left", PivotPreset::BottomLeft, 2, 0},
+        {"⬇", "Bottom-Center", PivotPreset::BottomCenter, 2, 1},
+        {"↘", "Bottom-Right", PivotPreset::BottomRight, 2, 2}
+    };
+    for (const auto &item : presetBtns) {
+        QPushButton *btn = new QPushButton(QString::fromUtf8(item.iconText), m_pivotGroup);
+        btn->setToolTip(tr(item.tip));
+        btn->setFixedSize(30, 26);
+        btn->setStyleSheet(QStringLiteral(
+            "QPushButton {"
+            "  border: 1px solid palette(mid);"
+            "  border-radius: 4px;"
+            "  font-size: 12px;"
+            "  font-weight: bold;"
+            "}"
+            "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
+        ));
+        connect(btn, &QPushButton::clicked, this, [applyPreset, p = item.preset]() {
+            applyPreset(p);
+        });
+        matrixGrid->addWidget(btn, item.row, item.col);
+    }
+    QHBoxLayout *matrixWrap = new QHBoxLayout();
+    matrixWrap->addLayout(matrixGrid);
+    matrixWrap->addStretch();
+    pgLayout->addLayout(matrixWrap);
+
+    // 3. Exact Numeric Coordinates
+    QLabel *coordsLbl = new QLabel(tr("Coordinates (relative to frame):"), m_pivotGroup);
+    coordsLbl->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 4px;"));
+    pgLayout->addWidget(coordsLbl);
+
+    QHBoxLayout *coordsRow = new QHBoxLayout();
+    coordsRow->setSpacing(6);
+
+    QLabel *lblX = new QLabel(QStringLiteral("X:"), m_pivotGroup);
+    lblX->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    coordsRow->addWidget(lblX);
+
+    m_pivotXSpin = new QSpinBox(m_pivotGroup);
+    m_pivotXSpin->setRange(-9999, 9999);
+    m_pivotXSpin->setValue(0);
+    m_pivotXSpin->setToolTip(tr("Horizontal pivot coordinate relative to frame top-left"));
+    coordsRow->addWidget(m_pivotXSpin, 1);
+
+    QLabel *lblY = new QLabel(QStringLiteral("Y:"), m_pivotGroup);
+    lblY->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    coordsRow->addWidget(lblY);
+
+    m_pivotYSpin = new QSpinBox(m_pivotGroup);
+    m_pivotYSpin->setRange(-9999, 9999);
+    m_pivotYSpin->setValue(0);
+    m_pivotYSpin->setToolTip(tr("Vertical pivot coordinate relative to frame top-left"));
+    coordsRow->addWidget(m_pivotYSpin, 1);
+
+    pgLayout->addLayout(coordsRow);
+
+    auto onSpinChanged = [this]() {
+        if (m_isSyncingPivotUi || !m_canvas) return;
+        QPoint newP(m_pivotXSpin->value(), m_pivotYSpin->value());
+        m_sessionModifiedPivots[m_currentFrameIndex] = newP;
+        if (m_pivotApplyAllFramesCheck && m_pivotApplyAllFramesCheck->isChecked()) {
+            for (int idx : m_activeSequence) {
+                m_sessionModifiedPivots[idx] = newP;
+            }
+        }
+        m_canvas->setFramePivot(newP);
+        QSize envSize;
+        QPoint envPivot, curFrameOffset;
+        computeAnimationEnvelope(envSize, envPivot, curFrameOffset);
+        m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
+        updateLivePreview();
+    };
+    connect(m_pivotXSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [onSpinChanged](int) { onSpinChanged(); });
+    connect(m_pivotYSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [onSpinChanged](int) { onSpinChanged(); });
+
+    // 4. Guidelines & Display
+    m_pivotShowGuidelinesCheck = new QCheckBox(tr("Show ground & axis guidelines"), m_pivotGroup);
+    m_pivotShowGuidelinesCheck->setChecked(true);
+    m_pivotShowGuidelinesCheck->setToolTip(tr("Display dashed ground level (red) and central vertical axis (blue) lines"));
+    connect(m_pivotShowGuidelinesCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setShowPivotGuidelines(checked);
+    });
+    pgLayout->addWidget(m_pivotShowGuidelinesCheck);
+
+    // 5. Batch Propagation
+    m_pivotApplyAllFramesCheck = new QCheckBox(tr("Auto-apply changes to animation frames"), m_pivotGroup);
+    m_pivotApplyAllFramesCheck->setChecked(false);
+    m_pivotApplyAllFramesCheck->setToolTip(tr("When checked, dragging or editing the pivot applies to all frames in the current animation"));
+    pgLayout->addWidget(m_pivotApplyAllFramesCheck);
+
+    QHBoxLayout *batchButtonsLayout = new QHBoxLayout();
+    batchButtonsLayout->setSpacing(4);
+
+    m_btnApplyPivotToAnim = new QPushButton(tr("Apply to Anim"), m_pivotGroup);
+    m_btnApplyPivotToAnim->setToolTip(tr("Apply current frame's pivot point to all frames in the current animation"));
+    m_btnApplyPivotToAnim->setStyleSheet(btnStyle);
+    connect(m_btnApplyPivotToAnim, &QPushButton::clicked, this, [this]() {
+        if (!m_canvas) return;
+        QPoint curP = m_sessionModifiedPivots.value(m_currentFrameIndex, m_canvas->framePivot());
+        for (int idx : m_activeSequence) {
+            m_sessionModifiedPivots[idx] = curP;
+        }
+        QSize envSize;
+        QPoint envPivot, curFrameOffset;
+        computeAnimationEnvelope(envSize, envPivot, curFrameOffset);
+        m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
+        updateLivePreview();
+    });
+    batchButtonsLayout->addWidget(m_btnApplyPivotToAnim);
+
+    m_btnApplyPivotToAll = new QPushButton(tr("Apply to All"), m_pivotGroup);
+    m_btnApplyPivotToAll->setToolTip(tr("Apply current frame's pivot point to all frames in the entire project"));
+    m_btnApplyPivotToAll->setStyleSheet(btnStyle);
+    connect(m_btnApplyPivotToAll, &QPushButton::clicked, this, [this]() {
+        if (!m_canvas || !m_document) return;
+        QPoint curP = m_sessionModifiedPivots.value(m_currentFrameIndex, m_canvas->framePivot());
+        for (int i = 0; i < m_document->frameCount(); ++i) {
+            m_sessionModifiedPivots[i] = curP;
+        }
+        QSize envSize;
+        QPoint envPivot, curFrameOffset;
+        computeAnimationEnvelope(envSize, envPivot, curFrameOffset);
+        m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
+        updateLivePreview();
+    });
+    batchButtonsLayout->addWidget(m_btnApplyPivotToAll);
+
+    pgLayout->addLayout(batchButtonsLayout);
+
+    // 6. Helpful Tip
+    m_pivotTipLabel = new QLabel(tr("💡 <b>Tip:</b> Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization."), m_pivotGroup);
+    m_pivotTipLabel->setWordWrap(true);
+    m_pivotTipLabel->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 11px; padding: 4px;"));
+    pgLayout->addWidget(m_pivotTipLabel);
+
+    pgLayout->addStretch();
+    layout->addWidget(m_pivotGroup);
+    layout->addStretch();
+
+    return page;
+}
+
+void PixelEditorDialog::updatePivotUI()
+{
+    if (!m_pivotXSpin || !m_pivotYSpin) return;
+    m_isSyncingPivotUi = true;
+    QPoint p;
+    if (m_sessionModifiedPivots.contains(m_currentFrameIndex)) {
+        p = m_sessionModifiedPivots[m_currentFrameIndex];
+    } else if (m_document && m_currentFrameIndex >= 0 && m_currentFrameIndex < m_document->boxes().size()) {
+        p = m_document->box(m_currentFrameIndex).effectivePivot();
+    } else if (m_canvas) {
+        p = m_canvas->framePivot();
+    }
+    m_pivotXSpin->setValue(p.x());
+    m_pivotYSpin->setValue(p.y());
+    m_isSyncingPivotUi = false;
+}
+
 QWidget* PixelEditorDialog::createPalettePanel()
 {
     QScrollArea *scrollPanel = new QScrollArea(this);
@@ -1991,6 +2299,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_meshOptionsPage = createMeshOptionsPage();
     m_bucketOptionsPage = createBucketOptionsPage();
     m_magicWandOptionsPage = createMagicWandOptionsPage();
+    m_pivotOptionsPage = createPivotOptionsPage();
 
     m_contextualStack->addWidget(m_pencilOptionsPage);     // 0: Pencil
     m_contextualStack->addWidget(m_eraserOptionsPage);     // 1: Eraser
@@ -1999,6 +2308,7 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_contextualStack->addWidget(m_meshOptionsPage);       // 4: Polygon Mesh CDT
     m_contextualStack->addWidget(m_bucketOptionsPage);     // 5: Bucket Fill
     m_contextualStack->addWidget(m_magicWandOptionsPage);  // 6: Magic Wand
+    m_contextualStack->addWidget(m_pivotOptionsPage);      // 7: Pivot & Reticle
 
     toolTabLayout->addWidget(m_contextualStack);
     toolTabLayout->addStretch(1);
@@ -2066,19 +2376,6 @@ QWidget* PixelEditorDialog::createPalettePanel()
             m_colorInfoLabel->setText(tr("⚠ Active layer is locked! Unlock to paint."));
         }
     });
-
-    // 3. Live Preview (1:1 scale)
-    m_prevGroup = new QGroupBox(tr("1:1 Scale Preview"), panel);
-    m_prevGroup->setStyleSheet(groupBoxStyle);
-    QVBoxLayout *prevLayout = new QVBoxLayout(m_prevGroup);
-    prevLayout->setContentsMargins(4, 4, 4, 4);
-
-    m_previewLabel = new QLabel(m_prevGroup);
-    m_previewLabel->setAlignment(Qt::AlignCenter);
-    m_previewLabel->setMinimumHeight(64);
-    m_previewLabel->setStyleSheet(QStringLiteral("border: 1px solid palette(mid); border-radius: 4px;"));
-    prevLayout->addWidget(m_previewLabel);
-    layout->addWidget(m_prevGroup);
 
     layout->addStretch();
 
@@ -2229,6 +2526,10 @@ void PixelEditorDialog::onToolButtonClicked(int id)
             break;
         case PixelTool::SelectColor:
             m_contextualStack->setCurrentIndex(6); // Magic Wand
+            break;
+        case PixelTool::PivotEdit:
+            m_contextualStack->setCurrentIndex(7); // Animation Pivot & Reticle
+            updatePivotUI();
             break;
         }
     }
@@ -2403,7 +2704,9 @@ void PixelEditorDialog::computeAnimationEnvelope(QSize &outSize, QPoint &outPivo
         if (sz.isEmpty()) sz = QSize(32, 32);
 
         QPoint piv;
-        if (idx < m_document->boxes().size()) {
+        if (m_sessionModifiedPivots.contains(idx)) {
+            piv = m_sessionModifiedPivots[idx];
+        } else if (idx < m_document->boxes().size()) {
             piv = m_document->box(idx).effectivePivot();
         } else {
             piv = QPoint(sz.width() / 2, sz.height() / 2);
@@ -2439,7 +2742,9 @@ void PixelEditorDialog::computeAnimationEnvelope(QSize &outSize, QPoint &outPivo
     outPivot = QPoint(-minX, -minY);
 
     QPoint curPivot(0, 0);
-    if (m_currentFrameIndex >= 0 && m_currentFrameIndex < m_document->boxes().size()) {
+    if (m_sessionModifiedPivots.contains(m_currentFrameIndex)) {
+        curPivot = m_sessionModifiedPivots[m_currentFrameIndex];
+    } else if (m_currentFrameIndex >= 0 && m_currentFrameIndex < m_document->boxes().size()) {
         curPivot = m_document->box(m_currentFrameIndex).effectivePivot();
     } else if (m_currentFrameIndex >= 0 && m_currentFrameIndex < m_document->frameCount()) {
         QSize curSz = m_document->frame(m_currentFrameIndex).size();
@@ -2640,6 +2945,7 @@ void PixelEditorDialog::loadFrame(int index)
 
     updateNavigationButtons();
     updateLivePreview();
+    updatePivotUI();
     updateCollisionWarningUI();
 }
 
@@ -3945,7 +4251,8 @@ bool PixelEditorDialog::applyChanges()
         syncSessionLayersFromCanvas();
     }
     const bool hasMultiLayerChanges = (m_sessionLayers.size() > 1 || m_sessionLayersModified || !m_sessionModifiedCels.isEmpty() || (m_canvas && m_canvas->layerCount() > 1));
-    if (m_sessionModifiedFrames.isEmpty() && m_sessionModifiedPolygons.isEmpty() && m_sessionModifiedVertices.isEmpty() && !hasMultiLayerChanges) {
+    const bool hasPivotChanges = !m_sessionModifiedPivots.isEmpty();
+    if (m_sessionModifiedFrames.isEmpty() && m_sessionModifiedPolygons.isEmpty() && m_sessionModifiedVertices.isEmpty() && !hasMultiLayerChanges && !hasPivotChanges) {
         return true;
     }
     if (!m_document) return false;
@@ -3978,11 +4285,23 @@ bool PixelEditorDialog::applyChanges()
         }
     }
 
-    if (actualFrameChanges.isEmpty() && actualPolyChanges.isEmpty() && actualVerticesChanges.isEmpty() && !hasMultiLayerChanges) {
+    QList<int> actualPivotIndices;
+    QList<QPoint> actualPivotValues;
+    for (auto it = m_sessionModifiedPivots.constBegin(); it != m_sessionModifiedPivots.constEnd(); ++it) {
+        if (it.key() >= 0 && it.key() < m_document->boxes().size()) {
+            if (m_document->boxPivot(it.key()) != it.value()) {
+                actualPivotIndices.append(it.key());
+                actualPivotValues.append(it.value());
+            }
+        }
+    }
+
+    if (actualFrameChanges.isEmpty() && actualPolyChanges.isEmpty() && actualVerticesChanges.isEmpty() && !hasMultiLayerChanges && actualPivotIndices.isEmpty()) {
         m_sessionModifiedFrames.clear();
         m_sessionModifiedPolygons.clear();
         m_sessionModifiedVertices.clear();
         m_sessionModifiedTriangles.clear();
+        m_sessionModifiedPivots.clear();
         updateCollisionWarningUI();
         return true;
     }
@@ -4027,6 +4346,17 @@ bool PixelEditorDialog::applyChanges()
         }
     }
 
+    // Commit pivot changes via ChangePivotCommand
+    if (!actualPivotIndices.isEmpty()) {
+        if (m_docUndoStack) {
+            m_docUndoStack->push(new ChangePivotCommand(m_document, actualPivotIndices, actualPivotValues, true));
+        } else {
+            for (int i = 0; i < actualPivotIndices.size(); ++i) {
+                m_document->setBoxPivot(actualPivotIndices[i], actualPivotValues[i], true);
+            }
+        }
+    }
+
     // Commit layers and cels to document if modified
     if (m_document && (hasMultiLayerChanges || m_sessionLayersModified || !m_sessionModifiedCels.isEmpty() || !m_sessionLayers.isEmpty())) {
         if (!m_sessionLayers.isEmpty()) {
@@ -4043,6 +4373,7 @@ bool PixelEditorDialog::applyChanges()
     m_sessionModifiedVertices.clear();
     m_sessionModifiedTriangles.clear();
     m_sessionModifiedCels.clear();
+    m_sessionModifiedPivots.clear();
     m_sessionLayersModified = false;
     updateCollisionWarningUI();
 
@@ -4127,7 +4458,7 @@ void PixelEditorDialog::resetDefaultLayout()
         m_dockOptions->show();
     }
     if (m_dockTools && m_dockOptions) {
-        m_dockMainWindow->resizeDocks({m_dockTools}, {96}, Qt::Horizontal);
+        m_dockMainWindow->resizeDocks({m_dockTools}, {210}, Qt::Horizontal);
         m_dockMainWindow->resizeDocks({m_dockOptions}, {320}, Qt::Horizontal);
     }
     saveLayoutState();
@@ -4161,6 +4492,7 @@ void PixelEditorDialog::updateToolIcons()
     applyBtnIcon(m_btnBucket, QStringLiteral(":/drawer/icons/paint_bucket.png"));
     applyBtnIcon(m_btnEyedropper, QStringLiteral(":/drawer/icons/pipette.png"));
     applyBtnIcon(m_btnToolPolygon, QStringLiteral(":/drawer/icons/polygons.png"));
+    applyBtnIcon(m_btnToolPivot, QStringLiteral(":/drawer/icons/target.png"));
     applyBtnIcon(m_btnSelectRect, QStringLiteral(":/drawer/icons/select_rectangular.png"));
     applyBtnIcon(m_btnSelectColor, QStringLiteral(":/drawer/icons/magic_wand.png"));
     applyBtnIcon(m_btnFlipH, QStringLiteral(":/drawer/icons/flip_horizontal.png"));
@@ -4227,6 +4559,9 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnToolPolygon) {
         bool hasPoly = (m_canvas && m_canvas->hasPolygonMesh());
         m_btnToolPolygon->setToolTip(hasPoly ? tr("CDT Polygon Mesh Editor (◆) [D]") : tr("Polygon & Smart CDT Mesh Editor [D]"));
+    }
+    if (m_btnToolPivot) {
+        m_btnToolPivot->setToolTip(tr("Animation Pivot & Reticle Editor [O]"));
     }
 
     if (m_btnFlipH) m_btnFlipH->setToolTip(tr("Flip Horizontal"));

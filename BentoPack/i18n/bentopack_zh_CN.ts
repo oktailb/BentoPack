@@ -2966,6 +2966,10 @@ Strict removal clears the pixel.</source>
         <translation>已选：%1 px</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>动画轴心与准星编辑器 [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>铅笔选项</translation>
     </message>
@@ -3284,6 +3288,90 @@ Strict removal clears the pixel.</source>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;提示：&lt;/b&gt; 点击颜色选择连续匹配的像素。按住 &lt;b&gt;Shift&lt;/b&gt; 添加到选区，按住 &lt;b&gt;Ctrl&lt;/b&gt; 从选区减去。</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>动画轴心与准星</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>快速对齐:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ 地面 (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>将轴心对齐到底部中心 (地面位置)</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 中心</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>将轴心对齐到精确中心</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (左上角)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>将轴心对齐到左上角 (标准UI / 图像原点)</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>预设位置 (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>坐标 (相对于帧):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>相对于帧左上角的水平轴心坐标</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>相对于帧左上角的垂直轴心坐标</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>显示地面与中轴辅助线</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>显示虚线地面水平线 (红色) 与中央垂直中轴线 (蓝色)</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>自动将更改应用到动画所有帧</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>选中时，拖动或编辑轴心将应用于当前动画的所有帧</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>应用到动画</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>将当前帧的轴心位置应用到当前动画的所有帧</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>应用到全部</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>将当前帧的轴心位置应用到整个项目的所有帧</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;提示:&lt;/b&gt; 在画布上直接点击并拖动准星即可放置动画轴心。虚线表示用于同步的地面高度与垂直轴线。</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

@@ -2966,6 +2966,10 @@ Strict removal clears the pixel.</source>
         <translation>Виділено: %1 пкс</translation>
     </message>
     <message>
+        <source>Animation Pivot &amp; Reticle Editor [O]</source>
+        <translation>Редактор опорної точки та прицілу анімації [O]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Параметри олівця</translation>
     </message>
@@ -3284,6 +3288,90 @@ Strict removal clears the pixel.</source>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to select contiguous matching pixels. Hold &lt;b&gt;Shift&lt;/b&gt; to add to selection, &lt;b&gt;Ctrl&lt;/b&gt; to subtract.</source>
         <translation>💡 &lt;b&gt;Порада:&lt;/b&gt; Клацніть на колір для виділення суміжних пікселів. Утримуйте &lt;b&gt;Shift&lt;/b&gt; для додавання, &lt;b&gt;Ctrl&lt;/b&gt; для віднімання.</translation>
+    </message>
+    <message>
+        <source>Animation Pivot &amp; Reticle</source>
+        <translation>Опорна точка та приціл анімації</translation>
+    </message>
+    <message>
+        <source>Quick Align:</source>
+        <translation>Швидке вирівнювання:</translation>
+    </message>
+    <message>
+        <source>⬇ Sol (Ground)</source>
+        <translation>⬇ Земля (Ground)</translation>
+    </message>
+    <message>
+        <source>Align pivot to bottom center (ground position)</source>
+        <translation>Вирівняти опорну точку по центру знизу (рівень землі)</translation>
+    </message>
+    <message>
+        <source>🎯 Centre</source>
+        <translation>🎯 Центр</translation>
+    </message>
+    <message>
+        <source>Align pivot to exact center</source>
+        <translation>Вирівняти опорну точку точно по центру</translation>
+    </message>
+    <message>
+        <source>↖ UI (Top-Left)</source>
+        <translation>↖ UI (Вгорі ліворуч)</translation>
+    </message>
+    <message>
+        <source>Align pivot to top-left (standard UI / image origin)</source>
+        <translation>Вирівняти опорну точку по верхньому лівому куту (початок координат UI / зображення)</translation>
+    </message>
+    <message>
+        <source>Preset Positions (3x3):</source>
+        <translation>Попередньо встановлені позиції (3x3):</translation>
+    </message>
+    <message>
+        <source>Coordinates (relative to frame):</source>
+        <translation>Координати (відносно кадру):</translation>
+    </message>
+    <message>
+        <source>Horizontal pivot coordinate relative to frame top-left</source>
+        <translation>Горизонтальна координата опорної точки відносно верхнього лівого кута кадру</translation>
+    </message>
+    <message>
+        <source>Vertical pivot coordinate relative to frame top-left</source>
+        <translation>Вертикальна координата опорної точки відносно верхнього лівого кута кадру</translation>
+    </message>
+    <message>
+        <source>Show ground &amp; axis guidelines</source>
+        <translation>Показувати напрямні землі та осі</translation>
+    </message>
+    <message>
+        <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
+        <translation>Відображати пунктирні лінії рівня землі (червона) та центральної вертикальної осі (синя)</translation>
+    </message>
+    <message>
+        <source>Auto-apply changes to animation frames</source>
+        <translation>Автоматично застосовувати зміни до кадрів анімації</translation>
+    </message>
+    <message>
+        <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
+        <translation>Якщо позначено, перетягування або зміна опорної точки застосовується до всіх кадрів поточної анімації</translation>
+    </message>
+    <message>
+        <source>Apply to Anim</source>
+        <translation>До анімації</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>Застосувати опорну точку поточного кадру до всіх кадрів поточної анімації</translation>
+    </message>
+    <message>
+        <source>Apply to All</source>
+        <translation>До всіх</translation>
+    </message>
+    <message>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>Застосувати опорну точку поточного кадру до всіх кадрів усього проєкту</translation>
+    </message>
+    <message>
+        <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
+        <translation>💡 &lt;b&gt;Порада:&lt;/b&gt; Натисніть і перетягніть приціл безпосередньо на полотні, щоб розташувати опорну точку анімації. Пунктирні лінії вказують рівень землі та вертикальну вісь для синхронізації.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>

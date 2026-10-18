@@ -145,6 +145,16 @@ public:
     QDockWidget* toolsDock() const { return m_dockTools; }
     QDockWidget* optionsDock() const { return m_dockOptions; }
     QToolButton* panelsButton() const { return m_btnPanels; }
+    QToolButton* pivotToolButton() const { return m_btnToolPivot; }
+    QPoint sessionPivot(int frameIndex) const {
+        if (m_sessionModifiedPivots.contains(frameIndex)) {
+            return m_sessionModifiedPivots.value(frameIndex);
+        }
+        if (m_document && frameIndex >= 0 && frameIndex < m_document->boxes().size()) {
+            return m_document->box(frameIndex).effectivePivot();
+        }
+        return QPoint(0, 0);
+    }
     void resetDefaultLayout();
     void saveLayoutState();
     void reject() override;
@@ -248,6 +258,8 @@ private:
     QWidget* createMeshOptionsPage();
     QWidget* createBucketOptionsPage();
     QWidget* createMagicWandOptionsPage();
+    QWidget* createPivotOptionsPage();
+    void updatePivotUI();
 
 private:
     SpriteDocument*         m_document = nullptr;
@@ -258,6 +270,8 @@ private:
     QMap<int, QList<QPointF>> m_sessionModifiedVertices;
     QMap<int, QList<int>>     m_sessionModifiedTriangles;
     QMap<int, QList<SpriteCel>> m_sessionModifiedCels;
+    QMap<int, QPoint>       m_sessionModifiedPivots;
+    bool                    m_isSyncingPivotUi = false;
     QList<SpriteLayer>      m_sessionLayers;
     bool                    m_sessionLayersModified = false;
 
@@ -289,6 +303,7 @@ private:
     QToolButton*            m_btnSelectRect = nullptr;
     QToolButton*            m_btnSelectColor = nullptr;
     QToolButton*            m_btnToolPolygon = nullptr;
+    QToolButton*            m_btnToolPivot = nullptr;
     QToolButton*            m_btnFlipH = nullptr;
     QToolButton*            m_btnFlipV = nullptr;
     QToolButton*            m_btnRotate = nullptr;
@@ -313,6 +328,7 @@ private:
     QWidget*                m_meshOptionsPage = nullptr;
     QWidget*                m_bucketOptionsPage = nullptr;
     QWidget*                m_magicWandOptionsPage = nullptr;
+    QWidget*                m_pivotOptionsPage = nullptr;
     QWidget*                m_colorOptionsPage = nullptr;
 
     // Contextual: Pencil
@@ -444,6 +460,19 @@ private:
     QPushButton*            m_btnWandCopy = nullptr;
     QPushButton*            m_btnWandCut = nullptr;
     QLabel*                 m_wandTipLabel = nullptr;
+
+    // Contextual: Pivot & Reticle
+    QGroupBox*              m_pivotGroup = nullptr;
+    QSpinBox*               m_pivotXSpin = nullptr;
+    QSpinBox*               m_pivotYSpin = nullptr;
+    QCheckBox*              m_pivotShowGuidelinesCheck = nullptr;
+    QCheckBox*              m_pivotApplyAllFramesCheck = nullptr;
+    QPushButton*            m_btnPivotGround = nullptr;
+    QPushButton*            m_btnPivotCenter = nullptr;
+    QPushButton*            m_btnPivotTopLeft = nullptr;
+    QPushButton*            m_btnApplyPivotToAnim = nullptr;
+    QPushButton*            m_btnApplyPivotToAll = nullptr;
+    QLabel*                 m_pivotTipLabel = nullptr;
 
     // Palette & Colors
     QGroupBox*              m_colorsGroup = nullptr;
