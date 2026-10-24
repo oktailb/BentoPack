@@ -94,6 +94,12 @@ private slots:
     void testCdtConcaveWithInteriorTransparentIsland();
     void testVertexDeletionGuardInviolable();
     void testMemoryPressureLongAnimationBatchCdt();
+
+    // 11. M12 Tests: Regular Grid Triangulation, Weights & Sockets
+    void testRegularGridTriangulation();
+    void testSpriteBoxWeightsAndSocketsModelAndUndo();
+    void testProjectManagerSerializationWithWeightsAndSockets();
+    void testMultiEngineExportWeightsAndSockets();
 };
 
 void TestMesh::initTestCase()
@@ -1621,6 +1627,283 @@ void TestMesh::testMemoryPressureLongAnimationBatchCdt()
     for (int i = 0; i < frameCount; ++i) {
         QVERIFY(doc.box(i).vertices.size() >= 4);
         QVERIFY(!doc.box(i).triangles.isEmpty());
+    }
+}
+
+void TestMesh::testRegularGridTriangulation()
+{
+    QRectF rect(10.0, 20.0, 80.0, 60.0);
+    int cols = 4;
+    int rows = 3;
+
+    SmartMeshResult res = Triangulator::generateRegularGrid(rect, cols, rows);
+    QVERIFY(!res.triangles.isEmpty());
+    // (cols + 1) * (rows + 1) vertices = 5 * 4 = 20
+    QCOMPARE(res.vertices.size(), 20);
+    // cols * rows * 2 triangles = 4 * 3 * 2 = 24 triangles -> 72 indices
+    QCOMPARE(res.triangles.size(), 72);
+
+    // Verify outer polygon boundary has 2 * (cols + rows) perimeter vertices
+    QCOMPARE(res.outerPolygon.size(), 2 * (cols + rows));
+    QCOMPARE(res.outerPolygon[0], QPointF(10.0, 20.0));
+    QCOMPARE(res.outerPolygon[cols], QPointF(90.0, 20.0));
+    QCOMPARE(res.outerPolygon[cols + rows], QPointF(90.0, 80.0));
+    QCOMPARE(res.outerPolygon[2 * cols + rows], QPointF(10.0, 80.0));
+
+    // Verify all triangle indices are within vertex range
+    for (int idx : res.triangles) {
+        QVERIFY(idx >= 0 && idx < res.vertices.size());
+    }
+
+    // Verify clamped bounds (0 or negative cols/rows -> clamped to 1)
+    SmartMeshResult clampRes = Triangulator::generateRegularGrid(rect, 0, -2);
+    QVERIFY(!clampRes.triangles.isEmpty());
+    QCOMPARE(clampRes.vertices.size(), 4);
+    QCOMPARE(clampRes.triangles.size(), 6);
+    QCOMPARE(clampRes.outerPolygon.size(), 4);
+}
+
+void TestMesh::testSpriteBoxWeightsAndSocketsModelAndUndo()
+{
+    SpriteDocument doc;
+    QImage frameImg(32, 32, QImage::Format_ARGB32_Premultiplied);
+    frameImg.fill(Qt::blue);
+    SpriteBox box(QRect(0, 0, 32, 32));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(32, 0) << QPointF(32, 32) << QPointF(0, 32) << QPointF(0, 0);
+    box.vertices = { QPointF(0, 0), QPointF(32, 0), QPointF(32, 32), QPointF(0, 32) };
+    box.triangles = { 0, 1, 2, 0, 2, 3 };
+    doc.addFrame(frameImg, box);
+
+    QUndoStack undoStack;
+    QList<float> weights = { 0.0f, 0.25f, 0.75f, 1.0f };
+    QMap<QString, QPointF> sockets;
+    sockets.insert(QStringLiteral("socket_hand"), QPointF(10.0, 15.0));
+    sockets.insert(QStringLiteral("socket_weapon"), QPointF(20.0, 25.0));
+
+    QMap<int, QList<float>> weightsMap;
+    weightsMap[0] = weights;
+    QMap<int, QMap<QString, QPointF>> socketsMap;
+    socketsMap[0] = sockets;
+
+    // Apply command
+    undoStack.push(new EditSpritePixelsCommand(&doc, {}, {}, {}, {}, weightsMap, socketsMap));
+
+    // Verify document updated
+    QCOMPARE(doc.box(0).vertexWeights, weights);
+    QCOMPARE(doc.box(0).sockets.size(), 2);
+    QCOMPARE(doc.box(0).sockets.value(QStringLiteral("socket_hand")), QPointF(10.0, 15.0));
+    QCOMPARE(doc.box(0).sockets.value(QStringLiteral("socket_weapon")), QPointF(20.0, 25.0));
+
+    // Undo
+    QVERIFY(undoStack.canUndo());
+    undoStack.undo();
+    QVERIFY(doc.box(0).vertexWeights.isEmpty());
+    QVERIFY(doc.box(0).sockets.isEmpty());
+
+    // Redo
+    QVERIFY(undoStack.canRedo());
+    undoStack.redo();
+    QCOMPARE(doc.box(0).vertexWeights, weights);
+    QCOMPARE(doc.box(0).sockets, sockets);
+}
+
+void TestMesh::testProjectManagerSerializationWithWeightsAndSockets()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    SpriteDocument doc;
+    QImage atlas(64, 64, QImage::Format_ARGB32_Premultiplied);
+    atlas.fill(Qt::black);
+    doc.setAtlas(atlas);
+
+    QImage img1(32, 32, QImage::Format_ARGB32_Premultiplied);
+    img1.fill(Qt::red);
+    SpriteBox box1(QRect(0, 0, 32, 32));
+    box1.vertexWeights = { 0.1f, 0.5f, 0.9f };
+    box1.sockets.insert(QStringLiteral("socket_hat"), QPointF(16.0, 2.0));
+    box1.sockets.insert(QStringLiteral("socket_back"), QPointF(16.0, 20.0));
+    doc.addFrame(img1, box1);
+
+    QImage img2(32, 32, QImage::Format_ARGB32_Premultiplied);
+    img2.fill(Qt::green);
+    SpriteBox box2(QRect(32, 0, 32, 32));
+    box2.vertexWeights = { 1.0f, 0.7f, 0.3f, 0.0f };
+    box2.sockets.insert(QStringLiteral("socket_feet"), QPointF(16.0, 31.0));
+    doc.addFrame(img2, box2);
+
+    QString errStr;
+    bool saveOk = ProjectManager::saveProjectToSessionDir(doc, tempDir.path(), 1.0, QPointF(0, 0), &errStr);
+    QVERIFY2(saveOk, qPrintable(errStr));
+
+    SpriteDocument loadedDoc;
+    bool loadOk = ProjectManager::loadProjectFromSessionDir(tempDir.path(), loadedDoc, nullptr, nullptr, &errStr);
+    QVERIFY2(loadOk, qPrintable(errStr));
+    QCOMPARE(loadedDoc.frameCount(), 2);
+
+    QCOMPARE(loadedDoc.box(0).vertexWeights, box1.vertexWeights);
+    QCOMPARE(loadedDoc.box(0).sockets, box1.sockets);
+
+    QCOMPARE(loadedDoc.box(1).vertexWeights, box2.vertexWeights);
+    QCOMPARE(loadedDoc.box(1).sockets, box2.sockets);
+}
+
+void TestMesh::testMultiEngineExportWeightsAndSockets()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    SpriteDocument doc;
+    QImage img(32, 32, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::cyan);
+    SpriteBox box(QRect(0, 0, 32, 32));
+    box.hasPolygonMesh = true;
+    box.polygon << QPointF(0, 0) << QPointF(32, 0) << QPointF(16, 32) << QPointF(0, 0);
+    box.vertices = { QPointF(0, 0), QPointF(32, 0), QPointF(16, 32) };
+    box.triangles = { 0, 1, 2 };
+    box.vertexWeights = { 0.2f, 0.5f, 0.8f };
+    box.sockets.insert(QStringLiteral("socket_hand"), QPointF(10.0, 12.0));
+    box.sockets.insert(QStringLiteral("socket_weapon"), QPointF(20.0, 22.0));
+    doc.addFrame(img, box);
+
+    // 1. TexturePacker JSON export & import
+    {
+        QString jsonPath = tempDir.filePath("test_m12.json");
+        JsonExtractor jsonExt;
+        ExportOptions opts;
+        opts.format = FORMAT_TEXTUREPACKER_JSON;
+        opts.packOptions.algorithm = AtlasPacker::MaxRects;
+        ExtractorError err;
+        bool ok = jsonExt.write(jsonPath, doc, opts, &err);
+        QVERIFY2(ok, qPrintable(err.message));
+
+        // Read file and verify fields exist
+        QFile jf(jsonPath);
+        QVERIFY(jf.open(QIODevice::ReadOnly));
+        QJsonDocument jdoc = QJsonDocument::fromJson(jf.readAll());
+        jf.close();
+        QJsonObject root = jdoc.object();
+        QJsonObject f0;
+        if (root["frames"].isArray()) {
+            f0 = root["frames"].toArray().first().toObject();
+        } else if (root["frames"].isObject()) {
+            f0 = root["frames"].toObject().begin().value().toObject();
+        }
+        QVERIFY(!f0.isEmpty());
+        QVERIFY(f0.contains("vertexWeights"));
+        QVERIFY(f0.contains("sockets"));
+
+        // Import back
+        SpriteDocument importedDoc;
+        bool readOk = jsonExt.read(jsonPath, importedDoc, &err);
+        QVERIFY2(readOk, qPrintable(err.message));
+        QCOMPARE(importedDoc.frameCount(), 1);
+        QCOMPARE(importedDoc.box(0).vertexWeights.size(), 3);
+        QCOMPARE(importedDoc.box(0).sockets.size(), 2);
+        QCOMPARE(importedDoc.box(0).sockets.value(QStringLiteral("socket_hand")), QPointF(10.0, 12.0));
+    }
+
+    // 2. Unity export & import
+    {
+        QString unityPath = tempDir.filePath("test_m12.unity.json");
+        UnityExtractor unityExt;
+        ExportOptions opts;
+        opts.format = FORMAT_UNITY;
+        opts.packOptions.algorithm = AtlasPacker::MaxRects;
+        ExtractorError err;
+        bool ok = unityExt.write(unityPath, doc, opts, &err);
+        QVERIFY2(ok, qPrintable(err.message));
+
+        // Read file and verify fields exist
+        QFile uf(unityPath);
+        QVERIFY(uf.open(QIODevice::ReadOnly));
+        QJsonDocument udoc = QJsonDocument::fromJson(uf.readAll());
+        uf.close();
+        QJsonObject root = udoc.object();
+        QJsonArray spritesArr = root["sprites"].toArray();
+        QVERIFY(!spritesArr.isEmpty());
+        QJsonObject s0 = spritesArr[0].toObject();
+        QVERIFY(s0.contains("weights"));
+        QVERIFY(s0.contains("colors"));
+        QVERIFY(s0.contains("sockets"));
+
+        // Import back
+        SpriteDocument importedDoc;
+        bool readOk = unityExt.read(unityPath, importedDoc, &err);
+        QVERIFY2(readOk, qPrintable(err.message));
+        QCOMPARE(importedDoc.frameCount(), 1);
+        QCOMPARE(importedDoc.box(0).vertexWeights.size(), 3);
+        QCOMPARE(importedDoc.box(0).sockets.size(), 2);
+        QCOMPARE(importedDoc.box(0).sockets.value(QStringLiteral("socket_hand")), QPointF(10.0, 12.0));
+    }
+
+    // 3. Unreal Paper2D export & import
+    {
+        QString unrealPath = tempDir.filePath("test_m12.paper2d.json");
+        UnrealExtractor unrealExt;
+        ExportOptions opts;
+        opts.format = FORMAT_UNREAL;
+        opts.packOptions.algorithm = AtlasPacker::MaxRects;
+        ExtractorError err;
+        bool ok = unrealExt.write(unrealPath, doc, opts, &err);
+        QVERIFY2(ok, qPrintable(err.message));
+
+        // Read file and verify fields exist
+        QFile rf(unrealPath);
+        QVERIFY(rf.open(QIODevice::ReadOnly));
+        QJsonDocument rdoc = QJsonDocument::fromJson(rf.readAll());
+        rf.close();
+        QJsonObject root = rdoc.object();
+        QJsonArray spritesArr = root["sprites"].toArray();
+        QVERIFY(!spritesArr.isEmpty());
+        QJsonObject s0 = spritesArr[0].toObject();
+        QJsonObject renderGeom = s0["renderGeometry"].toObject();
+        QVERIFY(renderGeom.contains("weights"));
+        QVERIFY(renderGeom.contains("colors"));
+        QVERIFY(s0.contains("sockets"));
+
+        // Import back
+        SpriteDocument importedDoc;
+        bool readOk = unrealExt.read(unrealPath, importedDoc, &err);
+        QVERIFY2(readOk, qPrintable(err.message));
+        QCOMPARE(importedDoc.frameCount(), 1);
+        QCOMPARE(importedDoc.box(0).vertexWeights.size(), 3);
+        QCOMPARE(importedDoc.box(0).sockets.size(), 2);
+        QCOMPARE(importedDoc.box(0).sockets.value(QStringLiteral("socket_hand")), QPointF(10.0, 12.0));
+    }
+
+    // 4. Godot export & import
+    {
+        QString godotPath = tempDir.filePath("test_m12.tres");
+        GodotExtractor godotExt;
+        ExportOptions opts;
+        opts.format = FORMAT_GODOT;
+        opts.packOptions.algorithm = AtlasPacker::MaxRects;
+        ExtractorError err;
+        bool ok = godotExt.write(godotPath, doc, opts, &err);
+        QVERIFY2(ok, qPrintable(err.message));
+
+        QString meshTresPath = tempDir.filePath("test_m12_mesh.tres");
+        QVERIFY(QFile::exists(meshTresPath));
+
+        QFile mf(meshTresPath);
+        QVERIFY(mf.open(QIODevice::ReadOnly | QIODevice::Text));
+        QString meshContent = QString::fromUtf8(mf.readAll());
+        mf.close();
+
+        QVERIFY(meshContent.contains(QStringLiteral("metadata/frame_0/weights")));
+        QVERIFY(meshContent.contains(QStringLiteral("metadata/frame_0/colors")));
+        QVERIFY(meshContent.contains(QStringLiteral("metadata/frame_0/sockets")));
+
+        // Import back
+        SpriteDocument importedDoc;
+        bool readOk = godotExt.read(godotPath, importedDoc, &err);
+        QVERIFY2(readOk, qPrintable(err.message));
+        QCOMPARE(importedDoc.frameCount(), 1);
+        QCOMPARE(importedDoc.box(0).vertexWeights.size(), 3);
+        QCOMPARE(importedDoc.box(0).sockets.size(), 2);
+        QCOMPARE(importedDoc.box(0).sockets.value(QStringLiteral("socket_hand")), QPointF(10.0, 12.0));
     }
 }
 

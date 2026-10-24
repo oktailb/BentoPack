@@ -90,6 +90,16 @@ public:
                                              const SmartMeshParams &params = SmartMeshParams());
 
     /**
+     * @brief Generates a regular M x N deformable grid mesh (M12) for banners, capes,
+     *        flags, water, or foliage deformation with vertex shaders.
+     * @param rect Bounding rectangle of the sprite or frame.
+     * @param columns Number of subdivisions along X axis (M >= 1).
+     * @param rows Number of subdivisions along Y axis (N >= 1).
+     * @return SmartMeshResult containing outer polygon, all grid vertices, and triangulation.
+     */
+    static SmartMeshResult generateRegularGrid(const QRectF &rect, int columns, int rows);
+
+    /**
      * @brief Computes the surface area of a polygon using the Shoelace formula.
      */
     static double calculateArea(const QPolygonF &polygon);

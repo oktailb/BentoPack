@@ -3335,6 +3335,14 @@ Strict removal: clears the fringe pixel.</source>
         <translation>アニメーションピボット＆レティクルエディター [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>頂点ウェイト＆風影響ペインター [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>ソケット＆アタッチメントピンエディター [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>鉛筆オプション</translation>
     </message>
@@ -3787,6 +3795,66 @@ Strict removal: clears the fringe pixel.</source>
         <translation>アニメーション &apos;%1&apos; の全フレームに適用</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>頂点ウェイト＆風の影響</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>ヒートマップオーバーレイを表示</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>すべて 0.0（固定）</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>すべて 1.0（最大風影響）</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>垂直グラデーション（根元 0 -&gt; 先端 1）</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>水平グラデーション</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>全アニメーションフレームにプリセットを適用</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>左クリック: 風ウェイトを描画。
+右クリック: ウェイトを 0.0 に消去。
+青 = 0.0（固定の根元）、赤 = 1.0（最大動作）。</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>ソケット＆アタッチメントピン</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ 追加 / 名前の変更</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 削除</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 全フレームにソケットをコピー</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>キャンバス上のピンをクリックして選択・ドラッグ。
+空のキャンバスをクリックしてピンを移動。
+Godot、Unity、Unreal Paper2D、JSON にエクスポートされます。</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>現在の選択範囲を反転</translation>
     </message>
@@ -3825,6 +3893,38 @@ Strict removal: clears the fringe pixel.</source>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>メッシュを輪郭にリセット</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>ペイントウェイト値:</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>ブラシ半径:</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>ウェイトプリセット:</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>アクティブソケット / プリセット:</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>ソケット識別子:</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>ローカル座標（左上からの px）:</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>ソケットをコピーしました</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>アクティブなアニメーションの全 %2 フレームに %1 個のソケットをコピーしました。</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>ポリゴンとメッシュの簡素化</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>タイト輪郭（スプライト切り抜き）</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>レギュラーグリッド（旗、のぼり、布）</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>メッシュモード:</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>グリッドの列数:</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>グリッドの行数:</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

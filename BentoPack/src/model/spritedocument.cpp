@@ -795,6 +795,38 @@ void SpriteDocument::applyPivotPreset(const QList<int> &indices, PivotPreset pre
     }
 }
 
+QList<float> SpriteDocument::boxVertexWeights(int index) const
+{
+    if (index >= 0 && index < m_boxes.size()) {
+        return m_boxes.at(index).vertexWeights;
+    }
+    return {};
+}
+
+void SpriteDocument::setBoxVertexWeights(int index, const QList<float> &weights)
+{
+    if (index < 0 || index >= m_boxes.size()) return;
+    if (m_boxes[index].vertexWeights == weights) return;
+    m_boxes[index].vertexWeights = weights;
+    emit frameUpdated(index);
+}
+
+QMap<QString, QPointF> SpriteDocument::boxSockets(int index) const
+{
+    if (index >= 0 && index < m_boxes.size()) {
+        return m_boxes.at(index).sockets;
+    }
+    return {};
+}
+
+void SpriteDocument::setBoxSockets(int index, const QMap<QString, QPointF> &sockets)
+{
+    if (index < 0 || index >= m_boxes.size()) return;
+    if (m_boxes[index].sockets == sockets) return;
+    m_boxes[index].sockets = sockets;
+    emit frameUpdated(index);
+}
+
 QRect SpriteDocument::computeAnimationEnvelope(const QString &animName) const
 {
     QList<int> frameIndices;

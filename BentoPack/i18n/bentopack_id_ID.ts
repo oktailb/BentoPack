@@ -3335,6 +3335,14 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Editor Poros &amp; Retikel Animasi [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>Kuas Bobot Titik &amp; Pengaruh Angin [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>Editor Soket &amp; Titik Pemasangan [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Opsi Pensil</translation>
     </message>
@@ -3787,6 +3795,66 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Terapkan ke semua bingkai &apos;%1&apos;</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>Bobot Titik &amp; Pengaruh Angin</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>Tampilkan Hamparan Peta Panas (Heatmap)</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>Semua 0.0 (Tetap)</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>Semua 1.0 (Angin Penuh)</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>Gradien Vertikal (Dasar 0 -&gt; Ujung 1)</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>Gradien Horizontal</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>Terapkan preset ke semua bingkai animasi</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>Klik-kiri: lukis bobot angin.
+Klik-kanan: hapus bobot ke 0.0.
+Biru = 0.0 (akar tetap), Merah = 1.0 (gerakan maksimum).</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>Soket &amp; Titik Pemasangan</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ Tambah / Ganti Nama</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 Hapus</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 Salin Soket ke Semua Bingkai</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>Klik pin soket pada kanvas untuk memilih dan menyeret.
+Klik kanvas kosong untuk memindahkan pin aktif.
+Diekspor ke Godot, Unity, Unreal Paper2D, dan JSON.</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>Balikkan pilihan saat ini</translation>
     </message>
@@ -3825,6 +3893,38 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>Reset Jaring ke Garis Luar</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>Nilai Bobot Lukisan:</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>Radius Kuas:</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>Preset Bobot:</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>Soket Aktif / Preset:</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>Pengenal Soket:</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>Posisi Lokal (px dari kiri-atas):</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>Soket Disalin</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>Berhasil menyalin %1 soket ke semua %2 bingkai dalam animasi aktif.</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>Penyederhanaan Poligon &amp; Jala</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>Kontur Rapat (Potongan Sprite)</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>Kisi Teratur (Spanduk, Bendera, Kain)</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>Mode Mesh:</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>Kolom Kisi:</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>Baris Kisi:</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

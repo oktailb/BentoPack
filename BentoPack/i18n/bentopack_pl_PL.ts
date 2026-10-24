@@ -3335,6 +3335,14 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Edytor punktu obrotu (pivot) i celownika animacji [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>Pędzel wag wierzchołków i wpływu wiatru [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>Edytor punktów zaczepienia i gniazd (sockets) [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Opcje ołówka</translation>
     </message>
@@ -3787,6 +3795,66 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
         <translation>Zastosuj do wszystkich klatek &apos;%1&apos;</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>Wagi wierzchołków i wpływ wiatru</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>Pokaż mapę ciepła (heatmap)</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>Wszystkie 0.0 (Zablokowane)</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>Wszystkie 1.0 (Pełny wiatr)</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>Gradient pionowy (Baza 0 -&gt; Czubek 1)</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>Gradient poziomy</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>Zastosuj preset do wszystkich klatek animacji</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>Lewy przycisk myszy: maluj wagę wiatru.
+Prawy przycisk myszy: wyzeruj wagę do 0.0.
+Niebieski = 0.0 (stała podstawa), Czerwony = 1.0 (maksymalny ruch).</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>Punkty zaczepienia i gniazda</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ Dodaj / Zmień nazwę</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 Usuń</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 Kopiuj gniazda do wszystkich klatek</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>Kliknij punkt na płótnie, aby zaznaczyć i przeciągnąć.
+Kliknij puste płótno, aby przesunąć aktywny punkt.
+Eksport do Godot, Unity, Unreal Paper2D i JSON.</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>Odwróć bieżące zaznaczenie</translation>
     </message>
@@ -3825,6 +3893,38 @@ Czy chcesz je zapisać przed kontynuowaniem?</translation>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>Resetuj siatkę do konturu</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>Wartość wagi malowania:</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>Promień pędzla:</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>Presety wag:</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>Aktywne gniazdo / Preset:</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>Identyfikator gniazda:</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>Pozycja lokalna (px od lewego górnego rogu):</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>Gniazda skopiowane</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>Skopiowano %1 gniazd(a) do wszystkich %2 klatek aktywnej animacji.</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Czy chcesz przepakować atlas teraz?</translation>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>Upraszczanie wielokątów i siatki</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>Ścisły kontur (Wycięcie duszka)</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>Regularna siatka (Banery, flagi, tkaniny)</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>Tryb siatki (mesh):</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>Kolumny siatki:</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>Wiersze siatki:</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

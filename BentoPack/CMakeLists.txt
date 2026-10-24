@@ -305,6 +305,8 @@ qt6_add_resources(BentoPackWidgets "images"
     icons/undo.png
     icons/redo.png
     icons/target.png
+    icons/paintbrush.png
+    icons/link.png
 )
 
 target_include_directories(BentoPackWidgets PUBLIC

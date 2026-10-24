@@ -3335,6 +3335,14 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Редактор опорної точки та прицілу анімації [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>Пензель ваг вершин та впливу вітру [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>Редактор точок кріплення та сокетів [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Параметри олівця</translation>
     </message>
@@ -3787,6 +3795,66 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Застосувати до всіх кадрів &apos;%1&apos;</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>Ваги вершин та вплив вітру</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>Показати теплову карту (heatmap)</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>Всі 0.0 (Фіксовано)</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>Всі 1.0 (Максимальний вітер)</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>Вертикальний градієнт (Основа 0 -&gt; Кінець 1)</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>Горизонтальний градієнт</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>Застосувати пресет до всіх кадрів анімації</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>ЛКМ: малювати вагу вітру.
+ПКМ: стерти вагу до 0.0.
+Синій = 0.0 (нерухомий корінь), Червоний = 1.0 (макс. рух).</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>Точки кріплення та сокети</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ Додати / Перейменувати</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 Видалити</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 Копіювати сокети на всі кадри</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>Клікніть по піну на полотні для вибору і перетягування.
+Клікніть по вільному полотну для переміщення піна.
+Експорт у Godot, Unity, Unreal Paper2D та JSON.</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>Інвертувати поточне виділення</translation>
     </message>
@@ -3825,6 +3893,38 @@ Strict removal: clears the fringe pixel.</source>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>Скинути сітку до контуру</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>Значення ваги малювання:</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>Радіус пензля:</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>Пресети ваги:</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>Активний сокет / Пресет:</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>Ідентифікатор сокета:</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>Локальна позиція (пікс. від верхнього лівого кута):</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>Сокети скопійовано</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>Скопійовано %1 сокет(ів) на всі %2 кадрів активної анімації.</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>Спрощення полігонів і сіток</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>Щільний контур (Вирізка спрайта)</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>Регулярна сітка (Банери, прапори, тканина)</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>Режим полігональної сітки:</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>Стовпці сітки:</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>Рядки сітки:</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

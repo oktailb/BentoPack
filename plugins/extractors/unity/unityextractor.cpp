@@ -202,6 +202,33 @@ bool UnityExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extra
             }
         }
 
+        if (sObj.contains(QStringLiteral("weights")) && sObj[QStringLiteral("weights")].isArray()) {
+            QJsonArray wArr = sObj.value(QStringLiteral("weights")).toArray();
+            QList<float> weights;
+            weights.reserve(wArr.size());
+            for (const QJsonValue &wv : wArr) {
+                weights.append(static_cast<float>(wv.toDouble()));
+            }
+            box.vertexWeights = weights;
+        }
+
+        if (sObj.contains(QStringLiteral("sockets")) && sObj[QStringLiteral("sockets")].isObject()) {
+            QJsonObject sockObj = sObj.value(QStringLiteral("sockets")).toObject();
+            QMap<QString, QPointF> socks;
+            for (auto sit = sockObj.begin(); sit != sockObj.end(); ++sit) {
+                if (sit.value().isObject()) {
+                    QJsonObject o = sit.value().toObject();
+                    socks.insert(sit.key(), QPointF(o.value(QStringLiteral("x")).toDouble(), o.value(QStringLiteral("y")).toDouble()));
+                } else if (sit.value().isArray()) {
+                    QJsonArray a = sit.value().toArray();
+                    if (a.size() >= 2) {
+                        socks.insert(sit.key(), QPointF(a[0].toDouble(), a[1].toDouble()));
+                    }
+                }
+            }
+            box.sockets = socks;
+        }
+
         int fIdx = frames.size();
         frames.append(frameImg);
         boxes.append(box);
@@ -557,6 +584,33 @@ bool UnityExtractor::write(const QString &filePath, const SpriteDocument &doc, c
             sObj["uv"] = uvArr;
             sObj["uvs"] = uvArr;
             sObj["triangles"] = tArr;
+
+            if (!box.vertexWeights.isEmpty()) {
+                QJsonArray wArr;
+                QJsonArray cArr;
+                for (float wt : box.vertexWeights) {
+                    wArr.append(wt);
+                    QJsonArray col;
+                    col.append(wt);
+                    col.append(wt);
+                    col.append(wt);
+                    col.append(1.0);
+                    cArr.append(col);
+                }
+                sObj["weights"] = wArr;
+                sObj["colors"] = cArr;
+            }
+
+            if (!box.sockets.isEmpty()) {
+                QJsonObject socksObj;
+                for (auto sit = box.sockets.constBegin(); sit != box.sockets.constEnd(); ++sit) {
+                    QJsonObject ptObj;
+                    ptObj["x"] = sit.value().x();
+                    ptObj["y"] = sit.value().y();
+                    socksObj[sit.key()] = ptObj;
+                }
+                sObj["sockets"] = socksObj;
+            }
         }
 
         spritesArr.append(sObj);

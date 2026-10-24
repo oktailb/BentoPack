@@ -537,7 +537,7 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                                                  int frameIndex,
                                                  const QImage &newFrame,
                                                  QUndoCommand *parent)
-    : EditSpritePixelsCommand(doc, QMap<int, QImage>{{frameIndex, newFrame}}, {}, {}, {}, parent)
+    : EditSpritePixelsCommand(doc, QMap<int, QImage>{{frameIndex, newFrame}}, {}, {}, {}, {}, {}, parent)
 {
 }
 
@@ -546,6 +546,8 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                                                  const QMap<int, QPolygonF> &modifiedPolygons,
                                                  const QMap<int, QList<QPointF>> &modifiedVertices,
                                                  const QMap<int, QList<int>> &modifiedTriangles,
+                                                 const QMap<int, QList<float>> &modifiedWeights,
+                                                 const QMap<int, QMap<QString, QPointF>> &modifiedSockets,
                                                  QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_doc(doc)
@@ -553,6 +555,8 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
     , m_newPolygons(modifiedPolygons)
     , m_newVertices(modifiedVertices)
     , m_newTriangles(modifiedTriangles)
+    , m_newWeights(modifiedWeights)
+    , m_newSockets(modifiedSockets)
 {
     if (m_doc) {
         for (auto it = m_newFrames.constBegin(); it != m_newFrames.constEnd(); ++it) {
@@ -630,6 +634,30 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                     newB.rect.setSize(it.value().size());
                     m_newBoxes[idx] = newB;
                 }
+            }
+        }
+        for (auto it = m_newWeights.constBegin(); it != m_newWeights.constEnd(); ++it) {
+            int idx = it.key();
+            if (idx >= 0 && idx < m_doc->boxes().size()) {
+                if (!m_oldBoxes.contains(idx)) {
+                    m_oldBoxes[idx] = m_doc->box(idx);
+                }
+                if (!m_newBoxes.contains(idx)) {
+                    m_newBoxes[idx] = m_doc->box(idx);
+                }
+                m_newBoxes[idx].vertexWeights = it.value();
+            }
+        }
+        for (auto it = m_newSockets.constBegin(); it != m_newSockets.constEnd(); ++it) {
+            int idx = it.key();
+            if (idx >= 0 && idx < m_doc->boxes().size()) {
+                if (!m_oldBoxes.contains(idx)) {
+                    m_oldBoxes[idx] = m_doc->box(idx);
+                }
+                if (!m_newBoxes.contains(idx)) {
+                    m_newBoxes[idx] = m_doc->box(idx);
+                }
+                m_newBoxes[idx].sockets = it.value();
             }
         }
     }

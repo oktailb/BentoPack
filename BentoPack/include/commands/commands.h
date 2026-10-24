@@ -339,6 +339,8 @@ public:
                             const QMap<int, QPolygonF> &modifiedPolygons = {},
                             const QMap<int, QList<QPointF>> &modifiedVertices = {},
                             const QMap<int, QList<int>> &modifiedTriangles = {},
+                            const QMap<int, QList<float>> &modifiedWeights = {},
+                            const QMap<int, QMap<QString, QPointF>> &modifiedSockets = {},
                             QUndoCommand *parent = nullptr);
 
     EditSpritePixelsCommand(SpriteDocument *doc,
@@ -365,6 +367,8 @@ private:
     QMap<int, QPolygonF>        m_newPolygons;
     QMap<int, QList<QPointF>>   m_newVertices;
     QMap<int, QList<int>>       m_newTriangles;
+    QMap<int, QList<float>>     m_newWeights;
+    QMap<int, QMap<QString, QPointF>> m_newSockets;
     QMap<int, SpriteBox>        m_oldBoxes;
     QMap<int, SpriteBox>        m_newBoxes;
     QList<FramePatch>           m_framePatches;

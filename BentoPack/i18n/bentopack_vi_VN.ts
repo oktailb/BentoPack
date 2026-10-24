@@ -3335,6 +3335,14 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Trình chỉnh sửa điểm neo &amp; tâm ngắm hoạt ảnh [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>Bút vẽ trọng số đỉnh và ảnh hưởng của gió [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>Trình chỉnh sửa socket và điểm đính kèm [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Tùy chọn bút chì</translation>
     </message>
@@ -3787,6 +3795,66 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Áp dụng cho tất cả khung hình &apos;%1&apos;</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>Trọng số đỉnh &amp; Ảnh hưởng của gió</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>Hiển thị lớp phủ bản đồ nhiệt (Heatmap)</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>Tất cả 0.0 (Cố định)</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>Tất cả 1.0 (Gió tối đa)</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>Chuyển sắc dọc (Gốc 0 -&gt; Ngọn 1)</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>Chuyển sắc ngang</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>Áp dụng thiết lập sẵn cho tất cả các khung hình hoạt ảnh</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>Nhấp chuột trái: vẽ trọng số gió.
+Nhấp chuột phải: xóa trọng số về 0.0.
+Xanh dương = 0.0 (gốc cố định), Đỏ = 1.0 (chuyển động tối đa).</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>Socket &amp; Điểm đính kèm</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ Thêm / Đổi tên</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 Xóa</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 Sao chép socket sang tất cả khung hình</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>Nhấp vào điểm ghim trên khung vẽ để chọn và kéo.
+Nhấp vào vùng trống để di chuyển ghim đang chọn.
+Xuất ra Godot, Unity, Unreal Paper2D và JSON.</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>Đảo ngược vùng chọn</translation>
     </message>
@@ -3825,6 +3893,38 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>Đặt lại lưới về đường viền ngoài</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>Giá trị trọng số vẽ:</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>Bán kính cọ:</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>Thiết lập sẵn trọng số:</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>Socket đang chọn / Thiết lập sẵn:</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>Định danh socket:</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>Vị trí cục bộ (px từ góc trên bên trái):</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>Đã sao chép socket</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>Đã sao chép %1 socket sang tất cả %2 khung hình trong hoạt ảnh đang hoạt động.</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>Thao tác: Polygon &amp; Mesh Simplification</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>Đường viền sát (Cắt theo sprite)</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>Lưới đều (Băng rôn, cờ, vải)</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>Chế độ lưới (Mesh):</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>Cột lưới:</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>Hàng lưới:</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

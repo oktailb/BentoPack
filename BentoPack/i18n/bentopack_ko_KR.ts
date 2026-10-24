@@ -3335,6 +3335,14 @@ Strict removal: clears the fringe pixel.</source>
         <translation>애니메이션 피벗 및 레티클 에디터 [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>정점 가중치 및 바람 영향 페인터 [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>소켓 및 부착 핀 편집기 [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>연필 옵션</translation>
     </message>
@@ -3787,6 +3795,66 @@ Strict removal: clears the fringe pixel.</source>
         <translation>&apos;%1&apos;의 모든 프레임에 적용</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>정점 가중치 및 바람 영향</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>히트맵 오버레이 표시</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>모두 0.0 (고정)</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>모두 1.0 (최대 바람)</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>수직 그래디언트 (하단 0 -&gt; 상단 1)</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>수평 그래디언트</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>모든 애니메이션 프레임에 사전 설정 적용</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>좌클릭: 바람 가중치 페인팅.
+우클릭: 가중치 0.0으로 지우기.
+파란색 = 0.0 (고정된 뿌리), 빨간색 = 1.0 (최대 움직임).</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>소켓 및 부착 핀</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ 추가 / 이름 변경</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 삭제</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 모든 프레임에 소켓 복사</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>캔버스에서 핀을 클릭하여 선택 및 드래그합니다.
+빈 캔버스를 클릭하여 활성 핀을 이동합니다.
+Godot, Unity, Unreal Paper2D 및 JSON으로 내보내집니다.</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>현재 선택 영역 반전</translation>
     </message>
@@ -3825,6 +3893,38 @@ Strict removal: clears the fringe pixel.</source>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>메시를 윤곽선으로 초기화</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>페인트 가중치 값:</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>브러시 반경:</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>가중치 사전 설정:</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>활성 소켓 / 사전 설정:</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>소켓 식별자:</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>로컬 위치 (좌상단 기준 px):</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>소켓 복사됨</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>활성 애니메이션의 모든 %2개 프레임에 %1개 소켓을 복사했습니다.</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>폴리곤 및 메시 단순화</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>타이트 윤곽선 (스프라이트 오려내기)</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>정규 그리드 (배너, 깃발, 천)</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>메시 모드:</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>그리드 열:</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>그리드 행:</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

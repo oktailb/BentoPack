@@ -3335,6 +3335,14 @@ Strict removal: clears the fringe pixel.</source>
         <translation>เครื่องมือแก้ไขจุดยึดและเป้าเล็งแอนิเมชัน [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>เครื่องมือเพนต์น้ำหนักจุดยอดและอิทธิพลลม [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>ตัวแก้ไขซ็อกเก็ตและพินเชื่อมต่อ [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>ตัวเลือกดินสอ</translation>
     </message>
@@ -3787,6 +3795,66 @@ Strict removal: clears the fringe pixel.</source>
         <translation>ใช้กับทุกเฟรมของ &apos;%1&apos;</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>น้ำหนักจุดยอดและอิทธิพลลม</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>แสดงการซ้อนทับแผนที่ความร้อน (Heatmap)</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>ทั้งหมด 0.0 (ตรึงอยู่กับที่)</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>ทั้งหมด 1.0 (รับลมเต็มที่)</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>การไล่ระดับสีแนวตั้ง (ฐาน 0 -&gt; ปลาย 1)</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>การไล่ระดับสีแนวนอน</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>ใช้ค่าที่ตั้งไว้ล่วงหน้ากับทุกเฟรมของแอนิเมชัน</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>คลิกซ้าย: เพนต์น้ำหนักลม
+คลิกขวา: ลบน้ำหนักเป็น 0.0
+สีน้ำเงิน = 0.0 (โคนยึดตรึง), สีแดง = 1.0 (เคลื่อนไหวสูงสุด)</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>ซ็อกเก็ตและพินเชื่อมต่อ</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ เพิ่ม / เปลี่ยนชื่อ</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 ลบ</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 คัดลอกซ็อกเก็ตไปยังทุกเฟรม</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>คลิกพินซ็อกเก็ตบนผืนผ้าใบเพื่อเลือกและลาก
+คลิกพื้นที่ว่างบนผืนผ้าใบเพื่อย้ายพินที่เลือก
+ส่งออกไปยัง Godot, Unity, Unreal Paper2D และ JSON</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>สลับส่วนที่เลือก</translation>
     </message>
@@ -3825,6 +3893,38 @@ Strict removal: clears the fringe pixel.</source>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>รีเซ็ตเมชกลับเป็นโครงร่าง</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>ค่าน้ำหนักที่จะเพนต์:</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>รัศมีแปรง:</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>ค่ากำหนดน้ำหนักล่วงหน้า:</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>ซ็อกเก็ตที่ใช้งาน / ค่ากำหนดล่วงหน้า:</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>ตัวระบุซ็อกเก็ต:</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>ตำแหน่งเฉพาะที่ (px จากมุมบนซ้าย):</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>คัดลอกซ็อกเก็ตแล้ว</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>คัดลอก %1 ซ็อกเก็ตไปยังทั้ง %2 เฟรมในแอนิเมชันที่ใช้งานอยู่แล้ว</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Would you like to repack the atlas now?</translation>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>ดำเนินการ: Polygon &amp; Mesh Simplification</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>โครงร่างแนบชิด (ตัดสไปรต์)</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>กริดปกติ (แบนเนอร์, ธง, ผืนผ้า)</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>โหมดเมช:</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>คอลัมน์กริด:</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>แถวกริด:</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

@@ -326,14 +326,21 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
             QRegularExpression vertRegex(QStringLiteral(R"re(metadata/frame_(\d+)/vertices\s*=\s*PackedVector2Array\(([^)]*)\))re"));
             QRegularExpression intRegex(QStringLiteral(R"re(metadata/frame_(\d+)/internal_vertex_count\s*=\s*(\d+))re"));
             QRegularExpression triRegex(QStringLiteral(R"re(metadata/frame_(\d+)/triangles\s*=\s*PackedInt32Array\(([^)]*)\))re"));
+            QRegularExpression weightRegex(QStringLiteral(R"re(metadata/frame_(\d+)/weights\s*=\s*PackedFloat32Array\(([^)]*)\))re"));
+            QRegularExpression sockRegex(QStringLiteral(R"re(metadata/frame_(\d+)/sockets\s*=\s*\{([^}]*)\})re"));
+            QRegularExpression sockEntryRegex(QStringLiteral(R"re("([^"]+)"\s*:\s*Vector2\(\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*\))re"));
 
             struct FrameMeshEntry {
                 QPolygonF poly;
                 QList<QPointF> verts;
                 QList<int> tris;
+                QList<float> weights;
+                QMap<QString, QPointF> sockets;
                 int internalVertexCount = -1;
                 bool hasPoly = false;
                 bool hasVerts = false;
+                bool hasWeights = false;
+                bool hasSockets = false;
             };
             QMap<int, FrameMeshEntry> frameMeshes;
 
@@ -402,6 +409,45 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
                 }
             }
 
+            QRegularExpressionMatchIterator wIter = weightRegex.globalMatch(meshContent);
+            while (wIter.hasNext()) {
+                QRegularExpressionMatch match = wIter.next();
+                int idx = match.captured(1).toInt();
+                QString weightsStr = match.captured(2).trimmed();
+                if (idx >= 0 && idx < boxes.size() && !weightsStr.isEmpty()) {
+                    QStringList parts = weightsStr.split(QLatin1Char(','), Qt::SkipEmptyParts);
+                    QList<float> weights;
+                    weights.reserve(parts.size());
+                    for (const QString &s : parts) {
+                        weights.append(s.trimmed().toFloat());
+                    }
+                    frameMeshes[idx].weights = weights;
+                    frameMeshes[idx].hasWeights = true;
+                }
+            }
+
+            QRegularExpressionMatchIterator sIter = sockRegex.globalMatch(meshContent);
+            while (sIter.hasNext()) {
+                QRegularExpressionMatch match = sIter.next();
+                int idx = match.captured(1).toInt();
+                QString body = match.captured(2);
+                if (idx >= 0 && idx < boxes.size()) {
+                    QRegularExpressionMatchIterator entryIter = sockEntryRegex.globalMatch(body);
+                    QMap<QString, QPointF> socks;
+                    while (entryIter.hasNext()) {
+                        QRegularExpressionMatch eMatch = entryIter.next();
+                        QString sName = eMatch.captured(1);
+                        double sx = eMatch.captured(2).toDouble();
+                        double sy = eMatch.captured(3).toDouble();
+                        socks.insert(sName, QPointF(sx, sy));
+                    }
+                    if (!socks.isEmpty()) {
+                        frameMeshes[idx].sockets = socks;
+                        frameMeshes[idx].hasSockets = true;
+                    }
+                }
+            }
+
             for (auto it = frameMeshes.constBegin(); it != frameMeshes.constEnd(); ++it) {
                 int idx = it.key();
                 const FrameMeshEntry &fme = it.value();
@@ -424,6 +470,12 @@ bool GodotExtractor::read(const QString &filePath, SpriteDocument &doc, Extracto
                     } else {
                         boxes[idx].polygon = fme.poly;
                     }
+                }
+                if (fme.hasWeights) {
+                    boxes[idx].vertexWeights = fme.weights;
+                }
+                if (fme.hasSockets) {
+                    boxes[idx].sockets = fme.sockets;
                 }
             }
         }
@@ -840,10 +892,12 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
     outFile.close();
 
-    // If any frame has a tight polygon mesh, write companion _mesh.tres resource
+    // If any frame has a tight polygon mesh, weights, or sockets, write companion _mesh.tres resource
     bool hasMesh = false;
     for (int i = 0; i < doc.frameCount(); ++i) {
-        if (doc.box(i).hasPolygonMesh && !doc.box(i).polygon.isEmpty() && !doc.box(i).triangles.isEmpty()) {
+        const SpriteBox &bx = doc.box(i);
+        if ((bx.hasPolygonMesh && !bx.polygon.isEmpty() && !bx.triangles.isEmpty()) ||
+            !bx.vertexWeights.isEmpty() || !bx.sockets.isEmpty()) {
             hasMesh = true;
             break;
         }
@@ -877,59 +931,92 @@ bool GodotExtractor::write(const QString &filePath, const SpriteDocument &doc, c
 
                 if (i < doc.frameCount()) {
                     const SpriteBox &b = doc.box(i);
-                    if (b.hasPolygonMesh && !b.polygon.isEmpty() && !b.triangles.isEmpty()) {
+                    bool hasGeo = b.hasPolygonMesh && !b.polygon.isEmpty() && !b.triangles.isEmpty();
+                    if (hasGeo || !b.vertexWeights.isEmpty() || !b.sockets.isEmpty()) {
                         mOut << "metadata/frame_" << i << "/rect = Rect2(" << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << ")\n";
                         if (isMultiPage) {
                             mOut << "metadata/frame_" << i << "/page = " << pageIdx << "\n";
                             mOut << "metadata/frame_" << i << "/texture = ExtResource(\"page_" << pageIdx << "_atlas\")\n";
                         }
 
-                        // 1. Clean boundary perimeter contour
-                        QPolygonF boundaryPoly = b.polygon;
-                        if (boundaryPoly.isClosed() && boundaryPoly.size() >= 4) {
-                            boundaryPoly.removeLast();
-                        }
+                        if (hasGeo) {
+                            // 1. Clean boundary perimeter contour
+                            QPolygonF boundaryPoly = b.polygon;
+                            if (boundaryPoly.isClosed() && boundaryPoly.size() >= 4) {
+                                boundaryPoly.removeLast();
+                            }
 
-                        // 2. Full mesh vertices (boundary first, followed by interior Steiner/contrast points)
-                        const QList<QPointF> meshVertices = !b.vertices.isEmpty() ? b.vertices : boundaryPoly.toList();
-                        const int internalVertexCount = std::max(0, static_cast<int>(meshVertices.size()) - static_cast<int>(boundaryPoly.size()));
+                            // 2. Full mesh vertices (boundary first, followed by interior Steiner/contrast points)
+                            const QList<QPointF> meshVertices = !b.vertices.isEmpty() ? b.vertices : boundaryPoly.toList();
+                            const int internalVertexCount = std::max(0, static_cast<int>(meshVertices.size()) - static_cast<int>(boundaryPoly.size()));
 
-                        // Boundary polygon coordinates
-                        mOut << "metadata/frame_" << i << "/polygon = PackedVector2Array(";
-                        for (int p = 0; p < boundaryPoly.size(); ++p) {
-                            if (p > 0) mOut << ", ";
-                            mOut << boundaryPoly[p].x() << ", " << boundaryPoly[p].y();
-                        }
-                        mOut << ")\n";
-
-                        // Full mesh vertices (when mesh contains interior vertices or differs from boundary)
-                        if (internalVertexCount > 0 || meshVertices.size() != boundaryPoly.size()) {
-                            mOut << "metadata/frame_" << i << "/vertices = PackedVector2Array(";
-                            for (int p = 0; p < meshVertices.size(); ++p) {
+                            // Boundary polygon coordinates
+                            mOut << "metadata/frame_" << i << "/polygon = PackedVector2Array(";
+                            for (int p = 0; p < boundaryPoly.size(); ++p) {
                                 if (p > 0) mOut << ", ";
-                                mOut << meshVertices[p].x() << ", " << meshVertices[p].y();
+                                mOut << boundaryPoly[p].x() << ", " << boundaryPoly[p].y();
                             }
                             mOut << ")\n";
-                            mOut << "metadata/frame_" << i << "/internal_vertex_count = " << internalVertexCount << "\n";
+
+                            // Full mesh vertices (when mesh contains interior vertices or differs from boundary)
+                            if (internalVertexCount > 0 || meshVertices.size() != boundaryPoly.size()) {
+                                mOut << "metadata/frame_" << i << "/vertices = PackedVector2Array(";
+                                for (int p = 0; p < meshVertices.size(); ++p) {
+                                    if (p > 0) mOut << ", ";
+                                    mOut << meshVertices[p].x() << ", " << meshVertices[p].y();
+                                }
+                                mOut << ")\n";
+                                mOut << "metadata/frame_" << i << "/internal_vertex_count = " << internalVertexCount << "\n";
+                            }
+
+                            // UV coordinates (mapped to meshVertices)
+                            mOut << "metadata/frame_" << i << "/uv = PackedVector2Array(";
+                            for (int p = 0; p < meshVertices.size(); ++p) {
+                                if (p > 0) mOut << ", ";
+                                double u = (aW > 0.0) ? ((r.x() + meshVertices[p].x()) / aW) : 0.0;
+                                double v = (aH > 0.0) ? ((r.y() + meshVertices[p].y()) / aH) : 0.0;
+                                mOut << u << ", " << v;
+                            }
+                            mOut << ")\n";
+
+                            // Triangles (indices into meshVertices)
+                            mOut << "metadata/frame_" << i << "/triangles = PackedInt32Array(";
+                            for (int t = 0; t < b.triangles.size(); ++t) {
+                                if (t > 0) mOut << ", ";
+                                mOut << b.triangles[t];
+                            }
+                            mOut << ")\n";
+
+                            // Vertex weights & colors
+                            if (!b.vertexWeights.isEmpty()) {
+                                mOut << "metadata/frame_" << i << "/weights = PackedFloat32Array(";
+                                for (int w = 0; w < b.vertexWeights.size(); ++w) {
+                                    if (w > 0) mOut << ", ";
+                                    mOut << b.vertexWeights[w];
+                                }
+                                mOut << ")\n";
+
+                                mOut << "metadata/frame_" << i << "/colors = PackedColorArray(";
+                                for (int w = 0; w < b.vertexWeights.size(); ++w) {
+                                    if (w > 0) mOut << ", ";
+                                    float wt = b.vertexWeights[w];
+                                    mOut << "Color(" << wt << ", " << wt << ", " << wt << ", 1)";
+                                }
+                                mOut << ")\n";
+                            }
                         }
 
-                        // UV coordinates (mapped to meshVertices)
-                        mOut << "metadata/frame_" << i << "/uv = PackedVector2Array(";
-                        for (int p = 0; p < meshVertices.size(); ++p) {
-                            if (p > 0) mOut << ", ";
-                            double u = (aW > 0.0) ? ((r.x() + meshVertices[p].x()) / aW) : 0.0;
-                            double v = (aH > 0.0) ? ((r.y() + meshVertices[p].y()) / aH) : 0.0;
-                            mOut << u << ", " << v;
+                        // Sockets
+                        if (!b.sockets.isEmpty()) {
+                            mOut << "metadata/frame_" << i << "/sockets = {";
+                            bool firstSock = true;
+                            for (auto sit = b.sockets.constBegin(); sit != b.sockets.constEnd(); ++sit) {
+                                if (!firstSock) mOut << ", ";
+                                firstSock = false;
+                                mOut << "\"" << sit.key() << "\": Vector2(" << sit.value().x() << ", " << sit.value().y() << ")";
+                            }
+                            mOut << "}\n";
                         }
-                        mOut << ")\n";
-
-                        // Triangles (indices into meshVertices)
-                        mOut << "metadata/frame_" << i << "/triangles = PackedInt32Array(";
-                        for (int t = 0; t < b.triangles.size(); ++t) {
-                            if (t > 0) mOut << ", ";
-                            mOut << b.triangles[t];
-                        }
-                        mOut << ")\n";
                     }
                 }
             }

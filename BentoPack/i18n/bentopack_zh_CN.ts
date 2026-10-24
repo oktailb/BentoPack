@@ -3335,6 +3335,14 @@ Strict removal: clears the fringe pixel.</source>
         <translation>动画轴心与准星编辑器 [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>顶点权重与风力影响绘制器 [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>插槽与附加引脚编辑器 [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>铅笔选项</translation>
     </message>
@@ -3787,6 +3795,66 @@ Strict removal: clears the fringe pixel.</source>
         <translation>应用到 &apos;%1&apos; 的所有帧</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>顶点权重与风力影响</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>显示热力图覆盖</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>全置 0.0（固定）</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>全置 1.0（最大风力）</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>垂直渐变（底部 0 -&gt; 顶部 1）</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>水平渐变</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>将预设应用到所有动画帧</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>左键：绘制风力权重。
+右键：擦除权重至 0.0。
+蓝色 = 0.0（固定根部），红色 = 1.0（最大运动）。</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>插槽与附加引脚</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ 添加 / 重命名</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 删除</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 复制插槽至所有帧</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>在画布上单击引脚进行选择和拖拽。
+单击空白画布移动当前引脚。
+可导出至 Godot、Unity、Unreal Paper2D 和 JSON。</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>反选当前选区</translation>
     </message>
@@ -3825,6 +3893,38 @@ Strict removal: clears the fringe pixel.</source>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>重置网格为轮廓</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>绘制权重值：</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>画笔半径：</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>权重预设：</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>当前插槽 / 预设：</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>插槽标识符：</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>本地坐标（距离左上角像素）：</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>插槽已复制</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>已将 %1 个插槽复制到当前动画的所有 %2 帧。</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Would you like to repack the atlas now?</source>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>多边形与网格简化</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>紧密轮廓（精灵剪裁）</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>常规网格（横幅、旗帜、布料）</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>网格模式：</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>网格列数：</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>网格行数：</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

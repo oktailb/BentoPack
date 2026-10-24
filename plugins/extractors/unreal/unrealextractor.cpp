@@ -205,7 +205,53 @@ bool UnrealExtractor::read(const QString &filePath, SpriteDocument &outDoc, Extr
                     box.vertices = verts;
                     box.triangles = tris;
                 }
+
+                if (renderGeom.contains(QStringLiteral("weights")) && renderGeom[QStringLiteral("weights")].isArray()) {
+                    QJsonArray wArr = renderGeom.value(QStringLiteral("weights")).toArray();
+                    QList<float> weights;
+                    weights.reserve(wArr.size());
+                    for (const QJsonValue &wv : wArr) {
+                        weights.append(static_cast<float>(wv.toDouble()));
+                    }
+                    box.vertexWeights = weights;
+                }
             }
+        }
+
+        if (sObj.contains(QStringLiteral("sockets")) && sObj[QStringLiteral("sockets")].isArray()) {
+            QJsonArray sockArr = sObj[QStringLiteral("sockets")].toArray();
+            QMap<QString, QPointF> socks;
+            for (const QJsonValue &sv : sockArr) {
+                if (sv.isObject()) {
+                    QJsonObject so = sv.toObject();
+                    QString sName = so.value(QStringLiteral("socketName")).toString();
+                    if (sName.isEmpty()) sName = so.value(QStringLiteral("name")).toString();
+                    QPointF pt;
+                    if (so.contains(QStringLiteral("localTransform")) && so[QStringLiteral("localTransform")].isObject()) {
+                        QJsonObject trans = so.value(QStringLiteral("localTransform")).toObject();
+                        if (trans.contains(QStringLiteral("translation")) && trans[QStringLiteral("translation")].isObject()) {
+                            QJsonObject tr = trans.value(QStringLiteral("translation")).toObject();
+                            pt = QPointF(tr.value(QStringLiteral("x")).toDouble(), tr.value(QStringLiteral("y")).toDouble());
+                        }
+                    } else if (so.contains(QStringLiteral("x")) && so.contains(QStringLiteral("y"))) {
+                        pt = QPointF(so.value(QStringLiteral("x")).toDouble(), so.value(QStringLiteral("y")).toDouble());
+                    }
+                    if (!sName.isEmpty()) {
+                        socks.insert(sName, pt);
+                    }
+                }
+            }
+            box.sockets = socks;
+        } else if (sObj.contains(QStringLiteral("sockets")) && sObj[QStringLiteral("sockets")].isObject()) {
+            QJsonObject sockObj = sObj[QStringLiteral("sockets")].toObject();
+            QMap<QString, QPointF> socks;
+            for (auto sit = sockObj.begin(); sit != sockObj.end(); ++sit) {
+                if (sit.value().isObject()) {
+                    QJsonObject o = sit.value().toObject();
+                    socks.insert(sit.key(), QPointF(o.value(QStringLiteral("x")).toDouble(), o.value(QStringLiteral("y")).toDouble()));
+                }
+            }
+            box.sockets = socks;
         }
 
         int fIdx = frames.size();
@@ -438,6 +484,22 @@ bool UnrealExtractor::write(const QString &filePath, const SpriteDocument &doc, 
                 tArr.append(tri1);
                 tArr.append(tri2);
             }
+            if (!box.vertexWeights.isEmpty()) {
+                QJsonArray wArr;
+                QJsonArray cArr;
+                for (float wt : box.vertexWeights) {
+                    wArr.append(wt);
+                    QJsonObject col;
+                    col[QStringLiteral("r")] = wt;
+                    col[QStringLiteral("g")] = wt;
+                    col[QStringLiteral("b")] = wt;
+                    col[QStringLiteral("a")] = 1.0;
+                    cArr.append(col);
+                }
+                renderGeom[QStringLiteral("weights")] = wArr;
+                renderGeom[QStringLiteral("colors")] = cArr;
+            }
+
             renderGeom["vertices"] = vArr;
             renderGeom["triangles"] = tArr;
             sObj["renderGeometry"] = renderGeom;
@@ -459,6 +521,34 @@ bool UnrealExtractor::write(const QString &filePath, const SpriteDocument &doc, 
             }
             collisionGeom["polygon"] = colPoly;
             sObj["collisionGeometry"] = collisionGeom;
+
+            if (!box.sockets.isEmpty()) {
+                QJsonArray sockArr;
+                for (auto sit = box.sockets.constBegin(); sit != box.sockets.constEnd(); ++sit) {
+                    QJsonObject sockObj;
+                    sockObj[QStringLiteral("socketName")] = sit.key();
+                    QJsonObject trans;
+                    QJsonObject translation;
+                    translation[QStringLiteral("x")] = sit.value().x();
+                    translation[QStringLiteral("y")] = sit.value().y();
+                    translation[QStringLiteral("z")] = 0.0;
+                    trans[QStringLiteral("translation")] = translation;
+                    QJsonObject rotation;
+                    rotation[QStringLiteral("x")] = 0.0;
+                    rotation[QStringLiteral("y")] = 0.0;
+                    rotation[QStringLiteral("z")] = 0.0;
+                    rotation[QStringLiteral("w")] = 1.0;
+                    trans[QStringLiteral("rotation")] = rotation;
+                    QJsonObject scale;
+                    scale[QStringLiteral("x")] = 1.0;
+                    scale[QStringLiteral("y")] = 1.0;
+                    scale[QStringLiteral("z")] = 1.0;
+                    trans[QStringLiteral("scale")] = scale;
+                    sockObj[QStringLiteral("localTransform")] = trans;
+                    sockArr.append(sockObj);
+                }
+                sObj[QStringLiteral("sockets")] = sockArr;
+            }
         }
 
         spritesArr.append(sObj);

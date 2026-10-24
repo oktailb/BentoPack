@@ -148,6 +148,10 @@ public:
     QDockWidget* optionsDock() const { return m_dockOptions; }
     QToolButton* panelsButton() const { return m_btnPanels; }
     QToolButton* pivotToolButton() const { return m_btnToolPivot; }
+    QToolButton* weightPaintToolButton() const { return m_btnToolWeightPaint; }
+    QToolButton* socketToolButton() const { return m_btnToolSocket; }
+    QMap<int, QList<float>> sessionModifiedWeights() const { return m_sessionModifiedWeights; }
+    QMap<int, QMap<QString, QPointF>> sessionModifiedSockets() const { return m_sessionModifiedSockets; }
     QPoint sessionPivot(int frameIndex) const {
         if (m_sessionModifiedPivots.contains(frameIndex)) {
             return m_sessionModifiedPivots.value(frameIndex);
@@ -236,6 +240,9 @@ private:
     void updateNavigationButtons();
     void populateAnimationCombo();
     void saveCurrentFrameToSession();
+    void updateSocketUI();
+    QWidget* createWeightPaintOptionsPage();
+    QWidget* createSocketOptionsPage();
     bool checkAtlasPolygonCollision(QString *outDetails = nullptr, QList<int> *outCollidingIndices = nullptr) const;
     void updateCollisionWarningUI();
     void refreshPaletteSwatches();
@@ -273,6 +280,8 @@ private:
     QMap<int, QList<int>>     m_sessionModifiedTriangles;
     QMap<int, QList<SpriteCel>> m_sessionModifiedCels;
     QMap<int, QPoint>       m_sessionModifiedPivots;
+    QMap<int, QList<float>> m_sessionModifiedWeights;
+    QMap<int, QMap<QString, QPointF>> m_sessionModifiedSockets;
     bool                    m_isSyncingPivotUi = false;
     QList<SpriteLayer>      m_sessionLayers;
     bool                    m_sessionLayersModified = false;
@@ -306,6 +315,8 @@ private:
     QToolButton*            m_btnSelectColor = nullptr;
     QToolButton*            m_btnToolPolygon = nullptr;
     QToolButton*            m_btnToolPivot = nullptr;
+    QToolButton*            m_btnToolWeightPaint = nullptr;
+    QToolButton*            m_btnToolSocket = nullptr;
     QToolButton*            m_btnFlipH = nullptr;
     QToolButton*            m_btnFlipV = nullptr;
     QToolButton*            m_btnRotate = nullptr;
@@ -331,6 +342,8 @@ private:
     QWidget*                m_bucketOptionsPage = nullptr;
     QWidget*                m_magicWandOptionsPage = nullptr;
     QWidget*                m_pivotOptionsPage = nullptr;
+    QWidget*                m_weightOptionsPage = nullptr;
+    QWidget*                m_socketOptionsPage = nullptr;
     QWidget*                m_colorOptionsPage = nullptr;
 
     // Contextual: Pencil
@@ -475,6 +488,32 @@ private:
     QPushButton*            m_btnApplyPivotToAnim = nullptr;
     QPushButton*            m_btnApplyPivotToAll = nullptr;
     QLabel*                 m_pivotTipLabel = nullptr;
+
+    // Contextual: Vertex Weight Painting (M12)
+    QGroupBox*              m_weightGroup = nullptr;
+    QSlider*                m_sliderWeightVal = nullptr;
+    QDoubleSpinBox*         m_spinWeightVal = nullptr;
+    QLabel*                 m_lblWeightColorSwatch = nullptr;
+    QSlider*                m_sliderBrushRadius = nullptr;
+    QSpinBox*               m_spinBrushRadius = nullptr;
+    QCheckBox*              m_checkShowHeatmap = nullptr;
+    QPushButton*            m_btnWeightAll0 = nullptr;
+    QPushButton*            m_btnWeightAll1 = nullptr;
+    QPushButton*            m_btnWeightGradV = nullptr;
+    QPushButton*            m_btnWeightGradH = nullptr;
+    QCheckBox*              m_checkWeightApplyAllFrames = nullptr;
+    QLabel*                 m_lblWeightTip = nullptr;
+
+    // Contextual: Sockets & Attachment Pins (M12)
+    QGroupBox*              m_socketGroup = nullptr;
+    QComboBox*              m_comboSockets = nullptr;
+    QLineEdit*              m_editSocketName = nullptr;
+    QDoubleSpinBox*         m_spinSocketX = nullptr;
+    QDoubleSpinBox*         m_spinSocketY = nullptr;
+    QPushButton*            m_btnAddSocket = nullptr;
+    QPushButton*            m_btnRemoveSocket = nullptr;
+    QPushButton*            m_btnCopySocketsToAll = nullptr;
+    QLabel*                 m_lblSocketTip = nullptr;
 
     // Palette & Colors
     QGroupBox*              m_colorsGroup = nullptr;

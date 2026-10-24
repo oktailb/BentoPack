@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,6 +37,7 @@ class QDialogButtonBox;
 class QProgressBar;
 class QTimer;
 class QUndoStack;
+class QComboBox;
 #include "bentopackwidgets_export.h"
 
 /**
@@ -49,6 +50,11 @@ class BENTOPACK_WIDGETS_EXPORT PolygonMeshDialog : public QDialog
     Q_OBJECT
 
 public:
+    enum class MeshType {
+        TightContour = 0,
+        RegularGrid = 1
+    };
+
     explicit PolygonMeshDialog(SpriteDocument *document,
                                QUndoStack *undoStack,
                                int targetIndex = 0,
@@ -100,7 +106,10 @@ private:
                             int alphaThresh,
                             QPolygonF &outPoly,
                             QList<QPointF> &outVerts,
-                            QList<int> &outTris);
+                            QList<int> &outTris,
+                            MeshType type = MeshType::TightContour,
+                            int gridCols = 4,
+                            int gridRows = 4);
 
     void computeMeshForFrame(int frameIdx, QPolygonF &outPoly, QList<QPointF> &outVerts, QList<int> &outTris);
 
@@ -124,6 +133,11 @@ private:
     QGraphicsView  *m_previewView = nullptr;
     QGraphicsScene *m_previewScene = nullptr;
 
+    QLabel         *m_lblMeshType = nullptr;
+    QComboBox      *m_comboMeshType = nullptr;
+    QWidget        *m_contourParamsWidget = nullptr;
+    QWidget        *m_gridParamsWidget = nullptr;
+
     QDoubleSpinBox *m_toleranceSpin = nullptr;
     QSlider        *m_toleranceSlider = nullptr;
 
@@ -134,6 +148,11 @@ private:
     QSlider        *m_paddingSlider = nullptr;
 
     QSpinBox       *m_maxVerticesSpin = nullptr;
+
+    QLabel         *m_lblGridCols = nullptr;
+    QSpinBox       *m_gridColsSpin = nullptr;
+    QLabel         *m_lblGridRows = nullptr;
+    QSpinBox       *m_gridRowsSpin = nullptr;
 
     QGroupBox      *m_previewGroup = nullptr;
     QGroupBox      *m_paramsGroup = nullptr;

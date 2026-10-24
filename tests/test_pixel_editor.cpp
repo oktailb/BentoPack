@@ -2312,7 +2312,7 @@ void TestPixelEditor::testErgonomicContextualPanels()
         stack = dlg.findChild<QStackedWidget*>(QStringLiteral("contextualStack"));
     }
     QVERIFY(stack != nullptr);
-    QCOMPARE(stack->count(), 8);
+    QCOMPARE(stack->count(), 10);
 
     // Initial tool is Pencil -> page 0 (Pencil options)
     QCOMPARE(stack->currentIndex(), 0);
@@ -2378,6 +2378,24 @@ void TestPixelEditor::testErgonomicContextualPanels()
     QVERIFY(dlg.pivotToolButton() != nullptr);
     dlg.pivotToolButton()->click();
     QCOMPARE(stack->currentIndex(), 7);
+
+    // Switch to WeightPaint -> page 8 (Weight Paint options)
+    for (QToolButton *btn : toolButtons) {
+        if (btn->toolTip().contains(QLatin1String("Weight"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(stack->currentIndex(), 8);
+
+    // Switch to SocketEdit -> page 9 (Socket options)
+    for (QToolButton *btn : toolButtons) {
+        if (btn->toolTip().contains(QLatin1String("Socket"), Qt::CaseInsensitive)) {
+            btn->click();
+            break;
+        }
+    }
+    QCOMPARE(stack->currentIndex(), 9);
 }
 
 void TestPixelEditor::testPivotToolAndInteractivity()

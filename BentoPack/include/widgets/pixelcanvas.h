@@ -23,6 +23,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QVector>
+#include <QMap>
 #include <QUndoStack>
 #include <QPainter>
 #include <functional>
@@ -35,7 +36,9 @@ enum class PixelTool {
     SelectRect,
     SelectColor,
     PolygonEdit,
-    PivotEdit
+    PivotEdit,
+    WeightPaint,
+    SocketEdit
 };
 
 enum class PolygonEditMode {
@@ -280,6 +283,28 @@ public:
     bool showPivotGuidelines() const { return m_showPivotGuidelines; }
     void setShowPivotGuidelines(bool show);
 
+    // Vertex Weight Painting (M12)
+    QList<float> meshVertexWeights() const { return m_meshVertexWeights; }
+    void setMeshVertexWeights(const QList<float> &weights);
+    float paintWeightValue() const { return m_paintWeightValue; }
+    void setPaintWeightValue(float val);
+    int weightBrushRadius() const { return m_weightBrushRadius; }
+    void setWeightBrushRadius(int r);
+    bool showWeightHeatmap() const { return m_showWeightHeatmap; }
+    void setShowWeightHeatmap(bool show);
+    void setAllVertexWeights(float val);
+    void applyLinearGradientWeights(bool horizontal);
+    static QColor weightToColor(float w);
+
+    // Sockets / Attachment Pins (M12)
+    QMap<QString, QPointF> sockets() const { return m_sockets; }
+    void setSockets(const QMap<QString, QPointF> &sockets);
+    QString selectedSocket() const { return m_selectedSocketName; }
+    void setSelectedSocket(const QString &name);
+    void addOrUpdateSocket(const QString &name, const QPointF &pos);
+    void removeSocket(const QString &name);
+    void renameSocket(const QString &oldName, const QString &newName);
+
     // Coordinate Mapping
     QPoint widgetToPixel(const QPoint &widgetPos) const;
     QPoint pixelToWidget(const QPoint &pixelPos) const;
@@ -377,6 +402,9 @@ signals:
     void layerLockedAttempted();
     void pivotChanged(const QPoint &framePivot);
     void pivotCommitRequested(const QPoint &framePivot);
+    void vertexWeightsChanged(const QList<float> &weights);
+    void socketsChanged(const QMap<QString, QPointF> &sockets);
+    void socketSelected(const QString &name);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -476,6 +504,22 @@ private:
     void updatePolygonMask();
     int findVertexAt(const QPoint &widgetPos, double hitRadius = 8.0) const;
     int findBoundaryEdgeAt(const QPoint &widgetPos, double hitRadius = 6.0) const;
+
+    // Vertex Weight Painting (M12)
+    QList<float>    m_meshVertexWeights;
+    float           m_paintWeightValue = 1.0f;
+    int             m_weightBrushRadius = 16;
+    bool            m_showWeightHeatmap = true;
+    QList<float>    m_prePaintWeights;
+    void applyWeightBrush(const QPointF &pos, bool eraseMode = false);
+
+    // Sockets / Attachment Pins (M12)
+    QMap<QString, QPointF> m_sockets;
+    QString         m_selectedSocketName;
+    bool            m_isDraggingSocket = false;
+    QPointF         m_socketDragOffset;
+    QString findSocketAt(const QPoint &widgetPos, double hitRadius = 12.0) const;
+    void drawSockets(QPainter &painter);
 
     // Interaction state
     bool            m_isDrawing = false;

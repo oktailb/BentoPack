@@ -350,6 +350,55 @@ void JsonExtractor::extractFromTexturePackerFormat(const QJsonObject &framesObj,
             }
         }
 
+        if (frameObj.contains("vertexWeights") && frameObj["vertexWeights"].isArray()) {
+            QJsonArray wArr = frameObj["vertexWeights"].toArray();
+            QList<float> weights;
+            weights.reserve(wArr.size());
+            for (const QJsonValue &wv : wArr) {
+                weights.append(static_cast<float>(wv.toDouble()));
+            }
+            box.vertexWeights = weights;
+        } else if (frameObj.contains("weights") && frameObj["weights"].isArray()) {
+            QJsonArray wArr = frameObj["weights"].toArray();
+            QList<float> weights;
+            weights.reserve(wArr.size());
+            for (const QJsonValue &wv : wArr) {
+                weights.append(static_cast<float>(wv.toDouble()));
+            }
+            box.vertexWeights = weights;
+        }
+
+        if (frameObj.contains("sockets")) {
+            QMap<QString, QPointF> socks;
+            if (frameObj["sockets"].isObject()) {
+                QJsonObject sObj = frameObj["sockets"].toObject();
+                for (auto sit = sObj.begin(); sit != sObj.end(); ++sit) {
+                    if (sit.value().isObject()) {
+                        QJsonObject o = sit.value().toObject();
+                        socks.insert(sit.key(), QPointF(o.value("x").toDouble(), o.value("y").toDouble()));
+                    } else if (sit.value().isArray()) {
+                        QJsonArray a = sit.value().toArray();
+                        if (a.size() >= 2) {
+                            socks.insert(sit.key(), QPointF(a[0].toDouble(), a[1].toDouble()));
+                        }
+                    }
+                }
+            } else if (frameObj["sockets"].isArray()) {
+                QJsonArray sArr = frameObj["sockets"].toArray();
+                for (const QJsonValue &sv : sArr) {
+                    if (sv.isObject()) {
+                        QJsonObject o = sv.toObject();
+                        QString name = o.value("name").toString();
+                        if (name.isEmpty()) name = o.value("socketName").toString();
+                        if (!name.isEmpty()) {
+                            socks.insert(name, QPointF(o.value("x").toDouble(), o.value("y").toDouble()));
+                        }
+                    }
+                }
+            }
+            box.sockets = socks;
+        }
+
         frames.append(frameImg);
         boxes.append(box);
 
@@ -447,6 +496,55 @@ void JsonExtractor::extractFromArrayFormat(const QJsonArray &framesArray,
                 box.triangles = tris;
                 box.hasPolygonMesh = true;
             }
+        }
+
+        if (frameObj.contains("vertexWeights") && frameObj["vertexWeights"].isArray()) {
+            QJsonArray wArr = frameObj["vertexWeights"].toArray();
+            QList<float> weights;
+            weights.reserve(wArr.size());
+            for (const QJsonValue &wv : wArr) {
+                weights.append(static_cast<float>(wv.toDouble()));
+            }
+            box.vertexWeights = weights;
+        } else if (frameObj.contains("weights") && frameObj["weights"].isArray()) {
+            QJsonArray wArr = frameObj["weights"].toArray();
+            QList<float> weights;
+            weights.reserve(wArr.size());
+            for (const QJsonValue &wv : wArr) {
+                weights.append(static_cast<float>(wv.toDouble()));
+            }
+            box.vertexWeights = weights;
+        }
+
+        if (frameObj.contains("sockets")) {
+            QMap<QString, QPointF> socks;
+            if (frameObj["sockets"].isObject()) {
+                QJsonObject sObj = frameObj["sockets"].toObject();
+                for (auto sit = sObj.begin(); sit != sObj.end(); ++sit) {
+                    if (sit.value().isObject()) {
+                        QJsonObject o = sit.value().toObject();
+                        socks.insert(sit.key(), QPointF(o.value("x").toDouble(), o.value("y").toDouble()));
+                    } else if (sit.value().isArray()) {
+                        QJsonArray a = sit.value().toArray();
+                        if (a.size() >= 2) {
+                            socks.insert(sit.key(), QPointF(a[0].toDouble(), a[1].toDouble()));
+                        }
+                    }
+                }
+            } else if (frameObj["sockets"].isArray()) {
+                QJsonArray sArr = frameObj["sockets"].toArray();
+                for (const QJsonValue &sv : sArr) {
+                    if (sv.isObject()) {
+                        QJsonObject o = sv.toObject();
+                        QString name = o.value("name").toString();
+                        if (name.isEmpty()) name = o.value("socketName").toString();
+                        if (!name.isEmpty()) {
+                            socks.insert(name, QPointF(o.value("x").toDouble(), o.value("y").toDouble()));
+                        }
+                    }
+                }
+            }
+            box.sockets = socks;
         }
 
         frames.append(frameImg);
@@ -718,6 +816,25 @@ bool JsonExtractor::write(const QString &filePath, const SpriteDocument &doc, co
                     trianglesArr.append(tri);
                 }
                 frameData["triangles"] = trianglesArr;
+            }
+
+            if (!box.vertexWeights.isEmpty()) {
+                QJsonArray weightsArr;
+                for (float w : box.vertexWeights) {
+                    weightsArr.append(w);
+                }
+                frameData["vertexWeights"] = weightsArr;
+            }
+
+            if (!box.sockets.isEmpty()) {
+                QJsonObject socksObj;
+                for (auto sit = box.sockets.constBegin(); sit != box.sockets.constEnd(); ++sit) {
+                    QJsonObject ptObj;
+                    ptObj["x"] = sit.value().x();
+                    ptObj["y"] = sit.value().y();
+                    socksObj[sit.key()] = ptObj;
+                }
+                frameData["sockets"] = socksObj;
             }
         }
 

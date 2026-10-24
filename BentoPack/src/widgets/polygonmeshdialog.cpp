@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QComboBox>
 #include <QDoubleSpinBox>
 #include <QSpinBox>
 #include <QSlider>
@@ -112,65 +113,111 @@ void PolygonMeshDialog::setupUi()
     controlsLayout->setSpacing(12);
 
     // Parameters Group
+    // Parameters Group
     m_paramsGroup = new QGroupBox(this);
-    QGridLayout *paramsGrid = new QGridLayout(m_paramsGroup);
-    paramsGrid->setSpacing(8);
+    QVBoxLayout *paramsGroupLayout = new QVBoxLayout(m_paramsGroup);
+    paramsGroupLayout->setSpacing(8);
+
+    // Mesh Type Selector
+    QHBoxLayout *typeLayout = new QHBoxLayout();
+    m_lblMeshType = new QLabel(this);
+    typeLayout->addWidget(m_lblMeshType);
+    m_comboMeshType = new QComboBox(this);
+    typeLayout->addWidget(m_comboMeshType, 1);
+    paramsGroupLayout->addLayout(typeLayout);
 
     // Load persisted settings or use tuned defaults
     QSettings settings;
+    int defType = settings.value(QStringLiteral("PolygonMesh/MeshType"), 0).toInt();
     double defTol = settings.value(QStringLiteral("PolygonMesh/Tolerance"), 1.0).toDouble();
     int defAlpha = settings.value(QStringLiteral("PolygonMesh/AlphaThreshold"), 10).toInt();
     double defPad = settings.value(QStringLiteral("PolygonMesh/Padding"), 2.0).toDouble();
     int defMaxV = settings.value(QStringLiteral("PolygonMesh/MaxVertices"), 28).toInt();
+    int defCols = settings.value(QStringLiteral("PolygonMesh/GridCols"), 4).toInt();
+    int defRows = settings.value(QStringLiteral("PolygonMesh/GridRows"), 4).toInt();
+
+    // Contour Parameters Widget
+    m_contourParamsWidget = new QWidget(this);
+    QGridLayout *contourGrid = new QGridLayout(m_contourParamsWidget);
+    contourGrid->setContentsMargins(0, 0, 0, 0);
+    contourGrid->setSpacing(8);
 
     // 1. Tolerance (Epsilon)
-    m_lblTolerance = new QLabel(this);
-    paramsGrid->addWidget(m_lblTolerance, 0, 0);
-    m_toleranceSpin = new QDoubleSpinBox(this);
+    m_lblTolerance = new QLabel(m_contourParamsWidget);
+    contourGrid->addWidget(m_lblTolerance, 0, 0);
+    m_toleranceSpin = new QDoubleSpinBox(m_contourParamsWidget);
     m_toleranceSpin->setRange(0.2, 10.0);
     m_toleranceSpin->setSingleStep(0.2);
     m_toleranceSpin->setValue(defTol);
-    paramsGrid->addWidget(m_toleranceSpin, 0, 1);
+    contourGrid->addWidget(m_toleranceSpin, 0, 1);
 
-    m_toleranceSlider = new QSlider(Qt::Horizontal, this);
+    m_toleranceSlider = new QSlider(Qt::Horizontal, m_contourParamsWidget);
     m_toleranceSlider->setRange(2, 100); // 0.2 to 10.0 (* 10)
     m_toleranceSlider->setValue(static_cast<int>(std::round(defTol * 10.0)));
-    paramsGrid->addWidget(m_toleranceSlider, 0, 2);
+    contourGrid->addWidget(m_toleranceSlider, 0, 2);
 
     // 2. Alpha Threshold
-    m_lblAlpha = new QLabel(this);
-    paramsGrid->addWidget(m_lblAlpha, 1, 0);
-    m_alphaSpin = new QSpinBox(this);
+    m_lblAlpha = new QLabel(m_contourParamsWidget);
+    contourGrid->addWidget(m_lblAlpha, 1, 0);
+    m_alphaSpin = new QSpinBox(m_contourParamsWidget);
     m_alphaSpin->setRange(1, 254);
     m_alphaSpin->setValue(defAlpha);
-    paramsGrid->addWidget(m_alphaSpin, 1, 1);
+    contourGrid->addWidget(m_alphaSpin, 1, 1);
 
-    m_alphaSlider = new QSlider(Qt::Horizontal, this);
+    m_alphaSlider = new QSlider(Qt::Horizontal, m_contourParamsWidget);
     m_alphaSlider->setRange(1, 254);
     m_alphaSlider->setValue(defAlpha);
-    paramsGrid->addWidget(m_alphaSlider, 1, 2);
+    contourGrid->addWidget(m_alphaSlider, 1, 2);
 
     // 3. Padding (Outward Dilation)
-    m_lblPadding = new QLabel(this);
-    paramsGrid->addWidget(m_lblPadding, 2, 0);
-    m_paddingSpin = new QDoubleSpinBox(this);
+    m_lblPadding = new QLabel(m_contourParamsWidget);
+    contourGrid->addWidget(m_lblPadding, 2, 0);
+    m_paddingSpin = new QDoubleSpinBox(m_contourParamsWidget);
     m_paddingSpin->setRange(0.0, 12.0);
     m_paddingSpin->setSingleStep(0.5);
     m_paddingSpin->setValue(defPad);
-    paramsGrid->addWidget(m_paddingSpin, 2, 1);
+    contourGrid->addWidget(m_paddingSpin, 2, 1);
 
-    m_paddingSlider = new QSlider(Qt::Horizontal, this);
+    m_paddingSlider = new QSlider(Qt::Horizontal, m_contourParamsWidget);
     m_paddingSlider->setRange(0, 120); // 0.0 to 12.0 (* 10)
     m_paddingSlider->setValue(static_cast<int>(std::round(defPad * 10.0)));
-    paramsGrid->addWidget(m_paddingSlider, 2, 2);
+    contourGrid->addWidget(m_paddingSlider, 2, 2);
 
     // 4. Max Vertices
-    m_lblMaxVertices = new QLabel(this);
-    paramsGrid->addWidget(m_lblMaxVertices, 3, 0);
-    m_maxVerticesSpin = new QSpinBox(this);
+    m_lblMaxVertices = new QLabel(m_contourParamsWidget);
+    contourGrid->addWidget(m_lblMaxVertices, 3, 0);
+    m_maxVerticesSpin = new QSpinBox(m_contourParamsWidget);
     m_maxVerticesSpin->setRange(4, 96);
     m_maxVerticesSpin->setValue(defMaxV);
-    paramsGrid->addWidget(m_maxVerticesSpin, 3, 1, 1, 2);
+    contourGrid->addWidget(m_maxVerticesSpin, 3, 1, 1, 2);
+
+    paramsGroupLayout->addWidget(m_contourParamsWidget);
+
+    // Grid Parameters Widget
+    m_gridParamsWidget = new QWidget(this);
+    QGridLayout *gridGrid = new QGridLayout(m_gridParamsWidget);
+    gridGrid->setContentsMargins(0, 0, 0, 0);
+    gridGrid->setSpacing(8);
+
+    m_lblGridCols = new QLabel(m_gridParamsWidget);
+    gridGrid->addWidget(m_lblGridCols, 0, 0);
+    m_gridColsSpin = new QSpinBox(m_gridParamsWidget);
+    m_gridColsSpin->setRange(1, 32);
+    m_gridColsSpin->setValue(defCols);
+    gridGrid->addWidget(m_gridColsSpin, 0, 1);
+
+    m_lblGridRows = new QLabel(m_gridParamsWidget);
+    gridGrid->addWidget(m_lblGridRows, 1, 0);
+    m_gridRowsSpin = new QSpinBox(m_gridParamsWidget);
+    m_gridRowsSpin->setRange(1, 32);
+    m_gridRowsSpin->setValue(defRows);
+    gridGrid->addWidget(m_gridRowsSpin, 1, 1);
+
+    paramsGroupLayout->addWidget(m_gridParamsWidget);
+
+    m_comboMeshType->setCurrentIndex(defType == 1 ? 1 : 0);
+    m_contourParamsWidget->setVisible(defType != 1);
+    m_gridParamsWidget->setVisible(defType == 1);
 
     controlsLayout->addWidget(m_paramsGroup);
 
@@ -273,6 +320,15 @@ void PolygonMeshDialog::setupUi()
         updatePreviewAndMetrics();
     });
 
+    connect(m_comboMeshType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int idx) {
+        bool isGrid = (idx == static_cast<int>(MeshType::RegularGrid));
+        m_contourParamsWidget->setVisible(!isGrid);
+        m_gridParamsWidget->setVisible(isGrid);
+        updatePreviewAndMetrics();
+    });
+    connect(m_gridColsSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &PolygonMeshDialog::updatePreviewAndMetrics);
+    connect(m_gridRowsSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &PolygonMeshDialog::updatePreviewAndMetrics);
+
     connect(m_maxVerticesSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &PolygonMeshDialog::updatePreviewAndMetrics);
 
     connect(m_btnApplySelection, &QPushButton::clicked, this, &PolygonMeshDialog::applyToSelection);
@@ -285,6 +341,20 @@ void PolygonMeshDialog::retranslateUi()
     setWindowTitle(tr("Tight Mesh & 2D Polygon Packing"));
     if (m_previewGroup) m_previewGroup->setTitle(tr("Live Preview & Wireframe"));
     if (m_paramsGroup) m_paramsGroup->setTitle(tr("Polygon & Mesh Simplification"));
+    if (m_comboMeshType) {
+        m_comboMeshType->blockSignals(true);
+        int curIdx = m_comboMeshType->currentIndex();
+        m_comboMeshType->clear();
+        m_comboMeshType->addItem(tr("Tight Contour (Sprite Cutout)"));
+        m_comboMeshType->addItem(tr("Regular Grid (Banners, Flags, Cloth)"));
+        if (curIdx >= 0 && curIdx < m_comboMeshType->count()) {
+            m_comboMeshType->setCurrentIndex(curIdx);
+        }
+        m_comboMeshType->blockSignals(false);
+    }
+    if (m_lblMeshType) m_lblMeshType->setText(tr("Mesh Mode:"));
+    if (m_lblGridCols) m_lblGridCols->setText(tr("Grid Columns:"));
+    if (m_lblGridRows) m_lblGridRows->setText(tr("Grid Rows:"));
     if (m_lblTolerance) m_lblTolerance->setText(tr("Approximation Tolerance (ε):"));
     if (m_lblAlpha) m_lblAlpha->setText(tr("Alpha Threshold:"));
     if (m_lblPadding) m_lblPadding->setText(tr("Outward Padding:"));
@@ -350,7 +420,10 @@ void PolygonMeshDialog::computeMesh(const QImage &img,
                                     int alphaThresh,
                                     QPolygonF &outPoly,
                                     QList<QPointF> &outVerts,
-                                    QList<int> &outTris)
+                                    QList<int> &outTris,
+                                    MeshType type,
+                                    int gridCols,
+                                    int gridRows)
 {
     outPoly.clear();
     outVerts.clear();
@@ -360,10 +433,18 @@ void PolygonMeshDialog::computeMesh(const QImage &img,
         return;
     }
 
-    QPolygonF raw = ContourTracer::traceContour(img, alphaThresh);
-    outPoly = PolygonSimplifier::simplify(raw, eps, pad, maxV, img.size(), img, alphaThresh);
-    outVerts = outPoly.toList();
-    outTris = Triangulator::triangulate(outPoly);
+    if (type == MeshType::RegularGrid) {
+        QRectF rect(0, 0, img.width(), img.height());
+        SmartMeshResult grid = Triangulator::generateRegularGrid(rect, gridCols, gridRows);
+        outPoly = grid.outerPolygon;
+        outVerts = grid.vertices;
+        outTris = grid.triangles;
+    } else {
+        QPolygonF raw = ContourTracer::traceContour(img, alphaThresh);
+        outPoly = PolygonSimplifier::simplify(raw, eps, pad, maxV, img.size(), img, alphaThresh);
+        outVerts = outPoly.toList();
+        outTris = Triangulator::triangulate(outPoly);
+    }
 }
 
 void PolygonMeshDialog::computeMeshForFrame(int frameIdx, QPolygonF &outPoly, QList<QPointF> &outVerts, QList<int> &outTris)
@@ -383,7 +464,10 @@ void PolygonMeshDialog::computeMeshForFrame(int frameIdx, QPolygonF &outPoly, QL
                 m_alphaSpin->value(),
                 outPoly,
                 outVerts,
-                outTris);
+                outTris,
+                static_cast<MeshType>(m_comboMeshType->currentIndex()),
+                m_gridColsSpin->value(),
+                m_gridRowsSpin->value());
 }
 
 void PolygonMeshDialog::setProcessingState(bool processing, bool isBatch)
@@ -442,6 +526,9 @@ void PolygonMeshDialog::requestPreviewUpdate()
     double eps = m_toleranceSpin->value();
     double pad = m_paddingSpin->value();
     int maxV = m_maxVerticesSpin->value();
+    MeshType type = static_cast<MeshType>(m_comboMeshType->currentIndex());
+    int gridCols = m_gridColsSpin->value();
+    int gridRows = m_gridRowsSpin->value();
     int targetIdx = m_targetIndex;
 
     m_currentPreviewJobId++;
@@ -449,12 +536,12 @@ void PolygonMeshDialog::requestPreviewUpdate()
 
     setProcessingState(true, false);
 
-    m_previewWatcher.setFuture(QtConcurrent::run([img, eps, pad, maxV, alphaThresh, targetIdx, jobId]() {
+    m_previewWatcher.setFuture(QtConcurrent::run([img, eps, pad, maxV, alphaThresh, type, gridCols, gridRows, targetIdx, jobId]() {
         PreviewJobResult res;
         res.jobId = jobId;
         res.frameIndex = targetIdx;
         res.image = img;
-        computeMesh(img, eps, pad, maxV, alphaThresh, res.polygon, res.vertices, res.triangles);
+        computeMesh(img, eps, pad, maxV, alphaThresh, res.polygon, res.vertices, res.triangles, type, gridCols, gridRows);
         return res;
     }));
 }
@@ -509,10 +596,10 @@ void PolygonMeshDialog::renderScene(const QImage &img)
             int i0 = m_currentTriangles[t * 3];
             int i1 = m_currentTriangles[t * 3 + 1];
             int i2 = m_currentTriangles[t * 3 + 2];
-            if (i0 < m_currentPolygon.size() && i1 < m_currentPolygon.size() && i2 < m_currentPolygon.size()) {
-                const QPointF &p0 = m_currentPolygon[i0];
-                const QPointF &p1 = m_currentPolygon[i1];
-                const QPointF &p2 = m_currentPolygon[i2];
+            if (i0 < m_currentVertices.size() && i1 < m_currentVertices.size() && i2 < m_currentVertices.size()) {
+                const QPointF &p0 = m_currentVertices[i0];
+                const QPointF &p1 = m_currentVertices[i1];
+                const QPointF &p2 = m_currentVertices[i2];
 
                 m_previewScene->addLine(QLineF(p0, p1), triPen);
                 m_previewScene->addLine(QLineF(p1, p2), triPen);
@@ -531,7 +618,7 @@ void PolygonMeshDialog::renderScene(const QImage &img)
         QPen vPen(Qt::black, 1.0);
         vPen.setCosmetic(true);
         QBrush vBrush(QColor(255, 230, 40));
-        for (const QPointF &pt : m_currentPolygon) {
+        for (const QPointF &pt : m_currentVertices) {
             m_previewScene->addEllipse(pt.x() - 2.5, pt.y() - 2.5, 5.0, 5.0, vPen, vBrush);
         }
     }
@@ -542,11 +629,13 @@ void PolygonMeshDialog::renderScene(const QImage &img)
 
 void PolygonMeshDialog::updateMetrics(const QImage &img)
 {
-    int vCount = m_currentPolygon.size();
+    int vCount = m_currentVertices.size();
     int tCount = m_currentTriangles.size() / 3;
     double polyArea = Triangulator::calculateArea(m_currentPolygon);
     double boxArea = static_cast<double>(img.width() * img.height());
-    double savings = Triangulator::calculateOverdrawSavings(m_currentPolygon, img.size());
+    double savings = (m_comboMeshType && m_comboMeshType->currentIndex() == static_cast<int>(MeshType::RegularGrid))
+                     ? 0.0
+                     : Triangulator::calculateOverdrawSavings(m_currentPolygon, img.size());
 
     m_lblVertices->setText(tr("Vertices: %1").arg(vCount));
     m_lblTriangles->setText(tr("Triangles: %1").arg(tCount));
@@ -572,10 +661,13 @@ void PolygonMeshDialog::updateMetrics(const QImage &img)
 void PolygonMeshDialog::saveSettings()
 {
     QSettings settings;
+    settings.setValue(QStringLiteral("PolygonMesh/MeshType"), m_comboMeshType->currentIndex());
     settings.setValue(QStringLiteral("PolygonMesh/Tolerance"), m_toleranceSpin->value());
     settings.setValue(QStringLiteral("PolygonMesh/AlphaThreshold"), m_alphaSpin->value());
     settings.setValue(QStringLiteral("PolygonMesh/Padding"), m_paddingSpin->value());
     settings.setValue(QStringLiteral("PolygonMesh/MaxVertices"), m_maxVerticesSpin->value());
+    settings.setValue(QStringLiteral("PolygonMesh/GridCols"), m_gridColsSpin->value());
+    settings.setValue(QStringLiteral("PolygonMesh/GridRows"), m_gridRowsSpin->value());
 }
 
 void PolygonMeshDialog::startBatchMesh(const QList<int> &indices, bool isAllFrames)
@@ -596,6 +688,9 @@ void PolygonMeshDialog::startBatchMesh(const QList<int> &indices, bool isAllFram
     double eps = m_toleranceSpin->value();
     double pad = m_paddingSpin->value();
     int maxV = m_maxVerticesSpin->value();
+    MeshType type = static_cast<MeshType>(m_comboMeshType->currentIndex());
+    int gridCols = m_gridColsSpin->value();
+    int gridRows = m_gridRowsSpin->value();
     int total = workItems.size();
 
     setProcessingState(true, true);
@@ -604,7 +699,7 @@ void PolygonMeshDialog::startBatchMesh(const QList<int> &indices, bool isAllFram
     m_lblFeedback->setText(tr("Computing mesh: 0 / %1...").arg(total));
     m_lblFeedback->setStyleSheet(QStringLiteral("color: #00bcd4; font-size: 11px; font-weight: bold;"));
 
-    m_batchWatcher.setFuture(QtConcurrent::run([this, workItems, alphaThresh, eps, pad, maxV, isAllFrames]() {
+    m_batchWatcher.setFuture(QtConcurrent::run([this, workItems, alphaThresh, eps, pad, maxV, type, gridCols, gridRows, isAllFrames]() {
         BatchJobResult result;
         result.isAllFrames = isAllFrames;
         int totalItems = workItems.size();
@@ -616,7 +711,7 @@ void PolygonMeshDialog::startBatchMesh(const QList<int> &indices, bool isAllFram
             MeshState st;
             st.index = idx;
             if (!img.isNull() && img.width() > 0 && img.height() > 0) {
-                computeMesh(img, eps, pad, maxV, alphaThresh, st.polygon, st.vertices, st.triangles);
+                computeMesh(img, eps, pad, maxV, alphaThresh, st.polygon, st.vertices, st.triangles, type, gridCols, gridRows);
                 st.hasPolygonMesh = (!st.polygon.isEmpty() && !st.triangles.isEmpty());
             } else {
                 st.hasPolygonMesh = false;

@@ -45,6 +45,7 @@
 #include <QStyleHints>
 #include <QSettings>
 #include <QCloseEvent>
+#include <QLineEdit>
 #include <algorithm>
 
 namespace {
@@ -478,6 +479,18 @@ void PixelEditorDialog::setupUi()
         updateLivePreview();
     });
 
+    connect(m_canvas, &PixelCanvas::vertexWeightsChanged, this, [this](const QList<float> &weights) {
+        m_sessionModifiedWeights[m_currentFrameIndex] = weights;
+    });
+    connect(m_canvas, &PixelCanvas::socketsChanged, this, [this](const QMap<QString, QPointF> &sockets) {
+        m_sessionModifiedSockets[m_currentFrameIndex] = sockets;
+        updateSocketUI();
+    });
+    connect(m_canvas, &PixelCanvas::socketSelected, this, [this](const QString &name) {
+        Q_UNUSED(name);
+        updateSocketUI();
+    });
+
     if (m_canvas->undoStack()) {
         QPointer<QToolButton> btnUndo = m_btnUndo;
         QPointer<QToolButton> btnRedo = m_btnRedo;
@@ -527,6 +540,8 @@ void PixelEditorDialog::setupUi()
     addShortcut(QKeySequence(Qt::Key_W), [this]() { m_btnSelectColor->click(); });
     addShortcut(QKeySequence(Qt::Key_D), [this]() { if (m_btnToolPolygon) m_btnToolPolygon->click(); });
     addShortcut(QKeySequence(Qt::Key_O), [this]() { if (m_btnToolPivot) m_btnToolPivot->click(); });
+    addShortcut(QKeySequence(Qt::Key_K), [this]() { if (m_btnToolWeightPaint) m_btnToolWeightPaint->click(); });
+    addShortcut(QKeySequence(Qt::Key_N), [this]() { if (m_btnToolSocket) m_btnToolSocket->click(); });
 
     // Transforms & Actions
     addShortcut(QKeySequence(Qt::Key_X), [this]() { m_canvas->swapColors(); });
@@ -853,12 +868,16 @@ QWidget* PixelEditorDialog::createToolBar()
     m_btnToolPolygon = addToolBtn(QStringLiteral("◆"), tr("Polygon & Smart CDT Mesh Editor [D]"), PixelTool::PolygonEdit, static_cast<int>(PixelTool::PolygonEdit), 1, 2);
     m_btnToolPivot = addToolBtn(QStringLiteral("🎯"), tr("Animation Pivot & Reticle Editor [O]"), PixelTool::PivotEdit, static_cast<int>(PixelTool::PivotEdit), 1, 3);
 
+    // Row 2: Vertex weights & sockets (M12)
+    m_btnToolWeightPaint = addToolBtn(QStringLiteral("🎨"), tr("Vertex Weight & Wind Influence Painter [K]"), PixelTool::WeightPaint, static_cast<int>(PixelTool::WeightPaint), 2, 0);
+    m_btnToolSocket = addToolBtn(QStringLiteral("📍"), tr("Sockets & Attachment Pins Editor [N]"), PixelTool::SocketEdit, static_cast<int>(PixelTool::SocketEdit), 2, 1);
+
     connect(m_toolGroup, &QButtonGroup::idClicked, this, &PixelEditorDialog::onToolButtonClicked);
 
     // Separator 1 (spans 4 columns)
     QFrame *line1 = new QFrame(this);
     line1->setFrameShape(QFrame::HLine);
-    layout->addWidget(line1, 2, 0, 1, 4);
+    layout->addWidget(line1, 3, 0, 1, 4);
 
     auto addActionBtn = [this, layout, &toolBtnStyle](const QString &text, const QString &tooltip, int row, int col, const auto &slot) -> QToolButton* {
         QToolButton *btn = new QToolButton(this);
@@ -871,11 +890,11 @@ QWidget* PixelEditorDialog::createToolBar()
         return btn;
     };
 
-    // Row 3: Image / selection transformations (4 columns)
-    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal (H)"), 3, 0, [this]() { m_canvas->flipHorizontal(); });
-    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical (V)"), 3, 1, [this]() { m_canvas->flipVertical(); });
-    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise (R)"), 3, 2, [this]() { m_canvas->rotate90CW(); });
-    m_btnClearSel = addActionBtn(QStringLiteral("✕"), tr("Clear Selection / Deselect (Del)"), 3, 3, [this]() {
+    // Row 4: Image / selection transformations (4 columns)
+    m_btnFlipH = addActionBtn(QStringLiteral("⇄"), tr("Flip Horizontal (H)"), 4, 0, [this]() { m_canvas->flipHorizontal(); });
+    m_btnFlipV = addActionBtn(QStringLiteral("⇅"), tr("Flip Vertical (V)"), 4, 1, [this]() { m_canvas->flipVertical(); });
+    m_btnRotate = addActionBtn(QStringLiteral("↻"), tr("Rotate 90° Clockwise (R)"), 4, 2, [this]() { m_canvas->rotate90CW(); });
+    m_btnClearSel = addActionBtn(QStringLiteral("✕"), tr("Clear Selection / Deselect (Del)"), 4, 3, [this]() {
         if (m_canvas->hasSelection()) {
             m_canvas->clearSelection();
         } else {
@@ -886,11 +905,11 @@ QWidget* PixelEditorDialog::createToolBar()
     // Separator 2 (spans 4 columns)
     QFrame *line2 = new QFrame(this);
     line2->setFrameShape(QFrame::HLine);
-    layout->addWidget(line2, 4, 0, 1, 4);
+    layout->addWidget(line2, 5, 0, 1, 4);
 
-    // Row 5: Undo, Redo, and Filters
-    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 5, 0, [this]() { m_canvas->undo(); });
-    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 5, 1, [this]() { m_canvas->redo(); });
+    // Row 6: Undo, Redo, and Filters
+    m_btnUndo = addActionBtn(QStringLiteral("↶"), tr("Undo (Ctrl+Z)"), 6, 0, [this]() { m_canvas->undo(); });
+    m_btnRedo = addActionBtn(QStringLiteral("↷"), tr("Redo (Ctrl+Y)"), 6, 1, [this]() { m_canvas->redo(); });
     if (m_btnUndo) m_btnUndo->setEnabled(false);
     if (m_btnRedo) m_btnRedo->setEnabled(false);
 
@@ -907,7 +926,7 @@ QWidget* PixelEditorDialog::createToolBar()
     QMenu *filtersMenu = new QMenu(m_btnFilters);
     populateFiltersMenu(filtersMenu);
     m_btnFilters->setMenu(filtersMenu);
-    layout->addWidget(m_btnFilters, 5, 2, 1, 2);
+    layout->addWidget(m_btnFilters, 6, 2, 1, 2);
 
     mainVBox->addWidget(gridContainer);
 
@@ -2304,6 +2323,8 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_bucketOptionsPage = createBucketOptionsPage();
     m_magicWandOptionsPage = createMagicWandOptionsPage();
     m_pivotOptionsPage = createPivotOptionsPage();
+    m_weightOptionsPage = createWeightPaintOptionsPage();
+    m_socketOptionsPage = createSocketOptionsPage();
 
     m_contextualStack->addWidget(m_pencilOptionsPage);     // 0: Pencil
     m_contextualStack->addWidget(m_eraserOptionsPage);     // 1: Eraser
@@ -2313,6 +2334,8 @@ QWidget* PixelEditorDialog::createPalettePanel()
     m_contextualStack->addWidget(m_bucketOptionsPage);     // 5: Bucket Fill
     m_contextualStack->addWidget(m_magicWandOptionsPage);  // 6: Magic Wand
     m_contextualStack->addWidget(m_pivotOptionsPage);      // 7: Pivot & Reticle
+    m_contextualStack->addWidget(m_weightOptionsPage);     // 8: Weight Paint (M12)
+    m_contextualStack->addWidget(m_socketOptionsPage);     // 9: Sockets (M12)
 
     toolTabLayout->addWidget(m_contextualStack);
     toolTabLayout->addStretch(1);
@@ -2534,6 +2557,13 @@ void PixelEditorDialog::onToolButtonClicked(int id)
         case PixelTool::PivotEdit:
             m_contextualStack->setCurrentIndex(7); // Animation Pivot & Reticle
             updatePivotUI();
+            break;
+        case PixelTool::WeightPaint:
+            m_contextualStack->setCurrentIndex(8); // Weight Paint (M12)
+            break;
+        case PixelTool::SocketEdit:
+            m_contextualStack->setCurrentIndex(9); // Sockets (M12)
+            updateSocketUI();
             break;
         }
     }
@@ -2895,6 +2925,25 @@ void PixelEditorDialog::loadFrame(int index)
     m_canvas->setPolygonMeshData(poly, verts, tris);
     m_canvas->setCanvasEnvelope(envSize, curFrameOffset, envPivot);
 
+    // Vertex Weights (M12)
+    QList<float> weights;
+    if (m_sessionModifiedWeights.contains(index)) {
+        weights = m_sessionModifiedWeights[index];
+    } else if (index < m_document->boxes().size()) {
+        weights = m_document->box(index).vertexWeights;
+    }
+    m_canvas->setMeshVertexWeights(weights);
+
+    // Sockets (M12)
+    QMap<QString, QPointF> sockets;
+    if (m_sessionModifiedSockets.contains(index)) {
+        sockets = m_sessionModifiedSockets[index];
+    } else if (index < m_document->boxes().size()) {
+        sockets = m_document->box(index).sockets;
+    }
+    m_canvas->setSockets(sockets);
+    updateSocketUI();
+
     if (m_meshNoticeLabel) {
         m_meshNoticeLabel->setVisible(!hasPoly);
     }
@@ -3086,6 +3135,12 @@ void PixelEditorDialog::saveCurrentFrameToSession()
         m_sessionModifiedPolygons[m_currentFrameIndex] = m_canvas->polygonMesh();
         m_sessionModifiedVertices[m_currentFrameIndex] = m_canvas->meshVertices();
         m_sessionModifiedTriangles[m_currentFrameIndex] = m_canvas->meshTriangles();
+    }
+    if (!m_canvas->meshVertexWeights().isEmpty()) {
+        m_sessionModifiedWeights[m_currentFrameIndex] = m_canvas->meshVertexWeights();
+    }
+    if (!m_canvas->sockets().isEmpty()) {
+        m_sessionModifiedSockets[m_currentFrameIndex] = m_canvas->sockets();
     }
 
     if (m_canvas->hasLayers() && (m_canvas->layerCount() > 1 || m_sessionLayersModified || (m_document && m_document->hasLayers()))) {
@@ -4315,7 +4370,9 @@ bool PixelEditorDialog::applyChanges()
     }
     const bool hasMultiLayerChanges = (m_sessionLayers.size() > 1 || m_sessionLayersModified || !m_sessionModifiedCels.isEmpty() || (m_canvas && m_canvas->layerCount() > 1));
     const bool hasPivotChanges = !m_sessionModifiedPivots.isEmpty();
-    if (m_sessionModifiedFrames.isEmpty() && m_sessionModifiedPolygons.isEmpty() && m_sessionModifiedVertices.isEmpty() && !hasMultiLayerChanges && !hasPivotChanges) {
+    const bool hasWeightChanges = !m_sessionModifiedWeights.isEmpty();
+    const bool hasSocketChanges = !m_sessionModifiedSockets.isEmpty();
+    if (m_sessionModifiedFrames.isEmpty() && m_sessionModifiedPolygons.isEmpty() && m_sessionModifiedVertices.isEmpty() && !hasMultiLayerChanges && !hasPivotChanges && !hasWeightChanges && !hasSocketChanges) {
         return true;
     }
     if (!m_document) return false;
@@ -4359,12 +4416,32 @@ bool PixelEditorDialog::applyChanges()
         }
     }
 
-    if (actualFrameChanges.isEmpty() && actualPolyChanges.isEmpty() && actualVerticesChanges.isEmpty() && !hasMultiLayerChanges && actualPivotIndices.isEmpty()) {
+    QMap<int, QList<float>> actualWeightsChanges;
+    for (auto it = m_sessionModifiedWeights.constBegin(); it != m_sessionModifiedWeights.constEnd(); ++it) {
+        if (it.key() >= 0 && it.key() < m_document->boxes().size()) {
+            if (m_document->box(it.key()).vertexWeights != it.value()) {
+                actualWeightsChanges[it.key()] = it.value();
+            }
+        }
+    }
+
+    QMap<int, QMap<QString, QPointF>> actualSocketsChanges;
+    for (auto it = m_sessionModifiedSockets.constBegin(); it != m_sessionModifiedSockets.constEnd(); ++it) {
+        if (it.key() >= 0 && it.key() < m_document->boxes().size()) {
+            if (m_document->box(it.key()).sockets != it.value()) {
+                actualSocketsChanges[it.key()] = it.value();
+            }
+        }
+    }
+
+    if (actualFrameChanges.isEmpty() && actualPolyChanges.isEmpty() && actualVerticesChanges.isEmpty() && !hasMultiLayerChanges && actualPivotIndices.isEmpty() && actualWeightsChanges.isEmpty() && actualSocketsChanges.isEmpty()) {
         m_sessionModifiedFrames.clear();
         m_sessionModifiedPolygons.clear();
         m_sessionModifiedVertices.clear();
         m_sessionModifiedTriangles.clear();
         m_sessionModifiedPivots.clear();
+        m_sessionModifiedWeights.clear();
+        m_sessionModifiedSockets.clear();
         updateCollisionWarningUI();
         return true;
     }
@@ -4400,11 +4477,11 @@ bool PixelEditorDialog::applyChanges()
     }
 
     // Commit frame, polygon & mesh changes first so document state is completely up-to-date
-    if (!actualFrameChanges.isEmpty() || !actualPolyChanges.isEmpty() || !actualVerticesChanges.isEmpty()) {
+    if (!actualFrameChanges.isEmpty() || !actualPolyChanges.isEmpty() || !actualVerticesChanges.isEmpty() || !actualWeightsChanges.isEmpty() || !actualSocketsChanges.isEmpty()) {
         if (m_docUndoStack) {
-            m_docUndoStack->push(new EditSpritePixelsCommand(m_document, actualFrameChanges, actualPolyChanges, actualVerticesChanges, actualTrianglesChanges));
+            m_docUndoStack->push(new EditSpritePixelsCommand(m_document, actualFrameChanges, actualPolyChanges, actualVerticesChanges, actualTrianglesChanges, actualWeightsChanges, actualSocketsChanges));
         } else {
-            EditSpritePixelsCommand cmd(m_document, actualFrameChanges, actualPolyChanges, actualVerticesChanges, actualTrianglesChanges);
+            EditSpritePixelsCommand cmd(m_document, actualFrameChanges, actualPolyChanges, actualVerticesChanges, actualTrianglesChanges, actualWeightsChanges, actualSocketsChanges);
             cmd.redo();
         }
     }
@@ -4437,6 +4514,8 @@ bool PixelEditorDialog::applyChanges()
     m_sessionModifiedTriangles.clear();
     m_sessionModifiedCels.clear();
     m_sessionModifiedPivots.clear();
+    m_sessionModifiedWeights.clear();
+    m_sessionModifiedSockets.clear();
     m_sessionLayersModified = false;
     updateCollisionWarningUI();
 
@@ -4556,6 +4635,8 @@ void PixelEditorDialog::updateToolIcons()
     applyBtnIcon(m_btnEyedropper, QStringLiteral(":/drawer/icons/pipette.png"));
     applyBtnIcon(m_btnToolPolygon, QStringLiteral(":/drawer/icons/polygons.png"));
     applyBtnIcon(m_btnToolPivot, QStringLiteral(":/drawer/icons/target.png"));
+    applyBtnIcon(m_btnToolWeightPaint, QStringLiteral(":/drawer/icons/brush.png"));
+    applyBtnIcon(m_btnToolSocket, QStringLiteral(":/drawer/icons/anchor.png"));
     applyBtnIcon(m_btnSelectRect, QStringLiteral(":/drawer/icons/select_rectangular.png"));
     applyBtnIcon(m_btnSelectColor, QStringLiteral(":/drawer/icons/magic_wand.png"));
     applyBtnIcon(m_btnFlipH, QStringLiteral(":/drawer/icons/flip_horizontal.png"));
@@ -4564,6 +4645,8 @@ void PixelEditorDialog::updateToolIcons()
     applyBtnIcon(m_btnClearSel, QStringLiteral(":/drawer/icons/delete_selection.png"));
     applyBtnIcon(m_btnUndo, QStringLiteral(":/drawer/icons/undo.png"));
     applyBtnIcon(m_btnRedo, QStringLiteral(":/drawer/icons/redo.png"));
+    applyBtnIcon(m_btnToolWeightPaint, QStringLiteral(":/drawer/icons/paintbrush.png"));
+    applyBtnIcon(m_btnToolSocket, QStringLiteral(":/drawer/icons/link.png"));
 }
 
 void PixelEditorDialog::retranslateUi()
@@ -4626,6 +4709,26 @@ void PixelEditorDialog::retranslateUi()
     if (m_btnToolPivot) {
         m_btnToolPivot->setToolTip(tr("Animation Pivot & Reticle Editor [O]"));
     }
+    if (m_btnToolWeightPaint) {
+        m_btnToolWeightPaint->setToolTip(tr("Vertex Weight & Wind Influence Painter [K]"));
+    }
+    if (m_btnToolSocket) {
+        m_btnToolSocket->setToolTip(tr("Sockets & Attachment Pins Editor [N]"));
+    }
+    if (m_weightGroup) m_weightGroup->setTitle(tr("Vertex Weights & Wind Influence"));
+    if (m_checkShowHeatmap) m_checkShowHeatmap->setText(tr("Show Heatmap Overlay"));
+    if (m_btnWeightAll0) m_btnWeightAll0->setText(tr("All 0.0 (Fixed)"));
+    if (m_btnWeightAll1) m_btnWeightAll1->setText(tr("All 1.0 (Full Wind)"));
+    if (m_btnWeightGradV) m_btnWeightGradV->setText(tr("Vertical Gradient (Base 0 -> Tip 1)"));
+    if (m_btnWeightGradH) m_btnWeightGradH->setText(tr("Horizontal Gradient"));
+    if (m_checkWeightApplyAllFrames) m_checkWeightApplyAllFrames->setText(tr("Apply preset to all animation frames"));
+    if (m_lblWeightTip) m_lblWeightTip->setText(tr("Left-click: paint wind weight.\nRight-click: erase weight to 0.0.\nBlue = 0.0 (fixed root), Red = 1.0 (max motion)."));
+
+    if (m_socketGroup) m_socketGroup->setTitle(tr("Sockets & Attachment Pins"));
+    if (m_btnAddSocket) m_btnAddSocket->setText(tr("➕ Add / Rename"));
+    if (m_btnRemoveSocket) m_btnRemoveSocket->setText(tr("🗑 Delete"));
+    if (m_btnCopySocketsToAll) m_btnCopySocketsToAll->setText(tr("📋 Copy Sockets to All Frames"));
+    if (m_lblSocketTip) m_lblSocketTip->setText(tr("Click socket pin on canvas to select and drag.\nClick empty canvas to move active pin.\nExported to Godot, Unity, Unreal Paper2D, and JSON."));
 
     if (m_btnFlipH) m_btnFlipH->setToolTip(tr("Flip Horizontal"));
     if (m_btnFlipV) m_btnFlipV->setToolTip(tr("Flip Vertical"));
@@ -6064,6 +6167,389 @@ void PixelEditorDialog::updateMeshStatsUI()
     double savings = BentoPackGeometry::Triangulator::calculateOverdrawSavings(poly, imgSize);
     if (m_lblMeshOverdrawSavings) {
         m_lblMeshOverdrawSavings->setText(QStringLiteral("%1%").arg(savings, 0, 'f', 1));
+    }
+}
+
+// =========================================================================
+// Contextual Options: Weight Paint & Sockets (M12)
+// =========================================================================
+
+QWidget* PixelEditorDialog::createWeightPaintOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+
+    const QString groupBoxStyle = kToolGroupBoxStyle;
+    const QString btnStyle = QStringLiteral(
+        "QPushButton {"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 4px;"
+        "  font-size: 11px;"
+        "  font-weight: 500;"
+        "  padding: 4px 8px;"
+        "}"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
+    );
+
+    m_weightGroup = new QGroupBox(tr("Vertex Weights & Wind Influence"), page);
+    m_weightGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *wgLayout = new QVBoxLayout(m_weightGroup);
+    wgLayout->setContentsMargins(6, 10, 6, 6);
+    wgLayout->setSpacing(6);
+
+    // 1. Target Weight Slider & Spinbox
+    QLabel *lblVal = new QLabel(tr("Paint Weight Value:"), m_weightGroup);
+    lblVal->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    wgLayout->addWidget(lblVal);
+
+    QHBoxLayout *valRow = new QHBoxLayout();
+    valRow->setSpacing(4);
+    m_lblWeightColorSwatch = new QLabel(m_weightGroup);
+    m_lblWeightColorSwatch->setFixedSize(20, 20);
+    m_lblWeightColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid #ffffff; border-radius: 3px; background-color: rgb(255, 30, 0);"));
+    valRow->addWidget(m_lblWeightColorSwatch);
+
+    m_sliderWeightVal = new QSlider(Qt::Horizontal, m_weightGroup);
+    m_sliderWeightVal->setRange(0, 100);
+    m_sliderWeightVal->setValue(100);
+    valRow->addWidget(m_sliderWeightVal, 1);
+
+    m_spinWeightVal = new QDoubleSpinBox(m_weightGroup);
+    m_spinWeightVal->setRange(0.0, 1.0);
+    m_spinWeightVal->setSingleStep(0.05);
+    m_spinWeightVal->setValue(1.0);
+    m_spinWeightVal->setDecimals(2);
+    m_spinWeightVal->setFixedWidth(55);
+    valRow->addWidget(m_spinWeightVal);
+    wgLayout->addLayout(valRow);
+
+    auto updateSwatch = [this](float w) {
+        QColor col = PixelCanvas::weightToColor(w);
+        m_lblWeightColorSwatch->setStyleSheet(QStringLiteral("border: 1px solid #ffffff; border-radius: 3px; background-color: %1;").arg(col.name()));
+    };
+
+    connect(m_sliderWeightVal, &QSlider::valueChanged, this, [this, updateSwatch](int val) {
+        float w = val / 100.0f;
+        m_spinWeightVal->blockSignals(true);
+        m_spinWeightVal->setValue(w);
+        m_spinWeightVal->blockSignals(false);
+        updateSwatch(w);
+        if (m_canvas) m_canvas->setPaintWeightValue(w);
+    });
+
+    connect(m_spinWeightVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, [this, updateSwatch](double val) {
+        float w = static_cast<float>(val);
+        m_sliderWeightVal->blockSignals(true);
+        m_sliderWeightVal->setValue(static_cast<int>(std::round(w * 100.0f)));
+        m_sliderWeightVal->blockSignals(false);
+        updateSwatch(w);
+        if (m_canvas) m_canvas->setPaintWeightValue(w);
+    });
+
+    // 2. Brush Radius
+    QLabel *lblRad = new QLabel(tr("Brush Radius:"), m_weightGroup);
+    lblRad->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 4px;"));
+    wgLayout->addWidget(lblRad);
+
+    QHBoxLayout *radRow = new QHBoxLayout();
+    radRow->setSpacing(4);
+    m_sliderBrushRadius = new QSlider(Qt::Horizontal, m_weightGroup);
+    m_sliderBrushRadius->setRange(2, 64);
+    m_sliderBrushRadius->setValue(16);
+    radRow->addWidget(m_sliderBrushRadius, 1);
+
+    m_spinBrushRadius = new QSpinBox(m_weightGroup);
+    m_spinBrushRadius->setRange(2, 64);
+    m_spinBrushRadius->setValue(16);
+    m_spinBrushRadius->setFixedWidth(50);
+    radRow->addWidget(m_spinBrushRadius);
+    wgLayout->addLayout(radRow);
+
+    connect(m_sliderBrushRadius, &QSlider::valueChanged, this, [this](int val) {
+        m_spinBrushRadius->blockSignals(true);
+        m_spinBrushRadius->setValue(val);
+        m_spinBrushRadius->blockSignals(false);
+        if (m_canvas) m_canvas->setWeightBrushRadius(val);
+    });
+
+    connect(m_spinBrushRadius, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int val) {
+        m_sliderBrushRadius->blockSignals(true);
+        m_sliderBrushRadius->setValue(val);
+        m_sliderBrushRadius->blockSignals(false);
+        if (m_canvas) m_canvas->setWeightBrushRadius(val);
+    });
+
+    // 3. Heatmap Checkbox
+    m_checkShowHeatmap = new QCheckBox(tr("Show Heatmap Overlay"), m_weightGroup);
+    m_checkShowHeatmap->setChecked(true);
+    connect(m_checkShowHeatmap, &QCheckBox::toggled, this, [this](bool checked) {
+        if (m_canvas) m_canvas->setShowWeightHeatmap(checked);
+    });
+    wgLayout->addWidget(m_checkShowHeatmap);
+
+    // 4. Presets
+    QLabel *lblPresets = new QLabel(tr("Weight Presets:"), m_weightGroup);
+    lblPresets->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 6px;"));
+    wgLayout->addWidget(lblPresets);
+
+    auto applyPresetWeights = [this](auto func) {
+        if (!m_canvas) return;
+        func();
+        m_sessionModifiedWeights[m_currentFrameIndex] = m_canvas->meshVertexWeights();
+        if (m_checkWeightApplyAllFrames && m_checkWeightApplyAllFrames->isChecked()) {
+            QList<float> curW = m_canvas->meshVertexWeights();
+            for (int idx : m_activeSequence) {
+                m_sessionModifiedWeights[idx] = curW;
+            }
+        }
+    };
+
+    QHBoxLayout *presetRow1 = new QHBoxLayout();
+    m_btnWeightAll0 = new QPushButton(tr("All 0.0 (Fixed)"), m_weightGroup);
+    m_btnWeightAll0->setStyleSheet(btnStyle);
+    connect(m_btnWeightAll0, &QPushButton::clicked, this, [this, applyPresetWeights]() {
+        applyPresetWeights([this]() { m_canvas->setAllVertexWeights(0.0f); });
+    });
+    presetRow1->addWidget(m_btnWeightAll0);
+
+    m_btnWeightAll1 = new QPushButton(tr("All 1.0 (Full Wind)"), m_weightGroup);
+    m_btnWeightAll1->setStyleSheet(btnStyle);
+    connect(m_btnWeightAll1, &QPushButton::clicked, this, [this, applyPresetWeights]() {
+        applyPresetWeights([this]() { m_canvas->setAllVertexWeights(1.0f); });
+    });
+    presetRow1->addWidget(m_btnWeightAll1);
+    wgLayout->addLayout(presetRow1);
+
+    QHBoxLayout *presetRow2 = new QHBoxLayout();
+    m_btnWeightGradV = new QPushButton(tr("Vertical Gradient (Base 0 -> Tip 1)"), m_weightGroup);
+    m_btnWeightGradV->setStyleSheet(btnStyle);
+    connect(m_btnWeightGradV, &QPushButton::clicked, this, [this, applyPresetWeights]() {
+        applyPresetWeights([this]() { m_canvas->applyLinearGradientWeights(false); });
+    });
+    presetRow2->addWidget(m_btnWeightGradV);
+
+    m_btnWeightGradH = new QPushButton(tr("Horizontal Gradient"), m_weightGroup);
+    m_btnWeightGradH->setStyleSheet(btnStyle);
+    connect(m_btnWeightGradH, &QPushButton::clicked, this, [this, applyPresetWeights]() {
+        applyPresetWeights([this]() { m_canvas->applyLinearGradientWeights(true); });
+    });
+    presetRow2->addWidget(m_btnWeightGradH);
+    wgLayout->addLayout(presetRow2);
+
+    m_checkWeightApplyAllFrames = new QCheckBox(tr("Apply preset to all animation frames"), m_weightGroup);
+    wgLayout->addWidget(m_checkWeightApplyAllFrames);
+
+    // Tip label
+    m_lblWeightTip = new QLabel(tr("Left-click: paint wind weight.\nRight-click: erase weight to 0.0.\nBlue = 0.0 (fixed root), Red = 1.0 (max motion)."), m_weightGroup);
+    m_lblWeightTip->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 10px; font-style: italic; margin-top: 6px;"));
+    m_lblWeightTip->setWordWrap(true);
+    wgLayout->addWidget(m_lblWeightTip);
+
+    wgLayout->addStretch(1);
+    layout->addWidget(m_weightGroup);
+    layout->addStretch(1);
+    return page;
+}
+
+QWidget* PixelEditorDialog::createSocketOptionsPage()
+{
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+
+    const QString groupBoxStyle = kToolGroupBoxStyle;
+    const QString btnStyle = QStringLiteral(
+        "QPushButton {"
+        "  border: 1px solid palette(mid);"
+        "  border-radius: 4px;"
+        "  font-size: 11px;"
+        "  font-weight: 500;"
+        "  padding: 4px 8px;"
+        "}"
+        "QPushButton:hover { background-color: palette(alternate-base); border-color: palette(highlight); }"
+    );
+
+    m_socketGroup = new QGroupBox(tr("Sockets & Attachment Pins"), page);
+    m_socketGroup->setStyleSheet(groupBoxStyle);
+    QVBoxLayout *sgLayout = new QVBoxLayout(m_socketGroup);
+    sgLayout->setContentsMargins(6, 10, 6, 6);
+    sgLayout->setSpacing(6);
+
+    // 1. Socket Selection & Name
+    QLabel *lblSelect = new QLabel(tr("Active Socket / Preset:"), m_socketGroup);
+    lblSelect->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px;"));
+    sgLayout->addWidget(lblSelect);
+
+    m_comboSockets = new QComboBox(m_socketGroup);
+    m_comboSockets->setEditable(false);
+    sgLayout->addWidget(m_comboSockets);
+
+    QLabel *lblName = new QLabel(tr("Socket Identifier:"), m_socketGroup);
+    lblName->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 4px;"));
+    sgLayout->addWidget(lblName);
+
+    m_editSocketName = new QLineEdit(m_socketGroup);
+    m_editSocketName->setPlaceholderText(QStringLiteral("e.g. socket_hand_r, socket_weapon"));
+    sgLayout->addWidget(m_editSocketName);
+
+    // 2. Position X & Y
+    QLabel *lblPos = new QLabel(tr("Local Position (px from top-left):"), m_socketGroup);
+    lblPos->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 11px; margin-top: 4px;"));
+    sgLayout->addWidget(lblPos);
+
+    QHBoxLayout *posRow = new QHBoxLayout();
+    QLabel *lblX = new QLabel(QStringLiteral("X:"), m_socketGroup);
+    m_spinSocketX = new QDoubleSpinBox(m_socketGroup);
+    m_spinSocketX->setRange(-9999.0, 9999.0);
+    m_spinSocketX->setDecimals(1);
+    QLabel *lblY = new QLabel(QStringLiteral("Y:"), m_socketGroup);
+    m_spinSocketY = new QDoubleSpinBox(m_socketGroup);
+    m_spinSocketY->setRange(-9999.0, 9999.0);
+    m_spinSocketY->setDecimals(1);
+    posRow->addWidget(lblX);
+    posRow->addWidget(m_spinSocketX, 1);
+    posRow->addWidget(lblY);
+    posRow->addWidget(m_spinSocketY, 1);
+    sgLayout->addLayout(posRow);
+
+    // 3. Add & Remove Buttons
+    QHBoxLayout *actRow = new QHBoxLayout();
+    m_btnAddSocket = new QPushButton(tr("➕ Add / Rename"), m_socketGroup);
+    m_btnAddSocket->setStyleSheet(btnStyle);
+    m_btnRemoveSocket = new QPushButton(tr("🗑 Delete"), m_socketGroup);
+    m_btnRemoveSocket->setStyleSheet(btnStyle);
+    actRow->addWidget(m_btnAddSocket);
+    actRow->addWidget(m_btnRemoveSocket);
+    sgLayout->addLayout(actRow);
+
+    connect(m_btnAddSocket, &QPushButton::clicked, this, [this]() {
+        if (!m_canvas) return;
+        QString name = m_editSocketName->text().trimmed();
+        if (name.isEmpty()) {
+            name = QStringLiteral("socket_%1").arg(m_canvas->sockets().size() + 1);
+        }
+        QPointF pos(m_spinSocketX->value(), m_spinSocketY->value());
+        m_canvas->addOrUpdateSocket(name, pos);
+    });
+
+    connect(m_btnRemoveSocket, &QPushButton::clicked, this, [this]() {
+        if (!m_canvas) return;
+        QString cur = m_canvas->selectedSocket();
+        if (!cur.isEmpty()) {
+            m_canvas->removeSocket(cur);
+        }
+    });
+
+    auto onPosChanged = [this]() {
+        if (!m_canvas) return;
+        QString cur = m_canvas->selectedSocket();
+        if (!cur.isEmpty() && m_canvas->sockets().contains(cur)) {
+            QPointF p(m_spinSocketX->value(), m_spinSocketY->value());
+            m_canvas->addOrUpdateSocket(cur, p);
+        }
+    };
+    connect(m_spinSocketX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, onPosChanged);
+    connect(m_spinSocketY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, onPosChanged);
+
+    connect(m_comboSockets, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int idx) {
+        if (!m_canvas || idx < 0) return;
+        QString name = m_comboSockets->itemData(idx).toString();
+        if (!name.isEmpty()) {
+            if (m_canvas->sockets().contains(name)) {
+                m_canvas->setSelectedSocket(name);
+            } else {
+                m_editSocketName->setText(name);
+            }
+        }
+    });
+
+    // 4. Propagate Sockets
+    m_btnCopySocketsToAll = new QPushButton(tr("📋 Copy Sockets to All Frames"), m_socketGroup);
+    m_btnCopySocketsToAll->setStyleSheet(btnStyle);
+    connect(m_btnCopySocketsToAll, &QPushButton::clicked, this, [this]() {
+        if (!m_canvas) return;
+        QMap<QString, QPointF> cur = m_canvas->sockets();
+        for (int idx : m_activeSequence) {
+            m_sessionModifiedSockets[idx] = cur;
+        }
+        QMessageBox::information(this, tr("Sockets Copied"),
+            tr("Copied %1 socket(s) to all %2 frames in the active animation.")
+            .arg(cur.size()).arg(m_activeSequence.size()));
+    });
+    sgLayout->addWidget(m_btnCopySocketsToAll);
+
+    // Tip label
+    m_lblSocketTip = new QLabel(tr("Click socket pin on canvas to select and drag.\nClick empty canvas to move active pin.\nExported to Godot, Unity, Unreal Paper2D, and JSON."), m_socketGroup);
+    m_lblSocketTip->setStyleSheet(QStringLiteral("color: palette(placeholder-text); font-size: 10px; font-style: italic; margin-top: 6px;"));
+    m_lblSocketTip->setWordWrap(true);
+    sgLayout->addWidget(m_lblSocketTip);
+
+    sgLayout->addStretch(1);
+    layout->addWidget(m_socketGroup);
+    layout->addStretch(1);
+    return page;
+}
+
+void PixelEditorDialog::updateSocketUI()
+{
+    if (!m_canvas || !m_comboSockets) return;
+
+    m_comboSockets->blockSignals(true);
+    m_comboSockets->clear();
+
+    const QMap<QString, QPointF> socks = m_canvas->sockets();
+    QString curSel = m_canvas->selectedSocket();
+
+    int selIdx = -1;
+    for (auto it = socks.constBegin(); it != socks.constEnd(); ++it) {
+        m_comboSockets->addItem(QStringLiteral("📍 %1 (%2, %3)").arg(it.key()).arg(it.value().x(), 0, 'f', 1).arg(it.value().y(), 0, 'f', 1), it.key());
+        if (it.key() == curSel) {
+            selIdx = m_comboSockets->count() - 1;
+        }
+    }
+
+    // Standard preset suggestions
+    m_comboSockets->insertSeparator(m_comboSockets->count());
+    const QStringList suggestions = {
+        QStringLiteral("socket_hand_r"),
+        QStringLiteral("socket_hand_l"),
+        QStringLiteral("socket_weapon"),
+        QStringLiteral("socket_shield"),
+        QStringLiteral("socket_head"),
+        QStringLiteral("socket_hat"),
+        QStringLiteral("socket_chest"),
+        QStringLiteral("socket_feet"),
+        QStringLiteral("socket_trail")
+    };
+    for (const QString &s : suggestions) {
+        if (!socks.contains(s)) {
+            m_comboSockets->addItem(QStringLiteral("+ Suggestion: %1").arg(s), s);
+        }
+    }
+
+    if (selIdx >= 0) {
+        m_comboSockets->setCurrentIndex(selIdx);
+    }
+    m_comboSockets->blockSignals(false);
+
+    if (socks.contains(curSel)) {
+        QPointF p = socks[curSel];
+        m_editSocketName->setText(curSel);
+        m_spinSocketX->blockSignals(true);
+        m_spinSocketX->setValue(p.x());
+        m_spinSocketX->blockSignals(false);
+        m_spinSocketY->blockSignals(true);
+        m_spinSocketY->setValue(p.y());
+        m_spinSocketY->blockSignals(false);
+        m_btnRemoveSocket->setEnabled(true);
+    } else {
+        if (m_editSocketName->text().isEmpty() || socks.isEmpty()) {
+            m_editSocketName->setText(QStringLiteral("socket_hand"));
+        }
+        m_btnRemoveSocket->setEnabled(false);
     }
 }
 

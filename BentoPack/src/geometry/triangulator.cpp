@@ -760,4 +760,67 @@ QPolygonF Triangulator::extractBoundaryContour(const QList<QPointF> &allVertices
     return QPolygonF(allVertices);
 }
 
+SmartMeshResult Triangulator::generateRegularGrid(const QRectF &rect, int columns, int rows)
+{
+    SmartMeshResult result;
+    columns = std::clamp(columns, 1, 64);
+    rows = std::clamp(rows, 1, 64);
+
+    if (rect.width() <= 0.0 || rect.height() <= 0.0) {
+        return result;
+    }
+
+    const double dx = rect.width() / columns;
+    const double dy = rect.height() / rows;
+
+    // Generate grid vertices: (rows + 1) * (columns + 1)
+    result.vertices.reserve((rows + 1) * (columns + 1));
+    for (int r = 0; r <= rows; ++r) {
+        double y = rect.top() + r * dy;
+        for (int c = 0; c <= columns; ++c) {
+            double x = rect.left() + c * dx;
+            result.vertices.append(QPointF(x, y));
+        }
+    }
+
+    // Outer boundary polygon perimeter
+    result.outerPolygon.reserve(2 * (columns + rows));
+    for (int c = 0; c <= columns; ++c) {
+        result.outerPolygon.append(QPointF(rect.left() + c * dx, rect.top()));
+    }
+    for (int r = 1; r <= rows; ++r) {
+        result.outerPolygon.append(QPointF(rect.right(), rect.top() + r * dy));
+    }
+    for (int c = columns - 1; c >= 0; --c) {
+        result.outerPolygon.append(QPointF(rect.left() + c * dx, rect.bottom()));
+    }
+    for (int r = rows - 1; r >= 1; --r) {
+        result.outerPolygon.append(QPointF(rect.left(), rect.top() + r * dy));
+    }
+
+    // Triangulate each quad cell into 2 triangles
+    result.triangles.reserve(columns * rows * 6);
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < columns; ++c) {
+            int v0 = r * (columns + 1) + c;
+            int v1 = v0 + 1;
+            int v2 = (r + 1) * (columns + 1) + c;
+            int v3 = v2 + 1;
+
+            // Triangle 1: (v0, v1, v2)
+            result.triangles.append(v0);
+            result.triangles.append(v1);
+            result.triangles.append(v2);
+
+            // Triangle 2: (v1, v3, v2)
+            result.triangles.append(v1);
+            result.triangles.append(v3);
+            result.triangles.append(v2);
+        }
+    }
+
+    result.interiorVertexCount = std::max(0, static_cast<int>(result.vertices.size()) - static_cast<int>(result.outerPolygon.size()));
+    return result;
+}
+
 } // namespace BentoPackGeometry

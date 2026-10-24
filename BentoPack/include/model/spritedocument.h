@@ -127,6 +127,10 @@ struct BENTOPACK_CORE_EXPORT SpriteBox {
     QList<int>      triangles;
     bool            hasPolygonMesh = false;
 
+    // M12: Deformable Mesh & Attachment Metadata
+    QList<float>            vertexWeights; // Normalized [0.0, 1.0] weight per vertex (for wind / vertex shaders)
+    QMap<QString, QPointF>  sockets;       // Named attachment sockets / pins in local coordinates
+
     double polygonArea() const;
     double overdrawSavings() const;
 
@@ -143,7 +147,8 @@ struct BENTOPACK_CORE_EXPORT SpriteBox {
         return rect == other.rect && index == other.index && page == other.page && selected == other.selected
                && pivot == other.pivot && hasCustomPivot == other.hasCustomPivot
                && hasPolygonMesh == other.hasPolygonMesh && polygon == other.polygon
-               && vertices == other.vertices && triangles == other.triangles;
+               && vertices == other.vertices && triangles == other.triangles
+               && vertexWeights == other.vertexWeights && sockets == other.sockets;
     }
 
     bool operator!=(const SpriteBox &other) const {
@@ -251,6 +256,12 @@ public:
     void setBoxesPivot(const QList<int> &indices, const QPoint &pivot, bool custom = true);
     void applyPivotPreset(const QList<int> &indices, PivotPreset preset);
     QRect computeAnimationEnvelope(const QString &animName) const;
+
+    // Vertex Weights & Sockets (M12)
+    QList<float> boxVertexWeights(int index) const;
+    void setBoxVertexWeights(int index, const QList<float> &weights);
+    QMap<QString, QPointF> boxSockets(int index) const;
+    void setBoxSockets(int index, const QMap<QString, QPointF> &sockets);
 
     // Dimensions
     int maxFrameWidth() const { return m_maxFrameWidth; }

@@ -109,6 +109,25 @@ QByteArray ProjectManager::serializeDocumentToJson(const SpriteDocument &doc,
             bObj[QStringLiteral("triangles")] = triArray;
         }
 
+        if (!b.vertexWeights.isEmpty()) {
+            QJsonArray weightArray;
+            for (float w : b.vertexWeights) {
+                weightArray.append(static_cast<double>(w));
+            }
+            bObj[QStringLiteral("vertexWeights")] = weightArray;
+        }
+
+        if (!b.sockets.isEmpty()) {
+            QJsonObject sockObj;
+            for (auto sIt = b.sockets.constBegin(); sIt != b.sockets.constEnd(); ++sIt) {
+                QJsonObject ptObj;
+                ptObj[QStringLiteral("x")] = sIt.value().x();
+                ptObj[QStringLiteral("y")] = sIt.value().y();
+                sockObj[sIt.key()] = ptObj;
+            }
+            bObj[QStringLiteral("sockets")] = sockObj;
+        }
+
         boxesArray.append(bObj);
     }
     root[QStringLiteral("boxes")] = boxesArray;
@@ -339,6 +358,22 @@ bool ProjectManager::deserializeJsonToDocument(const QByteArray &jsonData,
             QJsonArray triArray = bObj.value(QStringLiteral("triangles")).toArray();
             for (const QJsonValue &v : triArray) {
                 box.triangles.append(v.toInt());
+            }
+        }
+
+        if (bObj.contains(QStringLiteral("vertexWeights"))) {
+            QJsonArray weightArray = bObj.value(QStringLiteral("vertexWeights")).toArray();
+            for (const QJsonValue &v : weightArray) {
+                box.vertexWeights.append(static_cast<float>(v.toDouble()));
+            }
+        }
+
+        if (bObj.contains(QStringLiteral("sockets"))) {
+            QJsonObject sockObj = bObj.value(QStringLiteral("sockets")).toObject();
+            for (auto sIt = sockObj.constBegin(); sIt != sockObj.constEnd(); ++sIt) {
+                QJsonObject ptObj = sIt.value().toObject();
+                box.sockets[sIt.key()] = QPointF(ptObj.value(QStringLiteral("x")).toDouble(),
+                                                 ptObj.value(QStringLiteral("y")).toDouble());
             }
         }
 

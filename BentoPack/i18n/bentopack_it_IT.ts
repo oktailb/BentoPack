@@ -3335,6 +3335,14 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Editor pivot e mirino d&apos;animazione [O]</translation>
     </message>
     <message>
+        <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
+        <translation>Pennello pesi vertici e influenza del vento [K]</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins Editor [N]</source>
+        <translation>Editor punti di ancoraggio e socket [N]</translation>
+    </message>
+    <message>
         <source>Pencil Options</source>
         <translation>Opzioni matita</translation>
     </message>
@@ -3787,6 +3795,66 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Applica a tutti i fotogrammi di &apos;%1&apos;</translation>
     </message>
     <message>
+        <source>Vertex Weights &amp; Wind Influence</source>
+        <translation>Pesi dei vertici e influenza del vento</translation>
+    </message>
+    <message>
+        <source>Show Heatmap Overlay</source>
+        <translation>Mostra mappa termica (heatmap)</translation>
+    </message>
+    <message>
+        <source>All 0.0 (Fixed)</source>
+        <translation>Tutti a 0.0 (Fisso)</translation>
+    </message>
+    <message>
+        <source>All 1.0 (Full Wind)</source>
+        <translation>Tutti a 1.0 (Vento massimo)</translation>
+    </message>
+    <message>
+        <source>Vertical Gradient (Base 0 -&gt; Tip 1)</source>
+        <translation>Gradiente verticale (Base 0 -&gt; Punta 1)</translation>
+    </message>
+    <message>
+        <source>Horizontal Gradient</source>
+        <translation>Gradiente orizzontale</translation>
+    </message>
+    <message>
+        <source>Apply preset to all animation frames</source>
+        <translation>Applica preimpostazione a tutti i fotogrammi dell&apos;animazione</translation>
+    </message>
+    <message>
+        <source>Left-click: paint wind weight.
+Right-click: erase weight to 0.0.
+Blue = 0.0 (fixed root), Red = 1.0 (max motion).</source>
+        <translation>Clic sinistro: dipingi peso del vento.
+Clic destro: cancella peso a 0.0.
+Blu = 0.0 (radice fissa), Rosso = 1.0 (movimento massimo).</translation>
+    </message>
+    <message>
+        <source>Sockets &amp; Attachment Pins</source>
+        <translation>Punti di ancoraggio e socket</translation>
+    </message>
+    <message>
+        <source>➕ Add / Rename</source>
+        <translation>➕ Aggiungi / Rinomina</translation>
+    </message>
+    <message>
+        <source>🗑 Delete</source>
+        <translation>🗑 Elimina</translation>
+    </message>
+    <message>
+        <source>📋 Copy Sockets to All Frames</source>
+        <translation>📋 Copia socket in tutti i fotogrammi</translation>
+    </message>
+    <message>
+        <source>Click socket pin on canvas to select and drag.
+Click empty canvas to move active pin.
+Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
+        <translation>Fai clic su un pin sulla tela per selezionarlo e trascinarlo.
+Fai clic sulla tela vuota per spostare il pin attivo.
+Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
+    </message>
+    <message>
         <source>Invert current selection</source>
         <translation>Inverti selezione corrente</translation>
     </message>
@@ -3825,6 +3893,38 @@ Vuoi salvarle prima di procedere?</translation>
     <message>
         <source>Reset Mesh to Outline</source>
         <translation>Ripristina mesh al contorno</translation>
+    </message>
+    <message>
+        <source>Paint Weight Value:</source>
+        <translation>Valore peso pennello:</translation>
+    </message>
+    <message>
+        <source>Brush Radius:</source>
+        <translation>Raggio pennello:</translation>
+    </message>
+    <message>
+        <source>Weight Presets:</source>
+        <translation>Preimpostazioni peso:</translation>
+    </message>
+    <message>
+        <source>Active Socket / Preset:</source>
+        <translation>Socket attivo / Preimpostazione:</translation>
+    </message>
+    <message>
+        <source>Socket Identifier:</source>
+        <translation>Identificatore socket:</translation>
+    </message>
+    <message>
+        <source>Local Position (px from top-left):</source>
+        <translation>Posizione locale (px da alto-sinistra):</translation>
+    </message>
+    <message>
+        <source>Sockets Copied</source>
+        <translation>Socket copiati</translation>
+    </message>
+    <message>
+        <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
+        <translation>Copiati %1 socket in tutti i %2 fotogrammi dell&apos;animazione attiva.</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4250,6 +4350,26 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     <message>
         <source>Polygon &amp; Mesh Simplification</source>
         <translation>Semplificazione poligono e mesh</translation>
+    </message>
+    <message>
+        <source>Tight Contour (Sprite Cutout)</source>
+        <translation>Contorno aderente (Ritaglio sprite)</translation>
+    </message>
+    <message>
+        <source>Regular Grid (Banners, Flags, Cloth)</source>
+        <translation>Griglia regolare (Stendardi, bandiere, tessuti)</translation>
+    </message>
+    <message>
+        <source>Mesh Mode:</source>
+        <translation>Modalità mesh:</translation>
+    </message>
+    <message>
+        <source>Grid Columns:</source>
+        <translation>Colonne griglia:</translation>
+    </message>
+    <message>
+        <source>Grid Rows:</source>
+        <translation>Righe griglia:</translation>
     </message>
     <message>
         <source>Approximation Tolerance (ε):</source>

@@ -2292,6 +2292,9 @@ void PixelCanvas::setPolygonMeshData(const QPolygonF &polygon, const QList<QPoin
 {
     m_polygonMesh = polygon;
     m_meshVertices = vertices.isEmpty() ? polygon.toList() : vertices;
+    if (m_meshVertexWeights.size() != m_meshVertices.size()) {
+        m_meshVertexWeights.resize(m_meshVertices.size(), 0.0f);
+    }
     if (!triangles.isEmpty()) {
         m_meshTriangles = triangles;
     } else if (polygon.size() >= 3) {
@@ -2345,6 +2348,9 @@ void PixelCanvas::retriangulateMesh()
     } else {
         m_meshTriangles = BentoPackGeometry::Triangulator::triangulate(m_polygonMesh);
     }
+    if (m_meshVertexWeights.size() != m_meshVertices.size()) {
+        m_meshVertexWeights.resize(m_meshVertices.size(), 0.0f);
+    }
     updatePolygonMask();
     update();
     emit polygonMeshChanged(m_polygonMesh);
@@ -2370,6 +2376,9 @@ void PixelCanvas::deleteSelectedVertex()
     } else {
         // Interior vertex
         m_meshVertices.removeAt(idx);
+    }
+    if (idx >= 0 && idx < m_meshVertexWeights.size()) {
+        m_meshVertexWeights.removeAt(idx);
     }
 
     m_selectedVertexIndex = -1;
@@ -2582,7 +2591,10 @@ void PixelCanvas::drawPolygonMesh(QPainter &painter)
     painter.save();
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    // 1. Draw CDT wireframe triangles
+    const bool isWeightPaintTool = (m_tool == PixelTool::WeightPaint);
+    const bool showHeatmap = m_showWeightHeatmap || isWeightPaintTool;
+
+    // 1. Draw CDT wireframe triangles (with optional thermal heatmap)
     if (!m_meshTriangles.isEmpty()) {
         QPen triPen(QColor(0, 210, 255, 130), 1.0, Qt::DashLine);
         painter.setPen(triPen);
@@ -2598,6 +2610,18 @@ void PixelCanvas::drawPolygonMesh(QPainter &painter)
                 triWidget << QPointF(m_meshVertices[i0].x() * m_zoom, m_meshVertices[i0].y() * m_zoom);
                 triWidget << QPointF(m_meshVertices[i1].x() * m_zoom, m_meshVertices[i1].y() * m_zoom);
                 triWidget << QPointF(m_meshVertices[i2].x() * m_zoom, m_meshVertices[i2].y() * m_zoom);
+
+                if (showHeatmap) {
+                    float w0 = (i0 < m_meshVertexWeights.size()) ? m_meshVertexWeights[i0] : 0.0f;
+                    float w1 = (i1 < m_meshVertexWeights.size()) ? m_meshVertexWeights[i1] : 0.0f;
+                    float w2 = (i2 < m_meshVertexWeights.size()) ? m_meshVertexWeights[i2] : 0.0f;
+                    float avgW = (w0 + w1 + w2) / 3.0f;
+                    QColor faceCol = weightToColor(avgW);
+                    faceCol.setAlpha(isWeightPaintTool ? 110 : 75);
+                    painter.setBrush(QBrush(faceCol));
+                } else {
+                    painter.setBrush(Qt::NoBrush);
+                }
                 painter.drawPolygon(triWidget);
             }
         }
@@ -2662,6 +2686,30 @@ void PixelCanvas::drawPolygonMesh(QPainter &painter)
                 painter.setBrush(Qt::NoBrush);
                 painter.drawEllipse(wpt, 11.0, 11.0);
             }
+        }
+    } else if (showHeatmap || isWeightPaintTool) {
+        // Draw colored vertex weight dots
+        for (int i = 0; i < m_meshVertices.size(); ++i) {
+            const QPointF &pt = m_meshVertices[i];
+            QPointF wpt(pt.x() * m_zoom, pt.y() * m_zoom);
+            float w = (i < m_meshVertexWeights.size()) ? m_meshVertexWeights[i] : 0.0f;
+            QColor dotCol = weightToColor(w);
+
+            double r = isWeightPaintTool ? 4.5 : 3.5;
+            painter.setPen(QPen(Qt::white, 1.2));
+            painter.setBrush(QBrush(dotCol));
+            painter.drawEllipse(wpt, r, r);
+        }
+
+        // Draw brush radius circle around mouse cursor if WeightPaint is active
+        if (isWeightPaintTool && m_lastPixelPos.x() >= 0) {
+            QPointF cursorWpt(m_lastPixelPos.x() * m_zoom, m_lastPixelPos.y() * m_zoom);
+            double radWidget = m_weightBrushRadius * m_zoom;
+            painter.setPen(QPen(QColor(255, 255, 255, 200), 1.5, Qt::DashLine));
+            QColor brushFill = weightToColor(m_paintWeightValue);
+            brushFill.setAlpha(40);
+            painter.setBrush(QBrush(brushFill));
+            painter.drawEllipse(cursorWpt, radWidget, radWidget);
         }
     }
 
@@ -2728,6 +2776,9 @@ void PixelCanvas::paintEvent(QPaintEvent *event)
 
     // 6. Selection bounds
     drawSelectionBorder(painter);
+
+    // 6b. Sockets / Attachment Pins (M12)
+    drawSockets(painter);
 
     painter.restore();
 
@@ -2992,6 +3043,22 @@ void PixelCanvas::mousePressEvent(QMouseEvent *event)
             event->accept();
             return;
         }
+    } else if (m_tool == PixelTool::WeightPaint) {
+        QPointF pixelPosF(pixelPos.x(), pixelPos.y());
+        m_prePaintWeights = m_meshVertexWeights;
+        applyWeightBrush(pixelPosF, event->button() == Qt::RightButton);
+    } else if (m_tool == PixelTool::SocketEdit) {
+        QString hitSocket = findSocketAt(event->pos(), 14.0);
+        if (!hitSocket.isEmpty()) {
+            m_selectedSocketName = hitSocket;
+            emit socketSelected(hitSocket);
+            m_isDraggingSocket = (event->button() == Qt::LeftButton);
+            update();
+        } else if (event->button() == Qt::LeftButton && !m_selectedSocketName.isEmpty()) {
+            m_sockets[m_selectedSocketName] = QPointF(pixelPos.x(), pixelPos.y());
+            emit socketsChanged(m_sockets);
+            update();
+        }
     }
 }
 
@@ -3108,6 +3175,28 @@ void PixelCanvas::mouseMoveEvent(QMouseEvent *event)
                 setCursor(Qt::CrossCursor);
             }
         }
+    } else if (m_tool == PixelTool::WeightPaint) {
+        m_lastPixelPos = pixelPos;
+        setCursor(Qt::CrossCursor);
+        if (event->buttons() & (Qt::LeftButton | Qt::RightButton)) {
+            QPointF pixelPosF(pixelPos.x(), pixelPos.y());
+            applyWeightBrush(pixelPosF, event->buttons() & Qt::RightButton);
+        } else {
+            update();
+        }
+    } else if (m_tool == PixelTool::SocketEdit) {
+        if (m_isDraggingSocket && !m_selectedSocketName.isEmpty()) {
+            m_sockets[m_selectedSocketName] = QPointF(pixelPos.x(), pixelPos.y());
+            emit socketsChanged(m_sockets);
+            update();
+        } else {
+            QString hit = findSocketAt(event->pos(), 14.0);
+            if (!hit.isEmpty()) {
+                setCursor(Qt::SizeAllCursor);
+            } else {
+                setCursor(Qt::CrossCursor);
+            }
+        }
     }
 }
 
@@ -3175,6 +3264,15 @@ void PixelCanvas::mouseReleaseEvent(QMouseEvent *event)
             event->accept();
             m_activeButton = Qt::NoButton;
             return;
+        }
+    } else if (m_tool == PixelTool::WeightPaint) {
+        if (m_meshVertexWeights != m_prePaintWeights) {
+            emit vertexWeightsChanged(m_meshVertexWeights);
+        }
+    } else if (m_tool == PixelTool::SocketEdit) {
+        if (m_isDraggingSocket) {
+            m_isDraggingSocket = false;
+            emit socketsChanged(m_sockets);
         }
     }
     m_activeButton = Qt::NoButton;
@@ -3318,4 +3416,261 @@ void PixelCanvas::leaveEvent(QEvent *event)
     }
     emit mousePixelLeft();
     QWidget::leaveEvent(event);
+}
+
+// =========================================================================
+// Vertex Weight Painting (M12)
+// =========================================================================
+
+void PixelCanvas::setMeshVertexWeights(const QList<float> &weights)
+{
+    m_meshVertexWeights = weights;
+    if (m_meshVertices.size() > m_meshVertexWeights.size()) {
+        m_meshVertexWeights.resize(m_meshVertices.size(), 0.0f);
+    }
+    update();
+}
+
+void PixelCanvas::setPaintWeightValue(float val)
+{
+    m_paintWeightValue = std::clamp(val, 0.0f, 1.0f);
+    update();
+}
+
+void PixelCanvas::setWeightBrushRadius(int r)
+{
+    m_weightBrushRadius = std::max(1, r);
+    update();
+}
+
+void PixelCanvas::setShowWeightHeatmap(bool show)
+{
+    m_showWeightHeatmap = show;
+    update();
+}
+
+void PixelCanvas::setAllVertexWeights(float val)
+{
+    val = std::clamp(val, 0.0f, 1.0f);
+    if (m_meshVertices.isEmpty()) return;
+
+    m_meshVertexWeights.fill(val, m_meshVertices.size());
+    update();
+    emit vertexWeightsChanged(m_meshVertexWeights);
+}
+
+void PixelCanvas::applyLinearGradientWeights(bool horizontal)
+{
+    if (m_meshVertices.size() < 2) return;
+
+    double minCoord = std::numeric_limits<double>::max();
+    double maxCoord = -std::numeric_limits<double>::max();
+    for (const QPointF &v : m_meshVertices) {
+        double c = horizontal ? v.x() : v.y();
+        minCoord = std::min(minCoord, c);
+        maxCoord = std::max(maxCoord, c);
+    }
+    double range = maxCoord - minCoord;
+    if (range <= 0.0001) range = 1.0;
+
+    m_meshVertexWeights.resize(m_meshVertices.size());
+    for (int i = 0; i < m_meshVertices.size(); ++i) {
+        const QPointF &v = m_meshVertices[i];
+        double c = horizontal ? v.x() : v.y();
+        float w = 0.0f;
+        if (horizontal) {
+            w = static_cast<float>((c - minCoord) / range);
+        } else {
+            // Top (min Y) = 1.0 (moving tip), Bottom (max Y) = 0.0 (fixed ground root)
+            w = static_cast<float>((maxCoord - c) / range);
+        }
+        m_meshVertexWeights[i] = std::clamp(w, 0.0f, 1.0f);
+    }
+    update();
+    emit vertexWeightsChanged(m_meshVertexWeights);
+}
+
+QColor PixelCanvas::weightToColor(float w)
+{
+    w = std::clamp(w, 0.0f, 1.0f);
+    // 5-stop thermal heatmap gradient:
+    // 0.00: Blue   rgb(0, 80, 255)
+    // 0.25: Cyan   rgb(0, 220, 255)
+    // 0.50: Green  rgb(50, 220, 50)
+    // 0.75: Yellow rgb(255, 220, 0)
+    // 1.00: Red    rgb(255, 30, 0)
+    if (w <= 0.25f) {
+        float t = w / 0.25f;
+        return QColor(0, static_cast<int>(80 + t * (220 - 80)), 255);
+    } else if (w <= 0.50f) {
+        float t = (w - 0.25f) / 0.25f;
+        return QColor(static_cast<int>(t * 50), 220, static_cast<int>(255 - t * (255 - 50)));
+    } else if (w <= 0.75f) {
+        float t = (w - 0.50f) / 0.25f;
+        return QColor(static_cast<int>(50 + t * (255 - 50)), 220, static_cast<int>(50 - t * 50));
+    } else {
+        float t = (w - 0.75f) / 0.25f;
+        return QColor(255, static_cast<int>(220 - t * (220 - 30)), 0);
+    }
+}
+
+void PixelCanvas::applyWeightBrush(const QPointF &pos, bool eraseMode)
+{
+    if (m_meshVertices.isEmpty()) return;
+
+    if (m_meshVertexWeights.size() != m_meshVertices.size()) {
+        m_meshVertexWeights.resize(m_meshVertices.size(), 0.0f);
+    }
+
+    const float targetW = eraseMode ? 0.0f : m_paintWeightValue;
+    const double radius = std::max(1.0, static_cast<double>(m_weightBrushRadius));
+
+    bool changed = false;
+    for (int i = 0; i < m_meshVertices.size(); ++i) {
+        const QPointF &v = m_meshVertices[i];
+        double dist = std::hypot(v.x() - pos.x(), v.y() - pos.y());
+        if (dist <= radius) {
+            double factor = 1.0 - (dist / radius);
+            float strength = static_cast<float>(std::clamp(factor * 0.45, 0.05, 1.0));
+            float oldW = m_meshVertexWeights[i];
+            float newW = (1.0f - strength) * oldW + strength * targetW;
+            newW = std::clamp(newW, 0.0f, 1.0f);
+            if (std::abs(newW - oldW) > 0.001f) {
+                m_meshVertexWeights[i] = newW;
+                changed = true;
+            }
+        }
+    }
+
+    if (changed) {
+        update();
+        emit vertexWeightsChanged(m_meshVertexWeights);
+    }
+}
+
+// =========================================================================
+// Sockets / Attachment Pins (M12)
+// =========================================================================
+
+void PixelCanvas::setSockets(const QMap<QString, QPointF> &sockets)
+{
+    m_sockets = sockets;
+    if (!m_sockets.contains(m_selectedSocketName)) {
+        m_selectedSocketName = m_sockets.isEmpty() ? QString() : m_sockets.firstKey();
+    }
+    update();
+}
+
+void PixelCanvas::setSelectedSocket(const QString &name)
+{
+    if (m_selectedSocketName != name) {
+        m_selectedSocketName = name;
+        update();
+        emit socketSelected(name);
+    }
+}
+
+void PixelCanvas::addOrUpdateSocket(const QString &name, const QPointF &pos)
+{
+    QString cleanName = name.trimmed();
+    if (cleanName.isEmpty()) return;
+    m_sockets[cleanName] = pos;
+    m_selectedSocketName = cleanName;
+    update();
+    emit socketsChanged(m_sockets);
+    emit socketSelected(m_selectedSocketName);
+}
+
+void PixelCanvas::removeSocket(const QString &name)
+{
+    if (m_sockets.remove(name) > 0) {
+        if (m_selectedSocketName == name) {
+            m_selectedSocketName = m_sockets.isEmpty() ? QString() : m_sockets.firstKey();
+            emit socketSelected(m_selectedSocketName);
+        }
+        update();
+        emit socketsChanged(m_sockets);
+    }
+}
+
+void PixelCanvas::renameSocket(const QString &oldName, const QString &newName)
+{
+    QString cleanNew = newName.trimmed();
+    if (oldName == cleanNew || cleanNew.isEmpty() || !m_sockets.contains(oldName)) return;
+    QPointF pos = m_sockets.take(oldName);
+    m_sockets[cleanNew] = pos;
+    if (m_selectedSocketName == oldName) {
+        m_selectedSocketName = cleanNew;
+    }
+    update();
+    emit socketsChanged(m_sockets);
+    emit socketSelected(m_selectedSocketName);
+}
+
+QString PixelCanvas::findSocketAt(const QPoint &widgetPos, double hitRadius) const
+{
+    double bestDist = hitRadius;
+    QString bestName;
+    for (auto it = m_sockets.constBegin(); it != m_sockets.constEnd(); ++it) {
+        QPointF wpt((it.value().x() + m_imageOffset.x()) * m_zoom,
+                    (it.value().y() + m_imageOffset.y()) * m_zoom);
+        double dist = std::hypot(widgetPos.x() - wpt.x(), widgetPos.y() - wpt.y());
+        if (dist <= bestDist) {
+            bestDist = dist;
+            bestName = it.key();
+        }
+    }
+    return bestName;
+}
+
+void PixelCanvas::drawSockets(QPainter &painter)
+{
+    if (m_sockets.isEmpty() && m_tool != PixelTool::SocketEdit) return;
+
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    QFont font = painter.font();
+    font.setPixelSize(10);
+    font.setBold(true);
+    painter.setFont(font);
+
+    for (auto it = m_sockets.constBegin(); it != m_sockets.constEnd(); ++it) {
+        const QString &name = it.key();
+        const QPointF &pt = it.value();
+        QPointF wpt(pt.x() * m_zoom, pt.y() * m_zoom);
+        bool isSelected = (name == m_selectedSocketName);
+
+        // Highlight ring if selected
+        if (isSelected) {
+            painter.setPen(QPen(QColor(255, 215, 0, 220), 2.0, Qt::DashLine));
+            painter.setBrush(QBrush(QColor(255, 215, 0, 45)));
+            painter.drawEllipse(wpt, 13.0, 13.0);
+        }
+
+        // Crosshair pin
+        QColor pinColor = isSelected ? QColor(255, 215, 0) : QColor(255, 50, 100);
+        painter.setPen(QPen(Qt::white, 1.5));
+        painter.setBrush(QBrush(pinColor));
+        painter.drawEllipse(wpt, 6.0, 6.0);
+
+        painter.setPen(QPen(Qt::white, 1.0));
+        painter.drawLine(wpt.x() - 8.0, wpt.y(), wpt.x() + 8.0, wpt.y());
+        painter.drawLine(wpt.x(), wpt.y() - 8.0, wpt.x(), wpt.y() + 8.0);
+
+        // Text badge pill
+        QFontMetrics fm(font);
+        int textW = fm.horizontalAdvance(name);
+        int textH = fm.height();
+        QRectF badgeRect(wpt.x() + 10.0, wpt.y() - textH * 0.5 - 2.0, textW + 8.0, textH + 4.0);
+
+        painter.setPen(QPen(isSelected ? QColor(255, 215, 0) : QColor(80, 80, 90), 1.0));
+        painter.setBrush(QBrush(QColor(20, 22, 28, 220)));
+        painter.drawRoundedRect(badgeRect, 3.0, 3.0);
+
+        painter.setPen(Qt::white);
+        painter.drawText(badgeRect, Qt::AlignCenter, name);
+    }
+
+    painter.restore();
 }
