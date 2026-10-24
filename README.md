@@ -15,9 +15,9 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 📥 Intelligent Extraction & Codec Plugins
+### Intelligent Extraction & Codec Plugins
 * **Native Aseprite (`.ase` / `.aseprite`) File Extraction:** Direct extraction of multi-layer, cel, frame, and animation tag definitions without requiring Aseprite installed. Automatically preserves blend modes and opacity.
 * **Animated GIF Decompilation:** Instant extraction of multi-frame animated GIFs into ordered frame sequences.
 * **Smart Sprite Sheet Slicing:** Automatic sprite detection and extraction with configurable alpha and color tolerance ($O(N)$ spatial grid).
@@ -25,7 +25,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 
 ![Aseprite Native Multi-Layer & Tag Import](docs/screenshots/12_aseprite_native_import.webp)
 
-### 🖌️ Surgical Pixel-by-Pixel Editor & Layer Studio (M4 & M18)
+### Surgical Pixel-by-Pixel Editor & Layer Studio
 * **High-Precision Canvas (`Ctrl+E`):** Fast, non-interpolated pixel art editor (`SmoothPixmapTransform = false`) with configurable pixel grid ($\ge 400\%$) for surgical touch-ups without switching to GIMP or Photoshop.
 * **Complete Multi-Layer Architecture (`LayerStackWidget`):** Non-destructive layer stack with layer creation, duplication, deletion, drag-and-drop reordering, visibility toggle, opacity slider (0–100%), and 12 blend modes (*Normal, Multiply, Screen, Overlay, Darken, Lighten, Color Dodge, Color Burn, Hard Light, Soft Light, Difference, Exclusion*), plus *Merge Down* and *Flatten Image*.
 * **Onion Skinning:** Configurable forward and backward frame ghosting with custom opacity and tint for fluid animation inbetweening and sub-pixel alignment.
@@ -46,7 +46,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 ![Pixel Editor with Multi-Layer Stack & Onion Skinning](docs/screenshots/13_pixel_editor_layers_and_onion_skin.webp)
 
 
-### 📐 2D Polygon & Intelligent CDT Mesh Packing (M8 & M19)
+### 2D Polygon & Intelligent CDT Mesh Packing
 * **Alpha Contour Extraction:** Automatic watertight Marching Squares contouring on sprite alpha silhouettes.
 * **Intelligent Simplification:** Ramer-Douglas-Peucker (RDP) boundary reduction with outward normal dilation (0–8px padding) to prevent edge pixel clipping, with customizable vertex budget (3–48 vertices).
 * **Constrained Delaunay Triangulation (CDT):** Feature-preserving mesh generation supporting Color Distance Mode and Sobel Edge Filter Mode.
@@ -59,7 +59,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 
 ![Intelligent CDT Polygon Mesh & Laser Knife Tool](docs/screenshots/14_mesh_knife_cdt_editor.webp)
 
-### 🎨 Non-Destructive Filter & Cleanup Suite (M7)
+### Non-Destructive Filter & Cleanup Suite
 * **Frame Context Menu & Targeted Scope:** Right-click directly on any sprite in the atlas or timeline to apply filters to the current selection, the whole frame, or batch-apply to all frames in the animation.
 * **Live Debounced Preview & Universal Undo:** Real-time feedback with non-destructive rollback via `QUndoStack` (`ApplyFilterCommand`) across 9 specialized filters:
   * **Chroma Background Removal (`Ctrl+Shift+B`):** Dominant color auto-detection, alpha thresholding, and smart crop.
@@ -75,7 +75,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 ![Retro Palette Quantization & Bayer Dithering](docs/screenshots/15_retro_palette_dithering.webp)
 
 
-### 🎬 Timeline & Animation Filmstrip (M2)
+### Timeline & Animation Filmstrip
 * **Filmstrip Dock:** Intuitive bottom timeline with thumbnail filmstrip, scrub bar, and drag-and-drop frame reordering.
 * **Frame Merging & Compositing:** Drag and drop one frame onto another to fuse them into a single layered sprite.
 * **Batch Editing:** Multi-selection operations including group deletion, invert selection, and reverse frame ordering (ideal for ping-pong loops).
@@ -83,18 +83,18 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 
 ![Frame Fusion Demo](docs/screenshots/16_sprite_fusion.webp)
 
-### 🎯 Interactive Anchor Points & Pivots (M3)
+### Interactive Anchor Points & Pivots
 * **Zero-Jittering Animation Stabilization:** Shared animation envelope alignment guarantees rock-solid anchored characters during motion, attacks, or jumps without visual shaking or sliding.
 * **Dual-Surface Direct Editing:** Move the high-contrast reticle directly within the atlas slices or right inside the live animation preview with real-time coordinate updates and Shift+Click snapping.
 * **Instant Cardinal Presets & Batch Actions:** One-click shortcuts for Ground/Bottom-Center, Center, and Top-Left (UI), with batch propagation to entire animations or the full project.
 * **Intelligent Preview Navigation:** Automatic optimal framing (*Fit In View*), 5000% razor-sharp pixel art wheel zoom, and pan controls.
 
-### 🍱 Native `.bento` Project Architecture (M5)
+### Native `.bento` Project Architecture
 * **All-in-One Compressed Format:** `.bento` project files package project metadata, frame descriptors, and source assets into a structured ZIP archive.
 * **Atomic Transactions & Crash Recovery:** Atomic file writing with journaled crash-recovery safeguard prevents project corruption.
 * **Embedded Git Time-Travel:** Integrated non-destructive versioning engine powered by LibGit2. Browse commit history, inspect visual diffs, and revert to previous states without leaving the app.
 
-### 📤 Multi-Engine Export
+### Multi-Engine Export
 * **PNG Sprite Atlas:** Optimized packing of extracted frames into a consolidated texture sheet.
 * **Non-Blocking Background Export:** Heavy compression tasks (KTX2 UASTC, high Zstd levels) run asynchronously via `QtConcurrent` with animated progress status, keeping the GUI perfectly responsive.
 * **Godot 4 Engine Exporter:** Generates ready-to-use Godot 4 `SpriteFrames` (`.tres`) resources with embedded `AtlasTexture` definitions, animations, and companion `_mesh.tres` 2D `ArrayMesh` resources.
@@ -102,7 +102,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 * **Unreal Engine Paper2D Exporter:** Generates `.paper2d.json` descriptors containing both render and collision polygon geometries.
 * **TexturePacker / Aseprite JSON:** Universal JSON metadata mapping frame bounds `(x, y, w, h)`, animation tags, and optional mesh geometry (`vertices`, `verticesUV`, `triangles`).
 
-### 🚀 GPU VRAM Hardware Texture Compression (M9)
+### GPU VRAM Hardware Texture Compression
 * **Direct GPU Memory Upload (Zero CPU Decompression Overhead):** Bypasses CPU software raster decompression at game runtime. Uploads blocks straight into VRAM, slashing memory bus bandwidth and reducing game asset load times to near-zero.
 * **Universal KTX2 Containers & Khronos Basis Universal:** Powered by Khronos `basis_universal` (v2.50) with multi-threaded C++ encoding.
 * **UASTC 4x4 Mode (Recommended for Pixel Art):** High-fidelity 8 bpp block compression delivering **75.0% VRAM memory savings** while preserving crisp sprite pixel contours and delicate alpha antialiasing. Transcodes on-the-fly to native GPU formats: **ASTC** (iOS, Android, Switch, Apple Silicon), **BC7** (PC DirectX 11/12, Vulkan, PS5, Xbox), or **ETC2**.
@@ -111,7 +111,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 * **Live VRAM Telemetry in ExportDialog:** Real-time feedback comparing raw RGBA8888 vs UASTC/ETC1S memory footprint with instant percentage savings.
 * **Integrated Game Engine Companions:** Emits `.ktx2` companion atlas files natively referenced by Godot 4 (`res://atlas.ktx2`), Unity (`KtxUnity`), Unreal Engine, and WebGL/WebGPU.
 
-### ⚙️ Comprehensive Settings & Preferences Center
+### Comprehensive Settings & Preferences Center
 * **Modular 6-Category Configuration:** Clean searchable preferences interface with responsive filtering.
 * **Multilingual UI (i18n):** Complete localization in English, French (Français), and Japanese (日本語) with hot-switch in Preferences.
 * **Startup & Automation:** Auto-reopen last active `.bento` project and optional background check for newer GitHub releases.
@@ -121,7 +121,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## Tech Stack & Architecture
 
 * **Language:** C++17
 * **Framework:** Qt 6 (Core, Gui, Widgets, Multimedia, Concurrent, Network, Test, LinguistTools)
@@ -134,7 +134,7 @@ The entire project (UI, CLI, core engine, plugins, filters, and engine exporters
 
 ---
 
-## 💻 Building and Running
+## Building and Running
 
 ### Prerequisites
 
@@ -191,7 +191,7 @@ ctest --test-dir build --output-on-failure -C Release
 
 ---
 
-## 🧪 Automated Testing
+## Automated Testing
 
 BentoPack includes an exhaustive test suite powered by `QtTest` and `CTest`, validating core models, codecs, controllers, plugins, filters, and multithreaded pipelines across 15 dedicated suites (**100% CTest pass rate**):
 
@@ -219,7 +219,7 @@ ctest --test-dir build --output-on-failure --verbose
 
 ---
 
-## ⚡ Command-Line Interface (`bentopack-cli`)
+## Command-Line Interface (`bentopack-cli`)
 
 BentoPack includes an autonomous, 100% headless console binary **`bentopack-cli`** (symlinked to `bentopack-cli` for backward compatibility) designed for game studio build pipelines and CI/CD runners (zero GUI/display required):
 
@@ -296,7 +296,7 @@ Reports are automatically written to [`benchmarks/REPORT.md`](benchmarks/REPORT.
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 Comprehensive documentation is available in the [`docs/`](docs/) directory:
 * **[User Guide](docs/USER_GUIDE.md):** Complete, step-by-step illustrated manual covering atlas slicing, timeline animations, anchor pivots, filters, MaxRects & tight mesh packing, surgical pixel editing, and multi-engine exports.
@@ -306,7 +306,7 @@ Comprehensive documentation is available in the [`docs/`](docs/) directory:
 
 ---
 
-## ⚔️ Comparison & Market Positioning
+## Comparison & Market Positioning
 
 BentoPack bridges the gap between raw asset extraction/cleanup (historically handled by tools like *ShoeBox*), sprite atlas packing (*TexturePacker*), and animation sequencing (*Aseprite / Pixelorama / Godot SpriteFrames*).
 
@@ -331,7 +331,7 @@ BentoPack bridges the gap between raw asset extraction/cleanup (historically han
 
 ---
 
-## 📄 Licensing & Distribution Model
+## Licensing & Distribution Model
 
 BentoPack is distributed as **100% Free and Open Source Software (FOSS)**:
 
