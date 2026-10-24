@@ -9,6 +9,9 @@ set(ALL_EXTRACTOR_PLUGINS
     extractor_spritesheet
     extractor_libgdx_spine
     extractor_aseprite
+    extractor_plist
+    extractor_pcx
+    extractor_pico8
 )
 
 set(ALL_FILTER_PLUGINS
@@ -35,6 +38,9 @@ set(PLUGIN_INCLUDES
     ${CMAKE_SOURCE_DIR}/plugins/extractors/spritesheet
     ${CMAKE_SOURCE_DIR}/plugins/extractors/libgdx_spine
     ${CMAKE_SOURCE_DIR}/plugins/extractors/aseprite
+    ${CMAKE_SOURCE_DIR}/plugins/extractors/plist
+    ${CMAKE_SOURCE_DIR}/plugins/extractors/pcx
+    ${CMAKE_SOURCE_DIR}/plugins/extractors/pico8
     ${CMAKE_SOURCE_DIR}/plugins/filters/backgroundremoval
     ${CMAKE_SOURCE_DIR}/plugins/filters/despill
     ${CMAKE_SOURCE_DIR}/plugins/filters/outline

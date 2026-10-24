@@ -327,20 +327,24 @@ Pour garantir la fluidité sur des atlas de très haute résolution (8K, 16K) :
   * Reconstitution instantanée de la mémoire vidéo avec fond transparent sans pollution de décor.
 
 ### 2. 💾 Formats Cultes Micro & DOS (Amiga, Atari, PC 90s)
-  **Format Apple / Cocos2d-x (`.plist` XML) :** Pour les pipelines historiques iOS / Cocos2d-x (complexité faible).
+* **✅ Format Apple / Cocos2d-x (`.plist` XML) [Implémenté - `extractor_plist`] :**
+  * Support complet des formats Cocos2d-x / TexturePacker (Format 2 et Format 3).
+  * Import/Export XML avec découpage de sprites (`textureRect`), offsets (`spriteOffset`), rotation anti-horaire 90°, et texture compagne PNG/VRAM.
 * **Amiga IFF / ILBM (`.iff`, `.lbm`) :**
   * Le standard sacré de **Deluxe Paint**.
   * Décodage des bitplanes entrelacés (1 à 8 bpp), modes EHB (*Extra Half-Brite*), et palettes dynamiques embarquées.
-* **ZSoft PCX (`.pcx`) :**
+* **✅ ZSoft PCX (`.pcx`) [Implémenté - `extractor_pcx`] :**
   * Le format roi du jeu DOS des années 90 (*Doom, Duke Nukem 3D, Commander Keen, Mortal Kombat PC*).
-  * RLE 8-bit indexé avec bloc palette 256 couleurs en queue de fichier.
+  * RLE 8-bit indexé avec décodage/encodage direct, marqueur VGA 256 couleurs (`0x0C` à EOF - 769 octets), 24-bit 3-planes, et segmentation automatique via `SpriteDetector`.
 
 ### 3. 📱 Formats Structurés Portables & Fantasy Consoles
 * **Nintendo Nitro SDK (`.ncgr` + `.ncer` + `.nclr`) — GBA & Nintendo DS :**
   * Extraction et liaison directe : `.ncgr` (tuiles graphiques) + `.nclr` (palette) + `.ncer` (cellules/meta-sprites assemblés avec offsets relatifs).
   * Recréation immédiate des frames d'animation et de leurs points de pivot sans découpage manuel.
 * **Fantasy Consoles (PICO-8 & TIC-80) :**
-  * Import direct des cartouches PICO-8 (`.p8`) en parsant les sections texte `__gfx__` (sprites 128×128 en 4bpp) et `__gff__` (flags de sprites).
+  * **✅ PICO-8 (`.p8`) [Implémenté - `extractor_pico8`] :**
+    * Import/Export direct des cartouches PICO-8 avec parsing des sections texte `__gfx__` (grille native $128\times 128$ en 4bpp, 16 couleurs officielles avec couleur 0 transparente) et `__gff__` (flags matériels de sprites 8 bits).
+    * Découpage automatique en tuiles $8\times 8$ (sprites 0 à 255) et quantification colorimétrique euclidienne pour l'export.
   * Import des cartouches TIC-80 (`.tic`).
 
 ### 4. 🌊 Palette Cycling & Color Shifting (Animation de Palettes d'Époque)

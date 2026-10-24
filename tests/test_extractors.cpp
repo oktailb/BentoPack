@@ -23,6 +23,9 @@
 #include "packer/multiatlaspacker.h"
 #include "project/projectmanager.h"
 #include "spriteextractor.h"
+#include "plistextractor.h"
+#include "pcxextractor.h"
+#include "pico8extractor.h"
 
 
 class TestExtractors : public QObject {
@@ -42,6 +45,9 @@ private slots:
   void testAsepriteExtractorWritePolygonClipping();
   void testGifExtractorRead();
   void testGifExtractorWriteMultiAnimations();
+  void testPlistExtractorReadWrite();
+  void testPcxExtractorReadWrite();
+  void testPico8ExtractorReadWrite();
   void testErrorHandlingNonExistentFile();
   void testErrorHandlingCorruptedData();
   void testExtractToImagesEquivalence();
@@ -234,6 +240,9 @@ void TestExtractors::testExtractorRegistryBasics() {
           nullptr);
   QVERIFY(reg.findExtractorById(QStringLiteral("aseprite_extractor")) !=
           nullptr);
+  QVERIFY(reg.findExtractorById(QStringLiteral("plist_extractor")) != nullptr);
+  QVERIFY(reg.findExtractorById(QStringLiteral("pcx_extractor")) != nullptr);
+  QVERIFY(reg.findExtractorById(QStringLiteral("pico8_extractor")) != nullptr);
 
   // Verify filter strings
   QString openFilters = reg.openFilterString();
@@ -243,6 +252,9 @@ void TestExtractors::testExtractorRegistryBasics() {
   QVERIFY(openFilters.contains(QStringLiteral("*.gif")));
   QVERIFY(openFilters.contains(QStringLiteral("*.atlas")));
   QVERIFY(openFilters.contains(QStringLiteral("*.ase")));
+  QVERIFY(openFilters.contains(QStringLiteral("*.plist")));
+  QVERIFY(openFilters.contains(QStringLiteral("*.pcx")));
+  QVERIFY(openFilters.contains(QStringLiteral("*.p8")));
 
   QString saveFilters = reg.saveFilterString();
   QVERIFY(saveFilters.contains(QStringLiteral("*.json")));
@@ -250,6 +262,9 @@ void TestExtractors::testExtractorRegistryBasics() {
   QVERIFY(saveFilters.contains(QStringLiteral("*.gif")));
   QVERIFY(saveFilters.contains(QStringLiteral("*.atlas")));
   QVERIFY(saveFilters.contains(QStringLiteral("*.ase")));
+  QVERIFY(saveFilters.contains(QStringLiteral("*.plist")));
+  QVERIFY(saveFilters.contains(QStringLiteral("*.pcx")));
+  QVERIFY(saveFilters.contains(QStringLiteral("*.p8")));
 }
 
 void TestExtractors::testSpriteExtractorCapabilities() {
@@ -1329,6 +1344,191 @@ void TestExtractors::testAsepriteExtractorWritePolygonClipping() {
   QVERIFY(qBlue(f1_inside) > 200);
   QRgb f1_outside = f1.pixel(2, 2);
   QCOMPARE(qAlpha(f1_outside), 0);
+}
+
+void TestExtractors::testPlistExtractorReadWrite() {
+  PlistExtractor extractor;
+  QCOMPARE(extractor.id(), QStringLiteral("plist_extractor"));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanImport));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanExport));
+
+  // Geometry parsing helpers
+  QCOMPARE(PlistExtractor::parseRect(QStringLiteral("{{10,20},{30,40}}")), QRect(10, 20, 30, 40));
+  QCOMPARE(PlistExtractor::parsePoint(QStringLiteral("{5,-15}")), QPoint(5, -15));
+  QCOMPARE(PlistExtractor::parseSize(QStringLiteral("{64,128}")), QSize(64, 128));
+
+  QTemporaryDir tempDir;
+  QVERIFY(tempDir.isValid());
+  QString plistPath = tempDir.filePath(QStringLiteral("sprites.plist"));
+
+  // Build document with 2 frames
+  QImage atlas(128, 64, QImage::Format_ARGB32);
+  atlas.fill(Qt::transparent);
+  {
+    QPainter p(&atlas);
+    p.fillRect(0, 0, 32, 32, Qt::red);
+    p.fillRect(40, 0, 48, 48, Qt::blue);
+  }
+
+  SpriteDocument doc;
+  doc.setAtlas(atlas);
+  QList<QImage> frames;
+  frames.append(atlas.copy(0, 0, 32, 32));
+  frames.append(atlas.copy(40, 0, 48, 48));
+  QList<SpriteBox> boxes;
+  boxes.append(SpriteBox(QRect(0, 0, 32, 32)));
+  boxes.append(SpriteBox(QRect(40, 0, 48, 48)));
+  doc.setFrames(frames, boxes);
+
+  ExportOptions expOpts;
+  ExtractorError writeErr;
+  bool ok = extractor.write(plistPath, doc, expOpts, &writeErr);
+  QVERIFY2(ok, qPrintable(writeErr.toString()));
+  QVERIFY(QFile::exists(plistPath));
+  QVERIFY(QFile::exists(tempDir.filePath(QStringLiteral("sprites.png"))));
+
+  // Verify canDecode
+  QVERIFY(extractor.canDecode(plistPath));
+
+  // Read back
+  SpriteDocument readDoc;
+  ExtractorError readErr;
+  bool readOk = extractor.read(plistPath, readDoc, &readErr);
+  QVERIFY2(readOk, qPrintable(readErr.toString()));
+  QCOMPARE(readDoc.frameCount(), 2);
+  QCOMPARE(readDoc.boxes().size(), 2);
+  QCOMPARE(readDoc.box(0).rect, QRect(0, 0, 32, 32));
+  QCOMPARE(readDoc.box(1).rect, QRect(40, 0, 48, 48));
+}
+
+void TestExtractors::testPcxExtractorReadWrite() {
+  PcxExtractor extractor;
+  QCOMPARE(extractor.id(), QStringLiteral("pcx_extractor"));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanImport));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanExport));
+
+  // Test encode and decode in-memory
+  QImage testImg(16, 16, QImage::Format_ARGB32);
+  testImg.fill(qRgb(255, 0, 0)); // Pure red
+  for (int y = 4; y < 12; ++y) {
+    for (int x = 4; x < 12; ++x) {
+      testImg.setPixel(x, y, qRgb(0, 255, 0)); // Green center
+    }
+  }
+
+  QByteArray pcxBytes;
+  QString encErr;
+  bool encOk = PcxExtractor::encodePcx(testImg, pcxBytes, &encErr);
+  QVERIFY2(encOk, qPrintable(encErr));
+  QVERIFY(pcxBytes.size() > 128 + 769);
+  QCOMPARE(static_cast<uchar>(pcxBytes[0]), 0x0A); // Manufacturer ZSoft
+  QCOMPARE(static_cast<uchar>(pcxBytes[pcxBytes.size() - 769]), 0x0C); // 256-color palette marker
+
+  QImage decodedImg;
+  QString decErr;
+  bool decOk = PcxExtractor::decodePcx(pcxBytes, decodedImg, &decErr);
+  QVERIFY2(decOk, qPrintable(decErr));
+  QCOMPARE(decodedImg.size(), QSize(16, 16));
+  // Check red corner and green center
+  QCOMPARE(qRed(decodedImg.pixel(0, 0)), 255);
+  QCOMPARE(qGreen(decodedImg.pixel(6, 6)), 255);
+
+  // Test file roundtrip
+  QTemporaryDir tempDir;
+  QVERIFY(tempDir.isValid());
+  QString pcxFile = tempDir.filePath(QStringLiteral("test.pcx"));
+
+  SpriteDocument doc;
+  doc.setAtlas(testImg);
+  QList<QImage> frames = { testImg };
+  QList<SpriteBox> boxes = { SpriteBox(QRect(0, 0, 16, 16)) };
+  doc.setFrames(frames, boxes);
+
+  ExportOptions expOpts;
+  ExtractorError writeErr;
+  bool writeOk = extractor.write(pcxFile, doc, expOpts, &writeErr);
+  QVERIFY2(writeOk, qPrintable(writeErr.toString()));
+  QVERIFY(QFile::exists(pcxFile));
+  QVERIFY(extractor.canDecode(pcxFile));
+
+  SpriteDocument readDoc;
+  ExtractorError readErr;
+  bool readDocOk = extractor.read(pcxFile, readDoc, &readErr);
+  QVERIFY2(readDocOk, qPrintable(readErr.toString()));
+  QCOMPARE(readDoc.atlas().size(), QSize(16, 16));
+  QVERIFY(readDoc.frameCount() >= 1);
+}
+
+void TestExtractors::testPico8ExtractorReadWrite() {
+  Pico8Extractor extractor;
+  QCOMPARE(extractor.id(), QStringLiteral("pico8_extractor"));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanImport));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanExport));
+
+  // Palette checks
+  const auto &pal = Pico8Extractor::pico8Palette();
+  QCOMPARE(pal.size(), 16);
+  QCOMPARE(qAlpha(pal[0]), 0); // Color 0 is transparent
+
+  // Nearest color matching
+  QCOMPARE(Pico8Extractor::findNearestPico8Color(qRgba(0, 0, 0, 0)), 0);
+  QCOMPARE(Pico8Extractor::findNearestPico8Color(qRgb(255, 0, 77)), 8);   // Red
+  QCOMPARE(Pico8Extractor::findNearestPico8Color(qRgb(255, 236, 39)), 10); // Yellow
+  QCOMPARE(Pico8Extractor::findNearestPico8Color(qRgb(41, 173, 255)), 12); // Light Blue
+
+  // GFX parsing & formatting
+  QImage img(128, 128, QImage::Format_ARGB32);
+  img.fill(Qt::transparent);
+  // Put a red 8x8 square in sprite 0 (0,0 to 7,7)
+  for (int y = 0; y < 8; ++y) {
+    for (int x = 0; x < 8; ++x) {
+      img.setPixel(x, y, pal[8]); // Red
+    }
+  }
+
+  QStringList gfx = Pico8Extractor::formatGfx(img);
+  QCOMPARE(gfx.size(), 128);
+  QVERIFY(gfx[0].startsWith(QStringLiteral("88888888")));
+
+  QImage parsedImg;
+  QVERIFY(Pico8Extractor::parseGfx(gfx, parsedImg));
+  QCOMPARE(parsedImg.size(), QSize(128, 128));
+  QCOMPARE(parsedImg.pixel(0, 0), pal[8]);
+
+  // GFF flags roundtrip
+  QVector<quint8> flags(256, 0);
+  flags[0] = 0x05; // Bits 0 and 2
+  flags[15] = 0xFF;
+  QStringList gffLines = Pico8Extractor::formatGff(flags);
+  QVector<quint8> parsedFlags = Pico8Extractor::parseGff(gffLines);
+  QCOMPARE(parsedFlags[0], static_cast<quint8>(0x05));
+  QCOMPARE(parsedFlags[15], static_cast<quint8>(0xFF));
+
+  // File roundtrip
+  QTemporaryDir tempDir;
+  QVERIFY(tempDir.isValid());
+  QString p8Path = tempDir.filePath(QStringLiteral("cart.p8"));
+
+  SpriteDocument doc;
+  doc.setAtlas(img);
+  QList<QImage> frames = { img.copy(0, 0, 8, 8) };
+  QList<SpriteBox> boxes = { SpriteBox(QRect(0, 0, 8, 8)) };
+  doc.setFrames(frames, boxes);
+
+  ExportOptions expOpts;
+  ExtractorError writeErr;
+  bool writeOk = extractor.write(p8Path, doc, expOpts, &writeErr);
+  QVERIFY2(writeOk, qPrintable(writeErr.toString()));
+  QVERIFY(QFile::exists(p8Path));
+  QVERIFY(extractor.canDecode(p8Path));
+
+  SpriteDocument readDoc;
+  ExtractorError readErr;
+  bool readOk = extractor.read(p8Path, readDoc, &readErr);
+  QVERIFY2(readOk, qPrintable(readErr.toString()));
+  QCOMPARE(readDoc.atlas().size(), QSize(128, 128));
+  QVERIFY(readDoc.frameCount() >= 1);
+  QCOMPARE(readDoc.box(0).rect, QRect(0, 0, 8, 8));
 }
 
 int main(int argc, char *argv[]) {
