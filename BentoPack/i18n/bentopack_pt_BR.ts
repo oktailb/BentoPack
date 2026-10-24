@@ -1754,6 +1754,33 @@ Clique em um nó para ver os detalhes.</translation>
     </message>
 </context>
 <context>
+    <name>IffExtractor</name>
+    <message>
+        <source>Cannot open IFF file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to decode IFF image: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot export IFF: Document atlas image is null.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to encode IFF: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file for writing: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write all IFF bytes to disk.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>JsonExtractor</name>
     <message>
         <source>Reading JSON sprite atlas %1...</source>
@@ -2995,6 +3022,48 @@ Deseja salvá-las antes de prosseguir?</translation>
     <message>
         <source>Filter: Outline &amp; Silhouette</source>
         <translation>Filtro: Contorno e Silhueta</translation>
+    </message>
+</context>
+<context>
+    <name>PcxExtractor</name>
+    <message>
+        <source>Cannot open PCX file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to decode PCX image: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot export PCX: Document atlas image is null.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to encode PCX: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file for writing: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write all PCX bytes to disk.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Pico8Extractor</name>
+    <message>
+        <source>Cannot open PICO-8 file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot export PICO-8: Document atlas image is null.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file for writing: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4335,6 +4404,41 @@ Deseja reempacotar o atlas agora?</translation>
     <message>
         <source>Filter: Pixel Art Rescale</source>
         <translation>Filtro: Redimensionamento de Pixel Art</translation>
+    </message>
+</context>
+<context>
+    <name>PlistExtractor</name>
+    <message>
+        <source>Cannot open plist file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XML parse error in plist: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Associated atlas image file not found for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to load atlas image: %1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Document has no frames to export.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save companion atlas image: %1</source>
+        <translation type="unfinished">Falha ao salvar a imagem de atlas correspondente: %1</translation>
+    </message>
+    <message>
+        <source>Cannot write plist file: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

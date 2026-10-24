@@ -26,6 +26,7 @@
 #include "plistextractor.h"
 #include "pcxextractor.h"
 #include "pico8extractor.h"
+#include "iffextractor.h"
 
 
 class TestExtractors : public QObject {
@@ -48,6 +49,7 @@ private slots:
   void testPlistExtractorReadWrite();
   void testPcxExtractorReadWrite();
   void testPico8ExtractorReadWrite();
+  void testIffExtractorReadWrite();
   void testErrorHandlingNonExistentFile();
   void testErrorHandlingCorruptedData();
   void testExtractToImagesEquivalence();
@@ -243,6 +245,7 @@ void TestExtractors::testExtractorRegistryBasics() {
   QVERIFY(reg.findExtractorById(QStringLiteral("plist_extractor")) != nullptr);
   QVERIFY(reg.findExtractorById(QStringLiteral("pcx_extractor")) != nullptr);
   QVERIFY(reg.findExtractorById(QStringLiteral("pico8_extractor")) != nullptr);
+  QVERIFY(reg.findExtractorById(QStringLiteral("iff_extractor")) != nullptr);
 
   // Verify filter strings
   QString openFilters = reg.openFilterString();
@@ -255,6 +258,8 @@ void TestExtractors::testExtractorRegistryBasics() {
   QVERIFY(openFilters.contains(QStringLiteral("*.plist")));
   QVERIFY(openFilters.contains(QStringLiteral("*.pcx")));
   QVERIFY(openFilters.contains(QStringLiteral("*.p8")));
+  QVERIFY(openFilters.contains(QStringLiteral("*.iff")));
+  QVERIFY(openFilters.contains(QStringLiteral("*.lbm")));
 
   QString saveFilters = reg.saveFilterString();
   QVERIFY(saveFilters.contains(QStringLiteral("*.json")));
@@ -265,6 +270,8 @@ void TestExtractors::testExtractorRegistryBasics() {
   QVERIFY(saveFilters.contains(QStringLiteral("*.plist")));
   QVERIFY(saveFilters.contains(QStringLiteral("*.pcx")));
   QVERIFY(saveFilters.contains(QStringLiteral("*.p8")));
+  QVERIFY(saveFilters.contains(QStringLiteral("*.iff")));
+  QVERIFY(saveFilters.contains(QStringLiteral("*.lbm")));
 }
 
 void TestExtractors::testSpriteExtractorCapabilities() {
@@ -1529,6 +1536,159 @@ void TestExtractors::testPico8ExtractorReadWrite() {
   QCOMPARE(readDoc.atlas().size(), QSize(128, 128));
   QVERIFY(readDoc.frameCount() >= 1);
   QCOMPARE(readDoc.box(0).rect, QRect(0, 0, 8, 8));
+}
+
+void TestExtractors::testIffExtractorReadWrite() {
+  IffExtractor extractor;
+  QCOMPARE(extractor.id(), QStringLiteral("iff_extractor"));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanImport));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanExport));
+  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("iff")));
+  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("lbm")));
+
+  // 1. ByteRun1 (PackBits) RLE roundtrip test
+  QByteArray rawTest(256, 0);
+  for (int i = 0; i < 50; ++i) rawTest[i] = static_cast<char>(0xAA); // Repeat run
+  for (int i = 50; i < 100; ++i) rawTest[i] = static_cast<char>(i);  // Literal run
+  for (int i = 100; i < 256; ++i) rawTest[i] = static_cast<char>(0x55); // Repeat run
+
+  QByteArray comp = IffExtractor::byteRun1Compress(reinterpret_cast<const uchar*>(rawTest.constData()), rawTest.size());
+  QVERIFY(comp.size() < rawTest.size());
+
+  QByteArray decomp(rawTest.size(), 0);
+  bool decompOk = IffExtractor::byteRun1Decompress(reinterpret_cast<const uchar*>(comp.constData()), comp.size(),
+                                                  reinterpret_cast<uchar*>(decomp.data()), decomp.size());
+  QVERIFY(decompOk);
+  QCOMPARE(decomp, rawTest);
+
+  // 2. In-memory ILBM encode & decode roundtrip test
+  QImage testImg(32, 32, QImage::Format_ARGB32);
+  testImg.fill(qRgb(20, 30, 40));
+  for (int y = 8; y < 24; ++y) {
+    for (int x = 8; x < 24; ++x) {
+      testImg.setPixel(x, y, qRgb(240, 120, 60));
+    }
+  }
+
+  QByteArray iffBytes;
+  QString encErr;
+  bool encOk = IffExtractor::encodeIff(testImg, iffBytes, &encErr);
+  QVERIFY2(encOk, qPrintable(encErr));
+  QVERIFY(iffBytes.size() > 64);
+  QVERIFY(iffBytes.startsWith("FORM"));
+  QCOMPARE(iffBytes.mid(8, 4), QByteArray("ILBM"));
+
+  QImage decodedImg;
+  QString decErr;
+  bool decOk = IffExtractor::decodeIff(iffBytes, decodedImg, &decErr);
+  QVERIFY2(decOk, qPrintable(decErr));
+  QCOMPARE(decodedImg.size(), QSize(32, 32));
+  // Verify colors at corners and center
+  QRgb corner = decodedImg.pixel(0, 0);
+  QRgb center = decodedImg.pixel(16, 16);
+  QVERIFY(qRed(corner) <= 60 && qBlue(corner) >= 20);
+  QVERIFY(qRed(center) > 200 && qGreen(center) > 80);
+
+  // 3. EHB (Extra Half-Brite) mode test
+  // Craft a 6-plane ILBM with CAMG EHB bit set:
+  // 16x16 pixels, rowBytes = 2, 6 planes -> 12 bytes per scanline.
+  // We'll set pixel (0,0) to color 1 (200, 100, 50), and pixel (1,0) to color 33 (1 + 32)
+  QByteArray ehbData;
+  ehbData.append("FORM", 4);
+  // Placeholder for length
+  int ehbLenPos = ehbData.size();
+  ehbData.append("\0\0\0\0", 4);
+  ehbData.append("ILBM", 4);
+
+  // BMHD
+  ehbData.append("BMHD", 4);
+  quint32 bmhdSize = 20;
+  char bmhdLen[4];
+  qToBigEndian<quint32>(bmhdSize, reinterpret_cast<uchar*>(bmhdLen));
+  ehbData.append(bmhdLen, 4);
+  QByteArray bmhdPayload(20, 0);
+  qToBigEndian<quint16>(16, reinterpret_cast<uchar*>(bmhdPayload.data()));     // w
+  qToBigEndian<quint16>(16, reinterpret_cast<uchar*>(bmhdPayload.data() + 2)); // h
+  bmhdPayload.data()[8] = 6; // nPlanes = 6 (EHB)
+  bmhdPayload.data()[9] = 0; // masking = none
+  bmhdPayload.data()[10] = 0; // compression = none
+  ehbData.append(bmhdPayload);
+
+  // CMAP (32 colors)
+  ehbData.append("CMAP", 4);
+  quint32 cmapSize = 32 * 3;
+  char cmapLen[4];
+  qToBigEndian<quint32>(cmapSize, reinterpret_cast<uchar*>(cmapLen));
+  ehbData.append(cmapLen, 4);
+  QByteArray cmapPayload(96, 0);
+  // Color 1 = (200, 100, 50)
+  cmapPayload.data()[3] = static_cast<char>(200);
+  cmapPayload.data()[4] = static_cast<char>(100);
+  cmapPayload.data()[5] = static_cast<char>(50);
+  ehbData.append(cmapPayload);
+
+  // CAMG (Amiga ViewPort mode with EHB bit 0x0080 set)
+  ehbData.append("CAMG", 4);
+  char camgLen[4];
+  qToBigEndian<quint32>(4, reinterpret_cast<uchar*>(camgLen));
+  ehbData.append(camgLen, 4);
+  char camgPayload[4];
+  qToBigEndian<quint32>(0x0080, reinterpret_cast<uchar*>(camgPayload));
+  ehbData.append(camgPayload, 4);
+
+  // BODY (16 lines * 12 bytes = 192 bytes)
+  ehbData.append("BODY", 4);
+  quint32 bodySize = 16 * 12;
+  char bodyLen[4];
+  qToBigEndian<quint32>(bodySize, reinterpret_cast<uchar*>(bodyLen));
+  ehbData.append(bodyLen, 4);
+  QByteArray bodyPayload(bodySize, 0);
+  // On line 0:
+  // Pixel (0,0): color 1 -> bit 0 of plane 0 is 1. Byte 0 of plane 0: 0x80.
+  bodyPayload.data()[0 * 2 + 0] = static_cast<char>(0x80);
+  // Pixel (1,0): color 33 (1 + 32) -> bit 1 of plane 0 is 1 (0x40), and bit 1 of plane 5 is 1 (0x40)!
+  bodyPayload.data()[0 * 2 + 0] |= static_cast<char>(0x40);
+  bodyPayload.data()[5 * 2 + 0] = static_cast<char>(0x40);
+  ehbData.append(bodyPayload);
+
+  // Update FORM length
+  quint32 totalForm = ehbData.size() - 8;
+  qToBigEndian<quint32>(totalForm, reinterpret_cast<uchar*>(ehbData.data() + ehbLenPos));
+
+  QImage ehbImg;
+  QString ehbErr;
+  bool ehbOk = IffExtractor::decodeIff(ehbData, ehbImg, &ehbErr);
+  QVERIFY2(ehbOk, qPrintable(ehbErr));
+  QCOMPARE(ehbImg.size(), QSize(16, 16));
+  // Pixel (0,0) must be base color (200, 100, 50)
+  QCOMPARE(ehbImg.pixel(0, 0), qRgb(200, 100, 50));
+  // Pixel (1,0) must be EHB half-brite: (100, 50, 25)
+  QCOMPARE(ehbImg.pixel(1, 0), qRgb(100, 50, 25));
+
+  // 4. File roundtrip test
+  QTemporaryDir tempDir;
+  QVERIFY(tempDir.isValid());
+  QString iffPath = tempDir.filePath(QStringLiteral("deluxepaint.iff"));
+
+  SpriteDocument doc;
+  doc.setAtlas(testImg);
+  QList<QImage> frames = { testImg.copy(0, 0, 16, 16) };
+  QList<SpriteBox> boxes = { SpriteBox(QRect(0, 0, 16, 16)) };
+  doc.setFrames(frames, boxes);
+
+  ExportOptions expOpts;
+  ExtractorError writeErr;
+  bool writeOk = extractor.write(iffPath, doc, expOpts, &writeErr);
+  QVERIFY2(writeOk, qPrintable(writeErr.toString()));
+  QVERIFY(QFile::exists(iffPath));
+  QVERIFY(extractor.canDecode(iffPath));
+
+  SpriteDocument readDoc;
+  ExtractorError readErr;
+  bool readDocOk = extractor.read(iffPath, readDoc, &readErr);
+  QVERIFY2(readDocOk, qPrintable(readErr.toString()));
+  QCOMPARE(readDoc.atlas().size(), QSize(32, 32));
+  QVERIFY(readDoc.frameCount() >= 1);
 }
 
 int main(int argc, char *argv[]) {

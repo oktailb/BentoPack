@@ -330,9 +330,11 @@ Pour garantir la fluidité sur des atlas de très haute résolution (8K, 16K) :
 * **✅ Format Apple / Cocos2d-x (`.plist` XML) [Implémenté - `extractor_plist`] :**
   * Support complet des formats Cocos2d-x / TexturePacker (Format 2 et Format 3).
   * Import/Export XML avec découpage de sprites (`textureRect`), offsets (`spriteOffset`), rotation anti-horaire 90°, et texture compagne PNG/VRAM.
-* **Amiga IFF / ILBM (`.iff`, `.lbm`) :**
-  * Le standard sacré de **Deluxe Paint**.
-  * Décodage des bitplanes entrelacés (1 à 8 bpp), modes EHB (*Extra Half-Brite*), et palettes dynamiques embarquées.
+* **✅ Amiga IFF / ILBM (`.iff`, `.lbm`, `.ilbm`) [Implémenté - `extractor_iff`] :**
+  * Le standard sacré de **Deluxe Paint** (Amiga OCS/ECS/AGA & PC MS-DOS).
+  * Décodage et encodage complet des bitplanes entrelacés (1 à 8 bpp, TrueColor 24 bpp, et chunks `PBM ` chunky).
+  * Support matériel du mode **EHB** (*Extra Half-Brite*, 64 couleurs via division RVB/2 des 32 registres) et **HAM6 / HAM8** (*Hold-And-Modify*).
+  * Compression et décompression RLE **ByteRun1** (PackBits Amiga standard), gestion du plan de masque (`mskHasMask`) et couleur transparente (`mskHasTransparentColor`).
 * **✅ ZSoft PCX (`.pcx`) [Implémenté - `extractor_pcx`] :**
   * Le format roi du jeu DOS des années 90 (*Doom, Duke Nukem 3D, Commander Keen, Mortal Kombat PC*).
   * RLE 8-bit indexé avec décodage/encodage direct, marqueur VGA 256 couleurs (`0x0C` à EOF - 769 octets), 24-bit 3-planes, et segmentation automatique via `SpriteDetector`.
