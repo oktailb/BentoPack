@@ -286,15 +286,14 @@ Les développeurs souhaitent apporter de la vie à leurs sprites 2D en les anima
 
 ### 📌 Contexte & Spécifications
 Pour garantir la fluidité sur des atlas de très haute résolution (8K, 16K) :
-1. **Vectorisation SIMD (AVX2 / NEON) :** Accélération des filtres graphiques les plus coûteux (`DespillFilter`, `OutlineFilter`, `ColorSwapFilter`) en traitant 8 pixels 32 bits par cycle AVX2 et 4 pixels par cycle NEON.
-2. **Snapshotting Différentiel Undo (*Dirty Rects*) :** Mémoriser uniquement le sous-rectangle modifié dans l'Éditeur de Pixels plutôt que de cloner l'image entière de l'atlas à chaque coup de pinceau (évite de saturer la mémoire vive).
-
----
-
-## 🌐 Priorité 9 (P4) : Formats Secondaires & Démonstrateur Web Vitrine
-
-1. **Format Apple / Cocos2d-x (`.plist` XML) :** Pour les pipelines historiques iOS / Cocos2d-x (complexité faible).
-2. **Micro-Démonstrateur Web Vitrine (Showcase WASM) :** Petit module WebAssembly ultra-léger sur le site officiel pour tester le rognage et le despill directement dans le navigateur, servant d'entonnoir d'acquisition vers l'application de bureau.
+1. **Snapshotting Différentiel Undo (*Dirty Rects*) & Scanlines Directes (Palier 1 - Complété) :**
+   - Calcul de bounding box différentielle accélérée par `std::memcmp` via [`PixelHash::computeDirtyRect`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/include/image/pixelhash.h).
+   - Intégration de [`patchAtlasDirect`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/include/model/spritedocument.h) et mise à jour de [`ApplyFilterCommand`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/include/commands/filtercommands.h) et [`EditSpritePixelsCommand`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/src/commands/commands.cpp) pour ne stocker que les sous-rectangles modifiés au lieu de cloner l'image entière de l'atlas (division par 100 à 1000 de la RAM Undo sur 4K/8K/16K).
+   - Remplacement des appels lents `QImage::pixel(x,y)` / `setPixel(x,y)` par des accès directs par pointeurs `constScanLine` / `scanLine` et arithmétique binaire dans les filtres (`ColorSwap`, `Despill`, `Outline`, `ColorAdjust`).
+2. **Vectorisation SIMD Dédiée (AVX2 / NEON) (Palier 2 - Complété) :**
+   - Détection dynamique et sécurisée du CPU sans risque de `SIGILL` via [`CpuFeatures::hasAvx2()`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/include/simd/cpu_features.h) et [`CpuFeatures::hasNeon()`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/include/simd/cpu_features.h).
+   - Noyaux vectorisés [`SimdKernels::colorSwapRow`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/include/simd/simd_kernels.h) et [`SimdKernels::despillChromaRow`](file:///home/oktail/Documents/GitHub/BentoPack/BentoPack/include/simd/simd_kernels.h) : calcul simultané sur 8/4 pixels par cycle (`_mm256_cvtepu8_epi16`, `_mm256_madd_epi16`, `_mm_hadd_epi32`, `_mm256_max_epi32`, `_mm256_blendv_epi8`) avec fallback scalaire garanti au bit près.
+   - Compilation ciblée par unité de compilation avec isolation du drapeau `-mavx2` / `/arch:AVX2`.
 
 ---
 
@@ -328,6 +327,7 @@ Pour garantir la fluidité sur des atlas de très haute résolution (8K, 16K) :
   * Reconstitution instantanée de la mémoire vidéo avec fond transparent sans pollution de décor.
 
 ### 2. 💾 Formats Cultes Micro & DOS (Amiga, Atari, PC 90s)
+  **Format Apple / Cocos2d-x (`.plist` XML) :** Pour les pipelines historiques iOS / Cocos2d-x (complexité faible).
 * **Amiga IFF / ILBM (`.iff`, `.lbm`) :**
   * Le standard sacré de **Deluxe Paint**.
   * Décodage des bitplanes entrelacés (1 à 8 bpp), modes EHB (*Extra Half-Brite*), et palettes dynamiques embarquées.

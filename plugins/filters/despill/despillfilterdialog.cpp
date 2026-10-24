@@ -236,7 +236,9 @@ QImage DespillFilterDialog::applyDespill(const QImage &source,
 {
     if (source.isNull()) return source;
 
-    QImage dest = source.convertToFormat(QImage::Format_ARGB32);
+    const QImage src32 = (source.format() == QImage::Format_ARGB32)
+                         ? source : source.convertToFormat(QImage::Format_ARGB32);
+    QImage dest = src32.copy();
     int w = dest.width();
     int h = dest.height();
 
@@ -249,18 +251,18 @@ QImage DespillFilterDialog::applyDespill(const QImage &source,
 
     int modifiedCount = 0;
 
-    auto processPixel = [&](int x, int y) {
+    auto processPixel = [&](int x, int y, const QRgb *prevLine, const QRgb *currLine, const QRgb *nextLine, QRgb *dstLine) {
         if (x < 0 || y < 0 || x >= w || y >= h) return;
-        QRgb p = source.pixel(x, y);
+        QRgb p = currLine[x];
         int a = qAlpha(p);
         if (a == 0) return;
 
-        // Check if adjacent to transparent pixel (border pixel)
+        // Check if adjacent to transparent pixel (border pixel) using fast bitwise checks
         bool isBorder = (x == 0 || y == 0 || x == w - 1 || y == h - 1 ||
-                         qAlpha(source.pixel(x - 1, y)) == 0 ||
-                         qAlpha(source.pixel(x + 1, y)) == 0 ||
-                         qAlpha(source.pixel(x, y - 1)) == 0 ||
-                         qAlpha(source.pixel(x, y + 1)) == 0);
+                         (currLine[x - 1] & 0xFF000000) == 0 ||
+                         (currLine[x + 1] & 0xFF000000) == 0 ||
+                         (prevLine && (prevLine[x] & 0xFF000000) == 0) ||
+                         (nextLine && (nextLine[x] & 0xFF000000) == 0));
 
         if (!isBorder) return;
 
@@ -317,26 +319,28 @@ QImage DespillFilterDialog::applyDespill(const QImage &source,
                     newB = static_cast<int>(std::round(pB * (1.0 - spillFactor) + lum * spillFactor));
                 }
 
-                dest.setPixel(x, y, qRgba(qBound(0, newR, 255), qBound(0, newG, 255), qBound(0, newB, 255), a));
+                dstLine[x] = qRgba(qBound(0, newR, 255), qBound(0, newG, 255), qBound(0, newB, 255), a);
                 modifiedCount++;
             }
         } else if (dE <= maxDeltaE) {
             if (mode == StrictAlpha) {
-                dest.setPixel(x, y, qRgba(0, 0, 0, 0));
+                dstLine[x] = qRgba(0, 0, 0, 0);
                 modifiedCount++;
             } else { // ColorClamping
-                // Color Clamping: find nearest non-fringe opaque neighbor within radius 2 using CIELAB ΔE
                 QRgb bestNeighbor = p;
                 double bestNeighborDeltaE = -1.0;
 
                 for (int dy = -2; dy <= 2; ++dy) {
+                    int ny = y + dy;
+                    if (ny < 0 || ny >= h) continue;
+                    const QRgb *neighborLine = reinterpret_cast<const QRgb*>(src32.constScanLine(ny));
+
                     for (int dx = -2; dx <= 2; ++dx) {
                         if (dx == 0 && dy == 0) continue;
                         int nx = x + dx;
-                        int ny = y + dy;
-                        if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+                        if (nx < 0 || nx >= w) continue;
 
-                        QRgb np = source.pixel(nx, ny);
+                        QRgb np = neighborLine[nx];
                         if (qAlpha(np) > 128) {
                             LabColor npLab = rgbToLab(qRed(np), qGreen(np), qBlue(np));
                             double nDE = deltaE(npLab, fringeLab);
@@ -349,11 +353,11 @@ QImage DespillFilterDialog::applyDespill(const QImage &source,
                 }
 
                 if (bestNeighborDeltaE > maxDeltaE) {
-                    dest.setPixel(x, y, qRgba(qRed(bestNeighbor), qGreen(bestNeighbor), qBlue(bestNeighbor), a));
+                    dstLine[x] = qRgba(qRed(bestNeighbor), qGreen(bestNeighbor), qBlue(bestNeighbor), a);
                     modifiedCount++;
                 } else {
                     // Fully surrounded by fringe: erase
-                    dest.setPixel(x, y, qRgba(0, 0, 0, 0));
+                    dstLine[x] = qRgba(0, 0, 0, 0);
                     modifiedCount++;
                 }
             }
@@ -362,16 +366,26 @@ QImage DespillFilterDialog::applyDespill(const QImage &source,
 
     if (targetAreas.isEmpty()) {
         for (int y = 0; y < h; ++y) {
+            const QRgb *prevLine = (y > 0) ? reinterpret_cast<const QRgb*>(src32.constScanLine(y - 1)) : nullptr;
+            const QRgb *currLine = reinterpret_cast<const QRgb*>(src32.constScanLine(y));
+            const QRgb *nextLine = (y < h - 1) ? reinterpret_cast<const QRgb*>(src32.constScanLine(y + 1)) : nullptr;
+            QRgb *dstLine = reinterpret_cast<QRgb*>(dest.scanLine(y));
+
             for (int x = 0; x < w; ++x) {
-                processPixel(x, y);
+                processPixel(x, y, prevLine, currLine, nextLine, dstLine);
             }
         }
     } else {
         for (const QRect &rect : targetAreas) {
             QRect bounded = rect.intersected(QRect(0, 0, w, h));
             for (int y = bounded.top(); y <= bounded.bottom(); ++y) {
+                const QRgb *prevLine = (y > 0) ? reinterpret_cast<const QRgb*>(src32.constScanLine(y - 1)) : nullptr;
+                const QRgb *currLine = reinterpret_cast<const QRgb*>(src32.constScanLine(y));
+                const QRgb *nextLine = (y < h - 1) ? reinterpret_cast<const QRgb*>(src32.constScanLine(y + 1)) : nullptr;
+                QRgb *dstLine = reinterpret_cast<QRgb*>(dest.scanLine(y));
+
                 for (int x = bounded.left(); x <= bounded.right(); ++x) {
-                    processPixel(x, y);
+                    processPixel(x, y, prevLine, currLine, nextLine, dstLine);
                 }
             }
         }

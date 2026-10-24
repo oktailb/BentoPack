@@ -16,6 +16,7 @@
 
 #include "colorswapfilterdialog.h"
 #include "commands/filtercommands.h"
+#include "simd/simd_kernels.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -182,7 +183,9 @@ QImage ColorSwapFilterDialog::applyColorSwap(const QImage &source,
 {
     if (source.isNull()) return source;
 
-    QImage dest = source.convertToFormat(QImage::Format_ARGB32);
+    const QImage src32 = (source.format() == QImage::Format_ARGB32)
+                         ? source : source.convertToFormat(QImage::Format_ARGB32);
+    QImage dest = src32.copy();
     int w = dest.width();
     int h = dest.height();
 
@@ -198,55 +201,32 @@ QImage ColorSwapFilterDialog::applyColorSwap(const QImage &source,
     int dS = dstCol.hsvSaturation();
     int dV = dstCol.value();
 
-    double maxDist = tolerance * 4.4167;
-    double maxDistSq = maxDist * maxDist;
+    const double maxDist = tolerance * 4.4167;
+    const int maxDistSqInt = static_cast<int>(std::round(maxDist * maxDist));
+    const QRgb dstRgbBase = qRgb(qRed(dstColor), qGreen(dstColor), qBlue(dstColor));
 
     int modifiedCount = 0;
 
-    auto processPixel = [&](int x, int y) {
-        if (x < 0 || y < 0 || x >= w || y >= h) return;
-        QRgb p = source.pixel(x, y);
-        int a = qAlpha(p);
-        if (a == 0) return;
+    auto processScanlineRange = [&](int y, int startX, int endX) {
+        const QRgb *srcLine = reinterpret_cast<const QRgb*>(src32.constScanLine(y));
+        QRgb *dstLine = reinterpret_cast<QRgb*>(dest.scanLine(y));
+        const int count = endX - startX + 1;
+        if (count <= 0) return;
 
-        int dR = qRed(p) - sr;
-        int dG = qGreen(p) - sg;
-        int dB = qBlue(p) - sb;
-        double distSq = dR * dR + dG * dG + dB * dB;
-
-        if (distSq <= maxDistSq) {
-            if (preserveShading) {
-                QColor pCol(p);
-                int pV = pCol.value();
-                int pS = pCol.hsvSaturation();
-
-                // Proportional shading & saturation modulation
-                int newV = (sV > 0) ? qBound(0, (pV * dV) / sV, 255) : dV;
-                int newS = (sS > 0) ? qBound(0, (pS * dS) / sS, 255) : dS;
-
-                QColor swapped;
-                swapped.setHsv(dH >= 0 ? dH : 0, newS, newV, a);
-                dest.setPixel(x, y, swapped.rgba());
-            } else {
-                dest.setPixel(x, y, qRgba(qRed(dstColor), qGreen(dstColor), qBlue(dstColor), a));
-            }
-            modifiedCount++;
-        }
+        modifiedCount += SimdKernels::colorSwapRow(srcLine + startX, dstLine + startX, count,
+                                                   sr, sg, sb, maxDistSqInt, dstRgbBase,
+                                                   preserveShading, sV, sS, dH, dS, dV);
     };
 
     if (targetAreas.isEmpty()) {
         for (int y = 0; y < h; ++y) {
-            for (int x = 0; x < w; ++x) {
-                processPixel(x, y);
-            }
+            processScanlineRange(y, 0, w - 1);
         }
     } else {
         for (const QRect &rect : targetAreas) {
             QRect bounded = rect.intersected(QRect(0, 0, w, h));
             for (int y = bounded.top(); y <= bounded.bottom(); ++y) {
-                for (int x = bounded.left(); x <= bounded.right(); ++x) {
-                    processPixel(x, y);
-                }
+                processScanlineRange(y, bounded.left(), bounded.right());
             }
         }
     }

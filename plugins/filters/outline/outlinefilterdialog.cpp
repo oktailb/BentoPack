@@ -194,13 +194,16 @@ QImage OutlineFilterDialog::applyOutline(const QImage &source,
 {
     if (source.isNull()) return source;
 
-    QImage dest = source.convertToFormat(QImage::Format_ARGB32);
+    const QImage src32 = (source.format() == QImage::Format_ARGB32)
+                         ? source : source.convertToFormat(QImage::Format_ARGB32);
+    QImage dest = src32.copy();
     int w = dest.width();
     int h = dest.height();
 
     int strokeR = qRed(strokeColor);
     int strokeG = qGreen(strokeColor);
     int strokeB = qBlue(strokeColor);
+    const QRgb solidStroke = qRgba(strokeR, strokeG, strokeB, 255);
 
     auto isInRange = [&](int dx, int dy) -> bool {
         if (connectivity == FourConnected) {
@@ -213,26 +216,32 @@ QImage OutlineFilterDialog::applyOutline(const QImage &source,
     auto processRegion = [&](const QRect &boundRect) {
         QRect r = boundRect.intersected(QRect(0, 0, w, h));
         for (int y = r.top(); y <= r.bottom(); ++y) {
+            const QRgb *srcLine = reinterpret_cast<const QRgb*>(src32.constScanLine(y));
+            QRgb *dstLine = reinterpret_cast<QRgb*>(dest.scanLine(y));
+
             for (int x = r.left(); x <= r.right(); ++x) {
-                QRgb p = source.pixel(x, y);
-                int a = qAlpha(p);
+                const QRgb p = srcLine[x];
+                const int a = qAlpha(p);
 
                 if (a > 0) {
                     if (silhouette) {
-                        dest.setPixel(x, y, qRgba(strokeR, strokeG, strokeB, a));
+                        dstLine[x] = qRgba(strokeR, strokeG, strokeB, a);
                     }
                 } else {
                     // Transparent pixel: check if neighbor within radius is opaque
                     bool foundOpaque = false;
                     for (int dy = -thickness; dy <= thickness && !foundOpaque; ++dy) {
+                        int ny = y + dy;
+                        if (ny < 0 || ny >= h) continue;
+                        const QRgb *neighborLine = reinterpret_cast<const QRgb*>(src32.constScanLine(ny));
+
                         for (int dx = -thickness; dx <= thickness && !foundOpaque; ++dx) {
                             if (dx == 0 && dy == 0) continue;
                             if (!isInRange(dx, dy)) continue;
 
                             int nx = x + dx;
-                            int ny = y + dy;
-                            if (nx >= 0 && ny >= 0 && nx < w && ny < h) {
-                                if (qAlpha(source.pixel(nx, ny)) > 0) {
+                            if (nx >= 0 && nx < w) {
+                                if ((neighborLine[nx] & 0xFF000000) != 0) {
                                     foundOpaque = true;
                                 }
                             }
@@ -240,7 +249,7 @@ QImage OutlineFilterDialog::applyOutline(const QImage &source,
                     }
 
                     if (foundOpaque) {
-                        dest.setPixel(x, y, qRgba(strokeR, strokeG, strokeB, 255));
+                        dstLine[x] = solidStroke;
                     }
                 }
             }

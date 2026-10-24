@@ -217,6 +217,7 @@ public:
     const QImage& atlas() const { return m_atlas; }
     void setAtlas(const QImage &image);
     void patchAtlas(const QRect &rect, const QImage &patch);
+    void patchAtlasDirect(const QRect &rect, const QImage &patch);
     void clearAtlasRegion(const QRect &rect);
     void recompositeAtlas();
 

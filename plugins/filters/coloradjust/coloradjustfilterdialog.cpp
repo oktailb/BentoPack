@@ -198,7 +198,9 @@ QImage ColorAdjustFilterDialog::applyColorAdjust(const QImage &source,
         return source;
     }
 
-    QImage dest = source.convertToFormat(QImage::Format_ARGB32);
+    const QImage src32 = (source.format() == QImage::Format_ARGB32)
+                         ? source : source.convertToFormat(QImage::Format_ARGB32);
+    QImage dest = src32.copy();
     int w = dest.width();
     int h = dest.height();
 
@@ -209,71 +211,71 @@ QImage ColorAdjustFilterDialog::applyColorAdjust(const QImage &source,
         contrastFactor = (259.0 * (cVal + 255.0)) / (255.0 * (259.0 - cVal));
     }
 
-    auto processPixel = [&](int x, int y) {
-        if (x < 0 || y < 0 || x >= w || y >= h) return;
-        QRgb p = source.pixel(x, y);
-        int a = qAlpha(p);
-        if (a == 0) return;
+    auto processScanlineRange = [&](int y, int startX, int endX) {
+        const QRgb *srcLine = reinterpret_cast<const QRgb*>(src32.constScanLine(y));
+        QRgb *dstLine = reinterpret_cast<QRgb*>(dest.scanLine(y));
 
-        QColor col(p);
-        int hue = col.hsvHue();
-        int sat = col.hsvSaturation();
-        int val = col.value();
+        for (int x = startX; x <= endX; ++x) {
+            const QRgb p = srcLine[x];
+            const int a = qAlpha(p);
+            if (a == 0) continue;
 
-        // 1. Hue Rotation
-        if (hueShift != 0) {
-            if (hue < 0) hue = 0;
-            hue = (hue + hueShift) % 360;
-            if (hue < 0) hue += 360;
-        }
+            QColor col(p);
+            int hue = col.hsvHue();
+            int sat = col.hsvSaturation();
+            int val = col.value();
 
-        // 2. Saturation Scaling
-        if (satShift != 0) {
-            if (satShift > 0) {
-                sat = sat + qRound((255 - sat) * (satShift / 100.0));
-            } else {
-                sat = sat + qRound(sat * (satShift / 100.0));
+            // 1. Hue Rotation
+            if (hueShift != 0) {
+                if (hue < 0) hue = 0;
+                hue = (hue + hueShift) % 360;
+                if (hue < 0) hue += 360;
             }
-            sat = qBound(0, sat, 255);
-        }
 
-        // 3. Brightness / Value Scaling
-        if (valShift != 0) {
-            if (valShift > 0) {
-                val = val + qRound((255 - val) * (valShift / 100.0));
-            } else {
-                val = val + qRound(val * (valShift / 100.0));
+            // 2. Saturation Scaling
+            if (satShift != 0) {
+                if (satShift > 0) {
+                    sat = sat + qRound((255 - sat) * (satShift / 100.0));
+                } else {
+                    sat = sat + qRound(sat * (satShift / 100.0));
+                }
+                sat = qBound(0, sat, 255);
             }
-            val = qBound(0, val, 255);
-        }
 
-        QColor adjusted;
-        adjusted.setHsv(hue < 0 ? 0 : hue, sat, val, a);
+            // 3. Brightness / Value Scaling
+            if (valShift != 0) {
+                if (valShift > 0) {
+                    val = val + qRound((255 - val) * (valShift / 100.0));
+                } else {
+                    val = val + qRound(val * (valShift / 100.0));
+                }
+                val = qBound(0, val, 255);
+            }
 
-        // 4. Contrast Adjustment
-        if (contrastShift != 0) {
-            int r = qBound(0, qRound(contrastFactor * (adjusted.red() - 128) + 128), 255);
-            int g = qBound(0, qRound(contrastFactor * (adjusted.green() - 128) + 128), 255);
-            int b = qBound(0, qRound(contrastFactor * (adjusted.blue() - 128) + 128), 255);
-            dest.setPixel(x, y, qRgba(r, g, b, a));
-        } else {
-            dest.setPixel(x, y, adjusted.rgba());
+            QColor adjusted;
+            adjusted.setHsv(hue < 0 ? 0 : hue, sat, val, a);
+
+            // 4. Contrast Adjustment
+            if (contrastShift != 0) {
+                int r = qBound(0, qRound(contrastFactor * (adjusted.red() - 128) + 128), 255);
+                int g = qBound(0, qRound(contrastFactor * (adjusted.green() - 128) + 128), 255);
+                int b = qBound(0, qRound(contrastFactor * (adjusted.blue() - 128) + 128), 255);
+                dstLine[x] = qRgba(r, g, b, a);
+            } else {
+                dstLine[x] = adjusted.rgba();
+            }
         }
     };
 
     if (targetAreas.isEmpty()) {
         for (int y = 0; y < h; ++y) {
-            for (int x = 0; x < w; ++x) {
-                processPixel(x, y);
-            }
+            processScanlineRange(y, 0, w - 1);
         }
     } else {
         for (const QRect &rect : targetAreas) {
             QRect bounded = rect.intersected(QRect(0, 0, w, h));
             for (int y = bounded.top(); y <= bounded.bottom(); ++y) {
-                for (int x = bounded.left(); x <= bounded.right(); ++x) {
-                    processPixel(x, y);
-                }
+                processScanlineRange(y, bounded.left(), bounded.right());
             }
         }
     }

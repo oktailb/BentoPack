@@ -18,6 +18,7 @@
 #define PIXELHASH_H
 
 #include <QImage>
+#include <QRect>
 #include <QtCore/qglobal.h>
 #include "bentopackcore_export.h"
 
@@ -55,6 +56,12 @@ public:
      * Evaluates layer index, layer ID, coordinates, opacity, and image contents.
      */
     static bool areCelsIdentical(const SpriteCel &a, const SpriteCel &b);
+
+    /**
+     * @brief Computes the bounding dirty rectangle enclosing all pixel differences between two images.
+     * Uses fast 64-bit memcmp scanline comparisons. Returns empty QRect if images are identical.
+     */
+    static QRect computeDirtyRect(const QImage &a, const QImage &b);
 
     /**
      * @brief Generic 64-bit XXH3 data hashing helper.

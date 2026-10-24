@@ -51,12 +51,17 @@ public:
 
 private:
     SpriteDocument*                 m_doc;
-    QImage                          m_oldAtlas;
+    QRect                           m_atlasDirtyRect;
+    QImage                          m_oldAtlasPatch;
+    QImage                          m_newAtlasPatch;
+    QImage                          m_oldAtlasFallback;
+    QImage                          m_newAtlasFallback;
+    bool                            m_isFullAtlasReplacement = false;
+
     QList<QImage>                  m_oldFrames;
     QList<SpriteBox>                m_oldBoxes;
     QMap<QString, SpriteAnimation>  m_oldAnimations;
 
-    QImage                          m_newAtlas;
     QList<QImage>                  m_newFrames;
     QList<SpriteBox>                m_newBoxes;
     QMap<QString, SpriteAnimation>  m_newAnimations;

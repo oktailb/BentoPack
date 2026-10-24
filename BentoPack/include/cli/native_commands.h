@@ -31,6 +31,7 @@ public:
     static CliResult executeFilter(const QStringList &args);
     static CliResult executeBento(const QStringList &args);
     static CliResult executeSsp(const QStringList &args) { return executeBento(args); }
+    static CliResult executeBenchmark(const QStringList &args);
     static CliResult executeSchema();
 };
 

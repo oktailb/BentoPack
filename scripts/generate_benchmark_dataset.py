@@ -310,6 +310,45 @@ def generate_massive_batch():
 
     print(f"[OK] Generated massive batch (500 procedural items) in {out_dir}")
 
+# ----------------------------------------------------------------------
+# 7. High-Resolution Atlases for M14 SIMD & Dirty-Rect Benchmarks (2K & 4K)
+# ----------------------------------------------------------------------
+def generate_high_res_sheets():
+    out_dir = os.path.join(DATASET_DIR, "high_res")
+    ensure_dir(out_dir)
+
+    # 1. 2K Atlas for Color Swap (2048 x 2048, 4.19 Mpixels)
+    atlas_2k_swap = Image.new("RGBA", (2048, 2048), (20, 24, 32, 255))
+    d_swap = ImageDraw.Draw(atlas_2k_swap)
+    for y in range(0, 2048, 64):
+        for x in range(0, 2048, 64):
+            # Target green tunic/armor with border
+            d_swap.rectangle([x + 6, y + 6, x + 58, y + 58], fill=(0, 200, 0, 255), outline=(10, 10, 10, 255))
+            d_swap.ellipse([x + 18, y + 18, x + 46, y + 46], fill=(10, 195, 5, 255))
+            d_swap.rectangle([x + 26, y + 26, x + 38, y + 38], fill=(220, 20, 20, 255))
+    atlas_2k_swap.save(os.path.join(out_dir, "atlas_2k_recolor.png"), "PNG")
+
+    # 2. 2K Atlas for Despill Chroma (2048 x 2048, 4.19 Mpixels)
+    atlas_2k_spill = Image.new("RGBA", (2048, 2048), (0, 0, 0, 0))
+    d_spill = ImageDraw.Draw(atlas_2k_spill)
+    for y in range(0, 2048, 64):
+        for x in range(0, 2048, 64):
+            # Body in red/skin tone surrounded by green fringe
+            d_spill.rectangle([x + 10, y + 10, x + 54, y + 54], fill=(210, 140, 90, 255), outline=(30, 210, 40, 255))
+            d_spill.ellipse([x + 18, y + 18, x + 46, y + 46], fill=(180, 50, 60, 255), outline=(30, 210, 40, 255))
+    atlas_2k_spill.save(os.path.join(out_dir, "atlas_2k_spill.png"), "PNG")
+
+    # 3. 4K Master Atlas (4096 x 4096, 16.78 Mpixels) for stress and dirty-rect differential undo
+    atlas_4k = Image.new("RGBA", (4096, 4096), (15, 18, 24, 255))
+    d_4k = ImageDraw.Draw(atlas_4k)
+    for y in range(0, 4096, 128):
+        for x in range(0, 4096, 128):
+            d_4k.rectangle([x + 8, y + 8, x + 120, y + 120], fill=(60, 90, 130, 255), outline=(255, 215, 0, 255))
+            d_4k.ellipse([x + 36, y + 36, x + 92, y + 92], fill=(220, 60, 60, 255))
+    atlas_4k.save(os.path.join(out_dir, "atlas_4k_master.png"), "PNG")
+
+    print(f"[OK] Generated high-res atlases (2K recolor, 2K despill, 4K master) in {out_dir}")
+
 def main():
     print("=" * 70)
     print("Generating Comprehensive Benchmark Dataset for BentoPack CLI...")
@@ -321,6 +360,7 @@ def main():
     generate_trim_stress()
     generate_raw_sheets()
     generate_massive_batch()
+    generate_high_res_sheets()
     print("=" * 70)
     print(f"Dataset successfully created in: {DATASET_DIR}")
     print("=" * 70)

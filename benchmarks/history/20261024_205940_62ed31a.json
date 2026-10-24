@@ -1,0 +1,279 @@
+{
+  "timestamp": "2026-10-24 20:59:40",
+  "commit": "62ed31a",
+  "branch": "main",
+  "total_tests": 28,
+  "passed_tests": 28,
+  "pass_rate": 100.0,
+  "total_duration_ms": 3751.58,
+  "throughput_fps": 3976.8,
+  "simd_arch": "AVX2 (256-bit SIMD)",
+  "simd_despill_speedup": 33.25,
+  "simd_colorswap_speedup": 11.26,
+  "simd_despill_mpx_sec": 3241.1,
+  "simd_colorswap_mpx_sec": 1845.8,
+  "memory_saved_percent": 99.9,
+  "results": [
+    {
+      "name": "TP_MaxRects_BSSF",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 47.51,
+      "details": "MaxRects BestShortSideFit + Extrude 1",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_MaxRects_BAF",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 47.43,
+      "details": "MaxRects BestAreaFit heuristic",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_MaxRects_BLSF",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 43.94,
+      "details": "MaxRects BestLongSideFit heuristic",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_MaxRects_BottomLeft",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 43.56,
+      "details": "MaxRects BottomLeft heuristic",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_MaxRects_ContactPoint",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 50.59,
+      "details": "MaxRects ContactPoint heuristic",
+      "metrics": {
+        "frames": 12
+      }
+    },
+    {
+      "name": "TP_SizeConstraints_POT",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 64.67,
+      "details": "Power-Of-Two forced: 512x256",
+      "metrics": {
+        "w": 512,
+        "h": 256
+      }
+    },
+    {
+      "name": "TP_Extrude_Border",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 48.77,
+      "details": "Border pixel extrusion 2px anti-bleeding",
+      "metrics": {}
+    },
+    {
+      "name": "TP_Trim_Mode_Trim",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 48.64,
+      "details": "Transparency trimmed (20 frames)",
+      "metrics": {}
+    },
+    {
+      "name": "TP_AutoAlias_Deduplication",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 53.3,
+      "details": "100 frames compacted to 40 unique atlas regions (60% saved)",
+      "metrics": {
+        "unique_frames": 40
+      }
+    },
+    {
+      "name": "TP_AutoAlias_Disabled",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 59.13,
+      "details": "All 100 frames preserved without deduplication",
+      "metrics": {}
+    },
+    {
+      "name": "TP_CustomPivots",
+      "category": "TexturePacker",
+      "status": "PASS",
+      "duration_ms": 47.85,
+      "details": "Normalized pivot point (0.5, 1.0) validated in JSON",
+      "metrics": {}
+    },
+    {
+      "name": "Aseprite_Packed",
+      "category": "Aseprite",
+      "status": "PASS",
+      "duration_ms": 46.9,
+      "details": "Aseprite -b batch packed mode",
+      "metrics": {}
+    },
+    {
+      "name": "Aseprite_RowPacker",
+      "category": "Aseprite",
+      "status": "PASS",
+      "duration_ms": 43.62,
+      "details": "Horizontal row filmstrip arrangement",
+      "metrics": {}
+    },
+    {
+      "name": "Aseprite_GridPacker",
+      "category": "Aseprite",
+      "status": "PASS",
+      "duration_ms": 45.63,
+      "details": "Matrix uniform grid layout",
+      "metrics": {}
+    },
+    {
+      "name": "Aseprite_ListTags",
+      "category": "Aseprite",
+      "status": "PASS",
+      "duration_ms": 1436.76,
+      "details": "frameTags exported (1 animation tags found)",
+      "metrics": {}
+    },
+    {
+      "name": "Godot_SpriteFrames",
+      "category": "Godot 4",
+      "status": "PASS",
+      "duration_ms": 46.13,
+      "details": "Native SpriteFrames (.tres) with AtlasTexture sub-resources",
+      "metrics": {}
+    },
+    {
+      "name": "Godot_UID_Preservation",
+      "category": "Godot 4",
+      "status": "PASS",
+      "duration_ms": 89.81,
+      "details": "UID preserved across builds: uid://1a010fbdeee5",
+      "metrics": {}
+    },
+    {
+      "name": "Godot_SceneGen",
+      "category": "Godot 4",
+      "status": "PASS",
+      "duration_ms": 45.19,
+      "details": "AnimatedSprite2D (.tscn) scene generated & ready to instantiate",
+      "metrics": {}
+    },
+    {
+      "name": "Native_Slice_Raw",
+      "category": "Native Commands",
+      "status": "PASS",
+      "duration_ms": 41.52,
+      "details": "Segmented 16 sprites from transparent sheet in O(N)",
+      "metrics": {}
+    },
+    {
+      "name": "Native_Slice_RemoveBg",
+      "category": "Native Commands",
+      "status": "PASS",
+      "duration_ms": 40.35,
+      "details": "Dominant background removed + 16 sprites segmented",
+      "metrics": {}
+    },
+    {
+      "name": "Native_Filter_Despill",
+      "category": "Native Commands",
+      "status": "PASS",
+      "duration_ms": 42.96,
+      "details": "Despill edge cleanup filter applied headless",
+      "metrics": {}
+    },
+    {
+      "name": "Native_Filter_Outline",
+      "category": "Native Commands",
+      "status": "PASS",
+      "duration_ms": 43.76,
+      "details": "2px red procedural silhouette outline applied",
+      "metrics": {}
+    },
+    {
+      "name": "POSIX_ExitCodes",
+      "category": "Compliance",
+      "status": "PASS",
+      "duration_ms": 101.48,
+      "details": "Strict POSIX codes verified: 1 (syntax), 2 (not found), 3 (constraints)",
+      "metrics": {}
+    },
+    {
+      "name": "Massive_500_Stress",
+      "category": "Scalability",
+      "status": "PASS",
+      "duration_ms": 125.73,
+      "details": "Packed 500 frames into 718x718 atlas (77.1% occupancy) at 3976.8 frames/sec",
+      "metrics": {
+        "throughput_fps": 3976.8,
+        "efficiency": 77.1,
+        "dimensions": "718x718"
+      }
+    },
+    {
+      "name": "M14_SIMD_ColorSwap_2K",
+      "category": "SIMD Acceleration (M14)",
+      "status": "PASS",
+      "duration_ms": 345.31,
+      "details": "Recolored 2048x2048 (4.19 Mpx) atlas at 28.1 Mpx/sec (AVX2 (256-bit SIMD))",
+      "metrics": {
+        "throughput_mpx_sec": 28.1,
+        "simd_arch": "AVX2 (256-bit SIMD)",
+        "resolution": "2048x2048"
+      }
+    },
+    {
+      "name": "M14_SIMD_Despill_2K",
+      "category": "SIMD Acceleration (M14)",
+      "status": "PASS",
+      "duration_ms": 264.69,
+      "details": "Despilled 2048x2048 (4.19 Mpx) atlas at 72.3 Mpx/sec (AVX2 (256-bit SIMD))",
+      "metrics": {
+        "throughput_mpx_sec": 72.3,
+        "simd_arch": "AVX2 (256-bit SIMD)",
+        "resolution": "2048x2048"
+      }
+    },
+    {
+      "name": "M14_SIMD_Microbench_Speedup",
+      "category": "SIMD Acceleration (M14)",
+      "status": "PASS",
+      "duration_ms": 304.61,
+      "details": "Hardware acceleration: Despill 33.25x (3241.1 Mpx/s), ColorSwap 11.26x (1845.8 Mpx/s) [AVX2 (256-bit SIMD)]",
+      "metrics": {
+        "color_swap_speedup": 11.26,
+        "despill_speedup": 33.25,
+        "color_swap_mpx_sec": 1845.8,
+        "despill_mpx_sec": 3241.1,
+        "simd_arch": "AVX2 (256-bit SIMD)"
+      }
+    },
+    {
+      "name": "M14_DirtyRect_Differential_Undo",
+      "category": "Dirty-Rect Memory (M14)",
+      "status": "PASS",
+      "duration_ms": 131.74,
+      "details": "4K Atlas (64 MB): 99.9% RAM saved via 128x128 patch (64 KB) [diff: 79751.2 \u00b5s, patch: 5902.8 \u00b5s]",
+      "metrics": {
+        "memory_saved_percent": 99.9,
+        "compute_dirty_rect_us": 79751.2,
+        "patch_atlas_us": 5902.8
+      }
+    }
+  ]
+}

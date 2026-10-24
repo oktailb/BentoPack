@@ -76,8 +76,38 @@ set(BentoPackCore_SRC
     src/geometry/triangulator.cpp
     src/geometry/polygonmerger.cpp
     src/commands/meshcommands.cpp
+    src/simd/cpu_features.cpp
+    src/simd/simd_kernels_scalar.cpp
     ${CMAKE_SOURCE_DIR}/palettes/palettes.qrc
 )
+
+# SIMD Architecture & Hardware Acceleration Support (Chantier M14 - Palier 2)
+include(CheckCXXCompilerFlag)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[3-6]86")
+    check_cxx_compiler_flag("-mavx2" COMPILER_SUPPORTS_AVX2)
+    if(COMPILER_SUPPORTS_AVX2)
+        set(AVX2_COMPILE_FLAGS "-mavx2 -O3")
+    elseif(MSVC)
+        check_cxx_compiler_flag("/arch:AVX2" COMPILER_SUPPORTS_MSVC_AVX2)
+        if(COMPILER_SUPPORTS_MSVC_AVX2)
+            set(COMPILER_SUPPORTS_AVX2 TRUE)
+            set(AVX2_COMPILE_FLAGS "/arch:AVX2")
+        endif()
+    endif()
+endif()
+
+if(COMPILER_SUPPORTS_AVX2)
+    message(STATUS "AVX2 SIMD acceleration enabled for BentoPack filters")
+    list(APPEND BentoPackCore_SRC src/simd/simd_kernels_avx2.cpp)
+    set_source_files_properties(src/simd/simd_kernels_avx2.cpp PROPERTIES COMPILE_FLAGS "${AVX2_COMPILE_FLAGS}")
+    add_compile_definitions(BENTOPACK_HAS_AVX2)
+endif()
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
+    message(STATUS "ARM NEON SIMD acceleration enabled for BentoPack filters")
+    list(APPEND BentoPackCore_SRC src/simd/simd_kernels_neon.cpp)
+    add_compile_definitions(BENTOPACK_HAS_NEON)
+endif()
 
 # Copy palettes directory to build bin directory for runtime discovery
 file(COPY "${CMAKE_SOURCE_DIR}/palettes" DESTINATION "${CMAKE_BINARY_DIR}/bin")

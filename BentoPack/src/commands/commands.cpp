@@ -678,12 +678,29 @@ EditSpritePixelsCommand::EditSpritePixelsCommand(SpriteDocument *doc,
                                                  QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_doc(doc)
-    , m_oldAtlas(oldAtlas)
-    , m_newAtlas(newAtlas)
 {
     m_oldFrames[frameIndex] = oldFrame;
     m_newFrames[frameIndex] = newFrame;
     setText(QObject::tr("Edit Frame %1 Pixels").arg(frameIndex + 1));
+
+    if (m_doc && !m_doc->atlas().isNull() && frameIndex >= 0 && frameIndex < m_doc->boxes().size()) {
+        const SpriteBox &b = m_doc->box(frameIndex);
+        if (!b.rect.isNull()) {
+            QRect r = b.rect.intersected(m_doc->atlas().rect());
+            if (!r.isEmpty()) {
+                FramePatch fp;
+                fp.rect = r;
+                fp.oldPatch = !oldAtlas.isNull() ? oldAtlas.copy(r) : m_doc->atlas().copy(r);
+                fp.newPatch = !newAtlas.isNull() ? newAtlas.copy(r) : newFrame;
+                m_framePatches.append(fp);
+            }
+        }
+    }
+
+    if (m_framePatches.isEmpty()) {
+        m_oldAtlas = oldAtlas;
+        m_newAtlas = newAtlas;
+    }
 }
 
 void EditSpritePixelsCommand::redo()

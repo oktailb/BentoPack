@@ -172,3 +172,51 @@ bool PixelHash::areCelsIdentical(const SpriteCel &a, const SpriteCel &b)
 
     return areImagesIdentical(a.image, b.image);
 }
+
+QRect PixelHash::computeDirtyRect(const QImage &a, const QImage &b)
+{
+    if (a.isNull() || b.isNull() || a.size() != b.size()) {
+        int w = std::max(a.width(), b.width());
+        int h = std::max(a.height(), b.height());
+        return (w > 0 && h > 0) ? QRect(0, 0, w, h) : QRect();
+    }
+
+    if (areImagesIdentical(a, b)) {
+        return QRect();
+    }
+
+    const int w = a.width();
+    const int h = a.height();
+
+    const QImage imgA = (a.format() == QImage::Format_ARGB32) ? a : a.convertToFormat(QImage::Format_ARGB32);
+    const QImage imgB = (b.format() == QImage::Format_ARGB32) ? b : b.convertToFormat(QImage::Format_ARGB32);
+
+    int minX = w, maxX = -1;
+    int minY = h, maxY = -1;
+
+    const int bytesPerLine = w * static_cast<int>(sizeof(QRgb));
+
+    for (int y = 0; y < h; ++y) {
+        const QRgb *lineA = reinterpret_cast<const QRgb*>(imgA.constScanLine(y));
+        const QRgb *lineB = reinterpret_cast<const QRgb*>(imgB.constScanLine(y));
+
+        if (std::memcmp(lineA, lineB, bytesPerLine) == 0) {
+            continue;
+        }
+
+        for (int x = 0; x < w; ++x) {
+            if (lineA[x] != lineB[x]) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+            }
+        }
+    }
+
+    if (maxX < minX || maxY < minY) {
+        return QRect();
+    }
+
+    return QRect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+}

@@ -34,6 +34,9 @@
 #include "aboutdialog.h"
 #include "localizationmanager.h"
 #include "config/appconfig.h"
+#include "image/pixelhash.h"
+#include "simd/cpu_features.h"
+#include "simd/simd_kernels.h"
 
 class TestFilters : public QObject
 {
@@ -57,6 +60,11 @@ private slots:
     void testPixelRescaleFilterAlgorithm();
     void testRetroPaletteFilterAlgorithm();
     void testApplyFilterCommandUndoRedo();
+    void testComputeDirtyRect();
+    void testDifferentialAtlasFilterUndoRedo();
+    void testCpuFeatures();
+    void testSimdColorSwapRowAccuracy();
+    void testSimdDespillChromaRowAccuracy();
     void testFilterAutoDetectBoxes();
     void testAtlasPackingFilterInteractive();
     void testSpriteDetectionFilterInteractive();
@@ -669,6 +677,220 @@ void TestFilters::testApplyFilterCommandUndoRedo()
     stack.redo();
     QCOMPARE(qBlue(doc.atlas().pixel(0, 0)), 255);
     QCOMPARE(qRed(doc.atlas().pixel(0, 0)), 0);
+}
+
+void TestFilters::testComputeDirtyRect()
+{
+    // 1. Identical images -> empty dirty rect
+    QImage img1(64, 64, QImage::Format_ARGB32);
+    img1.fill(qRgb(10, 20, 30));
+    QImage img2 = img1.copy();
+    QVERIFY(PixelHash::computeDirtyRect(img1, img2).isEmpty());
+
+    // 2. Localized rectangular patch modification
+    // Modify pixels from (15, 10) to (34, 29) -> width 20, height 20
+    for (int y = 10; y < 30; ++y) {
+        for (int x = 15; x < 35; ++x) {
+            img2.setPixel(x, y, qRgb(200, 150, 100));
+        }
+    }
+    QRect dirty = PixelHash::computeDirtyRect(img1, img2);
+    QCOMPARE(dirty, QRect(15, 10, 20, 20));
+
+    // 3. Null or mismatched sizes
+    QImage img3(32, 32, QImage::Format_ARGB32);
+    QRect fullBound = PixelHash::computeDirtyRect(img1, img3);
+    QCOMPARE(fullBound, QRect(0, 0, 64, 64));
+    QVERIFY(PixelHash::computeDirtyRect(QImage(), img1).isValid());
+}
+
+void TestFilters::testDifferentialAtlasFilterUndoRedo()
+{
+    // Test large atlas differential undo snapshotting (Chantier M14 - Palier 1)
+    SpriteDocument doc;
+    // Create an atlas (128x128) representing a high-res master atlas
+    QImage initialAtlas(128, 128, QImage::Format_ARGB32);
+    initialAtlas.fill(qRgb(10, 10, 10)); // Dark grey background
+    doc.setAtlas(initialAtlas);
+
+    SpriteBox box;
+    box.rect = QRect(20, 25, 16, 16);
+    box.index = 0;
+    QImage spriteFrame(16, 16, QImage::Format_ARGB32);
+    spriteFrame.fill(qRgb(255, 0, 0)); // Red sprite
+    doc.setFrames({ spriteFrame }, { box });
+
+    // Composite initial red sprite onto atlas
+    doc.patchAtlasDirect(box.rect, spriteFrame);
+    QCOMPARE(doc.atlas().pixel(25, 30), qRgb(255, 0, 0));
+    QCOMPARE(doc.atlas().pixel(0, 0), qRgb(10, 10, 10));
+
+    // Simulate filter applying to that specific sprite (turning it Green)
+    QImage filteredAtlas = doc.atlas().copy();
+    QImage filteredFrame = spriteFrame.copy();
+    filteredFrame.fill(qRgb(0, 255, 0)); // Green sprite
+    {
+        QPainter p(&filteredAtlas);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+        p.drawImage(box.rect.topLeft(), filteredFrame);
+    }
+
+    QUndoStack stack;
+    auto *cmd = new ApplyFilterCommand(&doc, QStringLiteral("Recolor Sprite"),
+                                       doc.atlas(), doc.frames(), doc.boxes(), doc.animations(),
+                                       filteredAtlas, { filteredFrame }, { box }, doc.animations());
+    stack.push(cmd);
+
+    // After redo / push: sprite should be green, surroundings untouched
+    QCOMPARE(doc.atlas().pixel(25, 30), qRgb(0, 255, 0));
+    QCOMPARE(doc.atlas().pixel(0, 0), qRgb(10, 10, 10));
+    QCOMPARE(doc.atlas().pixel(100, 100), qRgb(10, 10, 10));
+
+    // After undo: sprite should be restored to red, surroundings untouched
+    stack.undo();
+    QCOMPARE(doc.atlas().pixel(25, 30), qRgb(255, 0, 0));
+    QCOMPARE(doc.atlas().pixel(0, 0), qRgb(10, 10, 10));
+    QCOMPARE(doc.atlas().pixel(100, 100), qRgb(10, 10, 10));
+
+    // After redo: sprite should be green again
+    stack.redo();
+    QCOMPARE(doc.atlas().pixel(25, 30), qRgb(0, 255, 0));
+    QCOMPARE(doc.atlas().pixel(0, 0), qRgb(10, 10, 10));
+}
+
+void TestFilters::testCpuFeatures()
+{
+    // Test CPU feature query and architecture identification (Chantier M14 - Palier 2)
+    const char *archName = CpuFeatures::simdArchitectureName();
+    QVERIFY(archName != nullptr);
+    QVERIFY(std::strlen(archName) > 0);
+
+#if defined(BENTOPACK_HAS_AVX2)
+    // On our x86_64 build host with AVX2, this must detect AVX2 support
+    QVERIFY(CpuFeatures::hasAvx2());
+    QVERIFY(std::string(archName).find("AVX2") != std::string::npos);
+#endif
+}
+
+void TestFilters::testSimdColorSwapRowAccuracy()
+{
+    // Test bit-for-bit exactness between SIMD kernel and scalar baseline
+    // Test across various row lengths to stress exact block sizes, non-multiples, and tails
+    const QList<int> testCounts = { 1, 3, 4, 7, 8, 15, 16, 17, 31, 32, 33, 64, 127, 256 };
+
+    const QRgb srcTarget = qRgb(0, 200, 0);       // Green target
+    const QRgb dstTarget = qRgb(220, 20, 20);     // Red replacement
+    const int tolerance = 30;
+    const double maxDist = tolerance * 4.4167;
+    const int maxDistSq = static_cast<int>(std::round(maxDist * maxDist));
+    const QRgb dstRgbBase = qRgb(qRed(dstTarget), qGreen(dstTarget), qBlue(dstTarget));
+
+    QColor srcCol(srcTarget);
+    QColor dstCol(dstTarget);
+    const int sV = srcCol.value();
+    const int sS = srcCol.hsvSaturation();
+    const int dH = dstCol.hsvHue();
+    const int dS = dstCol.hsvSaturation();
+    const int dV = dstCol.value();
+
+    for (int count : testCounts) {
+        QVector<QRgb> src(count);
+        QVector<QRgb> dstScalar(count);
+        QVector<QRgb> dstSimd(count);
+
+        // Populate row with diverse pixels (exact match, near match, distant, transparent)
+        for (int i = 0; i < count; ++i) {
+            switch (i % 6) {
+            case 0:
+                src[i] = qRgba(0, 200, 0, 255);       // Exact match
+                break;
+            case 1:
+                src[i] = qRgba(10, 195, 5, 255);      // Near match (within tolerance)
+                break;
+            case 2:
+                src[i] = qRgba(10, 195, 5, 0);        // Near match but transparent (should not swap)
+                break;
+            case 3:
+                src[i] = qRgba(0, 0, 250, 255);       // Distant (Blue)
+                break;
+            case 4:
+                src[i] = qRgba(250, 250, 250, 255);   // White
+                break;
+            case 5:
+                src[i] = qRgba(0, 210, 10, 128);      // Near match with semi-transparency
+                break;
+            }
+            dstScalar[i] = src[i];
+            dstSimd[i] = src[i];
+        }
+
+        // 1. Test direct replacement mode (preserveShading = false)
+        int modScalar = SimdKernels::colorSwapRow_scalar(src.constData(), dstScalar.data(), count,
+                                                         qRed(srcTarget), qGreen(srcTarget), qBlue(srcTarget),
+                                                         maxDistSq, dstRgbBase, false,
+                                                         sV, sS, dH, dS, dV);
+
+        int modSimd = SimdKernels::colorSwapRow(src.constData(), dstSimd.data(), count,
+                                               qRed(srcTarget), qGreen(srcTarget), qBlue(srcTarget),
+                                               maxDistSq, dstRgbBase, false,
+                                               sV, sS, dH, dS, dV);
+
+        QCOMPARE(modSimd, modScalar);
+        for (int i = 0; i < count; ++i) {
+            QCOMPARE(dstSimd[i], dstScalar[i]);
+        }
+
+        // 2. Test shading preservation mode (preserveShading = true)
+        dstScalar = src;
+        dstSimd = src;
+        int modScalarShade = SimdKernels::colorSwapRow_scalar(src.constData(), dstScalar.data(), count,
+                                                              qRed(srcTarget), qGreen(srcTarget), qBlue(srcTarget),
+                                                              maxDistSq, dstRgbBase, true,
+                                                              sV, sS, dH, dS, dV);
+
+        int modSimdShade = SimdKernels::colorSwapRow(src.constData(), dstSimd.data(), count,
+                                                    qRed(srcTarget), qGreen(srcTarget), qBlue(srcTarget),
+                                                    maxDistSq, dstRgbBase, true,
+                                                    sV, sS, dH, dS, dV);
+
+        QCOMPARE(modSimdShade, modScalarShade);
+        for (int i = 0; i < count; ++i) {
+            QCOMPARE(dstSimd[i], dstScalar[i]);
+        }
+    }
+}
+
+void TestFilters::testSimdDespillChromaRowAccuracy()
+{
+    const QList<int> testCounts = { 1, 4, 7, 8, 16, 23, 64 };
+
+    for (int count : testCounts) {
+        QVector<QRgb> src(count);
+        QVector<QRgb> dstScalar(count);
+        QVector<QRgb> dstSimd(count);
+
+        for (int i = 0; i < count; ++i) {
+            if (i % 3 == 0) {
+                src[i] = qRgba(30, 210, 40, 255);   // Strong green spill
+            } else if (i % 3 == 1) {
+                src[i] = qRgba(180, 50, 60, 255);   // Red dominant (no spill)
+            } else {
+                src[i] = qRgba(20, 220, 30, 0);     // Transparent (ignored)
+            }
+            dstScalar[i] = src[i];
+            dstSimd[i] = src[i];
+        }
+
+        int modScalar = SimdKernels::despillChromaRow_scalar(src.constData(), dstScalar.data(), count,
+                                                            true, false, 1.0);
+        int modSimd = SimdKernels::despillChromaRow(src.constData(), dstSimd.data(), count,
+                                                   true, false, 1.0);
+
+        QCOMPARE(modSimd, modScalar);
+        for (int i = 0; i < count; ++i) {
+            QCOMPARE(dstSimd[i], dstScalar[i]);
+        }
+    }
 }
 
 void TestFilters::testFilterAutoDetectBoxes()

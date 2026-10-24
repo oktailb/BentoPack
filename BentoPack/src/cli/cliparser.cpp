@@ -71,6 +71,7 @@ QString CliParser::helpText()
         "  slice                       Auto-slice raw sheet with connected components & background removal\n"
         "  filter                      Apply headless image filters (despill, outline, color-swap, etc.)\n"
         "  bento                       Inspect or export native .bento projects (alias: ssp)\n"
+        "  benchmark                   Measure hardware SIMD vectorization & dirty-rect memory efficiency\n"
         "  schema                      Output JSON schema of all capabilities, options and commands\n\n"
         "TexturePacker Compatibility Options:\n"
         "  --sheet <file.png>          Target sprite sheet texture file\n"
@@ -168,6 +169,10 @@ CliResult CliParser::dispatchCommand(const QStringList &cleanArgs)
         }
         if (subCmd == QStringLiteral("bento") || subCmd == QStringLiteral("ssp")) {
             return NativeCommands::executeBento(cleanArgs.mid(1));
+        }
+        if (subCmd == QStringLiteral("benchmark") || subCmd == QStringLiteral("perf")) {
+            m_jsonOutput = true;
+            return NativeCommands::executeBenchmark(cleanArgs.mid(1));
         }
         if (subCmd == QStringLiteral("schema") || subCmd == QStringLiteral("--schema")) {
             m_jsonOutput = true;
@@ -285,7 +290,10 @@ CliResult CliParser::parseAndExecute(const QStringList &args)
 
         // If not a flag, collect as potential watch inputs
         if (!arg.startsWith(QStringLiteral("-")) && arg != QStringLiteral("pack") &&
-            arg != QStringLiteral("slice") && arg != QStringLiteral("filter") && arg != QStringLiteral("ssp")) {
+            arg != QStringLiteral("slice") && arg != QStringLiteral("filter") &&
+            arg != QStringLiteral("ssp") && arg != QStringLiteral("bento") &&
+            arg != QStringLiteral("benchmark") && arg != QStringLiteral("perf") &&
+            arg != QStringLiteral("schema")) {
             m_watchInputPaths.append(arg);
         }
 

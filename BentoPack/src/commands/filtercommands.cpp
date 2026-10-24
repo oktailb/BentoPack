@@ -15,6 +15,7 @@
  */
 
 #include "commands/filtercommands.h"
+#include "image/pixelhash.h"
 
 ApplyFilterCommand::ApplyFilterCommand(SpriteDocument *doc,
                                        const QString &filterTitle,
@@ -32,11 +33,9 @@ ApplyFilterCommand::ApplyFilterCommand(SpriteDocument *doc,
                                        QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_doc(doc)
-    , m_oldAtlas(oldAtlas)
     , m_oldFrames(oldFrames)
     , m_oldBoxes(oldBoxes)
     , m_oldAnimations(oldAnimations)
-    , m_newAtlas(newAtlas)
     , m_newFrames(newFrames)
     , m_newBoxes(newBoxes)
     , m_newAnimations(newAnimations)
@@ -45,6 +44,33 @@ ApplyFilterCommand::ApplyFilterCommand(SpriteDocument *doc,
     , m_skinProfilesBackup(oldSkinProfiles)
 {
     setText(filterTitle.isEmpty() ? QStringLiteral("Apply Filter") : filterTitle);
+
+    // Differential dirty-rect optimization for high-res (4K/8K/16K) atlases
+    if (!oldAtlas.isNull() && !newAtlas.isNull() && oldAtlas.size() == newAtlas.size()) {
+        m_atlasDirtyRect = PixelHash::computeDirtyRect(oldAtlas, newAtlas);
+        const qint64 totalPixels = static_cast<qint64>(oldAtlas.width()) * oldAtlas.height();
+        const qint64 dirtyPixels = static_cast<qint64>(m_atlasDirtyRect.width()) * m_atlasDirtyRect.height();
+
+        if (m_atlasDirtyRect.isEmpty()) {
+            // Atlas is completely untouched by the filter
+            m_isFullAtlasReplacement = false;
+        } else if (dirtyPixels >= totalPixels * 0.90) {
+            // Over 90% changed: full atlas snapshot
+            m_isFullAtlasReplacement = true;
+            m_oldAtlasFallback = oldAtlas;
+            m_newAtlasFallback = newAtlas;
+        } else {
+            // Sub-rectangle changed: store only differential dirty bounding box patches
+            m_isFullAtlasReplacement = false;
+            m_oldAtlasPatch = oldAtlas.copy(m_atlasDirtyRect);
+            m_newAtlasPatch = newAtlas.copy(m_atlasDirtyRect);
+        }
+    } else {
+        m_isFullAtlasReplacement = true;
+        m_oldAtlasFallback = oldAtlas;
+        m_newAtlasFallback = newAtlas;
+    }
+
     if (m_doc) {
         if (m_layersBackup.isEmpty() && m_doc->hasLayers()) {
             m_layersBackup = m_doc->layers();
@@ -65,7 +91,13 @@ ApplyFilterCommand::ApplyFilterCommand(SpriteDocument *doc,
 void ApplyFilterCommand::redo()
 {
     if (!m_doc) return;
-    m_doc->setAtlas(m_newAtlas);
+    if (m_isFullAtlasReplacement) {
+        if (!m_newAtlasFallback.isNull()) {
+            m_doc->setAtlas(m_newAtlasFallback);
+        }
+    } else if (!m_atlasDirtyRect.isEmpty() && !m_newAtlasPatch.isNull()) {
+        m_doc->patchAtlasDirect(m_atlasDirtyRect, m_newAtlasPatch);
+    }
     m_doc->setFrames(m_newFrames, m_newBoxes);
     if (!m_newAnimations.isEmpty() || !m_oldAnimations.isEmpty()) {
         m_doc->setAnimations(m_newAnimations);
@@ -75,7 +107,13 @@ void ApplyFilterCommand::redo()
 void ApplyFilterCommand::undo()
 {
     if (!m_doc) return;
-    m_doc->setAtlas(m_oldAtlas);
+    if (m_isFullAtlasReplacement) {
+        if (!m_oldAtlasFallback.isNull()) {
+            m_doc->setAtlas(m_oldAtlasFallback);
+        }
+    } else if (!m_atlasDirtyRect.isEmpty() && !m_oldAtlasPatch.isNull()) {
+        m_doc->patchAtlasDirect(m_atlasDirtyRect, m_oldAtlasPatch);
+    }
     m_doc->setFrames(m_oldFrames, m_oldBoxes);
     if (!m_layersBackup.isEmpty()) {
         m_doc->setLayers(m_layersBackup);

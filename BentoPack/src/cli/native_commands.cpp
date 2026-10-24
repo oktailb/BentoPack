@@ -23,12 +23,18 @@
 #include "filters/filterregistry.h"
 #include "extractor/extractorregistry.h"
 #include "generated/version.h"
+#include "simd/cpu_features.h"
+#include "simd/simd_kernels.h"
+#include "image/pixelhash.h"
+#include "model/spritedocument.h"
 #include <QFileInfo>
 #include <QDir>
 #include <QColor>
+#include <QPainter>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QElapsedTimer>
+#include <cmath>
 
 namespace BentoPackCli {
 
@@ -299,14 +305,25 @@ CliResult NativeCommands::executeFilter(const QStringList &args)
         return CliResult::error(ExitIoError, QStringLiteral("Failed to write output image: ") + outputPath);
     }
 
+    double mpxSec = (elapsedMs > 0) ? ((double(img.width() * img.height()) / 1000000.0) / (double(elapsedMs) / 1000.0)) : 0.0;
+
     QJsonObject json;
     json[QStringLiteral("input")] = inputPath;
     json[QStringLiteral("output")] = outputPath;
     json[QStringLiteral("filter")] = filterName;
+    json[QStringLiteral("width")] = img.width();
+    json[QStringLiteral("height")] = img.height();
+    json[QStringLiteral("pixels")] = img.width() * img.height();
+    json[QStringLiteral("simd_arch")] = QString::fromUtf8(CpuFeatures::simdArchitectureName());
     json[QStringLiteral("elapsed_ms")] = elapsedMs;
+    json[QStringLiteral("throughput_mpx_sec")] = std::round(mpxSec * 10.0) / 10.0;
 
-    QString summary = QStringLiteral("Filter '%1' applied to %2 in %3 ms.")
-        .arg(filterName, outputPath).arg(elapsedMs);
+    QString summary = QStringLiteral("Filter '%1' applied to %2 (%3x%4, %5 ms, %6 Mpx/s, SIMD: %7).")
+        .arg(filterName, outputPath)
+        .arg(img.width()).arg(img.height())
+        .arg(elapsedMs)
+        .arg(QString::number(mpxSec, 'f', 1))
+        .arg(QString::fromUtf8(CpuFeatures::simdArchitectureName()));
 
     return CliResult::success(summary, json);
 }
@@ -548,9 +565,211 @@ CliResult NativeCommands::executeSchema()
     watchCmd[QStringLiteral("options")] = watchOpts;
     cmds[QStringLiteral("watch")] = watchCmd;
 
+    // benchmark
+    QJsonObject benchCmd;
+    benchCmd[QStringLiteral("description")] = QStringLiteral("Measure SIMD vectorization throughput & dirty-rect undo memory reduction.");
+    QJsonObject benchOpts;
+    benchOpts[QStringLiteral("--simd")] = QStringLiteral("Benchmark SIMD kernels vs Scalar baseline (speedup & Mpx/s)");
+    benchOpts[QStringLiteral("--dirty-rect")] = QStringLiteral("Benchmark 4K atlas dirty-rect compute & memory savings");
+    benchOpts[QStringLiteral("--all")] = QStringLiteral("Run all hardware & memory performance benchmarks (default)");
+    benchCmd[QStringLiteral("options")] = benchOpts;
+    cmds[QStringLiteral("benchmark")] = benchCmd;
+
     schema[QStringLiteral("commands")] = cmds;
 
     return CliResult::success(QStringLiteral("BentoPack CLI schema"), schema);
+}
+
+CliResult NativeCommands::executeBenchmark(const QStringList &args)
+{
+    bool runSimd = args.contains(QStringLiteral("--simd")) || args.isEmpty() || args.contains(QStringLiteral("--all"));
+    bool runDirtyRect = args.contains(QStringLiteral("--dirty-rect")) || args.isEmpty() || args.contains(QStringLiteral("--all"));
+    if (args.contains(QStringLiteral("--simd")) && !args.contains(QStringLiteral("--dirty-rect"))) {
+        runDirtyRect = false;
+    }
+    if (args.contains(QStringLiteral("--dirty-rect")) && !args.contains(QStringLiteral("--simd"))) {
+        runSimd = false;
+    }
+
+    QJsonObject result;
+    result[QStringLiteral("status")] = QStringLiteral("success");
+    result[QStringLiteral("simd_arch")] = QString::fromUtf8(CpuFeatures::simdArchitectureName());
+
+    if (runSimd) {
+        QJsonObject simdObj;
+        simdObj[QStringLiteral("arch")] = QString::fromUtf8(CpuFeatures::simdArchitectureName());
+        simdObj[QStringLiteral("has_avx2")] = CpuFeatures::hasAvx2();
+        simdObj[QStringLiteral("has_neon")] = CpuFeatures::hasNeon();
+
+        const int pixelCount = 1048576; // 1 Megapixel
+        const int iterations = 10;      // 10 Megapixels total tested
+        QVector<QRgb> srcBuffer(pixelCount);
+        QVector<QRgb> dstScalar(pixelCount);
+        QVector<QRgb> dstSimd(pixelCount);
+
+        for (int i = 0; i < pixelCount; ++i) {
+            int m = i % 7;
+            if (m == 0) srcBuffer[i] = qRgba(0, 200, 0, 255);
+            else if (m == 1) srcBuffer[i] = qRgba(10, 195, 5, 255);
+            else if (m == 2) srcBuffer[i] = qRgba(10, 195, 5, 0);
+            else if (m == 3) srcBuffer[i] = qRgba(200, 20, 20, 255);
+            else if (m == 4) srcBuffer[i] = qRgba(20, 20, 200, 255);
+            else if (m == 5) srcBuffer[i] = qRgba(30, 210, 40, 255);
+            else srcBuffer[i] = qRgba(240, 240, 240, 255);
+        }
+
+        // 1. ColorSwap Benchmark
+        const QRgb srcTarget = qRgb(0, 200, 0);
+        const QRgb dstTarget = qRgb(220, 20, 20);
+        const int tolerance = 30;
+        const double maxDist = tolerance * 4.4167;
+        const int maxDistSq = static_cast<int>(std::round(maxDist * maxDist));
+        const QRgb dstRgbBase = qRgb(qRed(dstTarget), qGreen(dstTarget), qBlue(dstTarget));
+        QColor srcCol(srcTarget);
+        QColor dstCol(dstTarget);
+        const int sV = srcCol.value();
+        const int sS = srcCol.hsvSaturation();
+        const int dH = dstCol.hsvHue();
+        const int dS = dstCol.hsvSaturation();
+        const int dV = dstCol.value();
+
+        dstScalar = srcBuffer;
+        QElapsedTimer timerScalar;
+        timerScalar.start();
+        for (int it = 0; it < iterations; ++it) {
+            SimdKernels::colorSwapRow_scalar(srcBuffer.constData(), dstScalar.data(), pixelCount,
+                                             qRed(srcTarget), qGreen(srcTarget), qBlue(srcTarget),
+                                             maxDistSq, dstRgbBase, false, sV, sS, dH, dS, dV);
+        }
+        qint64 scalarElapsedNs = timerScalar.nsecsElapsed();
+        double scalarMs = scalarElapsedNs / 1000000.0;
+
+        dstSimd = srcBuffer;
+        QElapsedTimer timerSimd;
+        timerSimd.start();
+        for (int it = 0; it < iterations; ++it) {
+            SimdKernels::colorSwapRow(srcBuffer.constData(), dstSimd.data(), pixelCount,
+                                      qRed(srcTarget), qGreen(srcTarget), qBlue(srcTarget),
+                                      maxDistSq, dstRgbBase, false, sV, sS, dH, dS, dV);
+        }
+        qint64 simdElapsedNs = timerSimd.nsecsElapsed();
+        double simdMs = simdElapsedNs / 1000000.0;
+
+        bool bitExact = true;
+        for (int i = 0; i < pixelCount; ++i) {
+            if (dstSimd[i] != dstScalar[i]) {
+                bitExact = false;
+                break;
+            }
+        }
+
+        double speedup = (simdMs > 0.0) ? (scalarMs / simdMs) : 1.0;
+        double mpxSec = (simdMs > 0.0) ? ((double(pixelCount * iterations) / 1000000.0) / (simdMs / 1000.0)) : 0.0;
+
+        QJsonObject csJson;
+        csJson[QStringLiteral("pixels_tested")] = pixelCount * iterations;
+        csJson[QStringLiteral("simd_ms")] = std::round(simdMs * 100.0) / 100.0;
+        csJson[QStringLiteral("scalar_ms")] = std::round(scalarMs * 100.0) / 100.0;
+        csJson[QStringLiteral("speedup")] = std::round(speedup * 100.0) / 100.0;
+        csJson[QStringLiteral("throughput_mpx_sec")] = std::round(mpxSec * 10.0) / 10.0;
+        csJson[QStringLiteral("bit_exact")] = bitExact;
+        simdObj[QStringLiteral("color_swap")] = csJson;
+
+        // 2. Despill Chroma Benchmark
+        dstScalar = srcBuffer;
+        timerScalar.restart();
+        for (int it = 0; it < iterations; ++it) {
+            SimdKernels::despillChromaRow_scalar(srcBuffer.constData(), dstScalar.data(), pixelCount,
+                                                true, false, 1.0);
+        }
+        scalarElapsedNs = timerScalar.nsecsElapsed();
+        scalarMs = scalarElapsedNs / 1000000.0;
+
+        dstSimd = srcBuffer;
+        timerSimd.restart();
+        for (int it = 0; it < iterations; ++it) {
+            SimdKernels::despillChromaRow(srcBuffer.constData(), dstSimd.data(), pixelCount,
+                                         true, false, 1.0);
+        }
+        simdElapsedNs = timerSimd.nsecsElapsed();
+        simdMs = simdElapsedNs / 1000000.0;
+
+        bitExact = true;
+        for (int i = 0; i < pixelCount; ++i) {
+            if (dstSimd[i] != dstScalar[i]) {
+                bitExact = false;
+                break;
+            }
+        }
+
+        speedup = (simdMs > 0.0) ? (scalarMs / simdMs) : 1.0;
+        mpxSec = (simdMs > 0.0) ? ((double(pixelCount * iterations) / 1000000.0) / (simdMs / 1000.0)) : 0.0;
+
+        QJsonObject dsJson;
+        dsJson[QStringLiteral("pixels_tested")] = pixelCount * iterations;
+        dsJson[QStringLiteral("simd_ms")] = std::round(simdMs * 100.0) / 100.0;
+        dsJson[QStringLiteral("scalar_ms")] = std::round(scalarMs * 100.0) / 100.0;
+        dsJson[QStringLiteral("speedup")] = std::round(speedup * 100.0) / 100.0;
+        dsJson[QStringLiteral("throughput_mpx_sec")] = std::round(mpxSec * 10.0) / 10.0;
+        dsJson[QStringLiteral("bit_exact")] = bitExact;
+        simdObj[QStringLiteral("despill")] = dsJson;
+
+        result[QStringLiteral("simd")] = simdObj;
+    }
+
+    if (runDirtyRect) {
+        QJsonObject dirtyObj;
+        const int atlasDim = 4096;
+        const qint64 fullBytes = qint64(atlasDim) * qint64(atlasDim) * 4; // 67,108,864 bytes
+        const int patchDim = 128;
+        const qint64 patchBytes = qint64(patchDim) * qint64(patchDim) * 4; // 65,536 bytes
+        const double memorySaved = 100.0 * (1.0 - (double(patchBytes) / double(fullBytes)));
+
+        QImage atlasA(atlasDim, atlasDim, QImage::Format_ARGB32);
+        atlasA.fill(qRgb(15, 15, 20));
+        QImage atlasB = atlasA.copy();
+
+        QRect editRect(1200, 1400, patchDim, patchDim);
+        QImage patchFrame(patchDim, patchDim, QImage::Format_ARGB32);
+        patchFrame.fill(qRgb(220, 40, 40));
+        {
+            QPainter p(&atlasB);
+            p.setCompositionMode(QPainter::CompositionMode_Source);
+            p.drawImage(editRect.topLeft(), patchFrame);
+        }
+
+        QElapsedTimer timerDirty;
+        timerDirty.start();
+        QRect detectedRect = PixelHash::computeDirtyRect(atlasA, atlasB);
+        qint64 computeNs = timerDirty.nsecsElapsed();
+        double computeUs = computeNs / 1000.0;
+
+        SpriteDocument doc;
+        doc.setAtlas(atlasA);
+        QElapsedTimer timerPatch;
+        timerPatch.start();
+        doc.patchAtlasDirect(editRect, patchFrame);
+        qint64 patchNs = timerPatch.nsecsElapsed();
+        double patchUs = patchNs / 1000.0;
+
+        dirtyObj[QStringLiteral("atlas_dimensions")] = QStringLiteral("4096x4096");
+        dirtyObj[QStringLiteral("full_atlas_bytes")] = fullBytes;
+        dirtyObj[QStringLiteral("full_atlas_mb")] = std::round((double(fullBytes) / (1024.0 * 1024.0)) * 10.0) / 10.0;
+        dirtyObj[QStringLiteral("dirty_rect_dimensions")] = QStringLiteral("128x128");
+        dirtyObj[QStringLiteral("dirty_rect_bytes")] = patchBytes;
+        dirtyObj[QStringLiteral("dirty_rect_kb")] = std::round((double(patchBytes) / 1024.0) * 10.0) / 10.0;
+        dirtyObj[QStringLiteral("memory_saved_percent")] = std::round(memorySaved * 100.0) / 100.0;
+        dirtyObj[QStringLiteral("compute_dirty_rect_us")] = std::round(computeUs * 10.0) / 10.0;
+        dirtyObj[QStringLiteral("patch_atlas_us")] = std::round(patchUs * 10.0) / 10.0;
+        dirtyObj[QStringLiteral("exact_match")] = (detectedRect == editRect);
+
+        result[QStringLiteral("dirty_rect")] = dirtyObj;
+    }
+
+    QString summary = QStringLiteral("Benchmark executed (SIMD: %1).")
+        .arg(QString::fromUtf8(CpuFeatures::simdArchitectureName()));
+
+    return CliResult::success(summary, result);
 }
 
 } // namespace BentoPackCli
