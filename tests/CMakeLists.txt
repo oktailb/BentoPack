@@ -254,6 +254,15 @@ if (MINGW)
 endif()
 add_test(NAME test_casm_extractor COMMAND test_casm_extractor)
 
+# 16. test_retro_linter (Hardware & PPU Retro Linters)
+add_executable(test_retro_linter test_retro_linter.cpp)
+target_link_libraries(test_retro_linter PRIVATE BentoPackCore Qt6::Test Qt6::Gui)
+set_target_properties(test_retro_linter PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_retro_linter PRIVATE -mconsole)
+endif()
+add_test(NAME test_retro_linter COMMAND test_retro_linter)
+
 set(ALL_TEST_TARGETS
     test_extractors
     test_app_config
@@ -274,6 +283,7 @@ set(ALL_TEST_TARGETS
     test_vram_dedup
     test_live_watch
     test_casm_extractor
+    test_retro_linter
 )
 
 set_tests_properties(${ALL_TEST_TARGETS}

@@ -54,6 +54,7 @@ set(BentoPackCore_SRC
     src/image/spritedetector.cpp
     src/image/colorpalettepresets.cpp
     src/image/pixelhash.cpp
+    src/image/retrolinterhelper.cpp
     src/packer/celdeduplicator.cpp
     src/packer/deltapatchslicer.cpp
     src/project/sessionmanager.cpp

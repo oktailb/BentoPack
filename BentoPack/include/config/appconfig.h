@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -109,6 +109,24 @@ struct BENTOPACK_CORE_EXPORT ExportConfig
 };
 
 /**
+ * @brief Configuration settings for Hardware & Retro Constraints / PPU Linters.
+ */
+struct BENTOPACK_CORE_EXPORT RetroLinterConfig
+{
+    bool enabled = true;                   // Activated by default
+    int  profileIndex = 0;                // 0=Generic/Custom, 1=Game Boy, 2=NES, 3=Sega Master System, 4=Sega Mega Drive, 5=Commodore 64, 6=SNES, 7=PICO-8
+    int  scanlineSpriteWidthLimit = 64;   // Max sprite width allowed per scanline (pixels)
+    int  maxVramTiles = 256;              // Max unique 8x8 tiles in VRAM budget
+    int  tileSize = 8;                    // 8 for 8x8 tiles, 16 for 16x16
+    bool showScanlineGuide = true;        // Discrete vertical guide line in Pixel Canvas
+    bool showTileGrid = true;             // Subtle 8x8 tile grid in Pixel Canvas
+    bool showTimelineBadges = true;       // Discrete warning badge (pastille) on filmstrip frames
+    bool showVramGauge = true;            // VRAM tile usage gauge in status bar
+
+    static void applyPreset(int presetIndex, RetroLinterConfig &cfg);
+};
+
+/**
  * @brief Central configuration manager for BentoPack.
  *
  * Persists and loads user and default application settings to/from a structured
@@ -145,6 +163,9 @@ public:
     const ExportConfig& exportSettings() const { return m_export; }
     ExportConfig& exportSettings() { return m_export; }
 
+    const RetroLinterConfig& retroLinter() const { return m_retro; }
+    RetroLinterConfig& retroLinter() { return m_retro; }
+
     // File operations
     bool load(const QString &filePath = QString());
     bool save(const QString &filePath = QString()) const;
@@ -163,15 +184,17 @@ private:
 
     QString resolveDefaultConfigPath() const;
 
-    GeneralConfig   m_general;
-    AtlasConfig     m_atlas;
-    VisualConfig    m_visuals;
-    AnimationConfig m_animation;
-    ProjectConfig   m_project;
-    GitConfig       m_git;
-    ExportConfig    m_export;
+    GeneralConfig     m_general;
+    AtlasConfig       m_atlas;
+    VisualConfig      m_visuals;
+    AnimationConfig   m_animation;
+    ProjectConfig     m_project;
+    GitConfig         m_git;
+    ExportConfig      m_export;
+    RetroLinterConfig m_retro;
 
-    mutable QString m_customConfigPath;
+    mutable QString   m_customConfigPath;
 };
 
 #endif // APPCONFIG_H
+

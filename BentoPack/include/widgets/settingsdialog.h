@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,9 +54,10 @@ public:
         PageGeneral = 0,
         PageAtlas = 1,
         PageExport = 2,
-        PagePlugins = 3,
-        PageGit = 4,
-        PageUpdates = 5
+        PageRetro = 3,
+        PagePlugins = 4,
+        PageGit = 5,
+        PageUpdates = 6
     };
 
     explicit SettingsDialog(QWidget *parent = nullptr, PageIndex initialPage = PageGeneral);
@@ -88,6 +89,7 @@ private:
     QWidget* createGeneralPage();
     QWidget* createAtlasPage();
     QWidget* createExportPage();
+    QWidget* createRetroPage();
     QWidget* createPluginsPage();
     QWidget* createGitPage();
     QWidget* createUpdatesPage();
@@ -106,6 +108,7 @@ private:
     QTreeWidgetItem *m_itemGeneral = nullptr;
     QTreeWidgetItem *m_itemAtlas = nullptr;
     QTreeWidgetItem *m_itemExport = nullptr;
+    QTreeWidgetItem *m_itemRetro = nullptr;
     QTreeWidgetItem *m_itemPlugins = nullptr;
     QTreeWidgetItem *m_itemGit = nullptr;
     QTreeWidgetItem *m_itemUpdates = nullptr;
@@ -160,6 +163,26 @@ private:
     QComboBox *m_comboDefaultAlgorithm = nullptr;
     QCheckBox *m_chkDefaultZstd = nullptr;
     QSpinBox  *m_spinDefaultZstdLevel = nullptr;
+
+    // Retro Page
+    QLabel    *m_hdrRetro = nullptr;
+    QCheckBox *m_chkRetroEnabled = nullptr;
+    QGroupBox *m_grpRetroProfile = nullptr;
+    QLabel    *m_lblRetroProfile = nullptr;
+    QComboBox *m_comboRetroProfile = nullptr;
+    QLabel    *m_lblRetroProfileDesc = nullptr;
+    QGroupBox *m_grpRetroLimits = nullptr;
+    QLabel    *m_lblScanlineLimit = nullptr;
+    QSpinBox  *m_spinScanlineLimit = nullptr;
+    QLabel    *m_lblMaxVramTiles = nullptr;
+    QSpinBox  *m_spinMaxVramTiles = nullptr;
+    QLabel    *m_lblTileSize = nullptr;
+    QComboBox *m_comboTileSize = nullptr;
+    QGroupBox *m_grpRetroVisuals = nullptr;
+    QCheckBox *m_chkShowTileGrid = nullptr;
+    QCheckBox *m_chkShowScanlineGuide = nullptr;
+    QCheckBox *m_chkShowTimelineBadges = nullptr;
+    QCheckBox *m_chkShowVramGauge = nullptr;
 
     // Plugins Page
     QLabel      *m_hdrPlugins = nullptr;

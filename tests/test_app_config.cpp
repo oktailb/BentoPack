@@ -47,6 +47,17 @@ void TestAppConfig::testAppConfigDefaults()
     QCOMPARE(cfg.project().maxRecentFiles, 10);
     QCOMPARE(cfg.project().backgroundRemovalTolerance, 10);
     QCOMPARE(cfg.project().backgroundMinAlpha, 10);
+
+    // Retro Linter defaults (activated by default)
+    QCOMPARE(cfg.retroLinter().enabled, true);
+    QCOMPARE(cfg.retroLinter().profileIndex, 0);
+    QCOMPARE(cfg.retroLinter().scanlineSpriteWidthLimit, 64);
+    QCOMPARE(cfg.retroLinter().maxVramTiles, 256);
+    QCOMPARE(cfg.retroLinter().tileSize, 8);
+    QCOMPARE(cfg.retroLinter().showScanlineGuide, true);
+    QCOMPARE(cfg.retroLinter().showTileGrid, true);
+    QCOMPARE(cfg.retroLinter().showTimelineBadges, true);
+    QCOMPARE(cfg.retroLinter().showVramGauge, true);
 }
 
 void TestAppConfig::testAppConfigSaveAndLoad()
@@ -65,6 +76,10 @@ void TestAppConfig::testAppConfigSaveAndLoad()
     cfg.animation().defaultFps = 24;
     cfg.project().maxRecentFiles = 15;
     cfg.visuals().selectedBoxColor = QColor(255, 0, 0);
+    cfg.retroLinter().profileIndex = 4; // Mega Drive
+    cfg.retroLinter().scanlineSpriteWidthLimit = 128;
+    cfg.retroLinter().maxVramTiles = 512;
+    cfg.retroLinter().showScanlineGuide = false;
 
     // Save to temp path
     bool saveOk = cfg.save(tempConfigPath);
@@ -76,6 +91,7 @@ void TestAppConfig::testAppConfigSaveAndLoad()
     QCOMPARE(cfg.general().language, QStringLiteral("system"));
     QCOMPARE(cfg.atlas().zoomMax, 10.0);
     QCOMPARE(cfg.animation().defaultFps, 12);
+    QCOMPARE(cfg.retroLinter().scanlineSpriteWidthLimit, 64);
 
     // Load back from temp path
     bool loadOk = cfg.load(tempConfigPath);
@@ -88,6 +104,10 @@ void TestAppConfig::testAppConfigSaveAndLoad()
     QCOMPARE(cfg.animation().defaultFps, 24);
     QCOMPARE(cfg.project().maxRecentFiles, 15);
     QCOMPARE(cfg.visuals().selectedBoxColor, QColor(255, 0, 0));
+    QCOMPARE(cfg.retroLinter().profileIndex, 4);
+    QCOMPARE(cfg.retroLinter().scanlineSpriteWidthLimit, 128);
+    QCOMPARE(cfg.retroLinter().maxVramTiles, 512);
+    QCOMPARE(cfg.retroLinter().showScanlineGuide, false);
 
     // Clean up
     cfg.resetToDefaults();

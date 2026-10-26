@@ -236,6 +236,7 @@ private:
     void refreshFrameListDisplay();
     void setupViewMenuActions();
     void retranslateUi();
+    void updateVramGauge();
 
     std::unique_ptr<Ui::MainWindow> ui;
     ArrangementModel *frameModel = nullptr;
@@ -268,6 +269,9 @@ private:
     QAction *m_actionConfigureLiveWatch = nullptr;
     QPushButton *m_watchStatusBtn = nullptr;
     QLabel *statusLabel = nullptr;
+    QWidget *m_vramGaugeWidget = nullptr;
+    QLabel *m_vramLabel = nullptr;
+    QProgressBar *m_vramProgressBar = nullptr;
     QLabel *zoomLabel = nullptr;
     QSlider *zoomSlider = nullptr;
     QProgressBar *progressBar = nullptr;

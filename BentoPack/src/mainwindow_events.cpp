@@ -17,6 +17,7 @@
 #include "include/mainwindow.h"
 #include "ui_mainwindow.h"
 #include "include/config/appconfig.h"
+#include "widgets/settingsdialog.h"
 #include <QMouseEvent>
 #include <QDragMoveEvent>
 #include <QMimeData>
@@ -261,6 +262,12 @@ void MainWindow::enableFileDropsRecursively(QWidget *widget)
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == m_vramGaugeWidget && event->type() == QEvent::MouseButtonRelease) {
+        SettingsDialog dlg(this, SettingsDialog::PageRetro);
+        dlg.exec();
+        return true;
+    }
+
     // Global file drag-and-drop handling for all child widgets, central widget and viewports
     if (event->type() == QEvent::DragEnter) {
         QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
