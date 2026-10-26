@@ -16,6 +16,7 @@
 
 #include "widgets/pixelcanvas.h"
 #include "geometry/triangulator.h"
+#include "config/appconfig.h"
 #include <QPainter>
 #include <QMouseEvent>
 #include <QWheelEvent>
@@ -217,6 +218,8 @@ PixelCanvas::PixelCanvas(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setAttribute(Qt::WA_OpaquePaintEvent, false);
+
+    connect(&AppConfig::instance(), &AppConfig::configChanged, this, QOverload<>::of(&PixelCanvas::update));
 }
 
 void PixelCanvas::setImage(const QImage &image)
@@ -2160,17 +2163,30 @@ void PixelCanvas::drawPixelGrid(QPainter &painter, const QRect &rect)
     if (!m_showGrid || m_zoom < 4.0 || m_image.isNull()) return;
 
     painter.save();
-    painter.setPen(QColor(180, 180, 180, 45));
+
+    const auto &retro = AppConfig::instance().retroLinter();
+    bool showTileGrid = retro.enabled && retro.showTileGrid;
+    int tileSize = retro.tileSize > 0 ? retro.tileSize : 8;
 
     int w = m_image.width();
     int h = m_image.height();
 
     for (int x = 0; x <= w; ++x) {
         int vx = static_cast<int>(std::round(x * m_zoom));
+        if (showTileGrid && (x % tileSize == 0)) {
+            painter.setPen(QPen(QColor(56, 189, 248, 85), 1.0, Qt::DashLine));
+        } else {
+            painter.setPen(QColor(180, 180, 180, 45));
+        }
         painter.drawLine(vx, 0, vx, static_cast<int>(std::round(h * m_zoom)));
     }
     for (int y = 0; y <= h; ++y) {
         int vy = static_cast<int>(std::round(y * m_zoom));
+        if (showTileGrid && (y % tileSize == 0)) {
+            painter.setPen(QPen(QColor(56, 189, 248, 85), 1.0, Qt::DashLine));
+        } else {
+            painter.setPen(QColor(180, 180, 180, 45));
+        }
         painter.drawLine(0, vy, static_cast<int>(std::round(w * m_zoom)), vy);
     }
 
@@ -2770,6 +2786,38 @@ void PixelCanvas::paintEvent(QPaintEvent *event)
 
     // 4. Pixel grid
     drawPixelGrid(painter, rect());
+
+    // 4b. Hardware Scanline Constraint Guide (if retro linter enabled)
+    const auto &retro = AppConfig::instance().retroLinter();
+    if (retro.enabled && retro.showScanlineGuide) {
+        int limit = retro.scanlineSpriteWidthLimit;
+        int activeW = m_image.width();
+        if (limit > 0 && (activeW >= limit || (m_canvasSize.isValid() && m_canvasSize.width() >= limit))) {
+            int guideX = static_cast<int>(std::round(limit * m_zoom));
+            int maxH = static_cast<int>(std::round(std::max(m_image.height(), m_canvasSize.height()) * m_zoom));
+
+            painter.save();
+            QPen guidePen(QColor(245, 158, 11, 160), 1.2, Qt::DashDotLine);
+            guidePen.setCosmetic(true);
+            painter.setPen(guidePen);
+            painter.drawLine(guideX, 0, guideX, maxH);
+
+            QFont miniFont = painter.font();
+            miniFont.setPixelSize(9);
+            miniFont.setBold(true);
+            painter.setFont(miniFont);
+
+            QString label = QStringLiteral("%1px Limit").arg(limit);
+            QFontMetrics fm(miniFont);
+            int textW = fm.horizontalAdvance(label) + 6;
+            QRect labelRect(guideX - textW - 2, 2, textW, 14);
+            painter.fillRect(labelRect, QColor(245, 158, 11, 40));
+            painter.setPen(QColor(245, 158, 11, 220));
+            painter.drawRect(labelRect);
+            painter.drawText(labelRect, Qt::AlignCenter, label);
+            painter.restore();
+        }
+    }
 
     // 5. Polygon mesh contour
     drawPolygonMesh(painter);

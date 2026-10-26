@@ -19,6 +19,7 @@
 #include "include/commands/commands.h"
 #include "include/extractor/extractorregistry.h"
 #include "include/config/appconfig.h"
+#include "image/retrolinterhelper.h"
 #include "include/project/sessionmanager.h"
 #include "include/widgets/githistorydock.h"
 #include "include/widgets/settingsdialog.h"
@@ -633,6 +634,35 @@ void MainWindow::setupUIConnections()
     ui->statusBar->addPermanentWidget(m_watchStatusBtn);
     connect(m_watchStatusBtn, &QPushButton::clicked, this, &MainWindow::onConfigureLiveWatchTriggered);
     updateWatchStatusUI(WatchState::Idle, QString());
+
+    // VRAM Tile Gauge widget
+    m_vramGaugeWidget = new QWidget(this);
+    QHBoxLayout *vramLayout = new QHBoxLayout(m_vramGaugeWidget);
+    vramLayout->setContentsMargins(6, 0, 6, 0);
+    vramLayout->setSpacing(6);
+
+    m_vramLabel = new QLabel(m_vramGaugeWidget);
+    m_vramLabel->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: bold; color: #cbd5e1;"));
+    vramLayout->addWidget(m_vramLabel);
+
+    m_vramProgressBar = new QProgressBar(m_vramGaugeWidget);
+    m_vramProgressBar->setRange(0, 100);
+    m_vramProgressBar->setValue(0);
+    m_vramProgressBar->setTextVisible(false);
+    m_vramProgressBar->setFixedSize(70, 10);
+    vramLayout->addWidget(m_vramProgressBar);
+
+    m_vramGaugeWidget->setCursor(Qt::PointingHandCursor);
+    m_vramGaugeWidget->installEventFilter(this);
+    ui->statusBar->addPermanentWidget(m_vramGaugeWidget);
+
+    connect(&AppConfig::instance(), &AppConfig::configChanged, this, &MainWindow::updateVramGauge);
+    connect(m_document, &SpriteDocument::framesChanged, this, &MainWindow::updateVramGauge);
+    connect(m_document, &SpriteDocument::frameUpdated, this, [this](int) { updateVramGauge(); });
+    connect(m_document, &SpriteDocument::atlasChanged, this, &MainWindow::updateVramGauge);
+    connect(m_document, &SpriteDocument::documentReset, this, &MainWindow::updateVramGauge);
+
+    updateVramGauge();
 
     connect(zoomSlider, &QSlider::valueChanged, this, &MainWindow::zoomSliderChanged);
 
@@ -1656,6 +1686,71 @@ void MainWindow::onRetroRipperTriggered()
         RetroTileExplorerDialog dlg(fileName, this, m_projectController.get());
         dlg.exec();
     }
+void MainWindow::updateVramGauge()
+{
+    if (!m_vramGaugeWidget || !m_vramLabel || !m_vramProgressBar) return;
+
+    const auto &retro = AppConfig::instance().retroLinter();
+    if (!retro.enabled || !retro.showVramGauge) {
+        m_vramGaugeWidget->setVisible(false);
+        return;
+    }
+
+    m_vramGaugeWidget->setVisible(true);
+
+    int uniqueTiles = 0;
+    if (m_document && m_document->frameCount() > 0) {
+        uniqueTiles = RetroLinterHelper::countUniqueTiles(m_document->frames(), retro.tileSize);
+    }
+
+    int budget = retro.maxVramTiles > 0 ? retro.maxVramTiles : 256;
+    int percent = (budget > 0) ? ((uniqueTiles * 100) / budget) : 0;
+
+    m_vramLabel->setText(QStringLiteral("VRAM: %1 / %2 tiles").arg(uniqueTiles).arg(budget));
+    m_vramProgressBar->setValue(std::min(100, percent));
+
+    if (percent > 100) {
+        m_vramProgressBar->setStyleSheet(QStringLiteral(
+            "QProgressBar { background: #334155; border: 1px solid #475569; border-radius: 3px; }"
+            "QProgressBar::chunk { background: #ef4444; border-radius: 2px; }"));
+        m_vramLabel->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: bold; color: #f87171;"));
+    } else if (percent >= 85) {
+        m_vramProgressBar->setStyleSheet(QStringLiteral(
+            "QProgressBar { background: #334155; border: 1px solid #475569; border-radius: 3px; }"
+            "QProgressBar::chunk { background: #f59e0b; border-radius: 2px; }"));
+        m_vramLabel->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: bold; color: #fbbf24;"));
+    } else {
+        m_vramProgressBar->setStyleSheet(QStringLiteral(
+            "QProgressBar { background: #334155; border: 1px solid #475569; border-radius: 3px; }"
+            "QProgressBar::chunk { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #06b6d4, stop:1 #10b981); border-radius: 2px; }"));
+        m_vramLabel->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: bold; color: #cbd5e1;"));
+    }
+
+    QString profileName;
+    switch (retro.profileIndex) {
+    case 1: profileName = QStringLiteral("Nintendo Game Boy (DMG/CGB)"); break;
+    case 2: profileName = QStringLiteral("Nintendo NES / Famicom"); break;
+    case 3: profileName = QStringLiteral("Sega Master System"); break;
+    case 4: profileName = QStringLiteral("Sega Mega Drive / Genesis"); break;
+    case 5: profileName = QStringLiteral("Commodore 64"); break;
+    case 6: profileName = QStringLiteral("Super Nintendo (SNES)"); break;
+    case 7: profileName = QStringLiteral("PICO-8"); break;
+    default: profileName = QStringLiteral("Custom / Generic Retro"); break;
+    }
+
+    QString tip = QStringLiteral(
+        "<b>VRAM Tile Budget:</b> %1 / %2 unique %3x%3 tiles (%4%)\n"
+        "<b>Scanline Sprite Limit:</b> %5 px\n"
+        "<b>Hardware Profile:</b> %6\n"
+        "<i>Click to configure in Settings</i>")
+        .arg(uniqueTiles)
+        .arg(budget)
+        .arg(retro.tileSize)
+        .arg(percent)
+        .arg(retro.scanlineSpriteWidthLimit)
+        .arg(profileName);
+
+    m_vramGaugeWidget->setToolTip(tip);
 }
 
 

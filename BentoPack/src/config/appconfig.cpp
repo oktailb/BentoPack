@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,6 +81,50 @@ void GitConfig::detectSystemIdentity(QString *name, QString *email)
     if (email) *email = foundEmail;
 }
 
+void RetroLinterConfig::applyPreset(int presetIndex, RetroLinterConfig &cfg)
+{
+    cfg.profileIndex = presetIndex;
+    switch (presetIndex) {
+    case 1: // Game Boy (DMG / CGB)
+        cfg.scanlineSpriteWidthLimit = 64; // 10 sprites / line (8x8 or 8x16) -> safe 64px limit
+        cfg.maxVramTiles = 256;            // Pattern table 256 tiles
+        cfg.tileSize = 8;
+        break;
+    case 2: // NES / Famicom
+        cfg.scanlineSpriteWidthLimit = 64; // 8 sprites / scanline * 8px = 64px
+        cfg.maxVramTiles = 256;            // Pattern table 256 tiles
+        cfg.tileSize = 8;
+        break;
+    case 3: // Sega Master System / Game Gear
+        cfg.scanlineSpriteWidthLimit = 64; // 8 sprites / scanline * 8px = 64px
+        cfg.maxVramTiles = 256;            // 256 sprite tiles in VRAM
+        cfg.tileSize = 8;
+        break;
+    case 4: // Sega Mega Drive / Genesis
+        cfg.scanlineSpriteWidthLimit = 128; // 16 sprites / scanline (in 320x224 mode)
+        cfg.maxVramTiles = 512;             // Sprite VRAM pattern area
+        cfg.tileSize = 8;
+        break;
+    case 5: // Commodore 64
+        cfg.scanlineSpriteWidthLimit = 64;  // 8 hardware sprites / rasterline
+        cfg.maxVramTiles = 256;
+        cfg.tileSize = 8;
+        break;
+    case 6: // Super Nintendo (SNES)
+        cfg.scanlineSpriteWidthLimit = 256; // 32 sprites / scanline
+        cfg.maxVramTiles = 512;
+        cfg.tileSize = 8;
+        break;
+    case 7: // PICO-8
+        cfg.scanlineSpriteWidthLimit = 64;
+        cfg.maxVramTiles = 256;             // 128x128 sprite sheet = 256 tiles
+        cfg.tileSize = 8;
+        break;
+    default: // 0: Custom / Generic
+        break;
+    }
+}
+
 AppConfig& AppConfig::instance()
 {
     static AppConfig cfg;
@@ -128,6 +172,7 @@ void AppConfig::resetToDefaults()
     m_project = ProjectConfig();
     m_git = GitConfig();
     m_export = ExportConfig();
+    m_retro = RetroLinterConfig();
     emit configChanged();
 }
 
@@ -242,6 +287,20 @@ bool AppConfig::load(const QString &filePath)
         m_export.defaultZstdLevel = expObj.value(QStringLiteral("default_zstd_level")).toInt(m_export.defaultZstdLevel);
     }
 
+    // 7. Retro & Hardware Constraints section
+    if (root.contains(QStringLiteral("retro_linter")) && root.value(QStringLiteral("retro_linter")).isObject()) {
+        QJsonObject retroObj = root.value(QStringLiteral("retro_linter")).toObject();
+        m_retro.enabled = retroObj.value(QStringLiteral("enabled")).toBool(m_retro.enabled);
+        m_retro.profileIndex = retroObj.value(QStringLiteral("profile_index")).toInt(m_retro.profileIndex);
+        m_retro.scanlineSpriteWidthLimit = retroObj.value(QStringLiteral("scanline_sprite_width_limit")).toInt(m_retro.scanlineSpriteWidthLimit);
+        m_retro.maxVramTiles = retroObj.value(QStringLiteral("max_vram_tiles")).toInt(m_retro.maxVramTiles);
+        m_retro.tileSize = retroObj.value(QStringLiteral("tile_size")).toInt(m_retro.tileSize);
+        m_retro.showScanlineGuide = retroObj.value(QStringLiteral("show_scanline_guide")).toBool(m_retro.showScanlineGuide);
+        m_retro.showTileGrid = retroObj.value(QStringLiteral("show_tile_grid")).toBool(m_retro.showTileGrid);
+        m_retro.showTimelineBadges = retroObj.value(QStringLiteral("show_timeline_badges")).toBool(m_retro.showTimelineBadges);
+        m_retro.showVramGauge = retroObj.value(QStringLiteral("show_vram_gauge")).toBool(m_retro.showVramGauge);
+    }
+
     emit configChanged();
     return true;
 }
@@ -321,6 +380,19 @@ bool AppConfig::save(const QString &filePath) const
     expObj[QStringLiteral("default_zstd")] = m_export.defaultZstd;
     expObj[QStringLiteral("default_zstd_level")] = m_export.defaultZstdLevel;
     root[QStringLiteral("export")] = expObj;
+
+    // 7. Retro & Hardware Constraints
+    QJsonObject retroObj;
+    retroObj[QStringLiteral("enabled")] = m_retro.enabled;
+    retroObj[QStringLiteral("profile_index")] = m_retro.profileIndex;
+    retroObj[QStringLiteral("scanline_sprite_width_limit")] = m_retro.scanlineSpriteWidthLimit;
+    retroObj[QStringLiteral("max_vram_tiles")] = m_retro.maxVramTiles;
+    retroObj[QStringLiteral("tile_size")] = m_retro.tileSize;
+    retroObj[QStringLiteral("show_scanline_guide")] = m_retro.showScanlineGuide;
+    retroObj[QStringLiteral("show_tile_grid")] = m_retro.showTileGrid;
+    retroObj[QStringLiteral("show_timeline_badges")] = m_retro.showTimelineBadges;
+    retroObj[QStringLiteral("show_vram_gauge")] = m_retro.showVramGauge;
+    root[QStringLiteral("retro_linter")] = retroObj;
 
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {

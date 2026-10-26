@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,44 @@
  */
 
 #include "widgets/timelinefilmstripwidget.h"
+#include "config/appconfig.h"
+#include "image/retrolinterhelper.h"
 #include <QMenu>
 #include <QAction>
 #include <QPainter>
 #include <QEvent>
+
+namespace {
+static QIcon createTimelineThumbnail(const QImage &img, bool hasViolation)
+{
+    if (img.isNull()) return QIcon();
+    QImage scaledImg = img.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap pixmap(64, 64);
+    pixmap.fill(Qt::transparent);
+    {
+        QPainter p(&pixmap);
+        int ox = (64 - scaledImg.width()) / 2;
+        int oy = (64 - scaledImg.height()) / 2;
+        p.drawImage(ox, oy, scaledImg);
+
+        if (hasViolation) {
+            p.setRenderHint(QPainter::Antialiasing, true);
+            QRectF badgeRect(46, 2, 16, 16);
+            p.setBrush(QColor(245, 158, 11)); // Amber #f59e0b
+            p.setPen(QPen(QColor(255, 255, 255, 230), 1.2));
+            p.drawEllipse(badgeRect);
+
+            QFont f = p.font();
+            f.setPixelSize(11);
+            f.setBold(true);
+            p.setFont(f);
+            p.setPen(Qt::white);
+            p.drawText(badgeRect, Qt::AlignCenter, QStringLiteral("!"));
+        }
+    }
+    return QIcon(pixmap);
+}
+}
 
 TimelineFilmstripWidget::TimelineFilmstripWidget(QWidget *parent)
     : QWidget(parent)
@@ -67,6 +101,8 @@ void TimelineFilmstripWidget::setupUi()
     connect(m_listWidget, &FilmstripListWidget::itemMoved, this, &TimelineFilmstripWidget::onItemMoved);
 
     mainLayout->addWidget(m_listWidget);
+
+    connect(&AppConfig::instance(), &AppConfig::configChanged, this, &TimelineFilmstripWidget::refresh);
 }
 
 void TimelineFilmstripWidget::setDocument(SpriteDocument *document)
@@ -156,6 +192,14 @@ void TimelineFilmstripWidget::rebuildItems()
         }
     }
 
+    const auto &retro = AppConfig::instance().retroLinter();
+    bool checkRetro = retro.enabled && retro.showTimelineBadges;
+
+    QString tipPattern = tr("KEY_TIMELINE_FRAME_TOOLTIP");
+    if (!tipPattern.contains(QLatin1String("%1"))) {
+        tipPattern = QStringLiteral("Step #%1: Global Frame %2 (%3 ms)\nDrag and drop to reorder");
+    }
+
     if (matches) {
         // Update thumbnail icons to reflect latest frame modifications (e.g. background removal, pixel edits)
         for (int seqIdx = 0; seqIdx < anim.frameIndices.size(); ++seqIdx) {
@@ -164,7 +208,13 @@ void TimelineFilmstripWidget::rebuildItems()
             if (item && m_document && globalIdx >= 0 && globalIdx < m_document->frameCount()) {
                 QImage img = m_document->polygonClippedFrame(globalIdx);
                 if (!img.isNull()) {
-                    item->setIcon(QIcon(QPixmap::fromImage(img.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation))));
+                    bool isViolating = checkRetro && RetroLinterHelper::isScanlineViolated(img, retro);
+                    item->setIcon(createTimelineThumbnail(img, isViolating));
+                    QString tip = tipPattern.arg(seqIdx + 1).arg(globalIdx + 1).arg(frameDuration);
+                    if (isViolating) {
+                        tip += QStringLiteral("\n") + RetroLinterHelper::scanlineViolationMessage(img, retro);
+                    }
+                    item->setToolTip(tip);
                 }
             }
         }
@@ -177,11 +227,6 @@ void TimelineFilmstripWidget::rebuildItems()
     m_isRebuilding = true;
     m_listWidget->clear();
 
-    QString tipPattern = tr("KEY_TIMELINE_FRAME_TOOLTIP");
-    if (!tipPattern.contains(QLatin1String("%1"))) {
-        tipPattern = QStringLiteral("Step #%1: Global Frame %2 (%3 ms)\nDrag and drop to reorder");
-    }
-
     for (int seqIdx = 0; seqIdx < anim.frameIndices.size(); ++seqIdx) {
         int globalIdx = anim.frameIndices.at(seqIdx);
         auto *item = new QListWidgetItem(m_listWidget);
@@ -191,12 +236,17 @@ void TimelineFilmstripWidget::rebuildItems()
             img = m_document->polygonClippedFrame(globalIdx);
         }
 
+        bool isViolating = checkRetro && RetroLinterHelper::isScanlineViolated(img, retro);
         if (!img.isNull()) {
-            item->setIcon(QIcon(QPixmap::fromImage(img.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation))));
+            item->setIcon(createTimelineThumbnail(img, isViolating));
         }
 
         item->setText(tr("#%1 (F%2)").arg(seqIdx + 1).arg(globalIdx + 1));
-        item->setToolTip(tipPattern.arg(seqIdx + 1).arg(globalIdx + 1).arg(frameDuration));
+        QString tip = tipPattern.arg(seqIdx + 1).arg(globalIdx + 1).arg(frameDuration);
+        if (isViolating) {
+            tip += QStringLiteral("\n") + RetroLinterHelper::scanlineViolationMessage(img, retro);
+        }
+        item->setToolTip(tip);
         item->setData(Qt::UserRole, globalIdx);
         item->setData(Qt::UserRole + 1, seqIdx);
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);

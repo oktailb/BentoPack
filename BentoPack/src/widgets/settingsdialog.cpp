@@ -77,6 +77,9 @@ void SettingsDialog::setCurrentPage(PageIndex page)
         case PageExport:
             if (m_itemExport) m_categoryTree->setCurrentItem(m_itemExport);
             break;
+        case PageRetro:
+            if (m_itemRetro) m_categoryTree->setCurrentItem(m_itemRetro);
+            break;
         case PagePlugins:
             if (m_itemPlugins) m_categoryTree->setCurrentItem(m_itemPlugins);
             break;
@@ -127,6 +130,10 @@ void SettingsDialog::setupUI()
     m_itemExport->setText(0, tr("Export & VRAM"));
     m_itemExport->setData(0, Qt::UserRole, PageExport);
 
+    m_itemRetro = new QTreeWidgetItem(m_categoryTree);
+    m_itemRetro->setText(0, tr("Retro & Hardware Constraints"));
+    m_itemRetro->setData(0, Qt::UserRole, PageRetro);
+
     m_itemPlugins = new QTreeWidgetItem(m_categoryTree);
     m_itemPlugins->setText(0, tr("Plugins & Extensions"));
     m_itemPlugins->setData(0, Qt::UserRole, PagePlugins);
@@ -147,6 +154,7 @@ void SettingsDialog::setupUI()
     m_pagesStack->addWidget(createGeneralPage());
     m_pagesStack->addWidget(createAtlasPage());
     m_pagesStack->addWidget(createExportPage());
+    m_pagesStack->addWidget(createRetroPage());
     m_pagesStack->addWidget(createPluginsPage());
     m_pagesStack->addWidget(createGitPage());
     m_pagesStack->addWidget(createUpdatesPage());
@@ -476,6 +484,115 @@ QWidget* SettingsDialog::createExportPage()
     lblTip->setWordWrap(true);
     lblTip->setStyleSheet(QStringLiteral("color: #7f8c8d; font-size: 11px; margin-top: 6px;"));
     layout->addWidget(lblTip);
+
+    layout->addStretch();
+    return page;
+}
+
+QWidget* SettingsDialog::createRetroPage()
+{
+    QWidget *page = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(page);
+    layout->setContentsMargins(10, 0, 0, 0);
+
+    m_hdrRetro = new QLabel(tr("Retro & Hardware Constraints"));
+    m_hdrRetro->setStyleSheet(QStringLiteral("font-size: 16px; font-weight: bold; margin-bottom: 8px;"));
+    layout->addWidget(m_hdrRetro);
+
+    m_chkRetroEnabled = new QCheckBox(tr("Enable Hardware PPU Constraints & Retro Linters (Active by default)"), page);
+    m_chkRetroEnabled->setStyleSheet(QStringLiteral("font-weight: bold; font-size: 13px;"));
+    layout->addWidget(m_chkRetroEnabled);
+
+    // Profile Preset Group
+    m_grpRetroProfile = new QGroupBox(tr("Target System Profile"), page);
+    QFormLayout *formProfile = new QFormLayout(m_grpRetroProfile);
+
+    m_comboRetroProfile = new QComboBox(m_grpRetroProfile);
+    m_comboRetroProfile->addItem(tr("Custom / Generic Retro"), 0);
+    m_comboRetroProfile->addItem(tr("Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles"), 1);
+    m_comboRetroProfile->addItem(tr("Nintendo NES / Famicom - 64px scanline, 256 tiles"), 2);
+    m_comboRetroProfile->addItem(tr("Sega Master System / Game Gear - 64px scanline, 256 tiles"), 3);
+    m_comboRetroProfile->addItem(tr("Sega Mega Drive / Genesis - 128px scanline, 512 tiles"), 4);
+    m_comboRetroProfile->addItem(tr("Commodore 64 (Multicolor) - 64px scanline, 256 tiles"), 5);
+    m_comboRetroProfile->addItem(tr("Super Nintendo (SNES) - 256px scanline, 512 tiles"), 6);
+    m_comboRetroProfile->addItem(tr("PICO-8 - 64px scanline, 256 tiles"), 7);
+
+    m_lblRetroProfile = new QLabel(tr("Hardware Profile:"), m_grpRetroProfile);
+    formProfile->addRow(m_lblRetroProfile, m_comboRetroProfile);
+
+    m_lblRetroProfileDesc = new QLabel(m_grpRetroProfile);
+    m_lblRetroProfileDesc->setWordWrap(true);
+    m_lblRetroProfileDesc->setStyleSheet(QStringLiteral("color: #7f8c8d; font-size: 11px;"));
+    formProfile->addRow(m_lblRetroProfileDesc);
+
+    layout->addWidget(m_grpRetroProfile);
+
+    // Limits Group
+    m_grpRetroLimits = new QGroupBox(tr("Hardware Constraint Limits"), page);
+    QFormLayout *formLimits = new QFormLayout(m_grpRetroLimits);
+
+    m_spinScanlineLimit = new QSpinBox(m_grpRetroLimits);
+    m_spinScanlineLimit->setRange(8, 2048);
+    m_spinScanlineLimit->setSuffix(QStringLiteral(" px"));
+    m_lblScanlineLimit = new QLabel(tr("Max Scanline Sprite Width:"), m_grpRetroLimits);
+    formLimits->addRow(m_lblScanlineLimit, m_spinScanlineLimit);
+
+    m_spinMaxVramTiles = new QSpinBox(m_grpRetroLimits);
+    m_spinMaxVramTiles->setRange(16, 8192);
+    m_spinMaxVramTiles->setSuffix(QStringLiteral(" tiles"));
+    m_lblMaxVramTiles = new QLabel(tr("Max VRAM Tile Budget:"), m_grpRetroLimits);
+    formLimits->addRow(m_lblMaxVramTiles, m_spinMaxVramTiles);
+
+    m_comboTileSize = new QComboBox(m_grpRetroLimits);
+    m_comboTileSize->addItem(QStringLiteral("8x8 pixels"), 8);
+    m_comboTileSize->addItem(QStringLiteral("16x16 pixels"), 16);
+    m_lblTileSize = new QLabel(tr("Tile Grid Resolution:"), m_grpRetroLimits);
+    formLimits->addRow(m_lblTileSize, m_comboTileSize);
+
+    layout->addWidget(m_grpRetroLimits);
+
+    // Visual Guides Group
+    m_grpRetroVisuals = new QGroupBox(tr("Visual Feedback & Aids"), page);
+    QVBoxLayout *vboxVisuals = new QVBoxLayout(m_grpRetroVisuals);
+
+    m_chkShowTileGrid = new QCheckBox(tr("Show subtle 8x8 tile grid in Pixel Editor"), m_grpRetroVisuals);
+    m_chkShowScanlineGuide = new QCheckBox(tr("Show scanline width boundary guide in Pixel Editor"), m_grpRetroVisuals);
+    m_chkShowTimelineBadges = new QCheckBox(tr("Show discrete warning badges (pastilles) on Timeline frames"), m_grpRetroVisuals);
+    m_chkShowVramGauge = new QCheckBox(tr("Show VRAM tile budget gauge in status bar"), m_grpRetroVisuals);
+
+    vboxVisuals->addWidget(m_chkShowTileGrid);
+    vboxVisuals->addWidget(m_chkShowScanlineGuide);
+    vboxVisuals->addWidget(m_chkShowTimelineBadges);
+    vboxVisuals->addWidget(m_chkShowVramGauge);
+
+    layout->addWidget(m_grpRetroVisuals);
+
+    // Dynamic preset interaction
+    connect(m_comboRetroProfile, &QComboBox::currentIndexChanged, this, [this](int index) {
+        if (index > 0) {
+            RetroLinterConfig tmp;
+            RetroLinterConfig::applyPreset(index, tmp);
+            m_spinScanlineLimit->setValue(tmp.scanlineSpriteWidthLimit);
+            m_spinMaxVramTiles->setValue(tmp.maxVramTiles);
+            int tileIdx = m_comboTileSize->findData(tmp.tileSize);
+            if (tileIdx >= 0) m_comboTileSize->setCurrentIndex(tileIdx);
+        }
+    });
+
+    // Master enable toggle enables/disables child groups
+    connect(m_chkRetroEnabled, &QCheckBox::toggled, this, [this](bool checked) {
+        m_grpRetroProfile->setEnabled(checked);
+        m_grpRetroLimits->setEnabled(checked);
+        m_grpRetroVisuals->setEnabled(checked);
+    });
+
+    QLabel *lblNote = new QLabel(
+        tr("<b>Tip:</b> Constraints and visual badges provide non-blocking visual feedback for retro targets (NES, Game Boy, Mega Drive, C64) without interfering with modern engines (Godot/Unity/Unreal)."),
+        page
+    );
+    lblNote->setWordWrap(true);
+    lblNote->setStyleSheet(QStringLiteral("color: #7f8c8d; font-size: 11px; margin-top: 6px;"));
+    layout->addWidget(lblNote);
 
     layout->addStretch();
     return page;
@@ -949,6 +1066,40 @@ void SettingsDialog::loadSettings()
     if (m_spinDefaultZstdLevel) {
         m_spinDefaultZstdLevel->setValue(cfg.exportSettings().defaultZstdLevel);
     }
+
+    // Retro & Hardware Constraints
+    if (m_chkRetroEnabled) {
+        m_chkRetroEnabled->setChecked(cfg.retroLinter().enabled);
+    }
+    if (m_comboRetroProfile) {
+        int pidx = m_comboRetroProfile->findData(cfg.retroLinter().profileIndex);
+        if (pidx >= 0) m_comboRetroProfile->setCurrentIndex(pidx);
+    }
+    if (m_spinScanlineLimit) {
+        m_spinScanlineLimit->setValue(cfg.retroLinter().scanlineSpriteWidthLimit);
+    }
+    if (m_spinMaxVramTiles) {
+        m_spinMaxVramTiles->setValue(cfg.retroLinter().maxVramTiles);
+    }
+    if (m_comboTileSize) {
+        int tidx = m_comboTileSize->findData(cfg.retroLinter().tileSize);
+        if (tidx >= 0) m_comboTileSize->setCurrentIndex(tidx);
+    }
+    if (m_chkShowTileGrid) {
+        m_chkShowTileGrid->setChecked(cfg.retroLinter().showTileGrid);
+    }
+    if (m_chkShowScanlineGuide) {
+        m_chkShowScanlineGuide->setChecked(cfg.retroLinter().showScanlineGuide);
+    }
+    if (m_chkShowTimelineBadges) {
+        m_chkShowTimelineBadges->setChecked(cfg.retroLinter().showTimelineBadges);
+    }
+    if (m_chkShowVramGauge) {
+        m_chkShowVramGauge->setChecked(cfg.retroLinter().showVramGauge);
+    }
+    if (m_grpRetroProfile) m_grpRetroProfile->setEnabled(cfg.retroLinter().enabled);
+    if (m_grpRetroLimits) m_grpRetroLimits->setEnabled(cfg.retroLinter().enabled);
+    if (m_grpRetroVisuals) m_grpRetroVisuals->setEnabled(cfg.retroLinter().enabled);
 }
 
 void SettingsDialog::saveSettings()
@@ -997,6 +1148,35 @@ void SettingsDialog::saveSettings()
     }
     if (m_spinDefaultZstdLevel) {
         cfg.exportSettings().defaultZstdLevel = m_spinDefaultZstdLevel->value();
+    }
+
+    // Retro & Hardware Constraints
+    if (m_chkRetroEnabled) {
+        cfg.retroLinter().enabled = m_chkRetroEnabled->isChecked();
+    }
+    if (m_comboRetroProfile) {
+        cfg.retroLinter().profileIndex = m_comboRetroProfile->currentData().toInt();
+    }
+    if (m_spinScanlineLimit) {
+        cfg.retroLinter().scanlineSpriteWidthLimit = m_spinScanlineLimit->value();
+    }
+    if (m_spinMaxVramTiles) {
+        cfg.retroLinter().maxVramTiles = m_spinMaxVramTiles->value();
+    }
+    if (m_comboTileSize) {
+        cfg.retroLinter().tileSize = m_comboTileSize->currentData().toInt();
+    }
+    if (m_chkShowTileGrid) {
+        cfg.retroLinter().showTileGrid = m_chkShowTileGrid->isChecked();
+    }
+    if (m_chkShowScanlineGuide) {
+        cfg.retroLinter().showScanlineGuide = m_chkShowScanlineGuide->isChecked();
+    }
+    if (m_chkShowTimelineBadges) {
+        cfg.retroLinter().showTimelineBadges = m_chkShowTimelineBadges->isChecked();
+    }
+    if (m_chkShowVramGauge) {
+        cfg.retroLinter().showVramGauge = m_chkShowVramGauge->isChecked();
     }
 
     cfg.save();
@@ -1105,6 +1285,22 @@ void SettingsDialog::retranslateUi()
     if (m_lblDefaultAlgorithm) m_lblDefaultAlgorithm->setText(tr("Default Packing Algorithm:"));
     if (m_lblZstdLevel) m_lblZstdLevel->setText(tr("Zstd Compression Level:"));
     if (m_chkDefaultZstd) m_chkDefaultZstd->setText(tr("Enable Zstandard (Zstd) compression by default"));
+
+    // Retro Page
+    if (m_itemRetro) m_itemRetro->setText(0, tr("Retro & Hardware Constraints"));
+    if (m_hdrRetro) m_hdrRetro->setText(tr("Retro & Hardware Constraints"));
+    if (m_chkRetroEnabled) m_chkRetroEnabled->setText(tr("Enable Hardware PPU Constraints & Retro Linters (Active by default)"));
+    if (m_grpRetroProfile) m_grpRetroProfile->setTitle(tr("Target System Profile"));
+    if (m_lblRetroProfile) m_lblRetroProfile->setText(tr("Hardware Profile:"));
+    if (m_grpRetroLimits) m_grpRetroLimits->setTitle(tr("Hardware Constraint Limits"));
+    if (m_lblScanlineLimit) m_lblScanlineLimit->setText(tr("Max Scanline Sprite Width:"));
+    if (m_lblMaxVramTiles) m_lblMaxVramTiles->setText(tr("Max VRAM Tile Budget:"));
+    if (m_lblTileSize) m_lblTileSize->setText(tr("Tile Grid Resolution:"));
+    if (m_grpRetroVisuals) m_grpRetroVisuals->setTitle(tr("Visual Feedback & Aids"));
+    if (m_chkShowTileGrid) m_chkShowTileGrid->setText(tr("Show subtle 8x8 tile grid in Pixel Editor"));
+    if (m_chkShowScanlineGuide) m_chkShowScanlineGuide->setText(tr("Show scanline width boundary guide in Pixel Editor"));
+    if (m_chkShowTimelineBadges) m_chkShowTimelineBadges->setText(tr("Show discrete warning badges (pastilles) on Timeline frames"));
+    if (m_chkShowVramGauge) m_chkShowVramGauge->setText(tr("Show VRAM tile budget gauge in status bar"));
 
     // Plugins Page
     if (m_hdrPlugins) m_hdrPlugins->setText(tr("Plugins & Extensions"));

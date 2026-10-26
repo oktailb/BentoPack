@@ -14,6 +14,7 @@ set(ALL_EXTRACTOR_PLUGINS
     extractor_pico8
     extractor_iff
     extractor_retro_tile
+    extractor_casm
 )
 
 set(ALL_FILTER_PLUGINS
@@ -45,6 +46,7 @@ set(PLUGIN_INCLUDES
     ${CMAKE_SOURCE_DIR}/plugins/extractors/pico8
     ${CMAKE_SOURCE_DIR}/plugins/extractors/iff
     ${CMAKE_SOURCE_DIR}/plugins/extractors/retro_tile
+    ${CMAKE_SOURCE_DIR}/plugins/extractors/c_asm
     ${CMAKE_SOURCE_DIR}/plugins/filters/backgroundremoval
     ${CMAKE_SOURCE_DIR}/plugins/filters/despill
     ${CMAKE_SOURCE_DIR}/plugins/filters/outline
@@ -251,6 +253,26 @@ if (MINGW)
 endif()
 add_test(NAME test_live_watch COMMAND test_live_watch)
 
+# 15. test_casm_extractor (C/ASM Retro Exporter)
+add_executable(test_casm_extractor test_casm_extractor.cpp)
+target_include_directories(test_casm_extractor PRIVATE ${PLUGIN_INCLUDES})
+target_compile_definitions(test_casm_extractor PRIVATE SAMPLE_DIR="${CMAKE_SOURCE_DIR}/sample")
+target_link_libraries(test_casm_extractor PRIVATE BentoPackCore extractor_casm Qt6::Test Qt6::Widgets)
+set_target_properties(test_casm_extractor PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_casm_extractor PRIVATE -mconsole)
+endif()
+add_test(NAME test_casm_extractor COMMAND test_casm_extractor)
+
+# 16. test_retro_linter (Hardware & PPU Retro Linters)
+add_executable(test_retro_linter test_retro_linter.cpp)
+target_link_libraries(test_retro_linter PRIVATE BentoPackCore Qt6::Test Qt6::Gui)
+set_target_properties(test_retro_linter PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_retro_linter PRIVATE -mconsole)
+endif()
+add_test(NAME test_retro_linter COMMAND test_retro_linter)
+
 set(ALL_TEST_TARGETS
     test_extractors
     test_app_config
@@ -270,6 +292,8 @@ set(ALL_TEST_TARGETS
     test_multipage_packer
     test_vram_dedup
     test_live_watch
+    test_casm_extractor
+    test_retro_linter
 )
 
 set_tests_properties(${ALL_TEST_TARGETS}
@@ -289,6 +313,7 @@ if(WIN32)
             $<TARGET_FILE:extractor_spritesheet>
             $<TARGET_FILE:extractor_libgdx_spine>
             $<TARGET_FILE:extractor_aseprite>
+            $<TARGET_FILE:extractor_casm>
             "${CMAKE_BINARY_DIR}/bin"
         COMMENT "Copying extractor plugin DLLs to bin directory for tests"
     )
