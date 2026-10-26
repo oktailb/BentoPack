@@ -139,6 +139,8 @@ set(BentoPackCore_INCLUDE
     include/localizationmanager.h
     include/extractor/extractor.h
     include/extractor/extractorregistry.h
+    include/extractor/retrotiledecoder.h
+    include/extractor/romprobe.h
     include/extractor/export.h
     include/zip/miniz.h
     include/cli/cliparser.h
@@ -180,6 +182,7 @@ set(BentoPackWidgets_SRC
     src/widgets/branchselectiondialog.cpp
     src/widgets/openmediaconflictdialog.cpp
     src/widgets/watchconfigdialog.cpp
+    src/widgets/retrotileexplorerdialog.cpp
 )
 
 set(BentoPackWidgets_UI
@@ -210,6 +213,7 @@ set(BentoPackWidgets_INCLUDE
     include/widgets/layerstackwidget.h
     include/widgets/colorpickerwidget.h
     include/widgets/watchconfigdialog.h
+    include/widgets/retrotileexplorerdialog.h
 )
 
 # 1. BentoPackCore: Pure headless library (Qt6::Core, Qt6::Gui, Qt6::Concurrent, Qt6::Network - ZERO Qt6::Widgets)

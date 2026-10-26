@@ -313,18 +313,42 @@ Pour garantir la fluidité sur des atlas de très haute résolution (8K, 16K) :
 
 > **Vision à long terme :** Faire de BentoPack le pont définitif entre 40 ans d'histoire du pixel art et les pipelines modernes, en envoyant définitivement à la retraite les utilitaires préhistoriques Windows 98 / XP (*YY-CHR*, *Tile Molester*, scripts Python bricolés).
 
-### 1. 📥 Module d'Import Tuiles Brutes & Dumps ROM (*Raw Planar/Chunky Tile Streams*)
-* **Décodeur Universel de Bitplanes & Tuiles (`.chr` / `.bin`) :**
-  * Dialogue d'importation chirurgical : choix de l'offset mémoire (hexadécimal), taille de tuile ($8\times 8$ ou $16\times 16$), et format de décodage :
+### 1. 📥 Module d'Import Tuiles Brutes & Dumps ROM (*Consoles Rétro 8/16/32-bits*) [Implémenté - `extractor_retro_tile`]
+* **✅ Décodeur Universel de Bitplanes, Tuiles & Dumps VRAM/ROM (`.chr`, `.bin`, `.nes`, `.gb`, `.gbc`, `.sfc`, `.smc`, `.md`, `.gen`, `.tim`, `.vram`) :**
+  * **Magie Zero-Config (`RomProbe`) :**
+    * Détection automatique des en-têtes et formats :
+      * En-tête iNES (`NES\x1a`) avec calcul automatique de l'offset du CHR-ROM sans configuration manuelle (`16 + prgBanks * 16384`).
+      * Logo Nintendo Game Boy (offset `0x0104`).
+      * Signature Sega Mega Drive (`"SEGA"` à l'offset `0x0100`).
+      * En-tête SNES Copier / SMC (512 octets skippés automatiquement).
+      * PlayStation 1 TIM (`0x10`) : parsing direct des dimensions VRAM, du CLUT (palette 16 ou 256 couleurs BGR555) et des modes 4bpp, 8bpp et direct 16bpp.
+    * Scanneur heuristique d'entropie et de cohérence spatiale (`RomProbe::findGraphicOffset`) : scanne les ROMs sans en-tête pour contourner le code machine (PRG) et se caler directement sur les banques graphiques cohérentes.
+  * **Formats de décodage matériel supportés :**
     * **NES / Famicom (2bpp Planar) :** 16 octets/tuile (8 octets plan 0 + 8 octets plan 1).
     * **Game Boy / GBC (2bpp Interleaved) :** 16 octets/tuile (plans entrelacés ligne par ligne).
     * **Super Nintendo / SNES (4bpp Planar) :** 32 octets/tuile (plans 0/1 entrelacés puis 2/3).
+    * **Super Nintendo / SNES (3bpp Planar) :** 24 octets/tuile (plans 0/1 entrelacés 16 octets + plan 2 8 octets, Mode 0 / polices).
     * **Sega Mega Drive / Genesis (4bpp Chunky / Nibbles linéaires) :** 32 octets/tuile (2 pixels par octet, valeurs 0–15).
     * **Master System / Game Gear (4bpp Planar Chunky) :** 4 octets par ligne de 8 pixels.
-  * **Application directe des palettes rétro BentoPack :** Prévisualisation instantanée via l'une des 16 palettes `.gpl` intégrées (NES, SNES, Genesis, GB...).
-* **Importateur de Dumps VRAM Émulateurs (Savestates & Snapshots VRAM) :**
-  * Glisser-déposer d'un couple `VRAM.bin` + `Palette.pal` / `CRAM.bin` issu des émulateurs de référence (**Mesen**, **bsnes/Snes9x**, **BlastEm**, **mGBA**).
-  * Reconstitution instantanée de la mémoire vidéo avec fond transparent sans pollution de décor.
+    * **SNK Neo-Geo (4bpp Sprite Tile 16x16) :** 128 octets par tuile 16x16 décomposée en 4 quadrants 8x8.
+    * **Sony PlayStation 1 TIM (4bpp, 8bpp indexé avec CLUT, 16bpp direct BGR555).**
+    * **Raw Linear 8bpp Chunky :** Pour dumps VRAM linéaires d'émulateurs (1 octet/pixel).
+  * **🎯 Motifs d'Assemblage & Meta-Tuiles (*Tile Patterns* inspiré de SNESTilesKitten) :**
+    * Reconstitution automatique évitant la fragmentation en tranches horizontales des sprites multi-tuiles :
+      * `8x8 Linear` : Défilement linéaire standard pour décors et arrière-plans.
+      * `16x16 Sprites (2x2 Sequential)` : 4 tuiles consécutives réassemblées en bloc $16\times 16$ (très fréquent sur les jeux Capcom SNES/Genesis comme *Aladdin*, *Mega Man X*).
+      * `16x16 Sprites (SNES VRAM Stride 16 / 32)` : Décodage avec décalage de ligne VRAM (+16 ou +32 tuiles pour la moitié inférieure).
+      * `32x32 Sprites (4x4 Matrix)` : 16 tuiles consécutives réordonnées en matrice $32\times 32$.
+      * `32x32 Sprites (2x2*4 Quad SNESTilesKitten p32x32A)` : 4 quadrants $16\times 16$ réassemblés.
+    * Grille interactive avec surbrillance bleue/or des délimitations de sprites $16\times 16$ et $32\times 32$.
+    * Largeur de grille par défaut calée sur la largeur native VRAM console (16 tuiles = 128 px sur SNES).
+  * **🎨 Palette Studio & Scanneur ROM BGR555 / BGR333 :**
+    * Recherche heuristique et détection automatique des blocs de palettes 16 couleurs (BGR555 SNES/GBA et BGR333 Genesis) au sein de la ROM.
+    * Saisie manuelle de l'adresse hexadécimale du CLUT / palette (avec pas `-32B`, `-16B`, `+16B`, `+32B`) pour caler la palette exacte du jeu.
+    * Bandeau visuel interactif de 16 pastilles numérotées (indices 0 à 15) avec damier sur la couleur 0 transparente.
+    * Contrôle de zoom fluide (1x, 2x, 3x, 4x, 6x) en filtre au plus proche (*nearest-neighbor*) pour préserver la netteté du pixel art.
+  * **Assemblage automatique & Slicing (`SpriteDetector`) :** Reconstitution de planches de tuiles avec transparence sur l'index 0 et vectorisation/découpage automatique des sprites prêts à l'emploi.
+  * **Export Homebrew (`write()`) :** Ré-encodage et export direct en tuiles brutes NES 2bpp, Game Boy 2bpp, Genesis 4bpp ou SNES 4bpp pour les développeurs homebrew.
 
 ### 2. 💾 Formats Cultes Micro & DOS (Amiga, Atari, PC 90s)
 * **✅ Format Apple / Cocos2d-x (`.plist` XML) [Implémenté - `extractor_plist`] :**

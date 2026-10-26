@@ -235,6 +235,7 @@ private:
     void populateFrameList(const QList<QImage> &frameList, const QList<SpriteBox> &boxList);
     void refreshFrameListDisplay();
     void setupViewMenuActions();
+    void onRetroRipperTriggered();
     void retranslateUi();
 
     std::unique_ptr<Ui::MainWindow> ui;
@@ -266,6 +267,7 @@ private:
     QAction *m_actionMergeSlices = nullptr;
     QAction *m_actionToggleLiveWatch = nullptr;
     QAction *m_actionConfigureLiveWatch = nullptr;
+    QAction *m_actionRetroRipper = nullptr;
     QPushButton *m_watchStatusBtn = nullptr;
     QLabel *statusLabel = nullptr;
     QLabel *zoomLabel = nullptr;

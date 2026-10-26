@@ -2251,6 +2251,10 @@ Strict removal: clears the fringe pixel.</source>
         <translation>配置实时监控...</translation>
     </message>
     <message>
+        <source>KEY_ACTION_RETRO_RIPPER</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
         <translation>最近的项目</translation>
     </message>
@@ -2313,6 +2317,14 @@ Strict removal: clears the fringe pixel.</source>
     <message>
         <source>⚠️ Watch: Error</source>
         <translation>⚠️ Watch: 错误</translation>
+    </message>
+    <message>
+        <source>Retro ROMs &amp; VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Retro ROM or VRAM Dump</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -3022,6 +3034,13 @@ Strict removal: clears the fringe pixel.</source>
     <message>
         <source>Filter: Outline &amp; Silhouette</source>
         <translation>滤镜：轮廓与剪影</translation>
+    </message>
+</context>
+<context>
+    <name>PaletteStripWidget</name>
+    <message>
+        <source>Active 16-color palette swatches (indices 0 to 15)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5146,6 +5165,264 @@ Install package:
     <message>
         <source>Filter: Retro Palette &amp; Dithering</source>
         <translation>滤镜：复古调色板与抖动</translation>
+    </message>
+</context>
+<context>
+    <name>RetroTileExplorerDialog</name>
+    <message>
+        <source>Retro Console ROM &amp; VRAM Tile Ripper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🎯 Detected Graphic Banks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>📍 Memory Offset / Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hex:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dec:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Format:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SNES (4bpp Planar)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sega Mega Drive (4bpp Chunky)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nintendo Game Boy (2bpp Interleaved)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NES / Famicom (2bpp Planar)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sega Master System (4bpp Planar)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SNK Neo-Geo (4bpp 16x16)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sony PSX (TIM Direct)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raw Linear (8bpp Chunky)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grid Width:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tile Count:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>⚙️ Decoding &amp; Tile Patterns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SNES (3bpp Planar)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pattern:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>8x8 Linear (Tiles &amp; Backgrounds)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>16x16 Sprites (2x2 Sequential)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>16x16 Sprites (SNES VRAM Stride 16)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>16x16 Sprites (VRAM Stride 32)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>32x32 Sprites (4x4 Matrix)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>32x32 Sprites (2x2*4 Quad SNESTilesKitten)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>32x32 Sprites (SNES VRAM Stride 16)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🎨 Palette Studio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Source:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detected:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PC Offset:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>👁️ Inspection &amp; Zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Transparent #0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tile Grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Highlight Detected Sprites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <source>📥 Import Entire Sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Imports the current decoded tile sheet directly as a single atlas image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✨ Extract Sprites to Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically slices and imports all detected character sprites and objects into BentoPack frames.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open ROM/VRAM file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt; — %2 bytes (%3 KB)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🎮 %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beginning of File (0x000000)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None auto-detected in ROM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🎨 ROM Palette (Auto-Scan)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>🎯 ROM Palette (Manual Hex)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Harmonic Retro Preview (Shaded)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grayscale (Contrast)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No decodable tile data at offset 0x%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decoded: %1 tiles (%2x%3 px) | Zoom: %4x | Pattern: %5 | Palette: 0x%6 | Offset: 0x%7</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RetroTileExtractor</name>
+    <message>
+        <source>Cannot open retro ROM/VRAM file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File is empty: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to decode PSX TIM: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insufficient tile data at offset %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to decode retro tile stream.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot export: Document atlas image is null.</source>
+        <translation type="unfinished">无法导出：文档图集图像为空。</translation>
+    </message>
+    <message>
+        <source>Failed to encode retro tiles: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file for writing: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write all tile bytes to disk.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

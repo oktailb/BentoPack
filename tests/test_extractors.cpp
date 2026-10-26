@@ -27,6 +27,7 @@
 #include "pcxextractor.h"
 #include "pico8extractor.h"
 #include "iffextractor.h"
+#include "retrotileextractor.h"
 
 
 class TestExtractors : public QObject {
@@ -50,6 +51,7 @@ private slots:
   void testPcxExtractorReadWrite();
   void testPico8ExtractorReadWrite();
   void testIffExtractorReadWrite();
+  void testRetroTileExtractorReadWrite();
   void testErrorHandlingNonExistentFile();
   void testErrorHandlingCorruptedData();
   void testExtractToImagesEquivalence();
@@ -246,6 +248,7 @@ void TestExtractors::testExtractorRegistryBasics() {
   QVERIFY(reg.findExtractorById(QStringLiteral("pcx_extractor")) != nullptr);
   QVERIFY(reg.findExtractorById(QStringLiteral("pico8_extractor")) != nullptr);
   QVERIFY(reg.findExtractorById(QStringLiteral("iff_extractor")) != nullptr);
+  QVERIFY(reg.findExtractorById(QStringLiteral("retro_tile_extractor")) != nullptr);
 
   // Verify filter strings
   QString openFilters = reg.openFilterString();
@@ -260,6 +263,9 @@ void TestExtractors::testExtractorRegistryBasics() {
   QVERIFY(openFilters.contains(QStringLiteral("*.p8")));
   QVERIFY(openFilters.contains(QStringLiteral("*.iff")));
   QVERIFY(openFilters.contains(QStringLiteral("*.lbm")));
+  QVERIFY(openFilters.contains(QStringLiteral("*.nes")));
+  QVERIFY(openFilters.contains(QStringLiteral("*.gb")));
+  QVERIFY(openFilters.contains(QStringLiteral("*.tim")));
 
   QString saveFilters = reg.saveFilterString();
   QVERIFY(saveFilters.contains(QStringLiteral("*.json")));
@@ -272,6 +278,8 @@ void TestExtractors::testExtractorRegistryBasics() {
   QVERIFY(saveFilters.contains(QStringLiteral("*.p8")));
   QVERIFY(saveFilters.contains(QStringLiteral("*.iff")));
   QVERIFY(saveFilters.contains(QStringLiteral("*.lbm")));
+  QVERIFY(saveFilters.contains(QStringLiteral("*.nes")));
+  QVERIFY(saveFilters.contains(QStringLiteral("*.chr")));
 }
 
 void TestExtractors::testSpriteExtractorCapabilities() {
@@ -1689,6 +1697,206 @@ void TestExtractors::testIffExtractorReadWrite() {
   QVERIFY2(readDocOk, qPrintable(readErr.toString()));
   QCOMPARE(readDoc.atlas().size(), QSize(32, 32));
   QVERIFY(readDoc.frameCount() >= 1);
+}
+
+void TestExtractors::testRetroTileExtractorReadWrite() {
+  RetroTileExtractor extractor;
+  QCOMPARE(extractor.id(), QStringLiteral("retro_tile_extractor"));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanImport));
+  QVERIFY(extractor.capabilities().testFlag(Extractor::CanExport));
+  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("nes")));
+  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("gb")));
+  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("sfc")));
+  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("md")));
+  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("tim")));
+
+  QVector<QRgb> pal4 = {
+    qRgba(0, 0, 0, 0),        // Color 0 transparent
+    qRgb(100, 100, 100),      // Color 1
+    qRgb(180, 180, 180),      // Color 2
+    qRgb(255, 255, 255)       // Color 3
+  };
+
+  // 1. NES 2bpp Planar Tile test
+  QByteArray nesTile(16, 0);
+  nesTile[0] = static_cast<char>(0x80); // Row 0 bit 0
+  nesTile[8] = static_cast<char>(0x80); // Row 0 bit 1 -> Color 3 at (0,0)
+  QImage nesSheet = RetroTileDecoder::decodeTileSheet(
+    reinterpret_cast<const uchar*>(nesTile.constData()), 16,
+    RetroFormat::Nes2bpp, 1, 1, pal4, true
+  );
+  QCOMPARE(nesSheet.size(), QSize(8, 8));
+  QCOMPARE(nesSheet.pixel(0, 0), pal4[3]);
+  QCOMPARE(qAlpha(nesSheet.pixel(1, 0)), 0);
+
+  // 2. Game Boy 2bpp Interleaved Tile test
+  QByteArray gbTile(16, 0);
+  gbTile[0] = static_cast<char>(0x80); // Row 0 plane 0
+  gbTile[1] = static_cast<char>(0x80); // Row 0 plane 1 -> Color 3 at (0,0)
+  QImage gbSheet = RetroTileDecoder::decodeTileSheet(
+    reinterpret_cast<const uchar*>(gbTile.constData()), 16,
+    RetroFormat::GameBoy2bpp, 1, 1, pal4, true
+  );
+  QCOMPARE(gbSheet.size(), QSize(8, 8));
+  QCOMPARE(gbSheet.pixel(0, 0), pal4[3]);
+
+  // 3. Sega Genesis 4bpp Chunky Tile test
+  QByteArray mdTile(32, 0);
+  mdTile[0] = static_cast<char>(0x12); // Pixel (0,0)=1, Pixel (1,0)=2
+  QVector<QRgb> pal16(16, qRgb(0, 0, 0));
+  pal16[1] = qRgb(255, 0, 0);
+  pal16[2] = qRgb(0, 255, 0);
+  QImage mdSheet = RetroTileDecoder::decodeTileSheet(
+    reinterpret_cast<const uchar*>(mdTile.constData()), 32,
+    RetroFormat::Genesis4bpp, 1, 1, pal16, true
+  );
+  QCOMPARE(mdSheet.pixel(0, 0), pal16[1]);
+  QCOMPARE(mdSheet.pixel(1, 0), pal16[2]);
+
+  // 4. SNES 4bpp Planar Tile test
+  QByteArray snesTile(32, 0);
+  // Color 15 = all 4 planes high: b0=1, b1=1, b2=1, b3=1
+  snesTile[0] = static_cast<char>(0x80);
+  snesTile[1] = static_cast<char>(0x80);
+  snesTile[16] = static_cast<char>(0x80);
+  snesTile[17] = static_cast<char>(0x80);
+  pal16[15] = qRgb(255, 255, 0);
+  QImage snesSheet = RetroTileDecoder::decodeTileSheet(
+    reinterpret_cast<const uchar*>(snesTile.constData()), 32,
+    RetroFormat::Snes4bpp, 1, 1, pal16, true
+  );
+  QCOMPARE(snesSheet.pixel(0, 0), pal16[15]);
+
+  // 5. PSX TIM 4bpp with CLUT test
+  QByteArray timData;
+  timData.append("\x10\x00\x00\x00", 4); // Magic 0x10
+  timData.append("\x08\x00\x00\x00", 4); // Flags: 4bpp (0), hasClut (8)
+
+  // CLUT block: len 44, x 0, y 0, w 16, h 1, 16 BGR555 words
+  timData.append("\x2c\x00\x00\x00", 4); // len = 44
+  timData.append("\x00\x00\x00\x00", 4); // x, y
+  timData.append("\x10\x00\x01\x00", 4); // w=16, h=1
+  // 16 words: word 0 = transparent (0x0000), word 1 = Red (0x001F)
+  timData.append("\x00\x00", 2);
+  timData.append("\x1f\x00", 2);
+  for (int i = 2; i < 16; ++i) timData.append("\x00\x00", 2);
+
+  // Pixel data block: 16x4 pixels (4 words wide * 4 lines = 16 words = 32 bytes + 12 header = 44 bytes)
+  timData.append("\x2c\x00\x00\x00", 4); // len = 44
+  timData.append("\x00\x00\x00\x00", 4); // x, y
+  timData.append("\x04\x00\x04\x00", 4); // w=4 words (16 pixels), h=4
+  // Row 0: Pixel 0 has index 1 (Red), Pixel 1 has index 0 (transp)
+  timData.append("\x01", 1);
+  timData.append(QByteArray(31, 0));
+
+  QImage timImg;
+  QString timErr;
+  bool timOk = RetroTileDecoder::decodePsxTim(timData, timImg, &timErr);
+  QVERIFY2(timOk, qPrintable(timErr));
+  QCOMPARE(timImg.size(), QSize(16, 4));
+  QCOMPARE(timImg.pixel(0, 0), qRgb(248, 0, 0)); // BGR555 0x001F scaled to 8-bit
+  QCOMPARE(qAlpha(timImg.pixel(1, 0)), 0);
+
+  // 6. iNES ROM probe & auto-slicing test
+  QTemporaryDir tempDir;
+  QVERIFY(tempDir.isValid());
+  QString nesPath = tempDir.filePath(QStringLiteral("mario.nes"));
+
+  QByteArray nesRom;
+  // 16-byte iNES header
+  nesRom.append("NES\x1a", 4);
+  nesRom.append(static_cast<char>(1)); // 1 PRG bank (16KB)
+  nesRom.append(static_cast<char>(1)); // 1 CHR bank (8KB)
+  nesRom.append(QByteArray(10, 0));   // Flags / padding
+
+  // 16KB PRG dummy data
+  nesRom.append(QByteArray(16384, static_cast<char>(0xEA))); // NOPs
+
+  // 8KB CHR tile data (put our NES tile at the beginning of CHR-ROM)
+  nesRom.append(nesTile);
+  nesRom.append(QByteArray(8192 - 16, 0));
+
+  QFile nesFile(nesPath);
+  QVERIFY(nesFile.open(QIODevice::WriteOnly));
+  nesFile.write(nesRom);
+  nesFile.close();
+
+  // Verify canDecode and automatic probe
+  QVERIFY(extractor.canDecode(nesPath));
+
+  SpriteDocument nesDoc;
+  ExtractorError readErr;
+  bool readOk = extractor.read(nesPath, nesDoc, &readErr);
+  QVERIFY2(readOk, qPrintable(readErr.toString()));
+  QCOMPARE(nesDoc.atlas().width(), 128); // 16 tiles * 8 pixels
+  QVERIFY(nesDoc.frameCount() >= 1);
+  QVERIFY(!nesDoc.boxes().isEmpty());
+
+  // 7. Homebrew CHR export test
+  QString chrOutPath = tempDir.filePath(QStringLiteral("sprites.chr"));
+  ExportOptions expOpts;
+  ExtractorError writeErr;
+  bool writeOk = extractor.write(chrOutPath, nesDoc, expOpts, &writeErr);
+  QVERIFY2(writeOk, qPrintable(writeErr.toString()));
+  QVERIFY(QFile::exists(chrOutPath));
+  QVERIFY(QFileInfo(chrOutPath).size() % 16 == 0); // Must be multiple of 16-byte tiles
+
+  // 8. SNES ROM Aladdin (F).smc auto-probe and extraction test
+  QString aladdinPath = QStringLiteral("sample/Aladdin (F).smc");
+  if (QFile::exists(aladdinPath)) {
+    SpriteDocument aladdinDoc;
+    ExtractorError aladdinErr;
+    bool aladdinOk = extractor.read(aladdinPath, aladdinDoc, &aladdinErr);
+    QVERIFY2(aladdinOk, qPrintable(aladdinErr.toString()));
+    QVERIFY(!aladdinDoc.atlas().isNull());
+    QVERIFY(aladdinDoc.atlas().width() > 0);
+    QVERIFY(aladdinDoc.frameCount() >= 10);
+    qDebug() << "Aladdin (F).smc auto-extracted:"
+             << aladdinDoc.frameCount() << "sprites,"
+             << "atlas:" << aladdinDoc.atlas().size();
+
+    // 9. Pattern-aware decoding & palette detection unit tests
+    QFile aladdinFile(aladdinPath);
+    if (aladdinFile.open(QIODevice::ReadOnly)) {
+      QByteArray rom = aladdinFile.readAll();
+      aladdinFile.close();
+
+      // Scan ROM palettes
+      QList<DetectedPalette> palettes = RomProbe::scanPalettes(rom, RetroFormat::Snes4bpp, 32);
+      QVERIFY(!palettes.isEmpty());
+      QVERIFY(palettes.first().colors.size() == 16);
+
+      // Verify BGR555 conversion
+      quint16 redWord = 0x001F; // Full red
+      QRgb redRgb = RetroTileDecoder::snesBgr555ToRgb(redWord, false);
+      QCOMPARE(qRed(redRgb), 255);
+      QCOMPARE(qGreen(redRgb), 0);
+      QCOMPARE(qBlue(redRgb), 0);
+
+      // Verify TilePattern decoding on 4 tiles (16x16 sprite)
+      const uchar *raw = reinterpret_cast<const uchar*>(rom.constData());
+      QImage sheetLinear = RetroTileDecoder::decodeTileSheet(
+          raw + 0x4F800, 32 * 4, RetroFormat::Snes4bpp, 16, 4,
+          palettes.first().colors, true, TilePattern::Linear);
+      QCOMPARE(sheetLinear.size(), QSize(128, 8)); // 16 tiles wide * 8 px
+
+      QImage sheet2x2 = RetroTileDecoder::decodeTileSheet(
+          raw + 0x4F800, 32 * 4, RetroFormat::Snes4bpp, 16, 4,
+          palettes.first().colors, true, TilePattern::Sprite16x16_2x2);
+      QCOMPARE(sheet2x2.size(), QSize(128, 16)); // 2x2 sprite: 16px high!
+    }
+  }
+
+  // 10. SNES 3bpp format decoding test
+  QByteArray snes3bppTile(24, 0);
+  // Plane 0 line 0: 0xFF, Plane 1 line 0: 0x00, Plane 2 line 0: 0xFF -> color = 1 | 4 = 5
+  snes3bppTile.data()[0] = static_cast<char>(0xFF);
+  snes3bppTile.data()[16] = static_cast<char>(0xFF);
+  QVector<QRgb> pal3bpp = RetroTileDecoder::defaultPreviewPalette(RetroFormat::Snes3bpp);
+  QRgb dest3bpp[64] = {0};
+  RetroTileDecoder::decodeTile8x8(reinterpret_cast<const uchar*>(snes3bppTile.constData()),
+                                 RetroFormat::Snes3bpp, dest3bpp, 8, pal3bpp, false);
+  QCOMPARE(dest3bpp[0], pal3bpp[5]);
 }
 
 int main(int argc, char *argv[]) {

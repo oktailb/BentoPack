@@ -59,6 +59,7 @@ public:
 
     QString currentFilePath() const;
     void setCurrentFilePath(const QString &filePath);
+    SpriteDocument* document() const { return m_document; }
 
     // Native .bento Project Management
     bool newProject();

@@ -27,6 +27,7 @@
 #include "include/widgets/branchselectiondialog.h"
 #include "include/widgets/openmediaconflictdialog.h"
 #include "include/widgets/watchconfigdialog.h"
+#include "include/widgets/retrotileexplorerdialog.h"
 #include "include/widgets/filtermenubuilder.h"
 #include "include/watcher/livewatchmanager.h"
 #include "include/filters/filterregistry.h"
@@ -769,6 +770,9 @@ void MainWindow::setupShortcuts()
     m_actionConfigureLiveWatch = ui->menuFile->addAction(tr("KEY_ACTION_CONFIGURE_LIVE_WATCH"));
     connect(m_actionConfigureLiveWatch, &QAction::triggered, this, &MainWindow::onConfigureLiveWatchTriggered);
 
+    m_actionRetroRipper = ui->menuFile->addAction(tr("KEY_ACTION_RETRO_RIPPER"));
+    connect(m_actionRetroRipper, &QAction::triggered, this, &MainWindow::onRetroRipperTriggered);
+
     // Recent Projects Submenu
     m_recentProjectsMenu = new QMenu(tr("KEY_MENU_RECENT_PROJECTS"), this);
     ui->menuFile->insertMenu(ui->actionSaveProject, m_recentProjectsMenu);
@@ -871,6 +875,24 @@ void MainWindow::saveLayoutState()
 void MainWindow::processFile(const QString &fileName)
 {
     if (fileName.isEmpty()) return;
+
+    // Check if incoming file is a retro console ROM / VRAM dump
+    QFileInfo fi(fileName);
+    QString ext = fi.suffix().toLower();
+    static const QStringList s_retroExts = {
+        QStringLiteral("smc"), QStringLiteral("sfc"),
+        QStringLiteral("nes"), QStringLiteral("chr"),
+        QStringLiteral("gb"),  QStringLiteral("gbc"),
+        QStringLiteral("md"),  QStringLiteral("gen"), QStringLiteral("smd"),
+        QStringLiteral("sms"), QStringLiteral("gg"),
+        QStringLiteral("neo"), QStringLiteral("vram")
+    };
+
+    if (s_retroExts.contains(ext)) {
+        RetroTileExplorerDialog dlg(fileName, this, m_projectController.get());
+        dlg.exec();
+        return;
+    }
 
     if (m_document && !m_document->isEmpty()) {
         OpenMediaConflictDialog dlg(fileName, this);
@@ -1240,6 +1262,9 @@ void MainWindow::retranslateUi()
     }
     if (m_actionTogglePolygonMesh) {
         m_actionTogglePolygonMesh->setText(tr("KEY_ACTION_TOGGLE_POLYGON_MESH"));
+    }
+    if (m_actionRetroRipper) {
+        m_actionRetroRipper->setText(tr("KEY_ACTION_RETRO_RIPPER"));
     }
     if (m_actionMergeSlices) {
         m_actionMergeSlices->setText(tr("KEY_CTX_MERGE_SLICES"));
@@ -1620,6 +1645,16 @@ void MainWindow::updateWatchStatusUI(WatchState state, const QString &message)
         m_watchStatusBtn->setText(tr("⚠️ Watch: Error"));
         m_watchStatusBtn->setStyleSheet(QStringLiteral("QPushButton { color: #f44336; font-weight: bold; border: none; padding: 2px 8px; border-radius: 3px; } QPushButton:hover { background: rgba(244,67,54,0.2); }"));
         break;
+    }
+}
+
+void MainWindow::onRetroRipperTriggered()
+{
+    QString filter = tr("Retro ROMs & VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)");
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Select Retro ROM or VRAM Dump"), "", filter);
+    if (!fileName.isEmpty()) {
+        RetroTileExplorerDialog dlg(fileName, this, m_projectController.get());
+        dlg.exec();
     }
 }
 
