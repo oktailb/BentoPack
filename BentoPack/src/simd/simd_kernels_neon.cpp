@@ -17,7 +17,12 @@
 #include "simd/simd_kernels.h"
 
 #if defined(BENTOPACK_HAS_NEON)
-#include <arm_neon.h>
+
+#if (defined(__aarch64__) || defined(_M_ARM64) || defined(__ARM_NEON) || defined(__ARM_NEON__)) && !defined(__x86_64__) && !defined(_M_X64)
+#  define BENTOPACK_NEON_INTRINSICS_AVAILABLE 1
+#  include <arm_neon.h>
+#endif
+
 #include <QColor>
 #include <algorithm>
 #include <cmath>

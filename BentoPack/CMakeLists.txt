@@ -84,7 +84,28 @@ set(BentoPackCore_SRC
 
 # SIMD Architecture & Hardware Acceleration Support (Chantier M14 - Palier 2)
 include(CheckCXXCompilerFlag)
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[3-6]86")
+include(CheckCXXSourceCompiles)
+
+# Determine target architecture (accounting for macOS cross-compilation via CMAKE_OSX_ARCHITECTURES)
+set(TARGET_IS_X86 FALSE)
+set(TARGET_IS_ARM FALSE)
+
+if(APPLE AND CMAKE_OSX_ARCHITECTURES)
+    if(CMAKE_OSX_ARCHITECTURES MATCHES "x86_64|i386")
+        set(TARGET_IS_X86 TRUE)
+    endif()
+    if(CMAKE_OSX_ARCHITECTURES MATCHES "arm64|aarch64")
+        set(TARGET_IS_ARM TRUE)
+    endif()
+else()
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[3-6]86")
+        set(TARGET_IS_X86 TRUE)
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
+        set(TARGET_IS_ARM TRUE)
+    endif()
+endif()
+
+if(TARGET_IS_X86)
     check_cxx_compiler_flag("-mavx2" COMPILER_SUPPORTS_AVX2)
     if(COMPILER_SUPPORTS_AVX2)
         set(AVX2_COMPILE_FLAGS "-mavx2 -O3")
@@ -104,10 +125,20 @@ if(COMPILER_SUPPORTS_AVX2)
     add_compile_definitions(BENTOPACK_HAS_AVX2)
 endif()
 
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
-    message(STATUS "ARM NEON SIMD acceleration enabled for BentoPack filters")
-    list(APPEND BentoPackCore_SRC src/simd/simd_kernels_neon.cpp)
-    add_compile_definitions(BENTOPACK_HAS_NEON)
+if(TARGET_IS_ARM)
+    check_cxx_source_compiles("
+        #include <arm_neon.h>
+        int main() {
+            uint8x8_t v = vdup_n_u8(0);
+            (void)v;
+            return 0;
+        }
+    " COMPILER_SUPPORTS_NEON)
+    if(COMPILER_SUPPORTS_NEON)
+        message(STATUS "ARM NEON SIMD acceleration enabled for BentoPack filters")
+        list(APPEND BentoPackCore_SRC src/simd/simd_kernels_neon.cpp)
+        add_compile_definitions(BENTOPACK_HAS_NEON)
+    endif()
 endif()
 
 # Copy palettes directory to build bin directory for runtime discovery

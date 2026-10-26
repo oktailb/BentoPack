@@ -18,14 +18,17 @@
 
 #if defined(BENTOPACK_HAS_AVX2)
 
-#include <immintrin.h>
+#if (defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86))
+#  define BENTOPACK_AVX2_INTRINSICS_AVAILABLE 1
+#  include <immintrin.h>
+#  if defined(__GNUC__) || defined(__clang__)
+#    pragma GCC target("avx2")
+#  endif
+#endif
+
 #include <QColor>
 #include <algorithm>
 #include <cmath>
-
-#if defined(__GNUC__) || defined(__clang__)
-#  pragma GCC target("avx2")
-#endif
 
 int SimdKernels::colorSwapRow_avx2(const QRgb *src, QRgb *dst, int count,
                                    int sr, int sg, int sb,
@@ -33,6 +36,10 @@ int SimdKernels::colorSwapRow_avx2(const QRgb *src, QRgb *dst, int count,
                                    bool preserveShading,
                                    int sV, int sS, int dH, int dS, int dV)
 {
+#if !defined(BENTOPACK_AVX2_INTRINSICS_AVAILABLE)
+    return colorSwapRow_scalar(src, dst, count, sr, sg, sb, maxDistSq, dstRgbBase,
+                               preserveShading, sV, sS, dH, dS, dV);
+#else
     int modified = 0;
     int i = 0;
 
@@ -121,12 +128,16 @@ int SimdKernels::colorSwapRow_avx2(const QRgb *src, QRgb *dst, int count,
     }
 
     return modified;
+#endif // BENTOPACK_AVX2_INTRINSICS_AVAILABLE
 }
 
 int SimdKernels::despillChromaRow_avx2(const QRgb *src, QRgb *dst, int count,
                                       bool isGreenFringe, bool isBlueFringe,
                                       double spillFactor)
 {
+#if !defined(BENTOPACK_AVX2_INTRINSICS_AVAILABLE)
+    return despillChromaRow_scalar(src, dst, count, isGreenFringe, isBlueFringe, spillFactor);
+#else
     // If fractional spill factor, fallback to scalar to ensure identical floating-point rounding
     if (std::abs(spillFactor - 1.0) > 1e-4) {
         return despillChromaRow_scalar(src, dst, count, isGreenFringe, isBlueFringe, spillFactor);
@@ -189,6 +200,7 @@ int SimdKernels::despillChromaRow_avx2(const QRgb *src, QRgb *dst, int count,
     }
 
     return modified;
+#endif // BENTOPACK_AVX2_INTRINSICS_AVAILABLE
 }
 
 #endif // BENTOPACK_HAS_AVX2
