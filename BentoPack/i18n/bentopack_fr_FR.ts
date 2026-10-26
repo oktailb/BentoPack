@@ -535,6 +535,49 @@ Choisissez la branche à restaurer :</translation>
     </message>
 </context>
 <context>
+    <name>CAsmExtractor</name>
+    <message>
+        <source>The C/ASM plugin is an export-only plugin and does not import raw source code into sprite sheets.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export destination path is empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export cancelled by user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generating retro source code (%1)...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writing file %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open file for writing: %1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C/ASM code exported successfully to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Retro Architecture Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Hardware Constraints Linter (PPU scanlines, VRAM warnings)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exports native C/C++ arrays and pure Assembly data (.h, .c, .asm, .s, .inc) directly usable in homebrew SDKs without game engines.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CliParser</name>
     <message>
         <source>BentoPack CLI v%1 (Qt 6 - C++17 Headless Engine)</source>
@@ -5035,6 +5078,22 @@ Installez le paquet :
         <source>Create Emissive Layer </source>
         <translation>Créer un calque Émissif </translation>
     </message>
+    <message>
+        <source>1 frame exceeds 64 px width (%1 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 frames exceed 64 px width (up to %2 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>1 frame exceeds VIC-II hardware sprite size (24x21 px).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 frames exceed VIC-II hardware sprite size (24x21 px).</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QPlatformTheme</name>
@@ -5057,6 +5116,169 @@ Installez le paquet :
     <message>
         <source>Apply</source>
         <translation>Appliquer</translation>
+    </message>
+</context>
+<context>
+    <name>Retro::CAsmDialog</name>
+    <message>
+        <source>C / C++ &amp; Assembly Retro Code Exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Retro Architecture Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Language &amp; Pixel Layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C / C++ Header (.h)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C Source (.c)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Assembly Motorola / VASM (68000)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Assembly RGBDS (Game Boy)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Assembly ca65 / cc65 (6502)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Assembly NASM / TASM (x86)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Assembly GNU as (.byte/.long)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Assembly WLA-DX (Z80)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PICO-8 Lua String/Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Planar 2bpp Tiles (8x8) [GB/NES]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Planar 4bpp Tiles (8x8) [SMS/MD/SNES]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear 4bpp Packed (2 px/byte)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear 8bpp Indexed (1 byte/px)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amiga Planar Bitplanes (1-5 planes)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C64 Multicolor Sprite (24x21, 64B)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ZX Spectrum (1bpp + 8x8 attrs)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear 1bpp Mono (8 px/byte)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tile/Pixel Layout:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number Format:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bytes per Line:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Optional symbol prefix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Symbol Prefix:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data Type (C):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>e.g. const, PROGMEM, ALIGN(2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Storage Qualifier:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Sections &amp; Linter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Hardware Color Palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Animation Sequences Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Sprite Metadata Struct (Pivot, Size)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Include C Header Guards (#ifndef)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Include Scanline &amp; Hardware Linter Warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>📋 Copy Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source>Total ROM: %1 Bytes (%2 KB) | %3 Tiles (8x8)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>✅ Copied!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5705,6 +5927,10 @@ Installez le paquet :
         <translation>Format cible par défaut :</translation>
     </message>
     <message>
+        <source>Retro &amp; Hardware Constraints</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>PNG (Standard, Lossless)</source>
         <translation>PNG (Standard, Sans perte)</translation>
     </message>
@@ -5747,6 +5973,90 @@ Installez le paquet :
     <message>
         <source>Zstd Compression Level:</source>
         <translation>Niveau de compression Zstd :</translation>
+    </message>
+    <message>
+        <source>Enable Hardware PPU Constraints &amp; Retro Linters (Active by default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target System Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom / Generic Retro</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nintendo NES / Famicom - 64px scanline, 256 tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sega Master System / Game Gear - 64px scanline, 256 tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sega Mega Drive / Genesis - 128px scanline, 512 tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Commodore 64 (Multicolor) - 64px scanline, 256 tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Super Nintendo (SNES) - 256px scanline, 512 tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PICO-8 - 64px scanline, 256 tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hardware Profile:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hardware Constraint Limits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max Scanline Sprite Width:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max VRAM Tile Budget:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tile Grid Resolution:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visual Feedback &amp; Aids</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show subtle 8x8 tile grid in Pixel Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show scanline width boundary guide in Pixel Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show discrete warning badges (pastilles) on Timeline frames</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show VRAM tile budget gauge in status bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Tip:&lt;/b&gt; Constraints and visual badges provide non-blocking visual feedback for retro targets (NES, Game Boy, Mega Drive, C64) without interfering with modern engines (Godot/Unity/Unreal).</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open Plugins Folder...</source>

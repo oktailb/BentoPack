@@ -673,6 +673,9 @@ void RetroTileExplorerDialog::onDetectedPaletteSelected(int index)
     const uchar *raw = reinterpret_cast<const uchar*>(m_romData.constData());
     m_activeCustomPalette = RetroTileDecoder::readRomPalette(raw, m_romData.size(), offset, fmt, 16, m_chkColor0Transp->isChecked());
     m_useRomPalette = true;
+    m_comboPalette->blockSignals(true);
+    m_comboPalette->setCurrentIndex(0); // Show ROM Auto-Scan in Source dropdown
+    m_comboPalette->blockSignals(false);
 
     updateView();
 }
@@ -687,6 +690,9 @@ void RetroTileExplorerDialog::onPaletteOffsetChanged(int value)
     const uchar *raw = reinterpret_cast<const uchar*>(m_romData.constData());
     m_activeCustomPalette = RetroTileDecoder::readRomPalette(raw, m_romData.size(), value, fmt, 16, m_chkColor0Transp->isChecked());
     m_useRomPalette = true;
+    m_comboPalette->blockSignals(true);
+    m_comboPalette->setCurrentIndex(1); // Show ROM Manual Hex in Source dropdown
+    m_comboPalette->blockSignals(false);
 
     updateView();
 }

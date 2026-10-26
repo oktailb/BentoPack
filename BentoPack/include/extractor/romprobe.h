@@ -440,59 +440,41 @@ private:
 
 public:
     // Scan ROM data for valid 16-color palettes (SNES/GBA BGR555, Genesis BGR333)
-    static QList<DetectedPalette> scanPalettes(const QByteArray &data, RetroFormat format, int maxCount = 64)
+    // 100% generic heuristic analysis: hardware validity, entropy, luminance dynamic range,
+    // and artistic ramp continuity. Zero game-specific hardcoding.
+    static QList<DetectedPalette> scanPalettes(const QByteArray &data, RetroFormat format, int maxCount = 96)
     {
         QList<DetectedPalette> list;
         const uchar *raw = reinterpret_cast<const uchar*>(data.constData());
         int size = data.size();
         if (size < 32) return list;
 
-        // Recognized classic game character palette presets
-        if (format == RetroFormat::Snes4bpp || format == RetroFormat::Snes3bpp) {
-            int headerOff = (size % 1024 == 512) ? 512 : 0;
-            QByteArray loName = data.mid(headerOff + 0x7FC0, 21).toUpper();
-            QByteArray hiName = data.mid(headerOff + 0xFFC0, 21).toUpper();
-            bool isZelda = loName.contains("ZELDA") || loName.contains("TRIFORCE") || hiName.contains("ZELDA");
-            bool isAladdin = loName.contains("ALADDIN") || hiName.contains("ALADDIN");
-
-            auto addPreset = [&](int off, const QString &desc, float prio) {
-                if (off + 32 <= size) {
-                    DetectedPalette dp;
-                    dp.offset = off;
-                    dp.colors = RetroTileDecoder::readRomPalette(raw, size, off, format, 16, true);
-                    dp.confidence = prio;
-                    dp.label = QStringLiteral("%1 [0x%2]").arg(desc, QString::number(off, 16).toUpper());
-                    list.append(dp);
-                }
-            };
-
-            if (isZelda) {
-                addPreset(0x0DD308, QStringLiteral("Link (Green Tunic & Pink Hair)"), 2000.0f);
-                addPreset(0x0DD326, QStringLiteral("Link (Blue Mail)"), 1900.0f);
-                addPreset(0x0DD344, QStringLiteral("Link (Red Mail)"), 1800.0f);
-                addPreset(0x0DD362, QStringLiteral("Bunny Link"), 1700.0f);
-            } else if (isAladdin) {
-                addPreset(0x0230B0, QStringLiteral("Aladdin (Red Vest & Cream Pants)"), 2000.0f);
-                addPreset(0x023320, QStringLiteral("Genie (Blue)"), 1900.0f);
-                addPreset(0x023180, QStringLiteral("Aladdin (White Outfit)"), 1800.0f);
-                addPreset(0x0231C0, QStringLiteral("Agrabah Guard (Armor)"), 1700.0f);
-            }
-        }
-
-        int step = (format == RetroFormat::Genesis4bpp) ? 4 : 16;
+        int step = 2; // Check every 16-bit word boundary for SNES / Genesis / GBA
 
         for (int off = 0; off <= size - 32; off += step) {
-            // For SNES (BGR555), check that bit 15 is 0 for all 16 color words
+            // Hardware validity filter:
             if (format == RetroFormat::Snes4bpp || format == RetroFormat::Snes3bpp) {
-                bool highBitSet = false;
+                // In SNES BGR555 (0bbbbbgggggrrrrr), bit 15 is unused and must be 0 for all 16 words
+                bool valid = true;
                 for (int i = 0; i < 16; ++i) {
                     quint16 w = raw[off + i * 2] | (static_cast<quint16>(raw[off + i * 2 + 1]) << 8);
                     if (w & 0x8000) {
-                        highBitSet = true;
+                        valid = false;
                         break;
                     }
                 }
-                if (highBitSet) continue;
+                if (!valid) continue;
+            } else if (format == RetroFormat::Genesis4bpp) {
+                // In Genesis BGR333 (0000_bbb0_ggg0_rrr0), high nibble and unused bits are 0
+                bool valid = true;
+                for (int i = 0; i < 16; ++i) {
+                    quint16 w = (static_cast<quint16>(raw[off + i * 2]) << 8) | raw[off + i * 2 + 1];
+                    if (w & 0xF111) {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (!valid) continue;
             }
 
             QVector<QRgb> pal = RetroTileDecoder::readRomPalette(raw, size, off, format, 16, true);
@@ -518,21 +500,29 @@ public:
                 }
             }
 
-            // Real retro palettes have at least 6 unique colors and good luminance contrast
+            // Real retro palettes have between 6 and 16 unique colors and sufficient contrast
             if (uniqueCount >= 6 && (maxLum - minLum) >= 40.0f) {
-                // Evaluate ramp continuity (gradual shading typical of pixel art)
+                // Evaluate artistic ramp continuity (gradual shading typical of pixel art)
                 int rampScore = 0;
-                for (int i = 2; i < 16; ++i) {
-                    float diff = std::abs(lums[i] - lums[i - 1]);
-                    if (diff >= 4.0f && diff <= 70.0f) {
+                int chromaScore = 0;
+                for (int i = 1; i < 15; ++i) {
+                    float diff = std::abs(lums[i + 1] - lums[i]);
+                    if (diff >= 4.0f && diff <= 65.0f) {
                         rampScore++;
+                    }
+                    int dr = qRed(pal[i + 1]) - qRed(pal[i]);
+                    int dg = qGreen(pal[i + 1]) - qGreen(pal[i]);
+                    int db = qBlue(pal[i + 1]) - qBlue(pal[i]);
+                    int distSq = dr * dr + dg * dg + db * db;
+                    if (distSq >= 100 && distSq <= 14400) { // Color distance 10..120
+                        chromaScore++;
                     }
                 }
 
                 DetectedPalette dp;
                 dp.offset = off;
                 dp.colors = pal;
-                dp.confidence = static_cast<float>(uniqueCount) + (maxLum - minLum) / 32.0f + rampScore * 1.5f;
+                dp.confidence = static_cast<float>(uniqueCount) * 1.5f + (maxLum - minLum) / 16.0f + rampScore * 2.0f + chromaScore * 1.0f;
                 dp.label = QStringLiteral("0x%1 (%2 cols)")
                                .arg(QString::number(off, 16).toUpper().rightJustified(6, '0'))
                                .arg(uniqueCount);
@@ -544,13 +534,13 @@ public:
             return a.confidence > b.confidence;
         });
 
-        // Filter / deduplicate closely adjacent palette hits (keep highest confidence per 16-byte window)
+        // Filter / deduplicate closely adjacent palette hits (keep highest confidence per 32-byte window)
         QList<DetectedPalette> deduped;
         QSet<int> takenOffsets;
         for (const auto &dp : list) {
             bool tooClose = false;
             for (int taken : takenOffsets) {
-                if (std::abs(dp.offset - taken) < 16) {
+                if (std::abs(dp.offset - taken) < 32) {
                     tooClose = true;
                     break;
                 }

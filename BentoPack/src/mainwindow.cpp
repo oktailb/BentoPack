@@ -1686,6 +1686,8 @@ void MainWindow::onRetroRipperTriggered()
         RetroTileExplorerDialog dlg(fileName, this, m_projectController.get());
         dlg.exec();
     }
+}
+
 void MainWindow::updateVramGauge()
 {
     if (!m_vramGaugeWidget || !m_vramLabel || !m_vramProgressBar) return;
