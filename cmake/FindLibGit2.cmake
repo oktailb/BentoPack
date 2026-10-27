@@ -85,13 +85,19 @@ find_package_handle_standard_args(LibGit2
 )
 
 if(LibGit2_FOUND)
+    file(TO_CMAKE_PATH "${LIBGIT2_INCLUDE_DIR}" LIBGIT2_INCLUDE_DIR)
+    file(TO_CMAKE_PATH "${LIBGIT2_LIBRARY}" LIBGIT2_LIBRARY)
+    if(LIBGIT2_DLL)
+        file(TO_CMAKE_PATH "${LIBGIT2_DLL}" LIBGIT2_DLL)
+    endif()
     set(LIBGIT2_LIBRARIES ${LIBGIT2_LIBRARY})
     set(LIBGIT2_INCLUDE_DIRS ${LIBGIT2_INCLUDE_DIR})
 
     # If build directory also contains generated headers, add it
     foreach(_DIR IN LISTS _LIBGIT2_SEARCH_DIRS)
-        if(EXISTS "${_DIR}/gen_headers")
-            list(APPEND LIBGIT2_INCLUDE_DIRS "${_DIR}/gen_headers")
+        file(TO_CMAKE_PATH "${_DIR}/gen_headers" _GEN_DIR)
+        if(EXISTS "${_GEN_DIR}")
+            list(APPEND LIBGIT2_INCLUDE_DIRS "${_GEN_DIR}")
         endif()
     endforeach()
     list(REMOVE_DUPLICATES LIBGIT2_INCLUDE_DIRS)
