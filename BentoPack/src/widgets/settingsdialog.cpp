@@ -532,13 +532,13 @@ QWidget* SettingsDialog::createRetroPage()
     QFormLayout *formLimits = new QFormLayout(m_grpRetroLimits);
 
     m_spinScanlineLimit = new QSpinBox(m_grpRetroLimits);
-    m_spinScanlineLimit->setRange(8, 2048);
+    m_spinScanlineLimit->setRange(8, 65535);
     m_spinScanlineLimit->setSuffix(QStringLiteral(" px"));
     m_lblScanlineLimit = new QLabel(tr("Max Scanline Sprite Width:"), m_grpRetroLimits);
     formLimits->addRow(m_lblScanlineLimit, m_spinScanlineLimit);
 
     m_spinMaxVramTiles = new QSpinBox(m_grpRetroLimits);
-    m_spinMaxVramTiles->setRange(16, 8192);
+    m_spinMaxVramTiles->setRange(16, 65535);
     m_spinMaxVramTiles->setSuffix(QStringLiteral(" tiles"));
     m_lblMaxVramTiles = new QLabel(tr("Max VRAM Tile Budget:"), m_grpRetroLimits);
     formLimits->addRow(m_lblMaxVramTiles, m_spinMaxVramTiles);
@@ -559,11 +559,13 @@ QWidget* SettingsDialog::createRetroPage()
     m_chkShowScanlineGuide = new QCheckBox(tr("Show scanline width boundary guide in Pixel Editor"), m_grpRetroVisuals);
     m_chkShowTimelineBadges = new QCheckBox(tr("Show discrete warning badges (pastilles) on Timeline frames"), m_grpRetroVisuals);
     m_chkShowVramGauge = new QCheckBox(tr("Show VRAM tile budget gauge in status bar"), m_grpRetroVisuals);
+    m_chkShowAtlasGuides = new QCheckBox(tr("Show discrete sprite size limit guides on Atlas (background rules & zones)"), m_grpRetroVisuals);
 
     vboxVisuals->addWidget(m_chkShowTileGrid);
     vboxVisuals->addWidget(m_chkShowScanlineGuide);
     vboxVisuals->addWidget(m_chkShowTimelineBadges);
     vboxVisuals->addWidget(m_chkShowVramGauge);
+    vboxVisuals->addWidget(m_chkShowAtlasGuides);
 
     layout->addWidget(m_grpRetroVisuals);
 
@@ -1097,6 +1099,9 @@ void SettingsDialog::loadSettings()
     if (m_chkShowVramGauge) {
         m_chkShowVramGauge->setChecked(cfg.retroLinter().showVramGauge);
     }
+    if (m_chkShowAtlasGuides) {
+        m_chkShowAtlasGuides->setChecked(cfg.retroLinter().showAtlasGuides);
+    }
     if (m_grpRetroProfile) m_grpRetroProfile->setEnabled(cfg.retroLinter().enabled);
     if (m_grpRetroLimits) m_grpRetroLimits->setEnabled(cfg.retroLinter().enabled);
     if (m_grpRetroVisuals) m_grpRetroVisuals->setEnabled(cfg.retroLinter().enabled);
@@ -1178,8 +1183,12 @@ void SettingsDialog::saveSettings()
     if (m_chkShowVramGauge) {
         cfg.retroLinter().showVramGauge = m_chkShowVramGauge->isChecked();
     }
+    if (m_chkShowAtlasGuides) {
+        cfg.retroLinter().showAtlasGuides = m_chkShowAtlasGuides->isChecked();
+    }
 
     cfg.save();
+    emit AppConfig::instance().configChanged();
 }
 
 void SettingsDialog::applySettings()
@@ -1301,6 +1310,7 @@ void SettingsDialog::retranslateUi()
     if (m_chkShowScanlineGuide) m_chkShowScanlineGuide->setText(tr("Show scanline width boundary guide in Pixel Editor"));
     if (m_chkShowTimelineBadges) m_chkShowTimelineBadges->setText(tr("Show discrete warning badges (pastilles) on Timeline frames"));
     if (m_chkShowVramGauge) m_chkShowVramGauge->setText(tr("Show VRAM tile budget gauge in status bar"));
+    if (m_chkShowAtlasGuides) m_chkShowAtlasGuides->setText(tr("Show discrete sprite size limit guides on Atlas (background rules & zones)"));
 
     // Plugins Page
     if (m_hdrPlugins) m_hdrPlugins->setText(tr("Plugins & Extensions"));

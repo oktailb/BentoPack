@@ -122,6 +122,7 @@ struct BENTOPACK_CORE_EXPORT RetroLinterConfig
     bool showTileGrid = true;             // Subtle 8x8 tile grid in Pixel Canvas
     bool showTimelineBadges = true;       // Discrete warning badge (pastille) on filmstrip frames
     bool showVramGauge = true;            // VRAM tile usage gauge in status bar
+    bool showAtlasGuides = true;          // Discrete sprite size limit rules and zones in Atlas view
 
     static void applyPreset(int presetIndex, RetroLinterConfig &cfg);
 };

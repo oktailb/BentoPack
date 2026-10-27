@@ -262,9 +262,11 @@ void MainWindow::enableFileDropsRecursively(QWidget *widget)
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == m_vramGaugeWidget && event->type() == QEvent::MouseButtonRelease) {
+    if ((watched == m_vramGaugeWidget || watched == m_vramLabel || watched == m_vramProgressBar)
+        && event->type() == QEvent::MouseButtonRelease) {
         SettingsDialog dlg(this, SettingsDialog::PageRetro);
         dlg.exec();
+        updateVramGauge();
         return true;
     }
 

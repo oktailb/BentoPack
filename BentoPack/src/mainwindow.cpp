@@ -654,6 +654,10 @@ void MainWindow::setupUIConnections()
 
     m_vramGaugeWidget->setCursor(Qt::PointingHandCursor);
     m_vramGaugeWidget->installEventFilter(this);
+    m_vramLabel->setCursor(Qt::PointingHandCursor);
+    m_vramLabel->installEventFilter(this);
+    m_vramProgressBar->setCursor(Qt::PointingHandCursor);
+    m_vramProgressBar->installEventFilter(this);
     ui->statusBar->addPermanentWidget(m_vramGaugeWidget);
 
     connect(&AppConfig::instance(), &AppConfig::configChanged, this, &MainWindow::updateVramGauge);

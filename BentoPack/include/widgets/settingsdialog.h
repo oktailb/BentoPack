@@ -183,6 +183,7 @@ private:
     QCheckBox *m_chkShowScanlineGuide = nullptr;
     QCheckBox *m_chkShowTimelineBadges = nullptr;
     QCheckBox *m_chkShowVramGauge = nullptr;
+    QCheckBox *m_chkShowAtlasGuides = nullptr;
 
     // Plugins Page
     QLabel      *m_hdrPlugins = nullptr;

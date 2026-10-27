@@ -313,6 +313,11 @@ if(WIN32)
             $<TARGET_FILE:extractor_spritesheet>
             $<TARGET_FILE:extractor_libgdx_spine>
             $<TARGET_FILE:extractor_aseprite>
+            $<TARGET_FILE:extractor_plist>
+            $<TARGET_FILE:extractor_pcx>
+            $<TARGET_FILE:extractor_pico8>
+            $<TARGET_FILE:extractor_iff>
+            $<TARGET_FILE:extractor_retro_tile>
             $<TARGET_FILE:extractor_casm>
             "${CMAKE_BINARY_DIR}/bin"
         COMMENT "Copying extractor plugin DLLs to bin directory for tests"

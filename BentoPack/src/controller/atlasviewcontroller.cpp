@@ -26,6 +26,121 @@
 #include <algorithm>
 #include <cmath>
 
+class AtlasRetroGuideItem : public QGraphicsItem
+{
+public:
+    explicit AtlasRetroGuideItem(const QRectF &rect, QGraphicsItem *parent = nullptr)
+        : QGraphicsItem(parent), m_rect(rect)
+    {
+        setZValue(0.05);
+        setAcceptedMouseButtons(Qt::NoButton);
+    }
+
+    void setRect(const QRectF &rect) {
+        if (m_rect != rect) {
+            prepareGeometryChange();
+            m_rect = rect;
+            update();
+        }
+    }
+
+    QRectF boundingRect() const override {
+        return m_rect;
+    }
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override
+    {
+        Q_UNUSED(option);
+        Q_UNUSED(widget);
+
+        const auto &retro = AppConfig::instance().retroLinter();
+        if (!retro.enabled || !retro.showAtlasGuides || m_rect.isEmpty()) {
+            return;
+        }
+
+        int limit = retro.scanlineSpriteWidthLimit;
+        if (limit <= 0) limit = 64;
+        int tile = retro.tileSize > 0 ? retro.tileSize : 8;
+
+        painter->save();
+        painter->setRenderHint(QPainter::Antialiasing, false);
+
+        // 1. Alternating subtle zone background shading (e.g. limit x limit grid)
+        int cols = static_cast<int>(std::ceil(m_rect.width() / limit));
+        int rows = static_cast<int>(std::ceil(m_rect.height() / limit));
+        QColor shadeColor(245, 158, 11, 8); // subtle 3% amber watermark tint
+        for (int r = 0; r < rows; ++r) {
+            for (int c = 0; c < cols; ++c) {
+                if ((r + c) % 2 == 1) {
+                    QRectF cell(m_rect.left() + c * limit,
+                                m_rect.top() + r * limit,
+                                std::min<double>(limit, m_rect.right() - (m_rect.left() + c * limit)),
+                                std::min<double>(limit, m_rect.bottom() - (m_rect.top() + r * limit)));
+                    painter->fillRect(cell, shadeColor);
+                }
+            }
+        }
+
+        // 2. Tile grid (fine dots every tileSize)
+        if (tile >= 4 && m_rect.width() <= 8192 && m_rect.height() <= 8192) {
+            QPen tilePen(QColor(56, 189, 248, 60), 1, Qt::DotLine);
+            tilePen.setCosmetic(true);
+            painter->setPen(tilePen);
+
+            for (double x = m_rect.left() + tile; x < m_rect.right(); x += tile) {
+                if (std::fmod(x - m_rect.left(), limit) != 0.0) {
+                    painter->drawLine(QPointF(x, m_rect.top()), QPointF(x, m_rect.bottom()));
+                }
+            }
+            for (double y = m_rect.top() + tile; y < m_rect.bottom(); y += tile) {
+                if (std::fmod(y - m_rect.top(), limit) != 0.0) {
+                    painter->drawLine(QPointF(m_rect.left(), y), QPointF(m_rect.right(), y));
+                }
+            }
+        }
+
+        // 3. Major retro sprite limit rules (dashed amber line every limit - doubled width to 2px)
+        QPen zonePen(QColor(245, 158, 11, 180), 2, Qt::DashLine);
+        zonePen.setCosmetic(true);
+        painter->setPen(zonePen);
+
+        for (double x = m_rect.left() + limit; x < m_rect.right(); x += limit) {
+            painter->drawLine(QPointF(x, m_rect.top()), QPointF(x, m_rect.bottom()));
+        }
+        for (double y = m_rect.top() + limit; y < m_rect.bottom(); y += limit) {
+            painter->drawLine(QPointF(m_rect.left(), y), QPointF(m_rect.right(), y));
+        }
+
+        // 4. Subtle ruler indicators along top edge
+        double scale = 1.0;
+        if (scene() && !scene()->views().isEmpty()) {
+            scale = scene()->views().first()->transform().m11();
+        }
+        QFont rulerFont("Arial", 7);
+        painter->setFont(rulerFont);
+        painter->setPen(QColor(245, 158, 11, 150));
+
+        for (int c = 1; c <= cols; ++c) {
+            double x = m_rect.left() + c * limit;
+            if (x < m_rect.right()) {
+                QString label = QString::number(c * limit);
+                painter->save();
+                painter->translate(x + 2, m_rect.top() + 2);
+                if (scale > 0.0) {
+                    painter->scale(1.0 / scale, 1.0 / scale);
+                }
+                painter->drawText(QPointF(0, 8), label);
+                painter->restore();
+            }
+        }
+
+        painter->restore();
+    }
+
+private:
+    QRectF m_rect;
+};
+
 AtlasViewController::AtlasViewController(QGraphicsView *view,
                                          SpriteDocument *document,
                                          QUndoStack *undoStack,
@@ -44,6 +159,21 @@ AtlasViewController::AtlasViewController(QGraphicsView *view,
         m_view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
         m_view->viewport()->installEventFilter(this);
     }
+
+    connect(&AppConfig::instance(), &AppConfig::configChanged, this, [this]() {
+        if (m_retroGuideItem) {
+            m_retroGuideItem->update();
+        }
+        for (auto *box : m_boxItems) {
+            if (box) {
+                box->updateTooltip();
+                box->update();
+            }
+        }
+        if (m_view && m_view->viewport()) {
+            m_view->viewport()->update();
+        }
+    });
 
     if (m_document) {
         if (!m_document->atlas().isNull()) {
@@ -169,6 +299,7 @@ void AtlasViewController::setAtlasImage(const QImage &image)
 
     if (m_atlasPixmapItem && m_scene->sceneRect() == image.rect()) {
         m_atlasPixmapItem->setPixmap(QPixmap::fromImage(image));
+        if (m_retroGuideItem) m_retroGuideItem->setRect(image.rect());
         syncAtlasBoxes();
         return;
     }
@@ -176,6 +307,9 @@ void AtlasViewController::setAtlasImage(const QImage &image)
     clearAtlas();
     m_atlasPixmapItem = m_scene->addPixmap(QPixmap::fromImage(image));
     m_scene->setSceneRect(image.rect());
+
+    m_retroGuideItem = new AtlasRetroGuideItem(image.rect());
+    m_scene->addItem(m_retroGuideItem);
 
     syncAtlasBoxes();
     fitInView();
@@ -212,6 +346,7 @@ void AtlasViewController::clearAtlas()
         delete m_selectionRectItem;
         m_selectionRectItem = nullptr;
     }
+    m_retroGuideItem = nullptr;
     m_scene->clear();
     m_atlasPixmapItem = nullptr;
 }

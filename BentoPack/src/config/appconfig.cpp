@@ -299,6 +299,7 @@ bool AppConfig::load(const QString &filePath)
         m_retro.showTileGrid = retroObj.value(QStringLiteral("show_tile_grid")).toBool(m_retro.showTileGrid);
         m_retro.showTimelineBadges = retroObj.value(QStringLiteral("show_timeline_badges")).toBool(m_retro.showTimelineBadges);
         m_retro.showVramGauge = retroObj.value(QStringLiteral("show_vram_gauge")).toBool(m_retro.showVramGauge);
+        m_retro.showAtlasGuides = retroObj.value(QStringLiteral("show_atlas_guides")).toBool(m_retro.showAtlasGuides);
     }
 
     emit configChanged();
@@ -392,6 +393,7 @@ bool AppConfig::save(const QString &filePath) const
     retroObj[QStringLiteral("show_tile_grid")] = m_retro.showTileGrid;
     retroObj[QStringLiteral("show_timeline_badges")] = m_retro.showTimelineBadges;
     retroObj[QStringLiteral("show_vram_gauge")] = m_retro.showVramGauge;
+    retroObj[QStringLiteral("show_atlas_guides")] = m_retro.showAtlasGuides;
     root[QStringLiteral("retro_linter")] = retroObj;
 
     QFile file(path);
@@ -404,5 +406,6 @@ bool AppConfig::save(const QString &filePath) const
     file.write(doc.toJson(QJsonDocument::Indented));
     file.close();
 
+    emit const_cast<AppConfig*>(this)->configChanged();
     return true;
 }

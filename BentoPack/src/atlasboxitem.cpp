@@ -36,12 +36,33 @@ AtlasBoxItem::AtlasBoxItem(int index, const QRect &rect, const QRect &atlasBound
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     setZValue(10.0); // Draw on top of the atlas pixmap
+    updateTooltip();
+}
+
+void AtlasBoxItem::updateTooltip()
+{
+    const auto &retro = AppConfig::instance().retroLinter();
+    if (retro.enabled && retro.showAtlasGuides && retro.scanlineSpriteWidthLimit > 0
+        && m_rect.width() > retro.scanlineSpriteWidthLimit) {
+        setToolTip(QObject::tr("Frame #%1: %2x%3 px\n⚠️ Exceeds retro scanline limit: %4 px (width: %5 px)")
+                   .arg(m_index + 1)
+                   .arg(static_cast<int>(m_rect.width()))
+                   .arg(static_cast<int>(m_rect.height()))
+                   .arg(retro.scanlineSpriteWidthLimit)
+                   .arg(static_cast<int>(m_rect.width())));
+    } else {
+        setToolTip(QObject::tr("Frame #%1: %2x%3 px")
+                   .arg(m_index + 1)
+                   .arg(static_cast<int>(m_rect.width()))
+                   .arg(static_cast<int>(m_rect.height())));
+    }
 }
 
 void AtlasBoxItem::setIndex(int idx)
 {
     if (m_index != idx) {
         m_index = idx;
+        updateTooltip();
         update();
     }
 }
@@ -65,6 +86,7 @@ void AtlasBoxItem::setBoxRect(const QRect &rect)
         if (!m_hasCustomPivot) {
             m_pivot = QPoint(rect.width() / 2, rect.height());
         }
+        updateTooltip();
         update();
     }
 }
@@ -819,6 +841,41 @@ void AtlasBoxItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setPen(m_selected ? Qt::black : Qt::white);
     painter->drawText(badgeRect, Qt::AlignCenter, labelText);
     painter->restore();
+
+    // 3.1 Retro Scanline & Sprite Size Boundary Guide in AtlasBoxItem
+    const auto &retro = AppConfig::instance().retroLinter();
+    if (retro.enabled && retro.showAtlasGuides) {
+        int limit = retro.scanlineSpriteWidthLimit;
+        if (limit > 0 && m_rect.width() > limit) {
+            // Discrete amber dashed line at limit
+            painter->save();
+            QPen limitPen(QColor(245, 158, 11, 220), 2, Qt::DashLine);
+            limitPen.setCosmetic(true);
+            painter->setPen(limitPen);
+            painter->drawLine(QPointF(m_rect.left() + limit, m_rect.top()),
+                             QPointF(m_rect.left() + limit, m_rect.bottom()));
+
+            // Discrete warning badge in top-right corner: "! 72px"
+            QString warnText = QStringLiteral("! %1px").arg(static_cast<int>(m_rect.width()));
+            QFont warnFont("Arial", 8, QFont::Bold);
+            QFontMetrics wfm(warnFont);
+            int wtextW = wfm.horizontalAdvance(warnText);
+            int wtextH = wfm.height();
+            double screenWBadgeW = wtextW + 6.0;
+            double screenWBadgeH = wtextH + 2.0;
+
+            painter->translate(m_rect.right(), m_rect.top());
+            if (scale > 0.0) {
+                painter->scale(1.0 / scale, 1.0 / scale);
+            }
+            QRectF warnBadgeRect(-screenWBadgeW, 0, screenWBadgeW, screenWBadgeH);
+            painter->fillRect(warnBadgeRect, QColor(245, 158, 11, 220));
+            painter->setFont(warnFont);
+            painter->setPen(Qt::white);
+            painter->drawText(warnBadgeRect, Qt::AlignCenter, warnText);
+            painter->restore();
+        }
+    }
 
     // 3.5. 2D Polygon Mesh Wireframe & Contour
     if (m_showPolygonMesh && m_hasPolygonMesh && !m_polygon.isEmpty()) {

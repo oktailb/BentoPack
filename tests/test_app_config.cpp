@@ -80,6 +80,7 @@ void TestAppConfig::testAppConfigSaveAndLoad()
     cfg.retroLinter().scanlineSpriteWidthLimit = 128;
     cfg.retroLinter().maxVramTiles = 512;
     cfg.retroLinter().showScanlineGuide = false;
+    cfg.retroLinter().showAtlasGuides = false;
 
     // Save to temp path
     bool saveOk = cfg.save(tempConfigPath);
@@ -92,6 +93,7 @@ void TestAppConfig::testAppConfigSaveAndLoad()
     QCOMPARE(cfg.atlas().zoomMax, 10.0);
     QCOMPARE(cfg.animation().defaultFps, 12);
     QCOMPARE(cfg.retroLinter().scanlineSpriteWidthLimit, 64);
+    QCOMPARE(cfg.retroLinter().showAtlasGuides, true);
 
     // Load back from temp path
     bool loadOk = cfg.load(tempConfigPath);
@@ -108,6 +110,7 @@ void TestAppConfig::testAppConfigSaveAndLoad()
     QCOMPARE(cfg.retroLinter().scanlineSpriteWidthLimit, 128);
     QCOMPARE(cfg.retroLinter().maxVramTiles, 512);
     QCOMPARE(cfg.retroLinter().showScanlineGuide, false);
+    QCOMPARE(cfg.retroLinter().showAtlasGuides, false);
 
     // Clean up
     cfg.resetToDefaults();

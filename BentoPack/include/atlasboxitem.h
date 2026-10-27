@@ -94,6 +94,7 @@ public:
 
     // Geometry helpers
     double currentHandleSize() const;
+    void updateTooltip();
 
 signals:
     void boxSelected(int index, bool selected, Qt::KeyboardModifiers modifiers);

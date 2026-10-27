@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Vincent LECOQ
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@
 class SpriteDocument;
 class QUndoStack;
 class AtlasBoxItem;
+class AtlasRetroGuideItem;
 
 /**
  * @brief Controller managing the Atlas QGraphicsView, zoom/pan, tools, and AtlasBoxItem interactions.
@@ -137,6 +138,7 @@ private:
     QUndoStack          *m_undoStack = nullptr;
 
     QGraphicsPixmapItem *m_atlasPixmapItem = nullptr;
+    AtlasRetroGuideItem *m_retroGuideItem = nullptr;
     QList<AtlasBoxItem*> m_boxItems;
 
     SliceToolMode        m_sliceToolMode = ToolSelect;
