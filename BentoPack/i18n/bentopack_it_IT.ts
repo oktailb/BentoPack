@@ -97,10 +97,10 @@
     </message>
     <message>
         <source>KEY_ABOUT_PURPOSE</source>
-        <translation>Un potente strumento per l&apos;estrazione e l&apos;animazione di sprite</translation>
+        <translation>Un potente strumento per l'estrazione e l'animazione di sprite</translation>
     </message>
     <message>
-        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <source>Studio d'outillage &amp; technologies multimédia</source>
         <translation>Studio di strumenti e tecnologie multimediali</translation>
     </message>
     <message>
@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>Invalid canvas dimensions or zero frames in Aseprite header.</source>
-        <translation>Dimensioni tela non valide o zero fotogrammi nell&apos;intestazione Aseprite.</translation>
+        <translation>Dimensioni tela non valide o zero fotogrammi nell'intestazione Aseprite.</translation>
     </message>
     <message>
         <source>Failed to decode any frames from Aseprite file.</source>
@@ -241,8 +241,8 @@
         <translation>Impacchettamento atlas (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
-        <translation>Pronto — Regola i parametri e fai clic su &apos;Calcola impacchettamento&apos;</translation>
+        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
+        <translation>Pronto — Regola i parametri e fai clic su 'Calcola impacchettamento'</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -298,7 +298,7 @@
     </message>
     <message>
         <source>Outer margin around the edges of the atlas</source>
-        <translation>Margine esterno attorno ai bordi dell&apos;atlas</translation>
+        <translation>Margine esterno attorno ai bordi dell'atlas</translation>
     </message>
     <message>
         <source>Border Padding:</source>
@@ -334,7 +334,7 @@
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
-        <translation>Rifila bordi trasparenti prima dell&apos;impacchettamento</translation>
+        <translation>Rifila bordi trasparenti prima dell'impacchettamento</translation>
     </message>
     <message>
         <source>Crops transparent margins around frames while preserving animation pivots. Highly recommended for animation spritesheets to eliminate empty spaces and maximize packing density.</source>
@@ -346,7 +346,7 @@
     </message>
     <message>
         <source>Number of CPU threads to use for parallel processing (1 to %1 cores)</source>
-        <translation>Numero di thread CPU per l&apos;elaborazione parallela (da 1 a %1 core)</translation>
+        <translation>Numero di thread CPU per l'elaborazione parallela (da 1 a %1 core)</translation>
     </message>
     <message>
         <source>Worker Threads:</source>
@@ -362,7 +362,7 @@
     </message>
     <message>
         <source>Computing packing...</source>
-        <translation>Calcolo dell&apos;impacchettamento in corso...</translation>
+        <translation>Calcolo dell'impacchettamento in corso...</translation>
     </message>
     <message>
         <source> | %1 delta patches</source>
@@ -382,7 +382,7 @@
     </message>
     <message>
         <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
-        <translation>Ripete i pixel del bordo verso l&apos;esterno (1-4 px) con bloccaggio diagonale a 8 vicini per evitare artefatti bilineari nei motori di gioco</translation>
+        <translation>Ripete i pixel del bordo verso l'esterno (1-4 px) con bloccaggio diagonale a 8 vicini per evitare artefatti bilineari nei motori di gioco</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -402,7 +402,7 @@
     </message>
     <message>
         <source>Error: Cannot fit sprites in atlas</source>
-        <translation>Errore: Impossibile inserire gli sprite nell&apos;atlas</translation>
+        <translation>Errore: Impossibile inserire gli sprite nell'atlas</translation>
     </message>
     <message>
         <source>%1 x %2 px</source>
@@ -538,43 +538,43 @@ Scegli quale ramo ripristinare:</translation>
     <name>CAsmExtractor</name>
     <message>
         <source>The C/ASM plugin is an export-only plugin and does not import raw source code into sprite sheets.</source>
-        <translation type="unfinished"></translation>
+        <translation>El plugin C/ASM es solo para exportación y no importa código fuente sin procesar a hojas de sprites.</translation>
     </message>
     <message>
         <source>Export destination path is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>La ruta de destino de exportación está vacía.</translation>
     </message>
     <message>
         <source>Export cancelled by user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportación cancelada por el usuario.</translation>
     </message>
     <message>
         <source>Generating retro source code (%1)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Generando código fuente retro (%1)...</translation>
     </message>
     <message>
         <source>Writing file %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Escribiendo archivo %1...</translation>
     </message>
     <message>
         <source>Could not open file for writing: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>No se pudo abrir el archivo para escribir: %1 (%2)</translation>
     </message>
     <message>
         <source>C/ASM code exported successfully to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Código C/ASM exportado con éxito a %1.</translation>
     </message>
     <message>
         <source>Default Retro Architecture Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuste predeterminado de arquitectura retro</translation>
     </message>
     <message>
         <source>Enable Hardware Constraints Linter (PPU scanlines, VRAM warnings)</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar linter de restricciones de hardware (líneas de escaneo PPU, advertencias VRAM)</translation>
     </message>
     <message>
         <source>Exports native C/C++ arrays and pure Assembly data (.h, .c, .asm, .s, .inc) directly usable in homebrew SDKs without game engines.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporta matrices nativas C/C++ y datos puros de ensamblador (.h, .c, .asm, .s, .inc) directamente utilizables en SDKs caseros sin motores de juegos.</translation>
     </message>
 </context>
 <context>
@@ -631,7 +631,7 @@ Scegli quale ramo ripristinare:</translation>
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
     </message>
     <message>
         <source>Adjusted (H:%1° S:%2% V:%3% C:%4%)</source>
@@ -650,7 +650,7 @@ Scegli quale ramo ripristinare:</translation>
     <name>ColorPalettePresets</name>
     <message>
         <source>Failed to decode image.</source>
-        <translation>Impossibile decodificare l&apos;immagine.</translation>
+        <translation>Impossibile decodificare l'immagine.</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
@@ -775,7 +775,7 @@ Scegli quale ramo ripristinare:</translation>
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
     </message>
     <message>
         <source>Select source color to replace</source>
@@ -806,7 +806,7 @@ Scegli quale ramo ripristinare:</translation>
     </message>
     <message>
         <source>Eliminates 1px colored fringe (green, white, magenta) along sprite borders after background extraction.</source>
-        <translation>Elimina le frange colorate da 1px lungo i bordi degli sprite dopo l&apos;estrazione dello sfondo.</translation>
+        <translation>Elimina le frange colorate da 1px lungo i bordi degli sprite dopo l'estrazione dello sfondo.</translation>
     </message>
 </context>
 <context>
@@ -829,7 +829,7 @@ Scegli quale ramo ripristinare:</translation>
     </message>
     <message>
         <source>Action mode:</source>
-        <translation>Modalità d&apos;azione:</translation>
+        <translation>Modalità d'azione:</translation>
     </message>
     <message>
         <source>Soft Color Clamping (CIELAB Perceptual)</source>
@@ -848,7 +848,7 @@ Scegli quale ramo ripristinare:</translation>
 Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
 Strict removal: clears the fringe pixel.</source>
         <translation>Fissaggio morbido: sostituisce il bordo con il colore interno usando CIELAB ΔE.
-Chroma spill: neutralizza i riflessi verdi/blu senza rimuovere l&apos;alfa.
+Chroma spill: neutralizza i riflessi verdi/blu senza rimuovere l'alfa.
 Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
@@ -861,7 +861,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
     </message>
     <message>
         <source>Select Fringe Color</source>
@@ -991,8 +991,8 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
         <translation>Nuovo livello (es. Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
-        <translation>%1 fotogramma/i preparato/i per il nuovo livello &apos;Emissive (_e)&apos;</translation>
+        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
+        <translation>%1 fotogramma/i preparato/i per il nuovo livello 'Emissive (_e)'</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -1178,7 +1178,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
-        <translation>Estrae le patch di bounding-box modificate tra fotogrammi consecutivi quando l&apos;area delta è ridotta, riducendo il consumo di VRAM</translation>
+        <translation>Estrae le patch di bounding-box modificate tra fotogrammi consecutivi quando l'area delta è ridotta, riducendo il consumo di VRAM</translation>
     </message>
     <message>
         <source>VRAM Texture &amp; GPU Compression </source>
@@ -1498,7 +1498,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>An error occurred during export.</source>
-        <translation>Si è verificato un errore durante l&apos;esportazione.</translation>
+        <translation>Si è verificato un errore durante l'esportazione.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1509,7 +1509,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     <name>Extractor</name>
     <message>
         <source>Export is not supported by this format (%1)</source>
-        <translation>L&apos;esportazione non è supportata da questo formato (%1)</translation>
+        <translation>L'esportazione non è supportata da questo formato (%1)</translation>
     </message>
 </context>
 <context>
@@ -1520,7 +1520,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>Update atlas and frames in real-time while adjusting parameters</source>
-        <translation>Aggiorna l&apos;atlas e i fotogrammi in tempo reale durante la regolazione dei parametri</translation>
+        <translation>Aggiorna l'atlas e i fotogrammi in tempo reale durante la regolazione dei parametri</translation>
     </message>
     <message>
         <source>Auto-detect Sprite Boxes</source>
@@ -1598,7 +1598,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>Failed to pack GIF frames into texture atlas.</source>
-        <translation>Impossibile impacchettare i fotogrammi GIF nell&apos;atlas.</translation>
+        <translation>Impossibile impacchettare i fotogrammi GIF nell'atlas.</translation>
     </message>
     <message>
         <source>Extracted %1 GIF frames</source>
@@ -1618,7 +1618,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>Animation %1 has no frames.</source>
-        <translation>L&apos;animazione %1 non ha fotogrammi.</translation>
+        <translation>L'animazione %1 non ha fotogrammi.</translation>
     </message>
     <message>
         <source>Failed to initialize GIF encoder for %1.</source>
@@ -1676,11 +1676,11 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>KEY_GIT_RETURN_PRESENT_TOOLTIP</source>
-        <translation>Ripristina l&apos;ultima versione (HEAD del ramo)</translation>
+        <translation>Ripristina l'ultima versione (HEAD del ramo)</translation>
     </message>
     <message>
         <source>KEY_GIT_DISABLED_BANNER</source>
-        <translation>L&apos;integrazione Git non è abilitata su questo sistema.
+        <translation>L'integrazione Git non è abilitata su questo sistema.
 (libgit2 non rilevata durante la compilazione)</translation>
     </message>
     <message>
@@ -1737,11 +1737,11 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Referenced texture atlas image not found for: %1</source>
-        <translation>Immagine dell&apos;atlas di texture referenziata non trovata per: %1</translation>
+        <translation>Immagine dell'atlas di texture referenziata non trovata per: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1</source>
-        <translation>Impossibile caricare l&apos;immagine dell&apos;atlas di texture: %1</translation>
+        <translation>Impossibile caricare l'immagine dell'atlas di texture: %1</translation>
     </message>
     <message>
         <source>Extracted %1 frames and %2 animations from Godot resource.</source>
@@ -1761,11 +1761,11 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
-        <translation>Impossibile impacchettare i fotogrammi atlas per l&apos;esportazione Godot.</translation>
+        <translation>Impossibile impacchettare i fotogrammi atlas per l'esportazione Godot.</translation>
     </message>
     <message>
         <source>Failed to write Godot atlas page image: %1</source>
-        <translation>Impossibile scrivere l&apos;immagine della pagina dell&apos;atlante Godot: %1</translation>
+        <translation>Impossibile scrivere l'immagine della pagina dell'atlante Godot: %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1773,7 +1773,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to write Godot atlas image: %1</source>
-        <translation>Impossibile scrivere l&apos;immagine atlas Godot: %1</translation>
+        <translation>Impossibile scrivere l'immagine atlas Godot: %1</translation>
     </message>
     <message>
         <source>Cannot write to Godot resource file: %1</source>
@@ -1800,27 +1800,27 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     <name>IffExtractor</name>
     <message>
         <source>Cannot open IFF file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo IFF: %1</translation>
     </message>
     <message>
         <source>Failed to decode IFF image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al decodificar la imagen IFF: %1</translation>
     </message>
     <message>
         <source>Cannot export IFF: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede exportar IFF: la imagen del atlas está vacía.</translation>
     </message>
     <message>
         <source>Failed to encode IFF: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al codificar IFF: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo para escribir: %1</translation>
     </message>
     <message>
         <source>Failed to write all IFF bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al escribir todos los bytes IFF en el disco.</translation>
     </message>
 </context>
 <context>
@@ -1835,7 +1835,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to decode atlas image: %1</source>
-        <translation>Impossibile decodificare l&apos;immagine atlas: %1</translation>
+        <translation>Impossibile decodificare l'immagine atlas: %1</translation>
     </message>
     <message>
         <source>No frames could be extracted from JSON: %1</source>
@@ -1859,7 +1859,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to pack frames for JSON export.</source>
-        <translation>Impossibile impacchettare i fotogrammi per l&apos;esportazione JSON.</translation>
+        <translation>Impossibile impacchettare i fotogrammi per l'esportazione JSON.</translation>
     </message>
     <message>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
@@ -1867,7 +1867,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to save companion image: %1</source>
-        <translation>Impossibile salvare l&apos;immagine associata: %1</translation>
+        <translation>Impossibile salvare l'immagine associata: %1</translation>
     </message>
     <message>
         <source>Cannot write to JSON file: %1</source>
@@ -1922,7 +1922,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Move active layer up</source>
-        <translation>Sposta livello attivo verso l&apos;alto</translation>
+        <translation>Sposta livello attivo verso l'alto</translation>
     </message>
     <message>
         <source>Move active layer down</source>
@@ -1954,7 +1954,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Isolates onion skinning to the active layer rather than the full composite</source>
-        <translation>Isola la carta cipolla al livello attivo anziché all&apos;intera composizione</translation>
+        <translation>Isola la carta cipolla al livello attivo anziché all'intera composizione</translation>
     </message>
     <message>
         <source>Hide layer</source>
@@ -2041,7 +2041,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Reading LibGDX/Spine Atlas...</source>
-        <translation>Lettura dell&apos;atlas LibGDX/Spine...</translation>
+        <translation>Lettura dell'atlas LibGDX/Spine...</translation>
     </message>
     <message>
         <source>Cannot open atlas file: %1</source>
@@ -2053,7 +2053,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to load companion atlas image: %1</source>
-        <translation>Impossibile caricare l&apos;immagine atlas associata: %1</translation>
+        <translation>Impossibile caricare l'immagine atlas associata: %1</translation>
     </message>
     <message>
         <source>LibGDX/Spine Atlas loaded successfully.</source>
@@ -2061,7 +2061,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Exporting LibGDX/Spine Atlas...</source>
-        <translation>Esportazione dell&apos;atlas LibGDX/Spine in corso...</translation>
+        <translation>Esportazione dell'atlas LibGDX/Spine in corso...</translation>
     </message>
     <message>
         <source>Document contains no sprites to export.</source>
@@ -2069,7 +2069,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to save companion atlas image: %1</source>
-        <translation>Impossibile salvare l&apos;immagine atlas associata: %1</translation>
+        <translation>Impossibile salvare l'immagine atlas associata: %1</translation>
     </message>
     <message>
         <source>Cannot create output atlas file: %1</source>
@@ -2112,7 +2112,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>File not found or locked by another application: %1</source>
-        <translation>File non trovato o bloccato da un&apos;altra applicazione: %1</translation>
+        <translation>File non trovato o bloccato da un'altra applicazione: %1</translation>
     </message>
     <message>
         <source>Failed to decode file: %1</source>
@@ -2143,7 +2143,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_TOOL_ADD_SLICE</source>
-        <translation>Fai clic e trascina sull&apos;atlas per tracciare un nuovo riquadro</translation>
+        <translation>Fai clic e trascina sull'atlas per tracciare un nuovo riquadro</translation>
     </message>
     <message>
         <source>KEY_TOOL_TRIM</source>
@@ -2159,7 +2159,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
-        <translation>Rileva e ritaglia automaticamente gli sprite dall&apos;atlas trasparente</translation>
+        <translation>Rileva e ritaglia automaticamente gli sprite dall'atlas trasparente</translation>
     </message>
     <message>
         <source>KEY_TOOL_REMOVE_BG</source>
@@ -2271,7 +2271,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_LIVE_WATCH</source>
-        <translation>Attiva/disattiva il monitoraggio file live e l&apos;esportazione automatica al motore (Ctrl+Alt+W)</translation>
+        <translation>Attiva/disattiva il monitoraggio file live e l'esportazione automatica al motore (Ctrl+Alt+W)</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2295,7 +2295,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_ACTION_RETRO_RIPPER</source>
-        <translation type="unfinished"></translation>
+        <translation>Extractor de ROM y VRAM Retro...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2363,11 +2363,11 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Retro ROMs &amp; VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>ROMs y VRAM Retro (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;Todos los archivos (*.*)</translation>
     </message>
     <message>
         <source>Select Retro ROM or VRAM Dump</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar ROM o volcado VRAM Retro</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -2379,11 +2379,11 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ANIM</source>
-        <translation>Aggiungi all&apos;animazione</translation>
+        <translation>Aggiungi all'animazione</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Aggiungi all&apos;animazione attiva &quot;%1&quot;</translation>
+        <translation>Aggiungi all'animazione attiva "%1"</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2451,7 +2451,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_STATUS_POPULATING</source>
-        <translation>Compilazione dell&apos;elenco fotogrammi...</translation>
+        <translation>Compilazione dell'elenco fotogrammi...</translation>
     </message>
     <message>
         <source>KEY_FRAME_LABEL</source>
@@ -2483,7 +2483,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_ZOOM_IN</source>
-        <translation>Ingrandisci la vista dell&apos;atlas</translation>
+        <translation>Ingrandisci la vista dell'atlas</translation>
     </message>
     <message>
         <source>KEY_ACTION_ZOOM_OUT</source>
@@ -2491,7 +2491,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_ZOOM_OUT</source>
-        <translation>Riduci la vista dell&apos;atlas</translation>
+        <translation>Riduci la vista dell'atlas</translation>
     </message>
     <message>
         <source>KEY_ACTION_ZOOM_RESET</source>
@@ -2499,7 +2499,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_ZOOM_RESET</source>
-        <translation>Ripristina lo zoom dell&apos;atlas al 100%</translation>
+        <translation>Ripristina lo zoom dell'atlas al 100%</translation>
     </message>
     <message>
         <source>KEY_DOCK_PREVIEW</source>
@@ -2619,7 +2619,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_REVERSE_ANIM</source>
-        <translation>Inverti l&apos;ordine dei fotogrammi dell&apos;animazione</translation>
+        <translation>Inverti l'ordine dei fotogrammi dell'animazione</translation>
     </message>
     <message>
         <source>⇄</source>
@@ -2627,7 +2627,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_DELETE_ANIM</source>
-        <translation>Elimina l&apos;animazione selezionata</translation>
+        <translation>Elimina l'animazione selezionata</translation>
     </message>
     <message>
         <source>🗑</source>
@@ -2680,7 +2680,7 @@ Vuoi ripristinare questa sessione?</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Il progetto corrente &quot;%1&quot; contiene modifiche non salvate.
+        <translation>Il progetto corrente "%1" contiene modifiche non salvate.
 Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
@@ -2749,11 +2749,11 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>KEY_BTN_APPLY_PIVOT_ANIM</source>
-        <translation>Applica all&apos;anim.</translation>
+        <translation>Applica all'anim.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_APPLY_PIVOT_ANIM</source>
-        <translation>Applica questo punto di pivot a tutti i fotogrammi dell&apos;animazione corrente</translation>
+        <translation>Applica questo punto di pivot a tutti i fotogrammi dell'animazione corrente</translation>
     </message>
     <message>
         <source>KEY_BTN_APPLY_PIVOT_ALL</source>
@@ -2927,8 +2927,8 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Nuovo livello (es. Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
-        <translation>%1 fotogramma/i preparato/i per il nuovo livello &apos;Normal (_n)&apos;</translation>
+        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
+        <translation>%1 fotogramma/i preparato/i per il nuovo livello 'Normal (_n)'</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -2974,7 +2974,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation>Aggiorna la texture dell&apos;atlante con questo elemento. Mantiene i riquadri sprite, i perni e le animazioni esistenti (ritagliati dal nuovo atlante).</translation>
+        <translation>Aggiorna la texture dell'atlante con questo elemento. Mantiene i riquadri sprite, i perni e le animazioni esistenti (ritagliati dal nuovo atlante).</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
@@ -2990,7 +2990,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation>Posiziona questo elemento come sfondo condiviso o cella di sovrapposizione ripetuta in modo identico su ogni fotogramma dell&apos;animazione.</translation>
+        <translation>Posiziona questo elemento come sfondo condiviso o cella di sovrapposizione ripetuta in modo identico su ogni fotogramma dell'animazione.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -3060,7 +3060,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
     </message>
     <message>
         <source>Select Outline Color</source>
@@ -3083,49 +3083,49 @@ Vuoi salvarle prima di procedere?</translation>
     <name>PaletteStripWidget</name>
     <message>
         <source>Active 16-color palette swatches (indices 0 to 15)</source>
-        <translation type="unfinished"></translation>
+        <translation>Muestras de paleta activa de 16 colores (índices 0 a 15)</translation>
     </message>
 </context>
 <context>
     <name>PcxExtractor</name>
     <message>
         <source>Cannot open PCX file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo PCX: %1</translation>
     </message>
     <message>
         <source>Failed to decode PCX image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al decodificar la imagen PCX: %1</translation>
     </message>
     <message>
         <source>Cannot export PCX: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede exportar PCX: la imagen del atlas está vacía.</translation>
     </message>
     <message>
         <source>Failed to encode PCX: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al codificar PCX: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo para escribir: %1</translation>
     </message>
     <message>
         <source>Failed to write all PCX bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al escribir todos los bytes PCX en el disco.</translation>
     </message>
 </context>
 <context>
     <name>Pico8Extractor</name>
     <message>
         <source>Cannot open PICO-8 file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo PICO-8: %1</translation>
     </message>
     <message>
         <source>Cannot export PICO-8: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede exportar PICO-8: la imagen del atlas está vacía.</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo para escribir: %1</translation>
     </message>
 </context>
 <context>
@@ -3290,12 +3290,12 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Colore secondary (Fai clic per aprire il selettore colore Pro)</translation>
     </message>
     <message>
-        <source>Apply to &apos;%1&apos; frames</source>
-        <translation>Applica ai fotogrammi di &apos;%1&apos;</translation>
+        <source>Apply to '%1' frames</source>
+        <translation>Applica ai fotogrammi di '%1'</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
-        <translation>Applica la generazione di mesh CDT a tutti i fotogrammi dell&apos;animazione &apos;%1&apos;</translation>
+        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
+        <translation>Applica la generazione di mesh CDT a tutti i fotogrammi dell'animazione '%1'</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3463,7 +3463,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Animation Pivot &amp; Reticle Editor [O]</source>
-        <translation>Editor pivot e mirino d&apos;animazione [O]</translation>
+        <translation>Editor pivot e mirino d'animazione [O]</translation>
     </message>
     <message>
         <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
@@ -3663,11 +3663,11 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Apply to all animation frames</source>
-        <translation>Applica a tutti i fotogrammi dell&apos;animazione</translation>
+        <translation>Applica a tutti i fotogrammi dell'animazione</translation>
     </message>
     <message>
         <source>Apply CDT mesh generation to all frames of the current animation</source>
-        <translation>Applica la generazione di mesh CDT a tutti i fotogrammi dell&apos;animazione corrente</translation>
+        <translation>Applica la generazione di mesh CDT a tutti i fotogrammi dell'animazione corrente</translation>
     </message>
     <message>
         <source>⚡ Generate CDT Mesh</source>
@@ -3755,7 +3755,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
-        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic su un colore per riempire. Il clic sinistro riempie col colore primario, il clic destro con il secondario. Tieni premuto &lt;b&gt;Maiusc&lt;/b&gt; per riempire l&apos;intera selezione.</translation>
+        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic su un colore per riempire. Il clic sinistro riempie col colore primario, il clic destro con il secondario. Tieni premuto &lt;b&gt;Maiusc&lt;/b&gt; per riempire l'intera selezione.</translation>
     </message>
     <message>
         <source>Fuzzy Select (Magic Wand)</source>
@@ -3767,7 +3767,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
-        <translation>Seleziona pixel connessi con colore corrispondente (Deseleziona per selezionare su tutta l&apos;immagine)</translation>
+        <translation>Seleziona pixel connessi con colore corrispondente (Deseleziona per selezionare su tutta l'immagine)</translation>
     </message>
     <message>
         <source>Allow magic wand selection to expand diagonally through pixel corners</source>
@@ -3795,7 +3795,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Animation Pivot &amp; Reticle</source>
-        <translation>Pivot e mirino d&apos;animazione</translation>
+        <translation>Pivot e mirino d'animazione</translation>
     </message>
     <message>
         <source>Quick Align:</source>
@@ -3835,11 +3835,11 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Horizontal pivot coordinate relative to frame top-left</source>
-        <translation>Coordinata orizzontale del pivot relativa all&apos;angolo in alto a sinistra del fotogramma</translation>
+        <translation>Coordinata orizzontale del pivot relativa all'angolo in alto a sinistra del fotogramma</translation>
     </message>
     <message>
         <source>Vertical pivot coordinate relative to frame top-left</source>
-        <translation>Coordinata verticale del pivot relativa all&apos;angolo in alto a sinistra del fotogramma</translation>
+        <translation>Coordinata verticale del pivot relativa all'angolo in alto a sinistra del fotogramma</translation>
     </message>
     <message>
         <source>Show ground &amp; axis guidelines</source>
@@ -3847,35 +3847,35 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
-        <translation>Mostra le linee tratteggiate del livello del suolo (rosso) e dell&apos;asse verticale centrale (blu)</translation>
+        <translation>Mostra le linee tratteggiate del livello del suolo (rosso) e dell'asse verticale centrale (blu)</translation>
     </message>
     <message>
         <source>Auto-apply changes to animation frames</source>
-        <translation>Applica automaticamente le modifiche ai fotogrammi dell&apos;animazione</translation>
+        <translation>Applica automaticamente le modifiche ai fotogrammi dell'animazione</translation>
     </message>
     <message>
         <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
-        <translation>Se selezionato, trascinare o modificare il pivot si applica a tutti i fotogrammi dell&apos;animazione corrente</translation>
+        <translation>Se selezionato, trascinare o modificare il pivot si applica a tutti i fotogrammi dell'animazione corrente</translation>
     </message>
     <message>
         <source>Apply to Anim</source>
-        <translation>Applica all&apos;anim.</translation>
+        <translation>Applica all'anim.</translation>
     </message>
     <message>
-        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
-        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell&apos;animazione corrente</translation>
+        <source>Apply current frame's pivot point to all frames in the current animation</source>
+        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell'animazione corrente</translation>
     </message>
     <message>
         <source>Apply to All</source>
         <translation>Applica a tutti</translation>
     </message>
     <message>
-        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
-        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell&apos;intero progetto</translation>
+        <source>Apply current frame's pivot point to all frames in the entire project</source>
+        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell'intero progetto</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
-        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic e trascina il mirino direttamente sul canvas per posizionare il pivot dell&apos;animazione. Le linee tratteggiate indicano il livello del suolo e l&apos;asse verticale per la sincronizzazione.</translation>
+        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic e trascina il mirino direttamente sul canvas per posizionare il pivot dell'animazione. Le linee tratteggiate indicano il livello del suolo e l'asse verticale per la sincronizzazione.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
@@ -3922,8 +3922,8 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Tutti i fotogrammi (%1)</translation>
     </message>
     <message>
-        <source>Apply to all &apos;%1&apos; frames</source>
-        <translation>Applica a tutti i fotogrammi di &apos;%1&apos;</translation>
+        <source>Apply to all '%1' frames</source>
+        <translation>Applica a tutti i fotogrammi di '%1'</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -3951,7 +3951,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Apply preset to all animation frames</source>
-        <translation>Applica preimpostazione a tutti i fotogrammi dell&apos;animazione</translation>
+        <translation>Applica preimpostazione a tutti i fotogrammi dell'animazione</translation>
     </message>
     <message>
         <source>Left-click: paint wind weight.
@@ -4055,7 +4055,7 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
-        <translation>Copiati %1 socket in tutti i %2 fotogrammi dell&apos;animazione attiva.</translation>
+        <translation>Copiati %1 socket in tutti i %2 fotogrammi dell'animazione attiva.</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4147,7 +4147,7 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>Erase pixels across all frames of current animation aligned by pivot</source>
-        <translation>Cancella pixel su tutti i fotogrammi dell&apos;animazione corrente allineati per perno</translation>
+        <translation>Cancella pixel su tutti i fotogrammi dell'animazione corrente allineati per perno</translation>
     </message>
     <message>
         <source>Erase across all visible layers</source>
@@ -4207,7 +4207,7 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
-        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Trascina la selezione per spostare i pixel fluttuanti. Premi &lt;b&gt;Invio&lt;/b&gt; o clicca all&apos;esterno per confermare.</translation>
+        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Trascina la selezione per spostare i pixel fluttuanti. Premi &lt;b&gt;Invio&lt;/b&gt; o clicca all'esterno per confermare.</translation>
     </message>
     <message>
         <source>Eyedropper Sampling</source>
@@ -4263,11 +4263,11 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>Discard unsaved pixel modifications and close editor (Esc)</source>
-        <translation>Ignora modifiche non salvate e chiudi l&apos;editor (Esc)</translation>
+        <translation>Ignora modifiche non salvate e chiudi l'editor (Esc)</translation>
     </message>
     <message>
         <source>Apply changes to project and keep editor open (Ctrl+S)</source>
-        <translation>Applica modifiche al progetto e mantieni aperto l&apos;editor (Ctrl+S)</translation>
+        <translation>Applica modifiche al progetto e mantieni aperto l'editor (Ctrl+S)</translation>
     </message>
     <message>
         <source>Save changes and close editor (Enter)</source>
@@ -4282,8 +4282,8 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
         <translation>Editor mesh poligonale CDT (nessuna mesh poligonale in questo fotogramma) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
-        <translation>Applica modifiche di disegno, generazione mesh e filtri a tutti i fotogrammi dell&apos;animazione &apos;%1&apos;</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
+        <translation>Applica modifiche di disegno, generazione mesh e filtri a tutti i fotogrammi dell'animazione '%1'</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4315,7 +4315,7 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>Atlas Collision Detected</source>
-        <translation>Rilevata collisione nell&apos;atlas</translation>
+        <translation>Rilevata collisione nell'atlas</translation>
     </message>
     <message>
         <source>Polygon or frame modifications cause collision with other sprites in the atlas:
@@ -4325,13 +4325,13 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
 An atlas repack must be performed upon validation to resolve overlapping frames.
 
 Would you like to repack the atlas now?</source>
-        <translation>Le modifiche al poligono o al fotogramma causano collisioni con altri sprite nell&apos;atlas:
+        <translation>Le modifiche al poligono o al fotogramma causano collisioni con altri sprite nell'atlas:
 
 %1
 
-È necessario reimpacchettare l&apos;atlas per risolvere la sovrapposizione.
+È necessario reimpacchettare l'atlas per risolvere la sovrapposizione.
 
-Vuoi reimpacchettare l&apos;atlas ora?</translation>
+Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Repack Atlas Now</source>
@@ -4343,7 +4343,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Filter navigation and onion skinning to animation</source>
-        <translation>Filtra navigazione e onion skinning all&apos;animazione</translation>
+        <translation>Filtra navigazione e onion skinning all'animazione</translation>
     </message>
     <message>
         <source># Grid</source>
@@ -4354,8 +4354,8 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
         <translation>⚡ Calcolo CDT in corso...</translation>
     </message>
     <message>
-        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
-        <translation>Applica filtro a tutti i fotogrammi di &apos;%1&apos; (%2 fotogrammi)</translation>
+        <source>Apply filter to all '%1' frames (%2 frames)</source>
+        <translation>Applica filtro a tutti i fotogrammi di '%1' (%2 fotogrammi)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4379,7 +4379,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Apply %1 to Animation</source>
-        <translation>Applica %1 all&apos;animazione</translation>
+        <translation>Applica %1 all'animazione</translation>
     </message>
     <message>
         <source>Apply %1 to Frame</source>
@@ -4406,7 +4406,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Rescales the atlas cleanly using Nearest-Neighbor (pixel-perfect) or Scale2x (smooth contours).</source>
-        <translation>Ridimensiona l&apos;atlas con precisione usando Nearest-Neighbor (pixel-perfect) o Scale2x (contorni smussati).</translation>
+        <translation>Ridimensiona l'atlas con precisione usando Nearest-Neighbor (pixel-perfect) o Scale2x (contorni smussati).</translation>
     </message>
 </context>
 <context>
@@ -4472,35 +4472,35 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     <name>PlistExtractor</name>
     <message>
         <source>Cannot open plist file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo plist: %1</translation>
     </message>
     <message>
         <source>XML parse error in plist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error de análisis XML en plist: %1</translation>
     </message>
     <message>
-        <source>No &apos;frames&apos; dictionary found in plist.</source>
-        <translation type="unfinished"></translation>
+        <source>No 'frames' dictionary found in plist.</source>
+        <translation>No se encontró el diccionario 'frames' en plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se encontró el archivo de imagen de atlas asociado para %1</translation>
     </message>
     <message>
         <source>Failed to load atlas image: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al cargar la imagen del atlas: %1 (%2)</translation>
     </message>
     <message>
         <source>Document has no frames to export.</source>
-        <translation type="unfinished"></translation>
+        <translation>El documento no tiene fotogramas para exportar.</translation>
     </message>
     <message>
         <source>Failed to save companion atlas image: %1</source>
-        <translation type="unfinished">Impossibile salvare l&apos;immagine atlas associata: %1</translation>
+        <translation>Impossibile salvare l'immagine atlas associata: %1</translation>
     </message>
     <message>
         <source>Cannot write plist file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede escribir el archivo plist: %1</translation>
     </message>
 </context>
 <context>
@@ -4705,7 +4705,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation>L&apos;immagine dell&apos;atlante decodificata è nulla.</translation>
+        <translation>L'immagine dell'atlante decodificata è nulla.</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
@@ -4717,7 +4717,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation>Impossibile caricare l&apos;immagine: %1</translation>
+        <translation>Impossibile caricare l'immagine: %1</translation>
     </message>
     <message>
         <source>Base</source>
@@ -4741,7 +4741,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation>Sostituzione dell&apos;atlante con %1 in corso...</translation>
+        <translation>Sostituzione dell'atlante con %1 in corso...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
@@ -4836,8 +4836,8 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     <message numerus="yes">
         <source>Erase Atlas Pixels for %n frame(s)</source>
         <translation>
-            <numerusform>Cancella i pixel dell&apos;atlas per %n fotogramma</numerusform>
-            <numerusform>Cancella i pixel dell&apos;atlas per %n fotogrammi</numerusform>
+            <numerusform>Cancella i pixel dell'atlas per %n fotogramma</numerusform>
+            <numerusform>Cancella i pixel dell'atlas per %n fotogrammi</numerusform>
         </translation>
     </message>
     <message>
@@ -4845,32 +4845,32 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
         <translation>Unisci fotogramma %1 in %2</translation>
     </message>
     <message>
-        <source>Create Animation &apos;%1&apos;</source>
-        <translation>Crea animazione &apos;%1&apos;</translation>
+        <source>Create Animation '%1'</source>
+        <translation>Crea animazione '%1'</translation>
     </message>
     <message>
-        <source>Delete Animation &apos;%1&apos;</source>
-        <translation>Elimina animazione &apos;%1&apos;</translation>
+        <source>Delete Animation '%1'</source>
+        <translation>Elimina animazione '%1'</translation>
     </message>
     <message>
-        <source>Reverse Animation &apos;%1&apos;</source>
-        <translation>Inverti animazione &apos;%1&apos;</translation>
+        <source>Reverse Animation '%1'</source>
+        <translation>Inverti animazione '%1'</translation>
     </message>
     <message>
-        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>Rinomina animazione &apos;%1&apos; in &apos;%2&apos;</translation>
+        <source>Rename Animation '%1' to '%2'</source>
+        <translation>Rinomina animazione '%1' in '%2'</translation>
     </message>
     <message>
-        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
-        <translation>Duplica animazione &apos;%1&apos; come &apos;%2&apos;</translation>
+        <source>Duplicate Animation '%1' as '%2'</source>
+        <translation>Duplica animazione '%1' come '%2'</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation &apos;%1&apos;</source>
-        <translation>Riordina fotogrammi nell&apos;animazione &apos;%1&apos;</translation>
+        <source>Reorder Frames in Animation '%1'</source>
+        <translation>Riordina fotogrammi nell'animazione '%1'</translation>
     </message>
     <message>
-        <source>Change Properties for Animation &apos;%1&apos;</source>
-        <translation>Modifica proprietà dell&apos;animazione &apos;%1&apos;</translation>
+        <source>Change Properties for Animation '%1'</source>
+        <translation>Modifica proprietà dell'animazione '%1'</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -4886,7 +4886,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation>Sostituisci file multimediale dell&apos;atlante</translation>
+        <translation>Sostituisci file multimediale dell'atlante</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
@@ -4898,7 +4898,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
-        <translation>Impossibile decodificare l&apos;immagine da: %1</translation>
+        <translation>Impossibile decodificare l'immagine da: %1</translation>
     </message>
     <message>
         <source>Failed to segment sprite frames.</source>
@@ -4906,11 +4906,11 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Failed to remove background from atlas.</source>
-        <translation>Impossibile rimuovere lo sfondo dall&apos;atlas.</translation>
+        <translation>Impossibile rimuovere lo sfondo dall'atlas.</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation>Impossibile caricare l&apos;immagine: %1</translation>
+        <translation>Impossibile caricare l'immagine: %1</translation>
     </message>
     <message>
         <source>Base</source>
@@ -4930,7 +4930,7 @@ Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>JSON parse error: %1 at offset %2</source>
-        <translation>Errore di analisi JSON: %1 all&apos;offset %2</translation>
+        <translation>Errore di analisi JSON: %1 all'offset %2</translation>
     </message>
     <message>
         <source>JSON root must be an object.</source>
@@ -4984,7 +4984,7 @@ Vuoi aprire lo strumento Mesh poligonale per ricalcolare le mesh?</translation>
 Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
         <translation>Il filtro applicato ha modificato la geometria e la silhouette degli sprite.
 
-Vuoi aprire lo strumento Mesh poligonale per generare mesh aderenti e ridurre l&apos;overdraw della GPU?</translation>
+Vuoi aprire lo strumento Mesh poligonale per generare mesh aderenti e ridurre l'overdraw della GPU?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>
@@ -5014,7 +5014,7 @@ Vuoi aprire lo strumento Mesh poligonale per generare mesh aderenti e ridurre l&
         <source>Failed to decode image from %1.
 
 %2</source>
-        <translation>Impossibile decodificare l&apos;immagine da %1.
+        <translation>Impossibile decodificare l'immagine da %1.
 
 %2</translation>
     </message>
@@ -5028,7 +5028,7 @@ To enable WebP support on Linux, install the corresponding package:
   • openSUSE:              sudo zypper install libqt6-qtimageformats
 
 On Windows / macOS, ensure Qt imageformats plugins (qwebp) are deployed with the application.</source>
-        <translation>Il plugin per il formato immagine WebP non è installato nell&apos;ambiente Qt.
+        <translation>Il plugin per il formato immagine WebP non è installato nell'ambiente Qt.
 
 Per abilitare WebP su Linux, installa il pacchetto corrispondente:
   • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
@@ -5036,7 +5036,7 @@ Per abilitare WebP su Linux, installa il pacchetto corrispondente:
   • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
   • openSUSE:              sudo zypper install libqt6-qtimageformats
 
-Su Windows / macOS, assicurati che i plugin Qt imageformats (qwebp) siano distribuiti con l&apos;applicazione.</translation>
+Su Windows / macOS, assicurati che i plugin Qt imageformats (qwebp) siano distribuiti con l'applicazione.</translation>
     </message>
     <message>
         <source>The %1 image format requires the Qt6 imageformats plugin.
@@ -5060,11 +5060,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Failed to decode project atlas: %1</source>
-        <translation>Impossibile decodificare l&apos;atlas di progetto: %1</translation>
+        <translation>Impossibile decodificare l'atlas di progetto: %1</translation>
     </message>
     <message>
         <source>Project atlas image file not found in session: %1</source>
-        <translation>File immagine dell&apos;atlas di progetto non trovato nella sessione: %1</translation>
+        <translation>File immagine dell'atlas di progetto non trovato nella sessione: %1</translation>
     </message>
     <message>
         <source>Set Auxiliary Map</source>
@@ -5080,19 +5080,29 @@ Installa il pacchetto:
     </message>
     <message>
         <source>1 frame exceeds 64 px width (%1 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
-        <translation type="unfinished"></translation>
+        <translation>1 fotograma supera los 64 px de ancho (%1 px): provocará parpadeo PPU en NES / Game Boy (máx 8 sprites de 8px).</translation>
     </message>
     <message>
         <source>%1 frames exceed 64 px width (up to %2 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 fotogramas superan los 64 px de ancho (hasta %2 px): provocará parpadeo PPU en NES / Game Boy (máx 8 sprites de 8px).</translation>
     </message>
     <message>
         <source>1 frame exceeds VIC-II hardware sprite size (24x21 px).</source>
-        <translation type="unfinished"></translation>
+        <translation>1 fotograma supera el tamaño de sprite de hardware VIC-II (24x21 px).</translation>
     </message>
     <message>
         <source>%1 frames exceed VIC-II hardware sprite size (24x21 px).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 fotogramas superan el tamaño de sprite de hardware VIC-II (24x21 px).</translation>
+    </message>
+    <message>
+        <source>Frame #%1: %2x%3 px
+⚠️ Exceeds retro scanline limit: %4 px (width: %5 px)</source>
+        <translation>Fotograma #%1: %2x%3 px
+⚠️ Supera el límite de línea de escaneo retro: %4 px (ancho: %5 px)</translation>
+    </message>
+    <message>
+        <source>Frame #%1: %2x%3 px</source>
+        <translation>Fotograma #%1: %2x%3 px</translation>
     </message>
 </context>
 <context>
@@ -5122,163 +5132,163 @@ Installa il pacchetto:
     <name>Retro::CAsmDialog</name>
     <message>
         <source>C / C++ &amp; Assembly Retro Code Exporter</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportador de código retro C / C++ y ensamblador</translation>
     </message>
     <message>
         <source>Target Retro Architecture Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuste predeterminado de arquitectura retro objetivo</translation>
     </message>
     <message>
         <source>Language &amp; Pixel Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Lenguaje y disposición de píxeles</translation>
     </message>
     <message>
         <source>C / C++ Header (.h)</source>
-        <translation type="unfinished"></translation>
+        <translation>Encabezado C / C++ (.h)</translation>
     </message>
     <message>
         <source>C Source (.c)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuente C (.c)</translation>
     </message>
     <message>
         <source>Assembly Motorola / VASM (68000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ensamblador Motorola / VASM (68000)</translation>
     </message>
     <message>
         <source>Assembly RGBDS (Game Boy)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ensamblador RGBDS (Game Boy)</translation>
     </message>
     <message>
         <source>Assembly ca65 / cc65 (6502)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ensamblador ca65 / cc65 (6502)</translation>
     </message>
     <message>
         <source>Assembly NASM / TASM (x86)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ensamblador NASM / TASM (x86)</translation>
     </message>
     <message>
         <source>Assembly GNU as (.byte/.long)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ensamblador GNU as (.byte/.long)</translation>
     </message>
     <message>
         <source>Assembly WLA-DX (Z80)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ensamblador WLA-DX (Z80)</translation>
     </message>
     <message>
         <source>PICO-8 Lua String/Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadena / Tabla Lua de PICO-8</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lenguaje:</translation>
     </message>
     <message>
         <source>Planar 2bpp Tiles (8x8) [GB/NES]</source>
-        <translation type="unfinished"></translation>
+        <translation>Teselas planares 2bpp (8x8) [GB/NES]</translation>
     </message>
     <message>
         <source>Planar 4bpp Tiles (8x8) [SMS/MD/SNES]</source>
-        <translation type="unfinished"></translation>
+        <translation>Teselas planares 4bpp (8x8) [SMS/MD/SNES]</translation>
     </message>
     <message>
         <source>Linear 4bpp Packed (2 px/byte)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineal 4bpp empaquetado (2 px/byte)</translation>
     </message>
     <message>
         <source>Linear 8bpp Indexed (1 byte/px)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineal 8bpp indexado (1 byte/px)</translation>
     </message>
     <message>
         <source>Amiga Planar Bitplanes (1-5 planes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Planos de bits planares Amiga (1-5 planos)</translation>
     </message>
     <message>
         <source>C64 Multicolor Sprite (24x21, 64B)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprite multicolor C64 (24x21, 64B)</translation>
     </message>
     <message>
         <source>ZX Spectrum (1bpp + 8x8 attrs)</source>
-        <translation type="unfinished"></translation>
+        <translation>ZX Spectrum (1bpp + atributos 8x8)</translation>
     </message>
     <message>
         <source>Linear 1bpp Mono (8 px/byte)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineal 1bpp mono (8 px/byte)</translation>
     </message>
     <message>
         <source>Tile/Pixel Layout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Disposición de teselas/píxeles:</translation>
     </message>
     <message>
         <source>Number Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato de número:</translation>
     </message>
     <message>
         <source>Bytes per Line:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bytes por línea:</translation>
     </message>
     <message>
         <source>Optional symbol prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Prefijo de símbolo opcional</translation>
     </message>
     <message>
         <source>Symbol Prefix:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prefijo de símbolo:</translation>
     </message>
     <message>
         <source>Data Type (C):</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de datos (C):</translation>
     </message>
     <message>
         <source>e.g. const, PROGMEM, ALIGN(2)</source>
-        <translation type="unfinished"></translation>
+        <translation>ej. const, PROGMEM, ALIGN(2)</translation>
     </message>
     <message>
         <source>Storage Qualifier:</source>
-        <translation type="unfinished"></translation>
+        <translation>Calificador de almacenamiento:</translation>
     </message>
     <message>
         <source>Export Sections &amp; Linter</source>
-        <translation type="unfinished"></translation>
+        <translation>Secciones de exportación y linter</translation>
     </message>
     <message>
         <source>Export Hardware Color Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar paleta de colores de hardware</translation>
     </message>
     <message>
         <source>Export Animation Sequences Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar tabla de secuencias de animación</translation>
     </message>
     <message>
         <source>Export Sprite Metadata Struct (Pivot, Size)</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar estructura de metadatos de sprites (pivote, tamaño)</translation>
     </message>
     <message>
         <source>Include C Header Guards (#ifndef)</source>
-        <translation type="unfinished"></translation>
+        <translation>Incluir guardas de encabezado C (#ifndef)</translation>
     </message>
     <message>
         <source>Include Scanline &amp; Hardware Linter Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Incluir advertencias de scanline y hardware</translation>
     </message>
     <message>
         <source>📋 Copy Code</source>
-        <translation type="unfinished"></translation>
+        <translation>📋 Copiar código</translation>
     </message>
     <message>
         <source>Export Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar código</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <source>Total ROM: %1 Bytes (%2 KB) | %3 Tiles (8x8)</source>
-        <translation type="unfinished"></translation>
+        <translation>ROM total: %1 Bytes (%2 KB) | %3 Teselas (8x8)</translation>
     </message>
     <message>
         <source>✅ Copied!</source>
-        <translation type="unfinished"></translation>
+        <translation>✅ ¡Copiado!</translation>
     </message>
 </context>
 <context>
@@ -5356,7 +5366,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
     </message>
     <message>
         <source>Import Color Palette</source>
@@ -5395,258 +5405,258 @@ Installa il pacchetto:
     <name>RetroTileExplorerDialog</name>
     <message>
         <source>Retro Console ROM &amp; VRAM Tile Ripper</source>
-        <translation type="unfinished"></translation>
+        <translation>Extractor de teselas ROM y VRAM de consolas retro</translation>
     </message>
     <message>
         <source>🎯 Detected Graphic Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>🎯 Bancos gráficos detectados</translation>
     </message>
     <message>
         <source>📍 Memory Offset / Address</source>
-        <translation type="unfinished"></translation>
+        <translation>📍 Desplazamiento de memoria / Dirección</translation>
     </message>
     <message>
         <source>Hex:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hex:</translation>
     </message>
     <message>
         <source>Dec:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dec:</translation>
     </message>
     <message>
         <source>Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato:</translation>
     </message>
     <message>
         <source>SNES (4bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES (Planar 4bpp)</translation>
     </message>
     <message>
         <source>Sega Mega Drive (4bpp Chunky)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Mega Drive (Chunky 4bpp)</translation>
     </message>
     <message>
         <source>Nintendo Game Boy (2bpp Interleaved)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo Game Boy (Entrelazado 2bpp)</translation>
     </message>
     <message>
         <source>NES / Famicom (2bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>NES / Famicom (Planar 2bpp)</translation>
     </message>
     <message>
         <source>Sega Master System (4bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Master System (Planar 4bpp)</translation>
     </message>
     <message>
         <source>SNK Neo-Geo (4bpp 16x16)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNK Neo-Geo (4bpp 16x16)</translation>
     </message>
     <message>
         <source>Sony PSX (TIM Direct)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony PSX (TIM Direct)</translation>
     </message>
     <message>
         <source>Raw Linear (8bpp Chunky)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineal sin procesar (Chunky 8bpp)</translation>
     </message>
     <message>
         <source>Grid Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ancho de cuadrícula:</translation>
     </message>
     <message>
         <source> tiles</source>
-        <translation type="unfinished"></translation>
+        <translation> teselas</translation>
     </message>
     <message>
         <source>Tile Count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de teselas:</translation>
     </message>
     <message>
         <source>⚙️ Decoding &amp; Tile Patterns</source>
-        <translation type="unfinished"></translation>
+        <translation>⚙️ Decodificación y patrones de teselas</translation>
     </message>
     <message>
         <source>SNES (3bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES (Planar 3bpp)</translation>
     </message>
     <message>
         <source>Pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation>Patrón:</translation>
     </message>
     <message>
         <source>8x8 Linear (Tiles &amp; Backgrounds)</source>
-        <translation type="unfinished"></translation>
+        <translation>8x8 lineal (Teselas y fondos)</translation>
     </message>
     <message>
         <source>16x16 Sprites (2x2 Sequential)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprites 16x16 (2x2 secuencial)</translation>
     </message>
     <message>
         <source>16x16 Sprites (SNES VRAM Stride 16)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprites 16x16 (SNES VRAM Stride 16)</translation>
     </message>
     <message>
         <source>16x16 Sprites (VRAM Stride 32)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprites 16x16 (VRAM Stride 32)</translation>
     </message>
     <message>
         <source>32x32 Sprites (4x4 Matrix)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprites 32x32 (Matriz 4x4)</translation>
     </message>
     <message>
         <source>32x32 Sprites (2x2*4 Quad SNESTilesKitten)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprites 32x32 (2x2*4 Quad SNESTilesKitten)</translation>
     </message>
     <message>
         <source>32x32 Sprites (SNES VRAM Stride 16)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprites 32x32 (SNES VRAM Stride 16)</translation>
     </message>
     <message>
         <source>🎨 Palette Studio</source>
-        <translation type="unfinished"></translation>
+        <translation>🎨 Estudio de paletas</translation>
     </message>
     <message>
         <source>Source:</source>
-        <translation type="unfinished"></translation>
+        <translation>Origen:</translation>
     </message>
     <message>
         <source>Detected:</source>
-        <translation type="unfinished"></translation>
+        <translation>Detectado:</translation>
     </message>
     <message>
         <source>PC Offset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Offset PC:</translation>
     </message>
     <message>
         <source>👁️ Inspection &amp; Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>👁️ Inspección y zoom</translation>
     </message>
     <message>
         <source>Transparent #0</source>
-        <translation type="unfinished"></translation>
+        <translation>Transparente #0</translation>
     </message>
     <message>
         <source>Tile Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuadrícula de teselas</translation>
     </message>
     <message>
         <source>Highlight Detected Sprites</source>
-        <translation type="unfinished"></translation>
+        <translation>Resaltar sprites detectados</translation>
     </message>
     <message>
         <source>Zoom:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <source>📥 Import Entire Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>📥 Importar hoja completa</translation>
     </message>
     <message>
         <source>Imports the current decoded tile sheet directly as a single atlas image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa la hoja de teselas decodificada actual directamente como una sola imagen de atlas.</translation>
     </message>
     <message>
         <source>✨ Extract Sprites to Project</source>
-        <translation type="unfinished"></translation>
+        <translation>✨ Extraer sprites al proyecto</translation>
     </message>
     <message>
         <source>Automatically slices and imports all detected character sprites and objects into BentoPack frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>Corta e importa automáticamente todos los sprites de personajes y objetos detectados en fotogramas de BentoPack.</translation>
     </message>
     <message>
         <source>File Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error de archivo</translation>
     </message>
     <message>
         <source>Cannot open ROM/VRAM file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo ROM/VRAM: %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; — %2 bytes (%3 KB)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; — %2 bytes (%3 KB)</translation>
     </message>
     <message>
         <source>🎮 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>🎮 %1</translation>
     </message>
     <message>
         <source>Beginning of File (0x000000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicio del archivo (0x000000)</translation>
     </message>
     <message>
         <source>None auto-detected in ROM</source>
-        <translation type="unfinished"></translation>
+        <translation>Ninguna detectada automáticamente en la ROM</translation>
     </message>
     <message>
         <source>🎨 ROM Palette (Auto-Scan)</source>
-        <translation type="unfinished"></translation>
+        <translation>🎨 Paleta ROM (Auto-escaneo)</translation>
     </message>
     <message>
         <source>🎯 ROM Palette (Manual Hex)</source>
-        <translation type="unfinished"></translation>
+        <translation>🎯 Paleta ROM (Manual Hex)</translation>
     </message>
     <message>
         <source>Harmonic Retro Preview (Shaded)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista previa retro armónica (Sombreada)</translation>
     </message>
     <message>
         <source>Grayscale (Contrast)</source>
-        <translation type="unfinished"></translation>
+        <translation>Escala de grises (Contraste)</translation>
     </message>
     <message>
         <source>No decodable tile data at offset 0x%1</source>
-        <translation type="unfinished"></translation>
+        <translation>No hay datos de teselas decodificables en el desplazamiento 0x%1</translation>
     </message>
     <message>
         <source>Empty sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoja vacía</translation>
     </message>
     <message>
         <source>Decoded: %1 tiles (%2x%3 px) | Zoom: %4x | Pattern: %5 | Palette: 0x%6 | Offset: 0x%7</source>
-        <translation type="unfinished"></translation>
+        <translation>Decodificado: %1 teselas (%2x%3 px) | Zoom: %4x | Patrón: %5 | Paleta: 0x%6 | Offset: 0x%7</translation>
     </message>
 </context>
 <context>
     <name>RetroTileExtractor</name>
     <message>
         <source>Cannot open retro ROM/VRAM file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo ROM/VRAM retro: %1</translation>
     </message>
     <message>
         <source>File is empty: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>El archivo está vacío: %1</translation>
     </message>
     <message>
         <source>Failed to decode PSX TIM: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al decodificar PSX TIM: %1</translation>
     </message>
     <message>
         <source>Insufficient tile data at offset %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datos de teselas insuficientes en el desplazamiento %1.</translation>
     </message>
     <message>
         <source>Failed to decode retro tile stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al decodificar el flujo de teselas retro.</translation>
     </message>
     <message>
         <source>Cannot export: Document atlas image is null.</source>
-        <translation type="unfinished">Impossibile esportare: l&apos;immagine atlas del documento è nulla.</translation>
+        <translation>Impossibile esportare: l'immagine atlas del documento è nulla.</translation>
     </message>
     <message>
         <source>Failed to encode retro tiles: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al codificar teselas retro: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo para escribir: %1</translation>
     </message>
     <message>
         <source>Failed to write all tile bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al escribir todos los bytes de teselas en el disco.</translation>
     </message>
 </context>
 <context>
@@ -5677,7 +5687,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Error occurred while adding files to ZIP archive: %1</source>
-        <translation>Errore durante l&apos;aggiunta di file all&apos;archivio ZIP: %1</translation>
+        <translation>Errore durante l'aggiunta di file all'archivio ZIP: %1</translation>
     </message>
     <message>
         <source>Error occurred while writing ZIP file: %1</source>
@@ -5685,7 +5695,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Failed to open ZIP archive: %1</source>
-        <translation>Impossibile aprire l&apos;archivio ZIP: %1</translation>
+        <translation>Impossibile aprire l'archivio ZIP: %1</translation>
     </message>
     <message>
         <source>No active session workspace to save.</source>
@@ -5725,11 +5735,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Checkout tree failed with error code: %1</source>
-        <translation>Checkout dell&apos;albero non riuscito con codice errore: %1</translation>
+        <translation>Checkout dell'albero non riuscito con codice errore: %1</translation>
     </message>
     <message>
         <source>Git integration is not compiled in.</source>
-        <translation>L&apos;integrazione Git non è compilata nel programma.</translation>
+        <translation>L'integrazione Git non è compilata nel programma.</translation>
     </message>
 </context>
 <context>
@@ -5800,7 +5810,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_SETTINGS_GRP_LANGUAGE</source>
-        <translation>Lingua dell&apos;interfaccia</translation>
+        <translation>Lingua dell'interfaccia</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
@@ -5808,7 +5818,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_APP</source>
-        <translation>Lingua dell&apos;applicazione:</translation>
+        <translation>Lingua dell'applicazione:</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_HINT</source>
@@ -5820,11 +5830,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Check automatically for updates on startup</source>
-        <translation>Verifica automaticamente gli aggiornamenti all&apos;avvio</translation>
+        <translation>Verifica automaticamente gli aggiornamenti all'avvio</translation>
     </message>
     <message>
         <source>Reopen last project on startup</source>
-        <translation>Riapri l&apos;ultimo progetto all&apos;avvio</translation>
+        <translation>Riapri l'ultimo progetto all'avvio</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_GIT</source>
@@ -5832,11 +5842,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_SETTINGS_GRP_AUTHOR</source>
-        <translation>Identità dell&apos;autore (Commit Git)</translation>
+        <translation>Identità dell'autore (Commit Git)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_INFO</source>
-        <translation>Questa identità viene registrata come firma dell&apos;autore per ogni commit nella cronologia del progetto .bento.</translation>
+        <translation>Questa identità viene registrata come firma dell'autore per ogni commit nella cronologia del progetto .bento.</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_NAME_PLACEHOLDER</source>
@@ -5864,11 +5874,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Stato: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 attivo&lt;/b&gt; (gestione cronologia e rami operativa)</translation>
+        <translation>Stato: &lt;b style='color:#27ae60;'&gt;LibGit2 attivo&lt;/b&gt; (gestione cronologia e rami operativa)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Stato: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 non compilato&lt;/b&gt; (cronologia git disabilitata)</translation>
+        <translation>Stato: &lt;b style='color:#e74c3c;'&gt;LibGit2 non compilato&lt;/b&gt; (cronologia git disabilitata)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -5920,15 +5930,103 @@ Installa il pacchetto:
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
-        <translation>&lt;b&gt;Suggerimento:&lt;/b&gt; Le texture compresse per GPU (KTX2 / Basis Universal) riducono l&apos;uso di memoria GPU (VRAM) e la larghezza di banda.</translation>
+        <translation>&lt;b&gt;Suggerimento:&lt;/b&gt; Le texture compresse per GPU (KTX2 / Basis Universal) riducono l'uso di memoria GPU (VRAM) e la larghezza di banda.</translation>
     </message>
     <message>
         <source>Default Target Format:</source>
         <translation>Formato di destinazione predefinito:</translation>
     </message>
     <message>
+        <source>Click to customize color (%1)</source>
+        <translation>Haga clic para personalizar el color (%1)</translation>
+    </message>
+    <message>
+        <source>Select Color</source>
+        <translation>Seleccionar color</translation>
+    </message>
+    <message>
         <source>Retro &amp; Hardware Constraints</source>
-        <translation type="unfinished"></translation>
+        <translation>Restricciones Retro y de Hardware</translation>
+    </message>
+    <message>
+        <source>Background Removal Min Alpha:</source>
+        <translation>Alfa mín. para eliminación de fondo:</translation>
+    </message>
+    <message>
+        <source>Grid / Row Vertical Alignment Tolerance:</source>
+        <translation>Tolerancia de alineación vertical de cuadrícula/fila:</translation>
+    </message>
+    <message>
+        <source>Animation Playback Defaults</source>
+        <translation>Valores predeterminados de reproducción de animación</translation>
+    </message>
+    <message>
+        <source>Default Frame Rate:</source>
+        <translation>Velocidad de fotogramas predeterminada:</translation>
+    </message>
+    <message>
+        <source>Maximum Frame Rate Limit:</source>
+        <translation>Límite máximo de velocidad de fotogramas:</translation>
+    </message>
+    <message>
+        <source>Auto-play animation when selected in list</source>
+        <translation>Reproducir automáticamente al seleccionar en la lista</translation>
+    </message>
+    <message>
+        <source>Auto-save session state on exit</source>
+        <translation>Guardar automáticamente el estado de la sesión al salir</translation>
+    </message>
+    <message>
+        <source>Keyboard Nudge &amp; Positioning</source>
+        <translation>Desplazamiento por teclado y posicionamiento</translation>
+    </message>
+    <message>
+        <source>Normal Nudge Step (Arrow keys):</source>
+        <translation>Paso de movimiento normal (teclas de flecha):</translation>
+    </message>
+    <message>
+        <source>Fast Nudge Step (Shift + Arrow keys):</source>
+        <translation>Paso de movimiento rápido (Mayús + teclas de flecha):</translation>
+    </message>
+    <message>
+        <source>Box Styling &amp; Selection Appearance</source>
+        <translation>Estilo de caja y apariencia de selección</translation>
+    </message>
+    <message>
+        <source>Resize Handle Size:</source>
+        <translation>Tamaño de los controles de cambio de tamaño:</translation>
+    </message>
+    <message>
+        <source>Resize Handle Grab Margin:</source>
+        <translation>Margen de agarre de los controles:</translation>
+    </message>
+    <message>
+        <source>Selected Box Outline Color:</source>
+        <translation>Color de contorno de la caja seleccionada:</translation>
+    </message>
+    <message>
+        <source>Selected Box Fill Color:</source>
+        <translation>Color de relleno de la caja seleccionada:</translation>
+    </message>
+    <message>
+        <source>Unselected Box Color:</source>
+        <translation>Color de las cajas no seleccionadas:</translation>
+    </message>
+    <message>
+        <source>Marquee Selection Color:</source>
+        <translation>Color del marco de selección:</translation>
+    </message>
+    <message>
+        <source>Slice Preview Outline Color:</source>
+        <translation>Color del contorno de vista previa de corte:</translation>
+    </message>
+    <message>
+        <source>Polygon Mesh Wireframe Color:</source>
+        <translation>Color de malla de alambre poligonal:</translation>
+    </message>
+    <message>
+        <source>Show polygon mesh by default when available</source>
+        <translation>Mostrar malla poligonal por defecto si está disponible</translation>
     </message>
     <message>
         <source>PNG (Standard, Lossless)</source>
@@ -5975,88 +6073,144 @@ Installa il pacchetto:
         <translation>Livello di compressione Zstd:</translation>
     </message>
     <message>
+        <source>Texture Packing &amp; Geometry Defaults</source>
+        <translation>Valores predeterminados de empaquetado y geometría de texturas</translation>
+    </message>
+    <message>
+        <source>Default Inner Sprite Padding:</source>
+        <translation>Relleno interno de sprite predeterminado:</translation>
+    </message>
+    <message>
+        <source>Default Atlas Border Margin:</source>
+        <translation>Margen de borde de atlas predeterminado:</translation>
+    </message>
+    <message>
+        <source>Default Bleed Border Extrusion:</source>
+        <translation>Extrusión de borde con sangrado predeterminada:</translation>
+    </message>
+    <message>
+        <source>Default Max Texture Atlas Dimensions:</source>
+        <translation>Dimensiones máximas de atlas predeterminadas:</translation>
+    </message>
+    <message>
+        <source>Force Power-of-Two (POT 2^n) texture dimensions by default</source>
+        <translation>Forzar dimensiones en potencia de dos (POT 2^n) por defecto</translation>
+    </message>
+    <message>
+        <source>Force square aspect ratio (width == height) by default</source>
+        <translation>Forzar relación de aspecto cuadrada (ancho == alto) por defecto</translation>
+    </message>
+    <message>
+        <source>Detect and share visually identical frames by default</source>
+        <translation>Detectar y compartir fotogramas idénticos por defecto</translation>
+    </message>
+    <message>
+        <source>Crop transparent margins (Trim) by default</source>
+        <translation>Recortar márgenes transparentes (Trim) por defecto</translation>
+    </message>
+    <message>
+        <source>Invert Normal Map Green channel (DirectX vs OpenGL Y-Flip)</source>
+        <translation>Invertir canal verde del mapa de normales (DirectX vs OpenGL Y-Flip)</translation>
+    </message>
+    <message>
         <source>Enable Hardware PPU Constraints &amp; Retro Linters (Active by default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar restricciones de PPU y linters retro (activo por defecto)</translation>
     </message>
     <message>
         <source>Target System Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Perfil del sistema de destino</translation>
     </message>
     <message>
         <source>Custom / Generic Retro</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalizado / Retro genérico</translation>
     </message>
     <message>
         <source>Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo Game Boy (DMG / CGB) - scanline 64px, 256 teselas</translation>
     </message>
     <message>
         <source>Nintendo NES / Famicom - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo NES / Famicom - scanline 64px, 256 teselas</translation>
     </message>
     <message>
         <source>Sega Master System / Game Gear - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Master System / Game Gear - scanline 64px, 256 teselas</translation>
     </message>
     <message>
         <source>Sega Mega Drive / Genesis - 128px scanline, 512 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Mega Drive / Genesis - scanline 128px, 512 teselas</translation>
     </message>
     <message>
         <source>Commodore 64 (Multicolor) - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Commodore 64 (Multicolor) - scanline 64px, 256 teselas</translation>
     </message>
     <message>
         <source>Super Nintendo (SNES) - 256px scanline, 512 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Super Nintendo (SNES) - scanline 256px, 512 teselas</translation>
     </message>
     <message>
         <source>PICO-8 - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 - scanline 64px, 256 teselas</translation>
     </message>
     <message>
         <source>Hardware Profile:</source>
-        <translation type="unfinished"></translation>
+        <translation>Perfil de hardware:</translation>
     </message>
     <message>
         <source>Hardware Constraint Limits</source>
-        <translation type="unfinished"></translation>
+        <translation>Límites de restricciones de hardware</translation>
     </message>
     <message>
         <source>Max Scanline Sprite Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ancho máx. de sprites por scanline:</translation>
     </message>
     <message>
         <source>Max VRAM Tile Budget:</source>
-        <translation type="unfinished"></translation>
+        <translation>Presupuesto máx. de teselas VRAM:</translation>
     </message>
     <message>
         <source>Tile Grid Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolución de cuadrícula de teselas:</translation>
+    </message>
+    <message>
+        <source>Max Sprites Per Scanline:</source>
+        <translation>Sprites máx. por scanline:</translation>
+    </message>
+    <message>
+        <source>Max Colors Per Sprite / Palette:</source>
+        <translation>Colores máx. por sprite / paleta:</translation>
     </message>
     <message>
         <source>Visual Feedback &amp; Aids</source>
-        <translation type="unfinished"></translation>
+        <translation>Comentarios visuales y ayudas</translation>
+    </message>
+    <message>
+        <source>Guide Line Thickness:</source>
+        <translation>Grosor de líneas guía:</translation>
     </message>
     <message>
         <source>Show subtle 8x8 tile grid in Pixel Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar cuadrícula sutil de 8x8 en el editor de píxeles</translation>
     </message>
     <message>
         <source>Show scanline width boundary guide in Pixel Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar guía de límite de scanline en el editor de píxeles</translation>
     </message>
     <message>
         <source>Show discrete warning badges (pastilles) on Timeline frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar insignias de advertencia discretas en los fotogramas de la línea de tiempo</translation>
     </message>
     <message>
         <source>Show VRAM tile budget gauge in status bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar indicador de presupuesto de teselas VRAM en la barra de estado</translation>
+    </message>
+    <message>
+        <source>Show discrete sprite size limit guides on Atlas (background rules &amp; zones)</source>
+        <translation>Mostrar guías de límite de tamaño de sprite en el atlas (reglas y zonas de fondo)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; Constraints and visual badges provide non-blocking visual feedback for retro targets (NES, Game Boy, Mega Drive, C64) without interfering with modern engines (Godot/Unity/Unreal).</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Consejo:&lt;/b&gt; Las restricciones y las insignias visuales brindan comentarios no bloqueantes para plataformas retro (NES, Game Boy, Mega Drive, C64) sin interferir con los motores modernos (Godot/Unity/Unreal).</translation>
     </message>
     <message>
         <source>Open Plugins Folder...</source>
@@ -6119,8 +6273,8 @@ Installa il pacchetto:
         <translation>Verifica aggiornamenti ora</translation>
     </message>
     <message>
-        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
-        <translation>Fai clic su &apos;Verifica aggiornamenti ora&apos; per interrogare l&apos;ultima versione su GitHub.</translation>
+        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
+        <translation>Fai clic su 'Verifica aggiornamenti ora' per interrogare l'ultima versione su GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6139,16 +6293,16 @@ Installa il pacchetto:
         <translation>Verifica aggiornamenti da GitHub in corso...</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Impossibile verificare gli aggiornamenti: %1&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #e74c3c;'&gt;Impossibile verificare gli aggiornamenti: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Risposta non valida da GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #e74c3c;'&gt;Risposta non valida da GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;È disponibile una nuova versione: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;È disponibile una nuova versione: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6159,8 +6313,8 @@ Installa il pacchetto:
         <translation>Rilasciata: %1</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Stai utilizzando l&apos;ultima versione disponibile (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #27ae60;'&gt;Stai utilizzando l'ultima versione disponibile (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
@@ -6250,7 +6404,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
-        <translation>Rileva e ritaglia i riquadri di delimitazione degli sprite dall&apos;atlas senza modificare lo sfondo o i colori dei pixel.</translation>
+        <translation>Rileva e ritaglia i riquadri di delimitazione degli sprite dall'atlas senza modificare lo sfondo o i colori dei pixel.</translation>
     </message>
 </context>
 <context>
@@ -6265,11 +6419,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
-        <translation>Impossibile decodificare l&apos;immagine da: %1</translation>
+        <translation>Impossibile decodificare l'immagine da: %1</translation>
     </message>
     <message>
         <source>Cannot export: Document atlas image is null.</source>
-        <translation>Impossibile esportare: l&apos;immagine atlas del documento è nulla.</translation>
+        <translation>Impossibile esportare: l'immagine atlas del documento è nulla.</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
@@ -6277,7 +6431,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Failed to save image to: %1</source>
-        <translation>Impossibile salvare l&apos;immagine in: %1</translation>
+        <translation>Impossibile salvare l'immagine in: %1</translation>
     </message>
     <message>
         <source>Exported atlas image to: %1</source>
@@ -6300,7 +6454,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</source>
-        <translation>Impacchetta gli sprite nell&apos;atlas usando inviluppi poligonali stretti, riquadri sovrapposti e rilevamento delle collisioni multithreading.</translation>
+        <translation>Impacchetta gli sprite nell'atlas usando inviluppi poligonali stretti, riquadri sovrapposti e rilevamento delle collisioni multithreading.</translation>
     </message>
     <message>
         <source>Tight Polygon Packing (Nesting)</source>
@@ -6319,7 +6473,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_TIMELINE_ADD_SELECTION_TOOLTIP</source>
-        <translation>Aggiungi i fotogrammi selezionati dell&apos;atlas a questa animazione</translation>
+        <translation>Aggiungi i fotogrammi selezionati dell'atlas a questa animazione</translation>
     </message>
     <message>
         <source>KEY_TIMELINE_NO_ANIM</source>
@@ -6353,7 +6507,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>KEY_TIMELINE_SELECT_IN_ATLAS</source>
-        <translation>Seleziona nell&apos;atlas</translation>
+        <translation>Seleziona nell'atlas</translation>
     </message>
 </context>
 <context>
@@ -6372,11 +6526,11 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Immagine dell&apos;atlas associata non trovata per: %1</translation>
+        <translation>Immagine dell'atlas associata non trovata per: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
-        <translation>Impossibile caricare l&apos;immagine dell&apos;atlas: %1 (%2)</translation>
+        <translation>Impossibile caricare l'immagine dell'atlas: %1 (%2)</translation>
     </message>
     <message>
         <source>Imported %1 frames from Unity 2D Sprite Mesh</source>
@@ -6396,7 +6550,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unity export.</source>
-        <translation>Impossibile impacchettare i fotogrammi per l&apos;esportazione Unity.</translation>
+        <translation>Impossibile impacchettare i fotogrammi per l'esportazione Unity.</translation>
     </message>
     <message>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
@@ -6404,7 +6558,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Failed to save companion image: %1</source>
-        <translation>Impossibile salvare l&apos;immagine associata: %1</translation>
+        <translation>Impossibile salvare l'immagine associata: %1</translation>
     </message>
     <message>
         <source>Cannot write to Unity JSON file: %1</source>
@@ -6439,11 +6593,11 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Immagine dell&apos;atlas associata non trovata per: %1</translation>
+        <translation>Immagine dell'atlas associata non trovata per: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
-        <translation>Impossibile caricare l&apos;immagine dell&apos;atlas: %1 (%2)</translation>
+        <translation>Impossibile caricare l'immagine dell'atlas: %1 (%2)</translation>
     </message>
     <message>
         <source>Imported %1 frames from Unreal Paper2D</source>
@@ -6463,7 +6617,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
-        <translation>Impossibile impacchettare i fotogrammi per l&apos;esportazione Unreal Paper2D.</translation>
+        <translation>Impossibile impacchettare i fotogrammi per l'esportazione Unreal Paper2D.</translation>
     </message>
     <message>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
@@ -6471,7 +6625,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Failed to save companion image: %1</source>
-        <translation>Impossibile salvare l&apos;immagine associata: %1</translation>
+        <translation>Impossibile salvare l'immagine associata: %1</translation>
     </message>
     <message>
         <source>Cannot write to Unreal Paper2D JSON file: %1</source>
@@ -6670,7 +6824,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Immediately triggers export to validate settings</source>
-        <translation>Avvia immediatamente l&apos;esportazione per convalidare le impostazioni</translation>
+        <translation>Avvia immediatamente l'esportazione per convalidare le impostazioni</translation>
     </message>
     <message>
         <source>💾 Save</source>

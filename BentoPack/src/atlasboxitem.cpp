@@ -849,7 +849,8 @@ void AtlasBoxItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         if (limit > 0 && m_rect.width() > limit) {
             // Discrete amber dashed line at limit
             painter->save();
-            QPen limitPen(QColor(245, 158, 11, 220), 2, Qt::DashLine);
+            int guideThick = qBound(1, retro.guideLineThickness, 4);
+            QPen limitPen(QColor(245, 158, 11, 220), guideThick, Qt::DashLine);
             limitPen.setCosmetic(true);
             painter->setPen(limitPen);
             painter->drawLine(QPointF(m_rect.left() + limit, m_rect.top()),

@@ -187,6 +187,15 @@ ExportDialog::ExportDialog(const SpriteDocument *document, const QString &defaul
     ui->chkZstd->setChecked(expCfg.defaultZstd);
     ui->spinZstdLevel->setValue(expCfg.defaultZstdLevel);
 
+    // Packing and layout defaults
+    ui->spinPadding->setValue(expCfg.defaultPadding);
+    ui->spinBorderPadding->setValue(expCfg.defaultBorderPadding);
+    ui->spinExtrude->setValue(expCfg.defaultExtrude);
+    ui->chkPowerOfTwo->setChecked(expCfg.defaultPowerOfTwo);
+    ui->chkForceSquare->setChecked(expCfg.defaultForceSquare);
+    ui->chkDeduplicate->setChecked(expCfg.defaultDeduplicate);
+    ui->chkTrim->setChecked(expCfg.defaultTrimSprites);
+
     updateComputedPath();
     updateContextualVisibility();
     onTextureFormatChanged(ui->comboTextureFormat->currentIndex());

@@ -36,6 +36,7 @@ struct BENTOPACK_CORE_EXPORT AtlasConfig
     int    nudgeStepSmall = 1;
     int    nudgeStepLarge = 10;
     int    fitViewPadding = 20;
+    bool   showPolygonMeshByDefault = true;
 };
 
 /**
@@ -51,6 +52,7 @@ struct VisualConfig
     QColor hoveredBoxFillColor = QColor(0, 180, 255, 30);    // Light translucent blue
     QColor marqueeColor = QColor(0, 120, 215);               // Blue dashed marquee
     QColor newSlicePreviewColor = QColor(0, 220, 100);       // Green dashed slice preview
+    QColor meshWireframeColor = QColor(0, 220, 255, 120);    // Cyan polygon wireframe
 };
 
 /**
@@ -69,10 +71,11 @@ struct AnimationConfig
  */
 struct BENTOPACK_CORE_EXPORT ProjectConfig
 {
-    int maxRecentFiles = 10;
-    int backgroundRemovalTolerance = 10;
-    int backgroundMinAlpha = 10;
-    int undoLimit = 50;
+    int  maxRecentFiles = 10;
+    int  backgroundRemovalTolerance = 10;
+    int  backgroundMinAlpha = 10;
+    int  undoLimit = 50;
+    bool autoSaveSession = true;
 };
 
 /**
@@ -97,15 +100,25 @@ struct BENTOPACK_CORE_EXPORT GeneralConfig
 };
 
 /**
- * @brief Default settings for export and VRAM texture compression.
+ * @brief Default settings for export, texture packaging, and VRAM compression.
  */
 struct BENTOPACK_CORE_EXPORT ExportConfig
 {
     QString defaultFormatId;            // Dynamic Extractor plugin ID (e.g. "godot_extractor", "json_extractor")
-    int defaultTextureFormatIndex = 0;   // 0 = PNG, 1 = KTX2 UASTC, 2 = KTX2 ETC1S
-    int defaultAlgorithmIndex = 0;       // 0 = Keep layout, 1 = MaxRects BSSF, etc.
+    int  defaultTextureFormatIndex = 0; // 0 = PNG, 1 = WebP, 2 = KTX2 / Basis
+    int  defaultAlgorithmIndex = 0;     // 0 = Keep layout, 1 = MaxRects BSSF, etc.
     bool defaultZstd = true;
-    int defaultZstdLevel = 9;
+    int  defaultZstdLevel = 9;
+    int  defaultPadding = 2;            // Inner spacing between sprites (px)
+    int  defaultBorderPadding = 0;      // Outer margin at atlas edges (px)
+    int  defaultExtrude = 0;            // Bleed border extrusion outward (px)
+    int  defaultMaxWidth = 4096;        // Maximum texture atlas width
+    int  defaultMaxHeight = 4096;       // Maximum texture atlas height
+    bool defaultPowerOfTwo = false;     // Restrict texture to 2^n dimensions
+    bool defaultForceSquare = false;    // Force width == height
+    bool defaultDeduplicate = false;    // Deduplicate visually identical frames
+    bool defaultTrimSprites = false;    // Crop transparent margins
+    bool defaultNormalMapYFlip = false; // Invert normal map green channel
 };
 
 /**
@@ -118,6 +131,9 @@ struct BENTOPACK_CORE_EXPORT RetroLinterConfig
     int  scanlineSpriteWidthLimit = 64;   // Max sprite width allowed per scanline (pixels)
     int  maxVramTiles = 256;              // Max unique 8x8 tiles in VRAM budget
     int  tileSize = 8;                    // 8 for 8x8 tiles, 16 for 16x16
+    int  guideLineThickness = 2;          // Thickness for discrete guide lines (1-4 px)
+    int  maxSpritesPerScanline = 8;       // Hardware sprite count limit per raster line
+    int  maxColorsPerSprite = 16;         // Palette color budget per sprite
     bool showScanlineGuide = true;        // Discrete vertical guide line in Pixel Canvas
     bool showTileGrid = true;             // Subtle 8x8 tile grid in Pixel Canvas
     bool showTimelineBadges = true;       // Discrete warning badge (pastille) on filmstrip frames

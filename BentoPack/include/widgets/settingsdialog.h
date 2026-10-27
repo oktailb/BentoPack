@@ -124,8 +124,19 @@ private:
     QGroupBox *m_grpExtraction = nullptr;
     QLabel    *m_lblAlphaThreshold = nullptr;
     QLabel    *m_lblBgRemovalTol = nullptr;
+    QLabel    *m_lblBgMinAlpha = nullptr;
+    QLabel    *m_lblVertTolerance = nullptr;
     QSpinBox  *m_spinAlphaThreshold = nullptr;
     QSpinBox  *m_spinBgRemovalTol = nullptr;
+    QSpinBox  *m_spinBgMinAlpha = nullptr;
+    QSpinBox  *m_spinVertTolerance = nullptr;
+
+    QGroupBox *m_grpAnimation = nullptr;
+    QLabel    *m_lblDefaultFps = nullptr;
+    QLabel    *m_lblMaxFps = nullptr;
+    QSpinBox  *m_spinDefaultFps = nullptr;
+    QSpinBox  *m_spinMaxFps = nullptr;
+    QCheckBox *m_chkAutoPlayOnSelection = nullptr;
 
     QGroupBox *m_grpLang = nullptr;
     QLabel    *m_lblLangApp = nullptr;
@@ -134,6 +145,7 @@ private:
     QGroupBox *m_grpStartup = nullptr;
     QCheckBox *m_chkCheckUpdatesOnStartup = nullptr;
     QCheckBox *m_chkReopenLastProject = nullptr;
+    QCheckBox *m_chkAutoSaveSession = nullptr;
 
     // Atlas Page
     QLabel         *m_hdrAtlas = nullptr;
@@ -151,6 +163,41 @@ private:
     QLabel         *m_lblMinSliceSize = nullptr;
     QSpinBox       *m_spinMinSliceSize = nullptr;
 
+    QGroupBox      *m_grpNudge = nullptr;
+    QLabel         *m_lblNudgeSmall = nullptr;
+    QLabel         *m_lblNudgeLarge = nullptr;
+    QSpinBox       *m_spinNudgeSmall = nullptr;
+    QSpinBox       *m_spinNudgeLarge = nullptr;
+
+    QGroupBox      *m_grpBoxStyle = nullptr;
+    QLabel         *m_lblHandleSize = nullptr;
+    QLabel         *m_lblHandleMargin = nullptr;
+    QDoubleSpinBox *m_spinHandleSize = nullptr;
+    QDoubleSpinBox *m_spinHandleMargin = nullptr;
+    QLabel         *m_lblSelectedBoxColor = nullptr;
+    QLabel         *m_lblSelectedBoxFillColor = nullptr;
+    QLabel         *m_lblUnselectedBoxColor = nullptr;
+    QLabel         *m_lblMarqueeColor = nullptr;
+    QLabel         *m_lblPreviewColor = nullptr;
+    QLabel         *m_lblMeshWireframeColor = nullptr;
+    QPushButton    *m_btnSelectedBoxColor = nullptr;
+    QPushButton    *m_btnSelectedBoxFillColor = nullptr;
+    QPushButton    *m_btnUnselectedBoxColor = nullptr;
+    QPushButton    *m_btnMarqueeColor = nullptr;
+    QPushButton    *m_btnPreviewColor = nullptr;
+    QPushButton    *m_btnMeshWireframeColor = nullptr;
+    QCheckBox      *m_chkShowPolygonMesh = nullptr;
+
+    QColor m_colSelectedBox;
+    QColor m_colSelectedBoxFill;
+    QColor m_colUnselectedBox;
+    QColor m_colMarquee;
+    QColor m_colPreview;
+    QColor m_colMeshWireframe;
+
+    void updateColorButton(QPushButton *btn, const QColor &color);
+    void pickColor(QWidget *parent, QColor &targetColor, QPushButton *button, bool alpha = false);
+
     // Export Page
     QLabel    *m_hdrExport = nullptr;
     QGroupBox *m_grpExportDefaults = nullptr;
@@ -163,6 +210,21 @@ private:
     QComboBox *m_comboDefaultAlgorithm = nullptr;
     QCheckBox *m_chkDefaultZstd = nullptr;
     QSpinBox  *m_spinDefaultZstdLevel = nullptr;
+
+    QGroupBox *m_grpPackDefaults = nullptr;
+    QLabel    *m_lblDefaultPadding = nullptr;
+    QLabel    *m_lblDefaultBorderPadding = nullptr;
+    QLabel    *m_lblDefaultExtrude = nullptr;
+    QLabel    *m_lblMaxDimensions = nullptr;
+    QSpinBox  *m_spinDefaultPadding = nullptr;
+    QSpinBox  *m_spinDefaultBorderPadding = nullptr;
+    QSpinBox  *m_spinDefaultExtrude = nullptr;
+    QComboBox *m_comboMaxDimensions = nullptr;
+    QCheckBox *m_chkDefaultPowerOfTwo = nullptr;
+    QCheckBox *m_chkDefaultForceSquare = nullptr;
+    QCheckBox *m_chkDefaultDeduplicate = nullptr;
+    QCheckBox *m_chkDefaultTrimSprites = nullptr;
+    QCheckBox *m_chkNormalMapYFlip = nullptr;
 
     // Retro Page
     QLabel    *m_hdrRetro = nullptr;
@@ -178,6 +240,12 @@ private:
     QSpinBox  *m_spinMaxVramTiles = nullptr;
     QLabel    *m_lblTileSize = nullptr;
     QComboBox *m_comboTileSize = nullptr;
+    QLabel    *m_lblGuideLineThickness = nullptr;
+    QSpinBox  *m_spinGuideLineThickness = nullptr;
+    QLabel    *m_lblMaxSpritesPerScanline = nullptr;
+    QSpinBox  *m_spinMaxSpritesPerScanline = nullptr;
+    QLabel    *m_lblMaxColorsPerSprite = nullptr;
+    QSpinBox  *m_spinMaxColorsPerSprite = nullptr;
     QGroupBox *m_grpRetroVisuals = nullptr;
     QCheckBox *m_chkShowTileGrid = nullptr;
     QCheckBox *m_chkShowScanlineGuide = nullptr;

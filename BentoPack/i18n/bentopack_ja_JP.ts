@@ -100,7 +100,7 @@
         <translation>スプライトを抽出してアニメーション化する強力なツール</translation>
     </message>
     <message>
-        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <source>Studio d'outillage &amp; technologies multimédia</source>
         <translation>ツール＆マルチメディア技術スタジオ</translation>
     </message>
     <message>
@@ -241,7 +241,7 @@
         <translation>アトラスビンパッキング (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
         <translation>準備完了 — 設定を調整して「パッキング計算」をクリックしてください</translation>
     </message>
     <message>
@@ -538,43 +538,43 @@ Choose which branch to restore:</source>
     <name>CAsmExtractor</name>
     <message>
         <source>The C/ASM plugin is an export-only plugin and does not import raw source code into sprite sheets.</source>
-        <translation type="unfinished"></translation>
+        <translation>C/ASMプラグインはエクスポート専用プラグインであり、未加工のソースコードをスプライトシートにインポートすることはできません。</translation>
     </message>
     <message>
         <source>Export destination path is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポート先のパスが空です。</translation>
     </message>
     <message>
         <source>Export cancelled by user.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザーによってエクスポートがキャンセルされました。</translation>
     </message>
     <message>
         <source>Generating retro source code (%1)...</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロソースコードを生成中 (%1)...</translation>
     </message>
     <message>
         <source>Writing file %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル %1 を書き込み中...</translation>
     </message>
     <message>
         <source>Could not open file for writing: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>書き込み用にファイルを開けませんでした: %1 (%2)</translation>
     </message>
     <message>
         <source>C/ASM code exported successfully to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>C/ASMコードが %1 に正常にエクスポートされました。</translation>
     </message>
     <message>
         <source>Default Retro Architecture Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトのレトロアーキテクチャプリセット</translation>
     </message>
     <message>
         <source>Enable Hardware Constraints Linter (PPU scanlines, VRAM warnings)</source>
-        <translation type="unfinished"></translation>
+        <translation>ハードウェア制約リンターを有効化 (PPU走査線、VRAM警告)</translation>
     </message>
     <message>
         <source>Exports native C/C++ arrays and pure Assembly data (.h, .c, .asm, .s, .inc) directly usable in homebrew SDKs without game engines.</source>
-        <translation type="unfinished"></translation>
+        <translation>ゲームエンジンを使用せず、自作SDKで直接利用可能なネイティブC/C++配列およびアセンブリデータ（.h、.c、.asm、.s、.inc）を出力します。</translation>
     </message>
 </context>
 <context>
@@ -991,8 +991,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>新規 レイヤー (例: Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
-        <translation>新規 レイヤー &apos;Emissive (_e)&apos; 用に %1 フレームを準備しました</translation>
+        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
+        <translation>新規 レイヤー 'Emissive (_e)' 用に %1 フレームを準備しました</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -1800,27 +1800,27 @@ Strict removal: clears the fringe pixel.</source>
     <name>IffExtractor</name>
     <message>
         <source>Cannot open IFF file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>IFFファイルを開けません: %1</translation>
     </message>
     <message>
         <source>Failed to decode IFF image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>IFF画像のデコードに失敗しました: %1</translation>
     </message>
     <message>
         <source>Cannot export IFF: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>IFFエクスポート不可: アトラス画像が空です。</translation>
     </message>
     <message>
         <source>Failed to encode IFF: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>IFFのエンコードに失敗しました: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>書き込み用にファイルを開けません: %1</translation>
     </message>
     <message>
         <source>Failed to write all IFF bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのIFFバイトをディスクに書き込めませんでした。</translation>
     </message>
 </context>
 <context>
@@ -2179,7 +2179,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_ACTION_RETRO_RIPPER</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロROM＆VRAMタイルリッパー...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2247,11 +2247,11 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Retro ROMs &amp; VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロROMおよびVRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;すべてのファイル (*.*)</translation>
     </message>
     <message>
         <source>Select Retro ROM or VRAM Dump</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロROMまたはVRAMダンプを選択</translation>
     </message>
     <message>
         <source>BentoPack</source>
@@ -2680,7 +2680,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>現在のプロジェクト &apos;%1&apos; には未保存の変更があります。
+        <translation>現在のプロジェクト '%1' には未保存の変更があります。
 続行する前に保存しますか？</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>新規 レイヤー (例: Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
-        <translation>新規 レイヤー &apos;Normal (_n)&apos; 用に %1 フレームを準備しました</translation>
+        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
+        <translation>新規 レイヤー 'Normal (_n)' 用に %1 フレームを準備しました</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3083,49 +3083,49 @@ Strict removal: clears the fringe pixel.</source>
     <name>PaletteStripWidget</name>
     <message>
         <source>Active 16-color palette swatches (indices 0 to 15)</source>
-        <translation type="unfinished"></translation>
+        <translation>アクティブ16色パレットスウォッチ (インデックス 0～15)</translation>
     </message>
 </context>
 <context>
     <name>PcxExtractor</name>
     <message>
         <source>Cannot open PCX file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>PCXファイルを開けません: %1</translation>
     </message>
     <message>
         <source>Failed to decode PCX image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>PCX画像のデコードに失敗しました: %1</translation>
     </message>
     <message>
         <source>Cannot export PCX: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>PCXエクスポート不可: アトラス画像が空です。</translation>
     </message>
     <message>
         <source>Failed to encode PCX: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>PCXのエンコードに失敗しました: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>書き込み用にファイルを開けません: %1</translation>
     </message>
     <message>
         <source>Failed to write all PCX bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのPCXバイトをディスクに書き込めませんでした。</translation>
     </message>
 </context>
 <context>
     <name>Pico8Extractor</name>
     <message>
         <source>Cannot open PICO-8 file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8ファイルを開けません: %1</translation>
     </message>
     <message>
         <source>Cannot export PICO-8: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8エクスポート不可: アトラス画像が空です。</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>書き込み用にファイルを開けません: %1</translation>
     </message>
 </context>
 <context>
@@ -3290,11 +3290,11 @@ Strict removal: clears the fringe pixel.</source>
         <translation>背景色 (クリックしてプロ用カラーピッカーを開く)</translation>
     </message>
     <message>
-        <source>Apply to &apos;%1&apos; frames</source>
+        <source>Apply to '%1' frames</source>
         <translation>「%1」のフレームに適用</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
+        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
         <translation>CDTメッシュ生成をアニメーション「%1」の全フレームに適用</translation>
     </message>
     <message>
@@ -3862,7 +3862,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>アニメに適用</translation>
     </message>
     <message>
-        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <source>Apply current frame's pivot point to all frames in the current animation</source>
         <translation>現在のフレームのピボット位置を現在のアニメーションの全フレームに適用</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>すべてに適用</translation>
     </message>
     <message>
-        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <source>Apply current frame's pivot point to all frames in the entire project</source>
         <translation>現在のフレームのピボット位置をプロジェクト全体の全フレームに適用</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>すべてのフレーム (%1)</translation>
     </message>
     <message>
-        <source>Apply to all &apos;%1&apos; frames</source>
-        <translation>アニメーション &apos;%1&apos; の全フレームに適用</translation>
+        <source>Apply to all '%1' frames</source>
+        <translation>アニメーション '%1' の全フレームに適用</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,7 +4282,7 @@ Godot、Unity、Unreal Paper2D、JSON にエクスポートされます。</tran
         <translation>CDTポリゴンメッシュエディター (このフレームにはポリゴンメッシュがありません) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
         <translation>描画編集、メッシュ生成、フィルターをアニメーション「%1」の全フレームに適用</translation>
     </message>
     <message>
@@ -4354,7 +4354,7 @@ Would you like to repack the atlas now?</source>
         <translation>⚡ CDT計算中...</translation>
     </message>
     <message>
-        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <source>Apply filter to all '%1' frames (%2 frames)</source>
         <translation>「%1」の全フレームにフィルターを適用 (%2 フレーム)</translation>
     </message>
     <message>
@@ -4472,35 +4472,35 @@ Would you like to repack the atlas now?</source>
     <name>PlistExtractor</name>
     <message>
         <source>Cannot open plist file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>plistファイルを開けません: %1</translation>
     </message>
     <message>
         <source>XML parse error in plist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>plistのXMLパースエラー: %1</translation>
     </message>
     <message>
-        <source>No &apos;frames&apos; dictionary found in plist.</source>
-        <translation type="unfinished"></translation>
+        <source>No 'frames' dictionary found in plist.</source>
+        <translation>plist内に 'frames' 辞書が見つかりません。</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 に関連付けられたアトラス画像ファイルが見つかりません</translation>
     </message>
     <message>
         <source>Failed to load atlas image: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>アトラス画像の読み込みに失敗しました: %1 (%2)</translation>
     </message>
     <message>
         <source>Document has no frames to export.</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポートするフレームがドキュメントにありません。</translation>
     </message>
     <message>
         <source>Failed to save companion atlas image: %1</source>
-        <translation type="unfinished">関連付けられたアトラス画像の保存に失敗しました: %1</translation>
+        <translation>付属のアトラス画像の保存に失敗しました: %1</translation>
     </message>
     <message>
         <source>Cannot write plist file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>plistファイルを書き込めません: %1</translation>
     </message>
 </context>
 <context>
@@ -4843,32 +4843,32 @@ Would you like to repack the atlas now?</source>
         <translation>フレーム %1 を %2 に結合</translation>
     </message>
     <message>
-        <source>Create Animation &apos;%1&apos;</source>
-        <translation>アニメーション &apos;%1&apos; を作成</translation>
+        <source>Create Animation '%1'</source>
+        <translation>アニメーション '%1' を作成</translation>
     </message>
     <message>
-        <source>Delete Animation &apos;%1&apos;</source>
-        <translation>アニメーション &apos;%1&apos; を削除</translation>
+        <source>Delete Animation '%1'</source>
+        <translation>アニメーション '%1' を削除</translation>
     </message>
     <message>
-        <source>Reverse Animation &apos;%1&apos;</source>
-        <translation>アニメーション &apos;%1&apos; を反転</translation>
+        <source>Reverse Animation '%1'</source>
+        <translation>アニメーション '%1' を反転</translation>
     </message>
     <message>
-        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>アニメーション &apos;%1&apos; を &apos;%2&apos; に名前変更</translation>
+        <source>Rename Animation '%1' to '%2'</source>
+        <translation>アニメーション '%1' を '%2' に名前変更</translation>
     </message>
     <message>
-        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
-        <translation>アニメーション &apos;%1&apos; を &apos;%2&apos; として複製</translation>
+        <source>Duplicate Animation '%1' as '%2'</source>
+        <translation>アニメーション '%1' を '%2' として複製</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation &apos;%1&apos;</source>
-        <translation>アニメーション &apos;%1&apos; のフレーム順序を変更</translation>
+        <source>Reorder Frames in Animation '%1'</source>
+        <translation>アニメーション '%1' のフレーム順序を変更</translation>
     </message>
     <message>
-        <source>Change Properties for Animation &apos;%1&apos;</source>
-        <translation>アニメーション &apos;%1&apos; のプロパティを変更</translation>
+        <source>Change Properties for Animation '%1'</source>
+        <translation>アニメーション '%1' のプロパティを変更</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -5078,19 +5078,29 @@ Install package:
     </message>
     <message>
         <source>1 frame exceeds 64 px width (%1 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
-        <translation type="unfinished"></translation>
+        <translation>1フレームが幅64pxを超えています（%1 px）: NES / Game Boyで走査線ちらつきが発生します（8pxスプライト最大8個）。</translation>
     </message>
     <message>
         <source>%1 frames exceed 64 px width (up to %2 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1個のフレームが幅64pxを超えています（最大 %2 px）: NES / Game Boyで走査線ちらつきが発生します（8pxスプライト最大8個）。</translation>
     </message>
     <message>
         <source>1 frame exceeds VIC-II hardware sprite size (24x21 px).</source>
-        <translation type="unfinished"></translation>
+        <translation>1フレームがVIC-IIハードウェアスプライトサイズ（24x21 px）を超えています。</translation>
     </message>
     <message>
         <source>%1 frames exceed VIC-II hardware sprite size (24x21 px).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1個のフレームがVIC-IIハードウェアスプライトサイズ（24x21 px）を超えています。</translation>
+    </message>
+    <message>
+        <source>Frame #%1: %2x%3 px
+⚠️ Exceeds retro scanline limit: %4 px (width: %5 px)</source>
+        <translation>フレーム #%1: %2x%3 px
+⚠️ レトロ走査線上限超過: %4 px (幅: %5 px)</translation>
+    </message>
+    <message>
+        <source>Frame #%1: %2x%3 px</source>
+        <translation>フレーム #%1: %2x%3 px</translation>
     </message>
 </context>
 <context>
@@ -5120,163 +5130,163 @@ Install package:
     <name>Retro::CAsmDialog</name>
     <message>
         <source>C / C++ &amp; Assembly Retro Code Exporter</source>
-        <translation type="unfinished"></translation>
+        <translation>C / C++ ＆ アセンブリ レトロコードエクスポーター</translation>
     </message>
     <message>
         <source>Target Retro Architecture Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>ターゲットレトロアーキテクチャプリセット</translation>
     </message>
     <message>
         <source>Language &amp; Pixel Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>言語とピクセル配置</translation>
     </message>
     <message>
         <source>C / C++ Header (.h)</source>
-        <translation type="unfinished"></translation>
+        <translation>C / C++ ヘッダー (.h)</translation>
     </message>
     <message>
         <source>C Source (.c)</source>
-        <translation type="unfinished"></translation>
+        <translation>C ソース (.c)</translation>
     </message>
     <message>
         <source>Assembly Motorola / VASM (68000)</source>
-        <translation type="unfinished"></translation>
+        <translation>アセンブリ Motorola / VASM (68000)</translation>
     </message>
     <message>
         <source>Assembly RGBDS (Game Boy)</source>
-        <translation type="unfinished"></translation>
+        <translation>アセンブリ RGBDS (Game Boy)</translation>
     </message>
     <message>
         <source>Assembly ca65 / cc65 (6502)</source>
-        <translation type="unfinished"></translation>
+        <translation>アセンブリ ca65 / cc65 (6502)</translation>
     </message>
     <message>
         <source>Assembly NASM / TASM (x86)</source>
-        <translation type="unfinished"></translation>
+        <translation>アセンブリ NASM / TASM (x86)</translation>
     </message>
     <message>
         <source>Assembly GNU as (.byte/.long)</source>
-        <translation type="unfinished"></translation>
+        <translation>アセンブリ GNU as (.byte/.long)</translation>
     </message>
     <message>
         <source>Assembly WLA-DX (Z80)</source>
-        <translation type="unfinished"></translation>
+        <translation>アセンブリ WLA-DX (Z80)</translation>
     </message>
     <message>
         <source>PICO-8 Lua String/Table</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 Lua 文字列/テーブル</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>言語:</translation>
     </message>
     <message>
         <source>Planar 2bpp Tiles (8x8) [GB/NES]</source>
-        <translation type="unfinished"></translation>
+        <translation>プレナー 2bpp タイル (8x8) [GB/NES]</translation>
     </message>
     <message>
         <source>Planar 4bpp Tiles (8x8) [SMS/MD/SNES]</source>
-        <translation type="unfinished"></translation>
+        <translation>プレナー 4bpp タイル (8x8) [SMS/MD/SNES]</translation>
     </message>
     <message>
         <source>Linear 4bpp Packed (2 px/byte)</source>
-        <translation type="unfinished"></translation>
+        <translation>リニア 4bpp パックド (2 px/byte)</translation>
     </message>
     <message>
         <source>Linear 8bpp Indexed (1 byte/px)</source>
-        <translation type="unfinished"></translation>
+        <translation>リニア 8bpp インデックス (1 byte/px)</translation>
     </message>
     <message>
         <source>Amiga Planar Bitplanes (1-5 planes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Amiga プレナービットプレーン (1～5プレーン)</translation>
     </message>
     <message>
         <source>C64 Multicolor Sprite (24x21, 64B)</source>
-        <translation type="unfinished"></translation>
+        <translation>C64 マルチカラースプライト (24x21, 64B)</translation>
     </message>
     <message>
         <source>ZX Spectrum (1bpp + 8x8 attrs)</source>
-        <translation type="unfinished"></translation>
+        <translation>ZX Spectrum (1bpp + 8x8 属性)</translation>
     </message>
     <message>
         <source>Linear 1bpp Mono (8 px/byte)</source>
-        <translation type="unfinished"></translation>
+        <translation>リニア 1bpp モノクロ (8 px/byte)</translation>
     </message>
     <message>
         <source>Tile/Pixel Layout:</source>
-        <translation type="unfinished"></translation>
+        <translation>タイル/ピクセル配置:</translation>
     </message>
     <message>
         <source>Number Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>数値フォーマット:</translation>
     </message>
     <message>
         <source>Bytes per Line:</source>
-        <translation type="unfinished"></translation>
+        <translation>1行あたりのバイト数:</translation>
     </message>
     <message>
         <source>Optional symbol prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>任意のシンボル接頭辞</translation>
     </message>
     <message>
         <source>Symbol Prefix:</source>
-        <translation type="unfinished"></translation>
+        <translation>シンボル接頭辞:</translation>
     </message>
     <message>
         <source>Data Type (C):</source>
-        <translation type="unfinished"></translation>
+        <translation>データ型 (C):</translation>
     </message>
     <message>
         <source>e.g. const, PROGMEM, ALIGN(2)</source>
-        <translation type="unfinished"></translation>
+        <translation>例: const, PROGMEM, ALIGN(2)</translation>
     </message>
     <message>
         <source>Storage Qualifier:</source>
-        <translation type="unfinished"></translation>
+        <translation>ストレージ修飾子:</translation>
     </message>
     <message>
         <source>Export Sections &amp; Linter</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポートセクションとリンター</translation>
     </message>
     <message>
         <source>Export Hardware Color Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>ハードウェアカラーパレットを出力</translation>
     </message>
     <message>
         <source>Export Animation Sequences Table</source>
-        <translation type="unfinished"></translation>
+        <translation>アニメーションシーケンス表を出力</translation>
     </message>
     <message>
         <source>Export Sprite Metadata Struct (Pivot, Size)</source>
-        <translation type="unfinished"></translation>
+        <translation>スプライトメタデータ構造体を出力 (原点, サイズ)</translation>
     </message>
     <message>
         <source>Include C Header Guards (#ifndef)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cヘッダーガードを含める (#ifndef)</translation>
     </message>
     <message>
         <source>Include Scanline &amp; Hardware Linter Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>走査線およびハードウェアリンターの警告を含める</translation>
     </message>
     <message>
         <source>📋 Copy Code</source>
-        <translation type="unfinished"></translation>
+        <translation>📋 コードをコピー</translation>
     </message>
     <message>
         <source>Export Code</source>
-        <translation type="unfinished"></translation>
+        <translation>コードを出力</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>Total ROM: %1 Bytes (%2 KB) | %3 Tiles (8x8)</source>
-        <translation type="unfinished"></translation>
+        <translation>合計ROM: %1 バイト (%2 KB) | %3 タイル (8x8)</translation>
     </message>
     <message>
         <source>✅ Copied!</source>
-        <translation type="unfinished"></translation>
+        <translation>✅ コピーしました！</translation>
     </message>
 </context>
 <context>
@@ -5393,258 +5403,258 @@ Install package:
     <name>RetroTileExplorerDialog</name>
     <message>
         <source>Retro Console ROM &amp; VRAM Tile Ripper</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロコンソールROM＆VRAMタイルリッパー</translation>
     </message>
     <message>
         <source>🎯 Detected Graphic Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>🎯 検出されたグラフィックバンク</translation>
     </message>
     <message>
         <source>📍 Memory Offset / Address</source>
-        <translation type="unfinished"></translation>
+        <translation>📍 メモリオフセット / アドレス</translation>
     </message>
     <message>
         <source>Hex:</source>
-        <translation type="unfinished"></translation>
+        <translation>16進数:</translation>
     </message>
     <message>
         <source>Dec:</source>
-        <translation type="unfinished"></translation>
+        <translation>10進数:</translation>
     </message>
     <message>
         <source>Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>フォーマット:</translation>
     </message>
     <message>
         <source>SNES (4bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES (4bpp プレナー)</translation>
     </message>
     <message>
         <source>Sega Mega Drive (4bpp Chunky)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Mega Drive (4bpp チャンキー)</translation>
     </message>
     <message>
         <source>Nintendo Game Boy (2bpp Interleaved)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo Game Boy (2bpp インターリーブ)</translation>
     </message>
     <message>
         <source>NES / Famicom (2bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>NES / Famicom (2bpp プレナー)</translation>
     </message>
     <message>
         <source>Sega Master System (4bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Master System (4bpp プレナー)</translation>
     </message>
     <message>
         <source>SNK Neo-Geo (4bpp 16x16)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNK Neo-Geo (4bpp 16x16)</translation>
     </message>
     <message>
         <source>Sony PSX (TIM Direct)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony PSX (TIM Direct)</translation>
     </message>
     <message>
         <source>Raw Linear (8bpp Chunky)</source>
-        <translation type="unfinished"></translation>
+        <translation>生リニア (8bpp チャンキー)</translation>
     </message>
     <message>
         <source>Grid Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>グリッド幅:</translation>
     </message>
     <message>
         <source> tiles</source>
-        <translation type="unfinished"></translation>
+        <translation> タイル</translation>
     </message>
     <message>
         <source>Tile Count:</source>
-        <translation type="unfinished"></translation>
+        <translation>タイル数:</translation>
     </message>
     <message>
         <source>⚙️ Decoding &amp; Tile Patterns</source>
-        <translation type="unfinished"></translation>
+        <translation>⚙️ デコード＆タイルパターン</translation>
     </message>
     <message>
         <source>SNES (3bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES (3bpp プレナー)</translation>
     </message>
     <message>
         <source>Pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation>パターン:</translation>
     </message>
     <message>
         <source>8x8 Linear (Tiles &amp; Backgrounds)</source>
-        <translation type="unfinished"></translation>
+        <translation>8x8 リニア (タイル＆背景)</translation>
     </message>
     <message>
         <source>16x16 Sprites (2x2 Sequential)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 スプライト (2x2 連番)</translation>
     </message>
     <message>
         <source>16x16 Sprites (SNES VRAM Stride 16)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 スプライト (SNES VRAM ストライド 16)</translation>
     </message>
     <message>
         <source>16x16 Sprites (VRAM Stride 32)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 スプライト (VRAM ストライド 32)</translation>
     </message>
     <message>
         <source>32x32 Sprites (4x4 Matrix)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 スプライト (4x4 マトリクス)</translation>
     </message>
     <message>
         <source>32x32 Sprites (2x2*4 Quad SNESTilesKitten)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 スプライト (2x2*4 クアッド SNESTilesKitten)</translation>
     </message>
     <message>
         <source>32x32 Sprites (SNES VRAM Stride 16)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 スプライト (SNES VRAM ストライド 16)</translation>
     </message>
     <message>
         <source>🎨 Palette Studio</source>
-        <translation type="unfinished"></translation>
+        <translation>🎨 パレットスタジオ</translation>
     </message>
     <message>
         <source>Source:</source>
-        <translation type="unfinished"></translation>
+        <translation>ソース:</translation>
     </message>
     <message>
         <source>Detected:</source>
-        <translation type="unfinished"></translation>
+        <translation>検出:</translation>
     </message>
     <message>
         <source>PC Offset:</source>
-        <translation type="unfinished"></translation>
+        <translation>PCオフセット:</translation>
     </message>
     <message>
         <source>👁️ Inspection &amp; Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>👁️ インスペクション＆ズーム</translation>
     </message>
     <message>
         <source>Transparent #0</source>
-        <translation type="unfinished"></translation>
+        <translation>透明色 #0</translation>
     </message>
     <message>
         <source>Tile Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>タイルグリッド</translation>
     </message>
     <message>
         <source>Highlight Detected Sprites</source>
-        <translation type="unfinished"></translation>
+        <translation>検出されたスプライトを強調表示</translation>
     </message>
     <message>
         <source>Zoom:</source>
-        <translation type="unfinished"></translation>
+        <translation>ズーム:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>📥 Import Entire Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>📥 シート全体をインポート</translation>
     </message>
     <message>
         <source>Imports the current decoded tile sheet directly as a single atlas image.</source>
-        <translation type="unfinished"></translation>
+        <translation>デコードされた現在のタイルシートを単一のアトラス画像として直接インポートします。</translation>
     </message>
     <message>
         <source>✨ Extract Sprites to Project</source>
-        <translation type="unfinished"></translation>
+        <translation>✨ プロジェクトにスプライトを抽出</translation>
     </message>
     <message>
         <source>Automatically slices and imports all detected character sprites and objects into BentoPack frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>検出されたすべてのキャラクタースプライトとオブジェクトを自動的にスライスし、BentoPackフレームにインポートします。</translation>
     </message>
     <message>
         <source>File Error</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルエラー</translation>
     </message>
     <message>
         <source>Cannot open ROM/VRAM file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ROM/VRAMファイルを開けません: %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; — %2 bytes (%3 KB)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; — %2 バイト (%3 KB)</translation>
     </message>
     <message>
         <source>🎮 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>🎮 %1</translation>
     </message>
     <message>
         <source>Beginning of File (0x000000)</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルの先頭 (0x000000)</translation>
     </message>
     <message>
         <source>None auto-detected in ROM</source>
-        <translation type="unfinished"></translation>
+        <translation>ROM内で自動検出されませんでした</translation>
     </message>
     <message>
         <source>🎨 ROM Palette (Auto-Scan)</source>
-        <translation type="unfinished"></translation>
+        <translation>🎨 ROMパレット (自動スキャン)</translation>
     </message>
     <message>
         <source>🎯 ROM Palette (Manual Hex)</source>
-        <translation type="unfinished"></translation>
+        <translation>🎯 ROMパレット (手動Hex)</translation>
     </message>
     <message>
         <source>Harmonic Retro Preview (Shaded)</source>
-        <translation type="unfinished"></translation>
+        <translation>ハーモニックレトロプレビュー (シェード)</translation>
     </message>
     <message>
         <source>Grayscale (Contrast)</source>
-        <translation type="unfinished"></translation>
+        <translation>グレースケール (コントラスト)</translation>
     </message>
     <message>
         <source>No decodable tile data at offset 0x%1</source>
-        <translation type="unfinished"></translation>
+        <translation>オフセット 0x%1 にデコード可能なタイルデータがありません</translation>
     </message>
     <message>
         <source>Empty sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>空のシート</translation>
     </message>
     <message>
         <source>Decoded: %1 tiles (%2x%3 px) | Zoom: %4x | Pattern: %5 | Palette: 0x%6 | Offset: 0x%7</source>
-        <translation type="unfinished"></translation>
+        <translation>デコード済: %1 タイル (%2x%3 px) | ズーム: %4x | パターン: %5 | パレット: 0x%6 | オフセット: 0x%7</translation>
     </message>
 </context>
 <context>
     <name>RetroTileExtractor</name>
     <message>
         <source>Cannot open retro ROM/VRAM file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロROM/VRAMファイルを開けません: %1</translation>
     </message>
     <message>
         <source>File is empty: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルが空です: %1</translation>
     </message>
     <message>
         <source>Failed to decode PSX TIM: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>PSX TIMのデコードに失敗しました: %1</translation>
     </message>
     <message>
         <source>Insufficient tile data at offset %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>オフセット %1 のタイルデータが不足しています。</translation>
     </message>
     <message>
         <source>Failed to decode retro tile stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロタイルストリームのデコードに失敗しました。</translation>
     </message>
     <message>
         <source>Cannot export: Document atlas image is null.</source>
-        <translation type="unfinished">エクスポート不可: アトラス画像が空です。</translation>
+        <translation>エクスポート不可: アトラス画像が空です。</translation>
     </message>
     <message>
         <source>Failed to encode retro tiles: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロタイルのエンコードに失敗しました: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>書き込み用にファイルを開けません: %1</translation>
     </message>
     <message>
         <source>Failed to write all tile bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのタイルバイトをディスクに書き込めませんでした。</translation>
     </message>
 </context>
 <context>
@@ -5862,11 +5872,11 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>ステータス : &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 有効&lt;/b&gt; (履歴およびブランチ管理が利用可能)</translation>
+        <translation>ステータス : &lt;b style='color:#27ae60;'&gt;LibGit2 有効&lt;/b&gt; (履歴およびブランチ管理が利用可能)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>ステータス : &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 未コンパイル&lt;/b&gt; (Git履歴は無効です)</translation>
+        <translation>ステータス : &lt;b style='color:#e74c3c;'&gt;LibGit2 未コンパイル&lt;/b&gt; (Git履歴は無効です)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -5925,8 +5935,96 @@ Install package:
         <translation>デフォルト対象フォーマット:</translation>
     </message>
     <message>
+        <source>Click to customize color (%1)</source>
+        <translation>クリックして色をカスタマイズ (%1)</translation>
+    </message>
+    <message>
+        <source>Select Color</source>
+        <translation>色を選択</translation>
+    </message>
+    <message>
         <source>Retro &amp; Hardware Constraints</source>
-        <translation type="unfinished"></translation>
+        <translation>レトロ＆ハードウェア制約</translation>
+    </message>
+    <message>
+        <source>Background Removal Min Alpha:</source>
+        <translation>背景除去の最小アルファ値:</translation>
+    </message>
+    <message>
+        <source>Grid / Row Vertical Alignment Tolerance:</source>
+        <translation>グリッド/行の垂直整列許容値:</translation>
+    </message>
+    <message>
+        <source>Animation Playback Defaults</source>
+        <translation>アニメーション再生のデフォルト設定</translation>
+    </message>
+    <message>
+        <source>Default Frame Rate:</source>
+        <translation>デフォルトフレームレート:</translation>
+    </message>
+    <message>
+        <source>Maximum Frame Rate Limit:</source>
+        <translation>最大フレームレート上限:</translation>
+    </message>
+    <message>
+        <source>Auto-play animation when selected in list</source>
+        <translation>リスト選択時にアニメーションを自動再生</translation>
+    </message>
+    <message>
+        <source>Auto-save session state on exit</source>
+        <translation>終了時にセッション状態を自動保存</translation>
+    </message>
+    <message>
+        <source>Keyboard Nudge &amp; Positioning</source>
+        <translation>キーボードナッジ＆微調整</translation>
+    </message>
+    <message>
+        <source>Normal Nudge Step (Arrow keys):</source>
+        <translation>通常移動ステップ (方向キー):</translation>
+    </message>
+    <message>
+        <source>Fast Nudge Step (Shift + Arrow keys):</source>
+        <translation>高速移動ステップ (Shift + 方向キー):</translation>
+    </message>
+    <message>
+        <source>Box Styling &amp; Selection Appearance</source>
+        <translation>ボックススタイル＆選択外観</translation>
+    </message>
+    <message>
+        <source>Resize Handle Size:</source>
+        <translation>リサイズハンドルのサイズ:</translation>
+    </message>
+    <message>
+        <source>Resize Handle Grab Margin:</source>
+        <translation>リサイズハンドルの掴み余白:</translation>
+    </message>
+    <message>
+        <source>Selected Box Outline Color:</source>
+        <translation>選択ボックスの輪郭色:</translation>
+    </message>
+    <message>
+        <source>Selected Box Fill Color:</source>
+        <translation>選択ボックスの塗りつぶし色:</translation>
+    </message>
+    <message>
+        <source>Unselected Box Color:</source>
+        <translation>非選択ボックスの色:</translation>
+    </message>
+    <message>
+        <source>Marquee Selection Color:</source>
+        <translation>範囲選択枠の色:</translation>
+    </message>
+    <message>
+        <source>Slice Preview Outline Color:</source>
+        <translation>スライスプレビュー輪郭色:</translation>
+    </message>
+    <message>
+        <source>Polygon Mesh Wireframe Color:</source>
+        <translation>ポリゴンメッシュワイヤーフレーム色:</translation>
+    </message>
+    <message>
+        <source>Show polygon mesh by default when available</source>
+        <translation>利用可能な場合デフォルトでポリゴンメッシュを表示</translation>
     </message>
     <message>
         <source>PNG (Standard, Lossless)</source>
@@ -5973,88 +6071,144 @@ Install package:
         <translation>Zstd 圧縮レベル:</translation>
     </message>
     <message>
+        <source>Texture Packing &amp; Geometry Defaults</source>
+        <translation>テクスチャパッキング＆ジオメトリのデフォルト</translation>
+    </message>
+    <message>
+        <source>Default Inner Sprite Padding:</source>
+        <translation>スプライト内部パディングのデフォルト:</translation>
+    </message>
+    <message>
+        <source>Default Atlas Border Margin:</source>
+        <translation>アトラス境界余白のデフォルト:</translation>
+    </message>
+    <message>
+        <source>Default Bleed Border Extrusion:</source>
+        <translation>ブリード境界押出のデフォルト:</translation>
+    </message>
+    <message>
+        <source>Default Max Texture Atlas Dimensions:</source>
+        <translation>最大アトラス解像度のデフォルト:</translation>
+    </message>
+    <message>
+        <source>Force Power-of-Two (POT 2^n) texture dimensions by default</source>
+        <translation>デフォルトでテクスチャサイズを2のべき乗 (POT 2^n) に強制</translation>
+    </message>
+    <message>
+        <source>Force square aspect ratio (width == height) by default</source>
+        <translation>デフォルトで正方形比率 (幅 == 高さ) に強制</translation>
+    </message>
+    <message>
+        <source>Detect and share visually identical frames by default</source>
+        <translation>視覚的に同一のフレームを検出して共有</translation>
+    </message>
+    <message>
+        <source>Crop transparent margins (Trim) by default</source>
+        <translation>透明余白をトリミング (Trim)</translation>
+    </message>
+    <message>
+        <source>Invert Normal Map Green channel (DirectX vs OpenGL Y-Flip)</source>
+        <translation>ノーマルマップの緑チャンネルを反転 (DirectX / OpenGL Y反転)</translation>
+    </message>
+    <message>
         <source>Enable Hardware PPU Constraints &amp; Retro Linters (Active by default)</source>
-        <translation type="unfinished"></translation>
+        <translation>ハードウェアPPU制約＆レトロリンターを有効化 (デフォルト有効)</translation>
     </message>
     <message>
         <source>Target System Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>対象システムプロファイル</translation>
     </message>
     <message>
         <source>Custom / Generic Retro</source>
-        <translation type="unfinished"></translation>
+        <translation>カスタム / 汎用レトロ</translation>
     </message>
     <message>
         <source>Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo Game Boy (DMG / CGB) - 走査線64px, 256タイル</translation>
     </message>
     <message>
         <source>Nintendo NES / Famicom - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo NES / Famicom - 走査線64px, 256タイル</translation>
     </message>
     <message>
         <source>Sega Master System / Game Gear - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Master System / Game Gear - 走査線64px, 256タイル</translation>
     </message>
     <message>
         <source>Sega Mega Drive / Genesis - 128px scanline, 512 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Mega Drive / Genesis - 走査線128px, 512タイル</translation>
     </message>
     <message>
         <source>Commodore 64 (Multicolor) - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Commodore 64 (マルチカラー) - 走査線64px, 256タイル</translation>
     </message>
     <message>
         <source>Super Nintendo (SNES) - 256px scanline, 512 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Super Nintendo (SNES) - 走査線256px, 512タイル</translation>
     </message>
     <message>
         <source>PICO-8 - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 - 走査線64px, 256タイル</translation>
     </message>
     <message>
         <source>Hardware Profile:</source>
-        <translation type="unfinished"></translation>
+        <translation>ハードウェアプロファイル:</translation>
     </message>
     <message>
         <source>Hardware Constraint Limits</source>
-        <translation type="unfinished"></translation>
+        <translation>ハードウェア制約上限</translation>
     </message>
     <message>
         <source>Max Scanline Sprite Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>走査線あたりの最大スプライト幅:</translation>
     </message>
     <message>
         <source>Max VRAM Tile Budget:</source>
-        <translation type="unfinished"></translation>
+        <translation>最大VRAMタイル上限:</translation>
     </message>
     <message>
         <source>Tile Grid Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>タイルグリッド解像度:</translation>
+    </message>
+    <message>
+        <source>Max Sprites Per Scanline:</source>
+        <translation>走査線あたりの最大スプライト数:</translation>
+    </message>
+    <message>
+        <source>Max Colors Per Sprite / Palette:</source>
+        <translation>スプライト/パレットあたりの最大色数:</translation>
     </message>
     <message>
         <source>Visual Feedback &amp; Aids</source>
-        <translation type="unfinished"></translation>
+        <translation>視覚的フィードバックとガイド</translation>
+    </message>
+    <message>
+        <source>Guide Line Thickness:</source>
+        <translation>ガイドラインの太さ:</translation>
     </message>
     <message>
         <source>Show subtle 8x8 tile grid in Pixel Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>ピクセルエディタに控えめな8x8タイルグリッドを表示</translation>
     </message>
     <message>
         <source>Show scanline width boundary guide in Pixel Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>ピクセルエディタに走査線幅の境界線を表示</translation>
     </message>
     <message>
         <source>Show discrete warning badges (pastilles) on Timeline frames</source>
-        <translation type="unfinished"></translation>
+        <translation>タイムラインのフレームに警告バッジを表示</translation>
     </message>
     <message>
         <source>Show VRAM tile budget gauge in status bar</source>
-        <translation type="unfinished"></translation>
+        <translation>ステータスバーにVRAMタイル残量ゲージを表示</translation>
+    </message>
+    <message>
+        <source>Show discrete sprite size limit guides on Atlas (background rules &amp; zones)</source>
+        <translation>アトラス上にスプライトサイズ制限ガイドを控えめに表示 (背景ルーラー/ゾーン)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; Constraints and visual badges provide non-blocking visual feedback for retro targets (NES, Game Boy, Mega Drive, C64) without interfering with modern engines (Godot/Unity/Unreal).</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;ヒント:&lt;/b&gt; 制約と視覚的バッジは、最新エンジン（Godot/Unity/Unreal）の作業を妨げることなく、レトロ環境（NES、Game Boy、Mega Drive、C64）向けの非ブロッキングな視覚フィードバックを提供します。</translation>
     </message>
     <message>
         <source>Open Plugins Folder...</source>
@@ -6117,7 +6271,7 @@ Install package:
         <translation>今すぐアップデートを確認</translation>
     </message>
     <message>
-        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
         <translation>「今すぐアップデートを確認」をクリックして、GitHub の最新リリースを照会します。</translation>
     </message>
     <message>
@@ -6137,16 +6291,16 @@ Install package:
         <translation>GitHub からアップデートを確認中...</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;アップデートの確認に失敗しました: %1&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #e74c3c;'&gt;アップデートの確認に失敗しました: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;GitHub からの無効な応答です。&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #e74c3c;'&gt;GitHub からの無効な応答です。&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;新しいバージョンが利用可能です: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;新しいバージョンが利用可能です: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6157,8 +6311,8 @@ Install package:
         <translation>リリース日: %1</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;最新バージョン (v%1) を使用しています。&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #27ae60;'&gt;最新バージョン (v%1) を使用しています。&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>

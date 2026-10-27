@@ -100,7 +100,7 @@
         <translation>Потужний інструмент для видобування спрайтів та створення анімацій</translation>
     </message>
     <message>
-        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <source>Studio d'outillage &amp; technologies multimédia</source>
         <translation>Студія інструментів та мультимедійних технологій</translation>
     </message>
     <message>
@@ -241,8 +241,8 @@
         <translation>Пакування атласу (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
-        <translation>Готово — налаштуйте параметри та натисніть &apos;Обчислити пакування&apos;</translation>
+        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
+        <translation>Готово — налаштуйте параметри та натисніть 'Обчислити пакування'</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -322,11 +322,11 @@
     </message>
     <message>
         <source>Auto-Aliasing (Merge identical frames without breaking animations)</source>
-        <translation>Авто-псевдоніми (об&apos;єднання однакових кадрів без порушення анімацій)</translation>
+        <translation>Авто-псевдоніми (об'єднання однакових кадрів без порушення анімацій)</translation>
     </message>
     <message>
         <source>Modular Cel Deduplication (Link shared cels across layers)</source>
-        <translation>Модульна дедуплікація cels (зв&apos;язування спільних cels між шарами)</translation>
+        <translation>Модульна дедуплікація cels (зв'язування спільних cels між шарами)</translation>
     </message>
     <message>
         <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
@@ -382,7 +382,7 @@
     </message>
     <message>
         <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
-        <translation>Повторює межові пікселі назовні (1-4 пкс) з 8-зв&apos;язним кутовим затисканням для запобігання артефактам білінійної інтерполяції в ігрових рушіях</translation>
+        <translation>Повторює межові пікселі назовні (1-4 пкс) з 8-зв'язним кутовим затисканням для запобігання артефактам білінійної інтерполяції в ігрових рушіях</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -432,7 +432,7 @@
     </message>
     <message>
         <source>KEY_CMD_MERGE_SLICES</source>
-        <translation>Об&apos;єднати %1 рамок</translation>
+        <translation>Об'єднати %1 рамок</translation>
     </message>
     <message>
         <source>KEY_CMD_MOVE_SLICES</source>
@@ -538,43 +538,43 @@ Choose which branch to restore:</source>
     <name>CAsmExtractor</name>
     <message>
         <source>The C/ASM plugin is an export-only plugin and does not import raw source code into sprite sheets.</source>
-        <translation type="unfinished"></translation>
+        <translation>The C/ASM plugin is an export-only plugin and does not import raw source code into sprite sheets.</translation>
     </message>
     <message>
         <source>Export destination path is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Export destination path is empty.</translation>
     </message>
     <message>
         <source>Export cancelled by user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Export cancelled by user.</translation>
     </message>
     <message>
         <source>Generating retro source code (%1)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Generating retro source code (%1)...</translation>
     </message>
     <message>
         <source>Writing file %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Writing file %1...</translation>
     </message>
     <message>
         <source>Could not open file for writing: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not open file for writing: %1 (%2)</translation>
     </message>
     <message>
         <source>C/ASM code exported successfully to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>C/ASM code exported successfully to %1.</translation>
     </message>
     <message>
         <source>Default Retro Architecture Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Default Retro Architecture Preset</translation>
     </message>
     <message>
         <source>Enable Hardware Constraints Linter (PPU scanlines, VRAM warnings)</source>
-        <translation type="unfinished"></translation>
+        <translation>Enable Hardware Constraints Linter (PPU scanlines, VRAM warnings)</translation>
     </message>
     <message>
         <source>Exports native C/C++ arrays and pure Assembly data (.h, .c, .asm, .s, .inc) directly usable in homebrew SDKs without game engines.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exports native C/C++ arrays and pure Assembly data (.h, .c, .asm, .s, .inc) directly usable in homebrew SDKs without game engines.</translation>
     </message>
 </context>
 <context>
@@ -833,7 +833,7 @@ Choose which branch to restore:</source>
     </message>
     <message>
         <source>Soft Color Clamping (CIELAB Perceptual)</source>
-        <translation>М&apos;яке колірне обмеження (CIELAB)</translation>
+        <translation>М'яке колірне обмеження (CIELAB)</translation>
     </message>
     <message>
         <source>Chroma Spill Suppression (Matte Despill)</source>
@@ -847,7 +847,7 @@ Choose which branch to restore:</source>
         <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
 Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
 Strict removal: clears the fringe pixel.</source>
-        <translation>М&apos;яке обмеження: замінює облямівку внутрішнім кольором за CIELAB ΔE.
+        <translation>М'яке обмеження: замінює облямівку внутрішнім кольором за CIELAB ΔE.
 Придушення переливу: нейтралізує зелені/сині відблиски без видалення альфи.
 Суворе видалення: очищає піксель облямівки.</translation>
     </message>
@@ -908,7 +908,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Soft Knee Falloff:</source>
-        <translation>М&apos;який спад (Soft Knee):</translation>
+        <translation>М'який спад (Soft Knee):</translation>
     </message>
     <message>
         <source>Selective Color Key Parameters</source>
@@ -991,8 +991,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Новий шар (напр. Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
-        <translation>%1 кадр(ів) підготовлено для нового шару &apos;Emissive (_e)&apos;</translation>
+        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
+        <translation>%1 кадр(ів) підготовлено для нового шару 'Emissive (_e)'</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -1102,7 +1102,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>File / Project Name:</source>
-        <translation>Ім&apos;я файлу / проекту:</translation>
+        <translation>Ім'я файлу / проекту:</translation>
     </message>
     <message>
         <source>e.g. hero, sprites, atlas...</source>
@@ -1470,7 +1470,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Please specify a valid file name before exporting.</source>
-        <translation>Будь ласка, вкажіть коректне ім&apos;я файлу перед експортом.</translation>
+        <translation>Будь ласка, вкажіть коректне ім'я файлу перед експортом.</translation>
     </message>
     <message>
         <source>Rendering and encoding animated GIF frames...</source>
@@ -1737,7 +1737,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Referenced texture atlas image not found for: %1</source>
-        <translation>Пов&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Пов'язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1</source>
@@ -1757,7 +1757,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
@@ -1800,27 +1800,27 @@ Strict removal: clears the fringe pixel.</source>
     <name>IffExtractor</name>
     <message>
         <source>Cannot open IFF file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open IFF file: %1</translation>
     </message>
     <message>
         <source>Failed to decode IFF image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to decode IFF image: %1</translation>
     </message>
     <message>
         <source>Cannot export IFF: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot export IFF: Document atlas image is null.</translation>
     </message>
     <message>
         <source>Failed to encode IFF: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to encode IFF: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open file for writing: %1</translation>
     </message>
     <message>
         <source>Failed to write all IFF bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to write all IFF bytes to disk.</translation>
     </message>
 </context>
 <context>
@@ -1831,7 +1831,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Associated atlas image not found: %1</source>
-        <translation>Зв&apos;язане зображення атласу не знайдено: %1</translation>
+        <translation>Зв'язане зображення атласу не знайдено: %1</translation>
     </message>
     <message>
         <source>Failed to decode atlas image: %1</source>
@@ -1851,7 +1851,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Packing atlas for JSON export...</source>
@@ -1883,7 +1883,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Hash Object (TexturePacker Hash)</source>
-        <translation>Об&apos;єкт хешу (TexturePacker Hash)</translation>
+        <translation>Об'єкт хешу (TexturePacker Hash)</translation>
     </message>
     <message>
         <source>Array List (TexturePacker Array / Aseprite)</source>
@@ -1930,7 +1930,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Merge active layer down</source>
-        <translation>Об&apos;єднати активний шар з нижнім</translation>
+        <translation>Об'єднати активний шар з нижнім</translation>
     </message>
     <message>
         <source>Flatten</source>
@@ -2022,7 +2022,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Soft Light</source>
-        <translation>М&apos;яке світло</translation>
+        <translation>М'яке світло</translation>
     </message>
     <message>
         <source>Difference</source>
@@ -2295,7 +2295,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_ACTION_RETRO_RIPPER</source>
-        <translation type="unfinished"></translation>
+        <translation>KEY_ACTION_RETRO_RIPPER</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2363,11 +2363,11 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Retro ROMs &amp; VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro ROMs &amp; VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)</translation>
     </message>
     <message>
         <source>Select Retro ROM or VRAM Dump</source>
-        <translation type="unfinished"></translation>
+        <translation>Select Retro ROM or VRAM Dump</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -2383,7 +2383,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Додати до активної анімації &quot;%1&quot;</translation>
+        <translation>Додати до активної анімації "%1"</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2407,7 +2407,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_MERGE_SLICES</source>
-        <translation>Об&apos;єднати рамки</translation>
+        <translation>Об'єднати рамки</translation>
     </message>
     <message>
         <source>KEY_CTX_DELETE_FRAMES</source>
@@ -2680,7 +2680,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Поточний проект &quot;%1&quot; містить незбережені зміни.
+        <translation>Поточний проект "%1" містить незбережені зміни.
 Бажаєте зберегти їх перед продовженням?</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Новий шар (напр. Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
-        <translation>%1 кадр(ів) підготовлено для нового шару &apos;Normal (_n)&apos;</translation>
+        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
+        <translation>%1 кадр(ів) підготовлено для нового шару 'Normal (_n)'</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -2943,7 +2943,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
-        <translation>Створює карти нормалей у дотичному просторі (_n) зі згорткою Собеля, об&apos;ємним скосом альфа-силуету та інтерактивним переглядом 2D-світла.</translation>
+        <translation>Створює карти нормалей у дотичному просторі (_n) зі згорткою Собеля, об'ємним скосом альфа-силуету та інтерактивним переглядом 2D-світла.</translation>
     </message>
 </context>
 <context>
@@ -3040,15 +3040,15 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Connectivity:</source>
-        <translation>Зв&apos;язність:</translation>
+        <translation>Зв'язність:</translation>
     </message>
     <message>
         <source>4-connected (Orthogonal crisp - Retro pixel art)</source>
-        <translation>4-зв&apos;язна (ортогональна чітка — ретро піксель-арт)</translation>
+        <translation>4-зв'язна (ортогональна чітка — ретро піксель-арт)</translation>
     </message>
     <message>
         <source>8-connected (Diagonal included - Smooth outline)</source>
-        <translation>8-зв&apos;язна (з діагоналями — плавний контур)</translation>
+        <translation>8-зв'язна (з діагоналями — плавний контур)</translation>
     </message>
     <message>
         <source>Solid silhouette / Hit-flash (Fill sprite interior)</source>
@@ -3083,49 +3083,49 @@ Strict removal: clears the fringe pixel.</source>
     <name>PaletteStripWidget</name>
     <message>
         <source>Active 16-color palette swatches (indices 0 to 15)</source>
-        <translation type="unfinished"></translation>
+        <translation>Active 16-color palette swatches (indices 0 to 15)</translation>
     </message>
 </context>
 <context>
     <name>PcxExtractor</name>
     <message>
         <source>Cannot open PCX file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open PCX file: %1</translation>
     </message>
     <message>
         <source>Failed to decode PCX image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to decode PCX image: %1</translation>
     </message>
     <message>
         <source>Cannot export PCX: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot export PCX: Document atlas image is null.</translation>
     </message>
     <message>
         <source>Failed to encode PCX: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to encode PCX: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open file for writing: %1</translation>
     </message>
     <message>
         <source>Failed to write all PCX bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to write all PCX bytes to disk.</translation>
     </message>
 </context>
 <context>
     <name>Pico8Extractor</name>
     <message>
         <source>Cannot open PICO-8 file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open PICO-8 file: %1</translation>
     </message>
     <message>
         <source>Cannot export PICO-8: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot export PICO-8: Document atlas image is null.</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open file for writing: %1</translation>
     </message>
 </context>
 <context>
@@ -3290,12 +3290,12 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Вторинний колір (Клацніть, щоб відкрити професійну палітру)</translation>
     </message>
     <message>
-        <source>Apply to &apos;%1&apos; frames</source>
-        <translation>Застосувати до кадрів &apos;%1&apos;</translation>
+        <source>Apply to '%1' frames</source>
+        <translation>Застосувати до кадрів '%1'</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
-        <translation>Застосувати генерацію CDT-сітки до всіх кадрів анімації &apos;%1&apos;</translation>
+        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
+        <translation>Застосувати генерацію CDT-сітки до всіх кадрів анімації '%1'</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3495,7 +3495,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Circle (Soft Round)</source>
-        <translation>Коло (М&apos;яке кругле)</translation>
+        <translation>Коло (М'яке кругле)</translation>
     </message>
     <message>
         <source>Hard edge (Pixel art)</source>
@@ -3731,7 +3731,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Diagonal neighbors (8-connected)</source>
-        <translation>Діагональні сусіди (8-зв&apos;язність)</translation>
+        <translation>Діагональні сусіди (8-зв'язність)</translation>
     </message>
     <message>
         <source>Allow flood fill to spread through diagonal pixel corners</source>
@@ -3747,7 +3747,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Sample merged (all layers)</source>
-        <translation>Об&apos;єднана проба (всі шари)</translation>
+        <translation>Об'єднана проба (всі шари)</translation>
     </message>
     <message>
         <source>Check color boundaries across all visible layers combined</source>
@@ -3767,7 +3767,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
-        <translation>Виділяти зв&apos;язані пікселі відповідного кольору (Зніміть прапорець для всього зображення)</translation>
+        <translation>Виділяти зв'язані пікселі відповідного кольору (Зніміть прапорець для всього зображення)</translation>
     </message>
     <message>
         <source>Allow magic wand selection to expand diagonally through pixel corners</source>
@@ -3862,7 +3862,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>До анімації</translation>
     </message>
     <message>
-        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <source>Apply current frame's pivot point to all frames in the current animation</source>
         <translation>Застосувати опорну точку поточного кадру до всіх кадрів поточної анімації</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>До всіх</translation>
     </message>
     <message>
-        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <source>Apply current frame's pivot point to all frames in the entire project</source>
         <translation>Застосувати опорну точку поточного кадру до всіх кадрів усього проєкту</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Усі кадри (%1)</translation>
     </message>
     <message>
-        <source>Apply to all &apos;%1&apos; frames</source>
-        <translation>Застосувати до всіх кадрів &apos;%1&apos;</translation>
+        <source>Apply to all '%1' frames</source>
+        <translation>Застосувати до всіх кадрів '%1'</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,8 +4282,8 @@ Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
         <translation>Редактор полігональної сітки CDT (немає сітки на цьому кадрі) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
-        <translation>Застосувати малювання, генерацію сітки та фільтри до всіх кадрів анімації &apos;%1&apos;</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
+        <translation>Застосувати малювання, генерацію сітки та фільтри до всіх кадрів анімації '%1'</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4354,8 +4354,8 @@ Would you like to repack the atlas now?</source>
         <translation>⚡ Обчислення CDT...</translation>
     </message>
     <message>
-        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
-        <translation>Застосувати фільтр до всіх кадрів &apos;%1&apos; (%2 кадрів)</translation>
+        <source>Apply filter to all '%1' frames (%2 frames)</source>
+        <translation>Застосувати фільтр до всіх кадрів '%1' (%2 кадрів)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4472,35 +4472,35 @@ Would you like to repack the atlas now?</source>
     <name>PlistExtractor</name>
     <message>
         <source>Cannot open plist file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open plist file: %1</translation>
     </message>
     <message>
         <source>XML parse error in plist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>XML parse error in plist: %1</translation>
     </message>
     <message>
-        <source>No &apos;frames&apos; dictionary found in plist.</source>
-        <translation type="unfinished"></translation>
+        <source>No 'frames' dictionary found in plist.</source>
+        <translation>No 'frames' dictionary found in plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Associated atlas image file not found for %1</translation>
     </message>
     <message>
         <source>Failed to load atlas image: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to load atlas image: %1 (%2)</translation>
     </message>
     <message>
         <source>Document has no frames to export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Document has no frames to export.</translation>
     </message>
     <message>
         <source>Failed to save companion atlas image: %1</source>
-        <translation type="unfinished">Не вдалося зберегти супутнє зображення атласу: %1</translation>
+        <translation>Не вдалося зберегти супутнє зображення атласу: %1</translation>
     </message>
     <message>
         <source>Cannot write plist file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot write plist file: %1</translation>
     </message>
 </context>
 <context>
@@ -4673,7 +4673,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Project file path is empty. Use Save As.</source>
-        <translation>Шлях до файлу проекту порожній. Використовуйте &quot;Зберегти як&quot;.</translation>
+        <translation>Шлях до файлу проекту порожній. Використовуйте "Зберегти як".</translation>
     </message>
     <message>
         <source>Saving project %1...</source>
@@ -4753,7 +4753,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
-        <translation>Шлях експорту повинен мати коректне ім&apos;я файлу: %1</translation>
+        <translation>Шлях експорту повинен мати коректне ім'я файлу: %1</translation>
     </message>
     <message>
         <source>Document is empty.</source>
@@ -4844,35 +4844,35 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Merge Frame %1 into %2</source>
-        <translation>Об&apos;єднати кадр %1 у %2</translation>
+        <translation>Об'єднати кадр %1 у %2</translation>
     </message>
     <message>
-        <source>Create Animation &apos;%1&apos;</source>
-        <translation>Створити анімацію &apos;%1&apos;</translation>
+        <source>Create Animation '%1'</source>
+        <translation>Створити анімацію '%1'</translation>
     </message>
     <message>
-        <source>Delete Animation &apos;%1&apos;</source>
-        <translation>Видалити анімацію &apos;%1&apos;</translation>
+        <source>Delete Animation '%1'</source>
+        <translation>Видалити анімацію '%1'</translation>
     </message>
     <message>
-        <source>Reverse Animation &apos;%1&apos;</source>
-        <translation>Зворотний порядок анімації &apos;%1&apos;</translation>
+        <source>Reverse Animation '%1'</source>
+        <translation>Зворотний порядок анімації '%1'</translation>
     </message>
     <message>
-        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>Перейменувати анімацію &apos;%1&apos; на &apos;%2&apos;</translation>
+        <source>Rename Animation '%1' to '%2'</source>
+        <translation>Перейменувати анімацію '%1' на '%2'</translation>
     </message>
     <message>
-        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
-        <translation>Дублювати анімацію &apos;%1&apos; як &apos;%2&apos;</translation>
+        <source>Duplicate Animation '%1' as '%2'</source>
+        <translation>Дублювати анімацію '%1' як '%2'</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation &apos;%1&apos;</source>
-        <translation>Змінити порядок кадрів в анімації &apos;%1&apos;</translation>
+        <source>Reorder Frames in Animation '%1'</source>
+        <translation>Змінити порядок кадрів в анімації '%1'</translation>
     </message>
     <message>
-        <source>Change Properties for Animation &apos;%1&apos;</source>
-        <translation>Змінити властивості анімації &apos;%1&apos;</translation>
+        <source>Change Properties for Animation '%1'</source>
+        <translation>Змінити властивості анімації '%1'</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -4936,7 +4936,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>JSON root must be an object.</source>
-        <translation>Корінь JSON повинен бути об&apos;єктом.</translation>
+        <translation>Корінь JSON повинен бути об'єктом.</translation>
     </message>
     <message>
         <source>Cleanup &amp; Extraction</source>
@@ -5082,19 +5082,29 @@ Install package:
     </message>
     <message>
         <source>1 frame exceeds 64 px width (%1 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
-        <translation type="unfinished"></translation>
+        <translation>1 frame exceeds 64 px width (%1 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</translation>
     </message>
     <message>
         <source>%1 frames exceed 64 px width (up to %2 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 frames exceed 64 px width (up to %2 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</translation>
     </message>
     <message>
         <source>1 frame exceeds VIC-II hardware sprite size (24x21 px).</source>
-        <translation type="unfinished"></translation>
+        <translation>1 frame exceeds VIC-II hardware sprite size (24x21 px).</translation>
     </message>
     <message>
         <source>%1 frames exceed VIC-II hardware sprite size (24x21 px).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 frames exceed VIC-II hardware sprite size (24x21 px).</translation>
+    </message>
+    <message>
+        <source>Frame #%1: %2x%3 px
+⚠️ Exceeds retro scanline limit: %4 px (width: %5 px)</source>
+        <translation>Frame #%1: %2x%3 px
+⚠️ Exceeds retro scanline limit: %4 px (width: %5 px)</translation>
+    </message>
+    <message>
+        <source>Frame #%1: %2x%3 px</source>
+        <translation>Frame #%1: %2x%3 px</translation>
     </message>
 </context>
 <context>
@@ -5124,163 +5134,163 @@ Install package:
     <name>Retro::CAsmDialog</name>
     <message>
         <source>C / C++ &amp; Assembly Retro Code Exporter</source>
-        <translation type="unfinished"></translation>
+        <translation>C / C++ &amp; Assembly Retro Code Exporter</translation>
     </message>
     <message>
         <source>Target Retro Architecture Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Target Retro Architecture Preset</translation>
     </message>
     <message>
         <source>Language &amp; Pixel Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Language &amp; Pixel Layout</translation>
     </message>
     <message>
         <source>C / C++ Header (.h)</source>
-        <translation type="unfinished"></translation>
+        <translation>C / C++ Header (.h)</translation>
     </message>
     <message>
         <source>C Source (.c)</source>
-        <translation type="unfinished"></translation>
+        <translation>C Source (.c)</translation>
     </message>
     <message>
         <source>Assembly Motorola / VASM (68000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembly Motorola / VASM (68000)</translation>
     </message>
     <message>
         <source>Assembly RGBDS (Game Boy)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembly RGBDS (Game Boy)</translation>
     </message>
     <message>
         <source>Assembly ca65 / cc65 (6502)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembly ca65 / cc65 (6502)</translation>
     </message>
     <message>
         <source>Assembly NASM / TASM (x86)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembly NASM / TASM (x86)</translation>
     </message>
     <message>
         <source>Assembly GNU as (.byte/.long)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembly GNU as (.byte/.long)</translation>
     </message>
     <message>
         <source>Assembly WLA-DX (Z80)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembly WLA-DX (Z80)</translation>
     </message>
     <message>
         <source>PICO-8 Lua String/Table</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 Lua String/Table</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Language:</translation>
     </message>
     <message>
         <source>Planar 2bpp Tiles (8x8) [GB/NES]</source>
-        <translation type="unfinished"></translation>
+        <translation>Planar 2bpp Tiles (8x8) [GB/NES]</translation>
     </message>
     <message>
         <source>Planar 4bpp Tiles (8x8) [SMS/MD/SNES]</source>
-        <translation type="unfinished"></translation>
+        <translation>Planar 4bpp Tiles (8x8) [SMS/MD/SNES]</translation>
     </message>
     <message>
         <source>Linear 4bpp Packed (2 px/byte)</source>
-        <translation type="unfinished"></translation>
+        <translation>Linear 4bpp Packed (2 px/byte)</translation>
     </message>
     <message>
         <source>Linear 8bpp Indexed (1 byte/px)</source>
-        <translation type="unfinished"></translation>
+        <translation>Linear 8bpp Indexed (1 byte/px)</translation>
     </message>
     <message>
         <source>Amiga Planar Bitplanes (1-5 planes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Amiga Planar Bitplanes (1-5 planes)</translation>
     </message>
     <message>
         <source>C64 Multicolor Sprite (24x21, 64B)</source>
-        <translation type="unfinished"></translation>
+        <translation>C64 Multicolor Sprite (24x21, 64B)</translation>
     </message>
     <message>
         <source>ZX Spectrum (1bpp + 8x8 attrs)</source>
-        <translation type="unfinished"></translation>
+        <translation>ZX Spectrum (1bpp + 8x8 attrs)</translation>
     </message>
     <message>
         <source>Linear 1bpp Mono (8 px/byte)</source>
-        <translation type="unfinished"></translation>
+        <translation>Linear 1bpp Mono (8 px/byte)</translation>
     </message>
     <message>
         <source>Tile/Pixel Layout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tile/Pixel Layout:</translation>
     </message>
     <message>
         <source>Number Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Number Format:</translation>
     </message>
     <message>
         <source>Bytes per Line:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bytes per Line:</translation>
     </message>
     <message>
         <source>Optional symbol prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Optional symbol prefix</translation>
     </message>
     <message>
         <source>Symbol Prefix:</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbol Prefix:</translation>
     </message>
     <message>
         <source>Data Type (C):</source>
-        <translation type="unfinished"></translation>
+        <translation>Data Type (C):</translation>
     </message>
     <message>
         <source>e.g. const, PROGMEM, ALIGN(2)</source>
-        <translation type="unfinished"></translation>
+        <translation>e.g. const, PROGMEM, ALIGN(2)</translation>
     </message>
     <message>
         <source>Storage Qualifier:</source>
-        <translation type="unfinished"></translation>
+        <translation>Storage Qualifier:</translation>
     </message>
     <message>
         <source>Export Sections &amp; Linter</source>
-        <translation type="unfinished"></translation>
+        <translation>Export Sections &amp; Linter</translation>
     </message>
     <message>
         <source>Export Hardware Color Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Export Hardware Color Palette</translation>
     </message>
     <message>
         <source>Export Animation Sequences Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Export Animation Sequences Table</translation>
     </message>
     <message>
         <source>Export Sprite Metadata Struct (Pivot, Size)</source>
-        <translation type="unfinished"></translation>
+        <translation>Export Sprite Metadata Struct (Pivot, Size)</translation>
     </message>
     <message>
         <source>Include C Header Guards (#ifndef)</source>
-        <translation type="unfinished"></translation>
+        <translation>Include C Header Guards (#ifndef)</translation>
     </message>
     <message>
         <source>Include Scanline &amp; Hardware Linter Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Include Scanline &amp; Hardware Linter Warnings</translation>
     </message>
     <message>
         <source>📋 Copy Code</source>
-        <translation type="unfinished"></translation>
+        <translation>📋 Copy Code</translation>
     </message>
     <message>
         <source>Export Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Export Code</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Скасувати</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <source>Total ROM: %1 Bytes (%2 KB) | %3 Tiles (8x8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Total ROM: %1 Bytes (%2 KB) | %3 Tiles (8x8)</translation>
     </message>
     <message>
         <source>✅ Copied!</source>
-        <translation type="unfinished"></translation>
+        <translation>✅ Copied!</translation>
     </message>
 </context>
 <context>
@@ -5397,258 +5407,258 @@ Install package:
     <name>RetroTileExplorerDialog</name>
     <message>
         <source>Retro Console ROM &amp; VRAM Tile Ripper</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro Console ROM &amp; VRAM Tile Ripper</translation>
     </message>
     <message>
         <source>🎯 Detected Graphic Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>🎯 Detected Graphic Banks</translation>
     </message>
     <message>
         <source>📍 Memory Offset / Address</source>
-        <translation type="unfinished"></translation>
+        <translation>📍 Memory Offset / Address</translation>
     </message>
     <message>
         <source>Hex:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hex:</translation>
     </message>
     <message>
         <source>Dec:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dec:</translation>
     </message>
     <message>
         <source>Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Format:</translation>
     </message>
     <message>
         <source>SNES (4bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES (4bpp Planar)</translation>
     </message>
     <message>
         <source>Sega Mega Drive (4bpp Chunky)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Mega Drive (4bpp Chunky)</translation>
     </message>
     <message>
         <source>Nintendo Game Boy (2bpp Interleaved)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo Game Boy (2bpp Interleaved)</translation>
     </message>
     <message>
         <source>NES / Famicom (2bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>NES / Famicom (2bpp Planar)</translation>
     </message>
     <message>
         <source>Sega Master System (4bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Master System (4bpp Planar)</translation>
     </message>
     <message>
         <source>SNK Neo-Geo (4bpp 16x16)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNK Neo-Geo (4bpp 16x16)</translation>
     </message>
     <message>
         <source>Sony PSX (TIM Direct)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony PSX (TIM Direct)</translation>
     </message>
     <message>
         <source>Raw Linear (8bpp Chunky)</source>
-        <translation type="unfinished"></translation>
+        <translation>Raw Linear (8bpp Chunky)</translation>
     </message>
     <message>
         <source>Grid Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grid Width:</translation>
     </message>
     <message>
         <source> tiles</source>
-        <translation type="unfinished"></translation>
+        <translation> tiles</translation>
     </message>
     <message>
         <source>Tile Count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tile Count:</translation>
     </message>
     <message>
         <source>⚙️ Decoding &amp; Tile Patterns</source>
-        <translation type="unfinished"></translation>
+        <translation>⚙️ Decoding &amp; Tile Patterns</translation>
     </message>
     <message>
         <source>SNES (3bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES (3bpp Planar)</translation>
     </message>
     <message>
         <source>Pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pattern:</translation>
     </message>
     <message>
         <source>8x8 Linear (Tiles &amp; Backgrounds)</source>
-        <translation type="unfinished"></translation>
+        <translation>8x8 Linear (Tiles &amp; Backgrounds)</translation>
     </message>
     <message>
         <source>16x16 Sprites (2x2 Sequential)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 Sprites (2x2 Sequential)</translation>
     </message>
     <message>
         <source>16x16 Sprites (SNES VRAM Stride 16)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 Sprites (SNES VRAM Stride 16)</translation>
     </message>
     <message>
         <source>16x16 Sprites (VRAM Stride 32)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 Sprites (VRAM Stride 32)</translation>
     </message>
     <message>
         <source>32x32 Sprites (4x4 Matrix)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 Sprites (4x4 Matrix)</translation>
     </message>
     <message>
         <source>32x32 Sprites (2x2*4 Quad SNESTilesKitten)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 Sprites (2x2*4 Quad SNESTilesKitten)</translation>
     </message>
     <message>
         <source>32x32 Sprites (SNES VRAM Stride 16)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 Sprites (SNES VRAM Stride 16)</translation>
     </message>
     <message>
         <source>🎨 Palette Studio</source>
-        <translation type="unfinished"></translation>
+        <translation>🎨 Palette Studio</translation>
     </message>
     <message>
         <source>Source:</source>
-        <translation type="unfinished"></translation>
+        <translation>Source:</translation>
     </message>
     <message>
         <source>Detected:</source>
-        <translation type="unfinished"></translation>
+        <translation>Detected:</translation>
     </message>
     <message>
         <source>PC Offset:</source>
-        <translation type="unfinished"></translation>
+        <translation>PC Offset:</translation>
     </message>
     <message>
         <source>👁️ Inspection &amp; Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>👁️ Inspection &amp; Zoom</translation>
     </message>
     <message>
         <source>Transparent #0</source>
-        <translation type="unfinished"></translation>
+        <translation>Transparent #0</translation>
     </message>
     <message>
         <source>Tile Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Tile Grid</translation>
     </message>
     <message>
         <source>Highlight Detected Sprites</source>
-        <translation type="unfinished"></translation>
+        <translation>Highlight Detected Sprites</translation>
     </message>
     <message>
         <source>Zoom:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Скасувати</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <source>📥 Import Entire Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>📥 Import Entire Sheet</translation>
     </message>
     <message>
         <source>Imports the current decoded tile sheet directly as a single atlas image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Imports the current decoded tile sheet directly as a single atlas image.</translation>
     </message>
     <message>
         <source>✨ Extract Sprites to Project</source>
-        <translation type="unfinished"></translation>
+        <translation>✨ Extract Sprites to Project</translation>
     </message>
     <message>
         <source>Automatically slices and imports all detected character sprites and objects into BentoPack frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatically slices and imports all detected character sprites and objects into BentoPack frames.</translation>
     </message>
     <message>
         <source>File Error</source>
-        <translation type="unfinished"></translation>
+        <translation>File Error</translation>
     </message>
     <message>
         <source>Cannot open ROM/VRAM file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open ROM/VRAM file: %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; — %2 bytes (%3 KB)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; — %2 bytes (%3 KB)</translation>
     </message>
     <message>
         <source>🎮 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>🎮 %1</translation>
     </message>
     <message>
         <source>Beginning of File (0x000000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Beginning of File (0x000000)</translation>
     </message>
     <message>
         <source>None auto-detected in ROM</source>
-        <translation type="unfinished"></translation>
+        <translation>None auto-detected in ROM</translation>
     </message>
     <message>
         <source>🎨 ROM Palette (Auto-Scan)</source>
-        <translation type="unfinished"></translation>
+        <translation>🎨 ROM Palette (Auto-Scan)</translation>
     </message>
     <message>
         <source>🎯 ROM Palette (Manual Hex)</source>
-        <translation type="unfinished"></translation>
+        <translation>🎯 ROM Palette (Manual Hex)</translation>
     </message>
     <message>
         <source>Harmonic Retro Preview (Shaded)</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonic Retro Preview (Shaded)</translation>
     </message>
     <message>
         <source>Grayscale (Contrast)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grayscale (Contrast)</translation>
     </message>
     <message>
         <source>No decodable tile data at offset 0x%1</source>
-        <translation type="unfinished"></translation>
+        <translation>No decodable tile data at offset 0x%1</translation>
     </message>
     <message>
         <source>Empty sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Empty sheet</translation>
     </message>
     <message>
         <source>Decoded: %1 tiles (%2x%3 px) | Zoom: %4x | Pattern: %5 | Palette: 0x%6 | Offset: 0x%7</source>
-        <translation type="unfinished"></translation>
+        <translation>Decoded: %1 tiles (%2x%3 px) | Zoom: %4x | Pattern: %5 | Palette: 0x%6 | Offset: 0x%7</translation>
     </message>
 </context>
 <context>
     <name>RetroTileExtractor</name>
     <message>
         <source>Cannot open retro ROM/VRAM file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open retro ROM/VRAM file: %1</translation>
     </message>
     <message>
         <source>File is empty: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>File is empty: %1</translation>
     </message>
     <message>
         <source>Failed to decode PSX TIM: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to decode PSX TIM: %1</translation>
     </message>
     <message>
         <source>Insufficient tile data at offset %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Insufficient tile data at offset %1.</translation>
     </message>
     <message>
         <source>Failed to decode retro tile stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to decode retro tile stream.</translation>
     </message>
     <message>
         <source>Cannot export: Document atlas image is null.</source>
-        <translation type="unfinished">Експорт неможливий: зображення атласу порожнє.</translation>
+        <translation>Експорт неможливий: зображення атласу порожнє.</translation>
     </message>
     <message>
         <source>Failed to encode retro tiles: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to encode retro tiles: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot open file for writing: %1</translation>
     </message>
     <message>
         <source>Failed to write all tile bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to write all tile bytes to disk.</translation>
     </message>
 </context>
 <context>
@@ -5846,7 +5856,7 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_NAME</source>
-        <translation>Ім&apos;я автора:</translation>
+        <translation>Ім'я автора:</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER</source>
@@ -5866,15 +5876,15 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Стан: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 активовано&lt;/b&gt; (керування історією та гілками працює нормально)</translation>
+        <translation>Стан: &lt;b style='color:#27ae60;'&gt;LibGit2 активовано&lt;/b&gt; (керування історією та гілками працює нормально)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Стан: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 не скомпільовано&lt;/b&gt; (історію Git вимкнено)</translation>
+        <translation>Стан: &lt;b style='color:#e74c3c;'&gt;LibGit2 не скомпільовано&lt;/b&gt; (історію Git вимкнено)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
-        <translation>Кожна дія редагування (обрізка, перейменування, об&apos;єднання спрайтів, створення анімацій) створює інкрементний коміт у сховищі проекту .bento.</translation>
+        <translation>Кожна дія редагування (обрізка, перейменування, об'єднання спрайтів, створення анімацій) створює інкрементний коміт у сховищі проекту .bento.</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_ATLAS</source>
@@ -5922,15 +5932,103 @@ Install package:
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
-        <translation>&lt;b&gt;Порада:&lt;/b&gt; Текстури, стиснуті для GPU (KTX2 / Basis Universal), зменшують використання пам&apos;яті GPU (VRAM) та пропускну здатність на цільових пристроях.</translation>
+        <translation>&lt;b&gt;Порада:&lt;/b&gt; Текстури, стиснуті для GPU (KTX2 / Basis Universal), зменшують використання пам'яті GPU (VRAM) та пропускну здатність на цільових пристроях.</translation>
     </message>
     <message>
         <source>Default Target Format:</source>
         <translation>Типовий цільовий формат:</translation>
     </message>
     <message>
+        <source>Click to customize color (%1)</source>
+        <translation>Click to customize color (%1)</translation>
+    </message>
+    <message>
+        <source>Select Color</source>
+        <translation>Select Color</translation>
+    </message>
+    <message>
         <source>Retro &amp; Hardware Constraints</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro &amp; Hardware Constraints</translation>
+    </message>
+    <message>
+        <source>Background Removal Min Alpha:</source>
+        <translation>Background Removal Min Alpha:</translation>
+    </message>
+    <message>
+        <source>Grid / Row Vertical Alignment Tolerance:</source>
+        <translation>Grid / Row Vertical Alignment Tolerance:</translation>
+    </message>
+    <message>
+        <source>Animation Playback Defaults</source>
+        <translation>Animation Playback Defaults</translation>
+    </message>
+    <message>
+        <source>Default Frame Rate:</source>
+        <translation>Default Frame Rate:</translation>
+    </message>
+    <message>
+        <source>Maximum Frame Rate Limit:</source>
+        <translation>Maximum Frame Rate Limit:</translation>
+    </message>
+    <message>
+        <source>Auto-play animation when selected in list</source>
+        <translation>Auto-play animation when selected in list</translation>
+    </message>
+    <message>
+        <source>Auto-save session state on exit</source>
+        <translation>Auto-save session state on exit</translation>
+    </message>
+    <message>
+        <source>Keyboard Nudge &amp; Positioning</source>
+        <translation>Keyboard Nudge &amp; Positioning</translation>
+    </message>
+    <message>
+        <source>Normal Nudge Step (Arrow keys):</source>
+        <translation>Normal Nudge Step (Arrow keys):</translation>
+    </message>
+    <message>
+        <source>Fast Nudge Step (Shift + Arrow keys):</source>
+        <translation>Fast Nudge Step (Shift + Arrow keys):</translation>
+    </message>
+    <message>
+        <source>Box Styling &amp; Selection Appearance</source>
+        <translation>Box Styling &amp; Selection Appearance</translation>
+    </message>
+    <message>
+        <source>Resize Handle Size:</source>
+        <translation>Resize Handle Size:</translation>
+    </message>
+    <message>
+        <source>Resize Handle Grab Margin:</source>
+        <translation>Resize Handle Grab Margin:</translation>
+    </message>
+    <message>
+        <source>Selected Box Outline Color:</source>
+        <translation>Selected Box Outline Color:</translation>
+    </message>
+    <message>
+        <source>Selected Box Fill Color:</source>
+        <translation>Selected Box Fill Color:</translation>
+    </message>
+    <message>
+        <source>Unselected Box Color:</source>
+        <translation>Unselected Box Color:</translation>
+    </message>
+    <message>
+        <source>Marquee Selection Color:</source>
+        <translation>Marquee Selection Color:</translation>
+    </message>
+    <message>
+        <source>Slice Preview Outline Color:</source>
+        <translation>Slice Preview Outline Color:</translation>
+    </message>
+    <message>
+        <source>Polygon Mesh Wireframe Color:</source>
+        <translation>Polygon Mesh Wireframe Color:</translation>
+    </message>
+    <message>
+        <source>Show polygon mesh by default when available</source>
+        <translation>Show polygon mesh by default when available</translation>
     </message>
     <message>
         <source>PNG (Standard, Lossless)</source>
@@ -5977,88 +6075,144 @@ Install package:
         <translation>Рівень стиснення Zstd:</translation>
     </message>
     <message>
+        <source>Texture Packing &amp; Geometry Defaults</source>
+        <translation>Texture Packing &amp; Geometry Defaults</translation>
+    </message>
+    <message>
+        <source>Default Inner Sprite Padding:</source>
+        <translation>Default Inner Sprite Padding:</translation>
+    </message>
+    <message>
+        <source>Default Atlas Border Margin:</source>
+        <translation>Default Atlas Border Margin:</translation>
+    </message>
+    <message>
+        <source>Default Bleed Border Extrusion:</source>
+        <translation>Default Bleed Border Extrusion:</translation>
+    </message>
+    <message>
+        <source>Default Max Texture Atlas Dimensions:</source>
+        <translation>Default Max Texture Atlas Dimensions:</translation>
+    </message>
+    <message>
+        <source>Force Power-of-Two (POT 2^n) texture dimensions by default</source>
+        <translation>Force Power-of-Two (POT 2^n) texture dimensions by default</translation>
+    </message>
+    <message>
+        <source>Force square aspect ratio (width == height) by default</source>
+        <translation>Force square aspect ratio (width == height) by default</translation>
+    </message>
+    <message>
+        <source>Detect and share visually identical frames by default</source>
+        <translation>Detect and share visually identical frames by default</translation>
+    </message>
+    <message>
+        <source>Crop transparent margins (Trim) by default</source>
+        <translation>Crop transparent margins (Trim) by default</translation>
+    </message>
+    <message>
+        <source>Invert Normal Map Green channel (DirectX vs OpenGL Y-Flip)</source>
+        <translation>Invert Normal Map Green channel (DirectX vs OpenGL Y-Flip)</translation>
+    </message>
+    <message>
         <source>Enable Hardware PPU Constraints &amp; Retro Linters (Active by default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Enable Hardware PPU Constraints &amp; Retro Linters (Active by default)</translation>
     </message>
     <message>
         <source>Target System Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Target System Profile</translation>
     </message>
     <message>
         <source>Custom / Generic Retro</source>
-        <translation type="unfinished"></translation>
+        <translation>Custom / Generic Retro</translation>
     </message>
     <message>
         <source>Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles</translation>
     </message>
     <message>
         <source>Nintendo NES / Famicom - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo NES / Famicom - 64px scanline, 256 tiles</translation>
     </message>
     <message>
         <source>Sega Master System / Game Gear - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Master System / Game Gear - 64px scanline, 256 tiles</translation>
     </message>
     <message>
         <source>Sega Mega Drive / Genesis - 128px scanline, 512 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Mega Drive / Genesis - 128px scanline, 512 tiles</translation>
     </message>
     <message>
         <source>Commodore 64 (Multicolor) - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Commodore 64 (Multicolor) - 64px scanline, 256 tiles</translation>
     </message>
     <message>
         <source>Super Nintendo (SNES) - 256px scanline, 512 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Super Nintendo (SNES) - 256px scanline, 512 tiles</translation>
     </message>
     <message>
         <source>PICO-8 - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 - 64px scanline, 256 tiles</translation>
     </message>
     <message>
         <source>Hardware Profile:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware Profile:</translation>
     </message>
     <message>
         <source>Hardware Constraint Limits</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware Constraint Limits</translation>
     </message>
     <message>
         <source>Max Scanline Sprite Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Max Scanline Sprite Width:</translation>
     </message>
     <message>
         <source>Max VRAM Tile Budget:</source>
-        <translation type="unfinished"></translation>
+        <translation>Max VRAM Tile Budget:</translation>
     </message>
     <message>
         <source>Tile Grid Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tile Grid Resolution:</translation>
+    </message>
+    <message>
+        <source>Max Sprites Per Scanline:</source>
+        <translation>Max Sprites Per Scanline:</translation>
+    </message>
+    <message>
+        <source>Max Colors Per Sprite / Palette:</source>
+        <translation>Max Colors Per Sprite / Palette:</translation>
     </message>
     <message>
         <source>Visual Feedback &amp; Aids</source>
-        <translation type="unfinished"></translation>
+        <translation>Visual Feedback &amp; Aids</translation>
+    </message>
+    <message>
+        <source>Guide Line Thickness:</source>
+        <translation>Guide Line Thickness:</translation>
     </message>
     <message>
         <source>Show subtle 8x8 tile grid in Pixel Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Show subtle 8x8 tile grid in Pixel Editor</translation>
     </message>
     <message>
         <source>Show scanline width boundary guide in Pixel Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Show scanline width boundary guide in Pixel Editor</translation>
     </message>
     <message>
         <source>Show discrete warning badges (pastilles) on Timeline frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Show discrete warning badges (pastilles) on Timeline frames</translation>
     </message>
     <message>
         <source>Show VRAM tile budget gauge in status bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Show VRAM tile budget gauge in status bar</translation>
+    </message>
+    <message>
+        <source>Show discrete sprite size limit guides on Atlas (background rules &amp; zones)</source>
+        <translation>Show discrete sprite size limit guides on Atlas (background rules &amp; zones)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; Constraints and visual badges provide non-blocking visual feedback for retro targets (NES, Game Boy, Mega Drive, C64) without interfering with modern engines (Godot/Unity/Unreal).</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Tip:&lt;/b&gt; Constraints and visual badges provide non-blocking visual feedback for retro targets (NES, Game Boy, Mega Drive, C64) without interfering with modern engines (Godot/Unity/Unreal).</translation>
     </message>
     <message>
         <source>Open Plugins Folder...</source>
@@ -6121,8 +6275,8 @@ Install package:
         <translation>Перевірити оновлення зараз</translation>
     </message>
     <message>
-        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
-        <translation>Натисніть &apos;Перевірити оновлення зараз&apos;, щоб отримати останній випуск на GitHub.</translation>
+        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
+        <translation>Натисніть 'Перевірити оновлення зараз', щоб отримати останній випуск на GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6141,16 +6295,16 @@ Install package:
         <translation>Перевірка оновлень на GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Не вдалося перевірити оновлення: %1&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #e74c3c;'&gt;Не вдалося перевірити оновлення: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Некоректна відповідь від GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #e74c3c;'&gt;Некоректна відповідь від GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Доступна нова версія: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Доступна нова версія: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6161,8 +6315,8 @@ Install package:
         <translation>Дата випуску: %1</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Ви використовуєте останню версію (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #27ae60;'&gt;Ви використовуєте останню версію (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
@@ -6275,7 +6429,7 @@ Install package:
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to save image to: %1</source>
@@ -6374,7 +6528,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Зв&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Зв'язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
@@ -6394,7 +6548,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unity export.</source>
@@ -6441,7 +6595,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Зв&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Зв'язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
@@ -6461,7 +6615,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
@@ -6580,11 +6734,11 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Base name:</source>
-        <translation>Базове ім&apos;я:</translation>
+        <translation>Базове ім'я:</translation>
     </message>
     <message>
         <source>Exported file base name (e.g., hero)</source>
-        <translation>Базове ім&apos;я експортованого файлу (напр., hero)</translation>
+        <translation>Базове ім'я експортованого файлу (напр., hero)</translation>
     </message>
     <message>
         <source>Generated file:</source>
@@ -6648,7 +6802,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Merge identical frames (Auto-Aliasing)</source>
-        <translation>Об&apos;єднувати однакові кадри (Auto-Aliasing)</translation>
+        <translation>Об'єднувати однакові кадри (Auto-Aliasing)</translation>
     </message>
     <message>
         <source>Power of Two dimensions (POT)</source>
@@ -6751,7 +6905,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Base name</source>
-        <translation>Базове ім&apos;я</translation>
+        <translation>Базове ім'я</translation>
     </message>
     <message>
         <source>Image Format</source>

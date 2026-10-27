@@ -30,6 +30,7 @@
 #include <QSplitter>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QColorDialog>
 #include <QEvent>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -40,6 +41,30 @@
 #include <QUrl>
 #include <QDir>
 #include <QCoreApplication>
+
+void SettingsDialog::updateColorButton(QPushButton *btn, const QColor &color)
+{
+    if (!btn) return;
+    QString colStr = color.alpha() < 255 ? color.name(QColor::HexArgb) : color.name(QColor::HexRgb);
+    btn->setStyleSheet(QStringLiteral(
+        "QPushButton { background-color: %1; border: 1px solid #555; border-radius: 3px; min-width: 60px; min-height: 20px; font-size: 11px; font-weight: bold; color: %2; }"
+    ).arg(colStr, (color.lightness() > 140) ? QStringLiteral("#000000") : QStringLiteral("#ffffff")));
+    btn->setText(colStr.toUpper());
+    btn->setToolTip(tr("Click to customize color (%1)").arg(colStr));
+}
+
+void SettingsDialog::pickColor(QWidget *parent, QColor &targetColor, QPushButton *button, bool alpha)
+{
+    QColorDialog::ColorDialogOptions options;
+    if (alpha) {
+        options |= QColorDialog::ShowAlphaChannel;
+    }
+    QColor col = QColorDialog::getColor(targetColor, parent, tr("Select Color"), options);
+    if (col.isValid()) {
+        targetColor = col;
+        updateColorButton(button, targetColor);
+    }
+}
 
 SettingsDialog::SettingsDialog(QWidget *parent, PageIndex initialPage)
     : QDialog(parent)
@@ -234,7 +259,38 @@ QWidget* SettingsDialog::createGeneralPage()
     m_spinBgRemovalTol->setRange(0, 100);
     m_lblBgRemovalTol = new QLabel(tr("KEY_SETTINGS_BG_REMOVAL_TOL"), m_grpExtraction);
     formExtraction->addRow(m_lblBgRemovalTol, m_spinBgRemovalTol);
+
+    m_spinBgMinAlpha = new QSpinBox(m_grpExtraction);
+    m_spinBgMinAlpha->setRange(0, 255);
+    m_lblBgMinAlpha = new QLabel(tr("Background Removal Min Alpha:"), m_grpExtraction);
+    formExtraction->addRow(m_lblBgMinAlpha, m_spinBgMinAlpha);
+
+    m_spinVertTolerance = new QSpinBox(m_grpExtraction);
+    m_spinVertTolerance->setRange(0, 50);
+    m_spinVertTolerance->setSuffix(QStringLiteral(" px"));
+    m_lblVertTolerance = new QLabel(tr("Grid / Row Vertical Alignment Tolerance:"), m_grpExtraction);
+    formExtraction->addRow(m_lblVertTolerance, m_spinVertTolerance);
     layout->addWidget(m_grpExtraction);
+
+    // Animation Playback Defaults Group
+    m_grpAnimation = new QGroupBox(tr("Animation Playback Defaults"), page);
+    QFormLayout *formAnim = new QFormLayout(m_grpAnimation);
+
+    m_spinDefaultFps = new QSpinBox(m_grpAnimation);
+    m_spinDefaultFps->setRange(1, 120);
+    m_spinDefaultFps->setSuffix(QStringLiteral(" fps"));
+    m_lblDefaultFps = new QLabel(tr("Default Frame Rate:"), m_grpAnimation);
+    formAnim->addRow(m_lblDefaultFps, m_spinDefaultFps);
+
+    m_spinMaxFps = new QSpinBox(m_grpAnimation);
+    m_spinMaxFps->setRange(10, 240);
+    m_spinMaxFps->setSuffix(QStringLiteral(" fps"));
+    m_lblMaxFps = new QLabel(tr("Maximum Frame Rate Limit:"), m_grpAnimation);
+    formAnim->addRow(m_lblMaxFps, m_spinMaxFps);
+
+    m_chkAutoPlayOnSelection = new QCheckBox(tr("Auto-play animation when selected in list"), m_grpAnimation);
+    formAnim->addRow(QString(), m_chkAutoPlayOnSelection);
+    layout->addWidget(m_grpAnimation);
 
     // Language / Localization Group
     m_grpLang = new QGroupBox(tr("KEY_SETTINGS_GRP_LANGUAGE"), page);
@@ -288,6 +344,9 @@ QWidget* SettingsDialog::createGeneralPage()
 
     m_chkReopenLastProject = new QCheckBox(tr("Reopen last project on startup"), m_grpStartup);
     startupLayout->addWidget(m_chkReopenLastProject);
+
+    m_chkAutoSaveSession = new QCheckBox(tr("Auto-save session state on exit"), m_grpStartup);
+    startupLayout->addWidget(m_chkAutoSaveSession);
 
     layout->addWidget(m_grpStartup);
 
@@ -413,6 +472,90 @@ QWidget* SettingsDialog::createAtlasPage()
     formSlicing->addRow(m_lblMinSliceSize, m_spinMinSliceSize);
 
     layout->addWidget(m_grpSlicing);
+
+    // Nudge and Keyboard Navigation
+    m_grpNudge = new QGroupBox(tr("Keyboard Nudge & Positioning"), page);
+    QFormLayout *formNudge = new QFormLayout(m_grpNudge);
+
+    m_spinNudgeSmall = new QSpinBox(m_grpNudge);
+    m_spinNudgeSmall->setRange(1, 50);
+    m_spinNudgeSmall->setSuffix(QStringLiteral(" px"));
+    m_lblNudgeSmall = new QLabel(tr("Normal Nudge Step (Arrow keys):"), m_grpNudge);
+    formNudge->addRow(m_lblNudgeSmall, m_spinNudgeSmall);
+
+    m_spinNudgeLarge = new QSpinBox(m_grpNudge);
+    m_spinNudgeLarge->setRange(2, 200);
+    m_spinNudgeLarge->setSuffix(QStringLiteral(" px"));
+    m_lblNudgeLarge = new QLabel(tr("Fast Nudge Step (Shift + Arrow keys):"), m_grpNudge);
+    formNudge->addRow(m_lblNudgeLarge, m_spinNudgeLarge);
+
+    layout->addWidget(m_grpNudge);
+
+    // Box Styling & Selection Appearance
+    m_grpBoxStyle = new QGroupBox(tr("Box Styling & Selection Appearance"), page);
+    QFormLayout *formBox = new QFormLayout(m_grpBoxStyle);
+
+    m_spinHandleSize = new QDoubleSpinBox(m_grpBoxStyle);
+    m_spinHandleSize->setRange(4.0, 32.0);
+    m_spinHandleSize->setSingleStep(1.0);
+    m_spinHandleSize->setSuffix(QStringLiteral(" px"));
+    m_lblHandleSize = new QLabel(tr("Resize Handle Size:"), m_grpBoxStyle);
+    formBox->addRow(m_lblHandleSize, m_spinHandleSize);
+
+    m_spinHandleMargin = new QDoubleSpinBox(m_grpBoxStyle);
+    m_spinHandleMargin->setRange(4.0, 64.0);
+    m_spinHandleMargin->setSingleStep(1.0);
+    m_spinHandleMargin->setSuffix(QStringLiteral(" px"));
+    m_lblHandleMargin = new QLabel(tr("Resize Handle Grab Margin:"), m_grpBoxStyle);
+    formBox->addRow(m_lblHandleMargin, m_spinHandleMargin);
+
+    // Color buttons
+    m_btnSelectedBoxColor = new QPushButton(m_grpBoxStyle);
+    connect(m_btnSelectedBoxColor, &QPushButton::clicked, this, [this]() {
+        pickColor(this, m_colSelectedBox, m_btnSelectedBoxColor, false);
+    });
+    m_lblSelectedBoxColor = new QLabel(tr("Selected Box Outline Color:"), m_grpBoxStyle);
+    formBox->addRow(m_lblSelectedBoxColor, m_btnSelectedBoxColor);
+
+    m_btnSelectedBoxFillColor = new QPushButton(m_grpBoxStyle);
+    connect(m_btnSelectedBoxFillColor, &QPushButton::clicked, this, [this]() {
+        pickColor(this, m_colSelectedBoxFill, m_btnSelectedBoxFillColor, true);
+    });
+    m_lblSelectedBoxFillColor = new QLabel(tr("Selected Box Fill Color:"), m_grpBoxStyle);
+    formBox->addRow(m_lblSelectedBoxFillColor, m_btnSelectedBoxFillColor);
+
+    m_btnUnselectedBoxColor = new QPushButton(m_grpBoxStyle);
+    connect(m_btnUnselectedBoxColor, &QPushButton::clicked, this, [this]() {
+        pickColor(this, m_colUnselectedBox, m_btnUnselectedBoxColor, true);
+    });
+    m_lblUnselectedBoxColor = new QLabel(tr("Unselected Box Color:"), m_grpBoxStyle);
+    formBox->addRow(m_lblUnselectedBoxColor, m_btnUnselectedBoxColor);
+
+    m_btnMarqueeColor = new QPushButton(m_grpBoxStyle);
+    connect(m_btnMarqueeColor, &QPushButton::clicked, this, [this]() {
+        pickColor(this, m_colMarquee, m_btnMarqueeColor, false);
+    });
+    m_lblMarqueeColor = new QLabel(tr("Marquee Selection Color:"), m_grpBoxStyle);
+    formBox->addRow(m_lblMarqueeColor, m_btnMarqueeColor);
+
+    m_btnPreviewColor = new QPushButton(m_grpBoxStyle);
+    connect(m_btnPreviewColor, &QPushButton::clicked, this, [this]() {
+        pickColor(this, m_colPreview, m_btnPreviewColor, false);
+    });
+    m_lblPreviewColor = new QLabel(tr("Slice Preview Outline Color:"), m_grpBoxStyle);
+    formBox->addRow(m_lblPreviewColor, m_btnPreviewColor);
+
+    m_btnMeshWireframeColor = new QPushButton(m_grpBoxStyle);
+    connect(m_btnMeshWireframeColor, &QPushButton::clicked, this, [this]() {
+        pickColor(this, m_colMeshWireframe, m_btnMeshWireframeColor, true);
+    });
+    m_lblMeshWireframeColor = new QLabel(tr("Polygon Mesh Wireframe Color:"), m_grpBoxStyle);
+    formBox->addRow(m_lblMeshWireframeColor, m_btnMeshWireframeColor);
+
+    m_chkShowPolygonMesh = new QCheckBox(tr("Show polygon mesh by default when available"), m_grpBoxStyle);
+    formBox->addRow(QString(), m_chkShowPolygonMesh);
+
+    layout->addWidget(m_grpBoxStyle);
     layout->addStretch();
     return page;
 }
@@ -476,6 +619,55 @@ QWidget* SettingsDialog::createExportPage()
     connect(m_chkDefaultZstd, &QCheckBox::toggled, m_lblZstdLevel, &QLabel::setEnabled);
 
     layout->addWidget(m_grpExportDefaults);
+
+    // Texture Packing & Geometry Defaults
+    m_grpPackDefaults = new QGroupBox(tr("Texture Packing & Geometry Defaults"), page);
+    QFormLayout *formPack = new QFormLayout(m_grpPackDefaults);
+
+    m_spinDefaultPadding = new QSpinBox(m_grpPackDefaults);
+    m_spinDefaultPadding->setRange(0, 64);
+    m_spinDefaultPadding->setSuffix(QStringLiteral(" px"));
+    m_lblDefaultPadding = new QLabel(tr("Default Inner Sprite Padding:"), m_grpPackDefaults);
+    formPack->addRow(m_lblDefaultPadding, m_spinDefaultPadding);
+
+    m_spinDefaultBorderPadding = new QSpinBox(m_grpPackDefaults);
+    m_spinDefaultBorderPadding->setRange(0, 64);
+    m_spinDefaultBorderPadding->setSuffix(QStringLiteral(" px"));
+    m_lblDefaultBorderPadding = new QLabel(tr("Default Atlas Border Margin:"), m_grpPackDefaults);
+    formPack->addRow(m_lblDefaultBorderPadding, m_spinDefaultBorderPadding);
+
+    m_spinDefaultExtrude = new QSpinBox(m_grpPackDefaults);
+    m_spinDefaultExtrude->setRange(0, 16);
+    m_spinDefaultExtrude->setSuffix(QStringLiteral(" px"));
+    m_lblDefaultExtrude = new QLabel(tr("Default Bleed Border Extrusion:"), m_grpPackDefaults);
+    formPack->addRow(m_lblDefaultExtrude, m_spinDefaultExtrude);
+
+    m_comboMaxDimensions = new QComboBox(m_grpPackDefaults);
+    m_comboMaxDimensions->addItem(QStringLiteral("512 x 512"), 512);
+    m_comboMaxDimensions->addItem(QStringLiteral("1024 x 1024"), 1024);
+    m_comboMaxDimensions->addItem(QStringLiteral("2048 x 2048"), 2048);
+    m_comboMaxDimensions->addItem(QStringLiteral("4096 x 4096"), 4096);
+    m_comboMaxDimensions->addItem(QStringLiteral("8192 x 8192"), 8192);
+    m_comboMaxDimensions->addItem(QStringLiteral("16384 x 16384"), 16384);
+    m_lblMaxDimensions = new QLabel(tr("Default Max Texture Atlas Dimensions:"), m_grpPackDefaults);
+    formPack->addRow(m_lblMaxDimensions, m_comboMaxDimensions);
+
+    m_chkDefaultPowerOfTwo = new QCheckBox(tr("Force Power-of-Two (POT 2^n) texture dimensions by default"), m_grpPackDefaults);
+    formPack->addRow(QString(), m_chkDefaultPowerOfTwo);
+
+    m_chkDefaultForceSquare = new QCheckBox(tr("Force square aspect ratio (width == height) by default"), m_grpPackDefaults);
+    formPack->addRow(QString(), m_chkDefaultForceSquare);
+
+    m_chkDefaultDeduplicate = new QCheckBox(tr("Detect and share visually identical frames by default"), m_grpPackDefaults);
+    formPack->addRow(QString(), m_chkDefaultDeduplicate);
+
+    m_chkDefaultTrimSprites = new QCheckBox(tr("Crop transparent margins (Trim) by default"), m_grpPackDefaults);
+    formPack->addRow(QString(), m_chkDefaultTrimSprites);
+
+    m_chkNormalMapYFlip = new QCheckBox(tr("Invert Normal Map Green channel (DirectX vs OpenGL Y-Flip)"), m_grpPackDefaults);
+    formPack->addRow(QString(), m_chkNormalMapYFlip);
+
+    layout->addWidget(m_grpPackDefaults);
 
     QLabel *lblTip = new QLabel(
         tr("<b>Tip:</b> GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices."),
@@ -549,11 +741,33 @@ QWidget* SettingsDialog::createRetroPage()
     m_lblTileSize = new QLabel(tr("Tile Grid Resolution:"), m_grpRetroLimits);
     formLimits->addRow(m_lblTileSize, m_comboTileSize);
 
+    m_spinMaxSpritesPerScanline = new QSpinBox(m_grpRetroLimits);
+    m_spinMaxSpritesPerScanline->setRange(1, 256);
+    m_spinMaxSpritesPerScanline->setSuffix(QStringLiteral(" sprites"));
+    m_lblMaxSpritesPerScanline = new QLabel(tr("Max Sprites Per Scanline:"), m_grpRetroLimits);
+    formLimits->addRow(m_lblMaxSpritesPerScanline, m_spinMaxSpritesPerScanline);
+
+    m_spinMaxColorsPerSprite = new QSpinBox(m_grpRetroLimits);
+    m_spinMaxColorsPerSprite->setRange(2, 256);
+    m_spinMaxColorsPerSprite->setSuffix(QStringLiteral(" colors"));
+    m_lblMaxColorsPerSprite = new QLabel(tr("Max Colors Per Sprite / Palette:"), m_grpRetroLimits);
+    formLimits->addRow(m_lblMaxColorsPerSprite, m_spinMaxColorsPerSprite);
+
     layout->addWidget(m_grpRetroLimits);
 
     // Visual Guides Group
     m_grpRetroVisuals = new QGroupBox(tr("Visual Feedback & Aids"), page);
     QVBoxLayout *vboxVisuals = new QVBoxLayout(m_grpRetroVisuals);
+
+    QHBoxLayout *hGuideThick = new QHBoxLayout();
+    m_lblGuideLineThickness = new QLabel(tr("Guide Line Thickness:"), m_grpRetroVisuals);
+    m_spinGuideLineThickness = new QSpinBox(m_grpRetroVisuals);
+    m_spinGuideLineThickness->setRange(1, 4);
+    m_spinGuideLineThickness->setSuffix(QStringLiteral(" px"));
+    hGuideThick->addWidget(m_lblGuideLineThickness);
+    hGuideThick->addWidget(m_spinGuideLineThickness);
+    hGuideThick->addStretch();
+    vboxVisuals->addLayout(hGuideThick);
 
     m_chkShowTileGrid = new QCheckBox(tr("Show subtle 8x8 tile grid in Pixel Editor"), m_grpRetroVisuals);
     m_chkShowScanlineGuide = new QCheckBox(tr("Show scanline width boundary guide in Pixel Editor"), m_grpRetroVisuals);
@@ -576,6 +790,8 @@ QWidget* SettingsDialog::createRetroPage()
             RetroLinterConfig::applyPreset(index, tmp);
             m_spinScanlineLimit->setValue(tmp.scanlineSpriteWidthLimit);
             m_spinMaxVramTiles->setValue(tmp.maxVramTiles);
+            m_spinMaxSpritesPerScanline->setValue(tmp.maxSpritesPerScanline);
+            m_spinMaxColorsPerSprite->setValue(tmp.maxColorsPerSprite);
             int tileIdx = m_comboTileSize->findData(tmp.tileSize);
             if (tileIdx >= 0) m_comboTileSize->setCurrentIndex(tileIdx);
         }
@@ -955,15 +1171,17 @@ void SettingsDialog::onSearchTextChanged(const QString &text)
         m_itemGeneral->setHidden(false);
         m_itemAtlas->setHidden(false);
         m_itemExport->setHidden(false);
+        m_itemRetro->setHidden(false);
         m_itemPlugins->setHidden(false);
         m_itemGit->setHidden(false);
         m_itemUpdates->setHidden(false);
         return;
     }
 
-    bool matchGeneral = QStringLiteral("général general langue language locale fr en ja français english japonais projet project undo redo recent récents alpha seuil tolerance fond background startup demarrage démarrage").contains(query);
-    bool matchAtlas = QStringLiteral("atlas affichage display zoom vue tranche slice padding cadrage").contains(query);
-    bool matchExport = QStringLiteral("export exportation vram texture ktx2 basis zstd compression format algorithme algorithm paper2d godot unity sheet").contains(query);
+    bool matchGeneral = QStringLiteral("général general langue language locale fr en ja français english japonais projet project undo redo recent récents alpha seuil tolerance fond background startup demarrage démarrage animation fps cadence play lecture autosave session").contains(query);
+    bool matchAtlas = QStringLiteral("atlas affichage display zoom vue tranche slice padding cadrage nudge fleche flèche deplacer déplacement poignée handle couleur color style box selection sélection cadre mesh maillage filaire wireframe").contains(query);
+    bool matchExport = QStringLiteral("export exportation vram texture ktx2 basis zstd compression format algorithme algorithm paper2d godot unity sheet pot puissance puissance-de-deux padding bordure extrude bleed rognage trim deduplication normalmap").contains(query);
+    bool matchRetro = QStringLiteral("retro rétro hardware ppu nes gameboy snes genesis megadrive c64 pico8 scanline vram tuiles tiles jauge guide pastille regle règle epaisseur thickness sprite palette").contains(query);
     bool matchPlugins = QStringLiteral("plugin plugins extension extensions filtre filter extractor extracteur dll so module reload").contains(query);
     bool matchGit = QStringLiteral("git version control contrôle author auteur email mail nom signature libgit2 commit").contains(query);
     bool matchUpdates = QStringLiteral("update updates mise à jour github release version nouveautés nouvelle").contains(query);
@@ -971,6 +1189,7 @@ void SettingsDialog::onSearchTextChanged(const QString &text)
     m_itemGeneral->setHidden(!matchGeneral);
     m_itemAtlas->setHidden(!matchAtlas);
     m_itemExport->setHidden(!matchExport);
+    m_itemRetro->setHidden(!matchRetro);
     m_itemPlugins->setHidden(!matchPlugins);
     m_itemGit->setHidden(!matchGit);
     m_itemUpdates->setHidden(!matchUpdates);
@@ -982,6 +1201,8 @@ void SettingsDialog::onSearchTextChanged(const QString &text)
             m_categoryTree->setCurrentItem(m_itemAtlas);
         } else if (!m_itemExport->isHidden()) {
             m_categoryTree->setCurrentItem(m_itemExport);
+        } else if (!m_itemRetro->isHidden()) {
+            m_categoryTree->setCurrentItem(m_itemRetro);
         } else if (!m_itemPlugins->isHidden()) {
             m_categoryTree->setCurrentItem(m_itemPlugins);
         } else if (!m_itemGit->isHidden()) {
@@ -1032,22 +1253,53 @@ void SettingsDialog::loadSettings()
     if (m_chkReopenLastProject) {
         m_chkReopenLastProject->setChecked(cfg.general().reopenLastProject);
     }
+    if (m_chkAutoSaveSession) {
+        m_chkAutoSaveSession->setChecked(cfg.project().autoSaveSession);
+    }
 
     m_spinUndoLimit->setValue(cfg.project().undoLimit);
     m_spinMaxRecentFiles->setValue(cfg.project().maxRecentFiles);
     m_spinAlphaThreshold->setValue(cfg.atlas().defaultAlphaThreshold);
     m_spinBgRemovalTol->setValue(cfg.project().backgroundRemovalTolerance);
+    m_spinBgMinAlpha->setValue(cfg.project().backgroundMinAlpha);
+    m_spinVertTolerance->setValue(cfg.atlas().defaultVerticalTolerance);
+
+    // Animation
+    m_spinDefaultFps->setValue(cfg.animation().defaultFps);
+    m_spinMaxFps->setValue(cfg.animation().maxFps);
+    m_chkAutoPlayOnSelection->setChecked(cfg.animation().autoPlayOnSelection);
 
     // Git
     m_editGitAuthorName->setText(cfg.git().authorName);
     m_editGitAuthorEmail->setText(cfg.git().authorEmail);
 
-    // Atlas
+    // Atlas & Navigation
     m_spinZoomStep->setValue(cfg.atlas().zoomStep);
     m_spinZoomMin->setValue(cfg.atlas().zoomMin);
     m_spinZoomMax->setValue(cfg.atlas().zoomMax);
     m_spinFitPadding->setValue(cfg.atlas().fitViewPadding);
     m_spinMinSliceSize->setValue(cfg.atlas().minSliceSize);
+    m_spinNudgeSmall->setValue(cfg.atlas().nudgeStepSmall);
+    m_spinNudgeLarge->setValue(cfg.atlas().nudgeStepLarge);
+
+    // Box Style & Colors
+    m_spinHandleSize->setValue(cfg.visuals().handleSize);
+    m_spinHandleMargin->setValue(cfg.visuals().handleMargin);
+
+    m_colSelectedBox = cfg.visuals().selectedBoxColor;
+    m_colSelectedBoxFill = cfg.visuals().selectedBoxFillColor;
+    m_colUnselectedBox = cfg.visuals().unselectedBoxColor;
+    m_colMarquee = cfg.visuals().marqueeColor;
+    m_colPreview = cfg.visuals().newSlicePreviewColor;
+    m_colMeshWireframe = cfg.visuals().meshWireframeColor;
+
+    updateColorButton(m_btnSelectedBoxColor, m_colSelectedBox);
+    updateColorButton(m_btnSelectedBoxFillColor, m_colSelectedBoxFill);
+    updateColorButton(m_btnUnselectedBoxColor, m_colUnselectedBox);
+    updateColorButton(m_btnMarqueeColor, m_colMarquee);
+    updateColorButton(m_btnPreviewColor, m_colPreview);
+    updateColorButton(m_btnMeshWireframeColor, m_colMeshWireframe);
+    m_chkShowPolygonMesh->setChecked(cfg.atlas().showPolygonMeshByDefault);
 
     // Export Defaults
     if (m_comboDefaultFormat && !cfg.exportSettings().defaultFormatId.isEmpty()) {
@@ -1069,6 +1321,21 @@ void SettingsDialog::loadSettings()
         m_spinDefaultZstdLevel->setValue(cfg.exportSettings().defaultZstdLevel);
     }
 
+    m_spinDefaultPadding->setValue(cfg.exportSettings().defaultPadding);
+    m_spinDefaultBorderPadding->setValue(cfg.exportSettings().defaultBorderPadding);
+    m_spinDefaultExtrude->setValue(cfg.exportSettings().defaultExtrude);
+    if (m_comboMaxDimensions) {
+        int dIdx = m_comboMaxDimensions->findData(cfg.exportSettings().defaultMaxWidth);
+        if (dIdx >= 0) {
+            m_comboMaxDimensions->setCurrentIndex(dIdx);
+        }
+    }
+    m_chkDefaultPowerOfTwo->setChecked(cfg.exportSettings().defaultPowerOfTwo);
+    m_chkDefaultForceSquare->setChecked(cfg.exportSettings().defaultForceSquare);
+    m_chkDefaultDeduplicate->setChecked(cfg.exportSettings().defaultDeduplicate);
+    m_chkDefaultTrimSprites->setChecked(cfg.exportSettings().defaultTrimSprites);
+    m_chkNormalMapYFlip->setChecked(cfg.exportSettings().defaultNormalMapYFlip);
+
     // Retro & Hardware Constraints
     if (m_chkRetroEnabled) {
         m_chkRetroEnabled->setChecked(cfg.retroLinter().enabled);
@@ -1086,6 +1353,15 @@ void SettingsDialog::loadSettings()
     if (m_comboTileSize) {
         int tidx = m_comboTileSize->findData(cfg.retroLinter().tileSize);
         if (tidx >= 0) m_comboTileSize->setCurrentIndex(tidx);
+    }
+    if (m_spinMaxSpritesPerScanline) {
+        m_spinMaxSpritesPerScanline->setValue(cfg.retroLinter().maxSpritesPerScanline);
+    }
+    if (m_spinMaxColorsPerSprite) {
+        m_spinMaxColorsPerSprite->setValue(cfg.retroLinter().maxColorsPerSprite);
+    }
+    if (m_spinGuideLineThickness) {
+        m_spinGuideLineThickness->setValue(cfg.retroLinter().guideLineThickness);
     }
     if (m_chkShowTileGrid) {
         m_chkShowTileGrid->setChecked(cfg.retroLinter().showTileGrid);
@@ -1121,22 +1397,45 @@ void SettingsDialog::saveSettings()
     if (m_chkReopenLastProject) {
         cfg.general().reopenLastProject = m_chkReopenLastProject->isChecked();
     }
+    if (m_chkAutoSaveSession) {
+        cfg.project().autoSaveSession = m_chkAutoSaveSession->isChecked();
+    }
 
     cfg.project().undoLimit = m_spinUndoLimit->value();
     cfg.project().maxRecentFiles = m_spinMaxRecentFiles->value();
     cfg.atlas().defaultAlphaThreshold = m_spinAlphaThreshold->value();
     cfg.project().backgroundRemovalTolerance = m_spinBgRemovalTol->value();
+    cfg.project().backgroundMinAlpha = m_spinBgMinAlpha->value();
+    cfg.atlas().defaultVerticalTolerance = m_spinVertTolerance->value();
+
+    // Animation
+    cfg.animation().defaultFps = m_spinDefaultFps->value();
+    cfg.animation().maxFps = m_spinMaxFps->value();
+    cfg.animation().autoPlayOnSelection = m_chkAutoPlayOnSelection->isChecked();
 
     // Git
     cfg.git().authorName = m_editGitAuthorName->text().trimmed();
     cfg.git().authorEmail = m_editGitAuthorEmail->text().trimmed();
 
-    // Atlas
+    // Atlas & Navigation
     cfg.atlas().zoomStep = m_spinZoomStep->value();
     cfg.atlas().zoomMin = m_spinZoomMin->value();
     cfg.atlas().zoomMax = m_spinZoomMax->value();
     cfg.atlas().fitViewPadding = m_spinFitPadding->value();
     cfg.atlas().minSliceSize = m_spinMinSliceSize->value();
+    cfg.atlas().nudgeStepSmall = m_spinNudgeSmall->value();
+    cfg.atlas().nudgeStepLarge = m_spinNudgeLarge->value();
+
+    // Box Style & Colors
+    cfg.visuals().handleSize = m_spinHandleSize->value();
+    cfg.visuals().handleMargin = m_spinHandleMargin->value();
+    cfg.visuals().selectedBoxColor = m_colSelectedBox;
+    cfg.visuals().selectedBoxFillColor = m_colSelectedBoxFill;
+    cfg.visuals().unselectedBoxColor = m_colUnselectedBox;
+    cfg.visuals().marqueeColor = m_colMarquee;
+    cfg.visuals().newSlicePreviewColor = m_colPreview;
+    cfg.visuals().meshWireframeColor = m_colMeshWireframe;
+    cfg.atlas().showPolygonMeshByDefault = m_chkShowPolygonMesh->isChecked();
 
     // Export Defaults
     if (m_comboDefaultFormat && m_comboDefaultFormat->currentIndex() >= 0) {
@@ -1155,6 +1454,20 @@ void SettingsDialog::saveSettings()
         cfg.exportSettings().defaultZstdLevel = m_spinDefaultZstdLevel->value();
     }
 
+    cfg.exportSettings().defaultPadding = m_spinDefaultPadding->value();
+    cfg.exportSettings().defaultBorderPadding = m_spinDefaultBorderPadding->value();
+    cfg.exportSettings().defaultExtrude = m_spinDefaultExtrude->value();
+    if (m_comboMaxDimensions) {
+        int maxDim = m_comboMaxDimensions->currentData().toInt();
+        cfg.exportSettings().defaultMaxWidth = maxDim;
+        cfg.exportSettings().defaultMaxHeight = maxDim;
+    }
+    cfg.exportSettings().defaultPowerOfTwo = m_chkDefaultPowerOfTwo->isChecked();
+    cfg.exportSettings().defaultForceSquare = m_chkDefaultForceSquare->isChecked();
+    cfg.exportSettings().defaultDeduplicate = m_chkDefaultDeduplicate->isChecked();
+    cfg.exportSettings().defaultTrimSprites = m_chkDefaultTrimSprites->isChecked();
+    cfg.exportSettings().defaultNormalMapYFlip = m_chkNormalMapYFlip->isChecked();
+
     // Retro & Hardware Constraints
     if (m_chkRetroEnabled) {
         cfg.retroLinter().enabled = m_chkRetroEnabled->isChecked();
@@ -1170,6 +1483,15 @@ void SettingsDialog::saveSettings()
     }
     if (m_comboTileSize) {
         cfg.retroLinter().tileSize = m_comboTileSize->currentData().toInt();
+    }
+    if (m_spinMaxSpritesPerScanline) {
+        cfg.retroLinter().maxSpritesPerScanline = m_spinMaxSpritesPerScanline->value();
+    }
+    if (m_spinMaxColorsPerSprite) {
+        cfg.retroLinter().maxColorsPerSprite = m_spinMaxColorsPerSprite->value();
+    }
+    if (m_spinGuideLineThickness) {
+        cfg.retroLinter().guideLineThickness = m_spinGuideLineThickness->value();
     }
     if (m_chkShowTileGrid) {
         cfg.retroLinter().showTileGrid = m_chkShowTileGrid->isChecked();
@@ -1231,6 +1553,7 @@ void SettingsDialog::retranslateUi()
     if (m_itemGeneral) m_itemGeneral->setText(0, tr("KEY_SETTINGS_CAT_GENERAL"));
     if (m_itemAtlas) m_itemAtlas->setText(0, tr("KEY_SETTINGS_CAT_ATLAS"));
     if (m_itemExport) m_itemExport->setText(0, tr("Export & VRAM"));
+    if (m_itemRetro) m_itemRetro->setText(0, tr("Retro & Hardware Constraints"));
     if (m_itemPlugins) m_itemPlugins->setText(0, tr("Plugins & Extensions"));
     if (m_itemGit) m_itemGit->setText(0, tr("KEY_SETTINGS_CAT_GIT"));
     if (m_itemUpdates) m_itemUpdates->setText(0, tr("Updates"));
@@ -1245,6 +1568,13 @@ void SettingsDialog::retranslateUi()
     if (m_grpExtraction) m_grpExtraction->setTitle(tr("KEY_SETTINGS_GRP_EXTRACTION"));
     if (m_lblAlphaThreshold) m_lblAlphaThreshold->setText(tr("KEY_SETTINGS_ALPHA_THRESHOLD"));
     if (m_lblBgRemovalTol) m_lblBgRemovalTol->setText(tr("KEY_SETTINGS_BG_REMOVAL_TOL"));
+    if (m_lblBgMinAlpha) m_lblBgMinAlpha->setText(tr("Background Removal Min Alpha:"));
+    if (m_lblVertTolerance) m_lblVertTolerance->setText(tr("Grid / Row Vertical Alignment Tolerance:"));
+
+    if (m_grpAnimation) m_grpAnimation->setTitle(tr("Animation Playback Defaults"));
+    if (m_lblDefaultFps) m_lblDefaultFps->setText(tr("Default Frame Rate:"));
+    if (m_lblMaxFps) m_lblMaxFps->setText(tr("Maximum Frame Rate Limit:"));
+    if (m_chkAutoPlayOnSelection) m_chkAutoPlayOnSelection->setText(tr("Auto-play animation when selected in list"));
 
     if (m_grpLang) m_grpLang->setTitle(tr("KEY_SETTINGS_GRP_LANGUAGE"));
     if (m_lblLangApp) m_lblLangApp->setText(tr("KEY_SETTINGS_LANG_APP"));
@@ -1259,6 +1589,7 @@ void SettingsDialog::retranslateUi()
     if (m_grpStartup) m_grpStartup->setTitle(tr("Startup & Behavior"));
     if (m_chkCheckUpdatesOnStartup) m_chkCheckUpdatesOnStartup->setText(tr("Check automatically for updates on startup"));
     if (m_chkReopenLastProject) m_chkReopenLastProject->setText(tr("Reopen last project on startup"));
+    if (m_chkAutoSaveSession) m_chkAutoSaveSession->setText(tr("Auto-save session state on exit"));
 
     // Git Page
     if (m_hdrGit) m_hdrGit->setText(tr("KEY_SETTINGS_HDR_GIT"));
@@ -1286,6 +1617,21 @@ void SettingsDialog::retranslateUi()
     if (m_grpSlicing) m_grpSlicing->setTitle(tr("KEY_SETTINGS_GRP_SLICING"));
     if (m_lblMinSliceSize) m_lblMinSliceSize->setText(tr("KEY_SETTINGS_MIN_SLICE_SIZE"));
 
+    if (m_grpNudge) m_grpNudge->setTitle(tr("Keyboard Nudge & Positioning"));
+    if (m_lblNudgeSmall) m_lblNudgeSmall->setText(tr("Normal Nudge Step (Arrow keys):"));
+    if (m_lblNudgeLarge) m_lblNudgeLarge->setText(tr("Fast Nudge Step (Shift + Arrow keys):"));
+
+    if (m_grpBoxStyle) m_grpBoxStyle->setTitle(tr("Box Styling & Selection Appearance"));
+    if (m_lblHandleSize) m_lblHandleSize->setText(tr("Resize Handle Size:"));
+    if (m_lblHandleMargin) m_lblHandleMargin->setText(tr("Resize Handle Grab Margin:"));
+    if (m_lblSelectedBoxColor) m_lblSelectedBoxColor->setText(tr("Selected Box Outline Color:"));
+    if (m_lblSelectedBoxFillColor) m_lblSelectedBoxFillColor->setText(tr("Selected Box Fill Color:"));
+    if (m_lblUnselectedBoxColor) m_lblUnselectedBoxColor->setText(tr("Unselected Box Color:"));
+    if (m_lblMarqueeColor) m_lblMarqueeColor->setText(tr("Marquee Selection Color:"));
+    if (m_lblPreviewColor) m_lblPreviewColor->setText(tr("Slice Preview Outline Color:"));
+    if (m_lblMeshWireframeColor) m_lblMeshWireframeColor->setText(tr("Polygon Mesh Wireframe Color:"));
+    if (m_chkShowPolygonMesh) m_chkShowPolygonMesh->setText(tr("Show polygon mesh by default when available"));
+
     // Export Page
     if (m_hdrExport) m_hdrExport->setText(tr("Export & VRAM Defaults"));
     if (m_grpExportDefaults) m_grpExportDefaults->setTitle(tr("Default Export Configurations"));
@@ -1294,6 +1640,17 @@ void SettingsDialog::retranslateUi()
     if (m_lblDefaultAlgorithm) m_lblDefaultAlgorithm->setText(tr("Default Packing Algorithm:"));
     if (m_lblZstdLevel) m_lblZstdLevel->setText(tr("Zstd Compression Level:"));
     if (m_chkDefaultZstd) m_chkDefaultZstd->setText(tr("Enable Zstandard (Zstd) compression by default"));
+
+    if (m_grpPackDefaults) m_grpPackDefaults->setTitle(tr("Texture Packing & Geometry Defaults"));
+    if (m_lblDefaultPadding) m_lblDefaultPadding->setText(tr("Default Inner Sprite Padding:"));
+    if (m_lblDefaultBorderPadding) m_lblDefaultBorderPadding->setText(tr("Default Atlas Border Margin:"));
+    if (m_lblDefaultExtrude) m_lblDefaultExtrude->setText(tr("Default Bleed Border Extrusion:"));
+    if (m_lblMaxDimensions) m_lblMaxDimensions->setText(tr("Default Max Texture Atlas Dimensions:"));
+    if (m_chkDefaultPowerOfTwo) m_chkDefaultPowerOfTwo->setText(tr("Force Power-of-Two (POT 2^n) texture dimensions by default"));
+    if (m_chkDefaultForceSquare) m_chkDefaultForceSquare->setText(tr("Force square aspect ratio (width == height) by default"));
+    if (m_chkDefaultDeduplicate) m_chkDefaultDeduplicate->setText(tr("Detect and share visually identical frames by default"));
+    if (m_chkDefaultTrimSprites) m_chkDefaultTrimSprites->setText(tr("Crop transparent margins (Trim) by default"));
+    if (m_chkNormalMapYFlip) m_chkNormalMapYFlip->setText(tr("Invert Normal Map Green channel (DirectX vs OpenGL Y-Flip)"));
 
     // Retro Page
     if (m_itemRetro) m_itemRetro->setText(0, tr("Retro & Hardware Constraints"));
@@ -1305,7 +1662,10 @@ void SettingsDialog::retranslateUi()
     if (m_lblScanlineLimit) m_lblScanlineLimit->setText(tr("Max Scanline Sprite Width:"));
     if (m_lblMaxVramTiles) m_lblMaxVramTiles->setText(tr("Max VRAM Tile Budget:"));
     if (m_lblTileSize) m_lblTileSize->setText(tr("Tile Grid Resolution:"));
+    if (m_lblMaxSpritesPerScanline) m_lblMaxSpritesPerScanline->setText(tr("Max Sprites Per Scanline:"));
+    if (m_lblMaxColorsPerSprite) m_lblMaxColorsPerSprite->setText(tr("Max Colors Per Sprite / Palette:"));
     if (m_grpRetroVisuals) m_grpRetroVisuals->setTitle(tr("Visual Feedback & Aids"));
+    if (m_lblGuideLineThickness) m_lblGuideLineThickness->setText(tr("Guide Line Thickness:"));
     if (m_chkShowTileGrid) m_chkShowTileGrid->setText(tr("Show subtle 8x8 tile grid in Pixel Editor"));
     if (m_chkShowScanlineGuide) m_chkShowScanlineGuide->setText(tr("Show scanline width boundary guide in Pixel Editor"));
     if (m_chkShowTimelineBadges) m_chkShowTimelineBadges->setText(tr("Show discrete warning badges (pastilles) on Timeline frames"));

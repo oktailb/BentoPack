@@ -99,8 +99,9 @@ public:
             }
         }
 
-        // 3. Major retro sprite limit rules (dashed amber line every limit - doubled width to 2px)
-        QPen zonePen(QColor(245, 158, 11, 180), 2, Qt::DashLine);
+        // 3. Major retro sprite limit rules (dashed amber line every limit)
+        int guideThick = qBound(1, retro.guideLineThickness, 4);
+        QPen zonePen(QColor(245, 158, 11, 180), guideThick, Qt::DashLine);
         zonePen.setCosmetic(true);
         painter->setPen(zonePen);
 

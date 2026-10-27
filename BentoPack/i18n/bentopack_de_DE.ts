@@ -100,7 +100,7 @@
         <translation>Ein leistungsstarkes Tool zur Extraktion und Animation von Sprites</translation>
     </message>
     <message>
-        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
+        <source>Studio d'outillage &amp; technologies multimédia</source>
         <translation>Studio für Werkzeuge und Multimediatechnologien</translation>
     </message>
     <message>
@@ -241,8 +241,8 @@
         <translation>Atlas Bin-Packing (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
-        <translation>Bereit — Parameter anpassen und auf &apos;Packen berechnen&apos; klicken</translation>
+        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
+        <translation>Bereit — Parameter anpassen und auf 'Packen berechnen' klicken</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -538,43 +538,43 @@ Wählen Sie, welcher Zweig wiederhergestellt werden soll:</translation>
     <name>CAsmExtractor</name>
     <message>
         <source>The C/ASM plugin is an export-only plugin and does not import raw source code into sprite sheets.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das C/ASM-Plugin ist ein reines Export-Plugin und importiert keinen rohen Quellcode in Spritesheets.</translation>
     </message>
     <message>
         <source>Export destination path is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Export-Zielpfad ist leer.</translation>
     </message>
     <message>
         <source>Export cancelled by user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Export durch Benutzer abgebrochen.</translation>
     </message>
     <message>
         <source>Generating retro source code (%1)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Generiere Retro-Quellcode (%1)...</translation>
     </message>
     <message>
         <source>Writing file %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Schreibe Datei %1...</translation>
     </message>
     <message>
         <source>Could not open file for writing: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte Datei nicht zum Schreiben öffnen: %1 (%2)</translation>
     </message>
     <message>
         <source>C/ASM code exported successfully to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>C/ASM-Code erfolgreich nach %1 exportiert.</translation>
     </message>
     <message>
         <source>Default Retro Architecture Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard-Retro-Architekturvoreinstellung</translation>
     </message>
     <message>
         <source>Enable Hardware Constraints Linter (PPU scanlines, VRAM warnings)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware-Constraint-Linter aktivieren (PPU-Scanlines, VRAM-Warnungen)</translation>
     </message>
     <message>
         <source>Exports native C/C++ arrays and pure Assembly data (.h, .c, .asm, .s, .inc) directly usable in homebrew SDKs without game engines.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportiert native C/C++-Arrays und reine Assemblerdaten (.h, .c, .asm, .s, .inc), die direkt in Homebrew-SDKs ohne Game-Engines verwendbar sind.</translation>
     </message>
 </context>
 <context>
@@ -991,8 +991,8 @@ Strikte Entfernung: löscht das Fransenpixel.</translation>
         <translation>Neue Ebene (z. B. Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
-        <translation>%1 Frame(s) für neue Ebene &apos;Emissive (_e)&apos; vorbereitet</translation>
+        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
+        <translation>%1 Frame(s) für neue Ebene 'Emissive (_e)' vorbereitet</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -1800,27 +1800,27 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
     <name>IffExtractor</name>
     <message>
         <source>Cannot open IFF file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann IFF-Datei nicht öffnen: %1</translation>
     </message>
     <message>
         <source>Failed to decode IFF image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Dekodieren des IFF-Bildes: %1</translation>
     </message>
     <message>
         <source>Cannot export IFF: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>IFF-Export nicht möglich: Atlas-Bild ist leer.</translation>
     </message>
     <message>
         <source>Failed to encode IFF: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Kodieren von IFF: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann Datei nicht zum Schreiben öffnen: %1</translation>
     </message>
     <message>
         <source>Failed to write all IFF bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Schreiben aller IFF-Bytes auf die Festplatte.</translation>
     </message>
 </context>
 <context>
@@ -2295,7 +2295,7 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
     </message>
     <message>
         <source>KEY_ACTION_RETRO_RIPPER</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro-ROM- und VRAM-Tile-Ripper...</translation>
     </message>
     <message>
         <source>KEY_MENU_RECENT_PROJECTS</source>
@@ -2363,11 +2363,11 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
     </message>
     <message>
         <source>Retro ROMs &amp; VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro-ROMs &amp; VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;Alle Dateien (*.*)</translation>
     </message>
     <message>
         <source>Select Retro ROM or VRAM Dump</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro-ROM oder VRAM-Dump auswählen</translation>
     </message>
     <message>
         <source>BentoPack (*.bento);;All Files (*.*)</source>
@@ -2383,7 +2383,7 @@ Klicken Sie auf einen Knoten, um Details anzuzeigen.</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Zur aktiven Animation &apos;%1&apos; hinzufügen</translation>
+        <translation>Zur aktiven Animation '%1' hinzufügen</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2680,7 +2680,7 @@ Möchten Sie diese Sitzung wiederherstellen?</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Das aktuelle Projekt &apos;%1&apos; enthält ungespeicherte Änderungen.
+        <translation>Das aktuelle Projekt '%1' enthält ungespeicherte Änderungen.
 Möchten Sie diese vor dem Fortfahren speichern?</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Neue Ebene (z. B. Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
-        <translation>%1 Frame(s) für neue Ebene &apos;Normal (_n)&apos; vorbereitet</translation>
+        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
+        <translation>%1 Frame(s) für neue Ebene 'Normal (_n)' vorbereitet</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3083,49 +3083,49 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
     <name>PaletteStripWidget</name>
     <message>
         <source>Active 16-color palette swatches (indices 0 to 15)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktive 16-Farben-Palettenfelder (Indizes 0 bis 15)</translation>
     </message>
 </context>
 <context>
     <name>PcxExtractor</name>
     <message>
         <source>Cannot open PCX file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann PCX-Datei nicht öffnen: %1</translation>
     </message>
     <message>
         <source>Failed to decode PCX image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Dekodieren des PCX-Bildes: %1</translation>
     </message>
     <message>
         <source>Cannot export PCX: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>PCX-Export nicht möglich: Atlas-Bild ist leer.</translation>
     </message>
     <message>
         <source>Failed to encode PCX: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Kodieren von PCX: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann Datei nicht zum Schreiben öffnen: %1</translation>
     </message>
     <message>
         <source>Failed to write all PCX bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Schreiben aller PCX-Bytes auf die Festplatte.</translation>
     </message>
 </context>
 <context>
     <name>Pico8Extractor</name>
     <message>
         <source>Cannot open PICO-8 file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann PICO-8-Datei nicht öffnen: %1</translation>
     </message>
     <message>
         <source>Cannot export PICO-8: Document atlas image is null.</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8-Export nicht möglich: Atlas-Bild ist leer.</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann Datei nicht zum Schreiben öffnen: %1</translation>
     </message>
 </context>
 <context>
@@ -3290,12 +3290,12 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Sekundärfarbe (Klicken, um Profi-Farbauswahl zu öffnen)</translation>
     </message>
     <message>
-        <source>Apply to &apos;%1&apos; frames</source>
-        <translation>Auf &apos;%1&apos;-Frames anwenden</translation>
+        <source>Apply to '%1' frames</source>
+        <translation>Auf '%1'-Frames anwenden</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
-        <translation>CDT-Netzgenerierung auf alle Frames der Animation &apos;%1&apos; anwenden</translation>
+        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
+        <translation>CDT-Netzgenerierung auf alle Frames der Animation '%1' anwenden</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3862,7 +3862,7 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Auf Anim anwenden</translation>
     </message>
     <message>
-        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <source>Apply current frame's pivot point to all frames in the current animation</source>
         <translation>Pivot-Punkt des aktuellen Frames auf alle Frames der aktuellen Animation anwenden</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Auf alle anwenden</translation>
     </message>
     <message>
-        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <source>Apply current frame's pivot point to all frames in the entire project</source>
         <translation>Pivot-Punkt des aktuellen Frames auf alle Frames im gesamten Projekt anwenden</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Möchten Sie diese vor dem Fortfahren speichern?</translation>
         <translation>Alle Frames (%1)</translation>
     </message>
     <message>
-        <source>Apply to all &apos;%1&apos; frames</source>
-        <translation>Auf alle Frames von &apos;%1&apos; anwenden</translation>
+        <source>Apply to all '%1' frames</source>
+        <translation>Auf alle Frames von '%1' anwenden</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,8 +4282,8 @@ Export nach Godot, Unity, Unreal Paper2D und JSON.</translation>
         <translation>CDT-Polygonnetz-Editor (kein Polygonnetz für diesen Frame) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
-        <translation>Zeichnungsänderungen, Netzgenerierung und Filter auf alle Frames der Animation &apos;%1&apos; anwenden</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
+        <translation>Zeichnungsänderungen, Netzgenerierung und Filter auf alle Frames der Animation '%1' anwenden</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4354,8 +4354,8 @@ Möchten Sie den Atlas jetzt neu packen?</translation>
         <translation>⚡ CDT wird berechnet...</translation>
     </message>
     <message>
-        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
-        <translation>Filter auf alle &apos;%1&apos;-Frames anwenden (%2 Frames)</translation>
+        <source>Apply filter to all '%1' frames (%2 frames)</source>
+        <translation>Filter auf alle '%1'-Frames anwenden (%2 Frames)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4472,35 +4472,35 @@ Möchten Sie den Atlas jetzt neu packen?</translation>
     <name>PlistExtractor</name>
     <message>
         <source>Cannot open plist file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann plist-Datei nicht öffnen: %1</translation>
     </message>
     <message>
         <source>XML parse error in plist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>XML-Parsing-Fehler in plist: %1</translation>
     </message>
     <message>
-        <source>No &apos;frames&apos; dictionary found in plist.</source>
-        <translation type="unfinished"></translation>
+        <source>No 'frames' dictionary found in plist.</source>
+        <translation>Kein 'frames'-Dictionary in plist gefunden.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugehörige Atlas-Bilddatei für %1 nicht gefunden</translation>
     </message>
     <message>
         <source>Failed to load atlas image: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Laden des Atlas-Bildes: %1 (%2)</translation>
     </message>
     <message>
         <source>Document has no frames to export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokument hat keine Frames zum Exportieren.</translation>
     </message>
     <message>
         <source>Failed to save companion atlas image: %1</source>
-        <translation type="unfinished">Zugehöriges Atlas-Bild konnte nicht gespeichert werden: %1</translation>
+        <translation>Fehler beim Speichern des zugehörigen Atlas-Bildes: %1</translation>
     </message>
     <message>
         <source>Cannot write plist file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann plist-Datei nicht schreiben: %1</translation>
     </message>
 </context>
 <context>
@@ -4673,7 +4673,7 @@ Möchten Sie den Atlas jetzt neu packen?</translation>
     </message>
     <message>
         <source>Project file path is empty. Use Save As.</source>
-        <translation>Projektdateipfad ist leer. Verwenden Sie &apos;Speichern unter&apos;.</translation>
+        <translation>Projektdateipfad ist leer. Verwenden Sie 'Speichern unter'.</translation>
     </message>
     <message>
         <source>Saving project %1...</source>
@@ -4845,32 +4845,32 @@ Möchten Sie den Atlas jetzt neu packen?</translation>
         <translation>Frame %1 in %2 zusammenführen</translation>
     </message>
     <message>
-        <source>Create Animation &apos;%1&apos;</source>
-        <translation>Animation &apos;%1&apos; erstellen</translation>
+        <source>Create Animation '%1'</source>
+        <translation>Animation '%1' erstellen</translation>
     </message>
     <message>
-        <source>Delete Animation &apos;%1&apos;</source>
-        <translation>Animation &apos;%1&apos; löschen</translation>
+        <source>Delete Animation '%1'</source>
+        <translation>Animation '%1' löschen</translation>
     </message>
     <message>
-        <source>Reverse Animation &apos;%1&apos;</source>
-        <translation>Animation &apos;%1&apos; umkehren</translation>
+        <source>Reverse Animation '%1'</source>
+        <translation>Animation '%1' umkehren</translation>
     </message>
     <message>
-        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>Animation &apos;%1&apos; in &apos;%2&apos; umbenennen</translation>
+        <source>Rename Animation '%1' to '%2'</source>
+        <translation>Animation '%1' in '%2' umbenennen</translation>
     </message>
     <message>
-        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
-        <translation>Animation &apos;%1&apos; als &apos;%2&apos; duplizieren</translation>
+        <source>Duplicate Animation '%1' as '%2'</source>
+        <translation>Animation '%1' als '%2' duplizieren</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation &apos;%1&apos;</source>
-        <translation>Reihenfolge der Frames in Animation &apos;%1&apos; ändern</translation>
+        <source>Reorder Frames in Animation '%1'</source>
+        <translation>Reihenfolge der Frames in Animation '%1' ändern</translation>
     </message>
     <message>
-        <source>Change Properties for Animation &apos;%1&apos;</source>
-        <translation>Eigenschaften für Animation &apos;%1&apos; ändern</translation>
+        <source>Change Properties for Animation '%1'</source>
+        <translation>Eigenschaften für Animation '%1' ändern</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -5080,19 +5080,29 @@ Paket installieren:
     </message>
     <message>
         <source>1 frame exceeds 64 px width (%1 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
-        <translation type="unfinished"></translation>
+        <translation>1 Frame überschreitet 64 px Breite (%1 px): verursacht PPU-Scanline-Flackern auf NES / Game Boy (max. 8 Sprites à 8px).</translation>
     </message>
     <message>
         <source>%1 frames exceed 64 px width (up to %2 px): will trigger PPU scanline flickering on NES / Game Boy (max 8 sprites of 8px).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Frames überschreiten 64 px Breite (bis zu %2 px): verursacht PPU-Scanline-Flackern auf NES / Game Boy (max. 8 Sprites à 8px).</translation>
     </message>
     <message>
         <source>1 frame exceeds VIC-II hardware sprite size (24x21 px).</source>
-        <translation type="unfinished"></translation>
+        <translation>1 Frame überschreitet die VIC-II-Hardware-Spritegröße (24x21 px).</translation>
     </message>
     <message>
         <source>%1 frames exceed VIC-II hardware sprite size (24x21 px).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Frames überschreiten die VIC-II-Hardware-Spritegröße (24x21 px).</translation>
+    </message>
+    <message>
+        <source>Frame #%1: %2x%3 px
+⚠️ Exceeds retro scanline limit: %4 px (width: %5 px)</source>
+        <translation>Frame #%1: %2x%3 px
+⚠️ Überschreitet Retro-Scanline-Limit: %4 px (Breite: %5 px)</translation>
+    </message>
+    <message>
+        <source>Frame #%1: %2x%3 px</source>
+        <translation>Frame #%1: %2x%3 px</translation>
     </message>
 </context>
 <context>
@@ -5122,163 +5132,163 @@ Paket installieren:
     <name>Retro::CAsmDialog</name>
     <message>
         <source>C / C++ &amp; Assembly Retro Code Exporter</source>
-        <translation type="unfinished"></translation>
+        <translation>C / C++ &amp; Assembler Retro-Code-Exporter</translation>
     </message>
     <message>
         <source>Target Retro Architecture Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziel-Retro-Architektur-Voreinstellung</translation>
     </message>
     <message>
         <source>Language &amp; Pixel Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache &amp; Pixel-Layout</translation>
     </message>
     <message>
         <source>C / C++ Header (.h)</source>
-        <translation type="unfinished"></translation>
+        <translation>C / C++ Header (.h)</translation>
     </message>
     <message>
         <source>C Source (.c)</source>
-        <translation type="unfinished"></translation>
+        <translation>C-Quelldatei (.c)</translation>
     </message>
     <message>
         <source>Assembly Motorola / VASM (68000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembler Motorola / VASM (68000)</translation>
     </message>
     <message>
         <source>Assembly RGBDS (Game Boy)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembler RGBDS (Game Boy)</translation>
     </message>
     <message>
         <source>Assembly ca65 / cc65 (6502)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembler ca65 / cc65 (6502)</translation>
     </message>
     <message>
         <source>Assembly NASM / TASM (x86)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembler NASM / TASM (x86)</translation>
     </message>
     <message>
         <source>Assembly GNU as (.byte/.long)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembler GNU as (.byte/.long)</translation>
     </message>
     <message>
         <source>Assembly WLA-DX (Z80)</source>
-        <translation type="unfinished"></translation>
+        <translation>Assembler WLA-DX (Z80)</translation>
     </message>
     <message>
         <source>PICO-8 Lua String/Table</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 Lua-Zeichenkette / Tabelle</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache:</translation>
     </message>
     <message>
         <source>Planar 2bpp Tiles (8x8) [GB/NES]</source>
-        <translation type="unfinished"></translation>
+        <translation>Planare 2bpp-Kacheln (8x8) [GB/NES]</translation>
     </message>
     <message>
         <source>Planar 4bpp Tiles (8x8) [SMS/MD/SNES]</source>
-        <translation type="unfinished"></translation>
+        <translation>Planare 4bpp-Kacheln (8x8) [SMS/MD/SNES]</translation>
     </message>
     <message>
         <source>Linear 4bpp Packed (2 px/byte)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineare 4bpp gepackt (2 px/Byte)</translation>
     </message>
     <message>
         <source>Linear 8bpp Indexed (1 byte/px)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineare 8bpp indiziert (1 Byte/px)</translation>
     </message>
     <message>
         <source>Amiga Planar Bitplanes (1-5 planes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Amiga planare Bitebenen (1-5 Ebenen)</translation>
     </message>
     <message>
         <source>C64 Multicolor Sprite (24x21, 64B)</source>
-        <translation type="unfinished"></translation>
+        <translation>C64 Mehrfarben-Sprite (24x21, 64B)</translation>
     </message>
     <message>
         <source>ZX Spectrum (1bpp + 8x8 attrs)</source>
-        <translation type="unfinished"></translation>
+        <translation>ZX Spectrum (1bpp + 8x8 Attribute)</translation>
     </message>
     <message>
         <source>Linear 1bpp Mono (8 px/byte)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineare 1bpp Mono (8 px/Byte)</translation>
     </message>
     <message>
         <source>Tile/Pixel Layout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kachel-/Pixel-Layout:</translation>
     </message>
     <message>
         <source>Number Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahlenformat:</translation>
     </message>
     <message>
         <source>Bytes per Line:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bytes pro Zeile:</translation>
     </message>
     <message>
         <source>Optional symbol prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Optionales Symbolpräfix</translation>
     </message>
     <message>
         <source>Symbol Prefix:</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbolpräfix:</translation>
     </message>
     <message>
         <source>Data Type (C):</source>
-        <translation type="unfinished"></translation>
+        <translation>Datentyp (C):</translation>
     </message>
     <message>
         <source>e.g. const, PROGMEM, ALIGN(2)</source>
-        <translation type="unfinished"></translation>
+        <translation>z.B. const, PROGMEM, ALIGN(2)</translation>
     </message>
     <message>
         <source>Storage Qualifier:</source>
-        <translation type="unfinished"></translation>
+        <translation>Speicherqualifizierer:</translation>
     </message>
     <message>
         <source>Export Sections &amp; Linter</source>
-        <translation type="unfinished"></translation>
+        <translation>Export-Abschnitte &amp; Linter</translation>
     </message>
     <message>
         <source>Export Hardware Color Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware-Farbpalette exportieren</translation>
     </message>
     <message>
         <source>Export Animation Sequences Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Animationssequenz-Tabelle exportieren</translation>
     </message>
     <message>
         <source>Export Sprite Metadata Struct (Pivot, Size)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprite-Metadaten-Struktur exportieren (Pivot, Größe)</translation>
     </message>
     <message>
         <source>Include C Header Guards (#ifndef)</source>
-        <translation type="unfinished"></translation>
+        <translation>C-Header-Guards einbinden (#ifndef)</translation>
     </message>
     <message>
         <source>Include Scanline &amp; Hardware Linter Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Scanline- &amp; Hardware-Linter-Warnungen einbinden</translation>
     </message>
     <message>
         <source>📋 Copy Code</source>
-        <translation type="unfinished"></translation>
+        <translation>📋 Code kopieren</translation>
     </message>
     <message>
         <source>Export Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Code exportieren</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <source>Total ROM: %1 Bytes (%2 KB) | %3 Tiles (8x8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamte ROM: %1 Bytes (%2 KB) | %3 Kacheln (8x8)</translation>
     </message>
     <message>
         <source>✅ Copied!</source>
-        <translation type="unfinished"></translation>
+        <translation>✅ Kopiert!</translation>
     </message>
 </context>
 <context>
@@ -5395,258 +5405,258 @@ Paket installieren:
     <name>RetroTileExplorerDialog</name>
     <message>
         <source>Retro Console ROM &amp; VRAM Tile Ripper</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro-Konsolen-ROM- &amp; VRAM-Tile-Ripper</translation>
     </message>
     <message>
         <source>🎯 Detected Graphic Banks</source>
-        <translation type="unfinished"></translation>
+        <translation>🎯 Erkannte Grafikbänke</translation>
     </message>
     <message>
         <source>📍 Memory Offset / Address</source>
-        <translation type="unfinished"></translation>
+        <translation>📍 Speicheroffset / Adresse</translation>
     </message>
     <message>
         <source>Hex:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hex:</translation>
     </message>
     <message>
         <source>Dec:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dez:</translation>
     </message>
     <message>
         <source>Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Format:</translation>
     </message>
     <message>
         <source>SNES (4bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES (4bpp planar)</translation>
     </message>
     <message>
         <source>Sega Mega Drive (4bpp Chunky)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Mega Drive (4bpp chunky)</translation>
     </message>
     <message>
         <source>Nintendo Game Boy (2bpp Interleaved)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo Game Boy (2bpp verschachtelt)</translation>
     </message>
     <message>
         <source>NES / Famicom (2bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>NES / Famicom (2bpp planar)</translation>
     </message>
     <message>
         <source>Sega Master System (4bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Master System (4bpp planar)</translation>
     </message>
     <message>
         <source>SNK Neo-Geo (4bpp 16x16)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNK Neo-Geo (4bpp 16x16)</translation>
     </message>
     <message>
         <source>Sony PSX (TIM Direct)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony PSX (TIM Direct)</translation>
     </message>
     <message>
         <source>Raw Linear (8bpp Chunky)</source>
-        <translation type="unfinished"></translation>
+        <translation>Roh linear (8bpp chunky)</translation>
     </message>
     <message>
         <source>Grid Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitterbreite:</translation>
     </message>
     <message>
         <source> tiles</source>
-        <translation type="unfinished"></translation>
+        <translation> Kacheln</translation>
     </message>
     <message>
         <source>Tile Count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kachelanzahl:</translation>
     </message>
     <message>
         <source>⚙️ Decoding &amp; Tile Patterns</source>
-        <translation type="unfinished"></translation>
+        <translation>⚙️ Dekodierung &amp; Kachelmuster</translation>
     </message>
     <message>
         <source>SNES (3bpp Planar)</source>
-        <translation type="unfinished"></translation>
+        <translation>SNES (3bpp planar)</translation>
     </message>
     <message>
         <source>Pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation>Muster:</translation>
     </message>
     <message>
         <source>8x8 Linear (Tiles &amp; Backgrounds)</source>
-        <translation type="unfinished"></translation>
+        <translation>8x8 linear (Kacheln &amp; Hintergründe)</translation>
     </message>
     <message>
         <source>16x16 Sprites (2x2 Sequential)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 Sprites (2x2 sequentiell)</translation>
     </message>
     <message>
         <source>16x16 Sprites (SNES VRAM Stride 16)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 Sprites (SNES VRAM Stride 16)</translation>
     </message>
     <message>
         <source>16x16 Sprites (VRAM Stride 32)</source>
-        <translation type="unfinished"></translation>
+        <translation>16x16 Sprites (VRAM Stride 32)</translation>
     </message>
     <message>
         <source>32x32 Sprites (4x4 Matrix)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 Sprites (4x4 Matrix)</translation>
     </message>
     <message>
         <source>32x32 Sprites (2x2*4 Quad SNESTilesKitten)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 Sprites (2x2*4 Quad SNESTilesKitten)</translation>
     </message>
     <message>
         <source>32x32 Sprites (SNES VRAM Stride 16)</source>
-        <translation type="unfinished"></translation>
+        <translation>32x32 Sprites (SNES VRAM Stride 16)</translation>
     </message>
     <message>
         <source>🎨 Palette Studio</source>
-        <translation type="unfinished"></translation>
+        <translation>🎨 Paletten-Studio</translation>
     </message>
     <message>
         <source>Source:</source>
-        <translation type="unfinished"></translation>
+        <translation>Quelle:</translation>
     </message>
     <message>
         <source>Detected:</source>
-        <translation type="unfinished"></translation>
+        <translation>Erkannt:</translation>
     </message>
     <message>
         <source>PC Offset:</source>
-        <translation type="unfinished"></translation>
+        <translation>PC-Offset:</translation>
     </message>
     <message>
         <source>👁️ Inspection &amp; Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>👁️ Inspektion &amp; Zoom</translation>
     </message>
     <message>
         <source>Transparent #0</source>
-        <translation type="unfinished"></translation>
+        <translation>Transparent #0</translation>
     </message>
     <message>
         <source>Tile Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Kachelgitter</translation>
     </message>
     <message>
         <source>Highlight Detected Sprites</source>
-        <translation type="unfinished"></translation>
+        <translation>Erkannte Sprites hervorheben</translation>
     </message>
     <message>
         <source>Zoom:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <source>📥 Import Entire Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>📥 Gesamtes Sheet importieren</translation>
     </message>
     <message>
         <source>Imports the current decoded tile sheet directly as a single atlas image.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importiert das aktuell dekodierte Kachel-Sheet direkt als einzelnes Atlas-Bild.</translation>
     </message>
     <message>
         <source>✨ Extract Sprites to Project</source>
-        <translation type="unfinished"></translation>
+        <translation>✨ Sprites ins Projekt extrahieren</translation>
     </message>
     <message>
         <source>Automatically slices and imports all detected character sprites and objects into BentoPack frames.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schneidet automatisch alle erkannten Zeichensprites und Objekte aus und importiert sie in BentoPack-Frames.</translation>
     </message>
     <message>
         <source>File Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateifehler</translation>
     </message>
     <message>
         <source>Cannot open ROM/VRAM file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ROM/VRAM-Datei nicht öffnen: %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; — %2 bytes (%3 KB)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; — %2 Bytes (%3 KB)</translation>
     </message>
     <message>
         <source>🎮 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>🎮 %1</translation>
     </message>
     <message>
         <source>Beginning of File (0x000000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateianfang (0x000000)</translation>
     </message>
     <message>
         <source>None auto-detected in ROM</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine in ROM automatisch erkannt</translation>
     </message>
     <message>
         <source>🎨 ROM Palette (Auto-Scan)</source>
-        <translation type="unfinished"></translation>
+        <translation>🎨 ROM-Palette (Auto-Scan)</translation>
     </message>
     <message>
         <source>🎯 ROM Palette (Manual Hex)</source>
-        <translation type="unfinished"></translation>
+        <translation>🎯 ROM-Palette (Manuell Hex)</translation>
     </message>
     <message>
         <source>Harmonic Retro Preview (Shaded)</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonische Retro-Vorschau (Schattiert)</translation>
     </message>
     <message>
         <source>Grayscale (Contrast)</source>
-        <translation type="unfinished"></translation>
+        <translation>Graustufen (Kontrast)</translation>
     </message>
     <message>
         <source>No decodable tile data at offset 0x%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine dekodierbaren Kacheldaten bei Offset 0x%1</translation>
     </message>
     <message>
         <source>Empty sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Leeres Sheet</translation>
     </message>
     <message>
         <source>Decoded: %1 tiles (%2x%3 px) | Zoom: %4x | Pattern: %5 | Palette: 0x%6 | Offset: 0x%7</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekodiert: %1 Kacheln (%2x%3 px) | Zoom: %4x | Muster: %5 | Palette: 0x%6 | Offset: 0x%7</translation>
     </message>
 </context>
 <context>
     <name>RetroTileExtractor</name>
     <message>
         <source>Cannot open retro ROM/VRAM file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann Retro-ROM/VRAM-Datei nicht öffnen: %1</translation>
     </message>
     <message>
         <source>File is empty: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei ist leer: %1</translation>
     </message>
     <message>
         <source>Failed to decode PSX TIM: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Dekodieren von PSX TIM: %1</translation>
     </message>
     <message>
         <source>Insufficient tile data at offset %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unzureichende Kacheldaten bei Offset %1.</translation>
     </message>
     <message>
         <source>Failed to decode retro tile stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Dekodieren des Retro-Kachel-Streams.</translation>
     </message>
     <message>
         <source>Cannot export: Document atlas image is null.</source>
-        <translation type="unfinished">Export nicht möglich: Dokumenten-Atlas-Bild ist null.</translation>
+        <translation>Export nicht möglich: Atlas-Bild ist leer.</translation>
     </message>
     <message>
         <source>Failed to encode retro tiles: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Kodieren von Retro-Kacheln: %1</translation>
     </message>
     <message>
         <source>Cannot open file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann Datei nicht zum Schreiben öffnen: %1</translation>
     </message>
     <message>
         <source>Failed to write all tile bytes to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Schreiben aller Kachel-Bytes auf die Festplatte.</translation>
     </message>
 </context>
 <context>
@@ -5864,11 +5874,11 @@ Paket installieren:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Status: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 aktiv&lt;/b&gt; (Verlauf und Branch-Management betriebsbereit)</translation>
+        <translation>Status: &lt;b style='color:#27ae60;'&gt;LibGit2 aktiv&lt;/b&gt; (Verlauf und Branch-Management betriebsbereit)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Status: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 nicht kompiliert&lt;/b&gt; (Git-Verlauf deaktiviert)</translation>
+        <translation>Status: &lt;b style='color:#e74c3c;'&gt;LibGit2 nicht kompiliert&lt;/b&gt; (Git-Verlauf deaktiviert)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -5896,7 +5906,7 @@ Paket installieren:
     </message>
     <message>
         <source>KEY_SETTINGS_FIT_PADDING</source>
-        <translation>Padding bei &apos;An Ansicht anpassen&apos;:</translation>
+        <translation>Padding bei 'An Ansicht anpassen':</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GRP_SLICING</source>
@@ -5927,8 +5937,96 @@ Paket installieren:
         <translation>Standard-Zielformat:</translation>
     </message>
     <message>
+        <source>Click to customize color (%1)</source>
+        <translation>Klicken zum Anpassen der Farbe (%1)</translation>
+    </message>
+    <message>
+        <source>Select Color</source>
+        <translation>Farbe auswählen</translation>
+    </message>
+    <message>
         <source>Retro &amp; Hardware Constraints</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro- &amp; Hardware-Einschränkungen</translation>
+    </message>
+    <message>
+        <source>Background Removal Min Alpha:</source>
+        <translation>Hintergrundentfernung Min. Alpha:</translation>
+    </message>
+    <message>
+        <source>Grid / Row Vertical Alignment Tolerance:</source>
+        <translation>Gitter / Zeilen vertikale Ausrichtungstoleranz:</translation>
+    </message>
+    <message>
+        <source>Animation Playback Defaults</source>
+        <translation>Standardwerte für Animationswiedergabe</translation>
+    </message>
+    <message>
+        <source>Default Frame Rate:</source>
+        <translation>Standard-Bildrate:</translation>
+    </message>
+    <message>
+        <source>Maximum Frame Rate Limit:</source>
+        <translation>Maximale Bildratenbegrenzung:</translation>
+    </message>
+    <message>
+        <source>Auto-play animation when selected in list</source>
+        <translation>Animation automatisch abspielen bei Auswahl in Liste</translation>
+    </message>
+    <message>
+        <source>Auto-save session state on exit</source>
+        <translation>Sitzungszustand beim Beenden automatisch speichern</translation>
+    </message>
+    <message>
+        <source>Keyboard Nudge &amp; Positioning</source>
+        <translation>Tastaturverschiebung &amp; Positionierung</translation>
+    </message>
+    <message>
+        <source>Normal Nudge Step (Arrow keys):</source>
+        <translation>Normaler Schritt (Pfeiltasten):</translation>
+    </message>
+    <message>
+        <source>Fast Nudge Step (Shift + Arrow keys):</source>
+        <translation>Schneller Schritt (Umschalt + Pfeiltasten):</translation>
+    </message>
+    <message>
+        <source>Box Styling &amp; Selection Appearance</source>
+        <translation>Box-Stil &amp; Auswahlerscheinung</translation>
+    </message>
+    <message>
+        <source>Resize Handle Size:</source>
+        <translation>Größe der Ziehpunkte:</translation>
+    </message>
+    <message>
+        <source>Resize Handle Grab Margin:</source>
+        <translation>Fangbereich der Ziehpunkte:</translation>
+    </message>
+    <message>
+        <source>Selected Box Outline Color:</source>
+        <translation>Umrissfarbe ausgewählter Boxen:</translation>
+    </message>
+    <message>
+        <source>Selected Box Fill Color:</source>
+        <translation>Füllfarbe ausgewählter Boxen:</translation>
+    </message>
+    <message>
+        <source>Unselected Box Color:</source>
+        <translation>Farbe nicht ausgewählter Boxen:</translation>
+    </message>
+    <message>
+        <source>Marquee Selection Color:</source>
+        <translation>Auswahlrahmenfarbe:</translation>
+    </message>
+    <message>
+        <source>Slice Preview Outline Color:</source>
+        <translation>Umrissfarbe der Schnittvorschau:</translation>
+    </message>
+    <message>
+        <source>Polygon Mesh Wireframe Color:</source>
+        <translation>Drahtgitterfarbe für Polygonnetz:</translation>
+    </message>
+    <message>
+        <source>Show polygon mesh by default when available</source>
+        <translation>Polygonnetz standardmäßig anzeigen, wenn verfügbar</translation>
     </message>
     <message>
         <source>PNG (Standard, Lossless)</source>
@@ -5975,88 +6073,144 @@ Paket installieren:
         <translation>Zstd-Kompressionsstufe:</translation>
     </message>
     <message>
+        <source>Texture Packing &amp; Geometry Defaults</source>
+        <translation>Standardwerte für Texturpacken &amp; Geometrie</translation>
+    </message>
+    <message>
+        <source>Default Inner Sprite Padding:</source>
+        <translation>Standard-Innenabstand der Sprites:</translation>
+    </message>
+    <message>
+        <source>Default Atlas Border Margin:</source>
+        <translation>Standard-Atlas-Randabstand:</translation>
+    </message>
+    <message>
+        <source>Default Bleed Border Extrusion:</source>
+        <translation>Standard-Anschnittüberhang (Bleed):</translation>
+    </message>
+    <message>
+        <source>Default Max Texture Atlas Dimensions:</source>
+        <translation>Standardmäßige max. Texturatlas-Abmessungen:</translation>
+    </message>
+    <message>
+        <source>Force Power-of-Two (POT 2^n) texture dimensions by default</source>
+        <translation>Standardmäßig Zweierpotenz-Texturmaße erzwingen (POT 2^n)</translation>
+    </message>
+    <message>
+        <source>Force square aspect ratio (width == height) by default</source>
+        <translation>Standardmäßig quadratisches Seitenverhältnis erzwingen</translation>
+    </message>
+    <message>
+        <source>Detect and share visually identical frames by default</source>
+        <translation>Visuell identische Frames standardmäßig erkennen und teilen</translation>
+    </message>
+    <message>
+        <source>Crop transparent margins (Trim) by default</source>
+        <translation>Transparente Ränder standardmäßig zuschneiden (Trim)</translation>
+    </message>
+    <message>
+        <source>Invert Normal Map Green channel (DirectX vs OpenGL Y-Flip)</source>
+        <translation>Grünkanal der Normal-Map invertieren (DirectX vs. OpenGL Y-Flip)</translation>
+    </message>
+    <message>
         <source>Enable Hardware PPU Constraints &amp; Retro Linters (Active by default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware-PPU-Einschränkungen &amp; Retro-Linter aktivieren (standardmäßig aktiv)</translation>
     </message>
     <message>
         <source>Target System Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Zielsystemprofil</translation>
     </message>
     <message>
         <source>Custom / Generic Retro</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefiniert / Generisches Retro</translation>
     </message>
     <message>
         <source>Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo Game Boy (DMG / CGB) - 64px Scanline, 256 Kacheln</translation>
     </message>
     <message>
         <source>Nintendo NES / Famicom - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Nintendo NES / Famicom - 64px Scanline, 256 Kacheln</translation>
     </message>
     <message>
         <source>Sega Master System / Game Gear - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Master System / Game Gear - 64px Scanline, 256 Kacheln</translation>
     </message>
     <message>
         <source>Sega Mega Drive / Genesis - 128px scanline, 512 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega Mega Drive / Genesis - 128px Scanline, 512 Kacheln</translation>
     </message>
     <message>
         <source>Commodore 64 (Multicolor) - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Commodore 64 (Mehrfarbig) - 64px Scanline, 256 Kacheln</translation>
     </message>
     <message>
         <source>Super Nintendo (SNES) - 256px scanline, 512 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Super Nintendo (SNES) - 256px Scanline, 512 Kacheln</translation>
     </message>
     <message>
         <source>PICO-8 - 64px scanline, 256 tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>PICO-8 - 64px Scanline, 256 Kacheln</translation>
     </message>
     <message>
         <source>Hardware Profile:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware-Profil:</translation>
     </message>
     <message>
         <source>Hardware Constraint Limits</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware-Einschränkungsgrenzen</translation>
     </message>
     <message>
         <source>Max Scanline Sprite Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Max. Scanline-Spritebreite:</translation>
     </message>
     <message>
         <source>Max VRAM Tile Budget:</source>
-        <translation type="unfinished"></translation>
+        <translation>Max. VRAM-Kachel-Budget:</translation>
     </message>
     <message>
         <source>Tile Grid Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kachelgitter-Auflösung:</translation>
+    </message>
+    <message>
+        <source>Max Sprites Per Scanline:</source>
+        <translation>Max. Sprites pro Scanline:</translation>
+    </message>
+    <message>
+        <source>Max Colors Per Sprite / Palette:</source>
+        <translation>Max. Farben pro Sprite / Palette:</translation>
     </message>
     <message>
         <source>Visual Feedback &amp; Aids</source>
-        <translation type="unfinished"></translation>
+        <translation>Visuelles Feedback &amp; Hilfsmittel</translation>
+    </message>
+    <message>
+        <source>Guide Line Thickness:</source>
+        <translation>Hilfslinien-Dicke:</translation>
     </message>
     <message>
         <source>Show subtle 8x8 tile grid in Pixel Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Dezentes 8x8-Kachelgitter im Pixel-Editor anzeigen</translation>
     </message>
     <message>
         <source>Show scanline width boundary guide in Pixel Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Scanline-Breitenbegrenzung im Pixel-Editor anzeigen</translation>
     </message>
     <message>
         <source>Show discrete warning badges (pastilles) on Timeline frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Dezente Warnplaketten auf Timeline-Frames anzeigen</translation>
     </message>
     <message>
         <source>Show VRAM tile budget gauge in status bar</source>
-        <translation type="unfinished"></translation>
+        <translation>VRAM-Kachel-Budget-Anzeige in der Statusleiste anzeigen</translation>
+    </message>
+    <message>
+        <source>Show discrete sprite size limit guides on Atlas (background rules &amp; zones)</source>
+        <translation>Dezente Größenbegrenzungslinien auf dem Atlas anzeigen (Hintergrund-Hilfslinien &amp; Zonen)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; Constraints and visual badges provide non-blocking visual feedback for retro targets (NES, Game Boy, Mega Drive, C64) without interfering with modern engines (Godot/Unity/Unreal).</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Tipp:&lt;/b&gt; Einschränkungen und visuelle Plaketten bieten dezentes, nicht blockierendes Feedback für Retro-Ziele (NES, Game Boy, Mega Drive, C64), ohne moderne Engines (Godot/Unity/Unreal) zu stören.</translation>
     </message>
     <message>
         <source>Open Plugins Folder...</source>
@@ -6119,8 +6273,8 @@ Paket installieren:
         <translation>Jetzt auf Updates prüfen</translation>
     </message>
     <message>
-        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
-        <translation>Klicken Sie auf &apos;Jetzt auf Updates prüfen&apos;, um die neueste Version auf GitHub abzufragen.</translation>
+        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
+        <translation>Klicken Sie auf 'Jetzt auf Updates prüfen', um die neueste Version auf GitHub abzufragen.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6139,16 +6293,16 @@ Paket installieren:
         <translation>Suche nach Updates auf GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Fehler bei der Suche nach Updates: %1&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #e74c3c;'&gt;Fehler bei der Suche nach Updates: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Ungültige Antwort von GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #e74c3c;'&gt;Ungültige Antwort von GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Eine neue Version ist verfügbar: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Eine neue Version ist verfügbar: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6159,8 +6313,8 @@ Paket installieren:
         <translation>Veröffentlicht: %1</translation>
     </message>
     <message>
-        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Sie verwenden die neueste Version (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style='color: #27ae60;'&gt;Sie verwenden die neueste Version (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>

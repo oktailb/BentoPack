@@ -89,36 +89,50 @@ void RetroLinterConfig::applyPreset(int presetIndex, RetroLinterConfig &cfg)
         cfg.scanlineSpriteWidthLimit = 64; // 10 sprites / line (8x8 or 8x16) -> safe 64px limit
         cfg.maxVramTiles = 256;            // Pattern table 256 tiles
         cfg.tileSize = 8;
+        cfg.maxSpritesPerScanline = 10;
+        cfg.maxColorsPerSprite = 4;
         break;
     case 2: // NES / Famicom
         cfg.scanlineSpriteWidthLimit = 64; // 8 sprites / scanline * 8px = 64px
         cfg.maxVramTiles = 256;            // Pattern table 256 tiles
         cfg.tileSize = 8;
+        cfg.maxSpritesPerScanline = 8;
+        cfg.maxColorsPerSprite = 4;
         break;
     case 3: // Sega Master System / Game Gear
         cfg.scanlineSpriteWidthLimit = 64; // 8 sprites / scanline * 8px = 64px
         cfg.maxVramTiles = 256;            // 256 sprite tiles in VRAM
         cfg.tileSize = 8;
+        cfg.maxSpritesPerScanline = 8;
+        cfg.maxColorsPerSprite = 16;
         break;
     case 4: // Sega Mega Drive / Genesis
         cfg.scanlineSpriteWidthLimit = 128; // 16 sprites / scanline (in 320x224 mode)
         cfg.maxVramTiles = 512;             // Sprite VRAM pattern area
         cfg.tileSize = 8;
+        cfg.maxSpritesPerScanline = 16;
+        cfg.maxColorsPerSprite = 16;
         break;
     case 5: // Commodore 64
         cfg.scanlineSpriteWidthLimit = 64;  // 8 hardware sprites / rasterline
         cfg.maxVramTiles = 256;
         cfg.tileSize = 8;
+        cfg.maxSpritesPerScanline = 8;
+        cfg.maxColorsPerSprite = 4;
         break;
     case 6: // Super Nintendo (SNES)
         cfg.scanlineSpriteWidthLimit = 256; // 32 sprites / scanline
         cfg.maxVramTiles = 512;
         cfg.tileSize = 8;
+        cfg.maxSpritesPerScanline = 32;
+        cfg.maxColorsPerSprite = 16;
         break;
     case 7: // PICO-8
         cfg.scanlineSpriteWidthLimit = 64;
         cfg.maxVramTiles = 256;             // 128x128 sprite sheet = 256 tiles
         cfg.tileSize = 8;
+        cfg.maxSpritesPerScanline = 8;
+        cfg.maxColorsPerSprite = 16;
         break;
     default: // 0: Custom / Generic
         break;
@@ -224,6 +238,7 @@ bool AppConfig::load(const QString &filePath)
         m_atlas.nudgeStepSmall = atlasObj.value(QStringLiteral("nudge_step_small")).toInt(m_atlas.nudgeStepSmall);
         m_atlas.nudgeStepLarge = atlasObj.value(QStringLiteral("nudge_step_large")).toInt(m_atlas.nudgeStepLarge);
         m_atlas.fitViewPadding = atlasObj.value(QStringLiteral("fit_view_padding")).toInt(m_atlas.fitViewPadding);
+        m_atlas.showPolygonMeshByDefault = atlasObj.value(QStringLiteral("show_polygon_mesh_by_default")).toBool(m_atlas.showPolygonMeshByDefault);
     }
 
     // 2. Visuals section
@@ -250,6 +265,9 @@ bool AppConfig::load(const QString &filePath)
         if (visObj.contains(QStringLiteral("new_slice_preview_color"))) {
             m_visuals.newSlicePreviewColor = QColor(visObj.value(QStringLiteral("new_slice_preview_color")).toString());
         }
+        if (visObj.contains(QStringLiteral("mesh_wireframe_color"))) {
+            m_visuals.meshWireframeColor = QColor(visObj.value(QStringLiteral("mesh_wireframe_color")).toString());
+        }
     }
 
     // 3. Animation section
@@ -268,6 +286,7 @@ bool AppConfig::load(const QString &filePath)
         m_project.backgroundRemovalTolerance = projObj.value(QStringLiteral("background_removal_tolerance")).toInt(m_project.backgroundRemovalTolerance);
         m_project.backgroundMinAlpha = projObj.value(QStringLiteral("background_min_alpha")).toInt(m_project.backgroundMinAlpha);
         m_project.undoLimit = projObj.value(QStringLiteral("undo_limit")).toInt(m_project.undoLimit);
+        m_project.autoSaveSession = projObj.value(QStringLiteral("auto_save_session")).toBool(m_project.autoSaveSession);
     }
 
     // 5. Git section
@@ -285,6 +304,16 @@ bool AppConfig::load(const QString &filePath)
         m_export.defaultAlgorithmIndex = expObj.value(QStringLiteral("default_algorithm_index")).toInt(m_export.defaultAlgorithmIndex);
         m_export.defaultZstd = expObj.value(QStringLiteral("default_zstd")).toBool(m_export.defaultZstd);
         m_export.defaultZstdLevel = expObj.value(QStringLiteral("default_zstd_level")).toInt(m_export.defaultZstdLevel);
+        m_export.defaultPadding = expObj.value(QStringLiteral("default_padding")).toInt(m_export.defaultPadding);
+        m_export.defaultBorderPadding = expObj.value(QStringLiteral("default_border_padding")).toInt(m_export.defaultBorderPadding);
+        m_export.defaultExtrude = expObj.value(QStringLiteral("default_extrude")).toInt(m_export.defaultExtrude);
+        m_export.defaultMaxWidth = expObj.value(QStringLiteral("default_max_width")).toInt(m_export.defaultMaxWidth);
+        m_export.defaultMaxHeight = expObj.value(QStringLiteral("default_max_height")).toInt(m_export.defaultMaxHeight);
+        m_export.defaultPowerOfTwo = expObj.value(QStringLiteral("default_power_of_two")).toBool(m_export.defaultPowerOfTwo);
+        m_export.defaultForceSquare = expObj.value(QStringLiteral("default_force_square")).toBool(m_export.defaultForceSquare);
+        m_export.defaultDeduplicate = expObj.value(QStringLiteral("default_deduplicate")).toBool(m_export.defaultDeduplicate);
+        m_export.defaultTrimSprites = expObj.value(QStringLiteral("default_trim_sprites")).toBool(m_export.defaultTrimSprites);
+        m_export.defaultNormalMapYFlip = expObj.value(QStringLiteral("default_normal_map_y_flip")).toBool(m_export.defaultNormalMapYFlip);
     }
 
     // 7. Retro & Hardware Constraints section
@@ -295,6 +324,9 @@ bool AppConfig::load(const QString &filePath)
         m_retro.scanlineSpriteWidthLimit = retroObj.value(QStringLiteral("scanline_sprite_width_limit")).toInt(m_retro.scanlineSpriteWidthLimit);
         m_retro.maxVramTiles = retroObj.value(QStringLiteral("max_vram_tiles")).toInt(m_retro.maxVramTiles);
         m_retro.tileSize = retroObj.value(QStringLiteral("tile_size")).toInt(m_retro.tileSize);
+        m_retro.guideLineThickness = retroObj.value(QStringLiteral("guide_line_thickness")).toInt(m_retro.guideLineThickness);
+        m_retro.maxSpritesPerScanline = retroObj.value(QStringLiteral("max_sprites_per_scanline")).toInt(m_retro.maxSpritesPerScanline);
+        m_retro.maxColorsPerSprite = retroObj.value(QStringLiteral("max_colors_per_sprite")).toInt(m_retro.maxColorsPerSprite);
         m_retro.showScanlineGuide = retroObj.value(QStringLiteral("show_scanline_guide")).toBool(m_retro.showScanlineGuide);
         m_retro.showTileGrid = retroObj.value(QStringLiteral("show_tile_grid")).toBool(m_retro.showTileGrid);
         m_retro.showTimelineBadges = retroObj.value(QStringLiteral("show_timeline_badges")).toBool(m_retro.showTimelineBadges);
@@ -337,6 +369,7 @@ bool AppConfig::save(const QString &filePath) const
     atlasObj[QStringLiteral("nudge_step_small")] = m_atlas.nudgeStepSmall;
     atlasObj[QStringLiteral("nudge_step_large")] = m_atlas.nudgeStepLarge;
     atlasObj[QStringLiteral("fit_view_padding")] = m_atlas.fitViewPadding;
+    atlasObj[QStringLiteral("show_polygon_mesh_by_default")] = m_atlas.showPolygonMeshByDefault;
     root[QStringLiteral("atlas")] = atlasObj;
 
     // 2. Visuals
@@ -349,6 +382,7 @@ bool AppConfig::save(const QString &filePath) const
     visObj[QStringLiteral("hovered_box_fill_color")] = m_visuals.hoveredBoxFillColor.name(QColor::HexArgb);
     visObj[QStringLiteral("marquee_color")] = m_visuals.marqueeColor.name(QColor::HexRgb);
     visObj[QStringLiteral("new_slice_preview_color")] = m_visuals.newSlicePreviewColor.name(QColor::HexRgb);
+    visObj[QStringLiteral("mesh_wireframe_color")] = m_visuals.meshWireframeColor.name(QColor::HexArgb);
     root[QStringLiteral("visuals")] = visObj;
 
     // 3. Animation
@@ -365,6 +399,7 @@ bool AppConfig::save(const QString &filePath) const
     projObj[QStringLiteral("background_removal_tolerance")] = m_project.backgroundRemovalTolerance;
     projObj[QStringLiteral("background_min_alpha")] = m_project.backgroundMinAlpha;
     projObj[QStringLiteral("undo_limit")] = m_project.undoLimit;
+    projObj[QStringLiteral("auto_save_session")] = m_project.autoSaveSession;
     root[QStringLiteral("project")] = projObj;
 
     // 5. Git
@@ -380,6 +415,16 @@ bool AppConfig::save(const QString &filePath) const
     expObj[QStringLiteral("default_algorithm_index")] = m_export.defaultAlgorithmIndex;
     expObj[QStringLiteral("default_zstd")] = m_export.defaultZstd;
     expObj[QStringLiteral("default_zstd_level")] = m_export.defaultZstdLevel;
+    expObj[QStringLiteral("default_padding")] = m_export.defaultPadding;
+    expObj[QStringLiteral("default_border_padding")] = m_export.defaultBorderPadding;
+    expObj[QStringLiteral("default_extrude")] = m_export.defaultExtrude;
+    expObj[QStringLiteral("default_max_width")] = m_export.defaultMaxWidth;
+    expObj[QStringLiteral("default_max_height")] = m_export.defaultMaxHeight;
+    expObj[QStringLiteral("default_power_of_two")] = m_export.defaultPowerOfTwo;
+    expObj[QStringLiteral("default_force_square")] = m_export.defaultForceSquare;
+    expObj[QStringLiteral("default_deduplicate")] = m_export.defaultDeduplicate;
+    expObj[QStringLiteral("default_trim_sprites")] = m_export.defaultTrimSprites;
+    expObj[QStringLiteral("default_normal_map_y_flip")] = m_export.defaultNormalMapYFlip;
     root[QStringLiteral("export")] = expObj;
 
     // 7. Retro & Hardware Constraints
@@ -389,6 +434,9 @@ bool AppConfig::save(const QString &filePath) const
     retroObj[QStringLiteral("scanline_sprite_width_limit")] = m_retro.scanlineSpriteWidthLimit;
     retroObj[QStringLiteral("max_vram_tiles")] = m_retro.maxVramTiles;
     retroObj[QStringLiteral("tile_size")] = m_retro.tileSize;
+    retroObj[QStringLiteral("guide_line_thickness")] = m_retro.guideLineThickness;
+    retroObj[QStringLiteral("max_sprites_per_scanline")] = m_retro.maxSpritesPerScanline;
+    retroObj[QStringLiteral("max_colors_per_sprite")] = m_retro.maxColorsPerSprite;
     retroObj[QStringLiteral("show_scanline_guide")] = m_retro.showScanlineGuide;
     retroObj[QStringLiteral("show_tile_grid")] = m_retro.showTileGrid;
     retroObj[QStringLiteral("show_timeline_badges")] = m_retro.showTimelineBadges;
