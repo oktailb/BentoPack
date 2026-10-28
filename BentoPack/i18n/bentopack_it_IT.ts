@@ -97,10 +97,10 @@
     </message>
     <message>
         <source>KEY_ABOUT_PURPOSE</source>
-        <translation>Un potente strumento per l'estrazione e l'animazione di sprite</translation>
+        <translation>Un potente strumento per l&apos;estrazione e l&apos;animazione di sprite</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Studio di strumenti e tecnologie multimediali</translation>
     </message>
     <message>
@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>Invalid canvas dimensions or zero frames in Aseprite header.</source>
-        <translation>Dimensioni tela non valide o zero fotogrammi nell'intestazione Aseprite.</translation>
+        <translation>Dimensioni tela non valide o zero fotogrammi nell&apos;intestazione Aseprite.</translation>
     </message>
     <message>
         <source>Failed to decode any frames from Aseprite file.</source>
@@ -241,8 +241,8 @@
         <translation>Impacchettamento atlas (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Pronto — Regola i parametri e fai clic su 'Calcola impacchettamento'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Pronto — Regola i parametri e fai clic su &apos;Calcola impacchettamento&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -298,7 +298,7 @@
     </message>
     <message>
         <source>Outer margin around the edges of the atlas</source>
-        <translation>Margine esterno attorno ai bordi dell'atlas</translation>
+        <translation>Margine esterno attorno ai bordi dell&apos;atlas</translation>
     </message>
     <message>
         <source>Border Padding:</source>
@@ -334,7 +334,7 @@
     </message>
     <message>
         <source>Trim Transparent Borders before packing</source>
-        <translation>Rifila bordi trasparenti prima dell'impacchettamento</translation>
+        <translation>Rifila bordi trasparenti prima dell&apos;impacchettamento</translation>
     </message>
     <message>
         <source>Crops transparent margins around frames while preserving animation pivots. Highly recommended for animation spritesheets to eliminate empty spaces and maximize packing density.</source>
@@ -346,7 +346,7 @@
     </message>
     <message>
         <source>Number of CPU threads to use for parallel processing (1 to %1 cores)</source>
-        <translation>Numero di thread CPU per l'elaborazione parallela (da 1 a %1 core)</translation>
+        <translation>Numero di thread CPU per l&apos;elaborazione parallela (da 1 a %1 core)</translation>
     </message>
     <message>
         <source>Worker Threads:</source>
@@ -362,7 +362,7 @@
     </message>
     <message>
         <source>Computing packing...</source>
-        <translation>Calcolo dell'impacchettamento in corso...</translation>
+        <translation>Calcolo dell&apos;impacchettamento in corso...</translation>
     </message>
     <message>
         <source> | %1 delta patches</source>
@@ -382,7 +382,7 @@
     </message>
     <message>
         <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
-        <translation>Ripete i pixel del bordo verso l'esterno (1-4 px) con bloccaggio diagonale a 8 vicini per evitare artefatti bilineari nei motori di gioco</translation>
+        <translation>Ripete i pixel del bordo verso l&apos;esterno (1-4 px) con bloccaggio diagonale a 8 vicini per evitare artefatti bilineari nei motori di gioco</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -402,7 +402,7 @@
     </message>
     <message>
         <source>Error: Cannot fit sprites in atlas</source>
-        <translation>Errore: Impossibile inserire gli sprite nell'atlas</translation>
+        <translation>Errore: Impossibile inserire gli sprite nell&apos;atlas</translation>
     </message>
     <message>
         <source>%1 x %2 px</source>
@@ -631,7 +631,7 @@ Scegli quale ramo ripristinare:</translation>
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
     </message>
     <message>
         <source>Adjusted (H:%1° S:%2% V:%3% C:%4%)</source>
@@ -650,7 +650,7 @@ Scegli quale ramo ripristinare:</translation>
     <name>ColorPalettePresets</name>
     <message>
         <source>Failed to decode image.</source>
-        <translation>Impossibile decodificare l'immagine.</translation>
+        <translation>Impossibile decodificare l&apos;immagine.</translation>
     </message>
     <message>
         <source>Cannot open file for reading.</source>
@@ -775,7 +775,7 @@ Scegli quale ramo ripristinare:</translation>
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
     </message>
     <message>
         <source>Select source color to replace</source>
@@ -806,7 +806,7 @@ Scegli quale ramo ripristinare:</translation>
     </message>
     <message>
         <source>Eliminates 1px colored fringe (green, white, magenta) along sprite borders after background extraction.</source>
-        <translation>Elimina le frange colorate da 1px lungo i bordi degli sprite dopo l'estrazione dello sfondo.</translation>
+        <translation>Elimina le frange colorate da 1px lungo i bordi degli sprite dopo l&apos;estrazione dello sfondo.</translation>
     </message>
 </context>
 <context>
@@ -829,7 +829,7 @@ Scegli quale ramo ripristinare:</translation>
     </message>
     <message>
         <source>Action mode:</source>
-        <translation>Modalità d'azione:</translation>
+        <translation>Modalità d&apos;azione:</translation>
     </message>
     <message>
         <source>Soft Color Clamping (CIELAB Perceptual)</source>
@@ -848,7 +848,7 @@ Scegli quale ramo ripristinare:</translation>
 Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
 Strict removal: clears the fringe pixel.</source>
         <translation>Fissaggio morbido: sostituisce il bordo con il colore interno usando CIELAB ΔE.
-Chroma spill: neutralizza i riflessi verdi/blu senza rimuovere l'alfa.
+Chroma spill: neutralizza i riflessi verdi/blu senza rimuovere l&apos;alfa.
 Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
@@ -861,7 +861,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
     </message>
     <message>
         <source>Select Fringe Color</source>
@@ -991,8 +991,8 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
         <translation>Nuovo livello (es. Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>%1 fotogramma/i preparato/i per il nuovo livello 'Emissive (_e)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 fotogramma/i preparato/i per il nuovo livello &apos;Emissive (_e)&apos;</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -1178,7 +1178,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>Extracts dirty bounding-box patches between consecutive animation frames when delta area is small, reducing VRAM texture consumption</source>
-        <translation>Estrae le patch di bounding-box modificate tra fotogrammi consecutivi quando l'area delta è ridotta, riducendo il consumo di VRAM</translation>
+        <translation>Estrae le patch di bounding-box modificate tra fotogrammi consecutivi quando l&apos;area delta è ridotta, riducendo il consumo di VRAM</translation>
     </message>
     <message>
         <source>VRAM Texture &amp; GPU Compression </source>
@@ -1498,7 +1498,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>An error occurred during export.</source>
-        <translation>Si è verificato un errore durante l'esportazione.</translation>
+        <translation>Si è verificato un errore durante l&apos;esportazione.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1509,7 +1509,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     <name>Extractor</name>
     <message>
         <source>Export is not supported by this format (%1)</source>
-        <translation>L'esportazione non è supportata da questo formato (%1)</translation>
+        <translation>L&apos;esportazione non è supportata da questo formato (%1)</translation>
     </message>
 </context>
 <context>
@@ -1520,7 +1520,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>Update atlas and frames in real-time while adjusting parameters</source>
-        <translation>Aggiorna l'atlas e i fotogrammi in tempo reale durante la regolazione dei parametri</translation>
+        <translation>Aggiorna l&apos;atlas e i fotogrammi in tempo reale durante la regolazione dei parametri</translation>
     </message>
     <message>
         <source>Auto-detect Sprite Boxes</source>
@@ -1598,7 +1598,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>Failed to pack GIF frames into texture atlas.</source>
-        <translation>Impossibile impacchettare i fotogrammi GIF nell'atlas.</translation>
+        <translation>Impossibile impacchettare i fotogrammi GIF nell&apos;atlas.</translation>
     </message>
     <message>
         <source>Extracted %1 GIF frames</source>
@@ -1618,7 +1618,7 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>Animation %1 has no frames.</source>
-        <translation>L'animazione %1 non ha fotogrammi.</translation>
+        <translation>L&apos;animazione %1 non ha fotogrammi.</translation>
     </message>
     <message>
         <source>Failed to initialize GIF encoder for %1.</source>
@@ -1676,11 +1676,11 @@ Rimozione rigorosa: cancella il pixel del bordo.</translation>
     </message>
     <message>
         <source>KEY_GIT_RETURN_PRESENT_TOOLTIP</source>
-        <translation>Ripristina l'ultima versione (HEAD del ramo)</translation>
+        <translation>Ripristina l&apos;ultima versione (HEAD del ramo)</translation>
     </message>
     <message>
         <source>KEY_GIT_DISABLED_BANNER</source>
-        <translation>L'integrazione Git non è abilitata su questo sistema.
+        <translation>L&apos;integrazione Git non è abilitata su questo sistema.
 (libgit2 non rilevata durante la compilazione)</translation>
     </message>
     <message>
@@ -1737,11 +1737,11 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Referenced texture atlas image not found for: %1</source>
-        <translation>Immagine dell'atlas di texture referenziata non trovata per: %1</translation>
+        <translation>Immagine dell&apos;atlas di texture referenziata non trovata per: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1</source>
-        <translation>Impossibile caricare l'immagine dell'atlas di texture: %1</translation>
+        <translation>Impossibile caricare l&apos;immagine dell&apos;atlas di texture: %1</translation>
     </message>
     <message>
         <source>Extracted %1 frames and %2 animations from Godot resource.</source>
@@ -1761,11 +1761,11 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
-        <translation>Impossibile impacchettare i fotogrammi atlas per l'esportazione Godot.</translation>
+        <translation>Impossibile impacchettare i fotogrammi atlas per l&apos;esportazione Godot.</translation>
     </message>
     <message>
         <source>Failed to write Godot atlas page image: %1</source>
-        <translation>Impossibile scrivere l'immagine della pagina dell'atlante Godot: %1</translation>
+        <translation>Impossibile scrivere l&apos;immagine della pagina dell&apos;atlante Godot: %1</translation>
     </message>
     <message>
         <source>Failed to write Godot VRAM atlas texture: %1 (%2)</source>
@@ -1773,7 +1773,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to write Godot atlas image: %1</source>
-        <translation>Impossibile scrivere l'immagine atlas Godot: %1</translation>
+        <translation>Impossibile scrivere l&apos;immagine atlas Godot: %1</translation>
     </message>
     <message>
         <source>Cannot write to Godot resource file: %1</source>
@@ -1835,7 +1835,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to decode atlas image: %1</source>
-        <translation>Impossibile decodificare l'immagine atlas: %1</translation>
+        <translation>Impossibile decodificare l&apos;immagine atlas: %1</translation>
     </message>
     <message>
         <source>No frames could be extracted from JSON: %1</source>
@@ -1859,7 +1859,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to pack frames for JSON export.</source>
-        <translation>Impossibile impacchettare i fotogrammi per l'esportazione JSON.</translation>
+        <translation>Impossibile impacchettare i fotogrammi per l&apos;esportazione JSON.</translation>
     </message>
     <message>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
@@ -1867,7 +1867,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to save companion image: %1</source>
-        <translation>Impossibile salvare l'immagine associata: %1</translation>
+        <translation>Impossibile salvare l&apos;immagine associata: %1</translation>
     </message>
     <message>
         <source>Cannot write to JSON file: %1</source>
@@ -1922,7 +1922,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Move active layer up</source>
-        <translation>Sposta livello attivo verso l'alto</translation>
+        <translation>Sposta livello attivo verso l&apos;alto</translation>
     </message>
     <message>
         <source>Move active layer down</source>
@@ -1954,7 +1954,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Isolates onion skinning to the active layer rather than the full composite</source>
-        <translation>Isola la carta cipolla al livello attivo anziché all'intera composizione</translation>
+        <translation>Isola la carta cipolla al livello attivo anziché all&apos;intera composizione</translation>
     </message>
     <message>
         <source>Hide layer</source>
@@ -2041,7 +2041,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Reading LibGDX/Spine Atlas...</source>
-        <translation>Lettura dell'atlas LibGDX/Spine...</translation>
+        <translation>Lettura dell&apos;atlas LibGDX/Spine...</translation>
     </message>
     <message>
         <source>Cannot open atlas file: %1</source>
@@ -2053,7 +2053,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to load companion atlas image: %1</source>
-        <translation>Impossibile caricare l'immagine atlas associata: %1</translation>
+        <translation>Impossibile caricare l&apos;immagine atlas associata: %1</translation>
     </message>
     <message>
         <source>LibGDX/Spine Atlas loaded successfully.</source>
@@ -2061,7 +2061,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Exporting LibGDX/Spine Atlas...</source>
-        <translation>Esportazione dell'atlas LibGDX/Spine in corso...</translation>
+        <translation>Esportazione dell&apos;atlas LibGDX/Spine in corso...</translation>
     </message>
     <message>
         <source>Document contains no sprites to export.</source>
@@ -2069,7 +2069,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>Failed to save companion atlas image: %1</source>
-        <translation>Impossibile salvare l'immagine atlas associata: %1</translation>
+        <translation>Impossibile salvare l&apos;immagine atlas associata: %1</translation>
     </message>
     <message>
         <source>Cannot create output atlas file: %1</source>
@@ -2112,7 +2112,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>File not found or locked by another application: %1</source>
-        <translation>File non trovato o bloccato da un'altra applicazione: %1</translation>
+        <translation>File non trovato o bloccato da un&apos;altra applicazione: %1</translation>
     </message>
     <message>
         <source>Failed to decode file: %1</source>
@@ -2143,7 +2143,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_TOOL_ADD_SLICE</source>
-        <translation>Fai clic e trascina sull'atlas per tracciare un nuovo riquadro</translation>
+        <translation>Fai clic e trascina sull&apos;atlas per tracciare un nuovo riquadro</translation>
     </message>
     <message>
         <source>KEY_TOOL_TRIM</source>
@@ -2159,7 +2159,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_TOOL_DETECT_SPRITES</source>
-        <translation>Rileva e ritaglia automaticamente gli sprite dall'atlas trasparente</translation>
+        <translation>Rileva e ritaglia automaticamente gli sprite dall&apos;atlas trasparente</translation>
     </message>
     <message>
         <source>KEY_TOOL_REMOVE_BG</source>
@@ -2271,7 +2271,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_LIVE_WATCH</source>
-        <translation>Attiva/disattiva il monitoraggio file live e l'esportazione automatica al motore (Ctrl+Alt+W)</translation>
+        <translation>Attiva/disattiva il monitoraggio file live e l&apos;esportazione automatica al motore (Ctrl+Alt+W)</translation>
     </message>
     <message>
         <source>KEY_MENU_EDIT</source>
@@ -2379,11 +2379,11 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ANIM</source>
-        <translation>Aggiungi all'animazione</translation>
+        <translation>Aggiungi all&apos;animazione</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Aggiungi all'animazione attiva "%1"</translation>
+        <translation>Aggiungi all&apos;animazione attiva &quot;%1&quot;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2451,7 +2451,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_STATUS_POPULATING</source>
-        <translation>Compilazione dell'elenco fotogrammi...</translation>
+        <translation>Compilazione dell&apos;elenco fotogrammi...</translation>
     </message>
     <message>
         <source>KEY_FRAME_LABEL</source>
@@ -2483,7 +2483,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_ZOOM_IN</source>
-        <translation>Ingrandisci la vista dell'atlas</translation>
+        <translation>Ingrandisci la vista dell&apos;atlas</translation>
     </message>
     <message>
         <source>KEY_ACTION_ZOOM_OUT</source>
@@ -2491,7 +2491,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_ZOOM_OUT</source>
-        <translation>Riduci la vista dell'atlas</translation>
+        <translation>Riduci la vista dell&apos;atlas</translation>
     </message>
     <message>
         <source>KEY_ACTION_ZOOM_RESET</source>
@@ -2499,7 +2499,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_ZOOM_RESET</source>
-        <translation>Ripristina lo zoom dell'atlas al 100%</translation>
+        <translation>Ripristina lo zoom dell&apos;atlas al 100%</translation>
     </message>
     <message>
         <source>KEY_DOCK_PREVIEW</source>
@@ -2619,7 +2619,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_REVERSE_ANIM</source>
-        <translation>Inverti l'ordine dei fotogrammi dell'animazione</translation>
+        <translation>Inverti l&apos;ordine dei fotogrammi dell&apos;animazione</translation>
     </message>
     <message>
         <source>⇄</source>
@@ -2627,7 +2627,7 @@ Fai clic su un nodo per visualizzarne i dettagli.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_DELETE_ANIM</source>
-        <translation>Elimina l'animazione selezionata</translation>
+        <translation>Elimina l&apos;animazione selezionata</translation>
     </message>
     <message>
         <source>🗑</source>
@@ -2680,7 +2680,7 @@ Vuoi ripristinare questa sessione?</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Il progetto corrente "%1" contiene modifiche non salvate.
+        <translation>Il progetto corrente &quot;%1&quot; contiene modifiche non salvate.
 Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
@@ -2749,11 +2749,11 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>KEY_BTN_APPLY_PIVOT_ANIM</source>
-        <translation>Applica all'anim.</translation>
+        <translation>Applica all&apos;anim.</translation>
     </message>
     <message>
         <source>KEY_TOOLTIP_APPLY_PIVOT_ANIM</source>
-        <translation>Applica questo punto di pivot a tutti i fotogrammi dell'animazione corrente</translation>
+        <translation>Applica questo punto di pivot a tutti i fotogrammi dell&apos;animazione corrente</translation>
     </message>
     <message>
         <source>KEY_BTN_APPLY_PIVOT_ALL</source>
@@ -2927,8 +2927,8 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Nuovo livello (es. Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>%1 fotogramma/i preparato/i per il nuovo livello 'Normal (_n)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 fotogramma/i preparato/i per il nuovo livello &apos;Normal (_n)&apos;</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -2974,7 +2974,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Updates the atlas texture with this media. Preserves your existing sprite boxes, pivots, and animations (re-sliced from the new atlas).</source>
-        <translation>Aggiorna la texture dell'atlante con questo elemento. Mantiene i riquadri sprite, i perni e le animazioni esistenti (ritagliati dal nuovo atlante).</translation>
+        <translation>Aggiorna la texture dell&apos;atlante con questo elemento. Mantiene i riquadri sprite, i perni e le animazioni esistenti (ritagliati dal nuovo atlante).</translation>
     </message>
     <message>
         <source>Add as New Atlas Layer</source>
@@ -2990,7 +2990,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Places this media as a shared background or overlay cel repeated identically across every animation frame.</source>
-        <translation>Posiziona questo elemento come sfondo condiviso o cella di sovrapposizione ripetuta in modo identico su ogni fotogramma dell'animazione.</translation>
+        <translation>Posiziona questo elemento come sfondo condiviso o cella di sovrapposizione ripetuta in modo identico su ogni fotogramma dell&apos;animazione.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -3060,7 +3060,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
     </message>
     <message>
         <source>Select Outline Color</source>
@@ -3290,12 +3290,12 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Colore secondary (Fai clic per aprire il selettore colore Pro)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
-        <translation>Applica ai fotogrammi di '%1'</translation>
+        <source>Apply to &apos;%1&apos; frames</source>
+        <translation>Applica ai fotogrammi di &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
-        <translation>Applica la generazione di mesh CDT a tutti i fotogrammi dell'animazione '%1'</translation>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
+        <translation>Applica la generazione di mesh CDT a tutti i fotogrammi dell&apos;animazione &apos;%1&apos;</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3463,7 +3463,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Animation Pivot &amp; Reticle Editor [O]</source>
-        <translation>Editor pivot e mirino d'animazione [O]</translation>
+        <translation>Editor pivot e mirino d&apos;animazione [O]</translation>
     </message>
     <message>
         <source>Vertex Weight &amp; Wind Influence Painter [K]</source>
@@ -3663,11 +3663,11 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Apply to all animation frames</source>
-        <translation>Applica a tutti i fotogrammi dell'animazione</translation>
+        <translation>Applica a tutti i fotogrammi dell&apos;animazione</translation>
     </message>
     <message>
         <source>Apply CDT mesh generation to all frames of the current animation</source>
-        <translation>Applica la generazione di mesh CDT a tutti i fotogrammi dell'animazione corrente</translation>
+        <translation>Applica la generazione di mesh CDT a tutti i fotogrammi dell&apos;animazione corrente</translation>
     </message>
     <message>
         <source>⚡ Generate CDT Mesh</source>
@@ -3755,7 +3755,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click on a color to flood fill. Left click fills with primary color, Right click with secondary. Hold &lt;b&gt;Shift&lt;/b&gt; to fill whole selection.</source>
-        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic su un colore per riempire. Il clic sinistro riempie col colore primario, il clic destro con il secondario. Tieni premuto &lt;b&gt;Maiusc&lt;/b&gt; per riempire l'intera selezione.</translation>
+        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic su un colore per riempire. Il clic sinistro riempie col colore primario, il clic destro con il secondario. Tieni premuto &lt;b&gt;Maiusc&lt;/b&gt; per riempire l&apos;intera selezione.</translation>
     </message>
     <message>
         <source>Fuzzy Select (Magic Wand)</source>
@@ -3767,7 +3767,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
-        <translation>Seleziona pixel connessi con colore corrispondente (Deseleziona per selezionare su tutta l'immagine)</translation>
+        <translation>Seleziona pixel connessi con colore corrispondente (Deseleziona per selezionare su tutta l&apos;immagine)</translation>
     </message>
     <message>
         <source>Allow magic wand selection to expand diagonally through pixel corners</source>
@@ -3795,7 +3795,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Animation Pivot &amp; Reticle</source>
-        <translation>Pivot e mirino d'animazione</translation>
+        <translation>Pivot e mirino d&apos;animazione</translation>
     </message>
     <message>
         <source>Quick Align:</source>
@@ -3835,11 +3835,11 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Horizontal pivot coordinate relative to frame top-left</source>
-        <translation>Coordinata orizzontale del pivot relativa all'angolo in alto a sinistra del fotogramma</translation>
+        <translation>Coordinata orizzontale del pivot relativa all&apos;angolo in alto a sinistra del fotogramma</translation>
     </message>
     <message>
         <source>Vertical pivot coordinate relative to frame top-left</source>
-        <translation>Coordinata verticale del pivot relativa all'angolo in alto a sinistra del fotogramma</translation>
+        <translation>Coordinata verticale del pivot relativa all&apos;angolo in alto a sinistra del fotogramma</translation>
     </message>
     <message>
         <source>Show ground &amp; axis guidelines</source>
@@ -3847,35 +3847,35 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Display dashed ground level (red) and central vertical axis (blue) lines</source>
-        <translation>Mostra le linee tratteggiate del livello del suolo (rosso) e dell'asse verticale centrale (blu)</translation>
+        <translation>Mostra le linee tratteggiate del livello del suolo (rosso) e dell&apos;asse verticale centrale (blu)</translation>
     </message>
     <message>
         <source>Auto-apply changes to animation frames</source>
-        <translation>Applica automaticamente le modifiche ai fotogrammi dell'animazione</translation>
+        <translation>Applica automaticamente le modifiche ai fotogrammi dell&apos;animazione</translation>
     </message>
     <message>
         <source>When checked, dragging or editing the pivot applies to all frames in the current animation</source>
-        <translation>Se selezionato, trascinare o modificare il pivot si applica a tutti i fotogrammi dell'animazione corrente</translation>
+        <translation>Se selezionato, trascinare o modificare il pivot si applica a tutti i fotogrammi dell&apos;animazione corrente</translation>
     </message>
     <message>
         <source>Apply to Anim</source>
-        <translation>Applica all'anim.</translation>
+        <translation>Applica all&apos;anim.</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
-        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell'animazione corrente</translation>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell&apos;animazione corrente</translation>
     </message>
     <message>
         <source>Apply to All</source>
         <translation>Applica a tutti</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
-        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell'intero progetto</translation>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>Applica il punto di pivot del fotogramma corrente a tutti i fotogrammi dell&apos;intero progetto</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
-        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic e trascina il mirino direttamente sul canvas per posizionare il pivot dell'animazione. Le linee tratteggiate indicano il livello del suolo e l'asse verticale per la sincronizzazione.</translation>
+        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Fai clic e trascina il mirino direttamente sul canvas per posizionare il pivot dell&apos;animazione. Le linee tratteggiate indicano il livello del suolo e l&apos;asse verticale per la sincronizzazione.</translation>
     </message>
     <message>
         <source>Open interactive Atlas Packing dialog to resolve sprite collisions</source>
@@ -3922,8 +3922,8 @@ Vuoi salvarle prima di procedere?</translation>
         <translation>Tutti i fotogrammi (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>Applica a tutti i fotogrammi di '%1'</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Applica a tutti i fotogrammi di &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -3951,7 +3951,7 @@ Vuoi salvarle prima di procedere?</translation>
     </message>
     <message>
         <source>Apply preset to all animation frames</source>
-        <translation>Applica preimpostazione a tutti i fotogrammi dell'animazione</translation>
+        <translation>Applica preimpostazione a tutti i fotogrammi dell&apos;animazione</translation>
     </message>
     <message>
         <source>Left-click: paint wind weight.
@@ -4055,7 +4055,7 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>Copied %1 socket(s) to all %2 frames in the active animation.</source>
-        <translation>Copiati %1 socket in tutti i %2 fotogrammi dell'animazione attiva.</translation>
+        <translation>Copiati %1 socket in tutti i %2 fotogrammi dell&apos;animazione attiva.</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters) to all frames aligned by pivot</source>
@@ -4147,7 +4147,7 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>Erase pixels across all frames of current animation aligned by pivot</source>
-        <translation>Cancella pixel su tutti i fotogrammi dell'animazione corrente allineati per perno</translation>
+        <translation>Cancella pixel su tutti i fotogrammi dell&apos;animazione corrente allineati per perno</translation>
     </message>
     <message>
         <source>Erase across all visible layers</source>
@@ -4207,7 +4207,7 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Drag selection to move floating pixels. Press &lt;b&gt;Enter&lt;/b&gt; or click outside to commit.</source>
-        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Trascina la selezione per spostare i pixel fluttuanti. Premi &lt;b&gt;Invio&lt;/b&gt; o clicca all'esterno per confermare.</translation>
+        <translation>💡 &lt;b&gt;Suggerimento:&lt;/b&gt; Trascina la selezione per spostare i pixel fluttuanti. Premi &lt;b&gt;Invio&lt;/b&gt; o clicca all&apos;esterno per confermare.</translation>
     </message>
     <message>
         <source>Eyedropper Sampling</source>
@@ -4263,11 +4263,11 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>Discard unsaved pixel modifications and close editor (Esc)</source>
-        <translation>Ignora modifiche non salvate e chiudi l'editor (Esc)</translation>
+        <translation>Ignora modifiche non salvate e chiudi l&apos;editor (Esc)</translation>
     </message>
     <message>
         <source>Apply changes to project and keep editor open (Ctrl+S)</source>
-        <translation>Applica modifiche al progetto e mantieni aperto l'editor (Ctrl+S)</translation>
+        <translation>Applica modifiche al progetto e mantieni aperto l&apos;editor (Ctrl+S)</translation>
     </message>
     <message>
         <source>Save changes and close editor (Enter)</source>
@@ -4282,8 +4282,8 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
         <translation>Editor mesh poligonale CDT (nessuna mesh poligonale in questo fotogramma) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
-        <translation>Applica modifiche di disegno, generazione mesh e filtri a tutti i fotogrammi dell'animazione '%1'</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Applica modifiche di disegno, generazione mesh e filtri a tutti i fotogrammi dell&apos;animazione &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4315,7 +4315,7 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
     </message>
     <message>
         <source>Atlas Collision Detected</source>
-        <translation>Rilevata collisione nell'atlas</translation>
+        <translation>Rilevata collisione nell&apos;atlas</translation>
     </message>
     <message>
         <source>Polygon or frame modifications cause collision with other sprites in the atlas:
@@ -4325,13 +4325,13 @@ Esportato in Godot, Unity, Unreal Paper2D e JSON.</translation>
 An atlas repack must be performed upon validation to resolve overlapping frames.
 
 Would you like to repack the atlas now?</source>
-        <translation>Le modifiche al poligono o al fotogramma causano collisioni con altri sprite nell'atlas:
+        <translation>Le modifiche al poligono o al fotogramma causano collisioni con altri sprite nell&apos;atlas:
 
 %1
 
-È necessario reimpacchettare l'atlas per risolvere la sovrapposizione.
+È necessario reimpacchettare l&apos;atlas per risolvere la sovrapposizione.
 
-Vuoi reimpacchettare l'atlas ora?</translation>
+Vuoi reimpacchettare l&apos;atlas ora?</translation>
     </message>
     <message>
         <source>Repack Atlas Now</source>
@@ -4343,7 +4343,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Filter navigation and onion skinning to animation</source>
-        <translation>Filtra navigazione e onion skinning all'animazione</translation>
+        <translation>Filtra navigazione e onion skinning all&apos;animazione</translation>
     </message>
     <message>
         <source># Grid</source>
@@ -4354,8 +4354,8 @@ Vuoi reimpacchettare l'atlas ora?</translation>
         <translation>⚡ Calcolo CDT in corso...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
-        <translation>Applica filtro a tutti i fotogrammi di '%1' (%2 fotogrammi)</translation>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation>Applica filtro a tutti i fotogrammi di &apos;%1&apos; (%2 fotogrammi)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4379,7 +4379,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Apply %1 to Animation</source>
-        <translation>Applica %1 all'animazione</translation>
+        <translation>Applica %1 all&apos;animazione</translation>
     </message>
     <message>
         <source>Apply %1 to Frame</source>
@@ -4406,7 +4406,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Rescales the atlas cleanly using Nearest-Neighbor (pixel-perfect) or Scale2x (smooth contours).</source>
-        <translation>Ridimensiona l'atlas con precisione usando Nearest-Neighbor (pixel-perfect) o Scale2x (contorni smussati).</translation>
+        <translation>Ridimensiona l&apos;atlas con precisione usando Nearest-Neighbor (pixel-perfect) o Scale2x (contorni smussati).</translation>
     </message>
 </context>
 <context>
@@ -4479,8 +4479,8 @@ Vuoi reimpacchettare l'atlas ora?</translation>
         <translation>Error de análisis XML en plist: %1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>No se encontró el diccionario 'frames' en plist.</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>No se encontró el diccionario &apos;frames&apos; en plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4496,7 +4496,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Failed to save companion atlas image: %1</source>
-        <translation>Impossibile salvare l'immagine atlas associata: %1</translation>
+        <translation>Impossibile salvare l&apos;immagine atlas associata: %1</translation>
     </message>
     <message>
         <source>Cannot write plist file: %1</source>
@@ -4705,7 +4705,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Decoded atlas image is null.</source>
-        <translation>L'immagine dell'atlante decodificata è nulla.</translation>
+        <translation>L&apos;immagine dell&apos;atlante decodificata è nulla.</translation>
     </message>
     <message>
         <source>Replace atlas with %1</source>
@@ -4717,7 +4717,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation>Impossibile caricare l'immagine: %1</translation>
+        <translation>Impossibile caricare l&apos;immagine: %1</translation>
     </message>
     <message>
         <source>Base</source>
@@ -4741,7 +4741,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Replacing atlas with %1...</source>
-        <translation>Sostituzione dell'atlante con %1 in corso...</translation>
+        <translation>Sostituzione dell&apos;atlante con %1 in corso...</translation>
     </message>
     <message>
         <source>Adding common background from %1...</source>
@@ -4836,8 +4836,8 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     <message numerus="yes">
         <source>Erase Atlas Pixels for %n frame(s)</source>
         <translation>
-            <numerusform>Cancella i pixel dell'atlas per %n fotogramma</numerusform>
-            <numerusform>Cancella i pixel dell'atlas per %n fotogrammi</numerusform>
+            <numerusform>Cancella i pixel dell&apos;atlas per %n fotogramma</numerusform>
+            <numerusform>Cancella i pixel dell&apos;atlas per %n fotogrammi</numerusform>
         </translation>
     </message>
     <message>
@@ -4845,32 +4845,32 @@ Vuoi reimpacchettare l'atlas ora?</translation>
         <translation>Unisci fotogramma %1 in %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Crea animazione '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Crea animazione &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Elimina animazione '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Elimina animazione &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Inverti animazione '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Inverti animazione &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Rinomina animazione '%1' in '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Rinomina animazione &apos;%1&apos; in &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Duplica animazione '%1' come '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Duplica animazione &apos;%1&apos; come &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Riordina fotogrammi nell'animazione '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Riordina fotogrammi nell&apos;animazione &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Modifica proprietà dell'animazione '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Modifica proprietà dell&apos;animazione &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -4886,7 +4886,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Replace Atlas Media</source>
-        <translation>Sostituisci file multimediale dell'atlante</translation>
+        <translation>Sostituisci file multimediale dell&apos;atlante</translation>
     </message>
     <message>
         <source>Add Media Layers</source>
@@ -4898,7 +4898,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
-        <translation>Impossibile decodificare l'immagine da: %1</translation>
+        <translation>Impossibile decodificare l&apos;immagine da: %1</translation>
     </message>
     <message>
         <source>Failed to segment sprite frames.</source>
@@ -4906,11 +4906,11 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>Failed to remove background from atlas.</source>
-        <translation>Impossibile rimuovere lo sfondo dall'atlas.</translation>
+        <translation>Impossibile rimuovere lo sfondo dall&apos;atlas.</translation>
     </message>
     <message>
         <source>Failed to load image: %1</source>
-        <translation>Impossibile caricare l'immagine: %1</translation>
+        <translation>Impossibile caricare l&apos;immagine: %1</translation>
     </message>
     <message>
         <source>Base</source>
@@ -4930,7 +4930,7 @@ Vuoi reimpacchettare l'atlas ora?</translation>
     </message>
     <message>
         <source>JSON parse error: %1 at offset %2</source>
-        <translation>Errore di analisi JSON: %1 all'offset %2</translation>
+        <translation>Errore di analisi JSON: %1 all&apos;offset %2</translation>
     </message>
     <message>
         <source>JSON root must be an object.</source>
@@ -4984,7 +4984,7 @@ Vuoi aprire lo strumento Mesh poligonale per ricalcolare le mesh?</translation>
 Would you like to open the Polygon Mesh tool to generate tight polygon meshes and reduce GPU overdraw?</source>
         <translation>Il filtro applicato ha modificato la geometria e la silhouette degli sprite.
 
-Vuoi aprire lo strumento Mesh poligonale per generare mesh aderenti e ridurre l'overdraw della GPU?</translation>
+Vuoi aprire lo strumento Mesh poligonale per generare mesh aderenti e ridurre l&apos;overdraw della GPU?</translation>
     </message>
     <message>
         <source>KEY_CMD_CHANGE_PIVOT</source>
@@ -5014,7 +5014,7 @@ Vuoi aprire lo strumento Mesh poligonale per generare mesh aderenti e ridurre l'
         <source>Failed to decode image from %1.
 
 %2</source>
-        <translation>Impossibile decodificare l'immagine da %1.
+        <translation>Impossibile decodificare l&apos;immagine da %1.
 
 %2</translation>
     </message>
@@ -5028,7 +5028,7 @@ To enable WebP support on Linux, install the corresponding package:
   • openSUSE:              sudo zypper install libqt6-qtimageformats
 
 On Windows / macOS, ensure Qt imageformats plugins (qwebp) are deployed with the application.</source>
-        <translation>Il plugin per il formato immagine WebP non è installato nell'ambiente Qt.
+        <translation>Il plugin per il formato immagine WebP non è installato nell&apos;ambiente Qt.
 
 Per abilitare WebP su Linux, installa il pacchetto corrispondente:
   • Arch Linux / Manjaro:  sudo pacman -S qt6-imageformats
@@ -5036,7 +5036,7 @@ Per abilitare WebP su Linux, installa il pacchetto corrispondente:
   • Fedora / RHEL:         sudo dnf install qt6-qtimageformats
   • openSUSE:              sudo zypper install libqt6-qtimageformats
 
-Su Windows / macOS, assicurati che i plugin Qt imageformats (qwebp) siano distribuiti con l'applicazione.</translation>
+Su Windows / macOS, assicurati che i plugin Qt imageformats (qwebp) siano distribuiti con l&apos;applicazione.</translation>
     </message>
     <message>
         <source>The %1 image format requires the Qt6 imageformats plugin.
@@ -5060,11 +5060,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Failed to decode project atlas: %1</source>
-        <translation>Impossibile decodificare l'atlas di progetto: %1</translation>
+        <translation>Impossibile decodificare l&apos;atlas di progetto: %1</translation>
     </message>
     <message>
         <source>Project atlas image file not found in session: %1</source>
-        <translation>File immagine dell'atlas di progetto non trovato nella sessione: %1</translation>
+        <translation>File immagine dell&apos;atlas di progetto non trovato nella sessione: %1</translation>
     </message>
     <message>
         <source>Set Auxiliary Map</source>
@@ -5366,7 +5366,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>No frames selected: applies to entire atlas</source>
-        <translation>Nessun fotogramma selezionato: applica all'intero atlas</translation>
+        <translation>Nessun fotogramma selezionato: applica all&apos;intero atlas</translation>
     </message>
     <message>
         <source>Import Color Palette</source>
@@ -5644,7 +5644,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Cannot export: Document atlas image is null.</source>
-        <translation>Impossibile esportare: l'immagine atlas del documento è nulla.</translation>
+        <translation>Impossibile esportare: l&apos;immagine atlas del documento è nulla.</translation>
     </message>
     <message>
         <source>Failed to encode retro tiles: %1</source>
@@ -5687,7 +5687,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Error occurred while adding files to ZIP archive: %1</source>
-        <translation>Errore durante l'aggiunta di file all'archivio ZIP: %1</translation>
+        <translation>Errore durante l&apos;aggiunta di file all&apos;archivio ZIP: %1</translation>
     </message>
     <message>
         <source>Error occurred while writing ZIP file: %1</source>
@@ -5695,7 +5695,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Failed to open ZIP archive: %1</source>
-        <translation>Impossibile aprire l'archivio ZIP: %1</translation>
+        <translation>Impossibile aprire l&apos;archivio ZIP: %1</translation>
     </message>
     <message>
         <source>No active session workspace to save.</source>
@@ -5735,11 +5735,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Checkout tree failed with error code: %1</source>
-        <translation>Checkout dell'albero non riuscito con codice errore: %1</translation>
+        <translation>Checkout dell&apos;albero non riuscito con codice errore: %1</translation>
     </message>
     <message>
         <source>Git integration is not compiled in.</source>
-        <translation>L'integrazione Git non è compilata nel programma.</translation>
+        <translation>L&apos;integrazione Git non è compilata nel programma.</translation>
     </message>
 </context>
 <context>
@@ -5810,7 +5810,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_SETTINGS_GRP_LANGUAGE</source>
-        <translation>Lingua dell'interfaccia</translation>
+        <translation>Lingua dell&apos;interfaccia</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_SYSTEM</source>
@@ -5818,7 +5818,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_APP</source>
-        <translation>Lingua dell'applicazione:</translation>
+        <translation>Lingua dell&apos;applicazione:</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_LANG_HINT</source>
@@ -5830,11 +5830,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Check automatically for updates on startup</source>
-        <translation>Verifica automaticamente gli aggiornamenti all'avvio</translation>
+        <translation>Verifica automaticamente gli aggiornamenti all&apos;avvio</translation>
     </message>
     <message>
         <source>Reopen last project on startup</source>
-        <translation>Riapri l'ultimo progetto all'avvio</translation>
+        <translation>Riapri l&apos;ultimo progetto all&apos;avvio</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_GIT</source>
@@ -5842,11 +5842,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_SETTINGS_GRP_AUTHOR</source>
-        <translation>Identità dell'autore (Commit Git)</translation>
+        <translation>Identità dell&apos;autore (Commit Git)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_INFO</source>
-        <translation>Questa identità viene registrata come firma dell'autore per ogni commit nella cronologia del progetto .bento.</translation>
+        <translation>Questa identità viene registrata come firma dell&apos;autore per ogni commit nella cronologia del progetto .bento.</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_NAME_PLACEHOLDER</source>
@@ -5874,11 +5874,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Stato: &lt;b style='color:#27ae60;'&gt;LibGit2 attivo&lt;/b&gt; (gestione cronologia e rami operativa)</translation>
+        <translation>Stato: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 attivo&lt;/b&gt; (gestione cronologia e rami operativa)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Stato: &lt;b style='color:#e74c3c;'&gt;LibGit2 non compilato&lt;/b&gt; (cronologia git disabilitata)</translation>
+        <translation>Stato: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 non compilato&lt;/b&gt; (cronologia git disabilitata)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -5930,7 +5930,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
-        <translation>&lt;b&gt;Suggerimento:&lt;/b&gt; Le texture compresse per GPU (KTX2 / Basis Universal) riducono l'uso di memoria GPU (VRAM) e la larghezza di banda.</translation>
+        <translation>&lt;b&gt;Suggerimento:&lt;/b&gt; Le texture compresse per GPU (KTX2 / Basis Universal) riducono l&apos;uso di memoria GPU (VRAM) e la larghezza di banda.</translation>
     </message>
     <message>
         <source>Default Target Format:</source>
@@ -6273,8 +6273,8 @@ Installa il pacchetto:
         <translation>Verifica aggiornamenti ora</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Fai clic su 'Verifica aggiornamenti ora' per interrogare l'ultima versione su GitHub.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Fai clic su &apos;Verifica aggiornamenti ora&apos; per interrogare l&apos;ultima versione su GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6293,16 +6293,16 @@ Installa il pacchetto:
         <translation>Verifica aggiornamenti da GitHub in corso...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Impossibile verificare gli aggiornamenti: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Impossibile verificare gli aggiornamenti: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Risposta non valida da GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Risposta non valida da GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;È disponibile una nuova versione: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;È disponibile una nuova versione: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6313,8 +6313,8 @@ Installa il pacchetto:
         <translation>Rilasciata: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;Stai utilizzando l'ultima versione disponibile (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Stai utilizzando l&apos;ultima versione disponibile (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
@@ -6404,7 +6404,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Detects and slices sprite bounding boxes from atlas without modifying background or pixel colors.</source>
-        <translation>Rileva e ritaglia i riquadri di delimitazione degli sprite dall'atlas senza modificare lo sfondo o i colori dei pixel.</translation>
+        <translation>Rileva e ritaglia i riquadri di delimitazione degli sprite dall&apos;atlas senza modificare lo sfondo o i colori dei pixel.</translation>
     </message>
 </context>
 <context>
@@ -6419,11 +6419,11 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Failed to decode image from: %1</source>
-        <translation>Impossibile decodificare l'immagine da: %1</translation>
+        <translation>Impossibile decodificare l&apos;immagine da: %1</translation>
     </message>
     <message>
         <source>Cannot export: Document atlas image is null.</source>
-        <translation>Impossibile esportare: l'immagine atlas del documento è nulla.</translation>
+        <translation>Impossibile esportare: l&apos;immagine atlas del documento è nulla.</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
@@ -6431,7 +6431,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Failed to save image to: %1</source>
-        <translation>Impossibile salvare l'immagine in: %1</translation>
+        <translation>Impossibile salvare l&apos;immagine in: %1</translation>
     </message>
     <message>
         <source>Exported atlas image to: %1</source>
@@ -6454,7 +6454,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>Packs sprites tightly into the atlas using tight polygonal envelopes, overlapping bounding boxes, and multi-threaded collision detection.</source>
-        <translation>Impacchetta gli sprite nell'atlas usando inviluppi poligonali stretti, riquadri sovrapposti e rilevamento delle collisioni multithreading.</translation>
+        <translation>Impacchetta gli sprite nell&apos;atlas usando inviluppi poligonali stretti, riquadri sovrapposti e rilevamento delle collisioni multithreading.</translation>
     </message>
     <message>
         <source>Tight Polygon Packing (Nesting)</source>
@@ -6473,7 +6473,7 @@ Installa il pacchetto:
     </message>
     <message>
         <source>KEY_TIMELINE_ADD_SELECTION_TOOLTIP</source>
-        <translation>Aggiungi i fotogrammi selezionati dell'atlas a questa animazione</translation>
+        <translation>Aggiungi i fotogrammi selezionati dell&apos;atlas a questa animazione</translation>
     </message>
     <message>
         <source>KEY_TIMELINE_NO_ANIM</source>
@@ -6507,7 +6507,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>KEY_TIMELINE_SELECT_IN_ATLAS</source>
-        <translation>Seleziona nell'atlas</translation>
+        <translation>Seleziona nell&apos;atlas</translation>
     </message>
 </context>
 <context>
@@ -6526,11 +6526,11 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Immagine dell'atlas associata non trovata per: %1</translation>
+        <translation>Immagine dell&apos;atlas associata non trovata per: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
-        <translation>Impossibile caricare l'immagine dell'atlas: %1 (%2)</translation>
+        <translation>Impossibile caricare l&apos;immagine dell&apos;atlas: %1 (%2)</translation>
     </message>
     <message>
         <source>Imported %1 frames from Unity 2D Sprite Mesh</source>
@@ -6550,7 +6550,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unity export.</source>
-        <translation>Impossibile impacchettare i fotogrammi per l'esportazione Unity.</translation>
+        <translation>Impossibile impacchettare i fotogrammi per l&apos;esportazione Unity.</translation>
     </message>
     <message>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
@@ -6558,7 +6558,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Failed to save companion image: %1</source>
-        <translation>Impossibile salvare l'immagine associata: %1</translation>
+        <translation>Impossibile salvare l&apos;immagine associata: %1</translation>
     </message>
     <message>
         <source>Cannot write to Unity JSON file: %1</source>
@@ -6593,11 +6593,11 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Immagine dell'atlas associata non trovata per: %1</translation>
+        <translation>Immagine dell&apos;atlas associata non trovata per: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
-        <translation>Impossibile caricare l'immagine dell'atlas: %1 (%2)</translation>
+        <translation>Impossibile caricare l&apos;immagine dell&apos;atlas: %1 (%2)</translation>
     </message>
     <message>
         <source>Imported %1 frames from Unreal Paper2D</source>
@@ -6617,7 +6617,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
-        <translation>Impossibile impacchettare i fotogrammi per l'esportazione Unreal Paper2D.</translation>
+        <translation>Impossibile impacchettare i fotogrammi per l&apos;esportazione Unreal Paper2D.</translation>
     </message>
     <message>
         <source>Failed to save companion VRAM texture: %1 (%2)</source>
@@ -6625,7 +6625,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Failed to save companion image: %1</source>
-        <translation>Impossibile salvare l'immagine associata: %1</translation>
+        <translation>Impossibile salvare l&apos;immagine associata: %1</translation>
     </message>
     <message>
         <source>Cannot write to Unreal Paper2D JSON file: %1</source>
@@ -6824,7 +6824,7 @@ Canc per eliminare</translation>
     </message>
     <message>
         <source>Immediately triggers export to validate settings</source>
-        <translation>Avvia immediatamente l'esportazione per convalidare le impostazioni</translation>
+        <translation>Avvia immediatamente l&apos;esportazione per convalidare le impostazioni</translation>
     </message>
     <message>
         <source>💾 Save</source>

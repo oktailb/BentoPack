@@ -100,7 +100,7 @@
         <translation>A powerful tool for sprite extraction and animation</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Tooling &amp; multimedia technology studio</translation>
     </message>
     <message>
@@ -241,8 +241,8 @@
         <translation>Atlas Bin-Packing (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Ready — Adjust parameters and click 'Compute Packing'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Ready — Adjust parameters and click &apos;Compute Packing&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -991,8 +991,8 @@ Strict removal: clears the fringe pixel.</translation>
         <translation>New Layer (e.g. Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>%1 frame(s) prepared for New Layer 'Emissive (_e)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -2383,7 +2383,7 @@ Click a node to view its details.</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Add to Active Animation '%1'</translation>
+        <translation>Add to Active Animation &apos;%1&apos;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2684,7 +2684,7 @@ Do you want to restore this session?</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>The current project '%1' has unsaved changes.
+        <translation>The current project &apos;%1&apos; has unsaved changes.
 Do you want to save them before proceeding?</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Do you want to save them before proceeding?</translation>
         <translation>New Layer (e.g. Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>%1 frame(s) prepared for New Layer 'Normal (_n)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3290,12 +3290,12 @@ Do you want to save them before proceeding?</translation>
         <translation>Secondary Color (Click to open Pro Color Picker)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
-        <translation>Apply to '%1' frames</translation>
+        <source>Apply to &apos;%1&apos; frames</source>
+        <translation>Apply to &apos;%1&apos; frames</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
-        <translation>Apply CDT mesh generation to all frames of animation '%1'</translation>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
+        <translation>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3862,16 +3862,16 @@ Do you want to save them before proceeding?</translation>
         <translation>Apply to Anim</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
-        <translation>Apply current frame's pivot point to all frames in the current animation</translation>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
+        <translation>Apply current frame&apos;s pivot point to all frames in the current animation</translation>
     </message>
     <message>
         <source>Apply to All</source>
         <translation>Apply to All</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
-        <translation>Apply current frame's pivot point to all frames in the entire project</translation>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
+        <translation>Apply current frame&apos;s pivot point to all frames in the entire project</translation>
     </message>
     <message>
         <source>💡 &lt;b&gt;Tip:&lt;/b&gt; Click and drag the reticle directly on the canvas to place the animation pivot. Dashed lines indicate the ground level and vertical axis for synchronization.</source>
@@ -3922,8 +3922,8 @@ Do you want to save them before proceeding?</translation>
         <translation>All Frames (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>Apply to all '%1' frames</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Apply to all &apos;%1&apos; frames</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,8 +4282,8 @@ Exported to Godot, Unity, Unreal Paper2D, and JSON.</translation>
         <translation>CDT Polygon Mesh Editor (No polygon mesh on this frame) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
-        <translation>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4354,8 +4354,8 @@ Would you like to repack the atlas now?</translation>
         <translation>⚡ Computing CDT...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
-        <translation>Apply filter to all '%1' frames (%2 frames)</translation>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation>Apply filter to all &apos;%1&apos; frames (%2 frames)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4479,8 +4479,8 @@ Would you like to repack the atlas now?</translation>
         <translation>XML parse error in plist: %1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>No 'frames' dictionary found in plist.</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>No &apos;frames&apos; dictionary found in plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4845,32 +4845,32 @@ Would you like to repack the atlas now?</translation>
         <translation>Merge Frame %1 into %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Create Animation '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Create Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Delete Animation '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Delete Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Reverse Animation '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Reverse Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Rename Animation '%1' to '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Rename Animation &apos;%1&apos; to &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Duplicate Animation '%1' as '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Reorder Frames in Animation '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Reorder Frames in Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Change Properties for Animation '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Change Properties for Animation &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -5874,11 +5874,11 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Status: &lt;b style='color:#27ae60;'&gt;LibGit2 active&lt;/b&gt; (history and branch management operational)</translation>
+        <translation>Status: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 active&lt;/b&gt; (history and branch management operational)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Status: &lt;b style='color:#e74c3c;'&gt;LibGit2 not compiled&lt;/b&gt; (git history disabled)</translation>
+        <translation>Status: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 not compiled&lt;/b&gt; (git history disabled)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -6273,8 +6273,8 @@ Install package:
         <translation>Check for Updates Now</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Click 'Check for Updates Now' to query the latest release on GitHub.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6293,16 +6293,16 @@ Install package:
         <translation>Checking for updates from GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6313,8 +6313,8 @@ Install package:
         <translation>Released: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>

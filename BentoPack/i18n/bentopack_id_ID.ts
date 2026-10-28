@@ -100,7 +100,7 @@
         <translation>Alat canggih untuk ekstraksi dan animasi sprite</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Studio Alat &amp; Teknologi Multimedia</translation>
     </message>
     <message>
@@ -241,8 +241,8 @@
         <translation>Pengemasan Atlas (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Siap — Sesuaikan parameter lalu klik 'Hitung Pengemasan'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Siap — Sesuaikan parameter lalu klik &apos;Hitung Pengemasan&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -991,8 +991,8 @@ Penghapusan ketat: membersihkan piksel batas.</translation>
         <translation>Lapisan Baru (mis. Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>%1 bingkai disiapkan untuk Lapisan Baru 'Emissive (_e)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 bingkai disiapkan untuk Lapisan Baru &apos;Emissive (_e)&apos;</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -2383,7 +2383,7 @@ Klik simpul untuk melihat detailnya.</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Tambahkan ke animasi aktif "%1"</translation>
+        <translation>Tambahkan ke animasi aktif &quot;%1&quot;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2680,7 +2680,7 @@ Apakah Anda ingin memulihkan sesi ini?</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Proyek saat ini "%1" memiliki perubahan yang belum disimpan.
+        <translation>Proyek saat ini &quot;%1&quot; memiliki perubahan yang belum disimpan.
 Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Lapisan Baru (mis. Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>%1 bingkai disiapkan untuk Lapisan Baru 'Normal (_n)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 bingkai disiapkan untuk Lapisan Baru &apos;Normal (_n)&apos;</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3290,12 +3290,12 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Warna Sekunder (Klik untuk membuka Pemilih Warna Pro)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
-        <translation>Terapkan ke bingkai '%1'</translation>
+        <source>Apply to &apos;%1&apos; frames</source>
+        <translation>Terapkan ke bingkai &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
-        <translation>Terapkan pembuatan jaring CDT ke semua bingkai animasi '%1'</translation>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
+        <translation>Terapkan pembuatan jaring CDT ke semua bingkai animasi &apos;%1&apos;</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3862,7 +3862,7 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Terapkan ke Anim.</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
         <translation>Terapkan titik poros frame saat ini ke semua frame di animasi saat ini</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Terapkan ke Semua</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
         <translation>Terapkan titik poros frame saat ini ke semua frame di seluruh proyek</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Apakah Anda ingin menyimpannya sebelum melanjutkan?</translation>
         <translation>Semua Bingkai (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>Terapkan ke semua bingkai '%1'</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Terapkan ke semua bingkai &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,8 +4282,8 @@ Diekspor ke Godot, Unity, Unreal Paper2D, dan JSON.</translation>
         <translation>Editor Mesh Poligon CDT (Tidak ada mesh poligon pada bingkai ini) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
-        <translation>Terapkan pengeditan gambar, pembuatan jaring, dan filter ke semua bingkai animasi '%1'</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Terapkan pengeditan gambar, pembuatan jaring, dan filter ke semua bingkai animasi &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4354,8 +4354,8 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
         <translation>⚡ Menghitung CDT...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
-        <translation>Terapkan filter ke semua bingkai '%1' (%2 bingkai)</translation>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation>Terapkan filter ke semua bingkai &apos;%1&apos; (%2 bingkai)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4479,8 +4479,8 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
         <translation>XML parse error in plist: %1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>No 'frames' dictionary found in plist.</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>No &apos;frames&apos; dictionary found in plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4843,32 +4843,32 @@ Apakah Anda ingin mengemas ulang atlas sekarang?</translation>
         <translation>Gabungkan Bingkai %1 ke %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Buat Animasi '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Buat Animasi &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Hapus Animasi '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Hapus Animasi &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Balikkan Animasi '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Balikkan Animasi &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Ganti Nama Animasi '%1' menjadi '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Ganti Nama Animasi &apos;%1&apos; menjadi &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Duplikat Animasi '%1' sebagai '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Duplikat Animasi &apos;%1&apos; sebagai &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Susun Ulang Bingkai di Animasi '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Susun Ulang Bingkai di Animasi &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Ubah Properti untuk Animasi '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Ubah Properti untuk Animasi &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -5872,11 +5872,11 @@ Pasang paket:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Status: &lt;b style='color:#27ae60;'&gt;LibGit2 aktif&lt;/b&gt; (manajemen riwayat dan cabang beroperasi)</translation>
+        <translation>Status: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 aktif&lt;/b&gt; (manajemen riwayat dan cabang beroperasi)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Status: &lt;b style='color:#e74c3c;'&gt;LibGit2 tidak dikompilasi&lt;/b&gt; (riwayat git dinonaktifkan)</translation>
+        <translation>Status: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 tidak dikompilasi&lt;/b&gt; (riwayat git dinonaktifkan)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -6271,8 +6271,8 @@ Pasang paket:
         <translation>Periksa Pembaruan Sekarang</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Klik 'Periksa Pembaruan Sekarang' untuk melihat rilis terbaru di GitHub.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Klik &apos;Periksa Pembaruan Sekarang&apos; untuk melihat rilis terbaru di GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6291,16 +6291,16 @@ Pasang paket:
         <translation>Memeriksa pembaruan dari GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Gagal memeriksa pembaruan: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Gagal memeriksa pembaruan: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Tanggapan tidak valid dari GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Tanggapan tidak valid dari GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Versi baru tersedia: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Versi baru tersedia: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6311,8 +6311,8 @@ Pasang paket:
         <translation>Dirilis: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;Anda menggunakan versi terbaru (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Anda menggunakan versi terbaru (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>

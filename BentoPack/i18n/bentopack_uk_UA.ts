@@ -100,7 +100,7 @@
         <translation>Потужний інструмент для видобування спрайтів та створення анімацій</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Студія інструментів та мультимедійних технологій</translation>
     </message>
     <message>
@@ -241,8 +241,8 @@
         <translation>Пакування атласу (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Готово — налаштуйте параметри та натисніть 'Обчислити пакування'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Готово — налаштуйте параметри та натисніть &apos;Обчислити пакування&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -322,11 +322,11 @@
     </message>
     <message>
         <source>Auto-Aliasing (Merge identical frames without breaking animations)</source>
-        <translation>Авто-псевдоніми (об'єднання однакових кадрів без порушення анімацій)</translation>
+        <translation>Авто-псевдоніми (об&apos;єднання однакових кадрів без порушення анімацій)</translation>
     </message>
     <message>
         <source>Modular Cel Deduplication (Link shared cels across layers)</source>
-        <translation>Модульна дедуплікація cels (зв'язування спільних cels між шарами)</translation>
+        <translation>Модульна дедуплікація cels (зв&apos;язування спільних cels між шарами)</translation>
     </message>
     <message>
         <source>Delta-Patch Slicing (Crop sub-rect deltas between animation frames)</source>
@@ -382,7 +382,7 @@
     </message>
     <message>
         <source>Repeats border pixels outward (1-4px) with 8-connected corner clamping to prevent bilinear interpolation artifacts and bleeding in game engines</source>
-        <translation>Повторює межові пікселі назовні (1-4 пкс) з 8-зв'язним кутовим затисканням для запобігання артефактам білінійної інтерполяції в ігрових рушіях</translation>
+        <translation>Повторює межові пікселі назовні (1-4 пкс) з 8-зв&apos;язним кутовим затисканням для запобігання артефактам білінійної інтерполяції в ігрових рушіях</translation>
     </message>
     <message>
         <source>Atlas Dimensions:</source>
@@ -432,7 +432,7 @@
     </message>
     <message>
         <source>KEY_CMD_MERGE_SLICES</source>
-        <translation>Об'єднати %1 рамок</translation>
+        <translation>Об&apos;єднати %1 рамок</translation>
     </message>
     <message>
         <source>KEY_CMD_MOVE_SLICES</source>
@@ -833,7 +833,7 @@ Choose which branch to restore:</source>
     </message>
     <message>
         <source>Soft Color Clamping (CIELAB Perceptual)</source>
-        <translation>М'яке колірне обмеження (CIELAB)</translation>
+        <translation>М&apos;яке колірне обмеження (CIELAB)</translation>
     </message>
     <message>
         <source>Chroma Spill Suppression (Matte Despill)</source>
@@ -847,7 +847,7 @@ Choose which branch to restore:</source>
         <source>Soft clamping: replaces fringe with interior color using CIELAB ΔE.
 Chroma spill: neutralizes green/blue bounce reflection without removing alpha.
 Strict removal: clears the fringe pixel.</source>
-        <translation>М'яке обмеження: замінює облямівку внутрішнім кольором за CIELAB ΔE.
+        <translation>М&apos;яке обмеження: замінює облямівку внутрішнім кольором за CIELAB ΔE.
 Придушення переливу: нейтралізує зелені/сині відблиски без видалення альфи.
 Суворе видалення: очищає піксель облямівки.</translation>
     </message>
@@ -908,7 +908,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Soft Knee Falloff:</source>
-        <translation>М'який спад (Soft Knee):</translation>
+        <translation>М&apos;який спад (Soft Knee):</translation>
     </message>
     <message>
         <source>Selective Color Key Parameters</source>
@@ -991,8 +991,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Новий шар (напр. Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>%1 кадр(ів) підготовлено для нового шару 'Emissive (_e)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 кадр(ів) підготовлено для нового шару &apos;Emissive (_e)&apos;</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -1102,7 +1102,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>File / Project Name:</source>
-        <translation>Ім'я файлу / проекту:</translation>
+        <translation>Ім&apos;я файлу / проекту:</translation>
     </message>
     <message>
         <source>e.g. hero, sprites, atlas...</source>
@@ -1470,7 +1470,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Please specify a valid file name before exporting.</source>
-        <translation>Будь ласка, вкажіть коректне ім'я файлу перед експортом.</translation>
+        <translation>Будь ласка, вкажіть коректне ім&apos;я файлу перед експортом.</translation>
     </message>
     <message>
         <source>Rendering and encoding animated GIF frames...</source>
@@ -1737,7 +1737,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Referenced texture atlas image not found for: %1</source>
-        <translation>Пов'язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Пов&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1</source>
@@ -1757,7 +1757,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack atlas frames for Godot export.</source>
@@ -1831,7 +1831,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Associated atlas image not found: %1</source>
-        <translation>Зв'язане зображення атласу не знайдено: %1</translation>
+        <translation>Зв&apos;язане зображення атласу не знайдено: %1</translation>
     </message>
     <message>
         <source>Failed to decode atlas image: %1</source>
@@ -1851,7 +1851,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Packing atlas for JSON export...</source>
@@ -1883,7 +1883,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Hash Object (TexturePacker Hash)</source>
-        <translation>Об'єкт хешу (TexturePacker Hash)</translation>
+        <translation>Об&apos;єкт хешу (TexturePacker Hash)</translation>
     </message>
     <message>
         <source>Array List (TexturePacker Array / Aseprite)</source>
@@ -1930,7 +1930,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Merge active layer down</source>
-        <translation>Об'єднати активний шар з нижнім</translation>
+        <translation>Об&apos;єднати активний шар з нижнім</translation>
     </message>
     <message>
         <source>Flatten</source>
@@ -2022,7 +2022,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Soft Light</source>
-        <translation>М'яке світло</translation>
+        <translation>М&apos;яке світло</translation>
     </message>
     <message>
         <source>Difference</source>
@@ -2383,7 +2383,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Додати до активної анімації "%1"</translation>
+        <translation>Додати до активної анімації &quot;%1&quot;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2407,7 +2407,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_MERGE_SLICES</source>
-        <translation>Об'єднати рамки</translation>
+        <translation>Об&apos;єднати рамки</translation>
     </message>
     <message>
         <source>KEY_CTX_DELETE_FRAMES</source>
@@ -2680,7 +2680,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Поточний проект "%1" містить незбережені зміни.
+        <translation>Поточний проект &quot;%1&quot; містить незбережені зміни.
 Бажаєте зберегти їх перед продовженням?</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Новий шар (напр. Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>%1 кадр(ів) підготовлено для нового шару 'Normal (_n)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 кадр(ів) підготовлено для нового шару &apos;Normal (_n)&apos;</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -2943,7 +2943,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Generates tangent-space normal maps (_n) with Sobel height convolution, volumetric alpha silhouette beveling, and interactive 2D light preview.</source>
-        <translation>Створює карти нормалей у дотичному просторі (_n) зі згорткою Собеля, об'ємним скосом альфа-силуету та інтерактивним переглядом 2D-світла.</translation>
+        <translation>Створює карти нормалей у дотичному просторі (_n) зі згорткою Собеля, об&apos;ємним скосом альфа-силуету та інтерактивним переглядом 2D-світла.</translation>
     </message>
 </context>
 <context>
@@ -3040,15 +3040,15 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Connectivity:</source>
-        <translation>Зв'язність:</translation>
+        <translation>Зв&apos;язність:</translation>
     </message>
     <message>
         <source>4-connected (Orthogonal crisp - Retro pixel art)</source>
-        <translation>4-зв'язна (ортогональна чітка — ретро піксель-арт)</translation>
+        <translation>4-зв&apos;язна (ортогональна чітка — ретро піксель-арт)</translation>
     </message>
     <message>
         <source>8-connected (Diagonal included - Smooth outline)</source>
-        <translation>8-зв'язна (з діагоналями — плавний контур)</translation>
+        <translation>8-зв&apos;язна (з діагоналями — плавний контур)</translation>
     </message>
     <message>
         <source>Solid silhouette / Hit-flash (Fill sprite interior)</source>
@@ -3290,12 +3290,12 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Вторинний колір (Клацніть, щоб відкрити професійну палітру)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
-        <translation>Застосувати до кадрів '%1'</translation>
+        <source>Apply to &apos;%1&apos; frames</source>
+        <translation>Застосувати до кадрів &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
-        <translation>Застосувати генерацію CDT-сітки до всіх кадрів анімації '%1'</translation>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
+        <translation>Застосувати генерацію CDT-сітки до всіх кадрів анімації &apos;%1&apos;</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3495,7 +3495,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Circle (Soft Round)</source>
-        <translation>Коло (М'яке кругле)</translation>
+        <translation>Коло (М&apos;яке кругле)</translation>
     </message>
     <message>
         <source>Hard edge (Pixel art)</source>
@@ -3731,7 +3731,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Diagonal neighbors (8-connected)</source>
-        <translation>Діагональні сусіди (8-зв'язність)</translation>
+        <translation>Діагональні сусіди (8-зв&apos;язність)</translation>
     </message>
     <message>
         <source>Allow flood fill to spread through diagonal pixel corners</source>
@@ -3747,7 +3747,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Sample merged (all layers)</source>
-        <translation>Об'єднана проба (всі шари)</translation>
+        <translation>Об&apos;єднана проба (всі шари)</translation>
     </message>
     <message>
         <source>Check color boundaries across all visible layers combined</source>
@@ -3767,7 +3767,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>Select connected pixels of matching color (Uncheck to select all matching pixels across whole image)</source>
-        <translation>Виділяти зв'язані пікселі відповідного кольору (Зніміть прапорець для всього зображення)</translation>
+        <translation>Виділяти зв&apos;язані пікселі відповідного кольору (Зніміть прапорець для всього зображення)</translation>
     </message>
     <message>
         <source>Allow magic wand selection to expand diagonally through pixel corners</source>
@@ -3862,7 +3862,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>До анімації</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
         <translation>Застосувати опорну точку поточного кадру до всіх кадрів поточної анімації</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>До всіх</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
         <translation>Застосувати опорну точку поточного кадру до всіх кадрів усього проєкту</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Усі кадри (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>Застосувати до всіх кадрів '%1'</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Застосувати до всіх кадрів &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,8 +4282,8 @@ Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
         <translation>Редактор полігональної сітки CDT (немає сітки на цьому кадрі) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
-        <translation>Застосувати малювання, генерацію сітки та фільтри до всіх кадрів анімації '%1'</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Застосувати малювання, генерацію сітки та фільтри до всіх кадрів анімації &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4354,8 +4354,8 @@ Would you like to repack the atlas now?</source>
         <translation>⚡ Обчислення CDT...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
-        <translation>Застосувати фільтр до всіх кадрів '%1' (%2 кадрів)</translation>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation>Застосувати фільтр до всіх кадрів &apos;%1&apos; (%2 кадрів)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4479,8 +4479,8 @@ Would you like to repack the atlas now?</source>
         <translation>XML parse error in plist: %1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>No 'frames' dictionary found in plist.</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>No &apos;frames&apos; dictionary found in plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4673,7 +4673,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Project file path is empty. Use Save As.</source>
-        <translation>Шлях до файлу проекту порожній. Використовуйте "Зберегти як".</translation>
+        <translation>Шлях до файлу проекту порожній. Використовуйте &quot;Зберегти як&quot;.</translation>
     </message>
     <message>
         <source>Saving project %1...</source>
@@ -4753,7 +4753,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Export file path must have a valid file name: %1</source>
-        <translation>Шлях експорту повинен мати коректне ім'я файлу: %1</translation>
+        <translation>Шлях експорту повинен мати коректне ім&apos;я файлу: %1</translation>
     </message>
     <message>
         <source>Document is empty.</source>
@@ -4844,35 +4844,35 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Merge Frame %1 into %2</source>
-        <translation>Об'єднати кадр %1 у %2</translation>
+        <translation>Об&apos;єднати кадр %1 у %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Створити анімацію '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Створити анімацію &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Видалити анімацію '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Видалити анімацію &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Зворотний порядок анімації '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Зворотний порядок анімації &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Перейменувати анімацію '%1' на '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Перейменувати анімацію &apos;%1&apos; на &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Дублювати анімацію '%1' як '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Дублювати анімацію &apos;%1&apos; як &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Змінити порядок кадрів в анімації '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Змінити порядок кадрів в анімації &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Змінити властивості анімації '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Змінити властивості анімації &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -4936,7 +4936,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>JSON root must be an object.</source>
-        <translation>Корінь JSON повинен бути об'єктом.</translation>
+        <translation>Корінь JSON повинен бути об&apos;єктом.</translation>
     </message>
     <message>
         <source>Cleanup &amp; Extraction</source>
@@ -5856,7 +5856,7 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_NAME</source>
-        <translation>Ім'я автора:</translation>
+        <translation>Ім&apos;я автора:</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_AUTHOR_EMAIL_PLACEHOLDER</source>
@@ -5876,15 +5876,15 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Стан: &lt;b style='color:#27ae60;'&gt;LibGit2 активовано&lt;/b&gt; (керування історією та гілками працює нормально)</translation>
+        <translation>Стан: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 активовано&lt;/b&gt; (керування історією та гілками працює нормально)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Стан: &lt;b style='color:#e74c3c;'&gt;LibGit2 не скомпільовано&lt;/b&gt; (історію Git вимкнено)</translation>
+        <translation>Стан: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 не скомпільовано&lt;/b&gt; (історію Git вимкнено)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
-        <translation>Кожна дія редагування (обрізка, перейменування, об'єднання спрайтів, створення анімацій) створює інкрементний коміт у сховищі проекту .bento.</translation>
+        <translation>Кожна дія редагування (обрізка, перейменування, об&apos;єднання спрайтів, створення анімацій) створює інкрементний коміт у сховищі проекту .bento.</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_HDR_ATLAS</source>
@@ -5932,7 +5932,7 @@ Install package:
     </message>
     <message>
         <source>&lt;b&gt;Tip:&lt;/b&gt; GPU compressed textures (KTX2 / Basis Universal) reduce GPU memory usage (VRAM) and bandwidth on runtime devices.</source>
-        <translation>&lt;b&gt;Порада:&lt;/b&gt; Текстури, стиснуті для GPU (KTX2 / Basis Universal), зменшують використання пам'яті GPU (VRAM) та пропускну здатність на цільових пристроях.</translation>
+        <translation>&lt;b&gt;Порада:&lt;/b&gt; Текстури, стиснуті для GPU (KTX2 / Basis Universal), зменшують використання пам&apos;яті GPU (VRAM) та пропускну здатність на цільових пристроях.</translation>
     </message>
     <message>
         <source>Default Target Format:</source>
@@ -6275,8 +6275,8 @@ Install package:
         <translation>Перевірити оновлення зараз</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Натисніть 'Перевірити оновлення зараз', щоб отримати останній випуск на GitHub.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Натисніть &apos;Перевірити оновлення зараз&apos;, щоб отримати останній випуск на GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6295,16 +6295,16 @@ Install package:
         <translation>Перевірка оновлень на GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Не вдалося перевірити оновлення: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Не вдалося перевірити оновлення: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Некоректна відповідь від GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Некоректна відповідь від GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Доступна нова версія: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Доступна нова версія: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6315,8 +6315,8 @@ Install package:
         <translation>Дата випуску: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;Ви використовуєте останню версію (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Ви використовуєте останню версію (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
@@ -6429,7 +6429,7 @@ Install package:
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to save image to: %1</source>
@@ -6528,7 +6528,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Зв'язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Зв&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
@@ -6548,7 +6548,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unity export.</source>
@@ -6595,7 +6595,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Associated texture atlas image not found for: %1</source>
-        <translation>Зв'язане зображення текстурного атласу не знайдено для: %1</translation>
+        <translation>Зв&apos;язане зображення текстурного атласу не знайдено для: %1</translation>
     </message>
     <message>
         <source>Failed to load texture atlas image: %1 (%2)</source>
@@ -6615,7 +6615,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Export file name cannot be empty.</source>
-        <translation>Ім'я файлу експорту не може бути порожнім.</translation>
+        <translation>Ім&apos;я файлу експорту не може бути порожнім.</translation>
     </message>
     <message>
         <source>Failed to pack frames for Unreal Paper2D export.</source>
@@ -6734,11 +6734,11 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Base name:</source>
-        <translation>Базове ім'я:</translation>
+        <translation>Базове ім&apos;я:</translation>
     </message>
     <message>
         <source>Exported file base name (e.g., hero)</source>
-        <translation>Базове ім'я експортованого файлу (напр., hero)</translation>
+        <translation>Базове ім&apos;я експортованого файлу (напр., hero)</translation>
     </message>
     <message>
         <source>Generated file:</source>
@@ -6802,7 +6802,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Merge identical frames (Auto-Aliasing)</source>
-        <translation>Об'єднувати однакові кадри (Auto-Aliasing)</translation>
+        <translation>Об&apos;єднувати однакові кадри (Auto-Aliasing)</translation>
     </message>
     <message>
         <source>Power of Two dimensions (POT)</source>
@@ -6905,7 +6905,7 @@ Del для видалення</translation>
     </message>
     <message>
         <source>Base name</source>
-        <translation>Базове ім'я</translation>
+        <translation>Базове ім&apos;я</translation>
     </message>
     <message>
         <source>Image Format</source>

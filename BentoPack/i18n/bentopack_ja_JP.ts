@@ -100,7 +100,7 @@
         <translation>スプライトを抽出してアニメーション化する強力なツール</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>ツール＆マルチメディア技術スタジオ</translation>
     </message>
     <message>
@@ -241,7 +241,7 @@
         <translation>アトラスビンパッキング (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
         <translation>準備完了 — 設定を調整して「パッキング計算」をクリックしてください</translation>
     </message>
     <message>
@@ -991,8 +991,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>新規 レイヤー (例: Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>新規 レイヤー 'Emissive (_e)' 用に %1 フレームを準備しました</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>新規 レイヤー &apos;Emissive (_e)&apos; 用に %1 フレームを準備しました</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -2680,7 +2680,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>現在のプロジェクト '%1' には未保存の変更があります。
+        <translation>現在のプロジェクト &apos;%1&apos; には未保存の変更があります。
 続行する前に保存しますか？</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>新規 レイヤー (例: Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>新規 レイヤー 'Normal (_n)' 用に %1 フレームを準備しました</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>新規 レイヤー &apos;Normal (_n)&apos; 用に %1 フレームを準備しました</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3290,11 +3290,11 @@ Strict removal: clears the fringe pixel.</source>
         <translation>背景色 (クリックしてプロ用カラーピッカーを開く)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
+        <source>Apply to &apos;%1&apos; frames</source>
         <translation>「%1」のフレームに適用</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
         <translation>CDTメッシュ生成をアニメーション「%1」の全フレームに適用</translation>
     </message>
     <message>
@@ -3862,7 +3862,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>アニメに適用</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
         <translation>現在のフレームのピボット位置を現在のアニメーションの全フレームに適用</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>すべてに適用</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
         <translation>現在のフレームのピボット位置をプロジェクト全体の全フレームに適用</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>すべてのフレーム (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>アニメーション '%1' の全フレームに適用</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>アニメーション &apos;%1&apos; の全フレームに適用</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,7 +4282,7 @@ Godot、Unity、Unreal Paper2D、JSON にエクスポートされます。</tran
         <translation>CDTポリゴンメッシュエディター (このフレームにはポリゴンメッシュがありません) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
         <translation>描画編集、メッシュ生成、フィルターをアニメーション「%1」の全フレームに適用</translation>
     </message>
     <message>
@@ -4354,7 +4354,7 @@ Would you like to repack the atlas now?</source>
         <translation>⚡ CDT計算中...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
         <translation>「%1」の全フレームにフィルターを適用 (%2 フレーム)</translation>
     </message>
     <message>
@@ -4479,8 +4479,8 @@ Would you like to repack the atlas now?</source>
         <translation>plistのXMLパースエラー: %1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>plist内に 'frames' 辞書が見つかりません。</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>plist内に &apos;frames&apos; 辞書が見つかりません。</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4843,32 +4843,32 @@ Would you like to repack the atlas now?</source>
         <translation>フレーム %1 を %2 に結合</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>アニメーション '%1' を作成</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>アニメーション &apos;%1&apos; を作成</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>アニメーション '%1' を削除</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>アニメーション &apos;%1&apos; を削除</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>アニメーション '%1' を反転</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>アニメーション &apos;%1&apos; を反転</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>アニメーション '%1' を '%2' に名前変更</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>アニメーション &apos;%1&apos; を &apos;%2&apos; に名前変更</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>アニメーション '%1' を '%2' として複製</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>アニメーション &apos;%1&apos; を &apos;%2&apos; として複製</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>アニメーション '%1' のフレーム順序を変更</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>アニメーション &apos;%1&apos; のフレーム順序を変更</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>アニメーション '%1' のプロパティを変更</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>アニメーション &apos;%1&apos; のプロパティを変更</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -5872,11 +5872,11 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>ステータス : &lt;b style='color:#27ae60;'&gt;LibGit2 有効&lt;/b&gt; (履歴およびブランチ管理が利用可能)</translation>
+        <translation>ステータス : &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 有効&lt;/b&gt; (履歴およびブランチ管理が利用可能)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>ステータス : &lt;b style='color:#e74c3c;'&gt;LibGit2 未コンパイル&lt;/b&gt; (Git履歴は無効です)</translation>
+        <translation>ステータス : &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 未コンパイル&lt;/b&gt; (Git履歴は無効です)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -6271,7 +6271,7 @@ Install package:
         <translation>今すぐアップデートを確認</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
         <translation>「今すぐアップデートを確認」をクリックして、GitHub の最新リリースを照会します。</translation>
     </message>
     <message>
@@ -6291,16 +6291,16 @@ Install package:
         <translation>GitHub からアップデートを確認中...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;アップデートの確認に失敗しました: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;アップデートの確認に失敗しました: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;GitHub からの無効な応答です。&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;GitHub からの無効な応答です。&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;新しいバージョンが利用可能です: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;新しいバージョンが利用可能です: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6311,8 +6311,8 @@ Install package:
         <translation>リリース日: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;最新バージョン (v%1) を使用しています。&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;最新バージョン (v%1) を使用しています。&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
