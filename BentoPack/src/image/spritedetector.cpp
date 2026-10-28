@@ -279,62 +279,183 @@ bool SpriteDetector::detectToImages(const QImage &sourceImage,
         }
     }
 
-    // Sort master components in reading order
-    QList<int> masterComponentIds;
+    // Collect master component rectangles
+    QList<QRect> initialRects;
     for (int c = 0; c < componentRects.size(); ++c) {
-        if (isMaster[c]) masterComponentIds.append(c);
+        if (isMaster[c]) initialRects.append(componentRects[c]);
     }
 
-    std::sort(masterComponentIds.begin(), masterComponentIds.end(),
-              [&componentRects, verticalTolerance](int a, int b) {
-                  const QRect &ra = componentRects[a], &rb = componentRects[b];
+    // Advanced constraints: Max dimensions, permissive dimension, grid alignment, non-overlapping boxes
+    QList<QRect> finalRects;
+    const int maxW = options.maxWidth > 0 ? options.maxWidth : 0;
+    const int maxH = options.maxHeight > 0 ? options.maxHeight : 0;
+    const int perm = options.maxDimensionPermissive > 0 ? options.maxDimensionPermissive : 0;
+    const int minSz = std::max(1, options.minSliceSize);
+
+    // 1. Partition oversized components if max dimensions are defined
+    for (const QRect &r : initialRects) {
+        bool withinLimits = true;
+        if (maxW > 0 && maxH > 0) {
+            bool normalFit = (r.width() <= maxW && r.height() <= maxH);
+            bool permissiveFit = false;
+            if (perm > 0) {
+                if (r.width() <= maxW && r.height() <= perm) permissiveFit = true;
+                if (r.height() <= maxH && r.width() <= perm) permissiveFit = true;
+            }
+            withinLimits = (normalFit || permissiveFit);
+        }
+
+        if (withinLimits) {
+            finalRects.append(r);
+        } else {
+            // Partition oversized block into tiles of size maxW x maxH
+            int stepX = maxW > 0 ? maxW : r.width();
+            int stepY = maxH > 0 ? maxH : r.height();
+            if (options.alignToGrid && options.gridCellSize > 0) {
+                stepX = std::max(options.gridCellSize, (stepX / options.gridCellSize) * options.gridCellSize);
+                stepY = std::max(options.gridCellSize, (stepY / options.gridCellSize) * options.gridCellSize);
+            }
+
+            for (int sy = r.top(); sy <= r.bottom(); sy += stepY) {
+                int cellH = std::min(stepY, r.bottom() - sy + 1);
+                for (int sx = r.left(); sx <= r.right(); sx += stepX) {
+                    int cellW = std::min(stepX, r.right() - sx + 1);
+
+                    // Compute tight bounding box of pixels within this cell
+                    int subMinX = sx + cellW, subMinY = sy + cellH, subMaxX = -1, subMaxY = -1;
+                    for (int py = sy; py < sy + cellH; ++py) {
+                        const QRgb *line = scanLines[py];
+                        for (int px = sx; px < sx + cellW; ++px) {
+                            if (qAlpha(line[px]) > ALPHA_THRESHOLD) {
+                                if (px < subMinX) subMinX = px;
+                                if (py < subMinY) subMinY = py;
+                                if (px > subMaxX) subMaxX = px;
+                                if (py > subMaxY) subMaxY = py;
+                            }
+                        }
+                    }
+
+                    if (subMinX <= subMaxX && subMinY <= subMaxY) {
+                        int bw = subMaxX - subMinX + 1;
+                        int bh = subMaxY - subMinY + 1;
+                        if (bw >= minSz && bh >= minSz) {
+                            finalRects.append(QRect(subMinX, subMinY, bw, bh));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // 2. Align to grid if requested
+    if (options.alignToGrid && options.gridCellSize > 1) {
+        const int g = options.gridCellSize;
+        for (int i = 0; i < finalRects.size(); ++i) {
+            QRect &r = finalRects[i];
+            int left = (r.left() / g) * g;
+            int top = (r.top() / g) * g;
+            int right = std::min(w - 1, ((r.right() + g) / g) * g - 1);
+            int bottom = std::min(h - 1, ((r.bottom() + g) / g) * g - 1);
+            r = QRect(left, top, right - left + 1, bottom - top + 1);
+        }
+    }
+
+    // 3. Resolve overlaps (disallowOverlaps)
+    if (options.disallowOverlaps && finalRects.size() > 1) {
+        bool changed = true;
+        int passCount = 0;
+        while (changed && passCount < 30) {
+            changed = false;
+            passCount++;
+
+            for (int i = 0; i < finalRects.size(); ++i) {
+                for (int j = i + 1; j < finalRects.size(); ++j) {
+                    QRect &ri = finalRects[i];
+                    QRect &rj = finalRects[j];
+                    if (!ri.intersects(rj)) continue;
+
+                    // Option A: If merging them stays within max limits, merge!
+                    QRect united = ri.united(rj);
+                    bool canMerge = true;
+                    if (maxW > 0 && maxH > 0) {
+                        bool normFit = (united.width() <= maxW && united.height() <= maxH);
+                        bool permFit = false;
+                        if (perm > 0) {
+                            if (united.width() <= maxW && united.height() <= perm) permFit = true;
+                            if (united.height() <= maxH && united.width() <= perm) permFit = true;
+                        }
+                        canMerge = (normFit || permFit);
+                    }
+
+                    if (canMerge) {
+                        ri = united;
+                        finalRects.removeAt(j);
+                        changed = true;
+                        break;
+                    }
+
+                    // Option B: Cannot merge without exceeding max sprite size.
+                    // Split the overlap along the axis of least penetration to disallow crossing bounding boxes.
+                    QRect inter = ri.intersected(rj);
+                    if (inter.width() < inter.height()) {
+                        // Horizontal resolution
+                        int midX = inter.left() + inter.width() / 2;
+                        if (ri.center().x() < rj.center().x()) {
+                            ri.setRight(midX - 1);
+                            rj.setLeft(midX);
+                        } else {
+                            rj.setRight(midX - 1);
+                            ri.setLeft(midX);
+                        }
+                    } else {
+                        // Vertical resolution
+                        int midY = inter.top() + inter.height() / 2;
+                        if (ri.center().y() < rj.center().y()) {
+                            ri.setBottom(midY - 1);
+                            rj.setTop(midY);
+                        } else {
+                            rj.setBottom(midY - 1);
+                            ri.setTop(midY);
+                        }
+                    }
+                    changed = true;
+                    break;
+                }
+                if (changed) break;
+            }
+        }
+
+        // Clean up degenerate rectangles after clipping
+        QList<QRect> validClean;
+        for (const QRect &r : finalRects) {
+            if (r.width() >= minSz && r.height() >= minSz && r.right() < w && r.bottom() < h) {
+                validClean.append(r);
+            }
+        }
+        finalRects = validClean;
+    }
+
+    // Sort final components in visual reading order
+    std::sort(finalRects.begin(), finalRects.end(),
+              [verticalTolerance](const QRect &ra, const QRect &rb) {
                   if (qAbs(ra.y() - rb.y()) <= verticalTolerance)
                       return ra.x() < rb.x();
                   return ra.y() < rb.y();
               });
 
-    // Map component -> slice index
-    std::vector<int> componentIdToBoxIndex(componentRects.size(), -1);
-    for (int i = 0; i < masterComponentIds.size(); ++i) {
-        componentIdToBoxIndex[masterComponentIds[i]] = i;
-    }
+    // Build bounding boxes & extract frames
+    outBoxes.reserve(finalRects.size());
+    outFrames.reserve(finalRects.size());
 
-    // Build pixel ownership
-    std::vector<int> pixelOwner(static_cast<size_t>(w * h), -1);
-    for (int idx = 0; idx < w * h; ++idx) {
-        int c = componentIdAtPixel[idx];
-        if (c >= 0) {
-            pixelOwner[idx] = componentIdToBoxIndex[c];
-        }
-    }
-
-    // Build bounding boxes & extract frames via direct scanline memory
-    outBoxes.reserve(masterComponentIds.size());
-    outFrames.reserve(masterComponentIds.size());
-
-    for (int i = 0; i < masterComponentIds.size(); ++i) {
+    for (int i = 0; i < finalRects.size(); ++i) {
         SpriteBox box;
-        box.rect = componentRects[masterComponentIds[i]];
+        box.rect = finalRects[i];
         box.index = i;
         box.selected = false;
         box.groupId = -1;
         outBoxes.append(box);
 
         QImage frame = image.copy(box.rect);
-        const int fw = frame.width();
-        const int fh = frame.height();
-        const int bx = box.rect.x();
-        const int by = box.rect.y();
-
-        for (int ly = 0; ly < fh; ++ly) {
-            QRgb *frameLine = reinterpret_cast<QRgb*>(frame.scanLine(ly));
-            const int gy_w = (by + ly) * w;
-            for (int lx = 0; lx < fw; ++lx) {
-                if (pixelOwner[gy_w + (bx + lx)] != i) {
-                    frameLine[lx] = 0; // transparent
-                }
-            }
-        }
         outFrames.append(frame);
     }
 

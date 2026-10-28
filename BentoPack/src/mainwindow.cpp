@@ -914,7 +914,9 @@ void MainWindow::processFile(const QString &fileName)
     QFileInfo fi(fileName);
     QString ext = fi.suffix().toLower();
     static const QStringList s_retroExts = {
-        QStringLiteral("smc"), QStringLiteral("sfc"),
+        QStringLiteral("smc"), QStringLiteral("sfc"), QStringLiteral("swc"), QStringLiteral("fig"),
+        QStringLiteral("000"), QStringLiteral("001"), QStringLiteral("s96"), QStringLiteral("zst"),
+        QStringLiteral("mss"), QStringLiteral("stk"), QStringLiteral("cgram"),
         QStringLiteral("nes"), QStringLiteral("chr"),
         QStringLiteral("gb"),  QStringLiteral("gbc"),
         QStringLiteral("md"),  QStringLiteral("gen"), QStringLiteral("smd"),
@@ -923,6 +925,23 @@ void MainWindow::processFile(const QString &fileName)
     };
 
     if (s_retroExts.contains(ext)) {
+        Extractor *extPlugin = ExtractorRegistry::instance().findDecoder(fileName);
+        if (extPlugin && extPlugin->hasInteractiveDialog()) {
+            SpriteDocument tempDoc;
+            if (extPlugin->showInteractiveDialog(fileName, tempDoc, this)) {
+                if (m_projectController && m_projectController->document()) {
+                    SpriteDocument *doc = m_projectController->document();
+                    doc->setAtlas(tempDoc.atlas());
+                    doc->setFrames(tempDoc.frames(), tempDoc.boxes());
+                    doc->setFilePath(fileName);
+                    m_projectController->setCurrentFilePath(fileName);
+                    m_projectController->addRecentFile(fileName);
+                    emit m_projectController->fileLoaded(fileName);
+                }
+            }
+            return;
+        }
+
         RetroTileExplorerDialog dlg(fileName, this, m_projectController.get());
         dlg.exec();
         return;
@@ -1684,9 +1703,26 @@ void MainWindow::updateWatchStatusUI(WatchState state, const QString &message)
 
 void MainWindow::onRetroRipperTriggered()
 {
-    QString filter = tr("Retro ROMs & VRAM (*.smc *.sfc *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)");
+    QString filter = tr("Retro ROMs & Savestates (*.smc *.sfc *.s96 *.000 *.zst *.mss *.stk *.cgram *.nes *.chr *.gb *.gbc *.md *.gen *.smd *.sms *.gg *.neo *.vram *.bin);;All Files (*.*)");
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select Retro ROM or VRAM Dump"), "", filter);
     if (!fileName.isEmpty()) {
+        Extractor *extPlugin = ExtractorRegistry::instance().findDecoder(fileName);
+        if (extPlugin && extPlugin->hasInteractiveDialog()) {
+            SpriteDocument tempDoc;
+            if (extPlugin->showInteractiveDialog(fileName, tempDoc, this)) {
+                if (m_projectController && m_projectController->document()) {
+                    SpriteDocument *doc = m_projectController->document();
+                    doc->setAtlas(tempDoc.atlas());
+                    doc->setFrames(tempDoc.frames(), tempDoc.boxes());
+                    doc->setFilePath(fileName);
+                    m_projectController->setCurrentFilePath(fileName);
+                    m_projectController->addRecentFile(fileName);
+                    emit m_projectController->fileLoaded(fileName);
+                }
+            }
+            return;
+        }
+
         RetroTileExplorerDialog dlg(fileName, this, m_projectController.get());
         dlg.exec();
     }

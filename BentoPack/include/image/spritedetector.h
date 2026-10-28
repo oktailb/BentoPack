@@ -35,6 +35,14 @@ struct BENTOPACK_CORE_EXPORT SpriteDetectionOptions
     int minSliceSize = 3;
     bool smartCrop = false;
     double overlapThreshold = 0.5;
+
+    // Advanced constraints (Retro hardware, non-overlapping, size limits)
+    int maxWidth = 0;               // 0 = unlimited, >0 = maximum sprite box width (e.g. 32)
+    int maxHeight = 0;              // 0 = unlimited, >0 = maximum sprite box height (e.g. 32)
+    int maxDimensionPermissive = 0; // Allow one dimension up to this value if other is within limit (e.g. 48 or 64)
+    bool disallowOverlaps = false;  // Disallow overlapping bounding boxes: merge or split
+    bool alignToGrid = false;       // Snap bounding box boundaries to tile grid
+    int gridCellSize = 8;           // 8 or 16 px tile grid
 };
 
 /**

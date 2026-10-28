@@ -156,6 +156,17 @@ Extractor* ExtractorRegistry::findDecoder(const QString &filePath) const
     QFileInfo fi(filePath);
     QString ext = fi.suffix().toLower();
 
+    // 1. Priority pass: Specialized decoders with dedicated interactive dialogs
+    for (Extractor *extractor : m_extractors) {
+        if ((extractor->capabilities() & Extractor::CanImport) &&
+            extractor->hasInteractiveDialog() &&
+            extractor->supportedExtensions().contains(ext) &&
+            extractor->canDecode(filePath)) {
+            return extractor;
+        }
+    }
+
+    // 2. Standard pass: Any decoder matching extension
     for (Extractor *extractor : m_extractors) {
         if ((extractor->capabilities() & Extractor::CanImport) &&
             extractor->supportedExtensions().contains(ext) &&

@@ -133,6 +133,22 @@ public:
         return nullptr;
     }
 
+    /**
+     * @brief Whether this extractor provides a specialized interactive import/ripping dialog.
+     */
+    virtual bool hasInteractiveDialog() const { return false; }
+
+    /**
+     * @brief Launches the specialized interactive ripper dialog.
+     * @return true if the user accepted and outDoc was populated.
+     */
+    virtual bool showInteractiveDialog(const QString &filePath, SpriteDocument &outDoc, QWidget *parent = nullptr) {
+        Q_UNUSED(filePath);
+        Q_UNUSED(outDoc);
+        Q_UNUSED(parent);
+        return false;
+    }
+
     // Compatibility wrappers
     bool extract(const QString &filePath, SpriteDocument &doc, QString *errorMsg = nullptr);
     bool exportDocument(const QString &filePath, const SpriteDocument &doc, const ExportOptions &options, QString *errorMsg = nullptr);

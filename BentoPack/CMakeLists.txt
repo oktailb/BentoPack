@@ -50,6 +50,9 @@ set(BentoPackCore_SRC
     src/commands/commands.cpp
     src/extractor.cpp
     src/extractor/extractorregistry.cpp
+    src/extractor/snessavestateloader.cpp
+    src/extractor/snespreset.cpp
+    src/extractor/snesromanalyzer.cpp
     src/config/appconfig.cpp
     src/image/spritedetector.cpp
     src/image/colorpalettepresets.cpp
@@ -173,6 +176,9 @@ set(BentoPackCore_INCLUDE
     include/extractor/extractorregistry.h
     include/extractor/retrotiledecoder.h
     include/extractor/romprobe.h
+    include/extractor/snessavestateloader.h
+    include/extractor/snespreset.h
+    include/extractor/snesromanalyzer.h
     include/extractor/export.h
     include/zip/miniz.h
     include/cli/cliparser.h

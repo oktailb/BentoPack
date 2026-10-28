@@ -15,6 +15,7 @@ set(ALL_EXTRACTOR_PLUGINS
     extractor_iff
     extractor_retro_tile
     extractor_casm
+    extractor_snes
 )
 
 set(ALL_FILTER_PLUGINS
@@ -47,6 +48,7 @@ set(PLUGIN_INCLUDES
     ${CMAKE_SOURCE_DIR}/plugins/extractors/iff
     ${CMAKE_SOURCE_DIR}/plugins/extractors/retro_tile
     ${CMAKE_SOURCE_DIR}/plugins/extractors/c_asm
+    ${CMAKE_SOURCE_DIR}/plugins/extractors/snes
     ${CMAKE_SOURCE_DIR}/plugins/filters/backgroundremoval
     ${CMAKE_SOURCE_DIR}/plugins/filters/despill
     ${CMAKE_SOURCE_DIR}/plugins/filters/outline
@@ -273,6 +275,16 @@ if (MINGW)
 endif()
 add_test(NAME test_retro_linter COMMAND test_retro_linter)
 
+# 17. test_snes_extractor (Specialized SNES Ripper & Savestate Loader)
+add_executable(test_snes_extractor test_snes_extractor.cpp)
+target_include_directories(test_snes_extractor PRIVATE ${PLUGIN_INCLUDES})
+target_link_libraries(test_snes_extractor PRIVATE BentoPackCore extractor_snes Qt6::Test Qt6::Widgets)
+set_target_properties(test_snes_extractor PROPERTIES WIN32_EXECUTABLE FALSE)
+if (MINGW)
+    target_link_options(test_snes_extractor PRIVATE -mconsole)
+endif()
+add_test(NAME test_snes_extractor COMMAND test_snes_extractor)
+
 set(ALL_TEST_TARGETS
     test_extractors
     test_app_config
@@ -294,6 +306,7 @@ set(ALL_TEST_TARGETS
     test_live_watch
     test_casm_extractor
     test_retro_linter
+    test_snes_extractor
 )
 
 set_tests_properties(${ALL_TEST_TARGETS}
@@ -319,6 +332,7 @@ if(WIN32)
             $<TARGET_FILE:extractor_iff>
             $<TARGET_FILE:extractor_retro_tile>
             $<TARGET_FILE:extractor_casm>
+            $<TARGET_FILE:extractor_snes>
             "${CMAKE_BINARY_DIR}/bin"
         COMMENT "Copying extractor plugin DLLs to bin directory for tests"
     )
