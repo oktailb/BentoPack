@@ -34,6 +34,7 @@
 build*/
 bin/
 lib/
+cots/
 .qtcreator/
 *.user
 *.user.*

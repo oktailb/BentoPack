@@ -761,5 +761,17 @@ void TestControllerProject::testOpenMediaConflictDialogChoices()
     QCOMPARE(dlgCancel.result(), QDialog::Rejected);
 }
 
-QTEST_MAIN(TestControllerProject)
+int main(int argc, char *argv[])
+{
+    std::setvbuf(stdout, nullptr, _IONBF, 0);
+    std::setvbuf(stderr, nullptr, _IONBF, 0);
+    qputenv("QT_QPA_PLATFORM", "offscreen");
+    qputenv("QT_ASSUME_STDERR_HAS_CONSOLE", "1");
+    qputenv("QT_FORCE_STDERR_LOGGING", "1");
+
+    QApplication app(argc, argv);
+    TestControllerProject tc;
+    return QTest::qExec(&tc, argc, argv);
+}
+
 #include "test_controller_project.moc"

@@ -1706,7 +1706,7 @@ void TestExtractors::testRetroTileExtractorReadWrite() {
   QVERIFY(extractor.capabilities().testFlag(Extractor::CanExport));
   QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("nes")));
   QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("gb")));
-  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("sfc")));
+  QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("sms")));
   QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("md")));
   QVERIFY(extractor.supportedExtensions().contains(QStringLiteral("tim")));
 
