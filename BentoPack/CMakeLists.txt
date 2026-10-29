@@ -50,9 +50,7 @@ set(BentoPackCore_SRC
     src/commands/commands.cpp
     src/extractor.cpp
     src/extractor/extractorregistry.cpp
-    src/extractor/snessavestateloader.cpp
-    src/extractor/snespreset.cpp
-    src/extractor/snesromanalyzer.cpp
+    src/extractor/retroprofileregistry.cpp
     src/config/appconfig.cpp
     src/image/spritedetector.cpp
     src/image/colorpalettepresets.cpp
@@ -176,9 +174,7 @@ set(BentoPackCore_INCLUDE
     include/extractor/extractorregistry.h
     include/extractor/retrotiledecoder.h
     include/extractor/romprobe.h
-    include/extractor/snessavestateloader.h
-    include/extractor/snespreset.h
-    include/extractor/snesromanalyzer.h
+    include/extractor/retroprofileregistry.h
     include/extractor/export.h
     include/zip/miniz.h
     include/cli/cliparser.h
@@ -220,7 +216,6 @@ set(BentoPackWidgets_SRC
     src/widgets/branchselectiondialog.cpp
     src/widgets/openmediaconflictdialog.cpp
     src/widgets/watchconfigdialog.cpp
-    src/widgets/retrotileexplorerdialog.cpp
 )
 
 set(BentoPackWidgets_UI
@@ -251,7 +246,6 @@ set(BentoPackWidgets_INCLUDE
     include/widgets/layerstackwidget.h
     include/widgets/colorpickerwidget.h
     include/widgets/watchconfigdialog.h
-    include/widgets/retrotileexplorerdialog.h
 )
 
 # 1. BentoPackCore: Pure headless library (Qt6::Core, Qt6::Gui, Qt6::Concurrent, Qt6::Network - ZERO Qt6::Widgets)

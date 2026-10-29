@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "extractor/snespreset.h"
+#include "snespreset.h"
 #include <QSettings>
 #include <QJsonDocument>
 #include <QJsonObject>

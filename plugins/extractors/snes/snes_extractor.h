@@ -22,8 +22,8 @@
 #include <QByteArray>
 #include "extractor/extractor.h"
 #include "extractor/retrotiledecoder.h"
-#include "extractor/snessavestateloader.h"
-#include "extractor/snespreset.h"
+#include "snessavestateloader.h"
+#include "snespreset.h"
 
 /**
  * @brief Specialized Extractor plugin for Super Nintendo / Super Famicom (SNES).
@@ -66,6 +66,7 @@ public:
 
     bool hasInteractiveDialog() const override { return true; }
     bool showInteractiveDialog(const QString &filePath, SpriteDocument &outDoc, QWidget *parent = nullptr) override;
+    QWidget* createSettingsWidget(QWidget *parent = nullptr) override;
 };
 
 #endif // SNES_EXTRACTOR_H

@@ -20,6 +20,7 @@
 #include "include/localizationmanager.h"
 #include "filters/filterregistry.h"
 #include "extractor/extractorregistry.h"
+#include "extractor/retroprofileregistry.h"
 #include "generated/version.h"
 #include "generated/i18n.h"
 
@@ -700,14 +701,10 @@ QWidget* SettingsDialog::createRetroPage()
     QFormLayout *formProfile = new QFormLayout(m_grpRetroProfile);
 
     m_comboRetroProfile = new QComboBox(m_grpRetroProfile);
-    m_comboRetroProfile->addItem(tr("Custom / Generic Retro"), 0);
-    m_comboRetroProfile->addItem(tr("Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles"), 1);
-    m_comboRetroProfile->addItem(tr("Nintendo NES / Famicom - 64px scanline, 256 tiles"), 2);
-    m_comboRetroProfile->addItem(tr("Sega Master System / Game Gear - 64px scanline, 256 tiles"), 3);
-    m_comboRetroProfile->addItem(tr("Sega Mega Drive / Genesis - 128px scanline, 512 tiles"), 4);
-    m_comboRetroProfile->addItem(tr("Commodore 64 (Multicolor) - 64px scanline, 256 tiles"), 5);
-    m_comboRetroProfile->addItem(tr("Super Nintendo (SNES) - 256px scanline, 512 tiles"), 6);
-    m_comboRetroProfile->addItem(tr("PICO-8 - 64px scanline, 256 tiles"), 7);
+    m_comboRetroProfile->addItem(tr("Custom / Generic Retro"), QStringLiteral("custom"));
+    for (const auto &p : RetroProfileRegistry::instance().profiles()) {
+        m_comboRetroProfile->addItem(p.name, p.id);
+    }
 
     m_lblRetroProfile = new QLabel(tr("Hardware Profile:"), m_grpRetroProfile);
     formProfile->addRow(m_lblRetroProfile, m_comboRetroProfile);
@@ -785,15 +782,22 @@ QWidget* SettingsDialog::createRetroPage()
 
     // Dynamic preset interaction
     connect(m_comboRetroProfile, &QComboBox::currentIndexChanged, this, [this](int index) {
-        if (index > 0) {
-            RetroLinterConfig tmp;
-            RetroLinterConfig::applyPreset(index, tmp);
-            m_spinScanlineLimit->setValue(tmp.scanlineSpriteWidthLimit);
-            m_spinMaxVramTiles->setValue(tmp.maxVramTiles);
-            m_spinMaxSpritesPerScanline->setValue(tmp.maxSpritesPerScanline);
-            m_spinMaxColorsPerSprite->setValue(tmp.maxColorsPerSprite);
-            int tileIdx = m_comboTileSize->findData(tmp.tileSize);
-            if (tileIdx >= 0) m_comboTileSize->setCurrentIndex(tileIdx);
+        if (index >= 0) {
+            QString pid = m_comboRetroProfile->itemData(index).toString();
+            if (pid == QStringLiteral("custom") || pid.isEmpty()) {
+                m_lblRetroProfileDesc->setText(tr("Custom hardware constraints: configure limits manually below."));
+                return;
+            }
+            if (RetroProfileRegistry::instance().hasProfile(pid)) {
+                auto p = RetroProfileRegistry::instance().profile(pid);
+                m_lblRetroProfileDesc->setText(p.description);
+                m_spinScanlineLimit->setValue(p.scanlineSpriteWidthLimit);
+                m_spinMaxVramTiles->setValue(p.maxVramTiles);
+                m_spinMaxSpritesPerScanline->setValue(p.maxSpritesPerScanline);
+                m_spinMaxColorsPerSprite->setValue(p.maxColorsPerSprite);
+                int tileIdx = m_comboTileSize->findData(p.tileSize);
+                if (tileIdx >= 0) m_comboTileSize->setCurrentIndex(tileIdx);
+            }
         }
     });
 
@@ -1180,8 +1184,12 @@ void SettingsDialog::onSearchTextChanged(const QString &text)
 
     bool matchGeneral = QStringLiteral("général general langue language locale fr en ja français english japonais projet project undo redo recent récents alpha seuil tolerance fond background startup demarrage démarrage animation fps cadence play lecture autosave session").contains(query);
     bool matchAtlas = QStringLiteral("atlas affichage display zoom vue tranche slice padding cadrage nudge fleche flèche deplacer déplacement poignée handle couleur color style box selection sélection cadre mesh maillage filaire wireframe").contains(query);
-    bool matchExport = QStringLiteral("export exportation vram texture ktx2 basis zstd compression format algorithme algorithm paper2d godot unity sheet pot puissance puissance-de-deux padding bordure extrude bleed rognage trim deduplication normalmap").contains(query);
-    bool matchRetro = QStringLiteral("retro rétro hardware ppu nes gameboy snes genesis megadrive c64 pico8 scanline vram tuiles tiles jauge guide pastille regle règle epaisseur thickness sprite palette").contains(query);
+    bool matchExport = QStringLiteral("export exportateur format compression dither trame webp basis png json xml optipng").contains(query);
+    QString retroKeywords = QStringLiteral("retro rétro hardware ppu scanline vram tuiles tiles jauge guide pastille regle règle epaisseur thickness sprite palette");
+    for (const auto &p : RetroProfileRegistry::instance().profiles()) {
+        retroKeywords += QLatin1Char(' ') + p.name + QLatin1Char(' ') + p.id;
+    }
+    bool matchRetro = retroKeywords.contains(query, Qt::CaseInsensitive);
     bool matchPlugins = QStringLiteral("plugin plugins extension extensions filtre filter extractor extracteur dll so module reload").contains(query);
     bool matchGit = QStringLiteral("git version control contrôle author auteur email mail nom signature libgit2 commit").contains(query);
     bool matchUpdates = QStringLiteral("update updates mise à jour github release version nouveautés nouvelle").contains(query);
@@ -1341,8 +1349,14 @@ void SettingsDialog::loadSettings()
         m_chkRetroEnabled->setChecked(cfg.retroLinter().enabled);
     }
     if (m_comboRetroProfile) {
-        int pidx = m_comboRetroProfile->findData(cfg.retroLinter().profileIndex);
-        if (pidx >= 0) m_comboRetroProfile->setCurrentIndex(pidx);
+        int pidx = m_comboRetroProfile->findData(cfg.retroLinter().profileId);
+        if (pidx < 0 && cfg.retroLinter().profileIndex > 0) {
+            if (RetroProfileRegistry::instance().hasLegacyIndex(cfg.retroLinter().profileIndex)) {
+                QString pid = RetroProfileRegistry::instance().profileByLegacyIndex(cfg.retroLinter().profileIndex).id;
+                pidx = m_comboRetroProfile->findData(pid);
+            }
+        }
+        m_comboRetroProfile->setCurrentIndex(pidx >= 0 ? pidx : 0);
     }
     if (m_spinScanlineLimit) {
         m_spinScanlineLimit->setValue(cfg.retroLinter().scanlineSpriteWidthLimit);
@@ -1473,7 +1487,8 @@ void SettingsDialog::saveSettings()
         cfg.retroLinter().enabled = m_chkRetroEnabled->isChecked();
     }
     if (m_comboRetroProfile) {
-        cfg.retroLinter().profileIndex = m_comboRetroProfile->currentData().toInt();
+        cfg.retroLinter().profileId = m_comboRetroProfile->currentData().toString();
+        cfg.retroLinter().profileIndex = m_comboRetroProfile->currentIndex();
     }
     if (m_spinScanlineLimit) {
         cfg.retroLinter().scanlineSpriteWidthLimit = m_spinScanlineLimit->value();
@@ -1658,6 +1673,18 @@ void SettingsDialog::retranslateUi()
     if (m_chkRetroEnabled) m_chkRetroEnabled->setText(tr("Enable Hardware PPU Constraints & Retro Linters (Active by default)"));
     if (m_grpRetroProfile) m_grpRetroProfile->setTitle(tr("Target System Profile"));
     if (m_lblRetroProfile) m_lblRetroProfile->setText(tr("Hardware Profile:"));
+    if (m_comboRetroProfile) {
+        QString currentPid = m_comboRetroProfile->currentData().toString();
+        m_comboRetroProfile->blockSignals(true);
+        m_comboRetroProfile->clear();
+        m_comboRetroProfile->addItem(tr("Custom / Generic Retro"), QStringLiteral("custom"));
+        for (const auto &p : RetroProfileRegistry::instance().profiles()) {
+            m_comboRetroProfile->addItem(p.name, p.id);
+        }
+        int idx = m_comboRetroProfile->findData(currentPid);
+        if (idx >= 0) m_comboRetroProfile->setCurrentIndex(idx);
+        m_comboRetroProfile->blockSignals(false);
+    }
     if (m_grpRetroLimits) m_grpRetroLimits->setTitle(tr("Hardware Constraint Limits"));
     if (m_lblScanlineLimit) m_lblScanlineLimit->setText(tr("Max Scanline Sprite Width:"));
     if (m_lblMaxVramTiles) m_lblMaxVramTiles->setText(tr("Max VRAM Tile Budget:"));

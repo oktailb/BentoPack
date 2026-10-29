@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-#include "widgets/retrotileexplorerdialog.h"
-#include "controller/projectcontroller.h"
+#include "retrotileexplorerdialog.h"
 #include "image/spritedetector.h"
 #include "image/colorpalettepresets.h"
 
@@ -95,11 +94,9 @@ private:
 };
 
 RetroTileExplorerDialog::RetroTileExplorerDialog(const QString &filePath,
-                                                 QWidget *parent,
-                                                 ProjectController *projectController)
+                                                 QWidget *parent)
     : QDialog(parent)
     , m_filePath(filePath)
-    , m_projectController(projectController)
 {
     setWindowTitle(tr("Retro Console ROM & VRAM Tile Ripper"));
     resize(1100, 740);
@@ -917,6 +914,8 @@ void RetroTileExplorerDialog::onExtractSpritesClicked()
 {
     if (m_currentSheet.isNull()) return;
 
+    m_extractAsSprites = true;
+
     if (m_extractedFrames.isEmpty()) {
         SpriteDetectionOptions opts;
         opts.minSliceSize = 4;
@@ -930,16 +929,6 @@ void RetroTileExplorerDialog::onExtractSpritesClicked()
         m_extractedBoxes.append(SpriteBox(QRect(0, 0, m_currentSheet.width(), m_currentSheet.height())));
     }
 
-    if (m_projectController && m_projectController->document()) {
-        SpriteDocument *doc = m_projectController->document();
-        doc->setAtlas(m_currentSheet);
-        doc->setFrames(m_extractedFrames, m_extractedBoxes);
-        doc->setFilePath(m_filePath);
-        m_projectController->setCurrentFilePath(m_filePath);
-        m_projectController->addRecentFile(m_filePath);
-        emit m_projectController->fileLoaded(m_filePath);
-    }
-
     accept();
 }
 
@@ -947,17 +936,9 @@ void RetroTileExplorerDialog::onImportSheetClicked()
 {
     if (m_currentSheet.isNull()) return;
 
-    if (m_projectController && m_projectController->document()) {
-        SpriteDocument *doc = m_projectController->document();
-        doc->setAtlas(m_currentSheet);
-        QList<QImage> singleFrame = { m_currentSheet };
-        QList<SpriteBox> singleBox = { SpriteBox(QRect(0, 0, m_currentSheet.width(), m_currentSheet.height())) };
-        doc->setFrames(singleFrame, singleBox);
-        doc->setFilePath(m_filePath);
-        m_projectController->setCurrentFilePath(m_filePath);
-        m_projectController->addRecentFile(m_filePath);
-        emit m_projectController->fileLoaded(m_filePath);
-    }
+    m_extractAsSprites = false;
+    m_extractedFrames = { m_currentSheet };
+    m_extractedBoxes = { SpriteBox(QRect(0, 0, m_currentSheet.width(), m_currentSheet.height())) };
 
     accept();
 }

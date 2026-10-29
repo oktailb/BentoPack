@@ -127,20 +127,22 @@ struct BENTOPACK_CORE_EXPORT ExportConfig
 struct BENTOPACK_CORE_EXPORT RetroLinterConfig
 {
     bool enabled = true;                   // Activated by default
-    int  profileIndex = 0;                // 0=Generic/Custom, 1=Game Boy, 2=NES, 3=Sega Master System, 4=Sega Mega Drive, 5=Commodore 64, 6=SNES, 7=PICO-8
-    int  scanlineSpriteWidthLimit = 64;   // Max sprite width allowed per scanline (pixels)
-    int  maxVramTiles = 256;              // Max unique 8x8 tiles in VRAM budget
-    int  tileSize = 8;                    // 8 for 8x8 tiles, 16 for 16x16
-    int  guideLineThickness = 2;          // Thickness for discrete guide lines (1-4 px)
-    int  maxSpritesPerScanline = 8;       // Hardware sprite count limit per raster line
-    int  maxColorsPerSprite = 16;         // Palette color budget per sprite
-    bool showScanlineGuide = true;        // Discrete vertical guide line in Pixel Canvas
-    bool showTileGrid = true;             // Subtle 8x8 tile grid in Pixel Canvas
-    bool showTimelineBadges = true;       // Discrete warning badge (pastille) on filmstrip frames
-    bool showVramGauge = true;            // VRAM tile usage gauge in status bar
-    bool showAtlasGuides = true;          // Discrete sprite size limit rules and zones in Atlas view
+    int     profileIndex = 0;              // Backward compatibility: 0=Custom, 1=GB, 2=NES, 3=SMS, 4=Genesis, 5=C64, 6=SNES, 7=PICO-8
+    QString profileId = QStringLiteral("custom"); // Dynamic profile ID registered by extractor plugins
+    int     scanlineSpriteWidthLimit = 64; // Max sprite width allowed per scanline (pixels)
+    int     maxVramTiles = 256;            // Max unique 8x8 tiles in VRAM budget
+    int     tileSize = 8;                  // 8 for 8x8 tiles, 16 for 16x16
+    int     guideLineThickness = 2;        // Thickness for discrete guide lines (1-4 px)
+    int     maxSpritesPerScanline = 8;     // Hardware sprite count limit per raster line
+    int     maxColorsPerSprite = 16;       // Palette color budget per sprite
+    bool    showScanlineGuide = true;      // Discrete vertical guide line in Pixel Canvas
+    bool    showTileGrid = true;           // Subtle 8x8 tile grid in Pixel Canvas
+    bool    showTimelineBadges = true;     // Discrete warning badge (pastille) on filmstrip frames
+    bool    showVramGauge = true;          // VRAM tile usage gauge in status bar
+    bool    showAtlasGuides = true;        // Discrete sprite size limit rules and zones in Atlas view
 
     static void applyPreset(int presetIndex, RetroLinterConfig &cfg);
+    static void applyPreset(const QString &profileId, RetroLinterConfig &cfg);
 };
 
 /**

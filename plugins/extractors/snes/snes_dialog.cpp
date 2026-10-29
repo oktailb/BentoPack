@@ -35,6 +35,12 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QtEndian>
+#include <QProcess>
+#include <QFileSystemWatcher>
+#include <QSettings>
+#include <QDateTime>
+#include <QFileInfo>
+#include <QDir>
 
 SnesDialog::SnesDialog(const QString &filePath, const QByteArray &fileData, QWidget *parent)
     : QDialog(parent)
@@ -43,6 +49,8 @@ SnesDialog::SnesDialog(const QString &filePath, const QByteArray &fileData, QWid
 {
     setWindowTitle(tr("Super Nintendo / Super Famicom (SNES) Ripper"));
     resize(1150, 800);
+
+    loadEmulatorSettings();
 
     m_isSavestate = SnesSavestateLoader::isSavestate(m_fileData, m_filePath);
     if (m_isSavestate) {
@@ -56,8 +64,17 @@ SnesDialog::SnesDialog(const QString &filePath, const QByteArray &fileData, QWid
 
     runHeuristicAnalysis();
     setupUi();
+    armSnapshotWatcher();
     updatePaletteSwatches();
     updateDecoding();
+}
+
+SnesDialog::~SnesDialog()
+{
+    if (m_emulatorProcess && m_emulatorProcess->state() != QProcess::NotRunning) {
+        m_emulatorProcess->terminate();
+        m_emulatorProcess->waitForFinished(1000);
+    }
 }
 
 void SnesDialog::runHeuristicAnalysis()
@@ -118,36 +135,80 @@ void SnesDialog::setupUi()
     // Tabs for Source
     m_tabWidget = new QTabWidget(leftPanel);
 
-    // Tab 1: Savestate / VRAM Live (if savestate)
+    // Tab 1: Savestate & Live Emulator
+    auto *tabSavestate = new QWidget(m_tabWidget);
+    auto *savestateLayout = new QVBoxLayout(tabSavestate);
+
+    m_savestateInfoLabel = new QLabel(tabSavestate);
+    m_savestateInfoLabel->setWordWrap(true);
+    m_savestateInfoLabel->setStyleSheet(QStringLiteral("background-color: #2b2d30; padding: 6px; border-radius: 4px; font-size: 11px;"));
+    savestateLayout->addWidget(m_savestateInfoLabel);
+
     if (m_isSavestate) {
-        auto *tabSavestate = new QWidget(m_tabWidget);
-        auto *savestateLayout = new QVBoxLayout(tabSavestate);
-
-        auto *vramInfoLbl = new QLabel(tr("PPU VRAM is directly extracted from the snapshot. All graphics are already decompressed by the game engine."), tabSavestate);
-        vramInfoLbl->setWordWrap(true);
-        savestateLayout->addWidget(vramInfoLbl);
-
-        auto *palRow = new QHBoxLayout();
-        palRow->addWidget(new QLabel(tr("Active Palette:"), tabSavestate));
-        m_savestatePaletteCombo = new QComboBox(tabSavestate);
-        for (int i = 0; i < 16; ++i) {
-            if (i < 8) {
-                m_savestatePaletteCombo->addItem(tr("Palette %1 (Background BG)").arg(i));
-            } else {
-                m_savestatePaletteCombo->addItem(tr("Palette %1 (Sprite / OBJ %2)").arg(i).arg(i - 8));
-            }
-        }
-        m_savestatePaletteCombo->setCurrentIndex(8);
-        connect(m_savestatePaletteCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SnesDialog::onPaletteIndexChanged);
-        palRow->addWidget(m_savestatePaletteCombo);
-        savestateLayout->addLayout(palRow);
-
-        auto *loadExtPalBtn = new QPushButton(tr("📁 Load External Palette / CGRAM..."), tabSavestate);
-        connect(loadExtPalBtn, &QPushButton::clicked, this, &SnesDialog::onLoadExternalPaletteClicked);
-        savestateLayout->addWidget(loadExtPalBtn);
-        savestateLayout->addStretch();
-        m_tabWidget->addTab(tabSavestate, tr("⚡ Savestate / VRAM"));
+        m_savestateInfoLabel->setText(tr("🎮 <b>%1</b> | VRAM: %2 KB | CGRAM: %3 Palettes\n"
+                                         "Graphics are extracted directly from hardware VRAM (no compression).")
+                                      .arg(m_savestate.emulatorName)
+                                      .arg(m_savestate.vram.size() / 1024)
+                                      .arg(m_savestate.cgram.size() / 32));
+    } else {
+        m_savestateInfoLabel->setText(tr("ℹ️ <b>Savestate non chargée.</b>\n"
+                                         "Lancez l'émulateur ci-dessous pour capturer en direct, ou chargez un fichier snapshot (.000, .s96, .zst)."));
     }
+
+    auto *palRow = new QHBoxLayout();
+    palRow->addWidget(new QLabel(tr("Palette CGRAM:"), tabSavestate));
+    m_savestatePaletteCombo = new QComboBox(tabSavestate);
+    for (int i = 0; i < 16; ++i) {
+        if (i < 8) {
+            m_savestatePaletteCombo->addItem(tr("Palette %1 (BG %2)").arg(i).arg(i));
+        } else {
+            m_savestatePaletteCombo->addItem(tr("Palette %1 (Sprite / OBJ %2)").arg(i).arg(i - 8));
+        }
+    }
+    m_savestatePaletteCombo->setCurrentIndex(8);
+    m_savestatePaletteCombo->setEnabled(m_isSavestate && !m_savestate.cgram.isEmpty());
+    connect(m_savestatePaletteCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SnesDialog::onPaletteIndexChanged);
+    palRow->addWidget(m_savestatePaletteCombo);
+    savestateLayout->addLayout(palRow);
+
+    auto *loadSavestateBtn = new QPushButton(tr("📁 Charger un Fichier Savestate (.000, .s96, .zst)..."), tabSavestate);
+    connect(loadSavestateBtn, &QPushButton::clicked, this, &SnesDialog::onLoadSavestateClicked);
+    savestateLayout->addWidget(loadSavestateBtn);
+
+    // Live Emulator Pilot GroupBox
+    auto *emuGroup = new QGroupBox(tr("🚀 Capture en Direct via Émulateur"), tabSavestate);
+    auto *emuLayout = new QVBoxLayout(emuGroup);
+
+    auto *emuHelpLbl = new QLabel(tr("Lancez le jeu dans Snes9x, ZSNES ou Mesen, jouez jusqu'à la scène souhaitée, puis appuyez sur <b>F1</b> (sauvegarde rapide). BentoPack détecte immédiatement le fichier et charge la VRAM et la CGRAM décompressées !"), emuGroup);
+    emuHelpLbl->setWordWrap(true);
+    emuHelpLbl->setStyleSheet(QStringLiteral("color: #aaa; font-size: 11px;"));
+    emuLayout->addWidget(emuHelpLbl);
+
+    auto *emuBtnRow = new QHBoxLayout();
+    m_launchEmulatorBtn = new QPushButton(tr("🚀 Lancer l'Émulateur"), emuGroup);
+    m_launchEmulatorBtn->setStyleSheet(QStringLiteral("background-color: #2e7d32; color: white; font-weight: bold; padding: 6px;"));
+    connect(m_launchEmulatorBtn, &QPushButton::clicked, this, &SnesDialog::onLaunchEmulatorClicked);
+    emuBtnRow->addWidget(m_launchEmulatorBtn);
+
+    m_configEmulatorBtn = new QPushButton(tr("⚙️ Configurer..."), emuGroup);
+    connect(m_configEmulatorBtn, &QPushButton::clicked, this, &SnesDialog::onConfigEmulatorClicked);
+    emuBtnRow->addWidget(m_configEmulatorBtn);
+    emuLayout->addLayout(emuBtnRow);
+
+    m_emulatorStatusLabel = new QLabel(emuGroup);
+    m_emulatorStatusLabel->setWordWrap(true);
+    if (m_emulatorPath.isEmpty()) {
+        m_emulatorStatusLabel->setText(tr("⚠️ Émulateur non configuré (cliquez sur Configurer)"));
+        m_emulatorStatusLabel->setStyleSheet(QStringLiteral("font-size: 11px; color: #ffb74d;"));
+    } else {
+        m_emulatorStatusLabel->setText(tr("Prêt : %1").arg(QFileInfo(m_emulatorPath).fileName()));
+        m_emulatorStatusLabel->setStyleSheet(QStringLiteral("font-size: 11px; color: #81c784;"));
+    }
+    emuLayout->addWidget(m_emulatorStatusLabel);
+
+    savestateLayout->addWidget(emuGroup);
+    savestateLayout->addStretch();
+    m_tabWidget->addTab(tabSavestate, tr("⚡ Savestate / Émulateur"));
 
     // Tab 2: Heuristic & Compression Bank Scanner
     auto *tabHeuristic = new QWidget(m_tabWidget);
@@ -878,3 +939,225 @@ void SnesDialog::onImportAtlasClicked()
     m_extractAsSprites = false;
     accept();
 }
+
+void SnesDialog::onLoadSavestateClicked()
+{
+    QString filter = tr("Savestates SNES (*.000 *.001 *.002 *.s96 *.zst *.mst);;Tous les fichiers (*.*)");
+    QString defaultDir = m_snapshotsDir.isEmpty() ? QFileInfo(m_filePath).absolutePath() : m_snapshotsDir;
+    QString path = QFileDialog::getOpenFileName(this, tr("Ouvrir une Savestate SNES"), defaultDir, filter);
+    if (path.isEmpty()) return;
+
+    SnesSavestateData ss = SnesSavestateLoader::load(path);
+    if (ss.vram.isEmpty()) {
+        QMessageBox::warning(this, tr("Erreur de chargement"),
+            tr("Impossible de trouver la VRAM PPU dans ce fichier de savestate (%1).").arg(QFileInfo(path).fileName()));
+        return;
+    }
+
+    m_savestate = ss;
+    m_isSavestate = true;
+    m_overrideData.clear();
+
+    if (m_savestateInfoLabel) {
+        m_savestateInfoLabel->setText(tr("🎮 <b>%1</b> | VRAM: %2 KB | CGRAM: %3 Palettes\nFichier : %4")
+            .arg(m_savestate.emulatorName)
+            .arg(m_savestate.vram.size() / 1024)
+            .arg(m_savestate.cgram.size() / 32)
+            .arg(QFileInfo(path).fileName()));
+    }
+
+    if (m_savestatePaletteCombo) {
+        m_savestatePaletteCombo->setEnabled(!m_savestate.cgram.isEmpty());
+        m_savestatePaletteCombo->setCurrentIndex(8);
+    }
+
+    if (!m_savestate.cgram.isEmpty()) {
+        m_activePalette = m_savestate.getPalette(8, true);
+    }
+
+    m_tabWidget->setCurrentIndex(0);
+    updatePaletteSwatches();
+    updateDecoding();
+}
+
+void SnesDialog::loadEmulatorSettings()
+{
+    QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+    m_emulatorPath = settings.value(QStringLiteral("SnesPlugin/emulatorPath")).toString();
+    m_snapshotsDir = settings.value(QStringLiteral("SnesPlugin/snapshotsDir")).toString();
+
+    // Auto-detect snapshots directory if empty and emulatorPath is set
+    if (m_snapshotsDir.isEmpty() && !m_emulatorPath.isEmpty()) {
+        QFileInfo emuInfo(m_emulatorPath);
+        QDir emuDir = emuInfo.dir();
+        if (emuDir.exists(QStringLiteral("Saves"))) {
+            m_snapshotsDir = emuDir.filePath(QStringLiteral("Saves"));
+        } else if (emuDir.exists(QStringLiteral("Screenshots"))) {
+            m_snapshotsDir = emuDir.filePath(QStringLiteral("Screenshots"));
+        } else {
+            m_snapshotsDir = emuDir.absolutePath();
+        }
+    }
+}
+
+void SnesDialog::saveEmulatorSettings()
+{
+    QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+    settings.setValue(QStringLiteral("SnesPlugin/emulatorPath"), m_emulatorPath);
+    settings.setValue(QStringLiteral("SnesPlugin/snapshotsDir"), m_snapshotsDir);
+}
+
+void SnesDialog::onConfigEmulatorClicked()
+{
+    QString startPath = m_emulatorPath.isEmpty() ? QStringLiteral("C:/") : m_emulatorPath;
+    QString exePath = QFileDialog::getOpenFileName(
+        this,
+        tr("Sélectionner l'exécutable Snes9x / Mesen / ZSNES"),
+        startPath,
+        tr("Exécutables (*.exe);;Tous les fichiers (*.*)"));
+
+    if (exePath.isEmpty()) return;
+
+    m_emulatorPath = exePath;
+
+    // Auto-suggest snapshots dir
+    QFileInfo emuInfo(m_emulatorPath);
+    QDir emuDir = emuInfo.dir();
+    if (emuDir.exists(QStringLiteral("Saves"))) {
+        m_snapshotsDir = emuDir.filePath(QStringLiteral("Saves"));
+    } else {
+        m_snapshotsDir = emuDir.absolutePath();
+    }
+
+    saveEmulatorSettings();
+    armSnapshotWatcher();
+
+    if (m_emulatorStatusLabel) {
+        m_emulatorStatusLabel->setText(tr("Configuré : %1 (Dossier : %2)")
+            .arg(emuInfo.fileName())
+            .arg(QFileInfo(m_snapshotsDir).fileName()));
+        m_emulatorStatusLabel->setStyleSheet(QStringLiteral("font-size: 11px; color: #81c784;"));
+    }
+}
+
+void SnesDialog::onLaunchEmulatorClicked()
+{
+    if (m_emulatorPath.isEmpty() || !QFile::exists(m_emulatorPath)) {
+        onConfigEmulatorClicked();
+        if (m_emulatorPath.isEmpty() || !QFile::exists(m_emulatorPath)) {
+            return;
+        }
+    }
+
+    if (m_emulatorProcess && m_emulatorProcess->state() != QProcess::NotRunning) {
+        m_emulatorProcess->terminate();
+        m_emulatorProcess->waitForFinished(1000);
+    }
+
+    if (!m_emulatorProcess) {
+        m_emulatorProcess = new QProcess(this);
+        connect(m_emulatorProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                this, &SnesDialog::onEmulatorFinished);
+    }
+
+    QStringList args;
+    if (!m_filePath.isEmpty()) {
+        args << QDir::toNativeSeparators(m_filePath);
+    }
+
+    m_emulatorProcess->setProgram(m_emulatorPath);
+    m_emulatorProcess->setArguments(args);
+    m_emulatorProcess->setWorkingDirectory(QFileInfo(m_emulatorPath).absolutePath());
+    m_emulatorProcess->start();
+
+    armSnapshotWatcher();
+
+    if (m_emulatorStatusLabel) {
+        m_emulatorStatusLabel->setText(tr("🟢 Émulateur en cours d'exécution.\nDans le jeu, appuyez sur <b>F1</b> (quick save) pour capturer instantanément !"));
+        m_emulatorStatusLabel->setStyleSheet(QStringLiteral("font-size: 11px; color: #64b5f6; font-weight: bold;"));
+    }
+}
+
+void SnesDialog::onEmulatorFinished(int exitCode)
+{
+    Q_UNUSED(exitCode);
+    if (m_emulatorStatusLabel) {
+        m_emulatorStatusLabel->setText(tr("Émulateur fermé."));
+        m_emulatorStatusLabel->setStyleSheet(QStringLiteral("font-size: 11px; color: #aaa;"));
+    }
+}
+
+void SnesDialog::armSnapshotWatcher()
+{
+    if (m_snapshotsDir.isEmpty() || !QDir(m_snapshotsDir).exists()) {
+        return;
+    }
+    if (!m_snapshotWatcher) {
+        m_snapshotWatcher = new QFileSystemWatcher(this);
+        connect(m_snapshotWatcher, &QFileSystemWatcher::directoryChanged,
+                this, &SnesDialog::onSnapshotDirectoryChanged);
+    }
+    const QStringList paths = m_snapshotWatcher->directories();
+    if (!paths.contains(m_snapshotsDir)) {
+        if (!paths.isEmpty()) {
+            m_snapshotWatcher->removePaths(paths);
+        }
+        m_snapshotWatcher->addPath(m_snapshotsDir);
+    }
+}
+
+void SnesDialog::onSnapshotDirectoryChanged(const QString &path)
+{
+    QDir dir(path);
+    QStringList filters;
+    filters << QStringLiteral("*.000") << QStringLiteral("*.001") << QStringLiteral("*.002")
+            << QStringLiteral("*.s96") << QStringLiteral("*.zst") << QStringLiteral("*.mst");
+    dir.setNameFilters(filters);
+    dir.setSorting(QDir::Time);
+
+    QFileInfoList list = dir.entryInfoList();
+    if (list.isEmpty()) return;
+
+    // Check the most recently modified snapshot file (within last 35 seconds)
+    QFileInfo mostRecent = list.first();
+    qint64 ageSec = mostRecent.lastModified().secsTo(QDateTime::currentDateTime());
+    if (ageSec > 35) {
+        return; // Stale file
+    }
+
+    SnesSavestateData ss = SnesSavestateLoader::load(mostRecent.absoluteFilePath());
+    if (ss.vram.isEmpty()) {
+        return;
+    }
+
+    m_savestate = ss;
+    m_isSavestate = true;
+    m_overrideData.clear();
+
+    if (m_savestateInfoLabel) {
+        m_savestateInfoLabel->setText(tr("🎮 <b>%1</b> | VRAM: %2 KB | CGRAM: %3 Palettes\nCapturé en direct : %4")
+            .arg(m_savestate.emulatorName)
+            .arg(m_savestate.vram.size() / 1024)
+            .arg(m_savestate.cgram.size() / 32)
+            .arg(mostRecent.fileName()));
+    }
+
+    if (m_savestatePaletteCombo) {
+        m_savestatePaletteCombo->setEnabled(!m_savestate.cgram.isEmpty());
+        m_savestatePaletteCombo->setCurrentIndex(8);
+    }
+
+    if (!m_savestate.cgram.isEmpty()) {
+        m_activePalette = m_savestate.getPalette(8, true);
+    }
+
+    if (m_emulatorStatusLabel) {
+        m_emulatorStatusLabel->setText(tr("✅ Snapshot capturé avec succès (%1) ! VRAM chargée.").arg(mostRecent.fileName()));
+        m_emulatorStatusLabel->setStyleSheet(QStringLiteral("font-size: 11px; color: #00e676; font-weight: bold;"));
+    }
+
+    m_tabWidget->setCurrentIndex(0);
+    updatePaletteSwatches();
+    updateDecoding();
+}
+

@@ -17,7 +17,6 @@
 #ifndef SNESSAVESTATELOADER_H
 #define SNESSAVESTATELOADER_H
 
-#include "bentopackcore_export.h"
 #include <QByteArray>
 #include <QString>
 #include <QVector>
@@ -27,7 +26,7 @@
 /**
  * @brief Container for extracted SNES VRAM (64KB) and CGRAM (512 bytes / 256 BGR555 colors).
  */
-struct BENTOPACK_CORE_EXPORT SnesSavestateData
+struct SnesSavestateData
 {
     bool       isValid = false;
     QString    emulatorName;
@@ -56,7 +55,7 @@ struct BENTOPACK_CORE_EXPORT SnesSavestateData
 /**
  * @brief Helper for SNES address translation (LoROM, HiROM, copier headers).
  */
-class BENTOPACK_CORE_EXPORT SnesAddress
+class SnesAddress
 {
 public:
     static bool hasCopierHeader(qint64 fileSize)
@@ -83,7 +82,7 @@ public:
 /**
  * @brief Clean-room loader for SNES emulator savestates (Snes9x, ZSNES, Mesen, raw VRAM/CGRAM dumps).
  */
-class BENTOPACK_CORE_EXPORT SnesSavestateLoader
+class SnesSavestateLoader
 {
 public:
     /**

@@ -28,7 +28,7 @@
 #include "include/widgets/branchselectiondialog.h"
 #include "include/widgets/openmediaconflictdialog.h"
 #include "include/widgets/watchconfigdialog.h"
-#include "include/widgets/retrotileexplorerdialog.h"
+#include "extractor/retroprofileregistry.h"
 #include "include/widgets/filtermenubuilder.h"
 #include "include/watcher/livewatchmanager.h"
 #include "include/filters/filterregistry.h"
@@ -941,10 +941,6 @@ void MainWindow::processFile(const QString &fileName)
             }
             return;
         }
-
-        RetroTileExplorerDialog dlg(fileName, this, m_projectController.get());
-        dlg.exec();
-        return;
     }
 
     if (m_document && !m_document->isEmpty()) {
@@ -1722,9 +1718,6 @@ void MainWindow::onRetroRipperTriggered()
             }
             return;
         }
-
-        RetroTileExplorerDialog dlg(fileName, this, m_projectController.get());
-        dlg.exec();
     }
 }
 
@@ -1768,16 +1761,11 @@ void MainWindow::updateVramGauge()
         m_vramLabel->setStyleSheet(QStringLiteral("font-size: 11px; font-weight: bold; color: #cbd5e1;"));
     }
 
-    QString profileName;
-    switch (retro.profileIndex) {
-    case 1: profileName = QStringLiteral("Nintendo Game Boy (DMG/CGB)"); break;
-    case 2: profileName = QStringLiteral("Nintendo NES / Famicom"); break;
-    case 3: profileName = QStringLiteral("Sega Master System"); break;
-    case 4: profileName = QStringLiteral("Sega Mega Drive / Genesis"); break;
-    case 5: profileName = QStringLiteral("Commodore 64"); break;
-    case 6: profileName = QStringLiteral("Super Nintendo (SNES)"); break;
-    case 7: profileName = QStringLiteral("PICO-8"); break;
-    default: profileName = QStringLiteral("Custom / Generic Retro"); break;
+    QString profileName = QStringLiteral("Custom / Generic Retro");
+    if (RetroProfileRegistry::instance().hasProfile(retro.profileId)) {
+        profileName = RetroProfileRegistry::instance().profile(retro.profileId).name;
+    } else if (retro.profileIndex > 0 && RetroProfileRegistry::instance().hasLegacyIndex(retro.profileIndex)) {
+        profileName = RetroProfileRegistry::instance().profileByLegacyIndex(retro.profileIndex).name;
     }
 
     QString tip = QStringLiteral(

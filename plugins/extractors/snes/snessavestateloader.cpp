@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "extractor/snessavestateloader.h"
+#include "snessavestateloader.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>

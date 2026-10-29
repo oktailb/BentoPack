@@ -17,14 +17,29 @@
 #include "snes_extractor.h"
 #include "snes_dialog.h"
 #include "image/spritedetector.h"
+#include "extractor/retroprofileregistry.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QLabel>
+#include <QFileDialog>
+#include <QSettings>
 
 SnesExtractor::SnesExtractor(QObject *parent)
     : Extractor(parent)
 {
+    // Dynamically register SNES profile into BentoPack's RetroProfileRegistry
+    RetroProfileRegistry::instance().registerProfile({
+        QStringLiteral("snes"),
+        tr("Super Nintendo (SNES) - 256px scanline, 512 tiles"),
+        tr("SNES PPU: 32 sprites/scanline, up to 512 8x8 tiles in VRAM budget, 16 colors/palette"),
+        256, 512, 8, 32, 16, 6
+    });
 }
 
 bool SnesExtractor::canDecode(const QString &filePath) const
@@ -333,4 +348,66 @@ bool SnesExtractor::showInteractiveDialog(const QString &filePath, SpriteDocumen
     outDoc.setFrames(frames, boxes);
     outDoc.setFilePath(filePath);
     return true;
+}
+QWidget* SnesExtractor::createSettingsWidget(QWidget *parent)
+{
+    QWidget *w = new QWidget(parent);
+    auto *layout = new QVBoxLayout(w);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    QSettings settings(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+    QString emuPath = settings.value(QStringLiteral("SnesPlugin/emulatorPath")).toString();
+    QString snapDir = settings.value(QStringLiteral("SnesPlugin/snapshotsDir")).toString();
+
+    auto *desc = new QLabel(
+        tr("<b>Super Nintendo / Super Famicom (SNES) Ripper Configuration</b><br>"
+           "Configure your preferred emulator (Snes9x, ZSNES, Mesen) for automated live VRAM captures via <b>F1</b>."),
+        w);
+    desc->setWordWrap(true);
+    desc->setStyleSheet(QStringLiteral("color: #aaa; font-size: 11px; margin-bottom: 6px;"));
+    layout->addWidget(desc);
+
+    auto *emuRow = new QHBoxLayout();
+    auto *editEmu = new QLineEdit(emuPath, w);
+    editEmu->setPlaceholderText(tr("Path to snes9x-x64.exe, mesen.exe, etc."));
+    auto *btnBrowseEmu = new QPushButton(tr("Browse..."), w);
+    QObject::connect(btnBrowseEmu, &QPushButton::clicked, [editEmu, w]() {
+        QString file = QFileDialog::getOpenFileName(w, tr("Select SNES Emulator"), editEmu->text(), tr("Executables (*.exe);;All Files (*.*)"));
+        if (!file.isEmpty()) {
+            editEmu->setText(file);
+            QSettings s(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+            s.setValue(QStringLiteral("SnesPlugin/emulatorPath"), file);
+        }
+    });
+    QObject::connect(editEmu, &QLineEdit::textChanged, [](const QString &text) {
+        QSettings s(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+        s.setValue(QStringLiteral("SnesPlugin/emulatorPath"), text);
+    });
+    emuRow->addWidget(new QLabel(tr("Emulator Executable:"), w));
+    emuRow->addWidget(editEmu, 1);
+    emuRow->addWidget(btnBrowseEmu);
+    layout->addLayout(emuRow);
+
+    auto *snapRow = new QHBoxLayout();
+    auto *editSnap = new QLineEdit(snapDir, w);
+    editSnap->setPlaceholderText(tr("Path to emulator Saves/ directory"));
+    auto *btnBrowseSnap = new QPushButton(tr("Browse..."), w);
+    QObject::connect(btnBrowseSnap, &QPushButton::clicked, [editSnap, w]() {
+        QString dir = QFileDialog::getExistingDirectory(w, tr("Select Snapshots Directory"), editSnap->text());
+        if (!dir.isEmpty()) {
+            editSnap->setText(dir);
+            QSettings s(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+            s.setValue(QStringLiteral("SnesPlugin/snapshotsDir"), dir);
+        }
+    });
+    QObject::connect(editSnap, &QLineEdit::textChanged, [](const QString &text) {
+        QSettings s(QStringLiteral("BentoPack"), QStringLiteral("BentoPack"));
+        s.setValue(QStringLiteral("SnesPlugin/snapshotsDir"), text);
+    });
+    snapRow->addWidget(new QLabel(tr("Snapshots Folder:"), w));
+    snapRow->addWidget(editSnap, 1);
+    snapRow->addWidget(btnBrowseSnap);
+    layout->addLayout(snapRow);
+
+    return w;
 }

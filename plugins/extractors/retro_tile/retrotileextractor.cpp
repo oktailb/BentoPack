@@ -15,15 +15,59 @@
  */
 
 #include "retrotileextractor.h"
+#include "retrotileexplorerdialog.h"
+#include "extractor/retroprofileregistry.h"
 #include "image/spritedetector.h"
 #include "image/colorpalettepresets.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QDebug>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QCheckBox>
+#include <QSettings>
 
 RetroTileExtractor::RetroTileExtractor(QObject *parent)
     : Extractor(parent)
 {
+    // Dynamically register retro hardware constraint profiles provided by this plugin
+    auto &reg = RetroProfileRegistry::instance();
+    reg.registerProfile({
+        QStringLiteral("gameboy"),
+        tr("Nintendo Game Boy (DMG / CGB) - 64px scanline, 256 tiles"),
+        tr("Game Boy PPU: 10 sprites/scanline, 256 tiles pattern table, 4 colors/sprite"),
+        64, 256, 8, 10, 4, 1
+    });
+    reg.registerProfile({
+        QStringLiteral("nes"),
+        tr("Nintendo NES / Famicom - 64px scanline, 256 tiles"),
+        tr("NES PPU: 8 sprites/scanline, 256 tiles pattern table, 4 colors/sprite"),
+        64, 256, 8, 8, 4, 2
+    });
+    reg.registerProfile({
+        QStringLiteral("sms"),
+        tr("Sega Master System / Game Gear - 64px scanline, 256 tiles"),
+        tr("SMS VDP: 8 sprites/scanline, 256 tiles in VRAM, 16 colors/sprite"),
+        64, 256, 8, 8, 16, 3
+    });
+    reg.registerProfile({
+        QStringLiteral("genesis"),
+        tr("Sega Mega Drive / Genesis - 128px scanline, 512 tiles"),
+        tr("Mega Drive VDP: 16 sprites/scanline, 512 tiles, 16 colors/sprite"),
+        128, 512, 8, 16, 16, 4
+    });
+    reg.registerProfile({
+        QStringLiteral("c64"),
+        tr("Commodore 64 (Multicolor) - 64px scanline, 256 tiles"),
+        tr("VIC-II: 8 hardware sprites/line, 4 colors"),
+        64, 256, 8, 8, 4, 5
+    });
+    reg.registerProfile({
+        QStringLiteral("pico8"),
+        tr("PICO-8 - 64px scanline, 256 tiles"),
+        tr("PICO-8 fantasy console: 128x128 sprite sheet, 256 tiles, 16 colors"),
+        64, 256, 8, 8, 16, 7
+    });
 }
 
 bool RetroTileExtractor::canDecode(const QString &filePath) const
@@ -327,4 +371,40 @@ bool RetroTileExtractor::write(const QString &filePath, const SpriteDocument &in
     }
 
     return true;
+}
+
+bool RetroTileExtractor::showInteractiveDialog(const QString &filePath, SpriteDocument &outDoc, QWidget *parent)
+{
+    RetroTileExplorerDialog dlg(filePath, parent);
+    if (dlg.exec() != QDialog::Accepted) {
+        return false;
+    }
+
+    outDoc.setAtlas(dlg.renderedSheet());
+    if (dlg.extractAsSprites() && !dlg.extractedFrames().isEmpty()) {
+        outDoc.setFrames(dlg.extractedFrames(), dlg.extractedBoxes());
+    } else {
+        outDoc.setFrames({ dlg.renderedSheet() }, { SpriteBox(QRect(0, 0, dlg.renderedSheet().width(), dlg.renderedSheet().height())) });
+    }
+    outDoc.setFilePath(filePath);
+    return true;
+}
+
+QWidget* RetroTileExtractor::createSettingsWidget(QWidget *parent)
+{
+    QWidget *w = new QWidget(parent);
+    QVBoxLayout *layout = new QVBoxLayout(w);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *info = new QLabel(
+        tr("<b>Universal Retro Console ROM & VRAM Tile Ripper</b><br>"
+           "Supports 8/16-bit consoles: Game Boy, NES, Sega Master System, Mega Drive, Commodore 64, PICO-8.<br>"
+           "Registered hardware profiles can be enabled in <i>Retro & Hardware Constraints</i>."),
+        w
+    );
+    info->setWordWrap(true);
+    info->setStyleSheet(QStringLiteral("color: #aaa; font-size: 11px;"));
+    layout->addWidget(info);
+
+    return w;
 }

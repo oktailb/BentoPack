@@ -22,7 +22,6 @@
 #include <QByteArray>
 #include <QImage>
 #include <QList>
-#include "bentopackwidgets_export.h"
 #include "extractor/retrotiledecoder.h"
 #include "extractor/romprobe.h"
 #include "model/spritedocument.h"
@@ -35,21 +34,20 @@ class QCheckBox;
 class QLabel;
 class QPushButton;
 class QScrollArea;
-class ProjectController;
 
-class BENTOPACK_WIDGETS_EXPORT RetroTileExplorerDialog : public QDialog
+class RetroTileExplorerDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit RetroTileExplorerDialog(const QString &filePath,
-                                     QWidget *parent = nullptr,
-                                     ProjectController *projectController = nullptr);
+                                     QWidget *parent = nullptr);
     ~RetroTileExplorerDialog() override = default;
 
     QImage renderedSheet() const { return m_currentSheet; }
     QList<QImage> extractedFrames() const { return m_extractedFrames; }
     QList<SpriteBox> extractedBoxes() const { return m_extractedBoxes; }
+    bool extractAsSprites() const { return m_extractAsSprites; }
 
 private slots:
     void onBankSelected(int index);
@@ -81,7 +79,6 @@ private:
     void updatePaletteStrip();
 
     QString            m_filePath;
-    ProjectController *m_projectController = nullptr;
     QByteArray         m_romData;
     RomProbeResult     m_probeResult;
 
@@ -114,6 +111,7 @@ private:
     QImage           m_currentSheet;
     QList<QImage>    m_extractedFrames;
     QList<SpriteBox> m_extractedBoxes;
+    bool             m_extractAsSprites = true;
     TilePattern      m_currentPattern = TilePattern::Linear;
     QVector<QRgb>    m_activeCustomPalette;
     bool             m_useRomPalette = false;

@@ -4,6 +4,7 @@
 #include <QColor>
 #include "image/retrolinterhelper.h"
 #include "config/appconfig.h"
+#include "extractor/retroprofileregistry.h"
 
 class TestRetroLinter : public QObject
 {
@@ -93,6 +94,11 @@ void TestRetroLinter::testScanlineViolationDetection()
 
 void TestRetroLinter::testPresetProfiles()
 {
+    RetroProfileRegistry::instance().registerProfile({ QStringLiteral("gameboy"), QStringLiteral("Game Boy"), QString(), 64, 256, 8, 10, 4, 1 });
+    RetroProfileRegistry::instance().registerProfile({ QStringLiteral("nes"), QStringLiteral("NES"), QString(), 64, 256, 8, 8, 4, 2 });
+    RetroProfileRegistry::instance().registerProfile({ QStringLiteral("genesis"), QStringLiteral("Mega Drive"), QString(), 128, 512, 8, 16, 16, 4 });
+    RetroProfileRegistry::instance().registerProfile({ QStringLiteral("snes"), QStringLiteral("SNES"), QString(), 256, 512, 8, 32, 16, 6 });
+
     RetroLinterConfig cfg;
 
     // Preset 1: Game Boy

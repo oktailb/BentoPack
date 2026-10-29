@@ -17,12 +17,11 @@
 #ifndef SNESPRESET_H
 #define SNESPRESET_H
 
-#include "bentopackcore_export.h"
 #include "extractor/retrotiledecoder.h"
 #include <QString>
 #include <QList>
 
-struct BENTOPACK_CORE_EXPORT SnesPreset
+struct SnesPreset
 {
     QString     title;
     QString     gameName;
@@ -40,7 +39,7 @@ struct BENTOPACK_CORE_EXPORT SnesPreset
     bool isValid() const { return !title.isEmpty() && tileLength > 0; }
 };
 
-class BENTOPACK_CORE_EXPORT SnesPresetManager
+class SnesPresetManager
 {
 public:
     /**

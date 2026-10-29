@@ -3,6 +3,12 @@ add_library(extractor_snes SHARED
     snes_extractor.h
     snes_dialog.cpp
     snes_dialog.h
+    snespreset.cpp
+    snespreset.h
+    snesromanalyzer.cpp
+    snesromanalyzer.h
+    snessavestateloader.cpp
+    snessavestateloader.h
 )
 
 target_include_directories(extractor_snes PUBLIC

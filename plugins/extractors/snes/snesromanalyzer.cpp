@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include "extractor/snesromanalyzer.h"
-#include "extractor/snessavestateloader.h"
+#include "snesromanalyzer.h"
+#include "snessavestateloader.h"
 #include <cmath>
 #include <algorithm>
 #include <QtEndian>

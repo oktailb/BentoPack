@@ -23,10 +23,9 @@
 #include <QVector>
 #include <QColor>
 #include "extractor/retrotiledecoder.h"
-#include "extractor/snessavestateloader.h"
-#include "extractor/snespreset.h"
-
-#include "extractor/snesromanalyzer.h"
+#include "snessavestateloader.h"
+#include "snespreset.h"
+#include "snesromanalyzer.h"
 
 class QComboBox;
 class QSpinBox;
@@ -46,7 +45,7 @@ class SnesDialog : public QDialog
 
 public:
     explicit SnesDialog(const QString &filePath, const QByteArray &fileData, QWidget *parent = nullptr);
-    ~SnesDialog() override = default;
+    ~SnesDialog() override;
 
     QImage decodedAtlasImage() const { return m_decodedImage; }
     QList<QRect> detectedSpriteBoxes() const { return m_detectedBoxes; }
@@ -69,6 +68,11 @@ private slots:
     void onZoomChanged();
     void onExtractSpritesClicked();
     void onImportAtlasClicked();
+    void onLaunchEmulatorClicked();
+    void onConfigEmulatorClicked();
+    void onLoadSavestateClicked();
+    void onSnapshotDirectoryChanged(const QString &path);
+    void onEmulatorFinished(int exitCode);
 
 private:
     void setupUi();
@@ -76,6 +80,9 @@ private:
     void updateDecoding();
     void autoDetectRomInfo();
     void runHeuristicAnalysis();
+    void loadEmulatorSettings();
+    void saveEmulatorSettings();
+    void armSnapshotWatcher();
 
     QString            m_filePath;
     QByteArray         m_fileData;
@@ -95,8 +102,16 @@ private:
     QTabWidget        *m_tabWidget = nullptr;
     QLabel            *m_infoBanner = nullptr;
 
-    // Tab 1: Savestate / VRAM Live
+    // Tab 1: Savestate / VRAM Live & Live Emulator Capture
     QComboBox         *m_savestatePaletteCombo = nullptr;
+    QLabel            *m_savestateInfoLabel = nullptr;
+    QPushButton       *m_launchEmulatorBtn = nullptr;
+    QPushButton       *m_configEmulatorBtn = nullptr;
+    QLabel            *m_emulatorStatusLabel = nullptr;
+    QString            m_emulatorPath;
+    QString            m_snapshotsDir;
+    class QProcess    *m_emulatorProcess = nullptr;
+    class QFileSystemWatcher *m_snapshotWatcher = nullptr;
 
     // Tab 2: Heuristic & Compression Bank Scanner
     QListWidget       *m_banksList = nullptr;

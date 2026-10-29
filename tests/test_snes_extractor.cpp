@@ -17,9 +17,9 @@
 #include <QtTest>
 #include <QTemporaryFile>
 #include <QTemporaryDir>
-#include "extractor/snessavestateloader.h"
-#include "extractor/snespreset.h"
-#include "extractor/snesromanalyzer.h"
+#include "snessavestateloader.h"
+#include "snespreset.h"
+#include "snesromanalyzer.h"
 #include "image/spritedetector.h"
 #include "snes_extractor.h"
 

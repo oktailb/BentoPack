@@ -23,9 +23,8 @@
 #include <QString>
 #include <QColor>
 #include "extractor/retrotiledecoder.h"
-#include "bentopackcore_export.h"
 
-struct BENTOPACK_CORE_EXPORT SnesScoredPalette
+struct SnesScoredPalette
 {
     int             offset = 0;
     double          score = 0.0;
@@ -33,7 +32,7 @@ struct BENTOPACK_CORE_EXPORT SnesScoredPalette
     QString         tag;
 };
 
-struct BENTOPACK_CORE_EXPORT SnesDetectedBank
+struct SnesDetectedBank
 {
     int             offset = 0;
     int             length = 0;
@@ -46,7 +45,7 @@ struct BENTOPACK_CORE_EXPORT SnesDetectedBank
     QString summary() const;
 };
 
-class BENTOPACK_CORE_EXPORT SnesPaletteScanner
+class SnesPaletteScanner
 {
 public:
     /**
@@ -65,7 +64,7 @@ public:
     static QStringList harmonicPresetNames();
 };
 
-class BENTOPACK_CORE_EXPORT SnesRomAnalyzer
+class SnesRomAnalyzer
 {
 public:
     /**

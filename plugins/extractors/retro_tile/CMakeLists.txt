@@ -1,6 +1,8 @@
 add_library(extractor_retro_tile SHARED
     retrotileextractor.cpp
     retrotileextractor.h
+    retrotileexplorerdialog.cpp
+    retrotileexplorerdialog.h
     retrotiledecoder.h
     romprobe.h
 )

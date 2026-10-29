@@ -81,61 +81,32 @@ void GitConfig::detectSystemIdentity(QString *name, QString *email)
     if (email) *email = foundEmail;
 }
 
+#include "extractor/retroprofileregistry.h"
+
+void RetroLinterConfig::applyPreset(const QString &profileId, RetroLinterConfig &cfg)
+{
+    cfg.profileId = profileId;
+    if (profileId == QStringLiteral("custom") || profileId.isEmpty()) {
+        cfg.profileIndex = 0;
+        return;
+    }
+    if (RetroProfileRegistry::instance().hasProfile(profileId)) {
+        auto p = RetroProfileRegistry::instance().profile(profileId);
+        cfg.scanlineSpriteWidthLimit = p.scanlineSpriteWidthLimit;
+        cfg.maxVramTiles = p.maxVramTiles;
+        cfg.tileSize = p.tileSize;
+        cfg.maxSpritesPerScanline = p.maxSpritesPerScanline;
+        cfg.maxColorsPerSprite = p.maxColorsPerSprite;
+    }
+}
+
 void RetroLinterConfig::applyPreset(int presetIndex, RetroLinterConfig &cfg)
 {
     cfg.profileIndex = presetIndex;
-    switch (presetIndex) {
-    case 1: // Game Boy (DMG / CGB)
-        cfg.scanlineSpriteWidthLimit = 64; // 10 sprites / line (8x8 or 8x16) -> safe 64px limit
-        cfg.maxVramTiles = 256;            // Pattern table 256 tiles
-        cfg.tileSize = 8;
-        cfg.maxSpritesPerScanline = 10;
-        cfg.maxColorsPerSprite = 4;
-        break;
-    case 2: // NES / Famicom
-        cfg.scanlineSpriteWidthLimit = 64; // 8 sprites / scanline * 8px = 64px
-        cfg.maxVramTiles = 256;            // Pattern table 256 tiles
-        cfg.tileSize = 8;
-        cfg.maxSpritesPerScanline = 8;
-        cfg.maxColorsPerSprite = 4;
-        break;
-    case 3: // Sega Master System / Game Gear
-        cfg.scanlineSpriteWidthLimit = 64; // 8 sprites / scanline * 8px = 64px
-        cfg.maxVramTiles = 256;            // 256 sprite tiles in VRAM
-        cfg.tileSize = 8;
-        cfg.maxSpritesPerScanline = 8;
-        cfg.maxColorsPerSprite = 16;
-        break;
-    case 4: // Sega Mega Drive / Genesis
-        cfg.scanlineSpriteWidthLimit = 128; // 16 sprites / scanline (in 320x224 mode)
-        cfg.maxVramTiles = 512;             // Sprite VRAM pattern area
-        cfg.tileSize = 8;
-        cfg.maxSpritesPerScanline = 16;
-        cfg.maxColorsPerSprite = 16;
-        break;
-    case 5: // Commodore 64
-        cfg.scanlineSpriteWidthLimit = 64;  // 8 hardware sprites / rasterline
-        cfg.maxVramTiles = 256;
-        cfg.tileSize = 8;
-        cfg.maxSpritesPerScanline = 8;
-        cfg.maxColorsPerSprite = 4;
-        break;
-    case 6: // Super Nintendo (SNES)
-        cfg.scanlineSpriteWidthLimit = 256; // 32 sprites / scanline
-        cfg.maxVramTiles = 512;
-        cfg.tileSize = 8;
-        cfg.maxSpritesPerScanline = 32;
-        cfg.maxColorsPerSprite = 16;
-        break;
-    case 7: // PICO-8
-        cfg.scanlineSpriteWidthLimit = 64;
-        cfg.maxVramTiles = 256;             // 128x128 sprite sheet = 256 tiles
-        cfg.tileSize = 8;
-        cfg.maxSpritesPerScanline = 8;
-        cfg.maxColorsPerSprite = 16;
-        break;
-    default: // 0: Custom / Generic
-        break;
+    if (presetIndex > 0 && RetroProfileRegistry::instance().hasLegacyIndex(presetIndex)) {
+        auto p = RetroProfileRegistry::instance().profileByLegacyIndex(presetIndex);
+        cfg.profileId = p.id;
+        applyPreset(p.id, cfg);
     }
 }
 
@@ -321,6 +292,12 @@ bool AppConfig::load(const QString &filePath)
         QJsonObject retroObj = root.value(QStringLiteral("retro_linter")).toObject();
         m_retro.enabled = retroObj.value(QStringLiteral("enabled")).toBool(m_retro.enabled);
         m_retro.profileIndex = retroObj.value(QStringLiteral("profile_index")).toInt(m_retro.profileIndex);
+        m_retro.profileId = retroObj.value(QStringLiteral("profile_id")).toString(m_retro.profileId);
+        if (m_retro.profileId.isEmpty() && m_retro.profileIndex > 0) {
+            if (RetroProfileRegistry::instance().hasLegacyIndex(m_retro.profileIndex)) {
+                m_retro.profileId = RetroProfileRegistry::instance().profileByLegacyIndex(m_retro.profileIndex).id;
+            }
+        }
         m_retro.scanlineSpriteWidthLimit = retroObj.value(QStringLiteral("scanline_sprite_width_limit")).toInt(m_retro.scanlineSpriteWidthLimit);
         m_retro.maxVramTiles = retroObj.value(QStringLiteral("max_vram_tiles")).toInt(m_retro.maxVramTiles);
         m_retro.tileSize = retroObj.value(QStringLiteral("tile_size")).toInt(m_retro.tileSize);
@@ -431,6 +408,7 @@ bool AppConfig::save(const QString &filePath) const
     QJsonObject retroObj;
     retroObj[QStringLiteral("enabled")] = m_retro.enabled;
     retroObj[QStringLiteral("profile_index")] = m_retro.profileIndex;
+    retroObj[QStringLiteral("profile_id")] = m_retro.profileId;
     retroObj[QStringLiteral("scanline_sprite_width_limit")] = m_retro.scanlineSpriteWidthLimit;
     retroObj[QStringLiteral("max_vram_tiles")] = m_retro.maxVramTiles;
     retroObj[QStringLiteral("tile_size")] = m_retro.tileSize;
