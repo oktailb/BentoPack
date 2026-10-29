@@ -100,7 +100,7 @@
         <translation>Công cụ đóng gói Sprite Sheet 2D &amp; Pipeline tài nguyên cho Game Engine</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Xưởng công cụ &amp; công nghệ đa phương tiện</translation>
     </message>
     <message>
@@ -241,8 +241,8 @@
         <translation>Đóng gói Atlas (MaxRects Bin-Packing)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Sẵn sàng — Tùy chỉnh tham số và nhấp 'Tính toán đóng gói'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Sẵn sàng — Tùy chỉnh tham số và nhấp &apos;Tính toán đóng gói&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -991,8 +991,8 @@ Xóa triệt để: xóa pixel viền.</translation>
         <translation>Lớp mới (ví dụ Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>%1 khung hình được chuẩn bị cho lớp mới 'Emissive (_e)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 khung hình được chuẩn bị cho lớp mới &apos;Emissive (_e)&apos;</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -2379,7 +2379,7 @@ Bấm vào một nút để xem chi tiết.</translation>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Thêm vào hoạt ảnh đang mở '%1'</translation>
+        <translation>Thêm vào hoạt ảnh đang mở &apos;%1&apos;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2680,7 +2680,7 @@ Bạn có muốn khôi phục phiên này không?</translation>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>Dự án hiện tại '%1' có những thay đổi chưa lưu.
+        <translation>Dự án hiện tại &apos;%1&apos; có những thay đổi chưa lưu.
 Bạn có muốn lưu trước khi tiếp tục không?</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Lớp mới (ví dụ Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>%1 khung hình được chuẩn bị cho lớp mới 'Normal (_n)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 khung hình được chuẩn bị cho lớp mới &apos;Normal (_n)&apos;</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3290,12 +3290,12 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Màu phụ (Nhấp để mở Bộ chọn màu Pro)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
-        <translation>Áp dụng cho các khung hình của '%1'</translation>
+        <source>Apply to &apos;%1&apos; frames</source>
+        <translation>Áp dụng cho các khung hình của &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
-        <translation>Áp dụng tạo lưới CDT cho tất cả các khung hình của hoạt ảnh '%1'</translation>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
+        <translation>Áp dụng tạo lưới CDT cho tất cả các khung hình của hoạt ảnh &apos;%1&apos;</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3862,7 +3862,7 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Áp dụng cho hoạt ảnh</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
         <translation>Áp dụng điểm neo của khung hình hiện tại cho tất cả khung hình trong hoạt ảnh hiện tại</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Áp dụng cho tất cả</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
         <translation>Áp dụng điểm neo của khung hình hiện tại cho tất cả khung hình trong toàn bộ dự án</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Bạn có muốn lưu trước khi tiếp tục không?</translation>
         <translation>Tất cả khung hình (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>Áp dụng cho tất cả khung hình '%1'</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Áp dụng cho tất cả khung hình &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,8 +4282,8 @@ Xuất ra Godot, Unity, Unreal Paper2D và JSON.</translation>
         <translation>Trình chỉnh sửa lưới đa giác CDT (Không có lưới đa giác trên khung hình này) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
-        <translation>Áp dụng chỉnh sửa vẽ, tạo lưới và bộ lọc cho tất cả các khung hình của hoạt ảnh '%1'</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Áp dụng chỉnh sửa vẽ, tạo lưới và bộ lọc cho tất cả các khung hình của hoạt ảnh &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4354,8 +4354,8 @@ Would you like to repack the atlas now?</translation>
         <translation>⚡ Đang tính toán CDT...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
-        <translation>Áp dụng bộ lọc cho tất cả các khung hình của '%1' (%2 khung hình)</translation>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation>Áp dụng bộ lọc cho tất cả các khung hình của &apos;%1&apos; (%2 khung hình)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4479,8 +4479,8 @@ Would you like to repack the atlas now?</translation>
         <translation>XML parse error in plist: %1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>No 'frames' dictionary found in plist.</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>No &apos;frames&apos; dictionary found in plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4843,32 +4843,32 @@ Would you like to repack the atlas now?</translation>
         <translation>Gộp khung hình %1 vào %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Tạo hoạt ảnh '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Tạo hoạt ảnh &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Xóa hoạt ảnh '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Xóa hoạt ảnh &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Thao tác: Reverse Animation '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Thao tác: Reverse Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Thao tác: Rename Animation '%1' to '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Thao tác: Rename Animation &apos;%1&apos; to &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Thao tác: Duplicate Animation '%1' as '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Thao tác: Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Thao tác: Reorder Frames in Animation '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Thao tác: Reorder Frames in Animation &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Thao tác: Change Properties for Animation '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Thao tác: Change Properties for Animation &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -6271,8 +6271,8 @@ Cài đặt gói:
         <translation>Kiểm tra bản cập nhật ngay</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Nhấn 'Kiểm tra cập nhật ngay' để truy vấn phiên bản mới nhất trên GitHub.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Nhấn &apos;Kiểm tra cập nhật ngay&apos; để truy vấn phiên bản mới nhất trên GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6291,16 +6291,16 @@ Cài đặt gói:
         <translation>Đang kiểm tra bản cập nhật từ GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Kiểm tra cập nhật thất bại: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Kiểm tra cập nhật thất bại: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Phản hồi không hợp lệ từ GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Phản hồi không hợp lệ từ GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Có phiên bản mới: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Có phiên bản mới: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6311,8 +6311,8 @@ Cài đặt gói:
         <translation>Phát hành: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;Bạn đang sử dụng phiên bản mới nhất (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Bạn đang sử dụng phiên bản mới nhất (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>

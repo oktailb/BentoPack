@@ -100,7 +100,7 @@
         <translation>스프라이트 추출 및 애니메이션을 위한 강력한 도구</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>툴링 및 멀티미디어 기술 스튜디오</translation>
     </message>
     <message>
@@ -241,8 +241,8 @@
         <translation>아틀라스 빈 패킹 (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>준비됨 — 파라미터를 조정하고 '패킹 계산'을 클릭하세요</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>준비됨 — 파라미터를 조정하고 &apos;패킹 계산&apos;을 클릭하세요</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -991,8 +991,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>새 레이어 (예: Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>새 레이어 'Emissive (_e)'을(를) 위해 %1개 프레임 준비됨</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>새 레이어 &apos;Emissive (_e)&apos;을(를) 위해 %1개 프레임 준비됨</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -2383,7 +2383,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>활성 애니메이션 '%1'에 추가</translation>
+        <translation>활성 애니메이션 &apos;%1&apos;에 추가</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2680,7 +2680,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>현재 프로젝트 '%1'에 저장되지 않은 변경 사항이 있습니다.
+        <translation>현재 프로젝트 &apos;%1&apos;에 저장되지 않은 변경 사항이 있습니다.
 계속하기 전에 저장하시겠습니까?</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>새 레이어 (예: Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>새 레이어 'Normal (_n)'을(를) 위해 %1개 프레임 준비됨</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>새 레이어 &apos;Normal (_n)&apos;을(를) 위해 %1개 프레임 준비됨</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3290,12 +3290,12 @@ Strict removal: clears the fringe pixel.</source>
         <translation>보조 색상 (클릭하여 프로 색상 선택기 열기)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
-        <translation>'%1' 프레임에 적용</translation>
+        <source>Apply to &apos;%1&apos; frames</source>
+        <translation>&apos;%1&apos; 프레임에 적용</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
-        <translation>'%1' 애니메이션의 모든 프레임에 CDT 메시 생성 적용</translation>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
+        <translation>&apos;%1&apos; 애니메이션의 모든 프레임에 CDT 메시 생성 적용</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3862,7 +3862,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>애니메이션에 적용</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
         <translation>현재 프레임의 피벗 위치를 현재 애니메이션의 모든 프레임에 적용</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>모두 적용</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
         <translation>현재 프레임의 피벗 위치를 전체 프로젝트의 모든 프레임에 적용</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>모든 프레임 (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>'%1'의 모든 프레임에 적용</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>&apos;%1&apos;의 모든 프레임에 적용</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,8 +4282,8 @@ Godot, Unity, Unreal Paper2D 및 JSON으로 내보내집니다.</translation>
         <translation>CDT 폴리곤 메시 편집기 (이 프레임에 폴리곤 메시 없음) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
-        <translation>'%1' 애니메이션의 모든 프레임에 그리기 편집, 메시 생성 및 필터 적용</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>&apos;%1&apos; 애니메이션의 모든 프레임에 그리기 편집, 메시 생성 및 필터 적용</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4354,8 +4354,8 @@ Would you like to repack the atlas now?</source>
         <translation>⚡ CDT 계산 중...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
-        <translation>'%1'의 모든 프레임에 필터 적용 (%2개 프레임)</translation>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation>&apos;%1&apos;의 모든 프레임에 필터 적용 (%2개 프레임)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4479,8 +4479,8 @@ Would you like to repack the atlas now?</source>
         <translation>XML parse error in plist: %1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>No 'frames' dictionary found in plist.</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>No &apos;frames&apos; dictionary found in plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4843,32 +4843,32 @@ Would you like to repack the atlas now?</source>
         <translation>프레임 %1을(를) %2에 병합</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>애니메이션 '%1' 생성</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>애니메이션 &apos;%1&apos; 생성</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>애니메이션 '%1' 삭제</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>애니메이션 &apos;%1&apos; 삭제</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>애니메이션 '%1' 반전</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>애니메이션 &apos;%1&apos; 반전</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>애니메이션 '%1'을(를) '%2'(으)로 이름 변경</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>애니메이션 &apos;%1&apos;을(를) &apos;%2&apos;(으)로 이름 변경</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>애니메이션 '%1'을(를) '%2'(으)로 복제</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>애니메이션 &apos;%1&apos;을(를) &apos;%2&apos;(으)로 복제</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>애니메이션 '%1'의 프레임 순서 변경</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>애니메이션 &apos;%1&apos;의 프레임 순서 변경</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>애니메이션 '%1'의 속성 변경</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>애니메이션 &apos;%1&apos;의 속성 변경</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -5872,11 +5872,11 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>상태: &lt;b style='color:#27ae60;'&gt;LibGit2 활성화됨&lt;/b&gt; (히스토리 및 브랜치 관리 작동 중)</translation>
+        <translation>상태: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 활성화됨&lt;/b&gt; (히스토리 및 브랜치 관리 작동 중)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>상태: &lt;b style='color:#e74c3c;'&gt;LibGit2 컴파일되지 않음&lt;/b&gt; (git 히스토리 비활성화됨)</translation>
+        <translation>상태: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 컴파일되지 않음&lt;/b&gt; (git 히스토리 비활성화됨)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -6271,8 +6271,8 @@ Install package:
         <translation>지금 업데이트 확인</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>GitHub에서 최신 릴리스를 조회하려면 '지금 업데이트 확인'을 클릭하세요.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>GitHub에서 최신 릴리스를 조회하려면 &apos;지금 업데이트 확인&apos;을 클릭하세요.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6291,16 +6291,16 @@ Install package:
         <translation>GitHub에서 업데이트 확인 중...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;업데이트 확인 실패: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;업데이트 확인 실패: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;GitHub의 잘못된 응답입니다.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;GitHub의 잘못된 응답입니다.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;새 버전을 사용할 수 있습니다: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;새 버전을 사용할 수 있습니다: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6311,8 +6311,8 @@ Install package:
         <translation>릴리스 날짜: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;최신 버전을 사용 중입니다 (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;최신 버전을 사용 중입니다 (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>

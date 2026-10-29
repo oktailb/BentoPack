@@ -100,7 +100,7 @@
         <translation>Мощный инструмент для извлечения и анимации спрайтов</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>Студия инструментария и мультимедийных технологий</translation>
     </message>
     <message>
@@ -241,8 +241,8 @@
         <translation>Упаковка атласа (MaxRects)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
-        <translation>Готово — Настройте параметры и нажмите 'Упаковать'</translation>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
+        <translation>Готово — Настройте параметры и нажмите &apos;Упаковать&apos;</translation>
     </message>
     <message>
         <source>Packing Algorithm</source>
@@ -991,8 +991,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Новый слой (напр. Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>%1 кадр(ов) подготовлено для нового слоя 'Emissive (_e)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>%1 кадр(ов) подготовлено для нового слоя &apos;Emissive (_e)&apos;</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -2383,7 +2383,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>Добавить в активную анимацию "%1"</translation>
+        <translation>Добавить в активную анимацию &quot;%1&quot;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2680,7 +2680,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_UNSAVED_CHANGES_PROMPT</source>
-        <translation>В текущем проекте "%1" есть несохранённые изменения.
+        <translation>В текущем проекте &quot;%1&quot; есть несохранённые изменения.
 Сохранить их перед продолжением?</translation>
     </message>
     <message>
@@ -2927,8 +2927,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Новый слой (напр. Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>%1 кадр(ов) подготовлено для нового слоя 'Normal (_n)'</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>%1 кадр(ов) подготовлено для нового слоя &apos;Normal (_n)&apos;</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3290,12 +3290,12 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Вторичный цвет (Нажмите, чтобы открыть профессиональную палитру)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
-        <translation>Применить к кадрам '%1'</translation>
+        <source>Apply to &apos;%1&apos; frames</source>
+        <translation>Применить к кадрам &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
-        <translation>Применить генерацию CDT-сетки ко всем кадрам анимации '%1'</translation>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
+        <translation>Применить генерацию CDT-сетки ко всем кадрам анимации &apos;%1&apos;</translation>
     </message>
     <message>
         <source>⛶ Pop-out...</source>
@@ -3862,7 +3862,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Применить к аним.</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
         <translation>Применить опорную точку текущего кадра ко всем кадрам текущей анимации</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Применить ко всем</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
         <translation>Применить опорную точку текущего кадра ко всем кадрам всего проекта</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>Все кадры (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>Применить ко всем кадрам '%1'</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>Применить ко всем кадрам &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,8 +4282,8 @@ Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
         <translation>Редактор полигональной сетки CDT (нет сетки на этом кадре) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
-        <translation>Применить рисование, генерацию сетки и фильтры ко всем кадрам анимации '%1'</translation>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
+        <translation>Применить рисование, генерацию сетки и фильтры ко всем кадрам анимации &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Apply edits (drawing, flip, fill, filters, mesh generation) to all frames aligned by pivot</source>
@@ -4354,8 +4354,8 @@ Would you like to repack the atlas now?</source>
         <translation>⚡ Вычисление CDT...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
-        <translation>Применить фильтр ко всем кадрам '%1' (%2 кадров)</translation>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
+        <translation>Применить фильтр ко всем кадрам &apos;%1&apos; (%2 кадров)</translation>
     </message>
     <message>
         <source>Apply filter to all frames (%1 frames)</source>
@@ -4479,8 +4479,8 @@ Would you like to repack the atlas now?</source>
         <translation>XML parse error in plist: %1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>No 'frames' dictionary found in plist.</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>No &apos;frames&apos; dictionary found in plist.</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4673,7 +4673,7 @@ Would you like to repack the atlas now?</source>
     </message>
     <message>
         <source>Project file path is empty. Use Save As.</source>
-        <translation>Путь к файлу проекта пуст. Используйте "Сохранить как".</translation>
+        <translation>Путь к файлу проекта пуст. Используйте &quot;Сохранить как&quot;.</translation>
     </message>
     <message>
         <source>Saving project %1...</source>
@@ -4847,32 +4847,32 @@ Would you like to repack the atlas now?</source>
         <translation>Объединить кадр %1 с %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>Создать анимацию '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>Создать анимацию &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>Удалить анимацию '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>Удалить анимацию &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>Обратить порядок анимации '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>Обратить порядок анимации &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>Переименовать анимацию '%1' в '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Переименовать анимацию &apos;%1&apos; в &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>Дублировать анимацию '%1' как '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>Дублировать анимацию &apos;%1&apos; как &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>Изменить порядок кадров в анимации '%1'</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>Изменить порядок кадров в анимации &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>Изменить свойства анимации '%1'</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>Изменить свойства анимации &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -5876,11 +5876,11 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>Статус: &lt;b style='color:#27ae60;'&gt;LibGit2 активен&lt;/b&gt; (управление историей и ветками работает)</translation>
+        <translation>Статус: &lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 активен&lt;/b&gt; (управление историей и ветками работает)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>Статус: &lt;b style='color:#e74c3c;'&gt;LibGit2 не скомпилирован&lt;/b&gt; (история git отключена)</translation>
+        <translation>Статус: &lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 не скомпилирован&lt;/b&gt; (история git отключена)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -6275,8 +6275,8 @@ Install package:
         <translation>Проверить обновления сейчас</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
-        <translation>Нажмите 'Проверить обновления сейчас' для запроса последнего релиза на GitHub.</translation>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
+        <translation>Нажмите &apos;Проверить обновления сейчас&apos; для запроса последнего релиза на GitHub.</translation>
     </message>
     <message>
         <source>Release Information</source>
@@ -6295,16 +6295,16 @@ Install package:
         <translation>Проверка обновлений на GitHub...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Ошибка проверки обновлений: %1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Ошибка проверки обновлений: %1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;Недопустимый ответ от GitHub.&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Недопустимый ответ от GitHub.&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;Доступна новая версия: %1!&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;Доступна новая версия: %1!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6315,8 +6315,8 @@ Install package:
         <translation>Дата выпуска: %1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;Вы используете самую актуальную версию (v%1).&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;Вы используете самую актуальную версию (v%1).&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>

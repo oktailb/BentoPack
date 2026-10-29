@@ -100,7 +100,7 @@
         <translation>一款强大的精灵提取与动画制作工具</translation>
     </message>
     <message>
-        <source>Studio d'outillage &amp; technologies multimédia</source>
+        <source>Studio d&apos;outillage &amp; technologies multimédia</source>
         <translation>工具与多媒体技术工作室</translation>
     </message>
     <message>
@@ -241,7 +241,7 @@
         <translation>图集打包 (MaxRects 算法)</translation>
     </message>
     <message>
-        <source>Ready — Adjust parameters and click 'Compute Packing'</source>
+        <source>Ready — Adjust parameters and click &apos;Compute Packing&apos;</source>
         <translation>准备就绪 — 请调整参数并点击“计算打包”</translation>
     </message>
     <message>
@@ -991,8 +991,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>新建 图层 (如 Emissive (_e))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Emissive (_e)'</source>
-        <translation>已为新建 图层 'Emissive (_e)' 准备 %1 帧</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Emissive (_e)&apos;</source>
+        <translation>已为新建 图层 &apos;Emissive (_e)&apos; 准备 %1 帧</translation>
     </message>
     <message>
         <source>Create Emissive Layer </source>
@@ -2383,7 +2383,7 @@ Strict removal: clears the fringe pixel.</source>
     </message>
     <message>
         <source>KEY_CTX_ADD_TO_ACTIVE_ANIM</source>
-        <translation>添加到活动动画 '%1'</translation>
+        <translation>添加到活动动画 &apos;%1&apos;</translation>
     </message>
     <message>
         <source>KEY_CTX_NO_EXISTING_ANIMS</source>
@@ -2927,8 +2927,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>新建 图层 (如 Normal (_n))</translation>
     </message>
     <message>
-        <source>%1 frame(s) prepared for New Layer 'Normal (_n)'</source>
-        <translation>已为新建 图层 'Normal (_n)' 准备 %1 帧</translation>
+        <source>%1 frame(s) prepared for New Layer &apos;Normal (_n)&apos;</source>
+        <translation>已为新建 图层 &apos;Normal (_n)&apos; 准备 %1 帧</translation>
     </message>
     <message>
         <source>Create Normal Layer </source>
@@ -3290,11 +3290,11 @@ Strict removal: clears the fringe pixel.</source>
         <translation>背景色 (点击打开专业拾色器)</translation>
     </message>
     <message>
-        <source>Apply to '%1' frames</source>
+        <source>Apply to &apos;%1&apos; frames</source>
         <translation>应用到“%1”的所有帧</translation>
     </message>
     <message>
-        <source>Apply CDT mesh generation to all frames of animation '%1'</source>
+        <source>Apply CDT mesh generation to all frames of animation &apos;%1&apos;</source>
         <translation>将 CDT 网格生成应用到动画“%1”的所有帧</translation>
     </message>
     <message>
@@ -3862,7 +3862,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>应用到动画</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the current animation</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the current animation</source>
         <translation>将当前帧的轴心位置应用到当前动画的所有帧</translation>
     </message>
     <message>
@@ -3870,7 +3870,7 @@ Strict removal: clears the fringe pixel.</source>
         <translation>应用到全部</translation>
     </message>
     <message>
-        <source>Apply current frame's pivot point to all frames in the entire project</source>
+        <source>Apply current frame&apos;s pivot point to all frames in the entire project</source>
         <translation>将当前帧的轴心位置应用到整个项目的所有帧</translation>
     </message>
     <message>
@@ -3922,8 +3922,8 @@ Strict removal: clears the fringe pixel.</source>
         <translation>所有帧 (%1)</translation>
     </message>
     <message>
-        <source>Apply to all '%1' frames</source>
-        <translation>应用到 '%1' 的所有帧</translation>
+        <source>Apply to all &apos;%1&apos; frames</source>
+        <translation>应用到 &apos;%1&apos; 的所有帧</translation>
     </message>
     <message>
         <source>Vertex Weights &amp; Wind Influence</source>
@@ -4282,7 +4282,7 @@ Exported to Godot, Unity, Unreal Paper2D, and JSON.</source>
         <translation>CDT多边形网格编辑器 (此帧无多边形网格) [D]</translation>
     </message>
     <message>
-        <source>Apply drawing edits, mesh generation and filters to all frames of animation '%1'</source>
+        <source>Apply drawing edits, mesh generation and filters to all frames of animation &apos;%1&apos;</source>
         <translation>将绘图修改、网格生成和滤镜应用到动画“%1”的所有帧</translation>
     </message>
     <message>
@@ -4354,7 +4354,7 @@ Would you like to repack the atlas now?</source>
         <translation>⚡ 正在计算 CDT...</translation>
     </message>
     <message>
-        <source>Apply filter to all '%1' frames (%2 frames)</source>
+        <source>Apply filter to all &apos;%1&apos; frames (%2 frames)</source>
         <translation>将滤镜应用到“%1”的所有帧 (共 %2 帧)</translation>
     </message>
     <message>
@@ -4479,8 +4479,8 @@ Would you like to repack the atlas now?</source>
         <translation>plist 中的 XML 解析错误：%1</translation>
     </message>
     <message>
-        <source>No 'frames' dictionary found in plist.</source>
-        <translation>plist 中未找到 'frames' 字典。</translation>
+        <source>No &apos;frames&apos; dictionary found in plist.</source>
+        <translation>plist 中未找到 &apos;frames&apos; 字典。</translation>
     </message>
     <message>
         <source>Associated atlas image file not found for %1</source>
@@ -4843,32 +4843,32 @@ Would you like to repack the atlas now?</source>
         <translation>将帧 %1 合并到 %2</translation>
     </message>
     <message>
-        <source>Create Animation '%1'</source>
-        <translation>创建动画 '%1'</translation>
+        <source>Create Animation &apos;%1&apos;</source>
+        <translation>创建动画 &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Delete Animation '%1'</source>
-        <translation>删除动画 '%1'</translation>
+        <source>Delete Animation &apos;%1&apos;</source>
+        <translation>删除动画 &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Reverse Animation '%1'</source>
-        <translation>反转动画 '%1'</translation>
+        <source>Reverse Animation &apos;%1&apos;</source>
+        <translation>反转动画 &apos;%1&apos;</translation>
     </message>
     <message>
-        <source>Rename Animation '%1' to '%2'</source>
-        <translation>将动画 '%1' 重命名为 '%2'</translation>
+        <source>Rename Animation &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>将动画 &apos;%1&apos; 重命名为 &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Duplicate Animation '%1' as '%2'</source>
-        <translation>将动画 '%1' 复制为 '%2'</translation>
+        <source>Duplicate Animation &apos;%1&apos; as &apos;%2&apos;</source>
+        <translation>将动画 &apos;%1&apos; 复制为 &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Reorder Frames in Animation '%1'</source>
-        <translation>重新排序动画 '%1' 中的帧</translation>
+        <source>Reorder Frames in Animation &apos;%1&apos;</source>
+        <translation>重新排序动画 &apos;%1&apos; 中的帧</translation>
     </message>
     <message>
-        <source>Change Properties for Animation '%1'</source>
-        <translation>更改动画 '%1' 的属性</translation>
+        <source>Change Properties for Animation &apos;%1&apos;</source>
+        <translation>更改动画 &apos;%1&apos; 的属性</translation>
     </message>
     <message>
         <source>Resize/Move Slice %1</source>
@@ -5872,11 +5872,11 @@ Install package:
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_ACTIVE</source>
-        <translation>状态：&lt;b style='color:#27ae60;'&gt;LibGit2 已激活&lt;/b&gt; (历史记录与分支管理运行正常)</translation>
+        <translation>状态：&lt;b style=&apos;color:#27ae60;&apos;&gt;LibGit2 已激活&lt;/b&gt; (历史记录与分支管理运行正常)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_STATUS_INACTIVE</source>
-        <translation>状态：&lt;b style='color:#e74c3c;'&gt;LibGit2 未编译&lt;/b&gt; (Git 历史记录被禁用)</translation>
+        <translation>状态：&lt;b style=&apos;color:#e74c3c;&apos;&gt;LibGit2 未编译&lt;/b&gt; (Git 历史记录被禁用)</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_GIT_ENGINE_DESC</source>
@@ -6271,7 +6271,7 @@ Install package:
         <translation>立即检查更新</translation>
     </message>
     <message>
-        <source>Click 'Check for Updates Now' to query the latest release on GitHub.</source>
+        <source>Click &apos;Check for Updates Now&apos; to query the latest release on GitHub.</source>
         <translation>点击“立即检查更新”以查询 GitHub 上的最新版本。</translation>
     </message>
     <message>
@@ -6291,16 +6291,16 @@ Install package:
         <translation>正在从 GitHub 检查更新...</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Failed to check for updates: %1&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;检查更新失败：%1&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Failed to check for updates: %1&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;检查更新失败：%1&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #e74c3c;'&gt;Invalid response from GitHub.&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #e74c3c;'&gt;GitHub 返回的响应无效。&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #e74c3c;&apos;&gt;Invalid response from GitHub.&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #e74c3c;&apos;&gt;GitHub 返回的响应无效。&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60; font-weight: bold;'&gt;A new version is available: %1!&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60; font-weight: bold;'&gt;有新版本可用：%1！&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;A new version is available: %1!&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60; font-weight: bold;&apos;&gt;有新版本可用：%1！&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Latest Version: &lt;b&gt;%1&lt;/b&gt; (%2)</source>
@@ -6311,8 +6311,8 @@ Install package:
         <translation>发布日期：%1</translation>
     </message>
     <message>
-        <source>&lt;span style='color: #27ae60;'&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
-        <translation>&lt;span style='color: #27ae60;'&gt;您使用的是最新版本 (v%1)。&lt;/span&gt;</translation>
+        <source>&lt;span style=&apos;color: #27ae60;&apos;&gt;You are using the latest version (v%1).&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color: #27ae60;&apos;&gt;您使用的是最新版本 (v%1)。&lt;/span&gt;</translation>
     </message>
     <message>
         <source>KEY_SETTINGS_RESET_TITLE</source>
